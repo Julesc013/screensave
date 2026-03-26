@@ -3,9 +3,9 @@
 ScreenSave is a Windows screensaver project built around a conservative compatibility contract:
 
 - C89 as the code baseline.
-- x86 Win32 `.scr` binaries as the baseline product format.
+- x86 Win32 `.scr` 32-bit binaries as the baseline product format.
 - GDI as the universal renderer floor.
-- GL11 as the optional conservative accelerated tier.
+- OpenGL 1.1 as the optional conservative accelerated tier.
 - Advanced OpenGL reserved for later, strictly optional, and capability-gated.
 
 ## Current State
