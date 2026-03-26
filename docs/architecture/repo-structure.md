@@ -10,6 +10,7 @@ The repository is shaped as a long-lived monorepo rather than a single saver pro
 - `assets/` keeps shared content separate from code and from product-local assets.
 - `tests/` and `validation/` separate executable verification from stored evidence.
 - `tools/`, `build/`, and `packaging/` keep support concerns visible without mixing them into runtime layers.
+- `build/` now distinguishes concrete modern toolchain lanes from honest legacy scaffold lanes.
 - `third_party/` provides an explicit place to track future external material and licenses without implying that any are present today.
 
 ## Why The Platform Tree Uses `include/` And `src/`

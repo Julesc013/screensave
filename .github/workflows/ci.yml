@@ -24,3 +24,6 @@ jobs:
 
       - name: Validate project-scoped Codex configuration
         run: python tools/scripts/check_codex_config.py
+
+      - name: Validate build scaffold layout
+        run: python tools/scripts/check_build_layout.py

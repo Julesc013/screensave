@@ -84,6 +84,7 @@ When touching governance or docs, run the lightweight checks under `tools/script
 python tools/scripts/check_repo_structure.py
 python tools/scripts/check_codex_config.py
 python tools/scripts/check_docs_basics.py
+python tools/scripts/check_build_layout.py
 ```
 
 The release scaffold check is for manual release-preparation review, not for publishing artifacts:

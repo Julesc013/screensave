@@ -2,6 +2,26 @@
 
 All notable repository changes are recorded here in series order.
 
+## S02 - 2026-03-27
+
+### Added
+
+- A documented build philosophy and toolchain lane structure under `build/`.
+- Concrete MSVC VS2022 build entry files and a concrete MinGW i686 make lane.
+- Tiny Series 02 build-only stub sources to make the initial platform-to-product target graph concrete.
+- `tools/scripts/check_build_layout.py` for static build-scaffold validation.
+
+### Changed
+
+- Updated CI to validate the build scaffold honestly at the repository's current stage.
+- Updated root and roadmap documentation to reflect the new build-layer reality.
+
+### Validation
+
+- Confirmed Series 00 and Series 01 prerequisites were present before changes.
+- Performed static validation of the build files, output conventions, and stub-source relationships.
+- Confirmed no real host, renderer, saver, packaging, or release implementation was added in this series.
+
 ## S01 - 2026-03-27
 
 ### Added

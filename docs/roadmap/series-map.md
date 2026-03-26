@@ -4,8 +4,8 @@ This is the short operational view of the prompt program.
 
 - `S00`: constitution, control plane, specs, docs, and permanent skeleton.
 - `S01`: governance and repository hygiene, contribution path, and CI foundation.
-- `S02`: public platform surface planning and Win32 host groundwork.
-- `S03`: GDI universal renderer floor.
+- `S02`: build scaffold, toolchain lanes, and output conventions.
+- `S03`: public platform surface, Win32 host groundwork, and initial GDI floor.
 - `S04`: shared config and saver lifecycle wiring.
 - `S05`: SDK and template groundwork.
 - `S06`: `nocturne` first saver.

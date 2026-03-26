@@ -14,9 +14,10 @@ The platform target is intentionally conservative:
 
 ## Current Status
 
-The repository is in Series 01.
+The repository is in Series 02.
 Series 00 established repository law, structure, roadmap, and agent guidance.
-Series 01 adds contribution, review, governance, and CI foundations.
+Series 01 added contribution, review, governance, and CI foundations.
+Series 02 adds the checked-in build scaffold and toolchain lane structure.
 There is still no real runtime implementation yet.
 
 ## Planned Product Shape
@@ -58,6 +59,17 @@ For explanatory architecture and execution order, start with:
 - `assets/` is for shared non-code content and license records.
 - `tests/` and `validation/` hold verification logic and evidence.
 - `tools/`, `build/`, and `packaging/` hold support material, not baseline runtime dependencies.
+
+## Build Status
+
+Series 02 introduces a truthful build scaffold:
+
+- a concrete MSVC VS2022 solution lane under `build/msvc/vs2022/`
+- a concrete MinGW i686 make lane under `build/mingw/i686/`
+- documentation-only VS6 and VS2008 lanes that preserve long-term intent without claiming present build completeness
+
+The checked-in build graph currently uses tiny build-only stubs.
+It does not implement the real Win32 `.scr` host, real saver behavior, or real rendering yet.
 
 Read the specs before adding code.
 This repository should stay truthful, reconstructable, and conservative about compatibility.

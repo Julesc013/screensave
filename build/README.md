@@ -1,6 +1,66 @@
 # Build
 
-Purpose: checked-in build coordination material, not generated output.
-Belongs here: toolchain notes, project-file strategy, and future build-system stubs.
-Does not belong here: compiled artifacts or release packages.
-Type: build support.
+This directory holds the checked-in build scaffold for ScreenSave.
+It documents the toolchain lanes, keeps their project files reviewable, and defines the output conventions that later implementation series must preserve.
+
+## Build Philosophy
+
+The build system is intentionally explicit:
+
+- checked-in per-toolchain lanes under `build/` are the canonical checked-in build entry points
+- generated output belongs under `out/`, never under `build/` or source directories
+- modern concrete lanes exist to support near-term implementation work
+- legacy lanes stay visible as honest scaffold and documentation until later series can validate them properly
+
+The build scaffold is not the constitutional source of truth.
+The normative compatibility and target rules remain in `specs/build_targets.md` and related specs.
+This directory translates those rules into reviewable build lanes.
+
+## Current State In Series 02
+
+Real now:
+
+- a concrete MSVC VS2022 solution and project pair
+- a concrete MinGW i686 make-based lane
+- tiny build-only stub sources used only to make the target graph and output conventions concrete
+- build-layout validation in `tools/scripts/check_build_layout.py`
+
+Deferred:
+
+- real screensaver host behavior
+- real saver logic
+- real renderer implementation
+- full legacy project files for VS6 and VS2008
+- packaging and release production
+
+## Toolchain Lanes
+
+- `build/msvc/vs2022/` is the practical modern Windows lane for near-term implementation work.
+- `build/mingw/i686/` is the practical GCC-family x86 lane.
+- `build/msvc/vs6/` documents the long-term legacy validation lane for early Windows targets.
+- `build/msvc/vs2008/` documents the intermediate-era MSVC lane.
+- `build/ci/` documents how CI validates the scaffold at the current stage.
+
+## Output Conventions
+
+Generated output belongs under `out/` using a stable pattern:
+
+- binaries: `out/<toolchain>/<lane>/<profile>/<target>/`
+- intermediates: `out/intermediate/<toolchain>/<lane>/<profile>/<target>/`
+- logs or generated reports: `out/logs/<toolchain>/<lane>/` or other explicitly named subtrees under `out/`
+
+Examples:
+
+- `out/msvc/vs2022/debug/nocturne_stub/nocturne.scr`
+- `out/intermediate/mingw/i686/release/screensave_platform_stub/`
+
+These conventions are documented now so later series can extend them without reshaping the tree.
+
+## How Later Series Should Extend This
+
+- replace Series 02 stub sources with real platform and product code in place
+- keep checked-in project files small and explicit
+- add real legacy project files only when they can be maintained honestly
+- expand CI from static scaffold validation to real builds only when the runtime is ready
+
+`build/` should remain readable without generated files or hidden generators becoming the only truth.
