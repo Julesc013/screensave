@@ -407,7 +407,7 @@ static LRESULT CALLBACK scr_window_proc(HWND window, UINT message, WPARAM wParam
                         "The renderer could not begin a saver-render frame."
                     );
                 }
-            } else if (context->settings.validation_scene_enabled) {
+            } else if (context->session == NULL) {
                 scr_render_validation_scene(context);
             } else {
                 scr_render_black_frame(context);

@@ -18,5 +18,7 @@ Series 04 lightly adopted the shared core here for:
 - shared common-config and deterministic-seed scaffolding
 - shared timing helpers
 
-Series 05 now routes screen and preview rendering through the reusable GDI backend, with a tiny built-in validation scene used only until a real saver product exists.
+Series 05 routes screen and preview rendering through the reusable GDI backend.
+Series 06 keeps the host lifecycle intact while loading real product-owned config, delegating config mode to the active saver module when it provides a dialog, and running Nocturne as the first real saver product.
+The validation scene remains only as a fallback path for non-product sessions.
 Type: runtime host implementation.

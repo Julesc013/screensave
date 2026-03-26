@@ -55,7 +55,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\platform\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\platform\src\host\win32_scr;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\platform\src\host\win32_scr;$(SolutionDir)..\..\..\products\savers\nocturne\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -74,7 +74,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\platform\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\platform\src\host\win32_scr;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\platform\src\host\win32_scr;$(SolutionDir)..\..\..\products\savers\nocturne\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -85,9 +85,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_config.c" />
     <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_entry.c" />
+    <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_module.c" />
+    <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_presets.c" />
+    <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_render.c" />
+    <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_sim.c" />
+    <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_themes.c" />
   </ItemGroup>
   <ItemGroup>
+    <ResourceCompile Include="..\..\..\products\savers\nocturne\src\nocturne_config.rc" />
     <ResourceCompile Include="..\..\..\platform\src\host\win32_scr\screensave_host.rc" />
   </ItemGroup>
   <ItemGroup>

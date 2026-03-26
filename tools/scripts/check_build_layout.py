@@ -60,8 +60,24 @@ REQUIRED_PATHS = [
     ROOT / "platform" / "src" / "host" / "win32_scr" / "scr_window.c",
     ROOT / "platform" / "src" / "host" / "win32_scr" / "resource.h",
     ROOT / "platform" / "src" / "host" / "win32_scr" / "screensave_host.rc",
+    ROOT / "products" / "savers" / "nocturne" / "manifest.ini",
+    ROOT / "products" / "savers" / "nocturne" / "README.md",
+    ROOT / "products" / "savers" / "nocturne" / "presets" / "defaults.ini",
+    ROOT / "products" / "savers" / "nocturne" / "presets" / "museum.ini",
+    ROOT / "products" / "savers" / "nocturne" / "presets" / "night_modes.ini",
     ROOT / "products" / "savers" / "nocturne" / "src" / "README.md",
+    ROOT / "products" / "savers" / "nocturne" / "src" / "nocturne_config.c",
+    ROOT / "products" / "savers" / "nocturne" / "src" / "nocturne_config.rc",
     ROOT / "products" / "savers" / "nocturne" / "src" / "nocturne_entry.c",
+    ROOT / "products" / "savers" / "nocturne" / "src" / "nocturne_internal.h",
+    ROOT / "products" / "savers" / "nocturne" / "src" / "nocturne_module.c",
+    ROOT / "products" / "savers" / "nocturne" / "src" / "nocturne_presets.c",
+    ROOT / "products" / "savers" / "nocturne" / "src" / "nocturne_render.c",
+    ROOT / "products" / "savers" / "nocturne" / "src" / "nocturne_resource.h",
+    ROOT / "products" / "savers" / "nocturne" / "src" / "nocturne_sim.c",
+    ROOT / "products" / "savers" / "nocturne" / "src" / "nocturne_themes.c",
+    ROOT / "products" / "savers" / "nocturne" / "tests" / "README.md",
+    ROOT / "products" / "savers" / "nocturne" / "tests" / "smoke.c",
 ]
 
 NS = {"msb": "http://schemas.microsoft.com/developer/msbuild/2003"}
@@ -127,8 +143,43 @@ def main() -> int:
     ):
         require(expected in platform_sources, f"screensave_platform.vcxproj is missing {expected!r}.", errors)
     require(
+        "..\\..\\..\\products\\savers\\nocturne\\src\\nocturne_config.c" in nocturne_sources,
+        "nocturne.vcxproj must compile the product config implementation.",
+        errors,
+    )
+    require(
         "..\\..\\..\\products\\savers\\nocturne\\src\\nocturne_entry.c" in nocturne_sources,
         "nocturne.vcxproj must compile the product entry.",
+        errors,
+    )
+    require(
+        "..\\..\\..\\products\\savers\\nocturne\\src\\nocturne_module.c" in nocturne_sources,
+        "nocturne.vcxproj must compile the product module descriptor.",
+        errors,
+    )
+    require(
+        "..\\..\\..\\products\\savers\\nocturne\\src\\nocturne_presets.c" in nocturne_sources,
+        "nocturne.vcxproj must compile the product presets.",
+        errors,
+    )
+    require(
+        "..\\..\\..\\products\\savers\\nocturne\\src\\nocturne_render.c" in nocturne_sources,
+        "nocturne.vcxproj must compile the product renderer.",
+        errors,
+    )
+    require(
+        "..\\..\\..\\products\\savers\\nocturne\\src\\nocturne_sim.c" in nocturne_sources,
+        "nocturne.vcxproj must compile the product simulation.",
+        errors,
+    )
+    require(
+        "..\\..\\..\\products\\savers\\nocturne\\src\\nocturne_themes.c" in nocturne_sources,
+        "nocturne.vcxproj must compile the product themes.",
+        errors,
+    )
+    require(
+        "..\\..\\..\\products\\savers\\nocturne\\src\\nocturne_config.rc" in nocturne_resources,
+        "nocturne.vcxproj must compile the product configuration resource script.",
         errors,
     )
     require(
@@ -163,7 +214,14 @@ def main() -> int:
         "scr_entry.c",
         "scr_validation_scene.c",
         "scr_window.c",
+        "nocturne_config.c",
         "nocturne_entry.c",
+        "nocturne_module.c",
+        "nocturne_presets.c",
+        "nocturne_render.c",
+        "nocturne_sim.c",
+        "nocturne_themes.c",
+        "nocturne_config.rc",
         "screensave_host.rc",
         "nocturne.scr",
         "windres",
@@ -189,9 +247,12 @@ def main() -> int:
     require("screensave_renderer_blit_bitmap" in validation_scene_text, "scr_validation_scene.c must exercise bitmap blit support.", errors)
 
     product_entry_text = (ROOT / "products" / "savers" / "nocturne" / "src" / "nocturne_entry.c").read_text(encoding="utf-8")
+    product_module_text = (ROOT / "products" / "savers" / "nocturne" / "src" / "nocturne_module.c").read_text(encoding="utf-8")
     require("screensave_scr_main" in product_entry_text, "nocturne_entry.c must delegate into the host entry.", errors)
-    require("screensave_saver_module" in product_entry_text, "nocturne_entry.c must define a saver-module descriptor.", errors)
-    require("Nocturne" in product_entry_text, "nocturne_entry.c must declare the product identity.", errors)
+    require("nocturne_get_module" in product_entry_text, "nocturne_entry.c must dispatch through the real product module.", errors)
+    require("screensave_saver_module" in product_module_text, "nocturne_module.c must define a saver-module descriptor.", errors)
+    require("Nocturne" in product_module_text, "nocturne_module.c must declare the product identity.", errors)
+    require("nocturne_config_show_dialog" in product_module_text, "nocturne_module.c must wire product-owned config dialog hooks.", errors)
 
     if errors:
         for error in errors:

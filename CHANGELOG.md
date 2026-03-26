@@ -2,6 +2,26 @@
 
 All notable repository changes are recorded here in series order.
 
+## S06 - 2026-03-27
+
+### Added
+
+- Nocturne as the first real saver product under `products/savers/nocturne/`, including a real saver module, curated presets/themes, a manifest, and lightweight smoke validation.
+- Product-owned Nocturne configuration persistence and a real Nocturne configuration dialog resource wired through the shared saver/config contract.
+
+### Changed
+
+- Extended the saver/module contract narrowly so the active saver can own its product config size, defaults, clamp/load/save hooks, and configuration dialog without pushing product logic into the host.
+- Updated the Win32 host to allocate, load, clamp, save, and edit active-product settings through the shared saver contract while keeping the validation scene as a fallback only when no real saver session exists.
+- Replaced the no-op `nocturne` shell with a real restrained dark-room product that renders through the shared GDI backend with fade-in, fade-out, deterministic seed support, and anti-stagnation reseed behavior.
+- Updated the concrete VS2022 and MinGW i686 build lanes, static build checks, and repository docs so Series 06 truthfully describes Nocturne as the first real product.
+
+### Validation
+
+- Confirmed Series 00 through Series 05 prerequisites existed before changes.
+- Performed static validation of the Nocturne product file graph, shared-contract wiring, host/build integration, and documentation consistency.
+- Confirmed no OpenGL backend work, second-product work, gallery/randomizer behavior, packaging logic, or release-production claims were added in this series.
+
 ## S05 - 2026-03-27
 
 ### Added

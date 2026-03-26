@@ -34,6 +34,7 @@ int screensave_scr_main(
 {
     INT_PTR dialog_result;
     int parse_result;
+    int result;
     scr_host_context context;
     scr_parsed_args parsed_args;
 
@@ -54,13 +55,41 @@ int screensave_scr_main(
     context.show_code = show_code;
     context.module = module;
 
-    scr_settings_set_defaults(&context.settings);
-    scr_settings_load(context.module, &context.settings);
-    screensave_common_config_clamp(&context.settings.common);
-    screensave_config_binding_init(&context.config_binding, &context.settings.common, NULL, 0U);
     screensave_diag_context_init(
         &context.diagnostics,
+        SCREENSAVE_DIAG_LEVEL_INFO
+    );
+
+    if (!scr_settings_init(context.module, &context.settings)) {
+        scr_show_message_box(
+            NULL,
+            context.module,
+            "The saver configuration state could not be initialized.",
+            MB_OK | MB_ICONERROR
+        );
+        return 1;
+    }
+
+    scr_settings_set_defaults(context.module, &context.settings);
+    if (!scr_settings_load(context.module, &context.settings, &context.diagnostics)) {
+        scr_emit_host_diagnostic(
+            &context,
+            SCREENSAVE_DIAG_LEVEL_WARNING,
+            2100UL,
+            "screensave_scr_main",
+            "The saver settings could not be loaded; defaults will be used for this session."
+        );
+    }
+    scr_settings_clamp(context.module, &context.settings);
+    screensave_diag_set_minimum_level(
+        &context.diagnostics,
         context.settings.common.diagnostics_overlay_enabled ? SCREENSAVE_DIAG_LEVEL_DEBUG : SCREENSAVE_DIAG_LEVEL_INFO
+    );
+    screensave_config_binding_init(
+        &context.config_binding,
+        &context.settings.common,
+        context.settings.product_config,
+        context.settings.product_config_size
     );
 
     parse_result = scr_parse_command_line(command_line, &parsed_args);
@@ -95,8 +124,12 @@ int screensave_scr_main(
 
     if (context.mode == SCREENSAVE_SESSION_MODE_CONFIG) {
         dialog_result = scr_show_config_dialog(&context);
-        return dialog_result == -1 ? 1 : 0;
+        result = dialog_result == -1 ? 1 : 0;
+        scr_settings_dispose(&context.settings);
+        return result;
     }
 
-    return scr_run_window(&context);
+    result = scr_run_window(&context);
+    scr_settings_dispose(&context.settings);
+    return result;
 }

@@ -32,6 +32,7 @@ Everything else should remain private until experience proves the abstraction is
 
 Series 04 keeps the host implementation private while exposing only a narrow version/config/diagnostics/renderer/saver contract set.
 Series 05 adds the first real backend under `platform/src/render/gdi/` and removes the need for a host-local placeholder draw path.
+Series 06 proves the public saver/config boundary with Nocturne while keeping product defaults, presets, themes, and config UI inside the product tree.
 
 ## Product Boundary
 

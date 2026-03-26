@@ -16,7 +16,8 @@
 
 typedef struct scr_settings_tag {
     screensave_common_config common;
-    int validation_scene_enabled;
+    void *product_config;
+    unsigned int product_config_size;
 } scr_settings;
 
 typedef struct scr_parsed_args_tag {
@@ -52,9 +53,20 @@ typedef struct scr_host_context_tag {
     screensave_saver_session *session;
 } scr_host_context;
 
-void scr_settings_set_defaults(scr_settings *settings);
-void scr_settings_load(const screensave_saver_module *module, scr_settings *settings);
-int scr_settings_save(const screensave_saver_module *module, const scr_settings *settings);
+int scr_settings_init(const screensave_saver_module *module, scr_settings *settings);
+void scr_settings_dispose(scr_settings *settings);
+void scr_settings_set_defaults(const screensave_saver_module *module, scr_settings *settings);
+void scr_settings_clamp(const screensave_saver_module *module, scr_settings *settings);
+int scr_settings_load(
+    const screensave_saver_module *module,
+    scr_settings *settings,
+    screensave_diag_context *diagnostics
+);
+int scr_settings_save(
+    const screensave_saver_module *module,
+    const scr_settings *settings,
+    screensave_diag_context *diagnostics
+);
 int scr_parse_command_line(LPSTR command_line, scr_parsed_args *parsed_args);
 int scr_run_window(scr_host_context *context);
 INT_PTR scr_show_config_dialog(scr_host_context *context);

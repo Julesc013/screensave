@@ -12,5 +12,6 @@ Current stage: Series 04 makes the first real core-runtime layer live here:
 - `config/` for common config, preset, and theme helpers
 - `version/` for runtime version identity
 
-Renderer backends remain deferred to later series.
+Renderer backends now consume these contracts from `platform/src/render/`.
+Series 06 uses the core runtime from the first real saver product without promoting Nocturne-specific behavior into shared code.
 Type: runtime implementation.

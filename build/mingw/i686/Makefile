@@ -37,7 +37,13 @@ PLATFORM_SRCS := \
 	$(ROOT)/platform/src/host/win32_scr/scr_window.c
 
 NOCTURNE_SRCS := \
-	$(ROOT)/products/savers/nocturne/src/nocturne_entry.c
+	$(ROOT)/products/savers/nocturne/src/nocturne_config.c \
+	$(ROOT)/products/savers/nocturne/src/nocturne_entry.c \
+	$(ROOT)/products/savers/nocturne/src/nocturne_module.c \
+	$(ROOT)/products/savers/nocturne/src/nocturne_presets.c \
+	$(ROOT)/products/savers/nocturne/src/nocturne_render.c \
+	$(ROOT)/products/savers/nocturne/src/nocturne_sim.c \
+	$(ROOT)/products/savers/nocturne/src/nocturne_themes.c
 
 PLATFORM_OBJS := \
 	$(PLATFORM_DIR)/renderer_dispatch.o \
@@ -62,7 +68,14 @@ PLATFORM_OBJS := \
 	$(PLATFORM_DIR)/scr_window.o
 
 NOCTURNE_OBJS := \
+	$(NOCTURNE_DIR)/nocturne_config.o \
 	$(NOCTURNE_DIR)/nocturne_entry.o \
+	$(NOCTURNE_DIR)/nocturne_module.o \
+	$(NOCTURNE_DIR)/nocturne_presets.o \
+	$(NOCTURNE_DIR)/nocturne_render.o \
+	$(NOCTURNE_DIR)/nocturne_sim.o \
+	$(NOCTURNE_DIR)/nocturne_themes.o \
+	$(NOCTURNE_DIR)/nocturne_config_res.o \
 	$(NOCTURNE_DIR)/screensave_host_res.o
 
 CFLAGS_COMMON := -std=c89 -Wall -Wextra -pedantic -I$(ROOT)/platform/include
@@ -166,9 +179,37 @@ $(PLATFORM_DIR)/scr_window.o: $(ROOT)/platform/src/host/win32_scr/scr_window.c
 	mkdir -p $(PLATFORM_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
+$(NOCTURNE_DIR)/nocturne_config.o: $(ROOT)/products/savers/nocturne/src/nocturne_config.c
+	mkdir -p $(NOCTURNE_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
 $(NOCTURNE_DIR)/nocturne_entry.o: $(ROOT)/products/savers/nocturne/src/nocturne_entry.c
 	mkdir -p $(NOCTURNE_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
+
+$(NOCTURNE_DIR)/nocturne_module.o: $(ROOT)/products/savers/nocturne/src/nocturne_module.c
+	mkdir -p $(NOCTURNE_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(NOCTURNE_DIR)/nocturne_presets.o: $(ROOT)/products/savers/nocturne/src/nocturne_presets.c
+	mkdir -p $(NOCTURNE_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(NOCTURNE_DIR)/nocturne_render.o: $(ROOT)/products/savers/nocturne/src/nocturne_render.c
+	mkdir -p $(NOCTURNE_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(NOCTURNE_DIR)/nocturne_sim.o: $(ROOT)/products/savers/nocturne/src/nocturne_sim.c
+	mkdir -p $(NOCTURNE_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(NOCTURNE_DIR)/nocturne_themes.o: $(ROOT)/products/savers/nocturne/src/nocturne_themes.c
+	mkdir -p $(NOCTURNE_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(NOCTURNE_DIR)/nocturne_config_res.o: $(ROOT)/products/savers/nocturne/src/nocturne_config.rc $(ROOT)/products/savers/nocturne/src/nocturne_resource.h
+	mkdir -p $(NOCTURNE_DIR)
+	$(RC) --include-dir=$(ROOT)/products/savers/nocturne/src -i $< -o $@
 
 $(NOCTURNE_DIR)/screensave_host_res.o: $(ROOT)/platform/src/host/win32_scr/screensave_host.rc $(ROOT)/platform/src/host/win32_scr/resource.h
 	mkdir -p $(NOCTURNE_DIR)

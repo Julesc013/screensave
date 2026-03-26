@@ -1,166 +1,135 @@
+#include <stdlib.h>
+
 #include "scr_internal.h"
 
-static int scr_build_registry_path(const screensave_saver_module *module, char *buffer, int buffer_size)
+static const screensave_saver_config_hooks *scr_get_config_hooks(const screensave_saver_module *module)
 {
-    if (
-        buffer == NULL ||
-        buffer_size <= 0 ||
-        module == NULL ||
-        module->identity.product_key == NULL
-    ) {
+    if (module == NULL) {
+        return NULL;
+    }
+
+    return module->config_hooks;
+}
+
+int scr_settings_init(const screensave_saver_module *module, scr_settings *settings)
+{
+    const screensave_saver_config_hooks *config_hooks;
+
+    if (settings == NULL) {
         return 0;
     }
 
-    buffer[0] = '\0';
-    if (!scr_append_text(buffer, buffer_size, SCR_SETTINGS_ROOTA)) {
+    ZeroMemory(settings, sizeof(*settings));
+    config_hooks = scr_get_config_hooks(module);
+    if (config_hooks == NULL || config_hooks->product_config_size == 0U) {
+        return 1;
+    }
+
+    settings->product_config = malloc(config_hooks->product_config_size);
+    if (settings->product_config == NULL) {
         return 0;
     }
 
-    return scr_append_text(buffer, buffer_size, module->identity.product_key);
+    settings->product_config_size = config_hooks->product_config_size;
+    ZeroMemory(settings->product_config, settings->product_config_size);
+    return 1;
 }
 
-static void scr_read_flag(HKEY key, const char *value_name, int *value)
+void scr_settings_dispose(scr_settings *settings)
 {
-    DWORD data;
-    DWORD type;
-    DWORD size;
-
-    data = 0;
-    type = 0;
-    size = sizeof(data);
-
-    if (RegQueryValueExA(key, value_name, NULL, &type, (LPBYTE)&data, &size) == ERROR_SUCCESS && type == REG_DWORD) {
-        *value = data != 0;
+    if (settings == NULL) {
+        return;
     }
-}
 
-static void scr_read_dword(HKEY key, const char *value_name, unsigned long *value)
-{
-    DWORD data;
-    DWORD type;
-    DWORD size;
-
-    data = 0;
-    type = 0;
-    size = sizeof(data);
-
-    if (
-        value != NULL &&
-        RegQueryValueExA(key, value_name, NULL, &type, (LPBYTE)&data, &size) == ERROR_SUCCESS &&
-        type == REG_DWORD
-    ) {
-        *value = (unsigned long)data;
+    if (settings->product_config != NULL) {
+        free(settings->product_config);
     }
+
+    ZeroMemory(settings, sizeof(*settings));
 }
 
-static LONG scr_write_flag(HKEY key, const char *value_name, int value)
+void scr_settings_set_defaults(const screensave_saver_module *module, scr_settings *settings)
 {
-    DWORD data;
+    const screensave_saver_config_hooks *config_hooks;
 
-    data = value ? 1UL : 0UL;
-    return RegSetValueExA(key, value_name, 0, REG_DWORD, (const BYTE *)&data, sizeof(data));
-}
-
-static LONG scr_write_dword(HKEY key, const char *value_name, unsigned long value)
-{
-    DWORD data;
-
-    data = (DWORD)value;
-    return RegSetValueExA(key, value_name, 0, REG_DWORD, (const BYTE *)&data, sizeof(data));
-}
-
-void scr_settings_set_defaults(scr_settings *settings)
-{
     if (settings == NULL) {
         return;
     }
 
     screensave_common_config_set_defaults(&settings->common);
-    settings->validation_scene_enabled = 1;
+    if (settings->product_config != NULL && settings->product_config_size > 0U) {
+        ZeroMemory(settings->product_config, settings->product_config_size);
+    }
+
+    config_hooks = scr_get_config_hooks(module);
+    if (config_hooks != NULL && config_hooks->set_defaults != NULL) {
+        config_hooks->set_defaults(&settings->common, settings->product_config, settings->product_config_size);
+    }
 }
 
-void scr_settings_load(const screensave_saver_module *module, scr_settings *settings)
+void scr_settings_clamp(const screensave_saver_module *module, scr_settings *settings)
 {
-    char path[260];
-    HKEY key;
-    unsigned long detail_level;
+    const screensave_saver_config_hooks *config_hooks;
 
     if (settings == NULL) {
         return;
     }
-
-    if (!scr_build_registry_path(module, path, sizeof(path))) {
-        return;
-    }
-
-    if (RegOpenKeyExA(HKEY_CURRENT_USER, path, 0, KEY_QUERY_VALUE, &key) != ERROR_SUCCESS) {
-        return;
-    }
-
-    detail_level = (unsigned long)settings->common.detail_level;
-    scr_read_dword(key, "DetailLevel", &detail_level);
-    settings->common.detail_level = (screensave_detail_level)detail_level;
-    scr_read_flag(key, "DiagnosticsOverlayEnabled", &settings->common.diagnostics_overlay_enabled);
-    scr_read_flag(key, "UseDeterministicSeed", &settings->common.use_deterministic_seed);
-    scr_read_dword(key, "DeterministicSeed", &settings->common.deterministic_seed);
-    scr_read_flag(key, "ValidationSceneEnabled", &settings->validation_scene_enabled);
-    RegCloseKey(key);
 
     screensave_common_config_clamp(&settings->common);
-    settings->validation_scene_enabled = settings->validation_scene_enabled != 0;
+    config_hooks = scr_get_config_hooks(module);
+    if (config_hooks != NULL && config_hooks->clamp != NULL) {
+        config_hooks->clamp(&settings->common, settings->product_config, settings->product_config_size);
+    }
 }
 
-int scr_settings_save(const screensave_saver_module *module, const scr_settings *settings)
+int scr_settings_load(
+    const screensave_saver_module *module,
+    scr_settings *settings,
+    screensave_diag_context *diagnostics
+)
 {
-    char path[260];
-    DWORD disposition;
-    HKEY key;
-    LONG result;
-    scr_settings safe_settings;
+    const screensave_saver_config_hooks *config_hooks;
 
     if (settings == NULL) {
         return 0;
     }
 
-    safe_settings = *settings;
-    screensave_common_config_clamp(&safe_settings.common);
-    safe_settings.validation_scene_enabled = safe_settings.validation_scene_enabled != 0;
-
-    if (!scr_build_registry_path(module, path, sizeof(path))) {
-        return 0;
+    config_hooks = scr_get_config_hooks(module);
+    if (config_hooks == NULL || config_hooks->load_config == NULL) {
+        return 1;
     }
 
-    result = RegCreateKeyExA(
-        HKEY_CURRENT_USER,
-        path,
-        0,
-        NULL,
-        REG_OPTION_NON_VOLATILE,
-        KEY_SET_VALUE,
-        NULL,
-        &key,
-        &disposition
+    return config_hooks->load_config(
+        module,
+        &settings->common,
+        settings->product_config,
+        settings->product_config_size,
+        diagnostics
     );
-    (void)disposition;
+}
 
-    if (result != ERROR_SUCCESS) {
+int scr_settings_save(
+    const screensave_saver_module *module,
+    const scr_settings *settings,
+    screensave_diag_context *diagnostics
+)
+{
+    const screensave_saver_config_hooks *config_hooks;
+
+    if (settings == NULL) {
         return 0;
     }
 
-    result = scr_write_dword(key, "DetailLevel", (unsigned long)safe_settings.common.detail_level);
-    if (result == ERROR_SUCCESS) {
-        result = scr_write_flag(key, "DiagnosticsOverlayEnabled", safe_settings.common.diagnostics_overlay_enabled);
-    }
-    if (result == ERROR_SUCCESS) {
-        result = scr_write_flag(key, "UseDeterministicSeed", safe_settings.common.use_deterministic_seed);
-    }
-    if (result == ERROR_SUCCESS) {
-        result = scr_write_dword(key, "DeterministicSeed", safe_settings.common.deterministic_seed);
-    }
-    if (result == ERROR_SUCCESS) {
-        result = scr_write_flag(key, "ValidationSceneEnabled", safe_settings.validation_scene_enabled);
+    config_hooks = scr_get_config_hooks(module);
+    if (config_hooks == NULL || config_hooks->save_config == NULL) {
+        return 1;
     }
 
-    RegCloseKey(key);
-    return result == ERROR_SUCCESS;
+    return config_hooks->save_config(
+        module,
+        &settings->common,
+        settings->product_config,
+        settings->product_config_size,
+        diagnostics
+    );
 }

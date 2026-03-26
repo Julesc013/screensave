@@ -2,6 +2,8 @@
 
 int screensave_saver_module_is_valid(const screensave_saver_module *module)
 {
+    const screensave_saver_config_hooks *config_hooks;
+
     if (module == NULL) {
         return 0;
     }
@@ -25,6 +27,13 @@ int screensave_saver_module_is_valid(const screensave_saver_module *module)
 
     if (module->theme_count > 0U && module->themes == NULL) {
         return 0;
+    }
+
+    config_hooks = module->config_hooks;
+    if (config_hooks != NULL) {
+        if (config_hooks->set_defaults == NULL || config_hooks->clamp == NULL) {
+            return 0;
+        }
     }
 
     return 1;

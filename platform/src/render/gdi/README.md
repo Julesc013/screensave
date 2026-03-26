@@ -12,5 +12,5 @@ Current stage: Series 05 makes the first reusable renderer backend real here:
 - `gdi_bitmap.c` provides modest bitmap-view blit support
 - `gdi_state.c` keeps backend diagnostics/info helpers private
 
-The design stays immediate and compatibility-first. OpenGL remains deferred.
+The design stays immediate and compatibility-first. Series 06 now exercises this backend through the real Nocturne product while OpenGL remains deferred.
 Type: runtime implementation.

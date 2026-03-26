@@ -1,7 +1,15 @@
 # Nocturne Source
 
-Purpose: source files owned by the `nocturne` saver product.
-Belongs here: product-local implementation and entry files owned by `nocturne`.
-Does not belong here: shared platform code or unrelated saver logic.
-Current stage: the directory contains only `nocturne_entry.c`, which contributes a no-op saver-module descriptor to the shared Series 05 host/runtime/renderer stack and no real saver visuals.
+Purpose: product-local implementation for the Nocturne saver.
+Belongs here: module lifecycle, config dialog and persistence, presets, themes, simulation, and rendering owned by Nocturne.
+Does not belong here: shared platform code or logic that only exists to prepare future savers.
+
+Key files:
+
+- `nocturne_module.c` declares the real saver module descriptor
+- `nocturne_config.c` owns Nocturne defaults, persistence, and its config dialog
+- `nocturne_presets.c` and `nocturne_themes.c` define the curated product identity
+- `nocturne_sim.c` owns fade, reseed, and motion-state evolution
+- `nocturne_render.c` draws the restrained visual through the shared renderer contract
+
 Type: product runtime source.

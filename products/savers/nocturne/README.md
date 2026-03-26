@@ -1,8 +1,16 @@
 # Nocturne
 
-Purpose: placeholder home for the planned first saver product.
-Belongs here: `nocturne`-specific presets, themes, docs, assets, and later implementation.
-Does not belong here: shared code that should live in `platform/` or generic saver templates.
-Current stage: Series 05 still keeps `nocturne` as a no-op saver-module shell while the host uses the new shared GDI backend and built-in validation scene.
-No real `nocturne` visual or content logic exists yet.
+Purpose: the first real ScreenSave product and the dark-room reference saver.
+Belongs here: Nocturne-specific runtime code, presets, themes, manifest data, and smoke checks.
+Does not belong here: shared host, renderer, or cross-product framework code.
+
+Series 06 makes Nocturne real:
+
+- a real saver module lifecycle on the shared host/runtime contract
+- restrained dark rendering through the shared GDI backend
+- curated presets and monochrome dark themes
+- product-owned config persistence and config dialog wiring
+- long-run fade and reseed behavior for calm but non-dead motion
+
+Nocturne stays intentionally narrow. It is a dark blanker-plus saver, not a general ambient effects engine.
 Type: product runtime space.

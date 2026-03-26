@@ -1,6 +1,6 @@
 # CI Build Notes
 
-CI does not attempt a native ScreenSave build in Series 05.
+CI does not attempt a native ScreenSave build in Series 06.
 
 ## What CI Checks Now
 
@@ -10,7 +10,7 @@ CI does not attempt a native ScreenSave build in Series 05.
 
 ## Why CI Does Not Build Yet
 
-The repository now has a real host skeleton, a real shared core runtime, and a real baseline GDI renderer, but it still lacks a validated toolchain baseline in CI, optional higher renderer tiers, and real saver-product behavior.
+The repository now has a real host skeleton, a real shared core runtime, a real baseline GDI renderer, and the first real saver product, but it still lacks a validated native Windows toolchain baseline in CI.
 Running a fake native build would still create misleading confidence.
 
 CI should only graduate to real build jobs when later series have enough concrete code for the result to be meaningful.

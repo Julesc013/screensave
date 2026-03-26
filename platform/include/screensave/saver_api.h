@@ -50,6 +50,43 @@ typedef struct screensave_saver_environment_tag {
 typedef struct screensave_saver_session_tag screensave_saver_session;
 struct screensave_saver_module_tag;
 
+typedef struct screensave_saver_config_hooks_tag {
+    unsigned int product_config_size;
+    void (*set_defaults)(
+        screensave_common_config *common_config,
+        void *product_config,
+        unsigned int product_config_size
+    );
+    void (*clamp)(
+        screensave_common_config *common_config,
+        void *product_config,
+        unsigned int product_config_size
+    );
+    int (*load_config)(
+        const struct screensave_saver_module_tag *module,
+        screensave_common_config *common_config,
+        void *product_config,
+        unsigned int product_config_size,
+        screensave_diag_context *diagnostics
+    );
+    int (*save_config)(
+        const struct screensave_saver_module_tag *module,
+        const screensave_common_config *common_config,
+        const void *product_config,
+        unsigned int product_config_size,
+        screensave_diag_context *diagnostics
+    );
+    INT_PTR (*show_config_dialog)(
+        HINSTANCE instance,
+        HWND owner_window,
+        const struct screensave_saver_module_tag *module,
+        screensave_common_config *common_config,
+        void *product_config,
+        unsigned int product_config_size,
+        screensave_diag_context *diagnostics
+    );
+} screensave_saver_config_hooks;
+
 typedef struct screensave_saver_callbacks_tag {
     int (*create_session)(
         const struct screensave_saver_module_tag *module,
@@ -69,6 +106,7 @@ typedef struct screensave_saver_module_tag {
     unsigned int preset_count;
     const screensave_theme_descriptor *themes;
     unsigned int theme_count;
+    const screensave_saver_config_hooks *config_hooks;
     const screensave_saver_callbacks *callbacks;
 } screensave_saver_module;
 

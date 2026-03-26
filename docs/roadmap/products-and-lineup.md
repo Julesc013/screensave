@@ -5,7 +5,7 @@ Names are planning anchors, not release claims.
 
 ## Quiet, Utility, And Ambient
 
-- `nocturne`: low-distraction ambient saver and the planned first product.
+- `nocturne`: low-distraction ambient saver and the first real product.
 - `ember`: warm low-motion abstract saver.
 - `weather_glass`: ambient utility-style saver for clocks, weather, or similar display concepts if the platform grows that far.
 

@@ -14,19 +14,20 @@ The platform target is intentionally conservative:
 
 ## Current Status
 
-The repository is in Series 05.
+The repository is in Series 06.
 Series 00 established repository law, structure, roadmap, and agent guidance.
 Series 01 added contribution, review, governance, and CI foundations.
 Series 02 added the checked-in build scaffold and toolchain lane structure.
 Series 03 added the first real Win32 `.scr` host skeleton.
 Series 04 added the first shared runtime substrate and narrow public platform API.
-Series 05 adds the mandatory reusable GDI renderer backend:
+Series 05 added the mandatory reusable GDI renderer backend.
+Series 06 adds Nocturne as the first real saver product:
 
-- a real shared GDI backend with an offscreen backbuffer and baseline primitive/blit support
-- host integration through the shared renderer path for screen and preview rendering
-- a tiny renderer-driven validation scene used when no real saver session exists yet
+- a real Nocturne saver module with product-owned config, presets, and themes
+- restrained dark-room-safe rendering through the shared GDI backend
+- real config dialog wiring and long-run fade/reseed behavior on the shared host path
 
-OpenGL and real saver-product behavior are still deferred.
+OpenGL, packaging, and multi-product behavior are still deferred.
 
 ## Planned Product Shape
 
@@ -36,7 +37,7 @@ ScreenSave is structured as one shared platform with many releasable products:
 - Suite-level applications such as Gallery, Player, and BenchLab under `products/apps/`
 - SDK material under `products/sdk/`
 
-The first named saver placeholder is `nocturne`.
+`nocturne` is now the first real saver product in the tree.
 Additional saver families and suite-level products are described in `docs/roadmap/products-and-lineup.md`.
 
 ## Repository Authority
@@ -70,14 +71,14 @@ For explanatory architecture and execution order, start with:
 
 ## Build Status
 
-The checked-in build scaffold now integrates the real Series 05 baseline renderer, the Series 04 shared core runtime, and the Series 03 host:
+The checked-in build scaffold now integrates the real Series 06 first-product path on top of the Series 05 renderer, Series 04 shared core runtime, and Series 03 host:
 
 - a concrete MSVC VS2022 solution lane under `build/msvc/vs2022/`
 - a concrete MinGW i686 make lane under `build/mingw/i686/`
 - documentation-only VS6 and VS2008 lanes that preserve long-term intent without claiming present build completeness
 
 The shared platform target now compiles the reusable non-renderer core runtime, the mandatory GDI backend, and the Win32 host.
-The `.scr` target now renders through the shared GDI path and falls back to a tiny built-in validation scene until the first real saver product arrives.
+The `.scr` target now runs the real Nocturne saver through the shared saver and GDI paths, with the validation scene retained only as a fallback for non-product sessions.
 
 Read the specs before adding code.
 This repository should stay truthful, reconstructable, and conservative about compatibility.

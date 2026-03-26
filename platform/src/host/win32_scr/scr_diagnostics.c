@@ -90,7 +90,7 @@ void scr_build_version_text(const scr_host_context *context, char *buffer, int b
     scr_append_text(buffer, buffer_size, "\r\n");
     scr_append_text(buffer, buffer_size, version_info->series_text);
     scr_append_text(buffer, buffer_size, "\r\n");
-    scr_append_text(buffer, buffer_size, "Shared diagnostics, common config, saver/module scaffolding, and the baseline GDI renderer are active.");
+    scr_append_text(buffer, buffer_size, "Shared diagnostics, common config, the saver/module runtime, and the baseline GDI renderer are active.");
 }
 
 void scr_build_overlay_text(const scr_host_context *context, char *buffer, int buffer_size)
@@ -126,8 +126,14 @@ void scr_build_overlay_text(const scr_host_context *context, char *buffer, int b
     } else {
         scr_append_text(buffer, buffer_size, "session");
     }
-    scr_append_text(buffer, buffer_size, "\r\nValidation scene: ");
-    scr_append_text(buffer, buffer_size, context->settings.validation_scene_enabled ? "on" : "off");
+    if (context->settings.common.preset_key != NULL) {
+        scr_append_text(buffer, buffer_size, "\r\nPreset: ");
+        scr_append_text(buffer, buffer_size, context->settings.common.preset_key);
+    }
+    if (context->settings.common.theme_key != NULL) {
+        scr_append_text(buffer, buffer_size, "\r\nTheme: ");
+        scr_append_text(buffer, buffer_size, context->settings.common.theme_key);
+    }
     if (context->renderer != NULL) {
         screensave_renderer_get_info(context->renderer, &renderer_info);
         scr_append_text(buffer, buffer_size, "\r\nRenderer: ");
@@ -144,6 +150,9 @@ void scr_build_overlay_text(const scr_host_context *context, char *buffer, int b
             scr_append_text(buffer, buffer_size, "\r\nRender status: ");
             scr_append_text(buffer, buffer_size, renderer_info.status_text);
         }
+    }
+    if (context->session == NULL) {
+        scr_append_text(buffer, buffer_size, "\r\nScene: validation fallback");
     }
     if (context->diagnostics.last_text[0] != '\0') {
         scr_append_text(buffer, buffer_size, "\r\nLast diag: ");
