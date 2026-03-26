@@ -87,6 +87,12 @@ typedef struct screensave_saver_config_hooks_tag {
     );
 } screensave_saver_config_hooks;
 
+typedef struct screensave_saver_config_state_tag {
+    screensave_common_config common;
+    void *product_config;
+    unsigned int product_config_size;
+} screensave_saver_config_state;
+
 typedef struct screensave_saver_callbacks_tag {
     int (*create_session)(
         const struct screensave_saver_module_tag *module,
@@ -111,6 +117,29 @@ typedef struct screensave_saver_module_tag {
 } screensave_saver_module;
 
 int screensave_saver_module_is_valid(const screensave_saver_module *module);
+int screensave_saver_config_state_init(
+    const screensave_saver_module *module,
+    screensave_saver_config_state *config_state
+);
+void screensave_saver_config_state_dispose(screensave_saver_config_state *config_state);
+void screensave_saver_config_state_set_defaults(
+    const screensave_saver_module *module,
+    screensave_saver_config_state *config_state
+);
+void screensave_saver_config_state_clamp(
+    const screensave_saver_module *module,
+    screensave_saver_config_state *config_state
+);
+int screensave_saver_config_state_load(
+    const screensave_saver_module *module,
+    screensave_saver_config_state *config_state,
+    screensave_diag_context *diagnostics
+);
+int screensave_saver_config_state_save(
+    const screensave_saver_module *module,
+    const screensave_saver_config_state *config_state,
+    screensave_diag_context *diagnostics
+);
 const char *screensave_session_mode_name(screensave_session_mode mode);
 int screensave_scr_main(
     HINSTANCE instance,

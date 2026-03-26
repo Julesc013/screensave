@@ -1,10 +1,11 @@
 # MinGW i686 Lane
 
-This is the concrete GCC-family x86 lane for Series 06.
+This is the concrete GCC-family x86 lane for Series 07.
 
 ## What Exists Now
 
 - `Makefile` for the shared platform library, the real `nocturne.scr` target, the core-plus-GDI platform objects, the Nocturne product objects, and the host/product dialog resources
+- `Makefile` for the shared platform library, the real `nocturne.scr` target, the real `benchlab.exe` target, the core-plus-GDI platform objects, the Nocturne product objects, and the host/product dialog resources
 
 The target graph mirrors the VS2022 lane closely so later implementation work does not have to invent two unrelated build stories.
 

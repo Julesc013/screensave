@@ -14,4 +14,5 @@ Current stage: Series 04 makes the first real core-runtime layer live here:
 
 Renderer backends now consume these contracts from `platform/src/render/`.
 Series 06 uses the core runtime from the first real saver product without promoting Nocturne-specific behavior into shared code.
+Series 07 adds only narrow shared helpers here for saver-config state ownership and diagnostics usage shared by the `.scr` host and BenchLab.
 Type: runtime implementation.

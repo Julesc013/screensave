@@ -1,6 +1,5 @@
 #include "scr_internal.h"
 #include "../../core/rng/rng_internal.h"
-#include "../../render/gdi/gdi_internal.h"
 
 static ATOM g_scr_window_class = 0;
 
@@ -113,7 +112,13 @@ static int scr_create_renderer_and_session(scr_host_context *context, HWND windo
     }
 
     scr_get_client_size(window, &drawable_size);
-    if (!screensave_gdi_renderer_create(window, &drawable_size, &context->diagnostics, &context->renderer)) {
+    if (!screensave_renderer_create_for_window(
+            SCREENSAVE_RENDERER_KIND_GDI,
+            window,
+            &drawable_size,
+            &context->diagnostics,
+            &context->renderer
+        )) {
         scr_emit_host_diagnostic(
             context,
             SCREENSAVE_DIAG_LEVEL_ERROR,
@@ -153,7 +158,7 @@ static void scr_resize_renderer_and_session(scr_host_context *context, HWND wind
     }
 
     scr_get_client_size(window, &drawable_size);
-    if (!screensave_gdi_renderer_resize(context->renderer, &drawable_size)) {
+    if (!screensave_renderer_resize_for_window(context->renderer, &drawable_size)) {
         scr_emit_host_diagnostic(
             context,
             SCREENSAVE_DIAG_LEVEL_WARNING,
@@ -378,7 +383,7 @@ static LRESULT CALLBACK scr_window_proc(HWND window, UINT message, WPARAM wParam
         dc = BeginPaint(window, &paint);
         GetClientRect(window, &client_rect);
         if (context != NULL && context->renderer != NULL) {
-            screensave_gdi_renderer_set_present_dc(context->renderer, dc);
+            screensave_renderer_set_present_dc(context->renderer, dc);
             if (
                 context->session != NULL &&
                 context->module->callbacks != NULL &&
@@ -412,7 +417,7 @@ static LRESULT CALLBACK scr_window_proc(HWND window, UINT message, WPARAM wParam
             } else {
                 scr_render_black_frame(context);
             }
-            screensave_gdi_renderer_clear_present_dc(context->renderer);
+            screensave_renderer_clear_present_dc(context->renderer);
         } else {
             FillRect(dc, &client_rect, (HBRUSH)GetStockObject(BLACK_BRUSH));
         }

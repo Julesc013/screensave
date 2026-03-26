@@ -42,7 +42,7 @@ Names are planning anchors, not release claims.
 
 - `gallery`: browse and launch installed or built savers.
 - `player`: run savers in a controlled windowed environment.
-- `benchlab`: performance, timing, and compatibility instrumentation.
+- `benchlab`: developer-facing windowed diagnostics harness for saver, renderer, and deterministic validation work.
 - `sdk`: headers, templates, examples, and contributor-oriented materials.
 
 Every product group is subordinate to the shared compatibility contract.

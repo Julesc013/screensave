@@ -14,11 +14,7 @@
 #define SCR_TIMER_INTERVAL_MS 33
 #define SCR_EXIT_MOUSE_DELTA 4
 
-typedef struct scr_settings_tag {
-    screensave_common_config common;
-    void *product_config;
-    unsigned int product_config_size;
-} scr_settings;
+typedef screensave_saver_config_state scr_settings;
 
 typedef struct scr_parsed_args_tag {
     screensave_session_mode mode;

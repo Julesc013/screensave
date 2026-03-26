@@ -23,4 +23,5 @@ Series 03 made the private Win32 host real.
 Series 04 makes the reusable non-renderer runtime and first public platform surface real.
 Series 05 makes the mandatory reusable GDI backend real and routes the host through the shared renderer path.
 Series 06 makes Nocturne the first real saver product on those shared contracts.
+Series 07 makes BenchLab the first real app product and proves the current saver/renderer contracts in a windowed diagnostics harness.
 Optional higher renderer tiers and multi-product concerns remain deferred while preserving the compatibility and ownership rules defined in `specs/`.

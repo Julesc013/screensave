@@ -5,13 +5,13 @@ This directory holds GCC-family Windows lanes that preserve the x86 target inten
 ## Strategy
 
 The MinGW lane exists so the build story is not defined only by one Microsoft toolchain generation.
-For Series 06, the practical lane is `i686/`.
+For Series 07, the practical lane is `i686/`.
 
 ## Current State
 
 Real now:
 
-- `i686/` contains a concrete make-based lane for the same shared core, host, GDI backend, and real Nocturne product used by the VS2022 lane
+- `i686/` contains a concrete make-based lane for the same shared core, host, GDI backend, real Nocturne saver, and real BenchLab app used by the VS2022 lane
 
 Deferred:
 

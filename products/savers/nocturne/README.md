@@ -11,6 +11,7 @@ Series 06 makes Nocturne real:
 - curated presets and monochrome dark themes
 - product-owned config persistence and config dialog wiring
 - long-run fade and reseed behavior for calm but non-dead motion
+- shared-contract integration that now allows BenchLab to run Nocturne in a windowed diagnostics harness without private host shortcuts
 
 Nocturne stays intentionally narrow. It is a dark blanker-plus saver, not a general ambient effects engine.
 Type: product runtime space.

@@ -1,6 +1,9 @@
 #ifndef SCREENSAVE_RENDERER_API_H
 #define SCREENSAVE_RENDERER_API_H
 
+#include <windows.h>
+
+#include "screensave/diagnostics_api.h"
 #include "screensave/types.h"
 
 typedef enum screensave_renderer_kind_tag {
@@ -45,6 +48,16 @@ typedef struct screensave_renderer_tag screensave_renderer;
 
 const char *screensave_renderer_kind_name(screensave_renderer_kind kind);
 int screensave_renderer_has_capability(unsigned long capability_flags, unsigned long capability_flag);
+int screensave_renderer_create_for_window(
+    screensave_renderer_kind requested_kind,
+    HWND target_window,
+    const screensave_sizei *drawable_size,
+    screensave_diag_context *diagnostics,
+    screensave_renderer **renderer_out
+);
+int screensave_renderer_resize_for_window(screensave_renderer *renderer, const screensave_sizei *drawable_size);
+void screensave_renderer_set_present_dc(screensave_renderer *renderer, HDC present_dc);
+void screensave_renderer_clear_present_dc(screensave_renderer *renderer);
 void screensave_renderer_get_info(const screensave_renderer *renderer, screensave_renderer_info *info);
 int screensave_renderer_begin_frame(screensave_renderer *renderer, const screensave_frame_info *frame_info);
 void screensave_renderer_clear(screensave_renderer *renderer, screensave_color color);

@@ -2,6 +2,25 @@
 
 All notable repository changes are recorded here in series order.
 
+## S07 - 2026-03-27
+
+### Added
+
+- BenchLab as the first real app product under `products/apps/benchlab/`, including a manifest, windowed harness sources, overlay diagnostics, app-local persistence, and lightweight smoke validation.
+- A deterministic BenchLab run mode with restart, reseed, pause, and single-step controls for repeatable Nocturne debugging on the shared GDI baseline.
+
+### Changed
+
+- Refined the shared saver and renderer contracts narrowly so both the `.scr` host and BenchLab can allocate saver-owned config state and create window-bound renderers through the public platform surface.
+- Updated the concrete VS2022 and MinGW i686 build lanes, static build checks, and repo docs so BenchLab is a first-class checked-in app target alongside `nocturne.scr`.
+- Extended shared diagnostics usage modestly so BenchLab can report app-local status while continuing to run Nocturne through the shared saver/module and renderer paths.
+
+### Validation
+
+- Confirmed Series 00 through Series 06 prerequisites existed before changes.
+- Performed static validation of the BenchLab file graph, shared-contract wiring, build integration, and documentation consistency.
+- Confirmed no OpenGL backend work, second-saver work, gallery/player scope, packaging logic, or release-production claims were added in this series.
+
 ## S06 - 2026-03-27
 
 ### Added

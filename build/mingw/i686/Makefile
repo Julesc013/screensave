@@ -6,13 +6,16 @@ AR ?= ar
 RC ?= windres
 
 OUTROOT := $(ROOT)/out
-BIN_DIR := $(OUTROOT)/mingw/i686/$(PROFILE)/nocturne
+NOCTURNE_BIN_DIR := $(OUTROOT)/mingw/i686/$(PROFILE)/nocturne
+BENCHLAB_BIN_DIR := $(OUTROOT)/mingw/i686/$(PROFILE)/benchlab
 INT_ROOT := $(OUTROOT)/intermediate/mingw/i686/$(PROFILE)
 PLATFORM_DIR := $(INT_ROOT)/screensave_platform
 NOCTURNE_DIR := $(INT_ROOT)/nocturne
+BENCHLAB_DIR := $(INT_ROOT)/benchlab
 
 PLATFORM_LIB := $(PLATFORM_DIR)/libscreensave_platform.a
-TARGET := $(BIN_DIR)/nocturne.scr
+NOCTURNE_TARGET := $(NOCTURNE_BIN_DIR)/nocturne.scr
+BENCHLAB_TARGET := $(BENCHLAB_BIN_DIR)/benchlab.exe
 
 PLATFORM_SRCS := \
 	$(ROOT)/platform/src/core/base/renderer_dispatch.c \
@@ -39,6 +42,20 @@ PLATFORM_SRCS := \
 NOCTURNE_SRCS := \
 	$(ROOT)/products/savers/nocturne/src/nocturne_config.c \
 	$(ROOT)/products/savers/nocturne/src/nocturne_entry.c \
+	$(ROOT)/products/savers/nocturne/src/nocturne_module.c \
+	$(ROOT)/products/savers/nocturne/src/nocturne_presets.c \
+	$(ROOT)/products/savers/nocturne/src/nocturne_render.c \
+	$(ROOT)/products/savers/nocturne/src/nocturne_sim.c \
+	$(ROOT)/products/savers/nocturne/src/nocturne_themes.c
+
+BENCHLAB_SRCS := \
+	$(ROOT)/products/apps/benchlab/src/benchlab_app.c \
+	$(ROOT)/products/apps/benchlab/src/benchlab_config.c \
+	$(ROOT)/products/apps/benchlab/src/benchlab_diag.c \
+	$(ROOT)/products/apps/benchlab/src/benchlab_main.c \
+	$(ROOT)/products/apps/benchlab/src/benchlab_overlay.c \
+	$(ROOT)/products/apps/benchlab/src/benchlab_session.c \
+	$(ROOT)/products/savers/nocturne/src/nocturne_config.c \
 	$(ROOT)/products/savers/nocturne/src/nocturne_module.c \
 	$(ROOT)/products/savers/nocturne/src/nocturne_presets.c \
 	$(ROOT)/products/savers/nocturne/src/nocturne_render.c \
@@ -78,6 +95,21 @@ NOCTURNE_OBJS := \
 	$(NOCTURNE_DIR)/nocturne_config_res.o \
 	$(NOCTURNE_DIR)/screensave_host_res.o
 
+BENCHLAB_OBJS := \
+	$(BENCHLAB_DIR)/benchlab_app.o \
+	$(BENCHLAB_DIR)/benchlab_config.o \
+	$(BENCHLAB_DIR)/benchlab_diag.o \
+	$(BENCHLAB_DIR)/benchlab_main.o \
+	$(BENCHLAB_DIR)/benchlab_overlay.o \
+	$(BENCHLAB_DIR)/benchlab_session.o \
+	$(BENCHLAB_DIR)/nocturne_config.o \
+	$(BENCHLAB_DIR)/nocturne_module.o \
+	$(BENCHLAB_DIR)/nocturne_presets.o \
+	$(BENCHLAB_DIR)/nocturne_render.o \
+	$(BENCHLAB_DIR)/nocturne_sim.o \
+	$(BENCHLAB_DIR)/nocturne_themes.o \
+	$(BENCHLAB_DIR)/nocturne_config_res.o
+
 CFLAGS_COMMON := -std=c89 -Wall -Wextra -pedantic -I$(ROOT)/platform/include
 LDLIBS_COMMON := -ladvapi32 -lgdi32 -luser32
 
@@ -89,11 +121,15 @@ endif
 
 .PHONY: all clean
 
-all: $(TARGET)
+all: $(NOCTURNE_TARGET) $(BENCHLAB_TARGET)
 
-$(TARGET): $(PLATFORM_LIB) $(NOCTURNE_OBJS)
-	mkdir -p $(BIN_DIR)
+$(NOCTURNE_TARGET): $(PLATFORM_LIB) $(NOCTURNE_OBJS)
+	mkdir -p $(NOCTURNE_BIN_DIR)
 	$(CC) $(CFLAGS) -mwindows -o $@ $(NOCTURNE_OBJS) $(PLATFORM_LIB) $(LDLIBS_COMMON)
+
+$(BENCHLAB_TARGET): $(PLATFORM_LIB) $(BENCHLAB_OBJS)
+	mkdir -p $(BENCHLAB_BIN_DIR)
+	$(CC) $(CFLAGS) -mwindows -o $@ $(BENCHLAB_OBJS) $(PLATFORM_LIB) $(LDLIBS_COMMON)
 
 $(PLATFORM_LIB): $(PLATFORM_OBJS)
 	mkdir -p $(PLATFORM_DIR)
@@ -215,5 +251,57 @@ $(NOCTURNE_DIR)/screensave_host_res.o: $(ROOT)/platform/src/host/win32_scr/scree
 	mkdir -p $(NOCTURNE_DIR)
 	$(RC) --include-dir=$(ROOT)/platform/src/host/win32_scr -i $< -o $@
 
+$(BENCHLAB_DIR)/benchlab_app.o: $(ROOT)/products/apps/benchlab/src/benchlab_app.c
+	mkdir -p $(BENCHLAB_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BENCHLAB_DIR)/benchlab_config.o: $(ROOT)/products/apps/benchlab/src/benchlab_config.c
+	mkdir -p $(BENCHLAB_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BENCHLAB_DIR)/benchlab_diag.o: $(ROOT)/products/apps/benchlab/src/benchlab_diag.c
+	mkdir -p $(BENCHLAB_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BENCHLAB_DIR)/benchlab_main.o: $(ROOT)/products/apps/benchlab/src/benchlab_main.c
+	mkdir -p $(BENCHLAB_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BENCHLAB_DIR)/benchlab_overlay.o: $(ROOT)/products/apps/benchlab/src/benchlab_overlay.c
+	mkdir -p $(BENCHLAB_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BENCHLAB_DIR)/benchlab_session.o: $(ROOT)/products/apps/benchlab/src/benchlab_session.c
+	mkdir -p $(BENCHLAB_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BENCHLAB_DIR)/nocturne_config.o: $(ROOT)/products/savers/nocturne/src/nocturne_config.c
+	mkdir -p $(BENCHLAB_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BENCHLAB_DIR)/nocturne_module.o: $(ROOT)/products/savers/nocturne/src/nocturne_module.c
+	mkdir -p $(BENCHLAB_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BENCHLAB_DIR)/nocturne_presets.o: $(ROOT)/products/savers/nocturne/src/nocturne_presets.c
+	mkdir -p $(BENCHLAB_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BENCHLAB_DIR)/nocturne_render.o: $(ROOT)/products/savers/nocturne/src/nocturne_render.c
+	mkdir -p $(BENCHLAB_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BENCHLAB_DIR)/nocturne_sim.o: $(ROOT)/products/savers/nocturne/src/nocturne_sim.c
+	mkdir -p $(BENCHLAB_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BENCHLAB_DIR)/nocturne_themes.o: $(ROOT)/products/savers/nocturne/src/nocturne_themes.c
+	mkdir -p $(BENCHLAB_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BENCHLAB_DIR)/nocturne_config_res.o: $(ROOT)/products/savers/nocturne/src/nocturne_config.rc $(ROOT)/products/savers/nocturne/src/nocturne_resource.h
+	mkdir -p $(BENCHLAB_DIR)
+	$(RC) --include-dir=$(ROOT)/products/savers/nocturne/src -i $< -o $@
+
 clean:
-	rm -rf $(BIN_DIR) $(PLATFORM_DIR) $(NOCTURNE_DIR)
+	rm -rf $(NOCTURNE_BIN_DIR) $(BENCHLAB_BIN_DIR) $(PLATFORM_DIR) $(NOCTURNE_DIR) $(BENCHLAB_DIR)

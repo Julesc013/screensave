@@ -138,6 +138,9 @@ const char *screensave_diag_domain_name(screensave_diag_domain domain)
     case SCREENSAVE_DIAG_DOMAIN_SAVER:
         return "saver";
 
+    case SCREENSAVE_DIAG_DOMAIN_APP:
+        return "app";
+
     case SCREENSAVE_DIAG_DOMAIN_PLATFORM:
     default:
         return "platform";

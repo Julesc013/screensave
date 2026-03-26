@@ -30,7 +30,6 @@ void screensave_gdi_update_renderer_info(
         return;
     }
 
-    renderer->info.requested_kind = SCREENSAVE_RENDERER_KIND_GDI;
     renderer->info.active_kind = SCREENSAVE_RENDERER_KIND_GDI;
     renderer->info.capability_flags = SCREENSAVE_GDI_CAPABILITIES;
     renderer->info.backend_name = "gdi";

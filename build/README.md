@@ -16,7 +16,7 @@ The build scaffold is not the constitutional source of truth.
 The normative compatibility and target rules remain in `specs/build_targets.md` and related specs.
 This directory translates those rules into reviewable build lanes.
 
-## Current State In Series 06
+## Current State In Series 07
 
 Real now:
 
@@ -27,7 +27,9 @@ Real now:
 - a narrow public platform header set under `platform/include/screensave/`
 - a real mandatory GDI backend under `platform/src/render/gdi/`
 - a real Nocturne saver product under `products/savers/nocturne/`
+- a real BenchLab diagnostics app under `products/apps/benchlab/`
 - product-owned configuration, presets, and themes wired through the shared saver contract
+- a windowed harness path that runs the active saver through the shared saver and renderer contracts outside the `.scr` host
 - a tiny renderer-driven validation scene retained only as a non-product fallback path
 - build-layout validation in `tools/scripts/check_build_layout.py`
 
@@ -35,6 +37,7 @@ Deferred:
 
 - OpenGL renderer backends
 - additional saver products beyond Nocturne
+- a final player or gallery app
 - full legacy project files for VS6 and VS2008
 - packaging and release production
 
@@ -63,7 +66,7 @@ These conventions are documented now so later series can extend them without res
 
 ## How Later Series Should Extend This
 
-- keep the shared core, GDI backend, and host lifecycle intact while later series add more saver sessions and optional higher renderer tiers against the public contracts
+- keep the shared core, GDI backend, saver contracts, and host/app lifecycle intact while later series add more saver sessions and optional higher renderer tiers against the public contracts
 - keep checked-in project files small and explicit
 - add real legacy project files only when they can be maintained honestly
 - expand CI from static scaffold validation to real builds only when the runtime is ready

@@ -14,7 +14,8 @@ typedef enum screensave_diag_domain_tag {
     SCREENSAVE_DIAG_DOMAIN_CORE = 2,
     SCREENSAVE_DIAG_DOMAIN_CONFIG = 3,
     SCREENSAVE_DIAG_DOMAIN_RENDERER = 4,
-    SCREENSAVE_DIAG_DOMAIN_SAVER = 5
+    SCREENSAVE_DIAG_DOMAIN_SAVER = 5,
+    SCREENSAVE_DIAG_DOMAIN_APP = 6
 } screensave_diag_domain;
 
 typedef struct screensave_diag_message_tag {

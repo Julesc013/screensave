@@ -1,6 +1,28 @@
 #include <string.h>
 
 #include "renderer_private.h"
+#include "../../render/gdi/gdi_internal.h"
+
+static void screensave_renderer_emit_create_diag(
+    screensave_diag_context *diagnostics,
+    screensave_diag_level level,
+    unsigned long code,
+    const char *text
+)
+{
+    if (diagnostics == NULL) {
+        return;
+    }
+
+    screensave_diag_emit(
+        diagnostics,
+        level,
+        SCREENSAVE_DIAG_DOMAIN_RENDERER,
+        code,
+        "renderer_dispatch",
+        text
+    );
+}
 
 static void screensave_renderer_zero_info(screensave_renderer_info *info)
 {
@@ -50,6 +72,110 @@ const char *screensave_renderer_kind_name(screensave_renderer_kind kind)
 int screensave_renderer_has_capability(unsigned long capability_flags, unsigned long capability_flag)
 {
     return (capability_flags & capability_flag) == capability_flag;
+}
+
+int screensave_renderer_create_for_window(
+    screensave_renderer_kind requested_kind,
+    HWND target_window,
+    const screensave_sizei *drawable_size,
+    screensave_diag_context *diagnostics,
+    screensave_renderer **renderer_out
+)
+{
+    screensave_renderer_kind effective_request;
+    const char *status_text;
+
+    if (renderer_out == NULL) {
+        return 0;
+    }
+
+    *renderer_out = NULL;
+    effective_request = requested_kind;
+    status_text = NULL;
+    if (
+        effective_request != SCREENSAVE_RENDERER_KIND_UNKNOWN &&
+        effective_request != SCREENSAVE_RENDERER_KIND_GDI
+    ) {
+        screensave_renderer_emit_create_diag(
+            diagnostics,
+            SCREENSAVE_DIAG_LEVEL_WARNING,
+            4101UL,
+            "The requested renderer is not available yet; falling back to GDI."
+        );
+        status_text = "fallback-gdi";
+    }
+
+    if (!screensave_gdi_renderer_create(target_window, drawable_size, diagnostics, renderer_out)) {
+        return 0;
+    }
+
+    if (*renderer_out != NULL) {
+        (*renderer_out)->info.requested_kind =
+            effective_request == SCREENSAVE_RENDERER_KIND_UNKNOWN
+                ? SCREENSAVE_RENDERER_KIND_GDI
+                : effective_request;
+        if (status_text != NULL) {
+            (*renderer_out)->info.status_text = status_text;
+        }
+    }
+
+    return 1;
+}
+
+int screensave_renderer_resize_for_window(screensave_renderer *renderer, const screensave_sizei *drawable_size)
+{
+    if (renderer == NULL) {
+        return 0;
+    }
+
+    switch (renderer->info.active_kind) {
+    case SCREENSAVE_RENDERER_KIND_GDI:
+        return screensave_gdi_renderer_resize(renderer, drawable_size);
+
+    case SCREENSAVE_RENDERER_KIND_GL11:
+    case SCREENSAVE_RENDERER_KIND_GL_PLUS:
+    case SCREENSAVE_RENDERER_KIND_UNKNOWN:
+    default:
+        return 0;
+    }
+}
+
+void screensave_renderer_set_present_dc(screensave_renderer *renderer, HDC present_dc)
+{
+    if (renderer == NULL) {
+        return;
+    }
+
+    switch (renderer->info.active_kind) {
+    case SCREENSAVE_RENDERER_KIND_GDI:
+        screensave_gdi_renderer_set_present_dc(renderer, present_dc);
+        break;
+
+    case SCREENSAVE_RENDERER_KIND_GL11:
+    case SCREENSAVE_RENDERER_KIND_GL_PLUS:
+    case SCREENSAVE_RENDERER_KIND_UNKNOWN:
+    default:
+        break;
+    }
+}
+
+void screensave_renderer_clear_present_dc(screensave_renderer *renderer)
+{
+    if (renderer == NULL) {
+        return;
+    }
+
+    switch (renderer->info.active_kind) {
+    case SCREENSAVE_RENDERER_KIND_GDI:
+        screensave_gdi_renderer_clear_present_dc(renderer);
+        break;
+
+    case SCREENSAVE_RENDERER_KIND_GL11:
+    case SCREENSAVE_RENDERER_KIND_GL_PLUS:
+    case SCREENSAVE_RENDERER_KIND_UNKNOWN:
+    default:
+        break;
+    }
 }
 
 void screensave_renderer_get_info(const screensave_renderer *renderer, screensave_renderer_info *info)
