@@ -1,0 +1,22 @@
+[project]
+name = "ScreenSave"
+default_branch = "main"
+primary_language = "c89"
+host_platform = "win32-x86"
+
+[execution]
+current_series = "S00"
+require_series_tagged_commits = true
+require_changelog_updates = true
+prefer_noninteractive_git = true
+
+[compatibility]
+c_baseline = "C89"
+product_baseline = "x86 Win32 .scr"
+renderer_floor = "GDI"
+optional_renderer = "GL11"
+advanced_gl_policy = "optional and capability-gated"
+
+[validation]
+bootstrap_script = "tools/verify_bootstrap.ps1"
+truth_notes = "Record toolchain and verification limits in docs/validation.md"
