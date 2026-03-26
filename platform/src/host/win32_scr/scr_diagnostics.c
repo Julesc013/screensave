@@ -1,4 +1,5 @@
 #include "scr_internal.h"
+#include "screensave/version.h"
 
 int scr_append_text(char *buffer, int buffer_size, const char *text)
 {
@@ -27,14 +28,41 @@ int scr_append_number(char *buffer, int buffer_size, unsigned long value)
     return scr_append_text(buffer, buffer_size, text);
 }
 
-const char *scr_mode_label(scr_run_mode mode)
+void scr_emit_host_diagnostic(
+    scr_host_context *context,
+    screensave_diag_level level,
+    unsigned long code,
+    const char *origin,
+    const char *text
+)
+{
+    if (context == NULL) {
+        return;
+    }
+
+    screensave_diag_emit(
+        &context->diagnostics,
+        level,
+        SCREENSAVE_DIAG_DOMAIN_HOST,
+        code,
+        origin,
+        text
+    );
+}
+
+const char *scr_mode_label(screensave_session_mode mode)
 {
     switch (mode) {
-    case SCR_RUN_MODE_SCREEN:
+    case SCREENSAVE_SESSION_MODE_SCREEN:
         return "screen saver";
-    case SCR_RUN_MODE_PREVIEW:
+
+    case SCREENSAVE_SESSION_MODE_PREVIEW:
         return "preview";
-    case SCR_RUN_MODE_CONFIG:
+
+    case SCREENSAVE_SESSION_MODE_WINDOWED:
+        return "windowed";
+
+    case SCREENSAVE_SESSION_MODE_CONFIG:
     default:
         return "configuration";
     }
@@ -42,6 +70,8 @@ const char *scr_mode_label(scr_run_mode mode)
 
 void scr_build_version_text(const scr_host_context *context, char *buffer, int buffer_size)
 {
+    const screensave_version_info *version_info;
+
     if (buffer == NULL || buffer_size <= 0) {
         return;
     }
@@ -51,17 +81,20 @@ void scr_build_version_text(const scr_host_context *context, char *buffer, int b
         return;
     }
 
-    scr_append_text(buffer, buffer_size, context->product.display_name);
+    version_info = screensave_version_get_info();
+
+    scr_append_text(buffer, buffer_size, context->module->identity.display_name);
     scr_append_text(buffer, buffer_size, "\r\n");
-    scr_append_text(buffer, buffer_size, "Series 03 Win32 host skeleton");
+    scr_append_text(buffer, buffer_size, "ScreenSave ");
+    scr_append_text(buffer, buffer_size, version_info->version_text);
     scr_append_text(buffer, buffer_size, "\r\n");
-    scr_append_text(buffer, buffer_size, "Settings are stored per user as a provisional registry scaffold.");
+    scr_append_text(buffer, buffer_size, version_info->series_text);
+    scr_append_text(buffer, buffer_size, "\r\n");
+    scr_append_text(buffer, buffer_size, "Shared diagnostics, common config, and saver/module scaffolding are active.");
 }
 
 void scr_build_overlay_text(const scr_host_context *context, char *buffer, int buffer_size)
 {
-    DWORD elapsed_millis;
-
     if (buffer == NULL || buffer_size <= 0) {
         return;
     }
@@ -71,25 +104,45 @@ void scr_build_overlay_text(const scr_host_context *context, char *buffer, int b
         return;
     }
 
-    elapsed_millis = GetTickCount() - context->start_tick;
-
-    scr_append_text(buffer, buffer_size, context->product.display_name);
+    scr_append_text(buffer, buffer_size, context->module->identity.display_name);
     scr_append_text(buffer, buffer_size, "\r\nMode: ");
     scr_append_text(buffer, buffer_size, scr_mode_label(context->mode));
+    scr_append_text(buffer, buffer_size, "\r\nRuntime: ");
+    scr_append_text(buffer, buffer_size, screensave_version_get_text());
     scr_append_text(buffer, buffer_size, "\r\nUptime: ");
-    scr_append_number(buffer, buffer_size, (unsigned long)(elapsed_millis / 1000UL));
+    scr_append_number(buffer, buffer_size, context->clock.elapsed_millis / 1000UL);
     scr_append_text(buffer, buffer_size, "s");
+    scr_append_text(buffer, buffer_size, "\r\nDetail: ");
+    scr_append_text(buffer, buffer_size, screensave_detail_level_name(context->settings.common.detail_level));
+    scr_append_text(buffer, buffer_size, "\r\nSeed: ");
+    if (context->settings.common.use_deterministic_seed) {
+        if (context->settings.common.deterministic_seed != 0UL) {
+            scr_append_text(buffer, buffer_size, "fixed");
+        } else {
+            scr_append_text(buffer, buffer_size, "module-default");
+        }
+    } else {
+        scr_append_text(buffer, buffer_size, "session");
+    }
     scr_append_text(buffer, buffer_size, "\r\nPlaceholder visual: ");
     scr_append_text(buffer, buffer_size, context->settings.placeholder_visual_enabled ? "on" : "off");
+    if (context->diagnostics.last_text[0] != '\0') {
+        scr_append_text(buffer, buffer_size, "\r\nLast diag: ");
+        scr_append_text(buffer, buffer_size, screensave_diag_level_name(context->diagnostics.last_level));
+        scr_append_text(buffer, buffer_size, "/");
+        scr_append_text(buffer, buffer_size, screensave_diag_domain_name(context->diagnostics.last_domain));
+        scr_append_text(buffer, buffer_size, " ");
+        scr_append_text(buffer, buffer_size, context->diagnostics.last_text);
+    }
 }
 
-void scr_show_message_box(HWND owner, const screensave_product_identity *product, const char *text, UINT type)
+void scr_show_message_box(HWND owner, const screensave_saver_module *module, const char *text, UINT type)
 {
     char title[96];
 
     title[0] = '\0';
-    if (product != NULL && product->display_name != NULL) {
-        scr_append_text(title, sizeof(title), product->display_name);
+    if (module != NULL && module->identity.display_name != NULL) {
+        scr_append_text(title, sizeof(title), module->identity.display_name);
         scr_append_text(title, sizeof(title), " - ScreenSave");
     } else {
         scr_append_text(title, sizeof(title), "ScreenSave");

@@ -80,8 +80,16 @@ int scr_parse_command_line(LPSTR command_line, scr_parsed_args *parsed_args)
     char *cursor;
     char mode_char;
 
+    if (parsed_args == NULL) {
+        return 0;
+    }
+
     ZeroMemory(parsed_args, sizeof(*parsed_args));
-    parsed_args->mode = SCR_RUN_MODE_CONFIG;
+    parsed_args->mode = SCREENSAVE_SESSION_MODE_CONFIG;
+
+    if (command_line == NULL) {
+        return 1;
+    }
 
     cursor = scr_skip_space(command_line);
     if (*cursor == '\0') {
@@ -103,12 +111,12 @@ int scr_parse_command_line(LPSTR command_line, scr_parsed_args *parsed_args)
     cursor++;
 
     if (mode_char == 's') {
-        parsed_args->mode = SCR_RUN_MODE_SCREEN;
+        parsed_args->mode = SCREENSAVE_SESSION_MODE_SCREEN;
         return 1;
     }
 
     if (mode_char == 'p') {
-        parsed_args->mode = SCR_RUN_MODE_PREVIEW;
+        parsed_args->mode = SCREENSAVE_SESSION_MODE_PREVIEW;
         cursor = scr_skip_separator(cursor);
         if (!scr_try_parse_window_handle(cursor, &parsed_args->preview_parent)) {
             parsed_args->show_invalid_argument_message = 1;
@@ -121,7 +129,7 @@ int scr_parse_command_line(LPSTR command_line, scr_parsed_args *parsed_args)
     }
 
     if (mode_char == 'c' || mode_char == 'a') {
-        parsed_args->mode = SCR_RUN_MODE_CONFIG;
+        parsed_args->mode = SCREENSAVE_SESSION_MODE_CONFIG;
         cursor = scr_skip_separator(cursor);
         if (*cursor != '\0') {
             (void)scr_try_parse_window_handle(cursor, &parsed_args->config_owner);
@@ -132,6 +140,6 @@ int scr_parse_command_line(LPSTR command_line, scr_parsed_args *parsed_args)
 
     scr_copy_invalid_token(command_line, parsed_args->invalid_argument, sizeof(parsed_args->invalid_argument));
     parsed_args->show_invalid_argument_message = 1;
-    parsed_args->mode = SCR_RUN_MODE_CONFIG;
+    parsed_args->mode = SCREENSAVE_SESSION_MODE_CONFIG;
     return 1;
 }

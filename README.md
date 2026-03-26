@@ -14,18 +14,18 @@ The platform target is intentionally conservative:
 
 ## Current Status
 
-The repository is in Series 03.
+The repository is in Series 04.
 Series 00 established repository law, structure, roadmap, and agent guidance.
 Series 01 added contribution, review, governance, and CI foundations.
 Series 02 added the checked-in build scaffold and toolchain lane structure.
-Series 03 adds the first real Win32 `.scr` host skeleton:
+Series 03 added the first real Win32 `.scr` host skeleton.
+Series 04 adds the first shared runtime substrate and narrow public platform API:
 
-- classic screen, preview, and configuration mode dispatch
-- a real full-screen window path and a real preview child-window path
-- a small configuration dialog with provisional per-user settings persistence
-- a host-local placeholder visual path used only to prove liveness before the shared renderer exists
+- public headers for versioning, diagnostics, config, renderer contracts, and saver/module contracts
+- reusable core timing, deterministic RNG, diagnostics, version, and common-config services
+- light host adoption of the shared module/config/diagnostics/version model while keeping the placeholder visual local
 
-Reusable renderer backends, shared saver lifecycle APIs, and real saver-product behavior are still deferred.
+Reusable renderer backends and real saver-product behavior are still deferred.
 
 ## Planned Product Shape
 
@@ -69,14 +69,14 @@ For explanatory architecture and execution order, start with:
 
 ## Build Status
 
-The checked-in build scaffold now integrates the real Series 03 host skeleton:
+The checked-in build scaffold now integrates the real Series 04 core runtime plus the Series 03 host:
 
 - a concrete MSVC VS2022 solution lane under `build/msvc/vs2022/`
 - a concrete MinGW i686 make lane under `build/mingw/i686/`
 - documentation-only VS6 and VS2008 lanes that preserve long-term intent without claiming present build completeness
 
-The shared platform target still contains a tiny Series 02 core-runtime stub because the reusable non-host runtime layer is not implemented yet.
-The `.scr` target now executes a real host skeleton, but it still uses a temporary host-local placeholder visual and not the future shared renderer layer.
+The shared platform target now compiles the reusable non-renderer core runtime together with the Win32 host.
+The `.scr` target still executes a host-local placeholder visual path and a no-op saver-module shell until the renderer backends and first real saver product arrive.
 
 Read the specs before adding code.
 This repository should stay truthful, reconstructable, and conservative about compatibility.

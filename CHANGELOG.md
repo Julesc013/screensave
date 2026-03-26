@@ -2,6 +2,26 @@
 
 All notable repository changes are recorded here in series order.
 
+## S04 - 2026-03-27
+
+### Added
+
+- A first narrow public platform header set under `platform/include/screensave/` for versioning, diagnostics, common config, renderer contracts, and saver/module contracts.
+- A reusable non-renderer core runtime under `platform/src/core/` covering version identity, deterministic RNG, timing, diagnostics, config helpers, and renderer/saver dispatch support.
+
+### Changed
+
+- Replaced the remaining Series 02 core stub in the concrete VS2022 and MinGW i686 build lanes with the real Series 04 shared core runtime.
+- Updated the Win32 host skeleton to consume the shared saver/module, common-config, diagnostics, version, and timing services while keeping the placeholder visual host-local.
+- Updated `nocturne_entry.c` from a product-identity shell to a no-op saver-module shell against the new public contract.
+- Updated root, architecture, build, public-header, core, host, and roadmap docs to describe the Series 04 runtime/core boundary truthfully.
+
+### Validation
+
+- Confirmed Series 00 through Series 03 prerequisites existed before changes.
+- Performed static validation of the new public header set, core runtime file graph, host/build integration, and documentation consistency.
+- Confirmed no renderer backend, real saver-product implementation, packaging logic, or release-production logic was added in this series.
+
 ## S03 - 2026-03-27
 
 ### Added

@@ -16,23 +16,22 @@ The build scaffold is not the constitutional source of truth.
 The normative compatibility and target rules remain in `specs/build_targets.md` and related specs.
 This directory translates those rules into reviewable build lanes.
 
-## Current State In Series 03
+## Current State In Series 04
 
 Real now:
 
 - a concrete MSVC VS2022 solution and project pair
 - a concrete MinGW i686 make-based lane
 - a real Win32 `.scr` host skeleton wired into both concrete modern lanes
-- a narrow public saver-to-host entry seam in `platform/include/screensave/scr_entry.h`
-- a small configuration-dialog resource and provisional per-user settings scaffold for the host
+- a real shared core runtime under `platform/src/core/`
+- a narrow public platform header set under `platform/include/screensave/`
+- a small configuration-dialog resource and provisional per-user common-settings scaffold for the host
 - build-layout validation in `tools/scripts/check_build_layout.py`
 
 Deferred:
 
-- reusable non-host core runtime services beyond the remaining Series 02 core stub
-- real saver logic
-- reusable renderer implementation
-- a broader public saver/runtime API
+- real renderer backend implementations
+- real saver logic beyond the no-op module shell
 - full legacy project files for VS6 and VS2008
 - packaging and release production
 
@@ -61,8 +60,7 @@ These conventions are documented now so later series can extend them without res
 
 ## How Later Series Should Extend This
 
-- replace Series 02 stub sources with real platform and product code in place
-- keep the Series 03 host lifecycle intact while later series replace local placeholder visuals with the shared renderer layer
+- keep the Series 04 shared core and host lifecycle intact while later series add renderer backends and real saver sessions against the public contracts
 - keep checked-in project files small and explicit
 - add real legacy project files only when they can be maintained honestly
 - expand CI from static scaffold validation to real builds only when the runtime is ready

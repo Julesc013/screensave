@@ -8,7 +8,7 @@ static void scr_show_invalid_argument_message(const scr_host_context *context, c
 
     if (parsed_args->invalid_preview_parent) {
         scr_append_text(message, sizeof(message), "Preview mode requires a valid parent window handle.");
-        scr_show_message_box(context->owner_window, &context->product, message, MB_OK | MB_ICONERROR);
+        scr_show_message_box(context->owner_window, context->module, message, MB_OK | MB_ICONERROR);
         return;
     }
 
@@ -21,7 +21,7 @@ static void scr_show_invalid_argument_message(const scr_host_context *context, c
         scr_append_text(message, sizeof(message), "for this saver");
     }
     scr_append_text(message, sizeof(message), ". Opening the configuration dialog instead.");
-    scr_show_message_box(context->owner_window, &context->product, message, MB_OK | MB_ICONINFORMATION);
+    scr_show_message_box(context->owner_window, context->module, message, MB_OK | MB_ICONINFORMATION);
 }
 
 int screensave_scr_main(
@@ -29,7 +29,7 @@ int screensave_scr_main(
     HINSTANCE previous_instance,
     LPSTR command_line,
     int show_code,
-    const screensave_product_identity *product_identity
+    const screensave_saver_module *module
 )
 {
     INT_PTR dialog_result;
@@ -37,14 +37,10 @@ int screensave_scr_main(
     scr_host_context context;
     scr_parsed_args parsed_args;
 
-    if (
-        product_identity == NULL ||
-        product_identity->product_key == NULL ||
-        product_identity->display_name == NULL
-    ) {
+    if (!screensave_saver_module_is_valid(module)) {
         MessageBoxA(
             NULL,
-            "The saver target did not provide a product identity.",
+            "The saver target did not provide a valid saver module descriptor.",
             "ScreenSave",
             MB_OK | MB_ICONERROR | MB_SETFOREGROUND
         );
@@ -56,7 +52,16 @@ int screensave_scr_main(
     context.previous_instance = previous_instance;
     context.command_line = command_line;
     context.show_code = show_code;
-    context.product = *product_identity;
+    context.module = module;
+
+    scr_settings_set_defaults(&context.settings);
+    scr_settings_load(context.module, &context.settings);
+    screensave_common_config_clamp(&context.settings.common);
+    screensave_config_binding_init(&context.config_binding, &context.settings.common, NULL, 0U);
+    screensave_diag_context_init(
+        &context.diagnostics,
+        context.settings.common.diagnostics_overlay_enabled ? SCREENSAVE_DIAG_LEVEL_DEBUG : SCREENSAVE_DIAG_LEVEL_INFO
+    );
 
     parse_result = scr_parse_command_line(command_line, &parsed_args);
     context.mode = parsed_args.mode;
@@ -64,18 +69,31 @@ int screensave_scr_main(
     context.preview_parent = parsed_args.preview_parent;
 
     if (!parse_result) {
-        scr_show_invalid_argument_message(&context, &parsed_args);
-        context.mode = SCR_RUN_MODE_CONFIG;
+        context.mode = SCREENSAVE_SESSION_MODE_CONFIG;
     }
 
     if (parsed_args.show_invalid_argument_message) {
+        if (parsed_args.invalid_preview_parent) {
+            scr_emit_host_diagnostic(
+                &context,
+                SCREENSAVE_DIAG_LEVEL_WARNING,
+                2101UL,
+                "screensave_scr_main",
+                "Preview mode argument did not provide a valid parent window."
+            );
+        } else {
+            scr_emit_host_diagnostic(
+                &context,
+                SCREENSAVE_DIAG_LEVEL_INFO,
+                2102UL,
+                "screensave_scr_main",
+                "An invalid saver argument was redirected to the configuration dialog."
+            );
+        }
         scr_show_invalid_argument_message(&context, &parsed_args);
     }
 
-    scr_settings_set_defaults(&context.settings);
-    scr_settings_load(&context.product, &context.settings);
-
-    if (context.mode == SCR_RUN_MODE_CONFIG) {
+    if (context.mode == SCREENSAVE_SESSION_MODE_CONFIG) {
         dialog_result = scr_show_config_dialog(&context);
         return dialog_result == -1 ? 1 : 0;
     }

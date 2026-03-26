@@ -16,14 +16,14 @@ The checked-in layout makes those lanes explicit instead of hiding them behind o
 
 Real now:
 
-- `vs2022/` contains the concrete modern solution and project files used to build the first real host skeleton and validate the output conventions.
+- `vs2022/` contains the concrete modern solution and project files used to build the shared core runtime, the real host skeleton, and the current `.scr` shell target.
 
 Documented scaffold only:
 
 - `vs6/`
 - `vs2008/`
 
-Those older lanes are intentionally documentation-heavy in Series 03.
+Those older lanes are intentionally documentation-heavy in Series 04.
 They preserve file layout and intent without claiming build completeness that does not yet exist.
 
 ## Output Intent

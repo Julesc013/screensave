@@ -6,7 +6,7 @@ This is the short operational view of the prompt program.
 - `S01`: governance and repository hygiene, contribution path, and CI foundation.
 - `S02`: build scaffold, toolchain lanes, and output conventions.
 - `S03`: Win32 `.scr` host skeleton, classic lifecycle routing, and host-local configuration scaffolding.
-- `S04`: public platform surface, shared config resolution, and initial GDI floor.
+- `S04`: shared core runtime and first public platform API layer.
 - `S05`: SDK and template groundwork.
 - `S06`: `nocturne` first saver.
 - `S07`: BenchLab and validation instrumentation.

@@ -1,0 +1,162 @@
+#include <string.h>
+
+#include "renderer_private.h"
+
+static void screensave_renderer_zero_info(screensave_renderer_info *info)
+{
+    memset(info, 0, sizeof(*info));
+    info->requested_kind = SCREENSAVE_RENDERER_KIND_UNKNOWN;
+    info->active_kind = SCREENSAVE_RENDERER_KIND_UNKNOWN;
+}
+
+void screensave_renderer_init_dispatch(
+    screensave_renderer *renderer,
+    const screensave_renderer_vtable *vtable,
+    void *backend_state,
+    const screensave_renderer_info *info
+)
+{
+    if (renderer == NULL) {
+        return;
+    }
+
+    renderer->vtable = vtable;
+    renderer->backend_state = backend_state;
+    if (info != NULL) {
+        renderer->info = *info;
+    } else {
+        screensave_renderer_zero_info(&renderer->info);
+    }
+}
+
+const char *screensave_renderer_kind_name(screensave_renderer_kind kind)
+{
+    switch (kind) {
+    case SCREENSAVE_RENDERER_KIND_GDI:
+        return "gdi";
+
+    case SCREENSAVE_RENDERER_KIND_GL11:
+        return "gl11";
+
+    case SCREENSAVE_RENDERER_KIND_GL_PLUS:
+        return "gl_plus";
+
+    case SCREENSAVE_RENDERER_KIND_UNKNOWN:
+    default:
+        return "unknown";
+    }
+}
+
+int screensave_renderer_has_capability(unsigned long capability_flags, unsigned long capability_flag)
+{
+    return (capability_flags & capability_flag) == capability_flag;
+}
+
+void screensave_renderer_get_info(const screensave_renderer *renderer, screensave_renderer_info *info)
+{
+    if (info == NULL) {
+        return;
+    }
+
+    if (renderer == NULL) {
+        screensave_renderer_zero_info(info);
+        return;
+    }
+
+    *info = renderer->info;
+}
+
+int screensave_renderer_begin_frame(screensave_renderer *renderer, const screensave_frame_info *frame_info)
+{
+    if (renderer == NULL || renderer->vtable == NULL || renderer->vtable->begin_frame == NULL) {
+        return 0;
+    }
+
+    return renderer->vtable->begin_frame(renderer, frame_info);
+}
+
+void screensave_renderer_clear(screensave_renderer *renderer, screensave_color color)
+{
+    if (renderer == NULL || renderer->vtable == NULL || renderer->vtable->clear == NULL) {
+        return;
+    }
+
+    renderer->vtable->clear(renderer, color);
+}
+
+void screensave_renderer_fill_rect(screensave_renderer *renderer, const screensave_recti *rect, screensave_color color)
+{
+    if (renderer == NULL || renderer->vtable == NULL || renderer->vtable->fill_rect == NULL) {
+        return;
+    }
+
+    renderer->vtable->fill_rect(renderer, rect, color);
+}
+
+void screensave_renderer_draw_frame_rect(screensave_renderer *renderer, const screensave_recti *rect, screensave_color color)
+{
+    if (renderer == NULL || renderer->vtable == NULL || renderer->vtable->draw_frame_rect == NULL) {
+        return;
+    }
+
+    renderer->vtable->draw_frame_rect(renderer, rect, color);
+}
+
+void screensave_renderer_draw_line(
+    screensave_renderer *renderer,
+    const screensave_pointi *start_point,
+    const screensave_pointi *end_point,
+    screensave_color color
+)
+{
+    if (renderer == NULL || renderer->vtable == NULL || renderer->vtable->draw_line == NULL) {
+        return;
+    }
+
+    renderer->vtable->draw_line(renderer, start_point, end_point, color);
+}
+
+void screensave_renderer_draw_polyline(
+    screensave_renderer *renderer,
+    const screensave_pointi *points,
+    unsigned int point_count,
+    screensave_color color
+)
+{
+    if (renderer == NULL || renderer->vtable == NULL || renderer->vtable->draw_polyline == NULL) {
+        return;
+    }
+
+    renderer->vtable->draw_polyline(renderer, points, point_count, color);
+}
+
+int screensave_renderer_blit_bitmap(
+    screensave_renderer *renderer,
+    const screensave_bitmap_view *bitmap,
+    const screensave_recti *destination_rect
+)
+{
+    if (renderer == NULL || renderer->vtable == NULL || renderer->vtable->blit_bitmap == NULL) {
+        return 0;
+    }
+
+    return renderer->vtable->blit_bitmap(renderer, bitmap, destination_rect);
+}
+
+int screensave_renderer_end_frame(screensave_renderer *renderer)
+{
+    if (renderer == NULL || renderer->vtable == NULL || renderer->vtable->end_frame == NULL) {
+        return 0;
+    }
+
+    return renderer->vtable->end_frame(renderer);
+}
+
+void screensave_renderer_shutdown(screensave_renderer *renderer)
+{
+    if (renderer == NULL || renderer->vtable == NULL || renderer->vtable->shutdown == NULL) {
+        return;
+    }
+
+    renderer->vtable->shutdown(renderer);
+}

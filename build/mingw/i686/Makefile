@@ -15,7 +15,13 @@ PLATFORM_LIB := $(PLATFORM_DIR)/libscreensave_platform.a
 TARGET := $(BIN_DIR)/nocturne.scr
 
 PLATFORM_SRCS := \
-	$(ROOT)/platform/src/core/_series02_core_stub.c \
+	$(ROOT)/platform/src/core/base/renderer_dispatch.c \
+	$(ROOT)/platform/src/core/base/saver_contract.c \
+	$(ROOT)/platform/src/core/config/config.c \
+	$(ROOT)/platform/src/core/diagnostics/diagnostics.c \
+	$(ROOT)/platform/src/core/rng/rng.c \
+	$(ROOT)/platform/src/core/timing/timing.c \
+	$(ROOT)/platform/src/core/version/version.c \
 	$(ROOT)/platform/src/host/win32_scr/scr_args.c \
 	$(ROOT)/platform/src/host/win32_scr/scr_config_dialog.c \
 	$(ROOT)/platform/src/host/win32_scr/scr_diagnostics.c \
@@ -27,7 +33,13 @@ NOCTURNE_SRCS := \
 	$(ROOT)/products/savers/nocturne/src/nocturne_entry.c
 
 PLATFORM_OBJS := \
-	$(PLATFORM_DIR)/_series02_core_stub.o \
+	$(PLATFORM_DIR)/renderer_dispatch.o \
+	$(PLATFORM_DIR)/saver_contract.o \
+	$(PLATFORM_DIR)/config.o \
+	$(PLATFORM_DIR)/diagnostics.o \
+	$(PLATFORM_DIR)/rng.o \
+	$(PLATFORM_DIR)/timing.o \
+	$(PLATFORM_DIR)/version.o \
 	$(PLATFORM_DIR)/scr_args.o \
 	$(PLATFORM_DIR)/scr_config_dialog.o \
 	$(PLATFORM_DIR)/scr_diagnostics.o \
@@ -60,7 +72,31 @@ $(PLATFORM_LIB): $(PLATFORM_OBJS)
 	mkdir -p $(PLATFORM_DIR)
 	$(AR) rcs $@ $(PLATFORM_OBJS)
 
-$(PLATFORM_DIR)/_series02_core_stub.o: $(ROOT)/platform/src/core/_series02_core_stub.c
+$(PLATFORM_DIR)/renderer_dispatch.o: $(ROOT)/platform/src/core/base/renderer_dispatch.c
+	mkdir -p $(PLATFORM_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(PLATFORM_DIR)/saver_contract.o: $(ROOT)/platform/src/core/base/saver_contract.c
+	mkdir -p $(PLATFORM_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(PLATFORM_DIR)/config.o: $(ROOT)/platform/src/core/config/config.c
+	mkdir -p $(PLATFORM_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(PLATFORM_DIR)/diagnostics.o: $(ROOT)/platform/src/core/diagnostics/diagnostics.c
+	mkdir -p $(PLATFORM_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(PLATFORM_DIR)/rng.o: $(ROOT)/platform/src/core/rng/rng.c
+	mkdir -p $(PLATFORM_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(PLATFORM_DIR)/timing.o: $(ROOT)/platform/src/core/timing/timing.c
+	mkdir -p $(PLATFORM_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(PLATFORM_DIR)/version.o: $(ROOT)/platform/src/core/version/version.c
 	mkdir -p $(PLATFORM_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 

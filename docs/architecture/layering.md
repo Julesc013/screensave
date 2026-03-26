@@ -24,14 +24,14 @@ This document explains dependency direction and responsibility boundaries.
 
 ## Public Versus Private Platform Surface
 
-The intended public platform surface lives under `platform/include/screensave/`.
+The public platform surface now begins under `platform/include/screensave/`.
 Implementation detail lives under `platform/src/`.
 
 Code should move into the public surface only when it is stable, cross-product, and intended for reuse.
 Everything else should remain private until experience proves the abstraction is durable.
 
-Series 03 keeps almost all host code private.
-The only checked-in public seam is the narrow saver-to-host entry path used by the real `.scr` target, and the temporary alive-visual code remains host-local until the renderer layer exists.
+Series 04 keeps the host implementation private while exposing only a narrow version/config/diagnostics/renderer/saver contract set.
+The temporary alive-visual code remains host-local until the renderer layer exists.
 
 ## Product Boundary
 

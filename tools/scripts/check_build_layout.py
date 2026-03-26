@@ -26,8 +26,22 @@ REQUIRED_PATHS = [
     PLATFORM_PROJECT,
     NOCTURNE_PROJECT,
     MINGW_MAKEFILE,
-    ROOT / "platform" / "src" / "core" / "_series02_core_stub.c",
-    ROOT / "platform" / "include" / "screensave" / "scr_entry.h",
+    ROOT / "platform" / "include" / "screensave" / "types.h",
+    ROOT / "platform" / "include" / "screensave" / "version.h",
+    ROOT / "platform" / "include" / "screensave" / "diagnostics_api.h",
+    ROOT / "platform" / "include" / "screensave" / "config_api.h",
+    ROOT / "platform" / "include" / "screensave" / "renderer_api.h",
+    ROOT / "platform" / "include" / "screensave" / "saver_api.h",
+    ROOT / "platform" / "src" / "core" / "base" / "renderer_dispatch.c",
+    ROOT / "platform" / "src" / "core" / "base" / "renderer_private.h",
+    ROOT / "platform" / "src" / "core" / "base" / "saver_contract.c",
+    ROOT / "platform" / "src" / "core" / "config" / "config.c",
+    ROOT / "platform" / "src" / "core" / "diagnostics" / "diagnostics.c",
+    ROOT / "platform" / "src" / "core" / "rng" / "rng.c",
+    ROOT / "platform" / "src" / "core" / "rng" / "rng_internal.h",
+    ROOT / "platform" / "src" / "core" / "timing" / "timing.c",
+    ROOT / "platform" / "src" / "core" / "timing" / "timing_internal.h",
+    ROOT / "platform" / "src" / "core" / "version" / "version.c",
     ROOT / "platform" / "src" / "host" / "win32_scr" / "scr_internal.h",
     ROOT / "platform" / "src" / "host" / "win32_scr" / "scr_args.c",
     ROOT / "platform" / "src" / "host" / "win32_scr" / "scr_config_dialog.c",
@@ -65,7 +79,7 @@ def main() -> int:
         return 1
 
     build_readme = (ROOT / "build" / "README.md").read_text(encoding="utf-8")
-    for phrase in ("checked-in per-toolchain lanes", "out/", "concrete MSVC VS2022 solution", "MinGW i686"):
+    for phrase in ("checked-in per-toolchain lanes", "out/", "concrete MSVC VS2022 solution", "shared core runtime"):
         require(phrase in build_readme, f"build/README.md is missing expected phrase: {phrase!r}", errors)
 
     for path in (ROOT / "build" / "msvc" / "vs6" / "README.md", ROOT / "build" / "msvc" / "vs2008" / "README.md"):
@@ -84,21 +98,18 @@ def main() -> int:
     nocturne_resources = [node.attrib.get("Include", "") for node in nocturne_project.findall(".//msb:ResourceCompile", NS)]
     project_refs = [node.attrib.get("Include", "") for node in nocturne_project.findall(".//msb:ProjectReference", NS)]
 
-    require(
-        "..\\..\\..\\platform\\src\\core\\_series02_core_stub.c" in platform_sources,
-        "screensave_platform.vcxproj must compile the remaining Series 02 core stub.",
-        errors,
-    )
-    require(
-        "..\\..\\..\\platform\\src\\host\\win32_scr\\scr_entry.c" in platform_sources,
-        "screensave_platform.vcxproj must compile the host entry path.",
-        errors,
-    )
-    require(
-        "..\\..\\..\\platform\\src\\host\\win32_scr\\scr_window.c" in platform_sources,
-        "screensave_platform.vcxproj must compile the host window path.",
-        errors,
-    )
+    for expected in (
+        "..\\..\\..\\platform\\src\\core\\base\\renderer_dispatch.c",
+        "..\\..\\..\\platform\\src\\core\\base\\saver_contract.c",
+        "..\\..\\..\\platform\\src\\core\\config\\config.c",
+        "..\\..\\..\\platform\\src\\core\\diagnostics\\diagnostics.c",
+        "..\\..\\..\\platform\\src\\core\\rng\\rng.c",
+        "..\\..\\..\\platform\\src\\core\\timing\\timing.c",
+        "..\\..\\..\\platform\\src\\core\\version\\version.c",
+        "..\\..\\..\\platform\\src\\host\\win32_scr\\scr_entry.c",
+        "..\\..\\..\\platform\\src\\host\\win32_scr\\scr_window.c",
+    ):
+        require(expected in platform_sources, f"screensave_platform.vcxproj is missing {expected!r}.", errors)
     require(
         "..\\..\\..\\products\\savers\\nocturne\\src\\nocturne_entry.c" in nocturne_sources,
         "nocturne.vcxproj must compile the product entry.",
@@ -120,7 +131,13 @@ def main() -> int:
     for expected in (
         "mingw/i686",
         "OUTROOT := $(ROOT)/out",
-        "_series02_core_stub.c",
+        "renderer_dispatch.c",
+        "saver_contract.c",
+        "config.c",
+        "diagnostics.c",
+        "rng.c",
+        "timing.c",
+        "version.c",
         "scr_entry.c",
         "scr_window.c",
         "nocturne_entry.c",
@@ -130,22 +147,17 @@ def main() -> int:
     ):
         require(expected in makefile_text, f"Makefile is missing {expected!r}.", errors)
 
-    core_stub_text = (ROOT / "platform" / "src" / "core" / "_series02_core_stub.c").read_text(encoding="utf-8")
-    require(
-        "Series 02 build-only scaffolding" in core_stub_text,
-        "platform/src/core/_series02_core_stub.c must remain explicitly identified as scaffolding.",
-        errors,
-    )
-
     host_entry_text = (ROOT / "platform" / "src" / "host" / "win32_scr" / "scr_entry.c").read_text(encoding="utf-8")
     require("screensave_scr_main" in host_entry_text, "scr_entry.c must define the shared saver host entry.", errors)
+    require("screensave_saver_module_is_valid" in host_entry_text, "scr_entry.c must validate the public saver module contract.", errors)
 
     host_window_text = (ROOT / "platform" / "src" / "host" / "win32_scr" / "scr_window.c").read_text(encoding="utf-8")
-    require("Temporary Series 03 liveness marker" in host_window_text, "scr_window.c must mark the placeholder draw path as temporary.", errors)
-    require("SCR_RUN_MODE_PREVIEW" in host_window_text, "scr_window.c must distinguish preview mode.", errors)
+    require("Temporary host-local liveness marker" in host_window_text, "scr_window.c must mark the placeholder draw path as temporary.", errors)
+    require("SCREENSAVE_SESSION_MODE_PREVIEW" in host_window_text, "scr_window.c must distinguish preview mode.", errors)
 
     product_entry_text = (ROOT / "products" / "savers" / "nocturne" / "src" / "nocturne_entry.c").read_text(encoding="utf-8")
     require("screensave_scr_main" in product_entry_text, "nocturne_entry.c must delegate into the host entry.", errors)
+    require("screensave_saver_module" in product_entry_text, "nocturne_entry.c must define a saver-module descriptor.", errors)
     require("Nocturne" in product_entry_text, "nocturne_entry.c must declare the product identity.", errors)
 
     if errors:

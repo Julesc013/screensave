@@ -15,8 +15,13 @@ static void scr_apply_settings_to_dialog(HWND dialog, const scr_settings *settin
     );
     CheckDlgButton(
         dialog,
+        IDC_SCR_DETERMINISTIC_SEED,
+        settings->common.use_deterministic_seed ? BST_CHECKED : BST_UNCHECKED
+    );
+    CheckDlgButton(
+        dialog,
         IDC_SCR_DIAGNOSTICS,
-        settings->diagnostics_overlay_enabled ? BST_CHECKED : BST_UNCHECKED
+        settings->common.diagnostics_overlay_enabled ? BST_CHECKED : BST_UNCHECKED
     );
 }
 
@@ -24,7 +29,9 @@ static void scr_read_settings_from_dialog(HWND dialog, scr_settings *settings)
 {
     settings->placeholder_visual_enabled =
         IsDlgButtonChecked(dialog, IDC_SCR_PLACEHOLDER_VISUAL) == BST_CHECKED;
-    settings->diagnostics_overlay_enabled =
+    settings->common.use_deterministic_seed =
+        IsDlgButtonChecked(dialog, IDC_SCR_DETERMINISTIC_SEED) == BST_CHECKED;
+    settings->common.diagnostics_overlay_enabled =
         IsDlgButtonChecked(dialog, IDC_SCR_DIAGNOSTICS) == BST_CHECKED;
 }
 
@@ -34,7 +41,7 @@ static void scr_initialize_dialog(HWND dialog, scr_host_context *context)
     char info[256];
 
     title[0] = '\0';
-    scr_append_text(title, sizeof(title), context->product.display_name);
+    scr_append_text(title, sizeof(title), context->module->identity.display_name);
     scr_append_text(title, sizeof(title), " Settings");
     SetWindowTextA(dialog, title);
 
@@ -61,12 +68,24 @@ static INT_PTR scr_handle_command(HWND dialog, WORD command_id)
     }
 
     if (command_id == IDOK) {
+        settings = context->settings;
         scr_read_settings_from_dialog(dialog, &settings);
-        if (!scr_settings_save(&context->product, &settings)) {
-            scr_show_message_box(dialog, &context->product, "Failed to save the provisional host settings.", MB_OK | MB_ICONERROR);
+        if (!scr_settings_save(context->module, &settings)) {
+            scr_emit_host_diagnostic(
+                context,
+                SCREENSAVE_DIAG_LEVEL_ERROR,
+                2201UL,
+                "scr_config_dialog",
+                "Failed to save the shared common-config scaffold."
+            );
+            scr_show_message_box(dialog, context->module, "Failed to save the shared common-config scaffold.", MB_OK | MB_ICONERROR);
             return TRUE;
         }
 
+        screensave_diag_set_minimum_level(
+            &context->diagnostics,
+            settings.common.diagnostics_overlay_enabled ? SCREENSAVE_DIAG_LEVEL_DEBUG : SCREENSAVE_DIAG_LEVEL_INFO
+        );
         context->settings = settings;
         EndDialog(dialog, IDOK);
         return TRUE;
@@ -110,7 +129,7 @@ INT_PTR scr_show_config_dialog(scr_host_context *context)
     if (result == -1) {
         scr_show_message_box(
             context->owner_window,
-            &context->product,
+            context->module,
             "The configuration dialog resource could not be loaded.",
             MB_OK | MB_ICONERROR
         );

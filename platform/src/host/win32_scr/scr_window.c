@@ -1,4 +1,5 @@
 #include "scr_internal.h"
+#include "../../core/rng/rng_internal.h"
 
 static ATOM g_scr_window_class = 0;
 
@@ -12,6 +13,39 @@ static void scr_request_exit(scr_host_context *context, HWND window)
 
     context->exit_pending = 1;
     DestroyWindow(window);
+}
+
+static unsigned long scr_resolve_session_seed(const scr_host_context *context)
+{
+    unsigned long fallback_seed;
+
+    if (context == NULL || context->module == NULL) {
+        return 0UL;
+    }
+
+    fallback_seed = (unsigned long)GetTickCount();
+    if (context->settings.common.use_deterministic_seed) {
+        fallback_seed = context->settings.common.deterministic_seed;
+    }
+
+    return screensave_rng_seed_from_text(context->module->identity.product_key, fallback_seed);
+}
+
+static void scr_prepare_runtime_state(scr_host_context *context)
+{
+    screensave_rng_state seed_rng;
+
+    if (context == NULL) {
+        return;
+    }
+
+    screensave_timebase_reset(&context->timebase);
+    screensave_timebase_sample(&context->timebase, &context->clock);
+
+    context->session_seed.base_seed = scr_resolve_session_seed(context);
+    screensave_rng_seed(&seed_rng, context->session_seed.base_seed);
+    context->session_seed.stream_seed = screensave_rng_next_u32(&seed_rng);
+    context->session_seed.deterministic = context->settings.common.use_deterministic_seed != 0;
 }
 
 static int scr_register_window_class(HINSTANCE instance)
@@ -41,6 +75,9 @@ static void scr_draw_placeholder(HDC dc, const RECT *client_rect, const scr_host
     int height;
     int size;
     int span;
+    unsigned long frame_index;
+    unsigned long speed_units;
+    unsigned long seed_offset;
     int x;
     int y;
     COLORREF accent;
@@ -59,16 +96,39 @@ static void scr_draw_placeholder(HDC dc, const RECT *client_rect, const scr_host
         size = width;
     }
 
+    frame_index = context->clock.frame_index;
+    switch (context->settings.common.detail_level) {
+    case SCREENSAVE_DETAIL_LEVEL_LOW:
+        speed_units = 2UL;
+        break;
+
+    case SCREENSAVE_DETAIL_LEVEL_HIGH:
+        speed_units = 6UL;
+        break;
+
+    case SCREENSAVE_DETAIL_LEVEL_STANDARD:
+    default:
+        speed_units = 4UL;
+        break;
+    }
+
     span = width - size;
     if (span <= 0) {
         x = 0;
     } else {
-        x = (int)((context->paint_tick * 4U) % (unsigned int)(span + 1));
+        seed_offset = context->session_seed.base_seed % (unsigned long)(span + 1);
+        x = (int)(((frame_index * speed_units) + seed_offset) % (unsigned long)(span + 1));
     }
     y = (height - size) / 2;
 
     SetRect(&moving_rect, x, y, x + size, y + size);
-    accent = context->preview_mode ? RGB(72, 72, 72) : RGB(0, 96, 24);
+    if (context->preview_mode) {
+        accent = RGB(72, 72, 72);
+    } else if (context->session_seed.deterministic) {
+        accent = RGB(96, 128, (BYTE)(32 + (context->session_seed.stream_seed % 96UL)));
+    } else {
+        accent = RGB(0, 96, 24);
+    }
     brush = CreateSolidBrush(accent);
     if (brush != NULL) {
         FillRect(dc, &moving_rect, brush);
@@ -79,7 +139,7 @@ static void scr_draw_placeholder(HDC dc, const RECT *client_rect, const scr_host
 static void scr_draw_overlay(HDC dc, const RECT *client_rect, const scr_host_context *context)
 {
     RECT text_rect;
-    char overlay[256];
+    char overlay[512];
 
     text_rect = *client_rect;
     text_rect.left += 8;
@@ -114,11 +174,20 @@ static LRESULT CALLBACK scr_window_proc(HWND window, UINT message, WPARAM wParam
 
     case WM_CREATE:
         if (context != NULL) {
-            context->preview_mode = context->mode == SCR_RUN_MODE_PREVIEW;
-            context->start_tick = GetTickCount();
-            context->paint_tick = 0;
+            context->preview_mode = context->mode == SCREENSAVE_SESSION_MODE_PREVIEW;
+            scr_prepare_runtime_state(context);
             GetCursorPos(&context->initial_cursor);
             context->timer_id = SetTimer(window, SCR_TIMER_ID, SCR_TIMER_INTERVAL_MS, NULL);
+            if (context->timer_id == 0) {
+                scr_emit_host_diagnostic(
+                    context,
+                    SCREENSAVE_DIAG_LEVEL_ERROR,
+                    2301UL,
+                    "scr_window_proc",
+                    "The host timer could not be created."
+                );
+                return -1;
+            }
         }
         return 0;
 
@@ -127,7 +196,7 @@ static LRESULT CALLBACK scr_window_proc(HWND window, UINT message, WPARAM wParam
 
     case WM_TIMER:
         if (context != NULL && wParam == SCR_TIMER_ID) {
-            context->paint_tick += 1U;
+            screensave_timebase_sample(&context->timebase, &context->clock);
             InvalidateRect(window, NULL, FALSE);
         }
         return 0;
@@ -188,12 +257,12 @@ static LRESULT CALLBACK scr_window_proc(HWND window, UINT message, WPARAM wParam
         FillRect(dc, &client_rect, (HBRUSH)GetStockObject(BLACK_BRUSH));
         if (context != NULL && context->settings.placeholder_visual_enabled) {
             /*
-             * Temporary Series 03 liveness marker.
-             * This stays host-local until the shared renderer layer exists.
+             * Temporary host-local liveness marker.
+             * This stays outside the shared renderer contract until Series 05 lands.
              */
             scr_draw_placeholder(dc, &client_rect, context);
         }
-        if (context != NULL && context->settings.diagnostics_overlay_enabled) {
+        if (context != NULL && context->settings.common.diagnostics_overlay_enabled) {
             scr_draw_overlay(dc, &client_rect, context);
         }
         EndPaint(window, &paint);
@@ -219,11 +288,18 @@ static HWND scr_create_window(scr_host_context *context)
 
     ZeroMemory(&rect, sizeof(rect));
 
-    if (context->mode == SCR_RUN_MODE_PREVIEW) {
+    if (context->mode == SCREENSAVE_SESSION_MODE_PREVIEW) {
         if (!IsWindow(context->preview_parent)) {
+            scr_emit_host_diagnostic(
+                context,
+                SCREENSAVE_DIAG_LEVEL_ERROR,
+                2302UL,
+                "scr_create_window",
+                "Preview mode was requested with an invalid parent window."
+            );
             scr_show_message_box(
                 context->owner_window,
-                &context->product,
+                context->module,
                 "Preview mode requires a valid parent window handle.",
                 MB_OK | MB_ICONERROR
             );
@@ -237,7 +313,7 @@ static HWND scr_create_window(scr_host_context *context)
         return CreateWindowExA(
             extended_style,
             SCR_HOST_WINDOW_CLASSA,
-            context->product.display_name,
+            context->module->identity.display_name,
             style,
             0,
             0,
@@ -256,7 +332,7 @@ static HWND scr_create_window(scr_host_context *context)
     return CreateWindowExA(
         extended_style,
         SCR_HOST_WINDOW_CLASSA,
-        context->product.display_name,
+        context->module->identity.display_name,
         style,
         0,
         0,
@@ -276,10 +352,17 @@ int scr_run_window(scr_host_context *context)
     int get_message_result;
 
     if (!scr_register_window_class(context->instance)) {
+        scr_emit_host_diagnostic(
+            context,
+            SCREENSAVE_DIAG_LEVEL_ERROR,
+            2303UL,
+            "scr_run_window",
+            "The host window class could not be registered."
+        );
         scr_show_message_box(
             context->owner_window,
-            &context->product,
-            "The Series 03 host window class could not be registered.",
+            context->module,
+            "The host window class could not be registered.",
             MB_OK | MB_ICONERROR
         );
         return 1;
@@ -299,9 +382,16 @@ int scr_run_window(scr_host_context *context)
     }
 
     if (get_message_result < 0) {
+        scr_emit_host_diagnostic(
+            context,
+            SCREENSAVE_DIAG_LEVEL_ERROR,
+            2304UL,
+            "scr_run_window",
+            "The host message loop failed."
+        );
         scr_show_message_box(
             context->owner_window,
-            &context->product,
+            context->module,
             "The host message loop failed.",
             MB_OK | MB_ICONERROR
         );
