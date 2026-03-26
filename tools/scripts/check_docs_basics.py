@@ -12,8 +12,8 @@ LINK_PATTERN = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
 
 REQUIRED_PHRASES = {
     ROOT / "README.md": [
-        "Series 02",
-        "no real runtime implementation yet",
+        "Series 03",
+        "host skeleton",
         ".github/",
     ],
     ROOT / "CONTRIBUTING.md": [

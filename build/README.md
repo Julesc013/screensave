@@ -16,20 +16,23 @@ The build scaffold is not the constitutional source of truth.
 The normative compatibility and target rules remain in `specs/build_targets.md` and related specs.
 This directory translates those rules into reviewable build lanes.
 
-## Current State In Series 02
+## Current State In Series 03
 
 Real now:
 
 - a concrete MSVC VS2022 solution and project pair
 - a concrete MinGW i686 make-based lane
-- tiny build-only stub sources used only to make the target graph and output conventions concrete
+- a real Win32 `.scr` host skeleton wired into both concrete modern lanes
+- a narrow public saver-to-host entry seam in `platform/include/screensave/scr_entry.h`
+- a small configuration-dialog resource and provisional per-user settings scaffold for the host
 - build-layout validation in `tools/scripts/check_build_layout.py`
 
 Deferred:
 
-- real screensaver host behavior
+- reusable non-host core runtime services beyond the remaining Series 02 core stub
 - real saver logic
-- real renderer implementation
+- reusable renderer implementation
+- a broader public saver/runtime API
 - full legacy project files for VS6 and VS2008
 - packaging and release production
 
@@ -51,14 +54,15 @@ Generated output belongs under `out/` using a stable pattern:
 
 Examples:
 
-- `out/msvc/vs2022/debug/nocturne_stub/nocturne.scr`
-- `out/intermediate/mingw/i686/release/screensave_platform_stub/`
+- `out/msvc/vs2022/Debug/nocturne/nocturne.scr`
+- `out/intermediate/mingw/i686/release/screensave_platform/`
 
 These conventions are documented now so later series can extend them without reshaping the tree.
 
 ## How Later Series Should Extend This
 
 - replace Series 02 stub sources with real platform and product code in place
+- keep the Series 03 host lifecycle intact while later series replace local placeholder visuals with the shared renderer layer
 - keep checked-in project files small and explicit
 - add real legacy project files only when they can be maintained honestly
 - expand CI from static scaffold validation to real builds only when the runtime is ready

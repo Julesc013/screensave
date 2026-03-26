@@ -1,10 +1,10 @@
 # MinGW i686 Lane
 
-This is the concrete GCC-family x86 lane for Series 02.
+This is the concrete GCC-family x86 lane for Series 03.
 
 ## What Exists Now
 
-- `Makefile` for the build-only platform stub library and the build-only `nocturne.scr` target
+- `Makefile` for the shared platform library, the real `nocturne.scr` host shell target, and the host dialog resource object
 
 The target graph mirrors the VS2022 lane closely so later implementation work does not have to invent two unrelated build stories.
 
@@ -15,8 +15,8 @@ When a MinGW i686 toolchain is available, the expected invocation shape is:
 
 - `mingw32-make -C build/mingw/i686 PROFILE=debug`
 
-The current makefile assumes a standard MinGW shell environment that can run commands such as `mkdir -p` and `rm -rf`.
-That assumption is documented here because it has not been validated yet on every Windows host setup.
+The current makefile assumes a MinGW shell environment that can run commands such as `mkdir -p`, `rm -rf`, and `windres`.
+That assumption remains documented here because it has not been validated yet on every Windows host setup.
 
 ## X86 Intent
 
@@ -35,8 +35,8 @@ Profiles are currently `debug` or `release`.
 ## Deferred Work
 
 - historical MinGW variant documentation beyond this lane
-- real resource handling
-- real saver metadata
+- reusable renderer integration
+- real saver metadata beyond the narrow Series 03 product identity
 - validation on actual target machines
 
 This lane is concrete enough for static review and later extension, not a claim of complete shipping readiness.

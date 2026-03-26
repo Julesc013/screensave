@@ -19,5 +19,5 @@ The product side exists to keep each saver or suite-level application separate:
 The architecture is intentionally conservative.
 Baseline functionality must remain available on a GDI-only path and must not depend on modern-only Windows assumptions.
 
-Series 00 creates the architectural boundary.
-Later series are expected to fill in implementation while preserving the compatibility and ownership rules defined in `specs/`.
+Series 03 makes the first part of that architecture real: the private Win32 host now handles classic screen, preview, and configuration entry paths with a temporary host-local visual path.
+Reusable renderer code, the broader public saver/runtime API, and real saver-product behavior remain deferred while preserving the compatibility and ownership rules defined in `specs/`.

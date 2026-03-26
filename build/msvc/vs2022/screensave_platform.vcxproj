@@ -11,20 +11,20 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{14D0C3B8-1C59-4D90-8F62-7C8330A55F02}</ProjectGuid>
+    <ProjectGuid>{27C5F6A5-7D40-4A3B-A344-1D8A23F63C01}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>nocturne_stub</RootNamespace>
-    <ProjectName>nocturne_stub</ProjectName>
+    <RootNamespace>screensave_platform</RootNamespace>
+    <ProjectName>screensave_platform</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -43,8 +43,7 @@
   <PropertyGroup>
     <OutDir>$(SolutionDir)..\..\..\out\msvc\vs2022\$(Configuration)\$(ProjectName)\</OutDir>
     <IntDir>$(SolutionDir)..\..\..\out\intermediate\msvc\vs2022\$(Configuration)\$(ProjectName)\</IntDir>
-    <TargetName>nocturne</TargetName>
-    <TargetExt>.scr</TargetExt>
+    <TargetName>screensave_platform</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -54,10 +53,6 @@
       <CompileAs>CompileAsC</CompileAs>
       <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\platform\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
-    <Link>
-      <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -69,20 +64,18 @@
       <CompileAs>CompileAsC</CompileAs>
       <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\platform\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
-    <Link>
-      <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
-    </Link>
+    <Lib>
+      <LinkTimeCodeGeneration>true</LinkTimeCodeGeneration>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\products\savers\nocturne\src\_series02_nocturne_stub.c" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="screensave_platform_stub.vcxproj">
-      <Project>{27C5F6A5-7D40-4A3B-A344-1D8A23F63C01}</Project>
-    </ProjectReference>
+    <ClCompile Include="..\..\..\platform\src\core\_series02_core_stub.c" />
+    <ClCompile Include="..\..\..\platform\src\host\win32_scr\scr_args.c" />
+    <ClCompile Include="..\..\..\platform\src\host\win32_scr\scr_config_dialog.c" />
+    <ClCompile Include="..\..\..\platform\src\host\win32_scr\scr_diagnostics.c" />
+    <ClCompile Include="..\..\..\platform\src\host\win32_scr\scr_entry.c" />
+    <ClCompile Include="..\..\..\platform\src\host\win32_scr\scr_settings.c" />
+    <ClCompile Include="..\..\..\platform\src\host\win32_scr\scr_window.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

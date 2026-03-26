@@ -1,23 +1,23 @@
 # VS2022 Lane
 
-This is the concrete modern MSVC lane for Series 02.
+This is the concrete modern MSVC lane for Series 03.
 
 ## What Exists Now
 
 - `ScreenSave.sln`
-- `screensave_platform_stub.vcxproj`
-- `nocturne_stub.vcxproj`
+- `screensave_platform.vcxproj`
+- `nocturne.vcxproj`
 
-These files are intentionally small.
-They define one shared static-library target and one stub saver target so the repository has a real checked-in build graph without claiming real screensaver behavior exists yet.
+These files stay intentionally small.
+They define one shared static-library target and one `.scr` saver target with a real host skeleton but no real saver product logic yet.
 
 ## What The Targets Mean
 
-- `screensave_platform_stub` is a build-only placeholder for shared platform linkage.
-- `nocturne_stub` is a build-only `.scr` target that proves the product lane, output conventions, and toolchain wiring.
+- `screensave_platform` compiles the shared host implementation plus the remaining Series 02 core-runtime stub.
+- `nocturne` compiles the product identity entry point, host dialog resource, and links the first real `.scr` executable target.
 
-Both targets use tiny Series 02 scaffold sources.
-Later series should replace those sources rather than adding parallel placeholder targets.
+The concrete host lifecycle now lives in the checked-in target graph.
+Later series should extend these targets in place instead of introducing parallel demo targets.
 
 ## Entry Path
 
@@ -38,7 +38,8 @@ No generated files should be checked into this directory.
 
 ## Deferred Work
 
-- real host implementation
-- real saver logic
-- real resources, metadata, and version stamping
+- broader public platform headers beyond the narrow Series 03 entry seam
+- reusable renderer backends
+- real saver-product behavior
+- richer version stamping and metadata
 - broader solution structure for additional products and apps

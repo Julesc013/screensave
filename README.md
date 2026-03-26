@@ -14,11 +14,18 @@ The platform target is intentionally conservative:
 
 ## Current Status
 
-The repository is in Series 02.
+The repository is in Series 03.
 Series 00 established repository law, structure, roadmap, and agent guidance.
 Series 01 added contribution, review, governance, and CI foundations.
-Series 02 adds the checked-in build scaffold and toolchain lane structure.
-There is still no real runtime implementation yet.
+Series 02 added the checked-in build scaffold and toolchain lane structure.
+Series 03 adds the first real Win32 `.scr` host skeleton:
+
+- classic screen, preview, and configuration mode dispatch
+- a real full-screen window path and a real preview child-window path
+- a small configuration dialog with provisional per-user settings persistence
+- a host-local placeholder visual path used only to prove liveness before the shared renderer exists
+
+Reusable renderer backends, shared saver lifecycle APIs, and real saver-product behavior are still deferred.
 
 ## Planned Product Shape
 
@@ -62,14 +69,14 @@ For explanatory architecture and execution order, start with:
 
 ## Build Status
 
-Series 02 introduces a truthful build scaffold:
+The checked-in build scaffold now integrates the real Series 03 host skeleton:
 
 - a concrete MSVC VS2022 solution lane under `build/msvc/vs2022/`
 - a concrete MinGW i686 make lane under `build/mingw/i686/`
 - documentation-only VS6 and VS2008 lanes that preserve long-term intent without claiming present build completeness
 
-The checked-in build graph currently uses tiny build-only stubs.
-It does not implement the real Win32 `.scr` host, real saver behavior, or real rendering yet.
+The shared platform target still contains a tiny Series 02 core-runtime stub because the reusable non-host runtime layer is not implemented yet.
+The `.scr` target now executes a real host skeleton, but it still uses a temporary host-local placeholder visual and not the future shared renderer layer.
 
 Read the specs before adding code.
 This repository should stay truthful, reconstructable, and conservative about compatibility.

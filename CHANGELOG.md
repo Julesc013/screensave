@@ -2,6 +2,26 @@
 
 All notable repository changes are recorded here in series order.
 
+## S03 - 2026-03-27
+
+### Added
+
+- A real Win32 `.scr` host skeleton under `platform/src/host/win32_scr/` with screen, preview, and configuration execution paths.
+- A small configuration dialog resource, provisional per-user settings persistence scaffold, and lightweight diagnostics overlay/version text support.
+- A narrow public saver-to-host entry header in `platform/include/screensave/scr_entry.h`.
+
+### Changed
+
+- Replaced the Series 02 host and product-target stubs with a real `nocturne.scr` host shell wired into the VS2022 and MinGW i686 build lanes.
+- Updated build validation to check the real host graph, resource integration, and product-entry wiring instead of the earlier stub-only graph.
+- Updated root, build, host, and roadmap documentation so Series 03 now describes the real host milestone truthfully.
+
+### Validation
+
+- Confirmed Series 00 through Series 02 prerequisites existed before changes.
+- Performed static validation of the host file layout, build graph wiring, resource integration, and documentation consistency.
+- Confirmed no reusable renderer backend, real saver-product implementation, packaging logic, or release-production logic was added in this series.
+
 ## S02 - 2026-03-27
 
 ### Added

@@ -5,13 +5,13 @@ This directory holds GCC-family Windows lanes that preserve the x86 target inten
 ## Strategy
 
 The MinGW lane exists so the build story is not defined only by one Microsoft toolchain generation.
-For Series 02, the practical lane is `i686/`.
+For Series 03, the practical lane is `i686/`.
 
 ## Current State
 
 Real now:
 
-- `i686/` contains a concrete make-based scaffold for the same stub target graph used by the VS2022 lane
+- `i686/` contains a concrete make-based lane for the same real host skeleton used by the VS2022 lane
 
 Deferred:
 

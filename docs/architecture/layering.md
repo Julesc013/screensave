@@ -30,6 +30,9 @@ Implementation detail lives under `platform/src/`.
 Code should move into the public surface only when it is stable, cross-product, and intended for reuse.
 Everything else should remain private until experience proves the abstraction is durable.
 
+Series 03 keeps almost all host code private.
+The only checked-in public seam is the narrow saver-to-host entry path used by the real `.scr` target, and the temporary alive-visual code remains host-local until the renderer layer exists.
+
 ## Product Boundary
 
 Products own:
