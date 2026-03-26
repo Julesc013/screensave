@@ -8,7 +8,7 @@ ScreenSave is a Windows screensaver project built around a conservative compatib
 - OpenGL 1.1 as the optional conservative accelerated tier.
 - Advanced OpenGL reserved for later, strictly optional, and capability-gated.
 
-## Current State
+## Automated Development
 
 The repository is at bootstrap series `S00`.
 The control plane, documentation, and directory layout now exist.
