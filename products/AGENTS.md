@@ -2,6 +2,8 @@
 
 This file applies to `products/`.
 
-- Keep product-local behavior and assets inside the product subtree when possible.
-- Do not bloat shared layers for one product without a documented reason.
-- Update product docs when a product gains new runtime or renderer requirements.
+- Keep each product subtree self-owned and identifiable.
+- Product-local manifests, presets, themes, and defaults belong with the owning product once introduced.
+- Shared code stays out of `platform/` until at least two products need the same stable abstraction.
+- Do not let one product's needs silently redefine the platform contract.
+- When a product gains new compatibility or validation requirements, update its docs and related validation notes in the same series.

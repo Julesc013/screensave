@@ -1,39 +1,61 @@
 # ScreenSave
 
-ScreenSave is a Windows screensaver project built around a conservative compatibility contract:
+ScreenSave is a monorepo for a retro-compatible Windows screensaver platform and a suite of products built on top of it.
 
-- C89 as the code baseline.
-- x86 Win32 `.scr` 32-bit binaries as the baseline product format.
-- GDI as the universal renderer floor.
-- OpenGL 1.1 as the optional conservative accelerated tier.
-- Advanced OpenGL reserved for later, strictly optional, and capability-gated.
+The platform target is intentionally conservative:
 
-## Automated Development
+- C89 is the language baseline.
+- x86 Win32 `.scr` binaries are the baseline product format.
+- Windows 95 / 98 / ME and NT 4.0 through Windows 11 are the support band to preserve.
+- The host model is the classic ANSI Win32 screensaver path.
+- GDI is mandatory.
+- OpenGL 1.1 is optional and must be capability-detected at runtime.
+- Any later accelerated backend must remain optional and must not weaken the universal baseline.
 
-The repository is at bootstrap series `S00`.
-The control plane, documentation, and directory layout now exist.
-No saver host, renderer implementation, or product code has been added yet.
+## Current Status
 
-## Repository Layout
+The repository is in Series 00, the constitutional stage.
+This series establishes repository law, structure, roadmap, and agent guidance only.
+There is no real runtime implementation yet.
 
-- `docs/` holds architecture, validation, and series mapping documents.
-- `specs/` holds normative project rules and compatibility requirements.
-- `src/` is reserved for shared C89 code, Win32 host code, and renderer implementations.
-- `products/` is reserved for product-local assets and code.
-- `tools/` holds local validation and developer scripts.
-- `.codex/` holds project-scoped Codex control files and reusable agent briefs.
+## Planned Product Shape
 
-## Validation
+ScreenSave is structured as one shared platform with many releasable products:
 
-Run the bootstrap check from the repository root:
+- Individual savers under `products/savers/`
+- Suite-level applications such as Gallery, Player, and BenchLab under `products/apps/`
+- SDK material under `products/sdk/`
 
-```powershell
-.\tools\verify_bootstrap.ps1
-```
+The first named saver placeholder is `nocturne`.
+Additional saver families and suite-level products are described in `docs/roadmap/products-and-lineup.md`.
 
-See `docs/validation.md` for current toolchain limits and validation notes.
+## Repository Authority
 
-## Status Notes
+For normative project law, start with:
 
-Bootstrap work is intentionally narrow.
-Future queued series should add implementation without weakening the compatibility baseline documented in `specs/compatibility.md`.
+- `specs/compatibility.md`
+- `specs/saver_api.md`
+- `specs/renderer_contract.md`
+- `specs/build_targets.md`
+- `specs/release_contract.md`
+- `specs/config_schema.md`
+
+For explanatory architecture and execution order, start with:
+
+- `docs/architecture/overview.md`
+- `docs/architecture/layering.md`
+- `docs/architecture/repo-structure.md`
+- `docs/roadmap/prompt-program.md`
+- `docs/roadmap/series-map.md`
+
+## Directory Summary
+
+- `.codex/` contains project-scoped Codex configuration and custom agent definitions.
+- `platform/` is the shared runtime and public API area.
+- `products/` is the product tree for savers, applications, and SDK material.
+- `assets/` is for shared non-code content and license records.
+- `tests/` and `validation/` hold verification logic and evidence.
+- `tools/`, `build/`, and `packaging/` hold support material, not baseline runtime dependencies.
+
+Read the specs before adding code.
+This repository should stay truthful, reconstructable, and conservative about compatibility.

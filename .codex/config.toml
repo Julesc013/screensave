@@ -1,22 +1,28 @@
-[project]
-name = "ScreenSave"
-default_branch = "main"
-primary_language = "c89"
-host_platform = "win32-x86"
+model = "gpt-5.4"
+model_reasoning_effort = "xhigh"
+plan_mode_reasoning_effort = "xhigh"
+approval_policy = "on-request"
+sandbox_mode = "workspace-write"
 
-[execution]
-current_series = "S00"
-require_series_tagged_commits = true
-require_changelog_updates = true
-prefer_noninteractive_git = true
+[sandbox_workspace_write]
+network_access = false
 
-[compatibility]
-c_baseline = "C89"
-product_baseline = "x86 Win32 .scr"
-renderer_floor = "GDI"
-optional_renderer = "GL11"
-advanced_gl_policy = "optional and capability-gated"
+[agents]
+max_threads = 4
+max_depth = 1
 
-[validation]
-bootstrap_script = "tools/verify_bootstrap.ps1"
-truth_notes = "Record toolchain and verification limits in docs/validation.md"
+[agents.repo_explorer]
+description = "Read-only repository mapper for locating relevant files, constraints, and series boundaries."
+config_file = "./agents/repo_explorer.toml"
+
+[agents.repo_architect]
+description = "High-rigor architect for specs, docs, interfaces, and repository contracts."
+config_file = "./agents/repo_architect.toml"
+
+[agents.implementer]
+description = "Scoped implementation worker that follows the platform contracts and keeps edits local."
+config_file = "./agents/implementer.toml"
+
+[agents.reviewer]
+description = "Read-only reviewer focused on correctness, regressions, omissions, and missing verification."
+config_file = "./agents/reviewer.toml"

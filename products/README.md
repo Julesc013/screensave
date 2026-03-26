@@ -1,4 +1,6 @@
 # Products
 
-Product-specific screensavers, assets, and configuration should live here.
-Bootstrap does not define any products yet.
+Purpose: all releasable product trees built on the shared platform.
+Belongs here: saver products, suite applications, and SDK material.
+Does not belong here: shared platform internals that belong in `platform/`.
+Type: runtime and product-definition space.

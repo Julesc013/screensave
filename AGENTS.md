@@ -1,29 +1,44 @@
 # AGENTS.md
 
-This file applies to the entire repository unless a deeper `AGENTS.md` overrides it.
+This file applies to the whole repository unless a deeper `AGENTS.md` overrides it.
 
-## Mission
+## Purpose
 
-Build ScreenSave as a coherent, reconstructable engineering project.
-Do not treat the empty starting tree as a reason to stop.
+ScreenSave is a monorepo for a retro-compatible Windows screensaver platform and a family of separate products built on that platform.
 
-## Execution Rules
+## Directory Map
 
-- Work series in order and prefer narrow repairs over broad rewrites.
-- Make at least one real commit per series using an `SNN ...` commit message.
-- Keep `CHANGELOG.md`, `README.md`, and affected docs/specs truthful in the same series as the code change.
-- Use non-interactive git commands and do not rewrite history during the rollout.
+- `platform/` is shared runtime and public platform surface.
+- `products/` is product-local code, manifests, presets, and content.
+- `specs/` is normative project law.
+- `docs/` is explanatory architecture and roadmap material.
+- `tests/`, `validation/`, `tools/`, `build/`, and `packaging/` support verification and delivery.
 
-## Compatibility Baseline
+## Invariants
 
-- Keep the codebase compatible with C89.
-- Treat x86 Win32 `.scr` output as the product baseline.
-- Keep GDI as the universal renderer floor.
-- Treat GL11 as optional and conservative.
-- Keep advanced OpenGL optional and capability-gated.
+- Preserve the C89 baseline.
+- Preserve x86 Win32 `.scr` as the baseline saver artifact.
+- Preserve the ANSI Win32 host path.
+- Keep GDI mandatory and GL11 optional.
+- Keep higher renderer tiers optional and capability-gated.
 
-## Verification
+## Working Rules
 
-- Review changed files after each series.
-- Run the strongest meaningful validation available for the current stage.
-- Record toolchain or environment limits honestly in `docs/validation.md`.
+- Read the relevant files in `specs/` before changing code or contracts.
+- Keep shared behavior out of `products/` until it is genuinely reused.
+- Prefer precise, local edits over broad rewrites.
+- Verify the changed area before finalizing and update docs that became stale.
+
+## Platform Versus Product
+
+- Put code in `platform/` only when it is a stable shared concern or a public platform contract.
+- Keep product identity, presets, content, and product-specific behavior inside the owning product subtree.
+
+## Do Not
+
+- Do not raise the language or platform baseline without updating the specs.
+- Do not add mandatory third-party runtime dependencies.
+- Do not introduce fake validation evidence, fake assets, or fake release claims.
+- Do not let a product requirement silently redefine the platform contract.
+
+Later series prompts are authoritative for their local scope, but they must preserve the normative contracts in `specs/` unless they update those contracts explicitly.

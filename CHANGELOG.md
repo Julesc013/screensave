@@ -1,25 +1,24 @@
 # Changelog
 
-All notable changes to this repository should be recorded here in series order.
+All notable repository changes are recorded here in series order.
 
 ## S00 - 2026-03-27
 
 ### Added
 
-- Root and subtree `AGENTS.md` control files.
-- Repository line-ending policy in `.gitattributes`.
-- Project-scoped Codex control metadata in `.codex/config.toml`.
-- Initial custom agent briefs in `.codex/agents/`.
-- Normative constitution and compatibility specs in `specs/`.
-- Architecture, validation, and series-map documents in `docs/`.
-- Shared source, product, and tooling directory scaffolding with purpose docs.
-- Bootstrap verification script at `tools/verify_bootstrap.ps1`.
+- Permanent repository skeleton for platform, products, assets, tests, validation, tools, build, packaging, and third-party records.
+- Root and subtree `AGENTS.md` guidance for repository, platform, products, tests, tools, and packaging work.
+- Project-scoped Codex control plane in `.codex/config.toml` and `.codex/agents/*.toml`.
+- Normative specifications for compatibility, saver API, renderer rules, build targets, release readiness, and config boundaries.
+- Explanatory architecture, roadmap, and lineup documentation under `docs/`.
 
 ### Changed
 
-- Expanded the root `README.md` from a placeholder into a truthful project bootstrap overview.
+- Rewrote the root `README.md` into the permanent Series 00 landing page.
+- Replaced the earlier temporary bootstrap layout with the long-term repository structure required by the prompt program.
 
 ### Validation
 
-- Ran `.\tools\verify_bootstrap.ps1`.
-- Confirmed the environment currently has PowerShell available, while `git`, `cl`, `msbuild`, and `cmake` are not on `PATH`.
+- Reviewed repository structure against the Series 00 directory contract.
+- Checked specs, docs, AGENTS guidance, and Codex config for internal consistency.
+- Confirmed that no runtime implementation, dependencies, CI workflows, or packaging logic were added in this series.
