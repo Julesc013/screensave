@@ -1,0 +1,61 @@
+name: Saver idea
+description: Propose a new saver, theme pack, or shared feature that fits the ScreenSave lineup.
+title: "[Idea]: "
+labels:
+  - idea
+  - lineup
+body:
+  - type: dropdown
+    id: idea_type
+    attributes:
+      label: Idea type
+      options:
+        - New saver product
+        - Theme pack
+        - Shared platform feature
+        - Suite-level application feature
+    validations:
+      required: true
+  - type: dropdown
+    id: category
+    attributes:
+      label: Lineup category
+      options:
+        - quiet / utility / ambient
+        - kinetic / classic
+        - mathematical / procedural
+        - systemic / simulation
+        - scenic / atmospheric
+        - heavyweight / showcase
+        - suite-level product
+        - unclear yet
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed saver or feature
+      description: Describe the idea plainly and concretely.
+    validations:
+      required: true
+  - type: textarea
+    id: lineup_fit
+    attributes:
+      label: Why it belongs in the lineup
+      description: Explain how this fits the planned product family or suite.
+    validations:
+      required: true
+  - type: textarea
+    id: shared_systems
+    attributes:
+      label: Likely shared systems
+      description: Identify any host, renderer, config, asset, or tooling systems this idea would touch.
+    validations:
+      required: true
+  - type: textarea
+    id: compatibility_concerns
+    attributes:
+      label: Compatibility concerns
+      description: Note GDI fallback, GL requirements, OS risks, or other compatibility constraints.
+    validations:
+      required: true

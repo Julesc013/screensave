@@ -14,9 +14,10 @@ The platform target is intentionally conservative:
 
 ## Current Status
 
-The repository is in Series 00, the constitutional stage.
-This series establishes repository law, structure, roadmap, and agent guidance only.
-There is no real runtime implementation yet.
+The repository is in Series 01.
+Series 00 established repository law, structure, roadmap, and agent guidance.
+Series 01 adds contribution, review, governance, and CI foundations.
+There is still no real runtime implementation yet.
 
 ## Planned Product Shape
 
@@ -51,6 +52,7 @@ For explanatory architecture and execution order, start with:
 ## Directory Summary
 
 - `.codex/` contains project-scoped Codex configuration and custom agent definitions.
+- `.github/` contains community-health files, ownership metadata, and stage-appropriate workflows.
 - `platform/` is the shared runtime and public API area.
 - `products/` is the product tree for savers, applications, and SDK material.
 - `assets/` is for shared non-code content and license records.

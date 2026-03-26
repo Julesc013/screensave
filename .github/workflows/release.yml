@@ -1,0 +1,48 @@
+name: Release Scaffold
+
+on:
+  workflow_dispatch:
+    inputs:
+      version_label:
+        description: "Optional release label to mention in the scaffold report."
+        required: false
+        type: string
+      track:
+        description: "Intended release track for the scaffold report."
+        required: true
+        default: preview
+        type: choice
+        options:
+          - preview
+          - candidate
+          - stable
+
+permissions:
+  contents: read
+
+jobs:
+  release-scaffold:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Generate release scaffold report
+        run: >
+          python tools/scripts/check_release_scaffold.py
+          --track "${{ inputs.track }}"
+          --version-label "${{ inputs.version_label }}"
+          --output out/release-scaffold/report.md
+
+      - name: Upload scaffold report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-scaffold-report
+          path: out/release-scaffold/report.md
+          if-no-files-found: error

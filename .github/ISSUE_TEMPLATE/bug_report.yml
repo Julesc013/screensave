@@ -1,0 +1,88 @@
+name: Bug report
+description: Report a repository, docs, tooling, build, packaging, or runtime problem.
+title: "[Bug]: "
+labels:
+  - bug
+  - triage
+body:
+  - type: dropdown
+    id: issue_kind
+    attributes:
+      label: Issue kind
+      description: What kind of problem is this?
+      options:
+        - Repository governance or process
+        - Documentation or specs
+        - Tooling or scripts
+        - CI or workflow behavior
+        - Build scaffolding
+        - Packaging scaffolding
+        - Runtime or product behavior
+    validations:
+      required: true
+  - type: dropdown
+    id: affected_area
+    attributes:
+      label: Affected area
+      description: Which part of the repository appears to own the problem?
+      options:
+        - .github
+        - docs
+        - specs
+        - platform
+        - products
+        - tests
+        - validation
+        - tools
+        - build
+        - packaging
+        - other
+    validations:
+      required: true
+  - type: input
+    id: product_or_path
+    attributes:
+      label: Product, path, or subsystem
+      description: Name the product, directory, file path, or subsystem if known.
+      placeholder: platform/src/host/win32_scr, products/savers/nocturne, docs/roadmap, or similar
+    validations:
+      required: true
+  - type: textarea
+    id: expected_behavior
+    attributes:
+      label: Expected behavior
+      description: What did you expect to happen?
+    validations:
+      required: true
+  - type: textarea
+    id: actual_behavior
+    attributes:
+      label: Actual behavior
+      description: What actually happened?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction_steps
+    attributes:
+      label: Reproduction steps
+      description: List the smallest reliable steps to reproduce the problem.
+      placeholder: |
+        1. ...
+        2. ...
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Include OS, architecture, Python version, shell, runner, VM, or other relevant context.
+      placeholder: Windows 11 x64, Python 3.12, GitHub-hosted ubuntu runner, or similar
+    validations:
+      required: true
+  - type: textarea
+    id: logs_or_screenshots
+    attributes:
+      label: Logs or screenshots
+      description: Paste relevant logs or link screenshots if available. Leave empty if none.
+      render: shell

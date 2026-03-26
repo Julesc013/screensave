@@ -2,6 +2,26 @@
 
 All notable repository changes are recorded here in series order.
 
+## S01 - 2026-03-27
+
+### Added
+
+- GitHub community-health files including issue forms, issue-template configuration, a pull request template, and CODEOWNERS.
+- Conservative GitHub Actions workflows for repository CI, docs health, and manual release scaffolding.
+- Lightweight validation helpers under `tools/scripts/` for repository structure, Codex config, docs basics, and release-scaffold checks.
+- `CONTRIBUTING.md` with repository boundaries, series expectations, and verification rules.
+
+### Changed
+
+- Updated repository truth-bearing docs to reflect the governance-focused Series 01 state.
+- Updated roadmap material so Series 01 now describes governance and CI foundation work instead of the earlier placeholder plan.
+
+### Validation
+
+- Confirmed Series 00 prerequisites existed before changes.
+- Validated the new governance files, Codex config, docs basics, and release scaffold inputs with the new helper scripts.
+- Confirmed the series added no runtime implementation, build system logic, packaging logic, or release publishing.
+
 ## S00 - 2026-03-27
 
 ### Added

@@ -1,0 +1,23 @@
+# Default owner
+* @Julesc013
+
+# Governance and repo law
+/.github/ @Julesc013
+/AGENTS.md @Julesc013
+/CONTRIBUTING.md @Julesc013
+/README.md @Julesc013
+/CHANGELOG.md @Julesc013
+/specs/ @Julesc013
+/docs/ @Julesc013
+/.codex/ @Julesc013
+
+# Shared runtime and product boundaries
+/platform/ @Julesc013
+/products/ @Julesc013
+/tests/ @Julesc013
+/validation/ @Julesc013
+/tools/ @Julesc013
+/build/ @Julesc013
+/packaging/ @Julesc013
+/assets/ @Julesc013
+/third_party/ @Julesc013

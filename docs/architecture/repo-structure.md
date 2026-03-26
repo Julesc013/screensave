@@ -4,6 +4,7 @@ The repository is shaped as a long-lived monorepo rather than a single saver pro
 
 ## Why This Layout Is Stable
 
+- `.github/` keeps community-health policy, review templates, ownership, and automation in one explicit place.
 - `platform/` isolates reusable runtime work from product-specific behavior.
 - `products/` gives each saver, application, and SDK area a clear ownership home.
 - `assets/` keeps shared content separate from code and from product-local assets.

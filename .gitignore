@@ -16,6 +16,8 @@ Desktop.ini
 *.bak
 *.cache
 *.pid
+__pycache__/
+*.pyc
 
 bin/
 obj/

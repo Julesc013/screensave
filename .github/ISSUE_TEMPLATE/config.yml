@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Repository Guide
+    url: https://github.com/Julesc013/screensave/blob/main/README.md
+    about: Read the repository overview and current stage before filing an issue.
+  - name: Compatibility Contract
+    url: https://github.com/Julesc013/screensave/blob/main/specs/compatibility.md
+    about: Check the baseline compatibility rules before reporting support expectations.
+  - name: Contribution Guide
+    url: https://github.com/Julesc013/screensave/blob/main/CONTRIBUTING.md
+    about: Review contribution, verification, and scope expectations before opening work.

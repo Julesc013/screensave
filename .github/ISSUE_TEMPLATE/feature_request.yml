@@ -1,0 +1,56 @@
+name: Feature request
+description: Request a concrete capability for the repository, platform, product, tooling, or packaging layer.
+title: "[Feature]: "
+labels:
+  - enhancement
+  - triage
+body:
+  - type: textarea
+    id: requested_capability
+    attributes:
+      label: Requested capability
+      description: Describe the capability or improvement you want.
+    validations:
+      required: true
+  - type: dropdown
+    id: affected_area
+    attributes:
+      label: Affected area
+      options:
+        - specs
+        - docs
+        - platform
+        - products
+        - tests
+        - validation
+        - tools
+        - build
+        - packaging
+        - repository governance
+    validations:
+      required: true
+  - type: checkboxes
+    id: change_scope
+    attributes:
+      label: Which layers would likely change?
+      options:
+        - label: specs
+        - label: platform
+        - label: product
+        - label: tooling
+        - label: packaging
+        - label: docs
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Motivation
+      description: Why is this useful now or later?
+    validations:
+      required: true
+  - type: textarea
+    id: constraints
+    attributes:
+      label: Constraints
+      description: Include compatibility, scope, renderer, packaging, or process constraints that should shape the solution.
+    validations:
+      required: true

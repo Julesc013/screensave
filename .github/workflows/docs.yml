@@ -1,0 +1,44 @@
+name: Docs Health
+
+on:
+  push:
+    paths:
+      - "README.md"
+      - "CONTRIBUTING.md"
+      - "CHANGELOG.md"
+      - "docs/**"
+      - "specs/**"
+      - ".github/README.md"
+      - ".github/PULL_REQUEST_TEMPLATE.md"
+      - ".github/ISSUE_TEMPLATE/**"
+      - "tools/scripts/check_docs_basics.py"
+  pull_request:
+    paths:
+      - "README.md"
+      - "CONTRIBUTING.md"
+      - "CHANGELOG.md"
+      - "docs/**"
+      - "specs/**"
+      - ".github/README.md"
+      - ".github/PULL_REQUEST_TEMPLATE.md"
+      - ".github/ISSUE_TEMPLATE/**"
+      - "tools/scripts/check_docs_basics.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  docs-health:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate documentation links and roadmap basics
+        run: python tools/scripts/check_docs_basics.py
