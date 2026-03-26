@@ -10,12 +10,12 @@ This is the short operational view of the prompt program.
 - `S05`: mandatory GDI backend and shared present path.
 - `S06`: `nocturne` first saver.
 - `S07`: BenchLab and validation instrumentation.
-- `S08`: compatibility matrix and capture discipline.
-- `S09`: Gallery and Player shells.
-- `S10`: `ember` and `oscilloscope_dreams`.
-- `S11`: quiet and classic saver pack.
-- `S12`: mathematical and procedural saver pack.
-- `S13`: scenic and atmospheric saver pack.
+- `S08`: optional GL11 backend and runtime selection.
+- `S09`: Motion Family with `ricochet` and `deepfield`.
+- `S10`: Framebuffer and vector family with `ember` and `oscilloscope_dreams`.
+- `S11`: Grid and simulation family with `pipeworks` and `lifeforms`.
+- `S12`: Systems and ambient family with `signal_lab`, `mechanical_dreams`, and `ecosystems`.
+- `S13`: Places and atmosphere family.
 - `S14`: systemic and simulation saver pack.
 - `S15`: optional `gl_plus` backend and accelerated gallery work.
 - `S16`: packaging, release notes, and delivery flow.

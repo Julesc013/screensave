@@ -308,6 +308,23 @@ void benchlab_session_destroy_runtime(benchlab_app *app)
     }
 }
 
+int benchlab_session_recreate_runtime(benchlab_app *app)
+{
+    HWND target_window;
+
+    if (app == NULL) {
+        return 0;
+    }
+
+    target_window = app->render_window != NULL ? app->render_window : app->main_window;
+    if (target_window == NULL) {
+        return 0;
+    }
+
+    benchlab_session_destroy_runtime(app);
+    return benchlab_session_create_runtime(app, target_window);
+}
+
 void benchlab_session_resize(benchlab_app *app, int width, int height)
 {
     screensave_sizei drawable_size;

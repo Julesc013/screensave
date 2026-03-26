@@ -113,7 +113,7 @@ static int scr_create_renderer_and_session(scr_host_context *context, HWND windo
 
     scr_get_client_size(window, &drawable_size);
     if (!screensave_renderer_create_for_window(
-            SCREENSAVE_RENDERER_KIND_GDI,
+            SCREENSAVE_RENDERER_KIND_UNKNOWN,
             window,
             &drawable_size,
             &context->diagnostics,
@@ -124,7 +124,7 @@ static int scr_create_renderer_and_session(scr_host_context *context, HWND windo
             SCREENSAVE_DIAG_LEVEL_ERROR,
             2305UL,
             "scr_create_renderer_and_session",
-            "The mandatory GDI renderer could not be initialized."
+            "The shared renderer could not be initialized for the saver window."
         );
         return 0;
     }
@@ -164,7 +164,7 @@ static void scr_resize_renderer_and_session(scr_host_context *context, HWND wind
             SCREENSAVE_DIAG_LEVEL_WARNING,
             2307UL,
             "scr_resize_renderer_and_session",
-            "The GDI renderer could not resize its backbuffer."
+            "The shared renderer could not resize its drawable surface."
         );
         return;
     }
@@ -237,7 +237,7 @@ static int scr_register_window_class(HINSTANCE instance)
     }
 
     ZeroMemory(&window_class, sizeof(window_class));
-    window_class.style = CS_HREDRAW | CS_VREDRAW;
+    window_class.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
     window_class.lpfnWndProc = scr_window_proc;
     window_class.hInstance = instance;
     window_class.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
@@ -260,6 +260,22 @@ static void scr_draw_overlay(HDC dc, const RECT *client_rect, const scr_host_con
     SetBkMode(dc, TRANSPARENT);
     SetTextColor(dc, RGB(0, 255, 0));
     DrawTextA(dc, overlay, -1, &text_rect, DT_LEFT | DT_NOPREFIX | DT_TOP);
+}
+
+static int scr_overlay_can_draw(const scr_host_context *context)
+{
+    screensave_renderer_info renderer_info;
+
+    if (context == NULL || !context->settings.common.diagnostics_overlay_enabled) {
+        return 0;
+    }
+
+    if (context->renderer == NULL) {
+        return 1;
+    }
+
+    screensave_renderer_get_info(context->renderer, &renderer_info);
+    return renderer_info.active_kind != SCREENSAVE_RENDERER_KIND_GL11;
 }
 
 static LRESULT CALLBACK scr_window_proc(HWND window, UINT message, WPARAM wParam, LPARAM lParam)
@@ -421,7 +437,7 @@ static LRESULT CALLBACK scr_window_proc(HWND window, UINT message, WPARAM wParam
         } else {
             FillRect(dc, &client_rect, (HBRUSH)GetStockObject(BLACK_BRUSH));
         }
-        if (context != NULL && context->settings.common.diagnostics_overlay_enabled) {
+        if (scr_overlay_can_draw(context)) {
             scr_draw_overlay(dc, &client_rect, context);
         }
         EndPaint(window, &paint);

@@ -13,5 +13,7 @@ Series 06 makes Nocturne real:
 - long-run fade and reseed behavior for calm but non-dead motion
 - shared-contract integration that now allows BenchLab to run Nocturne in a windowed diagnostics harness without private host shortcuts
 
+Series 08 keeps Nocturne renderer-agnostic while validating the same product through both the mandatory GDI backend and the optional GL11 backend.
+
 Nocturne stays intentionally narrow. It is a dark blanker-plus saver, not a general ambient effects engine.
 Type: product runtime space.

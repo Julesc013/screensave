@@ -90,7 +90,11 @@ void scr_build_version_text(const scr_host_context *context, char *buffer, int b
     scr_append_text(buffer, buffer_size, "\r\n");
     scr_append_text(buffer, buffer_size, version_info->series_text);
     scr_append_text(buffer, buffer_size, "\r\n");
-    scr_append_text(buffer, buffer_size, "Shared diagnostics, common config, the saver/module runtime, and the baseline GDI renderer are active.");
+    scr_append_text(
+        buffer,
+        buffer_size,
+        "Shared diagnostics, common config, the saver/module runtime, the mandatory GDI renderer, and the optional GL11 selection path are active."
+    );
 }
 
 void scr_build_overlay_text(const scr_host_context *context, char *buffer, int buffer_size)
@@ -136,11 +140,37 @@ void scr_build_overlay_text(const scr_host_context *context, char *buffer, int b
     }
     if (context->renderer != NULL) {
         screensave_renderer_get_info(context->renderer, &renderer_info);
+        scr_append_text(buffer, buffer_size, "\r\nRequested: ");
+        if (renderer_info.requested_kind == SCREENSAVE_RENDERER_KIND_UNKNOWN) {
+            scr_append_text(buffer, buffer_size, "auto");
+        } else {
+            scr_append_text(buffer, buffer_size, screensave_renderer_kind_name(renderer_info.requested_kind));
+        }
         scr_append_text(buffer, buffer_size, "\r\nRenderer: ");
         scr_append_text(buffer, buffer_size, screensave_renderer_kind_name(renderer_info.active_kind));
         if (renderer_info.backend_name != NULL) {
             scr_append_text(buffer, buffer_size, " ");
             scr_append_text(buffer, buffer_size, renderer_info.backend_name);
+        }
+        if (renderer_info.selection_reason != NULL) {
+            scr_append_text(buffer, buffer_size, "\r\nSelection: ");
+            scr_append_text(buffer, buffer_size, renderer_info.selection_reason);
+        }
+        if (renderer_info.fallback_reason != NULL) {
+            scr_append_text(buffer, buffer_size, "\r\nFallback: ");
+            scr_append_text(buffer, buffer_size, renderer_info.fallback_reason);
+        }
+        if (renderer_info.vendor_name != NULL) {
+            scr_append_text(buffer, buffer_size, "\r\nGL vendor: ");
+            scr_append_text(buffer, buffer_size, renderer_info.vendor_name);
+        }
+        if (renderer_info.renderer_name != NULL) {
+            scr_append_text(buffer, buffer_size, "\r\nGL renderer: ");
+            scr_append_text(buffer, buffer_size, renderer_info.renderer_name);
+        }
+        if (renderer_info.version_name != NULL) {
+            scr_append_text(buffer, buffer_size, "\r\nGL version: ");
+            scr_append_text(buffer, buffer_size, renderer_info.version_name);
         }
         scr_append_text(buffer, buffer_size, "\r\nBackbuffer: ");
         scr_append_number(buffer, buffer_size, (unsigned long)renderer_info.drawable_size.width);

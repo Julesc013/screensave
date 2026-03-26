@@ -14,7 +14,7 @@ The platform target is intentionally conservative:
 
 ## Current Status
 
-The repository is in Series 07.
+The repository is in Series 08.
 Series 00 established repository law, structure, roadmap, and agent guidance.
 Series 01 added contribution, review, governance, and CI foundations.
 Series 02 added the checked-in build scaffold and toolchain lane structure.
@@ -33,7 +33,14 @@ Series 07 adds BenchLab as the first real developer-facing app product:
 - deterministic restart and reseed controls for repeatable debugging
 - a modest runtime and renderer diagnostics overlay for validating Nocturne and the GDI baseline
 
-OpenGL, packaging, and multi-product saver selection are still deferred.
+Series 08 adds the optional OpenGL 1.1 backend without weakening the baseline:
+
+- a conservative WGL/OpenGL 1.1 backend under the shared renderer contract
+- automatic renderer selection with explicit fallback to GDI
+- BenchLab controls for `auto`, `gdi`, and `gl11`, with active-renderer and fallback reporting
+- Nocturne validation on both the mandatory GDI floor and the optional GL11 path
+
+GL-plus, packaging, and multi-product saver selection are still deferred.
 
 ## Planned Product Shape
 
@@ -78,15 +85,15 @@ For explanatory architecture and execution order, start with:
 
 ## Build Status
 
-The checked-in build scaffold now integrates the real Series 07 saver-plus-harness path on top of the Series 05 renderer, Series 04 shared core runtime, and Series 03 host:
+The checked-in build scaffold now integrates the real Series 08 saver-plus-harness path on top of the Series 05 GDI renderer, the Series 08 optional GL11 renderer, the Series 04 shared core runtime, and the Series 03 host:
 
 - a concrete MSVC VS2022 solution lane under `build/msvc/vs2022/`
 - a concrete MinGW i686 make lane under `build/mingw/i686/`
 - documentation-only VS6 and VS2008 lanes that preserve long-term intent without claiming present build completeness
 
-The shared platform target now compiles the reusable non-renderer core runtime, the mandatory GDI backend, and the Win32 host.
-The `.scr` target now runs the real Nocturne saver through the shared saver and GDI paths, with the validation scene retained only as a fallback for non-product sessions.
-The app target now runs BenchLab as a real windowed harness for Nocturne through the same shared contracts.
+The shared platform target now compiles the reusable non-renderer core runtime, the mandatory GDI backend, the optional GL11 backend, and the Win32 host.
+The `.scr` target now runs the real Nocturne saver through the shared saver path with automatic renderer selection and explicit fallback to GDI.
+The app target now runs BenchLab as a real windowed harness for Nocturne through the same shared contracts, with explicit renderer-selection controls and fallback diagnostics.
 
 Read the specs before adding code.
 This repository should stay truthful, reconstructable, and conservative about compatibility.

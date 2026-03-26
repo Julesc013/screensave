@@ -52,6 +52,15 @@ REQUIRED_PATHS = [
     ROOT / "platform" / "src" / "render" / "gdi" / "gdi_primitives.c",
     ROOT / "platform" / "src" / "render" / "gdi" / "gdi_bitmap.c",
     ROOT / "platform" / "src" / "render" / "gdi" / "gdi_state.c",
+    ROOT / "platform" / "src" / "render" / "gl11" / "README.md",
+    ROOT / "platform" / "src" / "render" / "gl11" / "gl11_internal.h",
+    ROOT / "platform" / "src" / "render" / "gl11" / "gl11_backend.c",
+    ROOT / "platform" / "src" / "render" / "gl11" / "gl11_bitmap.c",
+    ROOT / "platform" / "src" / "render" / "gl11" / "gl11_caps.c",
+    ROOT / "platform" / "src" / "render" / "gl11" / "gl11_context.c",
+    ROOT / "platform" / "src" / "render" / "gl11" / "gl11_present.c",
+    ROOT / "platform" / "src" / "render" / "gl11" / "gl11_primitives.c",
+    ROOT / "platform" / "src" / "render" / "gl11" / "gl11_state.c",
     ROOT / "platform" / "src" / "host" / "win32_scr" / "scr_internal.h",
     ROOT / "platform" / "src" / "host" / "win32_scr" / "scr_args.c",
     ROOT / "platform" / "src" / "host" / "win32_scr" / "scr_config_dialog.c",
@@ -169,6 +178,13 @@ def main() -> int:
         "..\\..\\..\\platform\\src\\render\\gdi\\gdi_primitives.c",
         "..\\..\\..\\platform\\src\\render\\gdi\\gdi_state.c",
         "..\\..\\..\\platform\\src\\render\\gdi\\gdi_surface.c",
+        "..\\..\\..\\platform\\src\\render\\gl11\\gl11_backend.c",
+        "..\\..\\..\\platform\\src\\render\\gl11\\gl11_bitmap.c",
+        "..\\..\\..\\platform\\src\\render\\gl11\\gl11_caps.c",
+        "..\\..\\..\\platform\\src\\render\\gl11\\gl11_context.c",
+        "..\\..\\..\\platform\\src\\render\\gl11\\gl11_present.c",
+        "..\\..\\..\\platform\\src\\render\\gl11\\gl11_primitives.c",
+        "..\\..\\..\\platform\\src\\render\\gl11\\gl11_state.c",
         "..\\..\\..\\platform\\src\\host\\win32_scr\\scr_entry.c",
         "..\\..\\..\\platform\\src\\host\\win32_scr\\scr_validation_scene.c",
         "..\\..\\..\\platform\\src\\host\\win32_scr\\scr_window.c",
@@ -223,7 +239,7 @@ def main() -> int:
 
     nocturne_project_text = NOCTURNE_PROJECT.read_text(encoding="utf-8")
     require("<TargetExt>.scr</TargetExt>" in nocturne_project_text, "nocturne.vcxproj must emit a .scr target.", errors)
-    require("user32.lib;gdi32.lib;advapi32.lib" in nocturne_project_text, "nocturne.vcxproj must link the host-support Win32 libraries.", errors)
+    require("user32.lib;gdi32.lib;advapi32.lib;opengl32.lib" in nocturne_project_text, "nocturne.vcxproj must link the host-support Win32 and OpenGL libraries.", errors)
     require("out\\msvc\\vs2022" in nocturne_project_text, "nocturne.vcxproj must use the documented MSVC output root.", errors)
 
     for expected in (
@@ -254,7 +270,7 @@ def main() -> int:
 
     benchlab_project_text = BENCHLAB_PROJECT.read_text(encoding="utf-8")
     require("<TargetExt>.exe</TargetExt>" in benchlab_project_text, "benchlab.vcxproj must emit an .exe target.", errors)
-    require("user32.lib;gdi32.lib;advapi32.lib" in benchlab_project_text, "benchlab.vcxproj must link the app-support Win32 libraries.", errors)
+    require("user32.lib;gdi32.lib;advapi32.lib;opengl32.lib" in benchlab_project_text, "benchlab.vcxproj must link the app-support Win32 and OpenGL libraries.", errors)
     require("out\\msvc\\vs2022" in benchlab_project_text, "benchlab.vcxproj must use the documented MSVC output root.", errors)
 
     makefile_text = MINGW_MAKEFILE.read_text(encoding="utf-8")
@@ -274,6 +290,13 @@ def main() -> int:
         "gdi_primitives.c",
         "gdi_state.c",
         "gdi_surface.c",
+        "gl11_backend.c",
+        "gl11_bitmap.c",
+        "gl11_caps.c",
+        "gl11_context.c",
+        "gl11_present.c",
+        "gl11_primitives.c",
+        "gl11_state.c",
         "scr_entry.c",
         "scr_validation_scene.c",
         "scr_window.c",
@@ -294,6 +317,7 @@ def main() -> int:
         "benchlab_overlay.c",
         "benchlab_session.c",
         "benchlab.exe",
+        "opengl32",
         "windres",
     ):
         require(expected in makefile_text, f"Makefile is missing {expected!r}.", errors)
@@ -304,11 +328,34 @@ def main() -> int:
 
     host_window_text = (ROOT / "platform" / "src" / "host" / "win32_scr" / "scr_window.c").read_text(encoding="utf-8")
     require("screensave_renderer_create_for_window" in host_window_text, "scr_window.c must initialize the reusable renderer through the shared public contract.", errors)
+    require("SCREENSAVE_RENDERER_KIND_UNKNOWN" in host_window_text, "scr_window.c must use the automatic renderer-selection path.", errors)
     require("scr_render_validation_scene" in host_window_text, "scr_window.c must route the fallback validation scene through the shared renderer.", errors)
     require("SCREENSAVE_SESSION_MODE_PREVIEW" in host_window_text, "scr_window.c must distinguish preview mode.", errors)
 
     gdi_backend_text = (ROOT / "platform" / "src" / "render" / "gdi" / "gdi_backend.c").read_text(encoding="utf-8")
     require("SCREENSAVE_RENDERER_KIND_GDI" in gdi_backend_text, "gdi_backend.c must identify itself as the GDI renderer.", errors)
+
+    renderer_api_text = (ROOT / "platform" / "include" / "screensave" / "renderer_api.h").read_text(encoding="utf-8")
+    require("selection_reason" in renderer_api_text, "renderer_api.h must expose selection-reason reporting.", errors)
+    require("fallback_reason" in renderer_api_text, "renderer_api.h must expose fallback-reason reporting.", errors)
+    require("vendor_name" in renderer_api_text, "renderer_api.h must expose backend identity strings for GL diagnostics.", errors)
+
+    renderer_dispatch_text = (ROOT / "platform" / "src" / "core" / "base" / "renderer_dispatch.c").read_text(encoding="utf-8")
+    require("SCREENSAVE_RENDERER_KIND_GL11" in renderer_dispatch_text, "renderer_dispatch.c must route the optional GL11 backend.", errors)
+    require("auto-fallback-gdi" in renderer_dispatch_text, "renderer_dispatch.c must report automatic fallback to GDI.", errors)
+    require("force-gl11-fallback-gdi" in renderer_dispatch_text, "renderer_dispatch.c must report forced-GL11 fallback to GDI.", errors)
+
+    gl11_backend_text = (ROOT / "platform" / "src" / "render" / "gl11" / "gl11_backend.c").read_text(encoding="utf-8")
+    require("SCREENSAVE_RENDERER_KIND_GL11" in gl11_backend_text, "gl11_backend.c must identify itself as the GL11 renderer.", errors)
+
+    gl11_context_text = (ROOT / "platform" / "src" / "render" / "gl11" / "gl11_context.c").read_text(encoding="utf-8")
+    require("wglCreateContext" in gl11_context_text, "gl11_context.c must create a real WGL context.", errors)
+    require("SetPixelFormat" in gl11_context_text, "gl11_context.c must set a real pixel format.", errors)
+
+    gl11_caps_text = (ROOT / "platform" / "src" / "render" / "gl11" / "gl11_caps.c").read_text(encoding="utf-8")
+    require("glGetString(GL_VENDOR)" in gl11_caps_text, "gl11_caps.c must capture GL vendor information.", errors)
+    require("glGetString(GL_RENDERER)" in gl11_caps_text, "gl11_caps.c must capture GL renderer information.", errors)
+    require("glGetString(GL_VERSION)" in gl11_caps_text, "gl11_caps.c must capture GL version information.", errors)
 
     gdi_surface_text = (ROOT / "platform" / "src" / "render" / "gdi" / "gdi_surface.c").read_text(encoding="utf-8")
     require("CreateDIBSection" in gdi_surface_text, "gdi_surface.c must create a real offscreen GDI backbuffer.", errors)
@@ -327,11 +374,17 @@ def main() -> int:
     benchlab_main_text = (ROOT / "products" / "apps" / "benchlab" / "src" / "benchlab_main.c").read_text(encoding="utf-8")
     benchlab_app_text = (ROOT / "products" / "apps" / "benchlab" / "src" / "benchlab_app.c").read_text(encoding="utf-8")
     benchlab_session_text = (ROOT / "products" / "apps" / "benchlab" / "src" / "benchlab_session.c").read_text(encoding="utf-8")
+    benchlab_overlay_text = (ROOT / "products" / "apps" / "benchlab" / "src" / "benchlab_overlay.c").read_text(encoding="utf-8")
     require("benchlab_app_run" in benchlab_main_text, "benchlab_main.c must delegate into the real BenchLab app runner.", errors)
     require("screensave_saver_module_is_valid" in benchlab_app_text, "benchlab_app.c must validate the active saver module before creating the harness.", errors)
+    require("IDM_BENCHLAB_RENDERER_AUTO" in benchlab_app_text, "benchlab_app.c must expose automatic renderer selection.", errors)
+    require("IDM_BENCHLAB_RENDERER_GDI" in benchlab_app_text, "benchlab_app.c must expose explicit GDI selection.", errors)
+    require("IDM_BENCHLAB_RENDERER_GL11" in benchlab_app_text, "benchlab_app.c must expose explicit renderer selection commands.", errors)
     require("screensave_renderer_create_for_window" in benchlab_session_text, "benchlab_session.c must create the shared renderer through the public renderer contract.", errors)
     require("nocturne_get_module" in benchlab_session_text, "benchlab_session.c must bind the current saver module explicitly for this stage.", errors)
     require("show_config_dialog" in benchlab_session_text, "benchlab_session.c must support product-owned saver configuration dialogs.", errors)
+    require("fallback_reason" in benchlab_overlay_text, "benchlab_overlay.c must report renderer fallback reasons.", errors)
+    require("vendor_name" in benchlab_overlay_text, "benchlab_overlay.c must report GL identity strings when available.", errors)
 
     if errors:
         for error in errors:

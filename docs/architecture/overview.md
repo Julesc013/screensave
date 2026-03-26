@@ -24,4 +24,4 @@ Series 04 makes the reusable non-renderer runtime and first public platform surf
 Series 05 makes the mandatory reusable GDI backend real and routes the host through the shared renderer path.
 Series 06 makes Nocturne the first real saver product on those shared contracts.
 Series 07 makes BenchLab the first real app product and proves the current saver/renderer contracts in a windowed diagnostics harness.
-Optional higher renderer tiers and multi-product concerns remain deferred while preserving the compatibility and ownership rules defined in `specs/`.
+Series 08 makes the optional GL11 backend, explicit renderer selection, and explicit fallback-to-GDI behavior real while preserving the compatibility and ownership rules defined in `specs/`.

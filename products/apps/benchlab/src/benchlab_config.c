@@ -100,6 +100,13 @@ static int benchlab_command_starts_with(const char *token, const char *prefix)
     return 1;
 }
 
+static int benchlab_is_valid_renderer_request(int renderer_request)
+{
+    return renderer_request == (int)SCREENSAVE_RENDERER_KIND_UNKNOWN ||
+        renderer_request == (int)SCREENSAVE_RENDERER_KIND_GDI ||
+        renderer_request == (int)SCREENSAVE_RENDERER_KIND_GL11;
+}
+
 void benchlab_app_config_set_defaults(benchlab_app_config *config)
 {
     if (config == NULL) {
@@ -110,6 +117,7 @@ void benchlab_app_config_set_defaults(benchlab_app_config *config)
     config->client_height = BENCHLAB_DEFAULT_CLIENT_HEIGHT;
     config->overlay_enabled = 1;
     config->deterministic_mode = 0;
+    config->renderer_request = (int)SCREENSAVE_RENDERER_KIND_UNKNOWN;
     config->fixed_seed = BENCHLAB_DEFAULT_FIXED_SEED;
 }
 
@@ -128,6 +136,9 @@ void benchlab_app_config_clamp(benchlab_app_config *config)
 
     config->overlay_enabled = config->overlay_enabled != 0;
     config->deterministic_mode = config->deterministic_mode != 0;
+    if (!benchlab_is_valid_renderer_request(config->renderer_request)) {
+        config->renderer_request = (int)SCREENSAVE_RENDERER_KIND_UNKNOWN;
+    }
     if (config->fixed_seed == 0UL) {
         config->fixed_seed = BENCHLAB_DEFAULT_FIXED_SEED;
     }
@@ -166,6 +177,11 @@ int benchlab_app_config_load(benchlab_app_config *config)
     value = (unsigned long)config->deterministic_mode;
     if (benchlab_read_dword(key, "DeterministicMode", &value)) {
         config->deterministic_mode = value != 0UL;
+    }
+
+    value = (unsigned long)config->renderer_request;
+    if (benchlab_read_dword(key, "RendererRequest", &value)) {
+        config->renderer_request = (int)value;
     }
 
     value = config->fixed_seed;
@@ -217,6 +233,9 @@ int benchlab_app_config_save(const benchlab_app_config *config)
     }
     if (result == ERROR_SUCCESS) {
         result = benchlab_write_dword(key, "DeterministicMode", (unsigned long)safe_config.deterministic_mode);
+    }
+    if (result == ERROR_SUCCESS) {
+        result = benchlab_write_dword(key, "RendererRequest", (unsigned long)safe_config.renderer_request);
     }
     if (result == ERROR_SUCCESS) {
         result = benchlab_write_dword(key, "FixedSeed", safe_config.fixed_seed);
@@ -277,6 +296,38 @@ void benchlab_app_config_apply_command_line(benchlab_app *app, LPSTR command_lin
         }
         if (benchlab_command_equals(token, "nooverlay")) {
             app->app_config.overlay_enabled = 0;
+            continue;
+        }
+        if (benchlab_command_equals(token, "auto")) {
+            app->app_config.renderer_request = (int)SCREENSAVE_RENDERER_KIND_UNKNOWN;
+            continue;
+        }
+        if (benchlab_command_equals(token, "gdi")) {
+            app->app_config.renderer_request = (int)SCREENSAVE_RENDERER_KIND_GDI;
+            continue;
+        }
+        if (benchlab_command_equals(token, "gl11")) {
+            app->app_config.renderer_request = (int)SCREENSAVE_RENDERER_KIND_GL11;
+            continue;
+        }
+        if (benchlab_command_starts_with(token, "renderer:")) {
+            const char *renderer_name;
+
+            renderer_name = token + 9;
+            if (lstrcmpiA(renderer_name, "auto") == 0) {
+                app->app_config.renderer_request = (int)SCREENSAVE_RENDERER_KIND_UNKNOWN;
+            } else if (lstrcmpiA(renderer_name, "gdi") == 0) {
+                app->app_config.renderer_request = (int)SCREENSAVE_RENDERER_KIND_GDI;
+            } else if (lstrcmpiA(renderer_name, "gl11") == 0) {
+                app->app_config.renderer_request = (int)SCREENSAVE_RENDERER_KIND_GL11;
+            } else {
+                benchlab_emit_app_diag(
+                    app,
+                    SCREENSAVE_DIAG_LEVEL_WARNING,
+                    7102UL,
+                    "BenchLab ignored an invalid /renderer: command-line argument."
+                );
+            }
             continue;
         }
         if (benchlab_command_starts_with(token, "seed:")) {

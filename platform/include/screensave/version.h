@@ -2,10 +2,10 @@
 #define SCREENSAVE_VERSION_H
 
 #define SCREENSAVE_VERSION_MAJOR 0
-#define SCREENSAVE_VERSION_MINOR 7
+#define SCREENSAVE_VERSION_MINOR 8
 #define SCREENSAVE_VERSION_PATCH 0
-#define SCREENSAVE_VERSION_TEXT "0.7.0"
-#define SCREENSAVE_VERSION_SERIES "Series 07 BenchLab diagnostics harness"
+#define SCREENSAVE_VERSION_TEXT "0.8.0"
+#define SCREENSAVE_VERSION_SERIES "Series 08 optional GL11 backend and runtime selection"
 
 typedef struct screensave_version_info_tag {
     unsigned short major;

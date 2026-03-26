@@ -5,7 +5,7 @@ This lane preserves the long-term place for Visual Studio 6 era project material
 ## Intended Role
 
 VS6 matters only as a later legacy validation lane for the oldest supported Windows band.
-It is not the practical development lane in Series 07.
+It is not the practical development lane in Series 08.
 
 ## What Is Real Now
 

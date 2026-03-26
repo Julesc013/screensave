@@ -42,6 +42,11 @@ typedef struct screensave_renderer_info_tag {
     screensave_sizei drawable_size;
     const char *backend_name;
     const char *status_text;
+    const char *selection_reason;
+    const char *fallback_reason;
+    const char *vendor_name;
+    const char *renderer_name;
+    const char *version_name;
 } screensave_renderer_info;
 
 typedef struct screensave_renderer_tag screensave_renderer;

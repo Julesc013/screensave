@@ -31,6 +31,13 @@ PLATFORM_SRCS := \
 	$(ROOT)/platform/src/render/gdi/gdi_primitives.c \
 	$(ROOT)/platform/src/render/gdi/gdi_state.c \
 	$(ROOT)/platform/src/render/gdi/gdi_surface.c \
+	$(ROOT)/platform/src/render/gl11/gl11_backend.c \
+	$(ROOT)/platform/src/render/gl11/gl11_bitmap.c \
+	$(ROOT)/platform/src/render/gl11/gl11_caps.c \
+	$(ROOT)/platform/src/render/gl11/gl11_context.c \
+	$(ROOT)/platform/src/render/gl11/gl11_present.c \
+	$(ROOT)/platform/src/render/gl11/gl11_primitives.c \
+	$(ROOT)/platform/src/render/gl11/gl11_state.c \
 	$(ROOT)/platform/src/host/win32_scr/scr_args.c \
 	$(ROOT)/platform/src/host/win32_scr/scr_config_dialog.c \
 	$(ROOT)/platform/src/host/win32_scr/scr_diagnostics.c \
@@ -76,6 +83,13 @@ PLATFORM_OBJS := \
 	$(PLATFORM_DIR)/gdi_primitives.o \
 	$(PLATFORM_DIR)/gdi_state.o \
 	$(PLATFORM_DIR)/gdi_surface.o \
+	$(PLATFORM_DIR)/gl11_backend.o \
+	$(PLATFORM_DIR)/gl11_bitmap.o \
+	$(PLATFORM_DIR)/gl11_caps.o \
+	$(PLATFORM_DIR)/gl11_context.o \
+	$(PLATFORM_DIR)/gl11_present.o \
+	$(PLATFORM_DIR)/gl11_primitives.o \
+	$(PLATFORM_DIR)/gl11_state.o \
 	$(PLATFORM_DIR)/scr_args.o \
 	$(PLATFORM_DIR)/scr_config_dialog.o \
 	$(PLATFORM_DIR)/scr_diagnostics.o \
@@ -111,7 +125,7 @@ BENCHLAB_OBJS := \
 	$(BENCHLAB_DIR)/nocturne_config_res.o
 
 CFLAGS_COMMON := -std=c89 -Wall -Wextra -pedantic -I$(ROOT)/platform/include
-LDLIBS_COMMON := -ladvapi32 -lgdi32 -luser32
+LDLIBS_COMMON := -ladvapi32 -lgdi32 -luser32 -lopengl32
 
 ifeq ($(PROFILE),release)
 	CFLAGS := $(CFLAGS_COMMON) -O2
@@ -184,6 +198,34 @@ $(PLATFORM_DIR)/gdi_state.o: $(ROOT)/platform/src/render/gdi/gdi_state.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(PLATFORM_DIR)/gdi_surface.o: $(ROOT)/platform/src/render/gdi/gdi_surface.c
+	mkdir -p $(PLATFORM_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(PLATFORM_DIR)/gl11_backend.o: $(ROOT)/platform/src/render/gl11/gl11_backend.c
+	mkdir -p $(PLATFORM_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(PLATFORM_DIR)/gl11_bitmap.o: $(ROOT)/platform/src/render/gl11/gl11_bitmap.c
+	mkdir -p $(PLATFORM_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(PLATFORM_DIR)/gl11_caps.o: $(ROOT)/platform/src/render/gl11/gl11_caps.c
+	mkdir -p $(PLATFORM_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(PLATFORM_DIR)/gl11_context.o: $(ROOT)/platform/src/render/gl11/gl11_context.c
+	mkdir -p $(PLATFORM_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(PLATFORM_DIR)/gl11_present.o: $(ROOT)/platform/src/render/gl11/gl11_present.c
+	mkdir -p $(PLATFORM_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(PLATFORM_DIR)/gl11_primitives.o: $(ROOT)/platform/src/render/gl11/gl11_primitives.c
+	mkdir -p $(PLATFORM_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(PLATFORM_DIR)/gl11_state.o: $(ROOT)/platform/src/render/gl11/gl11_state.c
 	mkdir -p $(PLATFORM_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 

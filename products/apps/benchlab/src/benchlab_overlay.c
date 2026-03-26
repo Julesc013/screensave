@@ -35,6 +35,15 @@ static int benchlab_append_hex(char *buffer, int buffer_size, unsigned long valu
     return benchlab_append_text(buffer, buffer_size, text);
 }
 
+static const char *benchlab_requested_renderer_text(screensave_renderer_kind requested_kind)
+{
+    if (requested_kind == SCREENSAVE_RENDERER_KIND_UNKNOWN) {
+        return "auto";
+    }
+
+    return screensave_renderer_kind_name(requested_kind);
+}
+
 static void benchlab_build_overlay_text(const benchlab_app *app, char *buffer, int buffer_size)
 {
     screensave_renderer_info renderer_info;
@@ -55,12 +64,32 @@ static void benchlab_build_overlay_text(const benchlab_app *app, char *buffer, i
     benchlab_append_text(buffer, buffer_size, "\r\nRuntime: ");
     benchlab_append_text(buffer, buffer_size, screensave_version_get_text());
     benchlab_append_text(buffer, buffer_size, "\r\nRequested renderer: ");
-    benchlab_append_text(buffer, buffer_size, screensave_renderer_kind_name(app->requested_renderer_kind));
+    benchlab_append_text(buffer, buffer_size, benchlab_requested_renderer_text(app->requested_renderer_kind));
 
     if (app->renderer != NULL) {
         screensave_renderer_get_info(app->renderer, &renderer_info);
         benchlab_append_text(buffer, buffer_size, "\r\nActive renderer: ");
         benchlab_append_text(buffer, buffer_size, screensave_renderer_kind_name(renderer_info.active_kind));
+        if (renderer_info.selection_reason != NULL) {
+            benchlab_append_text(buffer, buffer_size, "\r\nSelection: ");
+            benchlab_append_text(buffer, buffer_size, renderer_info.selection_reason);
+        }
+        if (renderer_info.fallback_reason != NULL) {
+            benchlab_append_text(buffer, buffer_size, "\r\nFallback: ");
+            benchlab_append_text(buffer, buffer_size, renderer_info.fallback_reason);
+        }
+        if (renderer_info.vendor_name != NULL) {
+            benchlab_append_text(buffer, buffer_size, "\r\nGL vendor: ");
+            benchlab_append_text(buffer, buffer_size, renderer_info.vendor_name);
+        }
+        if (renderer_info.renderer_name != NULL) {
+            benchlab_append_text(buffer, buffer_size, "\r\nGL renderer: ");
+            benchlab_append_text(buffer, buffer_size, renderer_info.renderer_name);
+        }
+        if (renderer_info.version_name != NULL) {
+            benchlab_append_text(buffer, buffer_size, "\r\nGL version: ");
+            benchlab_append_text(buffer, buffer_size, renderer_info.version_name);
+        }
         benchlab_append_text(buffer, buffer_size, "\r\nDrawable: ");
         benchlab_append_number(buffer, buffer_size, (unsigned long)renderer_info.drawable_size.width);
         benchlab_append_text(buffer, buffer_size, "x");
@@ -137,11 +166,6 @@ void benchlab_draw_overlay(HDC dc, const RECT *client_rect, const benchlab_app *
     text_rect.top += 8;
 
     SetBkMode(dc, TRANSPARENT);
-    SetTextColor(dc, RGB(0, 64, 0));
-    OffsetRect(&text_rect, 1, 1);
-    DrawTextA(dc, overlay, -1, &text_rect, DT_LEFT | DT_NOPREFIX | DT_TOP);
-
-    OffsetRect(&text_rect, -1, -1);
     SetTextColor(dc, RGB(0, 255, 0));
-    DrawTextA(dc, overlay, -1, &text_rect, DT_LEFT | DT_NOPREFIX | DT_TOP);
+    DrawTextA(dc, overlay, -1, &text_rect, DT_LEFT | DT_NOPREFIX | DT_TOP | DT_WORDBREAK);
 }

@@ -2,6 +2,26 @@
 
 All notable repository changes are recorded here in series order.
 
+## S08 - 2026-03-27
+
+### Added
+
+- A real optional OpenGL 1.1 backend under `platform/src/render/gl11/`, including conservative WGL context creation, capability capture, present handling, and the current baseline primitive/bitmap path required by the shared renderer contract.
+- Explicit runtime renderer selection and fallback reporting so sessions can request `auto`, `gdi`, or `gl11` while keeping GDI as the guaranteed floor.
+
+### Changed
+
+- Updated the shared renderer dispatch and renderer-info model narrowly so requested renderer, active renderer, fallback reason, and GL vendor/renderer/version can be reported honestly without introducing GL-plus or modern-context assumptions.
+- Updated the Win32 `.scr` host to use automatic shared-renderer selection while keeping the host lifecycle narrow and preserving GDI as the fallback baseline.
+- Updated BenchLab so developers can select the requested renderer explicitly, inspect requested-versus-active backend state, and validate Nocturne across both renderer paths without adding player or gallery scope.
+- Updated the concrete VS2022 and MinGW i686 build lanes, static build checks, manifests, and repo docs so Series 08 truthfully describes the optional GL11 backend and dual-backend validation state.
+
+### Validation
+
+- Confirmed Series 00 through Series 07 prerequisites existed before changes.
+- Performed static validation of the GL11 backend file graph, renderer-selection wiring, build integration, and documentation consistency.
+- Confirmed no GL-plus or modern-context work, second-saver work, gallery/player scope, packaging logic, or unsupported compatibility claims were added in this series.
+
 ## S07 - 2026-03-27
 
 ### Added

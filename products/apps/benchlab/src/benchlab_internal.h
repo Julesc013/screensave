@@ -10,12 +10,15 @@
 #include "screensave/version.h"
 
 #define BENCHLAB_WINDOW_CLASSA "ScreenSaveBenchLabWindow"
+#define BENCHLAB_RENDER_WINDOW_CLASSA "ScreenSaveBenchLabRenderWindow"
+#define BENCHLAB_INFO_WINDOW_CLASSA "ScreenSaveBenchLabInfoWindow"
 #define BENCHLAB_REGISTRY_ROOTA "Software\\Julesc013\\ScreenSave\\Apps\\benchlab"
 #define BENCHLAB_APP_TITLEA "BenchLab"
 #define BENCHLAB_TIMER_ID 1
 #define BENCHLAB_TIMER_INTERVAL_MS 33
 #define BENCHLAB_DEFAULT_CLIENT_WIDTH 640
 #define BENCHLAB_DEFAULT_CLIENT_HEIGHT 480
+#define BENCHLAB_INFO_PANEL_WIDTH 280
 #define BENCHLAB_DEFAULT_FIXED_SEED 0x00000707UL
 #define BENCHLAB_STEP_DELTA_MS 33UL
 #define BENCHLAB_DIAG_LINE_COUNT 6U
@@ -29,12 +32,16 @@
 #define IDM_BENCHLAB_STEP_FRAME 41006
 #define IDM_BENCHLAB_SAVER_SETTINGS 41007
 #define IDM_BENCHLAB_EXIT 41008
+#define IDM_BENCHLAB_RENDERER_AUTO 41009
+#define IDM_BENCHLAB_RENDERER_GDI 41010
+#define IDM_BENCHLAB_RENDERER_GL11 41011
 
 typedef struct benchlab_app_config_tag {
     int client_width;
     int client_height;
     int overlay_enabled;
     int deterministic_mode;
+    int renderer_request;
     unsigned long fixed_seed;
 } benchlab_app_config;
 
@@ -49,6 +56,8 @@ typedef struct benchlab_app_tag {
     LPSTR command_line;
     int show_code;
     HWND main_window;
+    HWND render_window;
+    HWND info_window;
     HMENU menu;
     const screensave_saver_module *module;
     screensave_renderer_kind requested_renderer_kind;
@@ -89,6 +98,7 @@ int benchlab_session_initialize_config(benchlab_app *app);
 void benchlab_session_dispose_config(benchlab_app *app);
 int benchlab_session_create_runtime(benchlab_app *app, HWND window);
 void benchlab_session_destroy_runtime(benchlab_app *app);
+int benchlab_session_recreate_runtime(benchlab_app *app);
 void benchlab_session_resize(benchlab_app *app, int width, int height);
 int benchlab_session_restart(benchlab_app *app, int reseed);
 void benchlab_session_tick(benchlab_app *app);

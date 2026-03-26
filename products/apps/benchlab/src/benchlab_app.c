@@ -1,8 +1,12 @@
 #include "benchlab_internal.h"
 
 static ATOM g_benchlab_window_class = 0;
+static ATOM g_benchlab_render_class = 0;
+static ATOM g_benchlab_info_class = 0;
 
 static LRESULT CALLBACK benchlab_window_proc(HWND window, UINT message, WPARAM wParam, LPARAM lParam);
+static LRESULT CALLBACK benchlab_render_window_proc(HWND window, UINT message, WPARAM wParam, LPARAM lParam);
+static LRESULT CALLBACK benchlab_info_window_proc(HWND window, UINT message, WPARAM wParam, LPARAM lParam);
 
 static void benchlab_show_message(HWND owner, const char *text, UINT type)
 {
@@ -12,6 +16,25 @@ static void benchlab_show_message(HWND owner, const char *text, UINT type)
 static benchlab_app *benchlab_get_window_app(HWND window)
 {
     return (benchlab_app *)GetWindowLongA(window, GWL_USERDATA);
+}
+
+static const char *benchlab_renderer_request_label(screensave_renderer_kind requested_kind)
+{
+    if (requested_kind == SCREENSAVE_RENDERER_KIND_UNKNOWN) {
+        return "auto";
+    }
+
+    return screensave_renderer_kind_name(requested_kind);
+}
+
+static void benchlab_attach_window_app(HWND window, LPARAM lParam)
+{
+    CREATESTRUCTA *create_struct;
+    benchlab_app *app;
+
+    create_struct = (CREATESTRUCTA *)lParam;
+    app = (benchlab_app *)create_struct->lpCreateParams;
+    SetWindowLongA(window, GWL_USERDATA, (LONG)app);
 }
 
 static HMENU benchlab_create_menu(void)
@@ -44,12 +67,31 @@ static HMENU benchlab_create_menu(void)
     AppendMenuA(run_menu, MF_STRING, IDM_BENCHLAB_EXIT, "E&xit");
 
     AppendMenuA(options_menu, MF_STRING, IDM_BENCHLAB_TOGGLE_DETERMINISTIC, "&Deterministic Mode\tF7");
-    AppendMenuA(options_menu, MF_STRING, IDM_BENCHLAB_TOGGLE_OVERLAY, "&Overlay");
+    AppendMenuA(options_menu, MF_STRING, IDM_BENCHLAB_TOGGLE_OVERLAY, "&Info Panel");
     AppendMenuA(options_menu, MF_STRING, IDM_BENCHLAB_SAVER_SETTINGS, "Saver &Settings...");
+    AppendMenuA(options_menu, MF_SEPARATOR, 0U, NULL);
+    AppendMenuA(options_menu, MF_STRING, IDM_BENCHLAB_RENDERER_AUTO, "Renderer &Auto");
+    AppendMenuA(options_menu, MF_STRING, IDM_BENCHLAB_RENDERER_GDI, "Renderer &GDI");
+    AppendMenuA(options_menu, MF_STRING, IDM_BENCHLAB_RENDERER_GL11, "Renderer &GL11");
 
     AppendMenuA(root_menu, MF_POPUP, (UINT_PTR)run_menu, "&Run");
     AppendMenuA(root_menu, MF_POPUP, (UINT_PTR)options_menu, "&Options");
     return root_menu;
+}
+
+static UINT benchlab_current_renderer_command(const benchlab_app *app)
+{
+    switch (app->requested_renderer_kind) {
+    case SCREENSAVE_RENDERER_KIND_GDI:
+        return IDM_BENCHLAB_RENDERER_GDI;
+
+    case SCREENSAVE_RENDERER_KIND_GL11:
+        return IDM_BENCHLAB_RENDERER_GL11;
+
+    case SCREENSAVE_RENDERER_KIND_UNKNOWN:
+    default:
+        return IDM_BENCHLAB_RENDERER_AUTO;
+    }
 }
 
 static void benchlab_update_menu_state(benchlab_app *app)
@@ -73,6 +115,13 @@ static void benchlab_update_menu_state(benchlab_app *app)
         IDM_BENCHLAB_TOGGLE_PAUSE,
         MF_BYCOMMAND | (app->paused ? MF_CHECKED : MF_UNCHECKED)
     );
+    CheckMenuRadioItem(
+        app->menu,
+        IDM_BENCHLAB_RENDERER_AUTO,
+        IDM_BENCHLAB_RENDERER_GL11,
+        benchlab_current_renderer_command(app),
+        MF_BYCOMMAND
+    );
     EnableMenuItem(
         app->menu,
         IDM_BENCHLAB_STEP_FRAME,
@@ -83,7 +132,8 @@ static void benchlab_update_menu_state(benchlab_app *app)
 
 static void benchlab_update_window_title(benchlab_app *app)
 {
-    char title[192];
+    char title[256];
+    screensave_renderer_info renderer_info;
 
     if (app == NULL || app->main_window == NULL || app->module == NULL) {
         return;
@@ -93,6 +143,14 @@ static void benchlab_update_window_title(benchlab_app *app)
     lstrcpyA(title, BENCHLAB_APP_TITLEA);
     lstrcatA(title, " - ");
     lstrcatA(title, app->module->identity.display_name);
+    lstrcatA(title, " [");
+    lstrcatA(title, benchlab_renderer_request_label(app->requested_renderer_kind));
+    if (app->renderer != NULL) {
+        screensave_renderer_get_info(app->renderer, &renderer_info);
+        lstrcatA(title, " -> ");
+        lstrcatA(title, screensave_renderer_kind_name(renderer_info.active_kind));
+    }
+    lstrcatA(title, "]");
     if (app->app_config.deterministic_mode) {
         lstrcatA(title, " [deterministic]");
     }
@@ -101,6 +159,235 @@ static void benchlab_update_window_title(benchlab_app *app)
     }
 
     SetWindowTextA(app->main_window, title);
+}
+
+static int benchlab_register_window_classes(HINSTANCE instance)
+{
+    WNDCLASSA window_class;
+
+    if (g_benchlab_window_class != 0 && g_benchlab_render_class != 0 && g_benchlab_info_class != 0) {
+        return 1;
+    }
+
+    ZeroMemory(&window_class, sizeof(window_class));
+    window_class.style = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS;
+    window_class.lpfnWndProc = benchlab_window_proc;
+    window_class.hInstance = instance;
+    window_class.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
+    window_class.hCursor = LoadCursor(NULL, IDC_ARROW);
+    window_class.lpszClassName = BENCHLAB_WINDOW_CLASSA;
+    g_benchlab_window_class = RegisterClassA(&window_class);
+    if (g_benchlab_window_class == 0) {
+        return 0;
+    }
+
+    ZeroMemory(&window_class, sizeof(window_class));
+    window_class.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
+    window_class.lpfnWndProc = benchlab_render_window_proc;
+    window_class.hInstance = instance;
+    window_class.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
+    window_class.hCursor = LoadCursor(NULL, IDC_ARROW);
+    window_class.lpszClassName = BENCHLAB_RENDER_WINDOW_CLASSA;
+    g_benchlab_render_class = RegisterClassA(&window_class);
+    if (g_benchlab_render_class == 0) {
+        return 0;
+    }
+
+    ZeroMemory(&window_class, sizeof(window_class));
+    window_class.style = CS_HREDRAW | CS_VREDRAW;
+    window_class.lpfnWndProc = benchlab_info_window_proc;
+    window_class.hInstance = instance;
+    window_class.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
+    window_class.hCursor = LoadCursor(NULL, IDC_ARROW);
+    window_class.lpszClassName = BENCHLAB_INFO_WINDOW_CLASSA;
+    g_benchlab_info_class = RegisterClassA(&window_class);
+    return g_benchlab_info_class != 0;
+}
+
+static HWND benchlab_create_window(benchlab_app *app)
+{
+    RECT rect;
+
+    if (app == NULL) {
+        return NULL;
+    }
+
+    rect.left = 0;
+    rect.top = 0;
+    rect.right = app->app_config.client_width;
+    rect.bottom = app->app_config.client_height;
+    AdjustWindowRect(&rect, WS_OVERLAPPEDWINDOW, TRUE);
+
+    return CreateWindowExA(
+        0,
+        BENCHLAB_WINDOW_CLASSA,
+        BENCHLAB_APP_TITLEA,
+        WS_OVERLAPPEDWINDOW | WS_VISIBLE | WS_CLIPCHILDREN,
+        CW_USEDEFAULT,
+        CW_USEDEFAULT,
+        rect.right - rect.left,
+        rect.bottom - rect.top,
+        NULL,
+        NULL,
+        app->instance,
+        app
+    );
+}
+
+static HWND benchlab_create_render_window(benchlab_app *app)
+{
+    return CreateWindowExA(
+        0,
+        BENCHLAB_RENDER_WINDOW_CLASSA,
+        NULL,
+        WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
+        0,
+        0,
+        1,
+        1,
+        app->main_window,
+        NULL,
+        app->instance,
+        app
+    );
+}
+
+static HWND benchlab_create_info_window(benchlab_app *app)
+{
+    return CreateWindowExA(
+        0,
+        BENCHLAB_INFO_WINDOW_CLASSA,
+        NULL,
+        WS_CHILD | WS_VISIBLE,
+        0,
+        0,
+        1,
+        1,
+        app->main_window,
+        NULL,
+        app->instance,
+        app
+    );
+}
+
+static void benchlab_layout_windows(benchlab_app *app)
+{
+    RECT client_rect;
+    int client_width;
+    int client_height;
+    int info_width;
+    int render_width;
+
+    if (app == NULL || app->main_window == NULL || app->render_window == NULL) {
+        return;
+    }
+
+    GetClientRect(app->main_window, &client_rect);
+    client_width = client_rect.right - client_rect.left;
+    client_height = client_rect.bottom - client_rect.top;
+    if (client_width < 1) {
+        client_width = 1;
+    }
+    if (client_height < 1) {
+        client_height = 1;
+    }
+
+    info_width = 0;
+    if (app->app_config.overlay_enabled && app->info_window != NULL && client_width > BENCHLAB_INFO_PANEL_WIDTH + 200) {
+        info_width = BENCHLAB_INFO_PANEL_WIDTH;
+    }
+
+    render_width = client_width - info_width;
+    if (render_width < 1) {
+        render_width = 1;
+    }
+
+    MoveWindow(app->render_window, 0, 0, render_width, client_height, TRUE);
+    if (app->info_window != NULL) {
+        if (info_width > 0) {
+            MoveWindow(app->info_window, render_width, 0, info_width, client_height, TRUE);
+            ShowWindow(app->info_window, SW_SHOWNOACTIVATE);
+        } else {
+            ShowWindow(app->info_window, SW_HIDE);
+        }
+    }
+
+    benchlab_session_resize(app, render_width, client_height);
+    InvalidateRect(app->render_window, NULL, TRUE);
+    if (app->info_window != NULL && info_width > 0) {
+        InvalidateRect(app->info_window, NULL, TRUE);
+    }
+}
+
+static int benchlab_recreate_render_runtime(benchlab_app *app)
+{
+    HWND new_render_window;
+
+    if (app == NULL || app->main_window == NULL) {
+        return 0;
+    }
+
+    benchlab_session_destroy_runtime(app);
+    if (app->render_window != NULL) {
+        DestroyWindow(app->render_window);
+        app->render_window = NULL;
+    }
+
+    new_render_window = benchlab_create_render_window(app);
+    if (new_render_window == NULL) {
+        return 0;
+    }
+
+    app->render_window = new_render_window;
+    benchlab_layout_windows(app);
+    if (!benchlab_session_create_runtime(app, app->render_window)) {
+        return 0;
+    }
+
+    benchlab_update_window_title(app);
+    if (app->info_window != NULL) {
+        InvalidateRect(app->info_window, NULL, TRUE);
+    }
+    return 1;
+}
+
+static int benchlab_handle_renderer_request(benchlab_app *app, screensave_renderer_kind requested_kind)
+{
+    screensave_renderer_kind previous_requested_kind;
+    int previous_renderer_request;
+
+    if (app == NULL) {
+        return 0;
+    }
+
+    if (app->requested_renderer_kind == requested_kind) {
+        benchlab_update_menu_state(app);
+        return 1;
+    }
+
+    previous_requested_kind = app->requested_renderer_kind;
+    previous_renderer_request = app->app_config.renderer_request;
+    app->requested_renderer_kind = requested_kind;
+    app->app_config.renderer_request = (int)requested_kind;
+    if (!benchlab_recreate_render_runtime(app)) {
+        app->requested_renderer_kind = previous_requested_kind;
+        app->app_config.renderer_request = previous_renderer_request;
+        (void)benchlab_recreate_render_runtime(app);
+        benchlab_show_message(
+            app->main_window,
+            app->diagnostics.last_text[0] != '\0'
+                ? app->diagnostics.last_text
+                : "BenchLab could not switch the requested renderer.",
+            MB_OK | MB_ICONERROR
+        );
+        benchlab_update_menu_state(app);
+        benchlab_update_window_title(app);
+        return 0;
+    }
+
+    benchlab_update_menu_state(app);
+    benchlab_update_window_title(app);
+    return 1;
 }
 
 static int benchlab_handle_command(benchlab_app *app, WORD command_id)
@@ -116,14 +403,18 @@ static int benchlab_handle_command(benchlab_app *app, WORD command_id)
         if (!benchlab_session_restart(app, 0)) {
             benchlab_show_message(app->main_window, app->diagnostics.last_text, MB_OK | MB_ICONERROR);
         }
-        InvalidateRect(app->main_window, NULL, FALSE);
+        if (app->render_window != NULL) {
+            InvalidateRect(app->render_window, NULL, FALSE);
+        }
         return 1;
 
     case IDM_BENCHLAB_RESEED:
         if (!benchlab_session_restart(app, 1)) {
             benchlab_show_message(app->main_window, app->diagnostics.last_text, MB_OK | MB_ICONERROR);
         }
-        InvalidateRect(app->main_window, NULL, FALSE);
+        if (app->render_window != NULL) {
+            InvalidateRect(app->render_window, NULL, FALSE);
+        }
         return 1;
 
     case IDM_BENCHLAB_TOGGLE_DETERMINISTIC:
@@ -133,13 +424,18 @@ static int benchlab_handle_command(benchlab_app *app, WORD command_id)
         }
         benchlab_update_menu_state(app);
         benchlab_update_window_title(app);
-        InvalidateRect(app->main_window, NULL, FALSE);
+        if (app->render_window != NULL) {
+            InvalidateRect(app->render_window, NULL, FALSE);
+        }
+        if (app->info_window != NULL) {
+            InvalidateRect(app->info_window, NULL, FALSE);
+        }
         return 1;
 
     case IDM_BENCHLAB_TOGGLE_OVERLAY:
         app->app_config.overlay_enabled = !app->app_config.overlay_enabled;
+        benchlab_layout_windows(app);
         benchlab_update_menu_state(app);
-        InvalidateRect(app->main_window, NULL, FALSE);
         return 1;
 
     case IDM_BENCHLAB_TOGGLE_PAUSE:
@@ -149,13 +445,20 @@ static int benchlab_handle_command(benchlab_app *app, WORD command_id)
         }
         benchlab_update_menu_state(app);
         benchlab_update_window_title(app);
-        InvalidateRect(app->main_window, NULL, FALSE);
+        if (app->info_window != NULL) {
+            InvalidateRect(app->info_window, NULL, FALSE);
+        }
         return 1;
 
     case IDM_BENCHLAB_STEP_FRAME:
         if (app->paused) {
             benchlab_session_step_once(app);
-            InvalidateRect(app->main_window, NULL, FALSE);
+            if (app->render_window != NULL) {
+                InvalidateRect(app->render_window, NULL, FALSE);
+            }
+            if (app->info_window != NULL) {
+                InvalidateRect(app->info_window, NULL, FALSE);
+            }
         }
         return 1;
 
@@ -172,8 +475,22 @@ static int benchlab_handle_command(benchlab_app *app, WORD command_id)
         }
         benchlab_update_menu_state(app);
         benchlab_update_window_title(app);
-        InvalidateRect(app->main_window, NULL, FALSE);
+        if (app->render_window != NULL) {
+            InvalidateRect(app->render_window, NULL, FALSE);
+        }
+        if (app->info_window != NULL) {
+            InvalidateRect(app->info_window, NULL, FALSE);
+        }
         return 1;
+
+    case IDM_BENCHLAB_RENDERER_AUTO:
+        return benchlab_handle_renderer_request(app, SCREENSAVE_RENDERER_KIND_UNKNOWN);
+
+    case IDM_BENCHLAB_RENDERER_GDI:
+        return benchlab_handle_renderer_request(app, SCREENSAVE_RENDERER_KIND_GDI);
+
+    case IDM_BENCHLAB_RENDERER_GL11:
+        return benchlab_handle_renderer_request(app, SCREENSAVE_RENDERER_KIND_GL11);
 
     case IDM_BENCHLAB_EXIT:
         DestroyWindow(app->main_window);
@@ -205,59 +522,8 @@ static int benchlab_handle_keydown(benchlab_app *app, WPARAM key_code)
     return 0;
 }
 
-static int benchlab_register_window_class(HINSTANCE instance)
+static LRESULT CALLBACK benchlab_render_window_proc(HWND window, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    WNDCLASSA window_class;
-
-    if (g_benchlab_window_class != 0) {
-        return 1;
-    }
-
-    ZeroMemory(&window_class, sizeof(window_class));
-    window_class.style = CS_HREDRAW | CS_VREDRAW;
-    window_class.lpfnWndProc = benchlab_window_proc;
-    window_class.hInstance = instance;
-    window_class.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
-    window_class.hCursor = LoadCursor(NULL, IDC_ARROW);
-    window_class.lpszClassName = BENCHLAB_WINDOW_CLASSA;
-
-    g_benchlab_window_class = RegisterClassA(&window_class);
-    return g_benchlab_window_class != 0;
-}
-
-static HWND benchlab_create_window(benchlab_app *app)
-{
-    RECT rect;
-
-    if (app == NULL) {
-        return NULL;
-    }
-
-    rect.left = 0;
-    rect.top = 0;
-    rect.right = app->app_config.client_width;
-    rect.bottom = app->app_config.client_height;
-    AdjustWindowRect(&rect, WS_OVERLAPPEDWINDOW, TRUE);
-
-    return CreateWindowExA(
-        0,
-        BENCHLAB_WINDOW_CLASSA,
-        BENCHLAB_APP_TITLEA,
-        WS_OVERLAPPEDWINDOW | WS_VISIBLE,
-        CW_USEDEFAULT,
-        CW_USEDEFAULT,
-        rect.right - rect.left,
-        rect.bottom - rect.top,
-        NULL,
-        NULL,
-        app->instance,
-        app
-    );
-}
-
-static LRESULT CALLBACK benchlab_window_proc(HWND window, UINT message, WPARAM wParam, LPARAM lParam)
-{
-    CREATESTRUCTA *create_struct;
     PAINTSTRUCT paint;
     RECT client_rect;
     benchlab_app *app;
@@ -266,9 +532,86 @@ static LRESULT CALLBACK benchlab_window_proc(HWND window, UINT message, WPARAM w
 
     switch (message) {
     case WM_NCCREATE:
-        create_struct = (CREATESTRUCTA *)lParam;
-        app = (benchlab_app *)create_struct->lpCreateParams;
-        SetWindowLongA(window, GWL_USERDATA, (LONG)app);
+        benchlab_attach_window_app(window, lParam);
+        return TRUE;
+
+    case WM_ERASEBKGND:
+        return 1;
+
+    case WM_KEYDOWN:
+        if (app != NULL && app->main_window != NULL) {
+            return SendMessageA(app->main_window, WM_KEYDOWN, wParam, lParam);
+        }
+        break;
+
+    case WM_PAINT:
+        BeginPaint(window, &paint);
+        GetClientRect(window, &client_rect);
+        if (app != NULL) {
+            benchlab_session_render(app, paint.hdc);
+        } else {
+            FillRect(paint.hdc, &client_rect, (HBRUSH)GetStockObject(BLACK_BRUSH));
+        }
+        EndPaint(window, &paint);
+        return 0;
+
+    case WM_DESTROY:
+        if (app != NULL && app->render_window == window) {
+            app->render_window = NULL;
+        }
+        return 0;
+    }
+
+    return DefWindowProcA(window, message, wParam, lParam);
+}
+
+static LRESULT CALLBACK benchlab_info_window_proc(HWND window, UINT message, WPARAM wParam, LPARAM lParam)
+{
+    PAINTSTRUCT paint;
+    RECT client_rect;
+    benchlab_app *app;
+
+    app = benchlab_get_window_app(window);
+
+    switch (message) {
+    case WM_NCCREATE:
+        benchlab_attach_window_app(window, lParam);
+        return TRUE;
+
+    case WM_ERASEBKGND:
+        return 1;
+
+    case WM_PAINT:
+        BeginPaint(window, &paint);
+        GetClientRect(window, &client_rect);
+        FillRect(paint.hdc, &client_rect, (HBRUSH)GetStockObject(BLACK_BRUSH));
+        if (app != NULL) {
+            benchlab_draw_overlay(paint.hdc, &client_rect, app);
+        }
+        EndPaint(window, &paint);
+        return 0;
+
+    case WM_DESTROY:
+        if (app != NULL && app->info_window == window) {
+            app->info_window = NULL;
+        }
+        return 0;
+    }
+
+    return DefWindowProcA(window, message, wParam, lParam);
+}
+
+static LRESULT CALLBACK benchlab_window_proc(HWND window, UINT message, WPARAM wParam, LPARAM lParam)
+{
+    PAINTSTRUCT paint;
+    benchlab_app *app;
+
+    app = benchlab_get_window_app(window);
+
+    switch (message) {
+    case WM_NCCREATE:
+        benchlab_attach_window_app(window, lParam);
+        app = benchlab_get_window_app(window);
         if (app != NULL) {
             app->main_window = window;
         }
@@ -284,9 +627,16 @@ static LRESULT CALLBACK benchlab_window_proc(HWND window, UINT message, WPARAM w
             SetMenu(window, app->menu);
         }
 
+        app->render_window = benchlab_create_render_window(app);
+        app->info_window = benchlab_create_info_window(app);
+        if (app->render_window == NULL || app->info_window == NULL) {
+            return -1;
+        }
+
+        benchlab_layout_windows(app);
         benchlab_update_menu_state(app);
         benchlab_update_window_title(app);
-        if (!benchlab_session_create_runtime(app, window)) {
+        if (!benchlab_session_create_runtime(app, app->render_window)) {
             benchlab_show_message(
                 window,
                 app->diagnostics.last_text[0] != '\0'
@@ -297,6 +647,7 @@ static LRESULT CALLBACK benchlab_window_proc(HWND window, UINT message, WPARAM w
             return -1;
         }
 
+        benchlab_update_window_title(app);
         SetTimer(window, BENCHLAB_TIMER_ID, BENCHLAB_TIMER_INTERVAL_MS, NULL);
         return 0;
 
@@ -318,8 +669,7 @@ static LRESULT CALLBACK benchlab_window_proc(HWND window, UINT message, WPARAM w
             app->app_config.client_width = LOWORD(lParam);
             app->app_config.client_height = HIWORD(lParam);
             benchlab_app_config_clamp(&app->app_config);
-            benchlab_session_resize(app, LOWORD(lParam), HIWORD(lParam));
-            InvalidateRect(window, NULL, TRUE);
+            benchlab_layout_windows(app);
         }
         return 0;
 
@@ -327,7 +677,12 @@ static LRESULT CALLBACK benchlab_window_proc(HWND window, UINT message, WPARAM w
         if (app != NULL && wParam == BENCHLAB_TIMER_ID) {
             if (!app->paused) {
                 benchlab_session_tick(app);
-                InvalidateRect(window, NULL, FALSE);
+                if (app->render_window != NULL) {
+                    InvalidateRect(app->render_window, NULL, FALSE);
+                }
+                if (app->info_window != NULL && app->app_config.overlay_enabled) {
+                    InvalidateRect(app->info_window, NULL, FALSE);
+                }
             }
         }
         return 0;
@@ -346,15 +701,6 @@ static LRESULT CALLBACK benchlab_window_proc(HWND window, UINT message, WPARAM w
 
     case WM_PAINT:
         BeginPaint(window, &paint);
-        GetClientRect(window, &client_rect);
-        if (app != NULL) {
-            benchlab_session_render(app, paint.hdc);
-            if (app->app_config.overlay_enabled) {
-                benchlab_draw_overlay(paint.hdc, &client_rect, app);
-            }
-        } else {
-            FillRect(paint.hdc, &client_rect, (HBRUSH)GetStockObject(BLACK_BRUSH));
-        }
         EndPaint(window, &paint);
         return 0;
 
@@ -382,7 +728,6 @@ int benchlab_app_run(HINSTANCE instance, LPSTR command_line, int show_code)
     app.command_line = command_line;
     app.show_code = show_code;
     app.module = benchlab_get_target_module();
-    app.requested_renderer_kind = SCREENSAVE_RENDERER_KIND_GDI;
 
     if (!screensave_saver_module_is_valid(app.module)) {
         benchlab_show_message(
@@ -398,6 +743,7 @@ int benchlab_app_run(HINSTANCE instance, LPSTR command_line, int show_code)
     benchlab_app_config_load(&app.app_config);
     benchlab_app_config_apply_command_line(&app, command_line);
     benchlab_app_config_clamp(&app.app_config);
+    app.requested_renderer_kind = (screensave_renderer_kind)app.app_config.renderer_request;
 
     if (!benchlab_session_initialize_config(&app)) {
         benchlab_show_message(
@@ -408,11 +754,11 @@ int benchlab_app_run(HINSTANCE instance, LPSTR command_line, int show_code)
         return 1;
     }
 
-    if (!benchlab_register_window_class(instance)) {
+    if (!benchlab_register_window_classes(instance)) {
         benchlab_session_dispose_config(&app);
         benchlab_show_message(
             NULL,
-            "BenchLab could not register its window class.",
+            "BenchLab could not register its window classes.",
             MB_OK | MB_ICONERROR
         );
         return 1;
