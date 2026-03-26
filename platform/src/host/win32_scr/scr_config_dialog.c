@@ -10,8 +10,8 @@ static void scr_apply_settings_to_dialog(HWND dialog, const scr_settings *settin
 {
     CheckDlgButton(
         dialog,
-        IDC_SCR_PLACEHOLDER_VISUAL,
-        settings->placeholder_visual_enabled ? BST_CHECKED : BST_UNCHECKED
+        IDC_SCR_VALIDATION_SCENE,
+        settings->validation_scene_enabled ? BST_CHECKED : BST_UNCHECKED
     );
     CheckDlgButton(
         dialog,
@@ -27,8 +27,8 @@ static void scr_apply_settings_to_dialog(HWND dialog, const scr_settings *settin
 
 static void scr_read_settings_from_dialog(HWND dialog, scr_settings *settings)
 {
-    settings->placeholder_visual_enabled =
-        IsDlgButtonChecked(dialog, IDC_SCR_PLACEHOLDER_VISUAL) == BST_CHECKED;
+    settings->validation_scene_enabled =
+        IsDlgButtonChecked(dialog, IDC_SCR_VALIDATION_SCENE) == BST_CHECKED;
     settings->common.use_deterministic_seed =
         IsDlgButtonChecked(dialog, IDC_SCR_DETERMINISTIC_SEED) == BST_CHECKED;
     settings->common.diagnostics_overlay_enabled =

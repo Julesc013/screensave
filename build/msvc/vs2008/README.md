@@ -18,4 +18,4 @@ It is useful later for compatibility work that is too new for VS6 and too old to
 - validation on actual VS2008 toolchains
 - compatibility shims required by older Windows SDK layouts
 
-Series 04 keeps this lane explicit without pretending it is already buildable.
+Series 05 keeps this lane explicit without pretending it is already buildable.

@@ -7,7 +7,7 @@ This is the short operational view of the prompt program.
 - `S02`: build scaffold, toolchain lanes, and output conventions.
 - `S03`: Win32 `.scr` host skeleton, classic lifecycle routing, and host-local configuration scaffolding.
 - `S04`: shared core runtime and first public platform API layer.
-- `S05`: SDK and template groundwork.
+- `S05`: mandatory GDI backend and shared present path.
 - `S06`: `nocturne` first saver.
 - `S07`: BenchLab and validation instrumentation.
 - `S08`: compatibility matrix and capture discipline.

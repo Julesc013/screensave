@@ -90,11 +90,13 @@ void scr_build_version_text(const scr_host_context *context, char *buffer, int b
     scr_append_text(buffer, buffer_size, "\r\n");
     scr_append_text(buffer, buffer_size, version_info->series_text);
     scr_append_text(buffer, buffer_size, "\r\n");
-    scr_append_text(buffer, buffer_size, "Shared diagnostics, common config, and saver/module scaffolding are active.");
+    scr_append_text(buffer, buffer_size, "Shared diagnostics, common config, saver/module scaffolding, and the baseline GDI renderer are active.");
 }
 
 void scr_build_overlay_text(const scr_host_context *context, char *buffer, int buffer_size)
 {
+    screensave_renderer_info renderer_info;
+
     if (buffer == NULL || buffer_size <= 0) {
         return;
     }
@@ -124,8 +126,25 @@ void scr_build_overlay_text(const scr_host_context *context, char *buffer, int b
     } else {
         scr_append_text(buffer, buffer_size, "session");
     }
-    scr_append_text(buffer, buffer_size, "\r\nPlaceholder visual: ");
-    scr_append_text(buffer, buffer_size, context->settings.placeholder_visual_enabled ? "on" : "off");
+    scr_append_text(buffer, buffer_size, "\r\nValidation scene: ");
+    scr_append_text(buffer, buffer_size, context->settings.validation_scene_enabled ? "on" : "off");
+    if (context->renderer != NULL) {
+        screensave_renderer_get_info(context->renderer, &renderer_info);
+        scr_append_text(buffer, buffer_size, "\r\nRenderer: ");
+        scr_append_text(buffer, buffer_size, screensave_renderer_kind_name(renderer_info.active_kind));
+        if (renderer_info.backend_name != NULL) {
+            scr_append_text(buffer, buffer_size, " ");
+            scr_append_text(buffer, buffer_size, renderer_info.backend_name);
+        }
+        scr_append_text(buffer, buffer_size, "\r\nBackbuffer: ");
+        scr_append_number(buffer, buffer_size, (unsigned long)renderer_info.drawable_size.width);
+        scr_append_text(buffer, buffer_size, "x");
+        scr_append_number(buffer, buffer_size, (unsigned long)renderer_info.drawable_size.height);
+        if (renderer_info.status_text != NULL) {
+            scr_append_text(buffer, buffer_size, "\r\nRender status: ");
+            scr_append_text(buffer, buffer_size, renderer_info.status_text);
+        }
+    }
     if (context->diagnostics.last_text[0] != '\0') {
         scr_append_text(buffer, buffer_size, "\r\nLast diag: ");
         scr_append_text(buffer, buffer_size, screensave_diag_level_name(context->diagnostics.last_level));

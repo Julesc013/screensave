@@ -29,6 +29,7 @@ typedef struct screensave_bitmap_view_tag {
     screensave_sizei size;
     int stride_bytes;
     unsigned int bits_per_pixel;
+    int origin_top_left;
 } screensave_bitmap_view;
 
 typedef struct screensave_renderer_info_tag {

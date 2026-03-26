@@ -1,6 +1,6 @@
 # VS2022 Lane
 
-This is the concrete modern MSVC lane for Series 04.
+This is the concrete modern MSVC lane for Series 05.
 
 ## What Exists Now
 
@@ -9,11 +9,11 @@ This is the concrete modern MSVC lane for Series 04.
 - `nocturne.vcxproj`
 
 These files stay intentionally small.
-They define one shared static-library target and one `.scr` saver target with a shared core runtime, a real host skeleton, and a no-op saver-module shell.
+They define one shared static-library target and one `.scr` saver target with a shared core runtime, a real GDI backend, a real host skeleton, and a no-op saver-module shell.
 
 ## What The Targets Mean
 
-- `screensave_platform` compiles the shared non-renderer core runtime plus the Win32 host implementation.
+- `screensave_platform` compiles the shared non-renderer core runtime, the mandatory GDI backend, and the Win32 host implementation.
 - `nocturne` compiles the no-op saver-module entry point, host dialog resource, and links the first real `.scr` executable target.
 
 The concrete host lifecycle now lives in the checked-in target graph.
@@ -38,7 +38,7 @@ No generated files should be checked into this directory.
 
 ## Deferred Work
 
-- reusable renderer backends
+- optional OpenGL renderer backends
 - real saver-product behavior
 - richer version stamping and metadata resources
 - broader solution structure for additional products and apps

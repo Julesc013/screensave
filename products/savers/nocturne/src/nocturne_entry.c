@@ -1,5 +1,5 @@
 /*
- * Series 04 wires the first narrow saver/module contract into the product target.
+ * Series 05 keeps the first narrow saver/module contract wired into the product target.
  * This remains a no-op module shell. It does not implement saver visuals yet.
  */
 
@@ -11,7 +11,7 @@ static const screensave_saver_module g_nocturne_module = {
     {
         "nocturne",
         "Nocturne",
-        "Series 04 no-op saver module shell."
+        "Series 05 no-op saver module shell."
     },
     SCREENSAVE_SAVER_CAP_UNIVERSAL_GDI | SCREENSAVE_SAVER_CAP_LONG_RUN_STABLE,
     NULL,

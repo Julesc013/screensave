@@ -21,4 +21,5 @@ Baseline functionality must remain available on a GDI-only path and must not dep
 
 Series 03 made the private Win32 host real.
 Series 04 makes the reusable non-renderer runtime and first public platform surface real.
-Renderer backends and real saver-product behavior remain deferred while preserving the compatibility and ownership rules defined in `specs/`.
+Series 05 makes the mandatory reusable GDI backend real and routes the host through the shared renderer path.
+Real saver-product behavior and optional higher renderer tiers remain deferred while preserving the compatibility and ownership rules defined in `specs/`.

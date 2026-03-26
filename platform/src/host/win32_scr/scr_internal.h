@@ -16,7 +16,7 @@
 
 typedef struct scr_settings_tag {
     screensave_common_config common;
-    int placeholder_visual_enabled;
+    int validation_scene_enabled;
 } scr_settings;
 
 typedef struct scr_parsed_args_tag {
@@ -48,6 +48,8 @@ typedef struct scr_host_context_tag {
     screensave_session_seed session_seed;
     screensave_config_binding config_binding;
     screensave_diag_context diagnostics;
+    screensave_renderer *renderer;
+    screensave_saver_session *session;
 } scr_host_context;
 
 void scr_settings_set_defaults(scr_settings *settings);
@@ -56,6 +58,7 @@ int scr_settings_save(const screensave_saver_module *module, const scr_settings 
 int scr_parse_command_line(LPSTR command_line, scr_parsed_args *parsed_args);
 int scr_run_window(scr_host_context *context);
 INT_PTR scr_show_config_dialog(scr_host_context *context);
+void scr_render_validation_scene(scr_host_context *context);
 const char *scr_mode_label(screensave_session_mode mode);
 void scr_build_version_text(const scr_host_context *context, char *buffer, int buffer_size);
 void scr_build_overlay_text(const scr_host_context *context, char *buffer, int buffer_size);

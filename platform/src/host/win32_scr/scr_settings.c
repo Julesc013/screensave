@@ -76,7 +76,7 @@ void scr_settings_set_defaults(scr_settings *settings)
     }
 
     screensave_common_config_set_defaults(&settings->common);
-    settings->placeholder_visual_enabled = 1;
+    settings->validation_scene_enabled = 1;
 }
 
 void scr_settings_load(const screensave_saver_module *module, scr_settings *settings)
@@ -103,11 +103,11 @@ void scr_settings_load(const screensave_saver_module *module, scr_settings *sett
     scr_read_flag(key, "DiagnosticsOverlayEnabled", &settings->common.diagnostics_overlay_enabled);
     scr_read_flag(key, "UseDeterministicSeed", &settings->common.use_deterministic_seed);
     scr_read_dword(key, "DeterministicSeed", &settings->common.deterministic_seed);
-    scr_read_flag(key, "PlaceholderVisualEnabled", &settings->placeholder_visual_enabled);
+    scr_read_flag(key, "ValidationSceneEnabled", &settings->validation_scene_enabled);
     RegCloseKey(key);
 
     screensave_common_config_clamp(&settings->common);
-    settings->placeholder_visual_enabled = settings->placeholder_visual_enabled != 0;
+    settings->validation_scene_enabled = settings->validation_scene_enabled != 0;
 }
 
 int scr_settings_save(const screensave_saver_module *module, const scr_settings *settings)
@@ -124,7 +124,7 @@ int scr_settings_save(const screensave_saver_module *module, const scr_settings 
 
     safe_settings = *settings;
     screensave_common_config_clamp(&safe_settings.common);
-    safe_settings.placeholder_visual_enabled = safe_settings.placeholder_visual_enabled != 0;
+    safe_settings.validation_scene_enabled = safe_settings.validation_scene_enabled != 0;
 
     if (!scr_build_registry_path(module, path, sizeof(path))) {
         return 0;
@@ -158,7 +158,7 @@ int scr_settings_save(const screensave_saver_module *module, const scr_settings 
         result = scr_write_dword(key, "DeterministicSeed", safe_settings.common.deterministic_seed);
     }
     if (result == ERROR_SUCCESS) {
-        result = scr_write_flag(key, "PlaceholderVisualEnabled", safe_settings.placeholder_visual_enabled);
+        result = scr_write_flag(key, "ValidationSceneEnabled", safe_settings.validation_scene_enabled);
     }
 
     RegCloseKey(key);

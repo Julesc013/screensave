@@ -14,18 +14,19 @@ The platform target is intentionally conservative:
 
 ## Current Status
 
-The repository is in Series 04.
+The repository is in Series 05.
 Series 00 established repository law, structure, roadmap, and agent guidance.
 Series 01 added contribution, review, governance, and CI foundations.
 Series 02 added the checked-in build scaffold and toolchain lane structure.
 Series 03 added the first real Win32 `.scr` host skeleton.
-Series 04 adds the first shared runtime substrate and narrow public platform API:
+Series 04 added the first shared runtime substrate and narrow public platform API.
+Series 05 adds the mandatory reusable GDI renderer backend:
 
-- public headers for versioning, diagnostics, config, renderer contracts, and saver/module contracts
-- reusable core timing, deterministic RNG, diagnostics, version, and common-config services
-- light host adoption of the shared module/config/diagnostics/version model while keeping the placeholder visual local
+- a real shared GDI backend with an offscreen backbuffer and baseline primitive/blit support
+- host integration through the shared renderer path for screen and preview rendering
+- a tiny renderer-driven validation scene used when no real saver session exists yet
 
-Reusable renderer backends and real saver-product behavior are still deferred.
+OpenGL and real saver-product behavior are still deferred.
 
 ## Planned Product Shape
 
@@ -69,14 +70,14 @@ For explanatory architecture and execution order, start with:
 
 ## Build Status
 
-The checked-in build scaffold now integrates the real Series 04 core runtime plus the Series 03 host:
+The checked-in build scaffold now integrates the real Series 05 baseline renderer, the Series 04 shared core runtime, and the Series 03 host:
 
 - a concrete MSVC VS2022 solution lane under `build/msvc/vs2022/`
 - a concrete MinGW i686 make lane under `build/mingw/i686/`
 - documentation-only VS6 and VS2008 lanes that preserve long-term intent without claiming present build completeness
 
-The shared platform target now compiles the reusable non-renderer core runtime together with the Win32 host.
-The `.scr` target still executes a host-local placeholder visual path and a no-op saver-module shell until the renderer backends and first real saver product arrive.
+The shared platform target now compiles the reusable non-renderer core runtime, the mandatory GDI backend, and the Win32 host.
+The `.scr` target now renders through the shared GDI path and falls back to a tiny built-in validation scene until the first real saver product arrives.
 
 Read the specs before adding code.
 This repository should stay truthful, reconstructable, and conservative about compatibility.

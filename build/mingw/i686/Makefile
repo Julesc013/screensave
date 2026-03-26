@@ -22,11 +22,18 @@ PLATFORM_SRCS := \
 	$(ROOT)/platform/src/core/rng/rng.c \
 	$(ROOT)/platform/src/core/timing/timing.c \
 	$(ROOT)/platform/src/core/version/version.c \
+	$(ROOT)/platform/src/render/gdi/gdi_backend.c \
+	$(ROOT)/platform/src/render/gdi/gdi_bitmap.c \
+	$(ROOT)/platform/src/render/gdi/gdi_present.c \
+	$(ROOT)/platform/src/render/gdi/gdi_primitives.c \
+	$(ROOT)/platform/src/render/gdi/gdi_state.c \
+	$(ROOT)/platform/src/render/gdi/gdi_surface.c \
 	$(ROOT)/platform/src/host/win32_scr/scr_args.c \
 	$(ROOT)/platform/src/host/win32_scr/scr_config_dialog.c \
 	$(ROOT)/platform/src/host/win32_scr/scr_diagnostics.c \
 	$(ROOT)/platform/src/host/win32_scr/scr_entry.c \
 	$(ROOT)/platform/src/host/win32_scr/scr_settings.c \
+	$(ROOT)/platform/src/host/win32_scr/scr_validation_scene.c \
 	$(ROOT)/platform/src/host/win32_scr/scr_window.c
 
 NOCTURNE_SRCS := \
@@ -40,11 +47,18 @@ PLATFORM_OBJS := \
 	$(PLATFORM_DIR)/rng.o \
 	$(PLATFORM_DIR)/timing.o \
 	$(PLATFORM_DIR)/version.o \
+	$(PLATFORM_DIR)/gdi_backend.o \
+	$(PLATFORM_DIR)/gdi_bitmap.o \
+	$(PLATFORM_DIR)/gdi_present.o \
+	$(PLATFORM_DIR)/gdi_primitives.o \
+	$(PLATFORM_DIR)/gdi_state.o \
+	$(PLATFORM_DIR)/gdi_surface.o \
 	$(PLATFORM_DIR)/scr_args.o \
 	$(PLATFORM_DIR)/scr_config_dialog.o \
 	$(PLATFORM_DIR)/scr_diagnostics.o \
 	$(PLATFORM_DIR)/scr_entry.o \
 	$(PLATFORM_DIR)/scr_settings.o \
+	$(PLATFORM_DIR)/scr_validation_scene.o \
 	$(PLATFORM_DIR)/scr_window.o
 
 NOCTURNE_OBJS := \
@@ -100,6 +114,30 @@ $(PLATFORM_DIR)/version.o: $(ROOT)/platform/src/core/version/version.c
 	mkdir -p $(PLATFORM_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
+$(PLATFORM_DIR)/gdi_backend.o: $(ROOT)/platform/src/render/gdi/gdi_backend.c
+	mkdir -p $(PLATFORM_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(PLATFORM_DIR)/gdi_bitmap.o: $(ROOT)/platform/src/render/gdi/gdi_bitmap.c
+	mkdir -p $(PLATFORM_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(PLATFORM_DIR)/gdi_present.o: $(ROOT)/platform/src/render/gdi/gdi_present.c
+	mkdir -p $(PLATFORM_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(PLATFORM_DIR)/gdi_primitives.o: $(ROOT)/platform/src/render/gdi/gdi_primitives.c
+	mkdir -p $(PLATFORM_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(PLATFORM_DIR)/gdi_state.o: $(ROOT)/platform/src/render/gdi/gdi_state.c
+	mkdir -p $(PLATFORM_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(PLATFORM_DIR)/gdi_surface.o: $(ROOT)/platform/src/render/gdi/gdi_surface.c
+	mkdir -p $(PLATFORM_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
 $(PLATFORM_DIR)/scr_args.o: $(ROOT)/platform/src/host/win32_scr/scr_args.c
 	mkdir -p $(PLATFORM_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -117,6 +155,10 @@ $(PLATFORM_DIR)/scr_entry.o: $(ROOT)/platform/src/host/win32_scr/scr_entry.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(PLATFORM_DIR)/scr_settings.o: $(ROOT)/platform/src/host/win32_scr/scr_settings.c
+	mkdir -p $(PLATFORM_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(PLATFORM_DIR)/scr_validation_scene.o: $(ROOT)/platform/src/host/win32_scr/scr_validation_scene.c
 	mkdir -p $(PLATFORM_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 

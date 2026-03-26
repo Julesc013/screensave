@@ -1,10 +1,10 @@
 # MinGW i686 Lane
 
-This is the concrete GCC-family x86 lane for Series 04.
+This is the concrete GCC-family x86 lane for Series 05.
 
 ## What Exists Now
 
-- `Makefile` for the shared platform library, the real `nocturne.scr` host shell target, the Series 04 core runtime objects, and the host dialog resource object
+- `Makefile` for the shared platform library, the real `nocturne.scr` host shell target, the Series 05 core-plus-GDI objects, and the host dialog resource object
 
 The target graph mirrors the VS2022 lane closely so later implementation work does not have to invent two unrelated build stories.
 
@@ -35,7 +35,7 @@ Profiles are currently `debug` or `release`.
 ## Deferred Work
 
 - historical MinGW variant documentation beyond this lane
-- reusable renderer backends
+- optional OpenGL renderer backends
 - real saver behavior beyond the narrow no-op module shell
 - validation on actual target machines
 

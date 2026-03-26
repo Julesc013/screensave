@@ -42,12 +42,21 @@ REQUIRED_PATHS = [
     ROOT / "platform" / "src" / "core" / "timing" / "timing.c",
     ROOT / "platform" / "src" / "core" / "timing" / "timing_internal.h",
     ROOT / "platform" / "src" / "core" / "version" / "version.c",
+    ROOT / "platform" / "src" / "render" / "gdi" / "README.md",
+    ROOT / "platform" / "src" / "render" / "gdi" / "gdi_internal.h",
+    ROOT / "platform" / "src" / "render" / "gdi" / "gdi_backend.c",
+    ROOT / "platform" / "src" / "render" / "gdi" / "gdi_surface.c",
+    ROOT / "platform" / "src" / "render" / "gdi" / "gdi_present.c",
+    ROOT / "platform" / "src" / "render" / "gdi" / "gdi_primitives.c",
+    ROOT / "platform" / "src" / "render" / "gdi" / "gdi_bitmap.c",
+    ROOT / "platform" / "src" / "render" / "gdi" / "gdi_state.c",
     ROOT / "platform" / "src" / "host" / "win32_scr" / "scr_internal.h",
     ROOT / "platform" / "src" / "host" / "win32_scr" / "scr_args.c",
     ROOT / "platform" / "src" / "host" / "win32_scr" / "scr_config_dialog.c",
     ROOT / "platform" / "src" / "host" / "win32_scr" / "scr_diagnostics.c",
     ROOT / "platform" / "src" / "host" / "win32_scr" / "scr_entry.c",
     ROOT / "platform" / "src" / "host" / "win32_scr" / "scr_settings.c",
+    ROOT / "platform" / "src" / "host" / "win32_scr" / "scr_validation_scene.c",
     ROOT / "platform" / "src" / "host" / "win32_scr" / "scr_window.c",
     ROOT / "platform" / "src" / "host" / "win32_scr" / "resource.h",
     ROOT / "platform" / "src" / "host" / "win32_scr" / "screensave_host.rc",
@@ -79,7 +88,7 @@ def main() -> int:
         return 1
 
     build_readme = (ROOT / "build" / "README.md").read_text(encoding="utf-8")
-    for phrase in ("checked-in per-toolchain lanes", "out/", "concrete MSVC VS2022 solution", "shared core runtime"):
+    for phrase in ("checked-in per-toolchain lanes", "out/", "concrete MSVC VS2022 solution", "mandatory GDI backend"):
         require(phrase in build_readme, f"build/README.md is missing expected phrase: {phrase!r}", errors)
 
     for path in (ROOT / "build" / "msvc" / "vs6" / "README.md", ROOT / "build" / "msvc" / "vs2008" / "README.md"):
@@ -106,7 +115,14 @@ def main() -> int:
         "..\\..\\..\\platform\\src\\core\\rng\\rng.c",
         "..\\..\\..\\platform\\src\\core\\timing\\timing.c",
         "..\\..\\..\\platform\\src\\core\\version\\version.c",
+        "..\\..\\..\\platform\\src\\render\\gdi\\gdi_backend.c",
+        "..\\..\\..\\platform\\src\\render\\gdi\\gdi_bitmap.c",
+        "..\\..\\..\\platform\\src\\render\\gdi\\gdi_present.c",
+        "..\\..\\..\\platform\\src\\render\\gdi\\gdi_primitives.c",
+        "..\\..\\..\\platform\\src\\render\\gdi\\gdi_state.c",
+        "..\\..\\..\\platform\\src\\render\\gdi\\gdi_surface.c",
         "..\\..\\..\\platform\\src\\host\\win32_scr\\scr_entry.c",
+        "..\\..\\..\\platform\\src\\host\\win32_scr\\scr_validation_scene.c",
         "..\\..\\..\\platform\\src\\host\\win32_scr\\scr_window.c",
     ):
         require(expected in platform_sources, f"screensave_platform.vcxproj is missing {expected!r}.", errors)
@@ -138,7 +154,14 @@ def main() -> int:
         "rng.c",
         "timing.c",
         "version.c",
+        "gdi_backend.c",
+        "gdi_bitmap.c",
+        "gdi_present.c",
+        "gdi_primitives.c",
+        "gdi_state.c",
+        "gdi_surface.c",
         "scr_entry.c",
+        "scr_validation_scene.c",
         "scr_window.c",
         "nocturne_entry.c",
         "screensave_host.rc",
@@ -152,8 +175,18 @@ def main() -> int:
     require("screensave_saver_module_is_valid" in host_entry_text, "scr_entry.c must validate the public saver module contract.", errors)
 
     host_window_text = (ROOT / "platform" / "src" / "host" / "win32_scr" / "scr_window.c").read_text(encoding="utf-8")
-    require("Temporary host-local liveness marker" in host_window_text, "scr_window.c must mark the placeholder draw path as temporary.", errors)
+    require("screensave_gdi_renderer_create" in host_window_text, "scr_window.c must initialize the reusable GDI renderer.", errors)
+    require("scr_render_validation_scene" in host_window_text, "scr_window.c must route the fallback validation scene through the shared renderer.", errors)
     require("SCREENSAVE_SESSION_MODE_PREVIEW" in host_window_text, "scr_window.c must distinguish preview mode.", errors)
+
+    gdi_backend_text = (ROOT / "platform" / "src" / "render" / "gdi" / "gdi_backend.c").read_text(encoding="utf-8")
+    require("SCREENSAVE_RENDERER_KIND_GDI" in gdi_backend_text, "gdi_backend.c must identify itself as the GDI renderer.", errors)
+
+    gdi_surface_text = (ROOT / "platform" / "src" / "render" / "gdi" / "gdi_surface.c").read_text(encoding="utf-8")
+    require("CreateDIBSection" in gdi_surface_text, "gdi_surface.c must create a real offscreen GDI backbuffer.", errors)
+
+    validation_scene_text = (ROOT / "platform" / "src" / "host" / "win32_scr" / "scr_validation_scene.c").read_text(encoding="utf-8")
+    require("screensave_renderer_blit_bitmap" in validation_scene_text, "scr_validation_scene.c must exercise bitmap blit support.", errors)
 
     product_entry_text = (ROOT / "products" / "savers" / "nocturne" / "src" / "nocturne_entry.c").read_text(encoding="utf-8")
     require("screensave_scr_main" in product_entry_text, "nocturne_entry.c must delegate into the host entry.", errors)

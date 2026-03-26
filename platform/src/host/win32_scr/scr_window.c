@@ -1,5 +1,6 @@
 #include "scr_internal.h"
 #include "../../core/rng/rng_internal.h"
+#include "../../render/gdi/gdi_internal.h"
 
 static ATOM g_scr_window_class = 0;
 
@@ -13,6 +14,29 @@ static void scr_request_exit(scr_host_context *context, HWND window)
 
     context->exit_pending = 1;
     DestroyWindow(window);
+}
+
+static void scr_get_client_size(HWND window, screensave_sizei *size)
+{
+    RECT rect;
+
+    if (size == NULL) {
+        return;
+    }
+
+    size->width = 1;
+    size->height = 1;
+    if (window == NULL) {
+        return;
+    }
+
+    GetClientRect(window, &rect);
+    if (rect.right - rect.left > 0) {
+        size->width = rect.right - rect.left;
+    }
+    if (rect.bottom - rect.top > 0) {
+        size->height = rect.bottom - rect.top;
+    }
 }
 
 static unsigned long scr_resolve_session_seed(const scr_host_context *context)
@@ -48,6 +72,157 @@ static void scr_prepare_runtime_state(scr_host_context *context)
     context->session_seed.deterministic = context->settings.common.use_deterministic_seed != 0;
 }
 
+static void scr_build_saver_environment(
+    scr_host_context *context,
+    const screensave_sizei *drawable_size,
+    screensave_saver_environment *environment
+)
+{
+    screensave_renderer_info renderer_info;
+
+    if (context == NULL || environment == NULL) {
+        return;
+    }
+
+    ZeroMemory(environment, sizeof(*environment));
+    environment->mode = context->mode;
+    environment->clock = context->clock;
+    environment->seed = context->session_seed;
+    environment->config_binding = &context->config_binding;
+    environment->renderer = context->renderer;
+    environment->diagnostics = &context->diagnostics;
+
+    if (drawable_size != NULL) {
+        environment->drawable_size = *drawable_size;
+    } else if (context->renderer != NULL) {
+        screensave_renderer_get_info(context->renderer, &renderer_info);
+        environment->drawable_size = renderer_info.drawable_size;
+    } else {
+        environment->drawable_size.width = 1;
+        environment->drawable_size.height = 1;
+    }
+}
+
+static int scr_create_renderer_and_session(scr_host_context *context, HWND window)
+{
+    screensave_sizei drawable_size;
+    screensave_saver_environment environment;
+
+    if (context == NULL) {
+        return 0;
+    }
+
+    scr_get_client_size(window, &drawable_size);
+    if (!screensave_gdi_renderer_create(window, &drawable_size, &context->diagnostics, &context->renderer)) {
+        scr_emit_host_diagnostic(
+            context,
+            SCREENSAVE_DIAG_LEVEL_ERROR,
+            2305UL,
+            "scr_create_renderer_and_session",
+            "The mandatory GDI renderer could not be initialized."
+        );
+        return 0;
+    }
+
+    if (context->module->callbacks != NULL && context->module->callbacks->create_session != NULL) {
+        scr_build_saver_environment(context, &drawable_size, &environment);
+        if (!context->module->callbacks->create_session(context->module, &context->session, &environment)) {
+            scr_emit_host_diagnostic(
+                context,
+                SCREENSAVE_DIAG_LEVEL_ERROR,
+                2306UL,
+                "scr_create_renderer_and_session",
+                "The saver session could not be created."
+            );
+            screensave_renderer_shutdown(context->renderer);
+            context->renderer = NULL;
+            return 0;
+        }
+    }
+
+    return 1;
+}
+
+static void scr_resize_renderer_and_session(scr_host_context *context, HWND window)
+{
+    screensave_sizei drawable_size;
+    screensave_saver_environment environment;
+
+    if (context == NULL || context->renderer == NULL) {
+        return;
+    }
+
+    scr_get_client_size(window, &drawable_size);
+    if (!screensave_gdi_renderer_resize(context->renderer, &drawable_size)) {
+        scr_emit_host_diagnostic(
+            context,
+            SCREENSAVE_DIAG_LEVEL_WARNING,
+            2307UL,
+            "scr_resize_renderer_and_session",
+            "The GDI renderer could not resize its backbuffer."
+        );
+        return;
+    }
+
+    if (
+        context->session != NULL &&
+        context->module->callbacks != NULL &&
+        context->module->callbacks->resize_session != NULL
+    ) {
+        scr_build_saver_environment(context, &drawable_size, &environment);
+        context->module->callbacks->resize_session(context->session, &environment);
+    }
+}
+
+static void scr_destroy_renderer_and_session(scr_host_context *context)
+{
+    if (context == NULL) {
+        return;
+    }
+
+    if (
+        context->session != NULL &&
+        context->module->callbacks != NULL &&
+        context->module->callbacks->destroy_session != NULL
+    ) {
+        context->module->callbacks->destroy_session(context->session);
+        context->session = NULL;
+    }
+
+    if (context->renderer != NULL) {
+        screensave_renderer_shutdown(context->renderer);
+        context->renderer = NULL;
+    }
+}
+
+static void scr_render_black_frame(scr_host_context *context)
+{
+    screensave_renderer_info renderer_info;
+    screensave_frame_info frame_info;
+    screensave_color background;
+
+    if (context == NULL || context->renderer == NULL) {
+        return;
+    }
+
+    screensave_renderer_get_info(context->renderer, &renderer_info);
+    frame_info.drawable_size = renderer_info.drawable_size;
+    frame_info.frame_index = context->clock.frame_index;
+    frame_info.elapsed_millis = context->clock.elapsed_millis;
+    frame_info.delta_millis = context->clock.delta_millis;
+
+    if (!screensave_renderer_begin_frame(context->renderer, &frame_info)) {
+        return;
+    }
+
+    background.red = 0;
+    background.green = 0;
+    background.blue = 0;
+    background.alpha = 255;
+    screensave_renderer_clear(context->renderer, background);
+    (void)screensave_renderer_end_frame(context->renderer);
+}
+
 static int scr_register_window_class(HINSTANCE instance)
 {
     WNDCLASSA window_class;
@@ -65,75 +240,6 @@ static int scr_register_window_class(HINSTANCE instance)
 
     g_scr_window_class = RegisterClassA(&window_class);
     return g_scr_window_class != 0;
-}
-
-static void scr_draw_placeholder(HDC dc, const RECT *client_rect, const scr_host_context *context)
-{
-    HBRUSH brush;
-    RECT moving_rect;
-    int width;
-    int height;
-    int size;
-    int span;
-    unsigned long frame_index;
-    unsigned long speed_units;
-    unsigned long seed_offset;
-    int x;
-    int y;
-    COLORREF accent;
-
-    width = client_rect->right - client_rect->left;
-    height = client_rect->bottom - client_rect->top;
-    if (width <= 0 || height <= 0) {
-        return;
-    }
-
-    size = height / 5;
-    if (size < 8) {
-        size = 8;
-    }
-    if (size > width) {
-        size = width;
-    }
-
-    frame_index = context->clock.frame_index;
-    switch (context->settings.common.detail_level) {
-    case SCREENSAVE_DETAIL_LEVEL_LOW:
-        speed_units = 2UL;
-        break;
-
-    case SCREENSAVE_DETAIL_LEVEL_HIGH:
-        speed_units = 6UL;
-        break;
-
-    case SCREENSAVE_DETAIL_LEVEL_STANDARD:
-    default:
-        speed_units = 4UL;
-        break;
-    }
-
-    span = width - size;
-    if (span <= 0) {
-        x = 0;
-    } else {
-        seed_offset = context->session_seed.base_seed % (unsigned long)(span + 1);
-        x = (int)(((frame_index * speed_units) + seed_offset) % (unsigned long)(span + 1));
-    }
-    y = (height - size) / 2;
-
-    SetRect(&moving_rect, x, y, x + size, y + size);
-    if (context->preview_mode) {
-        accent = RGB(72, 72, 72);
-    } else if (context->session_seed.deterministic) {
-        accent = RGB(96, 128, (BYTE)(32 + (context->session_seed.stream_seed % 96UL)));
-    } else {
-        accent = RGB(0, 96, 24);
-    }
-    brush = CreateSolidBrush(accent);
-    if (brush != NULL) {
-        FillRect(dc, &moving_rect, brush);
-        DeleteObject(brush);
-    }
 }
 
 static void scr_draw_overlay(HDC dc, const RECT *client_rect, const scr_host_context *context)
@@ -176,6 +282,9 @@ static LRESULT CALLBACK scr_window_proc(HWND window, UINT message, WPARAM wParam
         if (context != NULL) {
             context->preview_mode = context->mode == SCREENSAVE_SESSION_MODE_PREVIEW;
             scr_prepare_runtime_state(context);
+            if (!scr_create_renderer_and_session(context, window)) {
+                return -1;
+            }
             GetCursorPos(&context->initial_cursor);
             context->timer_id = SetTimer(window, SCR_TIMER_ID, SCR_TIMER_INTERVAL_MS, NULL);
             if (context->timer_id == 0) {
@@ -186,6 +295,7 @@ static LRESULT CALLBACK scr_window_proc(HWND window, UINT message, WPARAM wParam
                     "scr_window_proc",
                     "The host timer could not be created."
                 );
+                scr_destroy_renderer_and_session(context);
                 return -1;
             }
         }
@@ -197,11 +307,24 @@ static LRESULT CALLBACK scr_window_proc(HWND window, UINT message, WPARAM wParam
     case WM_TIMER:
         if (context != NULL && wParam == SCR_TIMER_ID) {
             screensave_timebase_sample(&context->timebase, &context->clock);
+            if (
+                context->session != NULL &&
+                context->module->callbacks != NULL &&
+                context->module->callbacks->step_session != NULL
+            ) {
+                screensave_saver_environment environment;
+
+                scr_build_saver_environment(context, NULL, &environment);
+                context->module->callbacks->step_session(context->session, &environment);
+            }
             InvalidateRect(window, NULL, FALSE);
         }
         return 0;
 
     case WM_SIZE:
+        if (context != NULL) {
+            scr_resize_renderer_and_session(context, window);
+        }
         InvalidateRect(window, NULL, TRUE);
         return 0;
 
@@ -254,13 +377,44 @@ static LRESULT CALLBACK scr_window_proc(HWND window, UINT message, WPARAM wParam
     case WM_PAINT:
         dc = BeginPaint(window, &paint);
         GetClientRect(window, &client_rect);
-        FillRect(dc, &client_rect, (HBRUSH)GetStockObject(BLACK_BRUSH));
-        if (context != NULL && context->settings.placeholder_visual_enabled) {
-            /*
-             * Temporary host-local liveness marker.
-             * This stays outside the shared renderer contract until Series 05 lands.
-             */
-            scr_draw_placeholder(dc, &client_rect, context);
+        if (context != NULL && context->renderer != NULL) {
+            screensave_gdi_renderer_set_present_dc(context->renderer, dc);
+            if (
+                context->session != NULL &&
+                context->module->callbacks != NULL &&
+                context->module->callbacks->render_session != NULL
+            ) {
+                screensave_renderer_info renderer_info;
+                screensave_frame_info frame_info;
+                screensave_saver_environment environment;
+
+                screensave_renderer_get_info(context->renderer, &renderer_info);
+                frame_info.drawable_size = renderer_info.drawable_size;
+                frame_info.frame_index = context->clock.frame_index;
+                frame_info.elapsed_millis = context->clock.elapsed_millis;
+                frame_info.delta_millis = context->clock.delta_millis;
+
+                if (screensave_renderer_begin_frame(context->renderer, &frame_info)) {
+                    scr_build_saver_environment(context, &renderer_info.drawable_size, &environment);
+                    context->module->callbacks->render_session(context->session, &environment);
+                    (void)screensave_renderer_end_frame(context->renderer);
+                } else {
+                    scr_emit_host_diagnostic(
+                        context,
+                        SCREENSAVE_DIAG_LEVEL_WARNING,
+                        2308UL,
+                        "scr_window_proc",
+                        "The renderer could not begin a saver-render frame."
+                    );
+                }
+            } else if (context->settings.validation_scene_enabled) {
+                scr_render_validation_scene(context);
+            } else {
+                scr_render_black_frame(context);
+            }
+            screensave_gdi_renderer_clear_present_dc(context->renderer);
+        } else {
+            FillRect(dc, &client_rect, (HBRUSH)GetStockObject(BLACK_BRUSH));
         }
         if (context != NULL && context->settings.common.diagnostics_overlay_enabled) {
             scr_draw_overlay(dc, &client_rect, context);
@@ -272,6 +426,9 @@ static LRESULT CALLBACK scr_window_proc(HWND window, UINT message, WPARAM wParam
         if (context != NULL && context->timer_id != 0) {
             KillTimer(window, context->timer_id);
             context->timer_id = 0;
+        }
+        if (context != NULL) {
+            scr_destroy_renderer_and_session(context);
         }
         PostQuitMessage(0);
         return 0;
@@ -370,6 +527,17 @@ int scr_run_window(scr_host_context *context)
 
     window = scr_create_window(context);
     if (window == NULL) {
+        if (
+            context->diagnostics.last_text[0] != '\0' &&
+            !(context->mode == SCREENSAVE_SESSION_MODE_PREVIEW && !IsWindow(context->preview_parent))
+        ) {
+            scr_show_message_box(
+                context->owner_window,
+                context->module,
+                context->diagnostics.last_text,
+                MB_OK | MB_ICONERROR
+            );
+        }
         return 1;
     }
 

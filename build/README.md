@@ -16,7 +16,7 @@ The build scaffold is not the constitutional source of truth.
 The normative compatibility and target rules remain in `specs/build_targets.md` and related specs.
 This directory translates those rules into reviewable build lanes.
 
-## Current State In Series 04
+## Current State In Series 05
 
 Real now:
 
@@ -25,12 +25,14 @@ Real now:
 - a real Win32 `.scr` host skeleton wired into both concrete modern lanes
 - a real shared core runtime under `platform/src/core/`
 - a narrow public platform header set under `platform/include/screensave/`
+- a real mandatory GDI backend under `platform/src/render/gdi/`
 - a small configuration-dialog resource and provisional per-user common-settings scaffold for the host
+- a tiny renderer-driven validation scene through the shared renderer path
 - build-layout validation in `tools/scripts/check_build_layout.py`
 
 Deferred:
 
-- real renderer backend implementations
+- OpenGL renderer backends
 - real saver logic beyond the no-op module shell
 - full legacy project files for VS6 and VS2008
 - packaging and release production
@@ -60,7 +62,7 @@ These conventions are documented now so later series can extend them without res
 
 ## How Later Series Should Extend This
 
-- keep the Series 04 shared core and host lifecycle intact while later series add renderer backends and real saver sessions against the public contracts
+- keep the Series 05 shared core, GDI backend, and host lifecycle intact while later series add real saver sessions and optional higher renderer tiers against the public contracts
 - keep checked-in project files small and explicit
 - add real legacy project files only when they can be maintained honestly
 - expand CI from static scaffold validation to real builds only when the runtime is ready

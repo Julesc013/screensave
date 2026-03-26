@@ -8,7 +8,7 @@ CAPTION "ScreenSave Settings"
 FONT 8, "MS Sans Serif"
 BEGIN
     LTEXT "", IDC_SCR_INFO, 8, 8, 204, 28
-    CONTROL "Enable placeholder visual", IDC_SCR_PLACEHOLDER_VISUAL, "Button", BS_AUTOCHECKBOX | WS_TABSTOP, 8, 42, 110, 10
+    CONTROL "Enable validation scene", IDC_SCR_VALIDATION_SCENE, "Button", BS_AUTOCHECKBOX | WS_TABSTOP, 8, 42, 110, 10
     CONTROL "Use deterministic seed", IDC_SCR_DETERMINISTIC_SEED, "Button", BS_AUTOCHECKBOX | WS_TABSTOP, 8, 56, 110, 10
     CONTROL "Show diagnostics overlay", IDC_SCR_DIAGNOSTICS, "Button", BS_AUTOCHECKBOX | WS_TABSTOP, 8, 70, 110, 10
     PUSHBUTTON "Defaults", IDC_SCR_RESET_DEFAULTS, 8, 84, 50, 14

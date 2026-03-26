@@ -31,7 +31,7 @@ Code should move into the public surface only when it is stable, cross-product, 
 Everything else should remain private until experience proves the abstraction is durable.
 
 Series 04 keeps the host implementation private while exposing only a narrow version/config/diagnostics/renderer/saver contract set.
-The temporary alive-visual code remains host-local until the renderer layer exists.
+Series 05 adds the first real backend under `platform/src/render/gdi/` and removes the need for a host-local placeholder draw path.
 
 ## Product Boundary
 

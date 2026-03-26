@@ -9,14 +9,14 @@ Current stage: Series 03 introduced the first real host skeleton here:
 - a full-screen saver window path
 - a preview child-window path
 - a small configuration dialog and provisional settings persistence
-- a host-local placeholder visual path used only to prove liveness before the shared renderer exists
+- a temporary host-local liveness path that was used before the shared renderer existed
 
-Series 04 lightly adopts the shared core here for:
+Series 04 lightly adopted the shared core here for:
 
 - saver/module identity and entry validation
 - shared version text and diagnostics state
 - shared common-config and deterministic-seed scaffolding
 - shared timing helpers
 
-The placeholder drawing code remains intentionally temporary and private to this directory until the reusable renderer lands.
+Series 05 now routes screen and preview rendering through the reusable GDI backend, with a tiny built-in validation scene used only until a real saver product exists.
 Type: runtime host implementation.

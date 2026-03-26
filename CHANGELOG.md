@@ -2,6 +2,26 @@
 
 All notable repository changes are recorded here in series order.
 
+## S05 - 2026-03-27
+
+### Added
+
+- A real reusable GDI backend under `platform/src/render/gdi/` with an offscreen DIB-section backbuffer, present path, baseline rect/line/polyline primitives, and modest bitmap-view blit support.
+- A tiny renderer-driven validation scene in the host used only when no real saver session exists yet.
+
+### Changed
+
+- Updated the Win32 host skeleton to create and use the shared GDI renderer for both screen and preview paths instead of the earlier host-local placeholder scene.
+- Updated the host lifecycle to recognize a real renderer-backed session path while keeping `nocturne` as a no-op saver-module shell.
+- Updated the concrete VS2022 and MinGW i686 build lanes and static build validation to include the GDI backend and validation-scene wiring.
+- Updated root, build, architecture, host, renderer, and roadmap documentation so Series 05 now describes the real renderer milestone truthfully.
+
+### Validation
+
+- Confirmed Series 00 through Series 04 prerequisites existed before changes.
+- Performed static validation of the GDI backend file graph, host/build integration, and documentation consistency.
+- Confirmed no OpenGL backend, real saver-product implementation, packaging logic, or release-production logic was added in this series.
+
 ## S04 - 2026-03-27
 
 ### Added
