@@ -11,10 +11,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{4E7545AE-BFD8-4E24-A9B8-7B901F90D16E}</ProjectGuid>
+    <ProjectGuid>{02E53197-4A02-4944-9BA0-AB57FB423663}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>benchlab</RootNamespace>
-    <ProjectName>benchlab</ProjectName>
+    <RootNamespace>deepfield</RootNamespace>
+    <ProjectName>deepfield</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -43,8 +43,8 @@
   <PropertyGroup>
     <OutDir>$(SolutionDir)..\..\..\out\msvc\vs2022\$(Configuration)\$(ProjectName)\</OutDir>
     <IntDir>$(SolutionDir)..\..\..\out\intermediate\msvc\vs2022\$(Configuration)\$(ProjectName)\</IntDir>
-    <TargetName>benchlab</TargetName>
-    <TargetExt>.exe</TargetExt>
+    <TargetName>deepfield</TargetName>
+    <TargetExt>.scr</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -55,7 +55,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\platform\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\products\savers\nocturne\src;$(SolutionDir)..\..\..\products\savers\ricochet\src;$(SolutionDir)..\..\..\products\savers\deepfield\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\platform\src\host\win32_scr;$(SolutionDir)..\..\..\products\savers\nocturne\src;$(SolutionDir)..\..\..\products\savers\ricochet\src;$(SolutionDir)..\..\..\products\savers\deepfield\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -74,7 +74,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\platform\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\products\savers\nocturne\src;$(SolutionDir)..\..\..\products\savers\ricochet\src;$(SolutionDir)..\..\..\products\savers\deepfield\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\platform\src\host\win32_scr;$(SolutionDir)..\..\..\products\savers\nocturne\src;$(SolutionDir)..\..\..\products\savers\ricochet\src;$(SolutionDir)..\..\..\products\savers\deepfield\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -85,18 +85,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\products\apps\benchlab\src\benchlab_app.c" />
-    <ClCompile Include="..\..\..\products\apps\benchlab\src\benchlab_config.c" />
-    <ClCompile Include="..\..\..\products\apps\benchlab\src\benchlab_diag.c" />
-    <ClCompile Include="..\..\..\products\apps\benchlab\src\benchlab_main.c" />
-    <ClCompile Include="..\..\..\products\apps\benchlab\src\benchlab_overlay.c" />
-    <ClCompile Include="..\..\..\products\apps\benchlab\src\benchlab_session.c" />
-    <ClCompile Include="..\..\..\products\savers\deepfield\src\deepfield_config.c" />
-    <ClCompile Include="..\..\..\products\savers\deepfield\src\deepfield_module.c" />
-    <ClCompile Include="..\..\..\products\savers\deepfield\src\deepfield_presets.c" />
-    <ClCompile Include="..\..\..\products\savers\deepfield\src\deepfield_render.c" />
-    <ClCompile Include="..\..\..\products\savers\deepfield\src\deepfield_sim.c" />
-    <ClCompile Include="..\..\..\products\savers\deepfield\src\deepfield_themes.c" />
     <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_config.c" />
     <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_module.c" />
     <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_presets.c" />
@@ -109,11 +97,19 @@
     <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_render.c" />
     <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_sim.c" />
     <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_themes.c" />
+    <ClCompile Include="..\..\..\products\savers\deepfield\src\deepfield_config.c" />
+    <ClCompile Include="..\..\..\products\savers\deepfield\src\deepfield_entry.c" />
+    <ClCompile Include="..\..\..\products\savers\deepfield\src\deepfield_module.c" />
+    <ClCompile Include="..\..\..\products\savers\deepfield\src\deepfield_presets.c" />
+    <ClCompile Include="..\..\..\products\savers\deepfield\src\deepfield_render.c" />
+    <ClCompile Include="..\..\..\products\savers\deepfield\src\deepfield_sim.c" />
+    <ClCompile Include="..\..\..\products\savers\deepfield\src\deepfield_themes.c" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\..\products\savers\deepfield\src\deepfield_config.rc" />
     <ResourceCompile Include="..\..\..\products\savers\nocturne\src\nocturne_config.rc" />
     <ResourceCompile Include="..\..\..\products\savers\ricochet\src\ricochet_config.rc" />
+    <ResourceCompile Include="..\..\..\platform\src\host\win32_scr\screensave_host.rc" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="screensave_platform.vcxproj">

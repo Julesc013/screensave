@@ -9,7 +9,10 @@ Names are planning anchors, not release claims.
 - `ember`: warm low-motion abstract saver.
 - `weather_glass`: ambient utility-style saver for clocks, weather, or similar display concepts if the platform grows that far.
 
-## Kinetic And Classic
+## Motion Family And Related Studies
+
+- `ricochet`: polished bounce-motion saver and a real Motion Family product.
+- `deepfield`: atmospheric drift and fly-through saver and a real Motion Family product.
 
 - `oscilloscope_dreams`: waveform and phosphor-inspired motion.
 - `starfield`: classic depth and drift presentation.
@@ -42,7 +45,7 @@ Names are planning anchors, not release claims.
 
 - `gallery`: browse and launch installed or built savers.
 - `player`: run savers in a controlled windowed environment.
-- `benchlab`: developer-facing windowed diagnostics harness for saver, renderer, and deterministic validation work.
+- `benchlab`: developer-facing windowed diagnostics harness for saver, renderer, deterministic validation work, and current multi-product inspection.
 - `sdk`: headers, templates, examples, and contributor-oriented materials.
 
 Every product group is subordinate to the shared compatibility contract.

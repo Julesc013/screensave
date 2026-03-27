@@ -1,8 +1,19 @@
 #include <string.h>
 
+#include "../../../../platform/src/core/base/saver_registry.h"
 #include "benchlab_internal.h"
 
 const screensave_saver_module *nocturne_get_module(void);
+const screensave_saver_module *ricochet_get_module(void);
+const screensave_saver_module *deepfield_get_module(void);
+
+typedef const screensave_saver_module *(*benchlab_module_getter)(void);
+
+static const benchlab_module_getter g_benchlab_module_getters[] = {
+    nocturne_get_module,
+    ricochet_get_module,
+    deepfield_get_module
+};
 
 static void benchlab_update_config_binding(benchlab_app *app)
 {
@@ -214,9 +225,37 @@ static int benchlab_copy_config_state(
     return 1;
 }
 
+unsigned int benchlab_get_available_module_count(void)
+{
+    return (unsigned int)(sizeof(g_benchlab_module_getters) / sizeof(g_benchlab_module_getters[0]));
+}
+
+const screensave_saver_module *benchlab_get_available_module(unsigned int index)
+{
+    if (index >= benchlab_get_available_module_count()) {
+        return NULL;
+    }
+
+    return g_benchlab_module_getters[index]();
+}
+
+const screensave_saver_module *benchlab_find_target_module(const char *product_key)
+{
+    const screensave_saver_module *modules[
+        sizeof(g_benchlab_module_getters) / sizeof(g_benchlab_module_getters[0])
+    ];
+    unsigned int index;
+
+    for (index = 0U; index < benchlab_get_available_module_count(); ++index) {
+        modules[index] = g_benchlab_module_getters[index]();
+    }
+
+    return screensave_saver_registry_find(modules, benchlab_get_available_module_count(), product_key);
+}
+
 const screensave_saver_module *benchlab_get_target_module(void)
 {
-    return nocturne_get_module();
+    return benchlab_find_target_module(BENCHLAB_DEFAULT_PRODUCT_KEY);
 }
 
 int benchlab_session_initialize_config(benchlab_app *app)

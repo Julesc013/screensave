@@ -71,6 +71,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\platform\src\core\base\renderer_dispatch.c" />
     <ClCompile Include="..\..\..\platform\src\core\base\saver_contract.c" />
+    <ClCompile Include="..\..\..\platform\src\core\base\saver_registry.c" />
     <ClCompile Include="..\..\..\platform\src\core\config\config.c" />
     <ClCompile Include="..\..\..\platform\src\core\diagnostics\diagnostics.c" />
     <ClCompile Include="..\..\..\platform\src\core\rng\rng.c" />

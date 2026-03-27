@@ -4,6 +4,7 @@ int main(void)
 {
     benchlab_app_config config;
     const screensave_saver_module *module;
+    unsigned int module_count;
 
     benchlab_app_config_set_defaults(&config);
     benchlab_app_config_clamp(&config);
@@ -20,8 +21,21 @@ int main(void)
         return 2;
     }
 
-    if (module->identity.product_key == NULL || lstrcmpA(module->identity.product_key, "nocturne") != 0) {
+    module_count = benchlab_get_available_module_count();
+    if (module_count < 3U) {
         return 3;
+    }
+
+    if (module->identity.product_key == NULL || lstrcmpA(module->identity.product_key, "nocturne") != 0) {
+        return 4;
+    }
+
+    if (benchlab_find_target_module("ricochet") == NULL) {
+        return 5;
+    }
+
+    if (benchlab_find_target_module("deepfield") == NULL) {
+        return 6;
     }
 
     return 0;

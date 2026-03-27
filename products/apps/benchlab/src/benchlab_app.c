@@ -41,14 +41,21 @@ static HMENU benchlab_create_menu(void)
 {
     HMENU root_menu;
     HMENU run_menu;
+    HMENU saver_menu;
     HMENU options_menu;
+    unsigned int index;
+    const screensave_saver_module *module;
 
     root_menu = CreateMenu();
     run_menu = CreatePopupMenu();
+    saver_menu = CreatePopupMenu();
     options_menu = CreatePopupMenu();
-    if (root_menu == NULL || run_menu == NULL || options_menu == NULL) {
+    if (root_menu == NULL || run_menu == NULL || saver_menu == NULL || options_menu == NULL) {
         if (options_menu != NULL) {
             DestroyMenu(options_menu);
+        }
+        if (saver_menu != NULL) {
+            DestroyMenu(saver_menu);
         }
         if (run_menu != NULL) {
             DestroyMenu(run_menu);
@@ -66,17 +73,50 @@ static HMENU benchlab_create_menu(void)
     AppendMenuA(run_menu, MF_SEPARATOR, 0U, NULL);
     AppendMenuA(run_menu, MF_STRING, IDM_BENCHLAB_EXIT, "E&xit");
 
+    for (index = 0U; index < benchlab_get_available_module_count(); ++index) {
+        module = benchlab_get_available_module(index);
+        if (module == NULL) {
+            continue;
+        }
+
+        AppendMenuA(
+            saver_menu,
+            MF_STRING,
+            IDM_BENCHLAB_PRODUCT_FIRST + index,
+            module->identity.display_name
+        );
+    }
+    AppendMenuA(saver_menu, MF_SEPARATOR, 0U, NULL);
+    AppendMenuA(saver_menu, MF_STRING, IDM_BENCHLAB_SAVER_SETTINGS, "Saver &Settings...");
+
     AppendMenuA(options_menu, MF_STRING, IDM_BENCHLAB_TOGGLE_DETERMINISTIC, "&Deterministic Mode\tF7");
     AppendMenuA(options_menu, MF_STRING, IDM_BENCHLAB_TOGGLE_OVERLAY, "&Info Panel");
-    AppendMenuA(options_menu, MF_STRING, IDM_BENCHLAB_SAVER_SETTINGS, "Saver &Settings...");
     AppendMenuA(options_menu, MF_SEPARATOR, 0U, NULL);
     AppendMenuA(options_menu, MF_STRING, IDM_BENCHLAB_RENDERER_AUTO, "Renderer &Auto");
     AppendMenuA(options_menu, MF_STRING, IDM_BENCHLAB_RENDERER_GDI, "Renderer &GDI");
     AppendMenuA(options_menu, MF_STRING, IDM_BENCHLAB_RENDERER_GL11, "Renderer &GL11");
 
     AppendMenuA(root_menu, MF_POPUP, (UINT_PTR)run_menu, "&Run");
+    AppendMenuA(root_menu, MF_POPUP, (UINT_PTR)saver_menu, "&Saver");
     AppendMenuA(root_menu, MF_POPUP, (UINT_PTR)options_menu, "&Options");
     return root_menu;
+}
+
+static UINT benchlab_current_product_command(const benchlab_app *app)
+{
+    unsigned int index;
+
+    if (app == NULL || app->module == NULL) {
+        return IDM_BENCHLAB_PRODUCT_FIRST;
+    }
+
+    for (index = 0U; index < benchlab_get_available_module_count(); ++index) {
+        if (benchlab_get_available_module(index) == app->module) {
+            return IDM_BENCHLAB_PRODUCT_FIRST + index;
+        }
+    }
+
+    return IDM_BENCHLAB_PRODUCT_FIRST;
 }
 
 static UINT benchlab_current_renderer_command(const benchlab_app *app)
@@ -114,6 +154,13 @@ static void benchlab_update_menu_state(benchlab_app *app)
         app->menu,
         IDM_BENCHLAB_TOGGLE_PAUSE,
         MF_BYCOMMAND | (app->paused ? MF_CHECKED : MF_UNCHECKED)
+    );
+    CheckMenuRadioItem(
+        app->menu,
+        IDM_BENCHLAB_PRODUCT_FIRST,
+        IDM_BENCHLAB_PRODUCT_FIRST + benchlab_get_available_module_count() - 1U,
+        benchlab_current_product_command(app),
+        MF_BYCOMMAND
     );
     CheckMenuRadioItem(
         app->menu,
@@ -390,12 +437,85 @@ static int benchlab_handle_renderer_request(benchlab_app *app, screensave_render
     return 1;
 }
 
+static int benchlab_handle_module_request(benchlab_app *app, const screensave_saver_module *module)
+{
+    const screensave_saver_module *previous_module;
+    char previous_product_key[32];
+
+    if (app == NULL || module == NULL) {
+        return 0;
+    }
+
+    if (app->module == module) {
+        benchlab_update_menu_state(app);
+        return 1;
+    }
+
+    previous_module = app->module;
+    lstrcpynA(previous_product_key, app->app_config.product_key, sizeof(previous_product_key));
+
+    benchlab_session_destroy_runtime(app);
+    benchlab_session_dispose_config(app);
+
+    app->module = module;
+    lstrcpynA(app->app_config.product_key, module->identity.product_key, sizeof(app->app_config.product_key));
+    if (
+        !benchlab_session_initialize_config(app) ||
+        !benchlab_session_create_runtime(app, app->render_window)
+    ) {
+        benchlab_session_destroy_runtime(app);
+        benchlab_session_dispose_config(app);
+
+        app->module = previous_module;
+        lstrcpynA(app->app_config.product_key, previous_product_key, sizeof(app->app_config.product_key));
+        if (app->module != NULL) {
+            (void)benchlab_session_initialize_config(app);
+            (void)benchlab_session_create_runtime(app, app->render_window);
+        }
+
+        benchlab_show_message(
+            app->main_window,
+            app->diagnostics.last_text[0] != '\0'
+                ? app->diagnostics.last_text
+                : "BenchLab could not switch the active saver product.",
+            MB_OK | MB_ICONERROR
+        );
+        benchlab_update_menu_state(app);
+        benchlab_update_window_title(app);
+        if (app->info_window != NULL) {
+            InvalidateRect(app->info_window, NULL, FALSE);
+        }
+        return 0;
+    }
+
+    benchlab_update_menu_state(app);
+    benchlab_update_window_title(app);
+    if (app->render_window != NULL) {
+        InvalidateRect(app->render_window, NULL, FALSE);
+    }
+    if (app->info_window != NULL) {
+        InvalidateRect(app->info_window, NULL, FALSE);
+    }
+    return 1;
+}
+
 static int benchlab_handle_command(benchlab_app *app, WORD command_id)
 {
     INT_PTR dialog_result;
+    const screensave_saver_module *module;
+    unsigned int module_index;
 
     if (app == NULL) {
         return 0;
+    }
+
+    if (
+        command_id >= IDM_BENCHLAB_PRODUCT_FIRST &&
+        command_id < IDM_BENCHLAB_PRODUCT_FIRST + benchlab_get_available_module_count()
+    ) {
+        module_index = (unsigned int)(command_id - IDM_BENCHLAB_PRODUCT_FIRST);
+        module = benchlab_get_available_module(module_index);
+        return benchlab_handle_module_request(app, module);
     }
 
     switch (command_id) {
@@ -727,22 +847,27 @@ int benchlab_app_run(HINSTANCE instance, LPSTR command_line, int show_code)
     app.instance = instance;
     app.command_line = command_line;
     app.show_code = show_code;
-    app.module = benchlab_get_target_module();
-
-    if (!screensave_saver_module_is_valid(app.module)) {
-        benchlab_show_message(
-            NULL,
-            "BenchLab could not start because the active saver module is invalid.",
-            MB_OK | MB_ICONERROR
-        );
-        return 1;
-    }
 
     screensave_diag_context_init(&app.diagnostics, SCREENSAVE_DIAG_LEVEL_DEBUG);
     benchlab_diag_attach(&app);
     benchlab_app_config_load(&app.app_config);
     benchlab_app_config_apply_command_line(&app, command_line);
     benchlab_app_config_clamp(&app.app_config);
+    app.module = benchlab_find_target_module(app.app_config.product_key);
+    if (app.module == NULL) {
+        app.module = benchlab_get_target_module();
+        if (app.module != NULL) {
+            lstrcpynA(app.app_config.product_key, app.module->identity.product_key, sizeof(app.app_config.product_key));
+        }
+    }
+    if (!screensave_saver_module_is_valid(app.module)) {
+        benchlab_show_message(
+            NULL,
+            "BenchLab could not start because the selected saver module is invalid.",
+            MB_OK | MB_ICONERROR
+        );
+        return 1;
+    }
     app.requested_renderer_kind = (screensave_renderer_kind)app.app_config.renderer_request;
 
     if (!benchlab_session_initialize_config(&app)) {

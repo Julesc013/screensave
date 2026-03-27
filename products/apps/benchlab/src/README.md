@@ -1,7 +1,7 @@
 # BenchLab Source
 
-Purpose: BenchLab app-local implementation for the Series 08 diagnostics harness.
-Belongs here: app lifecycle, harness control, app config persistence, diagnostics buffering, renderer selection, and info-panel rendering.
+Purpose: BenchLab app-local implementation for the Series 09 diagnostics harness.
+Belongs here: app lifecycle, harness control, app config persistence, diagnostics buffering, current saver selection, renderer selection, and info-panel rendering.
 Does not belong here: shared platform runtime or product-specific saver internals beyond the narrow active-module binding.
 
 Key files:

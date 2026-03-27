@@ -60,6 +60,44 @@ static LONG benchlab_write_dword(HKEY key, const char *value_name, unsigned long
     return RegSetValueExA(key, value_name, 0, REG_DWORD, (const BYTE *)&data, sizeof(data));
 }
 
+static int benchlab_read_string(HKEY key, const char *value_name, char *buffer, DWORD buffer_size)
+{
+    DWORD type;
+    DWORD size;
+
+    if (buffer == NULL || buffer_size == 0U) {
+        return 0;
+    }
+
+    buffer[0] = '\0';
+    type = 0UL;
+    size = buffer_size;
+    if (RegQueryValueExA(key, value_name, NULL, &type, (LPBYTE)buffer, &size) != ERROR_SUCCESS || type != REG_SZ) {
+        buffer[0] = '\0';
+        return 0;
+    }
+
+    buffer[buffer_size - 1U] = '\0';
+    return buffer[0] != '\0';
+}
+
+static LONG benchlab_write_string(HKEY key, const char *value_name, const char *value)
+{
+    if (value == NULL || value[0] == '\0') {
+        RegDeleteValueA(key, value_name);
+        return ERROR_SUCCESS;
+    }
+
+    return RegSetValueExA(
+        key,
+        value_name,
+        0,
+        REG_SZ,
+        (const BYTE *)value,
+        (DWORD)(lstrlenA(value) + 1)
+    );
+}
+
 static int benchlab_command_equals(const char *token, const char *expected)
 {
     if (token == NULL || expected == NULL) {
@@ -119,6 +157,7 @@ void benchlab_app_config_set_defaults(benchlab_app_config *config)
     config->deterministic_mode = 0;
     config->renderer_request = (int)SCREENSAVE_RENDERER_KIND_UNKNOWN;
     config->fixed_seed = BENCHLAB_DEFAULT_FIXED_SEED;
+    lstrcpyA(config->product_key, BENCHLAB_DEFAULT_PRODUCT_KEY);
 }
 
 void benchlab_app_config_clamp(benchlab_app_config *config)
@@ -141,6 +180,9 @@ void benchlab_app_config_clamp(benchlab_app_config *config)
     }
     if (config->fixed_seed == 0UL) {
         config->fixed_seed = BENCHLAB_DEFAULT_FIXED_SEED;
+    }
+    if (benchlab_find_target_module(config->product_key) == NULL) {
+        lstrcpyA(config->product_key, BENCHLAB_DEFAULT_PRODUCT_KEY);
     }
 }
 
@@ -188,6 +230,7 @@ int benchlab_app_config_load(benchlab_app_config *config)
     if (benchlab_read_dword(key, "FixedSeed", &value)) {
         config->fixed_seed = value;
     }
+    (void)benchlab_read_string(key, "ProductKey", config->product_key, sizeof(config->product_key));
 
     RegCloseKey(key);
     benchlab_app_config_clamp(config);
@@ -239,6 +282,9 @@ int benchlab_app_config_save(const benchlab_app_config *config)
     }
     if (result == ERROR_SUCCESS) {
         result = benchlab_write_dword(key, "FixedSeed", safe_config.fixed_seed);
+    }
+    if (result == ERROR_SUCCESS) {
+        result = benchlab_write_string(key, "ProductKey", safe_config.product_key);
     }
 
     RegCloseKey(key);
@@ -340,6 +386,22 @@ void benchlab_app_config_apply_command_line(benchlab_app *app, LPSTR command_lin
                     SCREENSAVE_DIAG_LEVEL_WARNING,
                     7101UL,
                     "BenchLab ignored an invalid /seed: command-line argument."
+                );
+            }
+            continue;
+        }
+        if (benchlab_command_starts_with(token, "saver:") || benchlab_command_starts_with(token, "product:")) {
+            const char *product_key;
+
+            product_key = token + (benchlab_command_starts_with(token, "saver:") ? 6 : 8);
+            if (benchlab_find_target_module(product_key) != NULL) {
+                lstrcpynA(app->app_config.product_key, product_key, sizeof(app->app_config.product_key));
+            } else {
+                benchlab_emit_app_diag(
+                    app,
+                    SCREENSAVE_DIAG_LEVEL_WARNING,
+                    7103UL,
+                    "BenchLab ignored an invalid /saver: command-line argument."
                 );
             }
             continue;

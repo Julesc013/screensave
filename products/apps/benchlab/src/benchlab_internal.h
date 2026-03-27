@@ -20,6 +20,7 @@
 #define BENCHLAB_DEFAULT_CLIENT_HEIGHT 480
 #define BENCHLAB_INFO_PANEL_WIDTH 280
 #define BENCHLAB_DEFAULT_FIXED_SEED 0x00000707UL
+#define BENCHLAB_DEFAULT_PRODUCT_KEY "nocturne"
 #define BENCHLAB_STEP_DELTA_MS 33UL
 #define BENCHLAB_DIAG_LINE_COUNT 6U
 #define BENCHLAB_DIAG_LINE_LENGTH 160
@@ -35,6 +36,8 @@
 #define IDM_BENCHLAB_RENDERER_AUTO 41009
 #define IDM_BENCHLAB_RENDERER_GDI 41010
 #define IDM_BENCHLAB_RENDERER_GL11 41011
+#define IDM_BENCHLAB_PRODUCT_FIRST 41020
+#define IDM_BENCHLAB_PRODUCT_LAST 41035
 
 typedef struct benchlab_app_config_tag {
     int client_width;
@@ -43,6 +46,7 @@ typedef struct benchlab_app_config_tag {
     int deterministic_mode;
     int renderer_request;
     unsigned long fixed_seed;
+    char product_key[32];
 } benchlab_app_config;
 
 typedef struct benchlab_diag_buffer_tag {
@@ -77,6 +81,9 @@ typedef struct benchlab_app_tag {
     int paused;
 } benchlab_app;
 
+unsigned int benchlab_get_available_module_count(void);
+const screensave_saver_module *benchlab_get_available_module(unsigned int index);
+const screensave_saver_module *benchlab_find_target_module(const char *product_key);
 const screensave_saver_module *benchlab_get_target_module(void);
 
 void benchlab_app_config_set_defaults(benchlab_app_config *config);

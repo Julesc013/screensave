@@ -1,10 +1,10 @@
 # MinGW i686 Lane
 
-This is the concrete GCC-family x86 lane for Series 08.
+This is the concrete GCC-family x86 lane for Series 09.
 
 ## What Exists Now
 
-- `Makefile` for the shared platform library, the real `nocturne.scr` target, the real `benchlab.exe` target, the core-plus-GDI-plus-GL11 platform objects, the Nocturne product objects, the host/product dialog resources, and the conservative `opengl32` link dependency required for the optional backend
+- `Makefile` for the shared platform library, the real `nocturne.scr`, `ricochet.scr`, and `deepfield.scr` targets, the real `benchlab.exe` target, the core-plus-GDI-plus-GL11 platform objects, the current saver product objects, the host/product dialog resources, and the conservative `opengl32` link dependency required for the optional backend
 
 The target graph mirrors the VS2022 lane closely so later implementation work does not have to invent two unrelated build stories.
 

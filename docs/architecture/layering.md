@@ -35,6 +35,7 @@ Series 05 adds the first real backend under `platform/src/render/gdi/` and remov
 Series 06 proves the public saver/config boundary with Nocturne while keeping product defaults, presets, themes, and config UI inside the product tree.
 Series 07 proves the same public contracts can also support a separate windowed diagnostics app without turning `platform/` into a player or UI framework.
 Series 08 proves the renderer contract can support both the mandatory GDI floor and an optional GL11 path without pushing backend-selection logic into products.
+Series 09 proves the same layering can support multiple real saver products while keeping only narrow selection helpers in shared code and leaving product motion logic inside each saver.
 
 ## Product Boundary
 

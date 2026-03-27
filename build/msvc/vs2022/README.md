@@ -1,22 +1,26 @@
 # VS2022 Lane
 
-This is the concrete modern MSVC lane for Series 08.
+This is the concrete modern MSVC lane for Series 09.
 
 ## What Exists Now
 
 - `ScreenSave.sln`
 - `screensave_platform.vcxproj`
 - `nocturne.vcxproj`
+- `ricochet.vcxproj`
+- `deepfield.vcxproj`
 - `benchlab.vcxproj`
 
 These files stay intentionally small.
-They define one shared static-library target, one `.scr` saver target, and one windowed diagnostics app target with a shared core runtime, the mandatory GDI backend, the optional GL11 backend, a real host skeleton, the first real saver product, and the first real diagnostics app.
+They define one shared static-library target, three `.scr` saver targets, and one windowed diagnostics app target with a shared core runtime, the mandatory GDI backend, the optional GL11 backend, a real host skeleton, three real saver products, and the first real diagnostics app.
 
 ## What The Targets Mean
 
 - `screensave_platform` compiles the shared non-renderer core runtime, the mandatory GDI backend, the optional GL11 backend, and the Win32 host implementation.
-- `nocturne` compiles the real Nocturne product sources, the product config dialog resource, the shared host resource, links `opengl32` for the optional GL11 path, and links the first real `.scr` executable target.
-- `benchlab` compiles the BenchLab app sources, reuses the real Nocturne product sources through the shared saver contract, links `opengl32` for explicit GL11 validation, and links the first real diagnostics harness executable target.
+- `nocturne` compiles the real Nocturne product sources, the current built-in saver registry, the product config dialog resources, the shared host resource, links `opengl32` for the optional GL11 path, and links the `.scr` executable target that defaults to Nocturne.
+- `ricochet` compiles the same shared platform plus saver set and links the `.scr` executable target that defaults to Ricochet.
+- `deepfield` compiles the same shared platform plus saver set and links the `.scr` executable target that defaults to Deepfield.
+- `benchlab` compiles the BenchLab app sources, reuses the real Nocturne, Ricochet, and Deepfield product sources through the shared saver contract, links `opengl32` for explicit backend validation, and links the diagnostics harness executable target.
 
 The concrete host lifecycle now lives in the checked-in target graph.
 Later series should extend these targets in place instead of introducing parallel demo targets.
@@ -42,4 +46,4 @@ No generated files should be checked into this directory.
 
 - GL-plus and later renderer tiers
 - richer version stamping and metadata resources
-- broader solution structure for additional savers and apps
+- broader solution structure for later saver families and suite apps

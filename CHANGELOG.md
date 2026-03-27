@@ -2,6 +2,26 @@
 
 All notable repository changes are recorded here in series order.
 
+## S09 - 2026-03-27
+
+### Added
+
+- Ricochet under `products/savers/ricochet/` as the first Motion Family saver, including a real saver module, curated presets/themes, product-owned config dialog, manifest, and lightweight smoke validation.
+- Deepfield under `products/savers/deepfield/` as the second Motion Family saver, including a real saver module, curated presets/themes, product-owned config dialog, manifest, and lightweight smoke validation.
+- A narrow private built-in saver registry helper so the current stage can resolve multiple real saver products without introducing a plugin loader or broad discovery system.
+
+### Changed
+
+- Updated the Win32 `.scr` host to support modest built-in saver selection, persist the selected product key, and delegate configuration to the selected real saver product while preserving the existing host lifecycle and automatic renderer-selection behavior.
+- Updated BenchLab so the diagnostics harness can select and run Nocturne, Ricochet, or Deepfield through the shared saver and renderer contracts while keeping deterministic restart/reseed and renderer diagnostics intact.
+- Updated the concrete VS2022 and MinGW i686 build lanes, static build checks, manifests, and repo docs so Series 09 truthfully describes the first multi-product saver family and current multi-product wiring.
+
+### Validation
+
+- Confirmed Series 00 through Series 08 prerequisites existed before changes.
+- Performed static validation of the Motion Family product file graph, multi-product host and BenchLab wiring, build integration, and documentation consistency.
+- Confirmed no GL-plus or modern-context work, next-family work, gallery/player scope, packaging logic, or unsupported compatibility claims were added in this series.
+
 ## S08 - 2026-03-27
 
 ### Added

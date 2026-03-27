@@ -25,3 +25,4 @@ Series 05 makes the mandatory reusable GDI backend real and routes the host thro
 Series 06 makes Nocturne the first real saver product on those shared contracts.
 Series 07 makes BenchLab the first real app product and proves the current saver/renderer contracts in a windowed diagnostics harness.
 Series 08 makes the optional GL11 backend, explicit renderer selection, and explicit fallback-to-GDI behavior real while preserving the compatibility and ownership rules defined in `specs/`.
+Series 09 makes the first real multi-product saver family live on those same contracts by adding Ricochet and Deepfield without turning the platform into a gallery, plugin loader, or scene framework.

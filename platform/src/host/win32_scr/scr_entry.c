@@ -1,3 +1,5 @@
+#include "../../core/base/saver_registry.h"
+#include "scr_host_entry.h"
 #include "scr_internal.h"
 
 static void scr_show_invalid_argument_message(const scr_host_context *context, const scr_parsed_args *parsed_args)
@@ -24,6 +26,39 @@ static void scr_show_invalid_argument_message(const scr_host_context *context, c
     scr_show_message_box(context->owner_window, context->module, message, MB_OK | MB_ICONINFORMATION);
 }
 
+static const screensave_saver_module *scr_resolve_active_module(
+    const screensave_saver_module *default_module,
+    const screensave_saver_module *const *available_modules,
+    unsigned int available_module_count
+)
+{
+    char product_key[64];
+    const screensave_saver_module *resolved_module;
+
+    if (
+        !screensave_saver_registry_is_valid(available_modules, available_module_count) ||
+        !screensave_saver_module_is_valid(default_module)
+    ) {
+        return NULL;
+    }
+
+    resolved_module = default_module;
+    if (!scr_load_selected_product_key(product_key, sizeof(product_key))) {
+        return resolved_module;
+    }
+
+    resolved_module = screensave_saver_registry_find(
+        available_modules,
+        available_module_count,
+        product_key
+    );
+    if (resolved_module == NULL) {
+        resolved_module = default_module;
+    }
+
+    return resolved_module;
+}
+
 int screensave_scr_main(
     HINSTANCE instance,
     HINSTANCE previous_instance,
@@ -32,16 +67,42 @@ int screensave_scr_main(
     const screensave_saver_module *module
 )
 {
+    const screensave_saver_module *modules[1];
+
+    modules[0] = module;
+    return screensave_scr_main_with_registry(
+        instance,
+        previous_instance,
+        command_line,
+        show_code,
+        module,
+        modules,
+        1U
+    );
+}
+
+int screensave_scr_main_with_registry(
+    HINSTANCE instance,
+    HINSTANCE previous_instance,
+    LPSTR command_line,
+    int show_code,
+    const screensave_saver_module *default_module,
+    const screensave_saver_module *const *available_modules,
+    unsigned int available_module_count
+)
+{
     INT_PTR dialog_result;
     int parse_result;
     int result;
     scr_host_context context;
     scr_parsed_args parsed_args;
+    const screensave_saver_module *active_module;
 
-    if (!screensave_saver_module_is_valid(module)) {
+    active_module = scr_resolve_active_module(default_module, available_modules, available_module_count);
+    if (active_module == NULL) {
         MessageBoxA(
             NULL,
-            "The saver target did not provide a valid saver module descriptor.",
+            "The saver target did not provide a valid built-in saver registry.",
             "ScreenSave",
             MB_OK | MB_ICONERROR | MB_SETFOREGROUND
         );
@@ -53,7 +114,10 @@ int screensave_scr_main(
     context.previous_instance = previous_instance;
     context.command_line = command_line;
     context.show_code = show_code;
-    context.module = module;
+    context.default_module = default_module;
+    context.available_modules = available_modules;
+    context.available_module_count = available_module_count;
+    context.module = active_module;
 
     screensave_diag_context_init(
         &context.diagnostics,

@@ -14,6 +14,7 @@ Series 06 makes Nocturne real:
 - shared-contract integration that now allows BenchLab to run Nocturne in a windowed diagnostics harness without private host shortcuts
 
 Series 08 keeps Nocturne renderer-agnostic while validating the same product through both the mandatory GDI backend and the optional GL11 backend.
+Series 09 keeps Nocturne as a first-class built-in saver while the host and BenchLab add narrow selection support for Nocturne, Ricochet, and Deepfield.
 
 Nocturne stays intentionally narrow. It is a dark blanker-plus saver, not a general ambient effects engine.
 Type: product runtime space.

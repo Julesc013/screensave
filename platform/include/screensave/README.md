@@ -5,7 +5,7 @@ Belongs here: stable cross-product types, interfaces, and constants once they ar
 Does not belong here: private helpers or product-specific declarations.
 Type: public runtime contract.
 
-Current stage: the first narrow public header set remains real here, with Series 08 now using it for both the first real saver product and the first real diagnostics app:
+Current stage: the first narrow public header set remains real here, with Series 09 now using it for multiple real saver products plus the first real diagnostics app:
 
 - `types.h` for tiny shared geometry and color structures
 - `version.h` for runtime version identity

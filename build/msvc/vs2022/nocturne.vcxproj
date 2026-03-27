@@ -55,7 +55,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\platform\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\platform\src\host\win32_scr;$(SolutionDir)..\..\..\products\savers\nocturne\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\platform\src\host\win32_scr;$(SolutionDir)..\..\..\products\savers\nocturne\src;$(SolutionDir)..\..\..\products\savers\ricochet\src;$(SolutionDir)..\..\..\products\savers\deepfield\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -74,7 +74,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\platform\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\platform\src\host\win32_scr;$(SolutionDir)..\..\..\products\savers\nocturne\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\platform\src\host\win32_scr;$(SolutionDir)..\..\..\products\savers\nocturne\src;$(SolutionDir)..\..\..\products\savers\ricochet\src;$(SolutionDir)..\..\..\products\savers\deepfield\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -92,9 +92,23 @@
     <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_render.c" />
     <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_sim.c" />
     <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_themes.c" />
+    <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_config.c" />
+    <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_module.c" />
+    <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_presets.c" />
+    <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_render.c" />
+    <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_sim.c" />
+    <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_themes.c" />
+    <ClCompile Include="..\..\..\products\savers\deepfield\src\deepfield_config.c" />
+    <ClCompile Include="..\..\..\products\savers\deepfield\src\deepfield_module.c" />
+    <ClCompile Include="..\..\..\products\savers\deepfield\src\deepfield_presets.c" />
+    <ClCompile Include="..\..\..\products\savers\deepfield\src\deepfield_render.c" />
+    <ClCompile Include="..\..\..\products\savers\deepfield\src\deepfield_sim.c" />
+    <ClCompile Include="..\..\..\products\savers\deepfield\src\deepfield_themes.c" />
   </ItemGroup>
   <ItemGroup>
+    <ResourceCompile Include="..\..\..\products\savers\deepfield\src\deepfield_config.rc" />
     <ResourceCompile Include="..\..\..\products\savers\nocturne\src\nocturne_config.rc" />
+    <ResourceCompile Include="..\..\..\products\savers\ricochet\src\ricochet_config.rc" />
     <ResourceCompile Include="..\..\..\platform\src\host\win32_scr\screensave_host.rc" />
   </ItemGroup>
   <ItemGroup>

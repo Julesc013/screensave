@@ -10,6 +10,7 @@
 
 #define SCR_HOST_WINDOW_CLASSA "ScreenSaveHostWindow"
 #define SCR_SETTINGS_ROOTA "Software\\Julesc013\\ScreenSave\\Products\\"
+#define SCR_HOST_REGISTRY_ROOTA "Software\\Julesc013\\ScreenSave\\Host"
 #define SCR_TIMER_ID 1
 #define SCR_TIMER_INTERVAL_MS 33
 #define SCR_EXIT_MOUSE_DELTA 4
@@ -30,6 +31,9 @@ typedef struct scr_host_context_tag {
     HINSTANCE previous_instance;
     LPSTR command_line;
     int show_code;
+    const screensave_saver_module *default_module;
+    const screensave_saver_module *const *available_modules;
+    unsigned int available_module_count;
     const screensave_saver_module *module;
     screensave_session_mode mode;
     HWND owner_window;
@@ -63,6 +67,8 @@ int scr_settings_save(
     const scr_settings *settings,
     screensave_diag_context *diagnostics
 );
+int scr_load_selected_product_key(char *buffer, unsigned int buffer_size);
+int scr_save_selected_product_key(const char *product_key);
 int scr_parse_command_line(LPSTR command_line, scr_parsed_args *parsed_args);
 int scr_run_window(scr_host_context *context);
 INT_PTR scr_show_config_dialog(scr_host_context *context);
