@@ -11,10 +11,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{6A35B8DB-EADF-4B29-B3CB-F6CB99A6B421}</ProjectGuid>
+    <ProjectGuid>{EBD5576D-C645-4D91-9B6B-B529B8A6F132}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>ricochet</RootNamespace>
-    <ProjectName>ricochet</ProjectName>
+    <RootNamespace>mechanical_dreams</RootNamespace>
+    <ProjectName>mechanical_dreams</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -43,7 +43,7 @@
   <PropertyGroup>
     <OutDir>$(SolutionDir)..\..\..\out\msvc\vs2022\$(Configuration)\$(ProjectName)\</OutDir>
     <IntDir>$(SolutionDir)..\..\..\out\intermediate\msvc\vs2022\$(Configuration)\$(ProjectName)\</IntDir>
-    <TargetName>ricochet</TargetName>
+    <TargetName>mechanical_dreams</TargetName>
     <TargetExt>.scr</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -92,7 +92,6 @@
     <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_sim.c" />
     <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_themes.c" />
     <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_config.c" />
-    <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_entry.c" />
     <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_module.c" />
     <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_presets.c" />
     <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_render.c" />
@@ -123,6 +122,7 @@
     <ClCompile Include="..\..\..\products\savers\pipeworks\src\pipeworks_sim.c" />
     <ClCompile Include="..\..\..\products\savers\pipeworks\src\pipeworks_themes.c" />
     <ClCompile Include="..\..\..\products\savers\lifeforms\src\lifeforms_config.c" />
+    <ClCompile Include="..\..\..\products\savers\mechanical_dreams\src\mechanical_dreams_entry.c" />
     <ClCompile Include="..\..\..\products\savers\lifeforms\src\lifeforms_module.c" />
     <ClCompile Include="..\..\..\products\savers\lifeforms\src\lifeforms_presets.c" />
     <ClCompile Include="..\..\..\products\savers\lifeforms\src\lifeforms_render.c" />
@@ -168,4 +168,5 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
 </Project>
+
 

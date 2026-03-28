@@ -7,10 +7,13 @@ const screensave_saver_module *deepfield_get_module(void);
 const screensave_saver_module *ember_get_module(void);
 const screensave_saver_module *pipeworks_get_module(void);
 const screensave_saver_module *lifeforms_get_module(void);
+const screensave_saver_module *signal_lab_get_module(void);
+const screensave_saver_module *mechanical_dreams_get_module(void);
+const screensave_saver_module *ecosystems_get_module(void);
 
 int PASCAL WinMain(HINSTANCE instance, HINSTANCE previous, LPSTR command_line, int show_code)
 {
-    const screensave_saver_module *modules[7];
+    const screensave_saver_module *modules[10];
 
     modules[0] = nocturne_get_module();
     modules[1] = ricochet_get_module();
@@ -19,6 +22,9 @@ int PASCAL WinMain(HINSTANCE instance, HINSTANCE previous, LPSTR command_line, i
     modules[4] = oscilloscope_dreams_get_module();
     modules[5] = pipeworks_get_module();
     modules[6] = lifeforms_get_module();
+    modules[7] = signal_lab_get_module();
+    modules[8] = mechanical_dreams_get_module();
+    modules[9] = ecosystems_get_module();
     return screensave_scr_main_with_registry(
         instance,
         previous,

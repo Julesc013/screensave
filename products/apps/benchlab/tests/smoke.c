@@ -22,7 +22,7 @@ int main(void)
     }
 
     module_count = benchlab_get_available_module_count();
-    if (module_count < 7U) {
+    if (module_count < 10U) {
         return 3;
     }
 
@@ -52,6 +52,18 @@ int main(void)
 
     if (benchlab_find_target_module("lifeforms") == NULL) {
         return 10;
+    }
+
+    if (benchlab_find_target_module("signal_lab") == NULL) {
+        return 11;
+    }
+
+    if (benchlab_find_target_module("mechanical_dreams") == NULL) {
+        return 12;
+    }
+
+    if (benchlab_find_target_module("ecosystems") == NULL) {
+        return 13;
     }
 
     return 0;

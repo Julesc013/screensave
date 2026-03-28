@@ -10,6 +10,9 @@ const screensave_saver_module *ember_get_module(void);
 const screensave_saver_module *oscilloscope_dreams_get_module(void);
 const screensave_saver_module *pipeworks_get_module(void);
 const screensave_saver_module *lifeforms_get_module(void);
+const screensave_saver_module *signal_lab_get_module(void);
+const screensave_saver_module *mechanical_dreams_get_module(void);
+const screensave_saver_module *ecosystems_get_module(void);
 
 typedef const screensave_saver_module *(*benchlab_module_getter)(void);
 
@@ -20,7 +23,10 @@ static const benchlab_module_getter g_benchlab_module_getters[] = {
     ember_get_module,
     oscilloscope_dreams_get_module,
     pipeworks_get_module,
-    lifeforms_get_module
+    lifeforms_get_module,
+    signal_lab_get_module,
+    mechanical_dreams_get_module,
+    ecosystems_get_module
 };
 
 static void benchlab_update_config_binding(benchlab_app *app)

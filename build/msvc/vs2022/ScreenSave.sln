@@ -18,6 +18,12 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pipeworks", "pipeworks.vcxp
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lifeforms", "lifeforms.vcxproj", "{1F87F605-6122-4AF1-9C2A-1C76D70E3931}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "signal_lab", "signal_lab.vcxproj", "{C11AE5B2-5B5C-4EAF-A821-7F89F73A1021}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mechanical_dreams", "mechanical_dreams.vcxproj", "{EBD5576D-C645-4D91-9B6B-B529B8A6F132}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ecosystems", "ecosystems.vcxproj", "{3F6E432E-7D8E-4A0A-BF27-90F77B3B7E43}"
+EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "benchlab", "benchlab.vcxproj", "{4E7545AE-BFD8-4E24-A9B8-7B901F90D16E}"
 EndProject
 Global
@@ -58,6 +64,18 @@ Global
 		{1F87F605-6122-4AF1-9C2A-1C76D70E3931}.Debug|Win32.Build.0 = Debug|Win32
 		{1F87F605-6122-4AF1-9C2A-1C76D70E3931}.Release|Win32.ActiveCfg = Release|Win32
 		{1F87F605-6122-4AF1-9C2A-1C76D70E3931}.Release|Win32.Build.0 = Release|Win32
+		{C11AE5B2-5B5C-4EAF-A821-7F89F73A1021}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C11AE5B2-5B5C-4EAF-A821-7F89F73A1021}.Debug|Win32.Build.0 = Debug|Win32
+		{C11AE5B2-5B5C-4EAF-A821-7F89F73A1021}.Release|Win32.ActiveCfg = Release|Win32
+		{C11AE5B2-5B5C-4EAF-A821-7F89F73A1021}.Release|Win32.Build.0 = Release|Win32
+		{EBD5576D-C645-4D91-9B6B-B529B8A6F132}.Debug|Win32.ActiveCfg = Debug|Win32
+		{EBD5576D-C645-4D91-9B6B-B529B8A6F132}.Debug|Win32.Build.0 = Debug|Win32
+		{EBD5576D-C645-4D91-9B6B-B529B8A6F132}.Release|Win32.ActiveCfg = Release|Win32
+		{EBD5576D-C645-4D91-9B6B-B529B8A6F132}.Release|Win32.Build.0 = Release|Win32
+		{3F6E432E-7D8E-4A0A-BF27-90F77B3B7E43}.Debug|Win32.ActiveCfg = Debug|Win32
+		{3F6E432E-7D8E-4A0A-BF27-90F77B3B7E43}.Debug|Win32.Build.0 = Debug|Win32
+		{3F6E432E-7D8E-4A0A-BF27-90F77B3B7E43}.Release|Win32.ActiveCfg = Release|Win32
+		{3F6E432E-7D8E-4A0A-BF27-90F77B3B7E43}.Release|Win32.Build.0 = Release|Win32
 		{4E7545AE-BFD8-4E24-A9B8-7B901F90D16E}.Debug|Win32.ActiveCfg = Debug|Win32
 		{4E7545AE-BFD8-4E24-A9B8-7B901F90D16E}.Debug|Win32.Build.0 = Debug|Win32
 		{4E7545AE-BFD8-4E24-A9B8-7B901F90D16E}.Release|Win32.ActiveCfg = Release|Win32
