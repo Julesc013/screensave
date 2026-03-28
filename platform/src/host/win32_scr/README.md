@@ -23,5 +23,6 @@ Series 06 keeps the host lifecycle intact while loading real product-owned confi
 Series 07 shares the public saver-config state and window-bound renderer helpers with BenchLab while leaving the `.scr` lifecycle itself private to this host.
 Series 08 keeps the host on automatic shared-renderer selection so GDI remains the guaranteed floor while the optional GL11 path can be exercised honestly without turning the host config UI into a renderer lab.
 Series 09 adds a narrow built-in saver selector for the current real saver set, persists the selected product key at the host level, and keeps product-specific settings inside each saver's own dialog instead of turning the host UI into a suite manager.
+Series 12 extends the same explicit built-in selector to the current ten-product saver set, including Signal Lab, Mechanical Dreams, and Ecosystems, while preserving the existing host lifecycle and automatic renderer-selection behavior.
 The validation scene remains only as a fallback path for non-product sessions.
 Type: runtime host implementation.

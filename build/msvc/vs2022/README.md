@@ -1,6 +1,6 @@
 # VS2022 Lane
 
-This is the concrete modern MSVC lane for Series 11.
+This is the concrete modern MSVC lane for Series 12.
 
 ## What Exists Now
 
@@ -13,10 +13,13 @@ This is the concrete modern MSVC lane for Series 11.
 - `oscilloscope_dreams.vcxproj`
 - `pipeworks.vcxproj`
 - `lifeforms.vcxproj`
+- `signal_lab.vcxproj`
+- `mechanical_dreams.vcxproj`
+- `ecosystems.vcxproj`
 - `benchlab.vcxproj`
 
 These files stay intentionally small.
-They define one shared static-library target, seven `.scr` saver targets, and one windowed diagnostics app target with a shared core runtime, the mandatory GDI backend, the optional GL11 backend, a real host skeleton, seven real saver products, and the first real diagnostics app.
+They define one shared static-library target, ten `.scr` saver targets, and one windowed diagnostics app target with a shared core runtime, the mandatory GDI backend, the optional GL11 backend, a real host skeleton, ten real saver products, and the current diagnostics app.
 
 ## What The Targets Mean
 
@@ -28,7 +31,10 @@ They define one shared static-library target, seven `.scr` saver targets, and on
 - `oscilloscope_dreams` compiles the same shared platform plus saver set and links the `.scr` executable target that defaults to Oscilloscope Dreams.
 - `pipeworks` compiles the same shared platform plus saver set and links the `.scr` executable target that defaults to Pipeworks.
 - `lifeforms` compiles the same shared platform plus saver set and links the `.scr` executable target that defaults to Lifeforms.
-- `benchlab` compiles the BenchLab app sources, reuses the real Nocturne, Ricochet, Deepfield, Ember, Oscilloscope Dreams, Pipeworks, and Lifeforms product sources through the shared saver contract, links `opengl32` for explicit backend validation, and links the diagnostics harness executable target.
+- `signal_lab` compiles the same shared platform plus saver set and links the `.scr` executable target that defaults to Signal Lab.
+- `mechanical_dreams` compiles the same shared platform plus saver set and links the `.scr` executable target that defaults to Mechanical Dreams.
+- `ecosystems` compiles the same shared platform plus saver set and links the `.scr` executable target that defaults to Ecosystems.
+- `benchlab` compiles the BenchLab app sources, reuses the real Nocturne, Ricochet, Deepfield, Ember, Oscilloscope Dreams, Pipeworks, Lifeforms, Signal Lab, Mechanical Dreams, and Ecosystems product sources through the shared saver contract, links `opengl32` for explicit backend validation, and links the diagnostics harness executable target.
 
 The concrete host lifecycle now lives in the checked-in target graph.
 Later series should extend these targets in place instead of introducing parallel demo targets.

@@ -14,7 +14,7 @@ The platform target is intentionally conservative:
 
 ## Current Status
 
-The repository is in Series 11.
+The repository is in Series 12.
 Series 00 established repository law, structure, roadmap, and agent guidance.
 Series 01 added contribution, review, governance, and CI foundations.
 Series 02 added the checked-in build scaffold and toolchain lane structure.
@@ -58,6 +58,13 @@ Series 11 adds the Grid and Simulation Family:
 - Lifeforms as the contemplative cellular-automata saver with curated ruleset, reseed, density, and theme presets
 - a narrow shared grid-buffer helper plus explicit host and BenchLab wiring so all current savers continue to run through the same shared saver and renderer paths
 
+Series 12 adds the Systems and Ambient Family:
+
+- Signal Lab as the synthetic instrument-and-panel saver with curated scope, terminal, and telemetry presets
+- Mechanical Dreams as the restrained kinetic-assembly saver with curated workshop, instrument, and machine-room presets
+- Ecosystems as the ambient habitat-and-behavior saver with curated aquarium, aviary, and firefly presets
+- explicit host and BenchLab wiring so all current savers continue to run through the same shared saver and renderer paths without adding a broad widget, animation, or ecology framework
+
 GL-plus, gallery/player work, and packaging remain deferred.
 
 ## Planned Product Shape
@@ -68,7 +75,7 @@ ScreenSave is structured as one shared platform with many releasable products:
 - Suite-level applications such as Gallery, Player, and BenchLab under `products/apps/`
 - SDK material under `products/sdk/`
 
-`nocturne`, `ricochet`, `deepfield`, `ember`, `oscilloscope_dreams`, `pipeworks`, and `lifeforms` are now the real saver products in the tree.
+`nocturne`, `ricochet`, `deepfield`, `ember`, `oscilloscope_dreams`, `pipeworks`, `lifeforms`, `signal_lab`, `mechanical_dreams`, and `ecosystems` are now the real saver products in the tree.
 `benchlab` is now the first real non-saver app in the tree.
 Additional saver families and suite-level products are described in `docs/roadmap/products-and-lineup.md`.
 
@@ -103,15 +110,15 @@ For explanatory architecture and execution order, start with:
 
 ## Build Status
 
-The checked-in build scaffold now integrates the real Series 11 multi-family saver-plus-harness path on top of the Series 05 GDI renderer, the Series 08 optional GL11 renderer, the Series 04 shared core runtime, and the Series 03 host:
+The checked-in build scaffold now integrates the real Series 12 multi-family saver-plus-harness path on top of the Series 05 GDI renderer, the Series 08 optional GL11 renderer, the Series 04 shared core runtime, and the Series 03 host:
 
 - a concrete MSVC VS2022 solution lane under `build/msvc/vs2022/`
 - a concrete MinGW i686 make lane under `build/mingw/i686/`
 - documentation-only VS6 and VS2008 lanes that preserve long-term intent without claiming present build completeness
 
 The shared platform target now compiles the reusable non-renderer core runtime, the mandatory GDI backend, the optional GL11 backend, the Win32 host, the narrow shared visual-buffer helper used by the current framebuffer and vector products, and the narrow shared grid-buffer helper used by the current grid and simulation products.
-The `.scr` targets now run Nocturne, Ricochet, Deepfield, Ember, Oscilloscope Dreams, Pipeworks, and Lifeforms through the shared saver path with automatic renderer selection and explicit fallback to GDI.
-The app target now runs BenchLab as a real windowed harness for all seven current savers through the same shared contracts, with explicit renderer-selection controls and fallback diagnostics.
+The `.scr` targets now run Nocturne, Ricochet, Deepfield, Ember, Oscilloscope Dreams, Pipeworks, Lifeforms, Signal Lab, Mechanical Dreams, and Ecosystems through the shared saver path with automatic renderer selection and explicit fallback to GDI.
+The app target now runs BenchLab as a real windowed harness for all ten current savers through the same shared contracts, with explicit renderer-selection controls and fallback diagnostics.
 
 Read the specs before adding code.
 This repository should stay truthful, reconstructable, and conservative about compatibility.

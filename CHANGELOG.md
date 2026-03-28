@@ -2,6 +2,28 @@
 
 All notable repository changes are recorded here in series order.
 
+## S12 - 2026-03-29
+
+### Added
+
+- Signal Lab under `products/savers/signal_lab/` as the Systems and Ambient Family synthetic instrument product, including real panel-layout modes, product-owned config, curated presets/themes, a manifest, and lightweight smoke coverage.
+- Mechanical Dreams under `products/savers/mechanical_dreams/` as the Systems and Ambient Family kinetic assembly product, including real coupled-motion scenes, product-owned config, curated presets/themes, a manifest, and lightweight smoke coverage.
+- Ecosystems under `products/savers/ecosystems/` as the Systems and Ambient Family ambient habitat product, including real habitat modes, restrained behavior-driven motion, product-owned config, curated presets/themes, a manifest, and lightweight smoke coverage.
+
+### Changed
+
+- Updated the built-in saver wiring so the current `.scr` products can default to Nocturne, Ricochet, Deepfield, Ember, Oscilloscope Dreams, Pipeworks, Lifeforms, Signal Lab, Mechanical Dreams, or Ecosystems while preserving the shared saver/module contract, explicit product identity, and automatic renderer-selection behavior.
+- Updated BenchLab so the diagnostics harness can select and inspect all ten current savers through the shared saver and renderer paths while keeping the UI modest and developer-facing.
+- Updated the concrete VS2022 and MinGW i686 build lanes, static build checks, product manifests, and repo docs so Series 12 truthfully describes the new systems/ambient family and the widened ten-product harness.
+
+### Validation
+
+- Confirmed Series 00 through Series 11 prerequisites existed before changes.
+- Ran `python tools/scripts/check_repo_structure.py`, `python tools/scripts/check_codex_config.py`, and `python tools/scripts/check_build_layout.py`; all passed.
+- Confirmed the checked-in VS2022 solution, saver projects, BenchLab project, and MinGW i686 make lane now include Signal Lab, Mechanical Dreams, and Ecosystems alongside the existing saver set.
+- Confirmed that full Win32 build and smoke execution could not be completed in this environment because `MSBuild.exe` / Visual C++ targets were not installed and `mingw32-make` was unavailable.
+- Confirmed no GL-plus or modern-context work, next-family work, gallery/player scope, packaging logic, or unsupported compatibility claims were added in this series.
+
 ## S11 - 2026-03-28
 
 ### Added

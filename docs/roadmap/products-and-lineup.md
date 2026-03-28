@@ -26,10 +26,16 @@ Names are planning anchors, not release claims.
 - `lifeforms`: contemplative cellular-automata saver and a real Grid and Simulation Family product.
 - `lattice`: grid, field, and topology-driven motion.
 
+## Systems And Ambient Family And Related Studies
+
+- `signal_lab`: synthetic instrument-and-panel saver and a real Systems and Ambient Family product.
+- `mechanical_dreams`: restrained kinetic-assembly saver and a real Systems and Ambient Family product.
+- `ecosystems`: ambient habitat-and-behavior saver and a real Systems and Ambient Family product.
+- `signal_garden`: procedural waveform and rule-based animation.
+
 ## Mathematical And Procedural
 
 - `pendulum_study`: deterministic physics-inspired motion.
-- `signal_garden`: procedural waveform and rule-based animation.
 
 ## Systemic And Simulation
 

@@ -36,5 +36,11 @@ Series 11 extends the same app to the current seven-product harness:
 - continued use of the shared saver dialogs and shared renderer path for motion-family, framebuffer/vector-family, and grid/simulation-family validation
 - preservation of deterministic restart/reseed value while keeping the UI modest and developer-facing
 
+Series 12 extends the same app to the current ten-product harness:
+
+- explicit saver selection for Nocturne, Ricochet, Deepfield, Ember, Oscilloscope Dreams, Pipeworks, Lifeforms, Signal Lab, Mechanical Dreams, and Ecosystems
+- continued use of the shared saver dialogs and shared renderer path for motion-family, framebuffer/vector-family, grid/simulation-family, and systems/ambient-family validation
+- preservation of deterministic restart/reseed value while keeping the UI modest and developer-facing
+
 BenchLab is intentionally narrow. It is a validation harness for developers, not the final end-user player.
 Type: product runtime space.
