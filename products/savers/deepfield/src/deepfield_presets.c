@@ -179,6 +179,7 @@ void deepfield_apply_preset_to_config(
 )
 {
     unsigned int preset_count;
+    const screensave_preset_descriptor *presets;
     const screensave_preset_descriptor *preset_descriptor;
     const deepfield_preset_values *preset_values;
 
@@ -186,7 +187,8 @@ void deepfield_apply_preset_to_config(
         return;
     }
 
-    preset_descriptor = screensave_find_preset(deepfield_get_presets(&preset_count), preset_count, preset_key);
+    presets = deepfield_get_presets(&preset_count);
+    preset_descriptor = screensave_find_preset(presets, preset_count, preset_key);
     preset_values = deepfield_find_preset_values(preset_key);
     if (preset_descriptor == NULL || preset_values == NULL) {
         return;

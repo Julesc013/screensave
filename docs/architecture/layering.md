@@ -36,6 +36,8 @@ Series 06 proves the public saver/config boundary with Nocturne while keeping pr
 Series 07 proves the same public contracts can also support a separate windowed diagnostics app without turning `platform/` into a player or UI framework.
 Series 08 proves the renderer contract can support both the mandatory GDI floor and an optional GL11 path without pushing backend-selection logic into products.
 Series 09 proves the same layering can support multiple real saver products while keeping only narrow selection helpers in shared code and leaving product motion logic inside each saver.
+Series 10 proves the same layering can also support richer framebuffer and vector products while promoting only a narrow shared visual-buffer helper and keeping palette, formula, persistence, and theme choices inside the owning products.
+Series 11 proves the same layering can also support stateful grid and cellular products while promoting only a narrow shared byte-grid helper and keeping growth, reseed, rule, and simulation choices inside the owning products.
 
 ## Product Boundary
 

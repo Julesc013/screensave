@@ -16,14 +16,14 @@ The checked-in layout makes those lanes explicit instead of hiding them behind o
 
 Real now:
 
-- `vs2022/` contains the concrete modern solution and project files used to build the shared core runtime, the real host skeleton, the mandatory GDI backend, the optional GL11 backend, the current real `nocturne.scr`, `ricochet.scr`, and `deepfield.scr` saver targets, and the real `benchlab.exe` diagnostics app target.
+- `vs2022/` contains the concrete modern solution and project files used to build the shared core runtime, the real host skeleton, the mandatory GDI backend, the optional GL11 backend, the current real `nocturne.scr`, `ricochet.scr`, `deepfield.scr`, `ember.scr`, and `oscilloscope_dreams.scr` saver targets, and the real `benchlab.exe` diagnostics app target.
 
 Documented scaffold only:
 
 - `vs6/`
 - `vs2008/`
 
-Those older lanes are intentionally documentation-heavy in Series 09.
+Those older lanes are intentionally documentation-heavy in Series 10.
 They preserve file layout and intent without claiming build completeness that does not yet exist.
 
 ## Output Intent

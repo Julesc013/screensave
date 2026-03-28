@@ -17,4 +17,6 @@ Series 06 uses the core runtime from the first real saver product without promot
 Series 07 adds only narrow shared helpers here for saver-config state ownership and diagnostics usage shared by the `.scr` host and BenchLab.
 Series 08 adds only narrow renderer-selection and fallback-reporting glue here so GDI remains the guaranteed floor while GL11 stays optional.
 Series 09 adds only a narrow private saver-registry helper here so the host and BenchLab can resolve the current built-in saver set without introducing broad discovery or plugin machinery.
+Series 10 adds only a narrow shared software-visual-buffer helper here so Ember and Oscilloscope Dreams can share bitmap- and persistence-oriented drawing without promoting a broad effects or vector framework.
+Series 11 adds only a narrow shared byte-grid helper here so Pipeworks and Lifeforms can share small occupancy and double-buffered state storage without promoting a broad simulation or tile framework.
 Type: runtime implementation.

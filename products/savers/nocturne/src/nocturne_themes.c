@@ -50,6 +50,8 @@ const screensave_theme_descriptor *nocturne_get_themes(unsigned int *count_out)
 const screensave_theme_descriptor *nocturne_find_theme_descriptor(const char *theme_key)
 {
     unsigned int theme_count;
+    const screensave_theme_descriptor *themes;
 
-    return screensave_find_theme(nocturne_get_themes(&theme_count), theme_count, theme_key);
+    themes = nocturne_get_themes(&theme_count);
+    return screensave_find_theme(themes, theme_count, theme_key);
 }

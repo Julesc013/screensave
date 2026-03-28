@@ -16,7 +16,7 @@ The build scaffold is not the constitutional source of truth.
 The normative compatibility and target rules remain in `specs/build_targets.md` and related specs.
 This directory translates those rules into reviewable build lanes.
 
-## Current State In Series 09
+## Current State In Series 11
 
 Real now:
 
@@ -27,7 +27,9 @@ Real now:
 - a narrow public platform header set under `platform/include/screensave/`
 - a real mandatory GDI backend under `platform/src/render/gdi/`
 - a real optional OpenGL 1.1 backend under `platform/src/render/gl11/`
-- real saver products under `products/savers/nocturne/`, `products/savers/ricochet/`, and `products/savers/deepfield/`
+- a narrow shared software visual-buffer helper under `platform/src/core/visual/`
+- a narrow shared grid-state helper under `platform/src/core/grid/`
+- real saver products under `products/savers/nocturne/`, `products/savers/ricochet/`, `products/savers/deepfield/`, `products/savers/ember/`, `products/savers/oscilloscope_dreams/`, `products/savers/pipeworks/`, and `products/savers/lifeforms/`
 - a real BenchLab diagnostics app under `products/apps/benchlab/`
 - product-owned configuration, presets, and themes wired through the shared saver contract
 - a windowed harness path that runs the active saver through the shared saver and renderer contracts outside the `.scr` host
@@ -39,7 +41,7 @@ Real now:
 Deferred:
 
 - GL-plus and later accelerated renderer tiers
-- additional saver families beyond Nocturne, Ricochet, and Deepfield
+- additional saver families beyond Nocturne, Ricochet, Deepfield, Ember, Oscilloscope Dreams, Pipeworks, and Lifeforms
 - a final player or gallery app
 - full legacy project files for VS6 and VS2008
 - packaging and release production

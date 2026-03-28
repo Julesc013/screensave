@@ -13,6 +13,10 @@ PLATFORM_PROJECT = ROOT / "build" / "msvc" / "vs2022" / "screensave_platform.vcx
 NOCTURNE_PROJECT = ROOT / "build" / "msvc" / "vs2022" / "nocturne.vcxproj"
 RICOCHET_PROJECT = ROOT / "build" / "msvc" / "vs2022" / "ricochet.vcxproj"
 DEEPFIELD_PROJECT = ROOT / "build" / "msvc" / "vs2022" / "deepfield.vcxproj"
+EMBER_PROJECT = ROOT / "build" / "msvc" / "vs2022" / "ember.vcxproj"
+OSCILLOSCOPE_DREAMS_PROJECT = ROOT / "build" / "msvc" / "vs2022" / "oscilloscope_dreams.vcxproj"
+PIPEWORKS_PROJECT = ROOT / "build" / "msvc" / "vs2022" / "pipeworks.vcxproj"
+LIFEFORMS_PROJECT = ROOT / "build" / "msvc" / "vs2022" / "lifeforms.vcxproj"
 BENCHLAB_PROJECT = ROOT / "build" / "msvc" / "vs2022" / "benchlab.vcxproj"
 MINGW_MAKEFILE = ROOT / "build" / "mingw" / "i686" / "Makefile"
 
@@ -37,12 +41,40 @@ COMMON_SAVER_SOURCES = [
     "..\\..\\..\\products\\savers\\deepfield\\src\\deepfield_render.c",
     "..\\..\\..\\products\\savers\\deepfield\\src\\deepfield_sim.c",
     "..\\..\\..\\products\\savers\\deepfield\\src\\deepfield_themes.c",
+    "..\\..\\..\\products\\savers\\ember\\src\\ember_config.c",
+    "..\\..\\..\\products\\savers\\ember\\src\\ember_module.c",
+    "..\\..\\..\\products\\savers\\ember\\src\\ember_presets.c",
+    "..\\..\\..\\products\\savers\\ember\\src\\ember_render.c",
+    "..\\..\\..\\products\\savers\\ember\\src\\ember_sim.c",
+    "..\\..\\..\\products\\savers\\ember\\src\\ember_themes.c",
+    "..\\..\\..\\products\\savers\\oscilloscope_dreams\\src\\oscilloscope_dreams_config.c",
+    "..\\..\\..\\products\\savers\\oscilloscope_dreams\\src\\oscilloscope_dreams_module.c",
+    "..\\..\\..\\products\\savers\\oscilloscope_dreams\\src\\oscilloscope_dreams_presets.c",
+    "..\\..\\..\\products\\savers\\oscilloscope_dreams\\src\\oscilloscope_dreams_render.c",
+    "..\\..\\..\\products\\savers\\oscilloscope_dreams\\src\\oscilloscope_dreams_sim.c",
+    "..\\..\\..\\products\\savers\\oscilloscope_dreams\\src\\oscilloscope_dreams_themes.c",
+    "..\\..\\..\\products\\savers\\pipeworks\\src\\pipeworks_config.c",
+    "..\\..\\..\\products\\savers\\pipeworks\\src\\pipeworks_module.c",
+    "..\\..\\..\\products\\savers\\pipeworks\\src\\pipeworks_presets.c",
+    "..\\..\\..\\products\\savers\\pipeworks\\src\\pipeworks_render.c",
+    "..\\..\\..\\products\\savers\\pipeworks\\src\\pipeworks_sim.c",
+    "..\\..\\..\\products\\savers\\pipeworks\\src\\pipeworks_themes.c",
+    "..\\..\\..\\products\\savers\\lifeforms\\src\\lifeforms_config.c",
+    "..\\..\\..\\products\\savers\\lifeforms\\src\\lifeforms_module.c",
+    "..\\..\\..\\products\\savers\\lifeforms\\src\\lifeforms_presets.c",
+    "..\\..\\..\\products\\savers\\lifeforms\\src\\lifeforms_render.c",
+    "..\\..\\..\\products\\savers\\lifeforms\\src\\lifeforms_sim.c",
+    "..\\..\\..\\products\\savers\\lifeforms\\src\\lifeforms_themes.c",
 ]
 
 COMMON_SAVER_RESOURCES = [
     "..\\..\\..\\products\\savers\\nocturne\\src\\nocturne_config.rc",
     "..\\..\\..\\products\\savers\\ricochet\\src\\ricochet_config.rc",
     "..\\..\\..\\products\\savers\\deepfield\\src\\deepfield_config.rc",
+    "..\\..\\..\\products\\savers\\ember\\src\\ember_config.rc",
+    "..\\..\\..\\products\\savers\\oscilloscope_dreams\\src\\oscilloscope_dreams_config.rc",
+    "..\\..\\..\\products\\savers\\pipeworks\\src\\pipeworks_config.rc",
+    "..\\..\\..\\products\\savers\\lifeforms\\src\\lifeforms_config.rc",
 ]
 
 REQUIRED_PATHS = [
@@ -59,6 +91,10 @@ REQUIRED_PATHS = [
     NOCTURNE_PROJECT,
     RICOCHET_PROJECT,
     DEEPFIELD_PROJECT,
+    EMBER_PROJECT,
+    OSCILLOSCOPE_DREAMS_PROJECT,
+    PIPEWORKS_PROJECT,
+    LIFEFORMS_PROJECT,
     BENCHLAB_PROJECT,
     MINGW_MAKEFILE,
     ROOT / "platform" / "include" / "screensave" / "types.h",
@@ -67,6 +103,8 @@ REQUIRED_PATHS = [
     ROOT / "platform" / "include" / "screensave" / "config_api.h",
     ROOT / "platform" / "include" / "screensave" / "renderer_api.h",
     ROOT / "platform" / "include" / "screensave" / "saver_api.h",
+    ROOT / "platform" / "include" / "screensave" / "grid_buffer_api.h",
+    ROOT / "platform" / "include" / "screensave" / "visual_buffer_api.h",
     ROOT / "platform" / "src" / "core" / "base" / "renderer_dispatch.c",
     ROOT / "platform" / "src" / "core" / "base" / "renderer_private.h",
     ROOT / "platform" / "src" / "core" / "base" / "saver_contract.c",
@@ -74,11 +112,13 @@ REQUIRED_PATHS = [
     ROOT / "platform" / "src" / "core" / "base" / "saver_registry.h",
     ROOT / "platform" / "src" / "core" / "config" / "config.c",
     ROOT / "platform" / "src" / "core" / "diagnostics" / "diagnostics.c",
+    ROOT / "platform" / "src" / "core" / "grid" / "grid_buffer.c",
     ROOT / "platform" / "src" / "core" / "rng" / "rng.c",
     ROOT / "platform" / "src" / "core" / "rng" / "rng_internal.h",
     ROOT / "platform" / "src" / "core" / "timing" / "timing.c",
     ROOT / "platform" / "src" / "core" / "timing" / "timing_internal.h",
     ROOT / "platform" / "src" / "core" / "version" / "version.c",
+    ROOT / "platform" / "src" / "core" / "visual" / "visual_buffer.c",
     ROOT / "platform" / "src" / "render" / "gdi" / "README.md",
     ROOT / "platform" / "src" / "render" / "gdi" / "gdi_internal.h",
     ROOT / "platform" / "src" / "render" / "gdi" / "gdi_backend.c",
@@ -158,6 +198,74 @@ REQUIRED_PATHS = [
     ROOT / "products" / "savers" / "deepfield" / "src" / "deepfield_themes.c",
     ROOT / "products" / "savers" / "deepfield" / "tests" / "README.md",
     ROOT / "products" / "savers" / "deepfield" / "tests" / "smoke.c",
+    ROOT / "products" / "savers" / "ember" / "manifest.ini",
+    ROOT / "products" / "savers" / "ember" / "README.md",
+    ROOT / "products" / "savers" / "ember" / "presets" / "defaults.ini",
+    ROOT / "products" / "savers" / "ember" / "presets" / "themed.ini",
+    ROOT / "products" / "savers" / "ember" / "presets" / "performance.ini",
+    ROOT / "products" / "savers" / "ember" / "src" / "ember_config.c",
+    ROOT / "products" / "savers" / "ember" / "src" / "ember_config.rc",
+    ROOT / "products" / "savers" / "ember" / "src" / "ember_entry.c",
+    ROOT / "products" / "savers" / "ember" / "src" / "ember_internal.h",
+    ROOT / "products" / "savers" / "ember" / "src" / "ember_module.c",
+    ROOT / "products" / "savers" / "ember" / "src" / "ember_presets.c",
+    ROOT / "products" / "savers" / "ember" / "src" / "ember_render.c",
+    ROOT / "products" / "savers" / "ember" / "src" / "ember_resource.h",
+    ROOT / "products" / "savers" / "ember" / "src" / "ember_sim.c",
+    ROOT / "products" / "savers" / "ember" / "src" / "ember_themes.c",
+    ROOT / "products" / "savers" / "ember" / "tests" / "README.md",
+    ROOT / "products" / "savers" / "ember" / "tests" / "smoke.c",
+    ROOT / "products" / "savers" / "oscilloscope_dreams" / "manifest.ini",
+    ROOT / "products" / "savers" / "oscilloscope_dreams" / "README.md",
+    ROOT / "products" / "savers" / "oscilloscope_dreams" / "presets" / "defaults.ini",
+    ROOT / "products" / "savers" / "oscilloscope_dreams" / "presets" / "themed.ini",
+    ROOT / "products" / "savers" / "oscilloscope_dreams" / "presets" / "performance.ini",
+    ROOT / "products" / "savers" / "oscilloscope_dreams" / "src" / "oscilloscope_dreams_config.c",
+    ROOT / "products" / "savers" / "oscilloscope_dreams" / "src" / "oscilloscope_dreams_config.rc",
+    ROOT / "products" / "savers" / "oscilloscope_dreams" / "src" / "oscilloscope_dreams_entry.c",
+    ROOT / "products" / "savers" / "oscilloscope_dreams" / "src" / "oscilloscope_dreams_internal.h",
+    ROOT / "products" / "savers" / "oscilloscope_dreams" / "src" / "oscilloscope_dreams_module.c",
+    ROOT / "products" / "savers" / "oscilloscope_dreams" / "src" / "oscilloscope_dreams_presets.c",
+    ROOT / "products" / "savers" / "oscilloscope_dreams" / "src" / "oscilloscope_dreams_render.c",
+    ROOT / "products" / "savers" / "oscilloscope_dreams" / "src" / "oscilloscope_dreams_resource.h",
+    ROOT / "products" / "savers" / "oscilloscope_dreams" / "src" / "oscilloscope_dreams_sim.c",
+    ROOT / "products" / "savers" / "oscilloscope_dreams" / "src" / "oscilloscope_dreams_themes.c",
+    ROOT / "products" / "savers" / "oscilloscope_dreams" / "tests" / "README.md",
+    ROOT / "products" / "savers" / "oscilloscope_dreams" / "tests" / "smoke.c",
+    ROOT / "products" / "savers" / "pipeworks" / "manifest.ini",
+    ROOT / "products" / "savers" / "pipeworks" / "README.md",
+    ROOT / "products" / "savers" / "pipeworks" / "presets" / "defaults.ini",
+    ROOT / "products" / "savers" / "pipeworks" / "presets" / "themed.ini",
+    ROOT / "products" / "savers" / "pipeworks" / "presets" / "performance.ini",
+    ROOT / "products" / "savers" / "pipeworks" / "src" / "pipeworks_config.c",
+    ROOT / "products" / "savers" / "pipeworks" / "src" / "pipeworks_config.rc",
+    ROOT / "products" / "savers" / "pipeworks" / "src" / "pipeworks_entry.c",
+    ROOT / "products" / "savers" / "pipeworks" / "src" / "pipeworks_internal.h",
+    ROOT / "products" / "savers" / "pipeworks" / "src" / "pipeworks_module.c",
+    ROOT / "products" / "savers" / "pipeworks" / "src" / "pipeworks_presets.c",
+    ROOT / "products" / "savers" / "pipeworks" / "src" / "pipeworks_render.c",
+    ROOT / "products" / "savers" / "pipeworks" / "src" / "pipeworks_resource.h",
+    ROOT / "products" / "savers" / "pipeworks" / "src" / "pipeworks_sim.c",
+    ROOT / "products" / "savers" / "pipeworks" / "src" / "pipeworks_themes.c",
+    ROOT / "products" / "savers" / "pipeworks" / "tests" / "README.md",
+    ROOT / "products" / "savers" / "pipeworks" / "tests" / "smoke.c",
+    ROOT / "products" / "savers" / "lifeforms" / "manifest.ini",
+    ROOT / "products" / "savers" / "lifeforms" / "README.md",
+    ROOT / "products" / "savers" / "lifeforms" / "presets" / "defaults.ini",
+    ROOT / "products" / "savers" / "lifeforms" / "presets" / "themed.ini",
+    ROOT / "products" / "savers" / "lifeforms" / "presets" / "performance.ini",
+    ROOT / "products" / "savers" / "lifeforms" / "src" / "lifeforms_config.c",
+    ROOT / "products" / "savers" / "lifeforms" / "src" / "lifeforms_config.rc",
+    ROOT / "products" / "savers" / "lifeforms" / "src" / "lifeforms_entry.c",
+    ROOT / "products" / "savers" / "lifeforms" / "src" / "lifeforms_internal.h",
+    ROOT / "products" / "savers" / "lifeforms" / "src" / "lifeforms_module.c",
+    ROOT / "products" / "savers" / "lifeforms" / "src" / "lifeforms_presets.c",
+    ROOT / "products" / "savers" / "lifeforms" / "src" / "lifeforms_render.c",
+    ROOT / "products" / "savers" / "lifeforms" / "src" / "lifeforms_resource.h",
+    ROOT / "products" / "savers" / "lifeforms" / "src" / "lifeforms_sim.c",
+    ROOT / "products" / "savers" / "lifeforms" / "src" / "lifeforms_themes.c",
+    ROOT / "products" / "savers" / "lifeforms" / "tests" / "README.md",
+    ROOT / "products" / "savers" / "lifeforms" / "tests" / "smoke.c",
     ROOT / "products" / "apps" / "benchlab" / "manifest.ini",
     ROOT / "products" / "apps" / "benchlab" / "README.md",
     ROOT / "products" / "apps" / "benchlab" / "captures" / "README.md",
@@ -260,6 +368,10 @@ def main() -> int:
         "BenchLab",
         "Ricochet",
         "Deepfield",
+        "Ember",
+        "Oscilloscope Dreams",
+        "Pipeworks",
+        "Lifeforms",
     ):
         require(phrase.lower() in build_readme.lower(), f"build/README.md is missing expected phrase: {phrase!r}", errors)
 
@@ -273,6 +385,10 @@ def main() -> int:
         "nocturne.vcxproj",
         "ricochet.vcxproj",
         "deepfield.vcxproj",
+        "ember.vcxproj",
+        "oscilloscope_dreams.vcxproj",
+        "pipeworks.vcxproj",
+        "lifeforms.vcxproj",
         "benchlab.vcxproj",
         "Debug|Win32",
         "Release|Win32",
@@ -289,9 +405,11 @@ def main() -> int:
             "..\\..\\..\\platform\\src\\core\\base\\saver_registry.c",
             "..\\..\\..\\platform\\src\\core\\config\\config.c",
             "..\\..\\..\\platform\\src\\core\\diagnostics\\diagnostics.c",
+            "..\\..\\..\\platform\\src\\core\\grid\\grid_buffer.c",
             "..\\..\\..\\platform\\src\\core\\rng\\rng.c",
             "..\\..\\..\\platform\\src\\core\\timing\\timing.c",
             "..\\..\\..\\platform\\src\\core\\version\\version.c",
+            "..\\..\\..\\platform\\src\\core\\visual\\visual_buffer.c",
             "..\\..\\..\\platform\\src\\render\\gdi\\gdi_backend.c",
             "..\\..\\..\\platform\\src\\render\\gdi\\gdi_bitmap.c",
             "..\\..\\..\\platform\\src\\render\\gdi\\gdi_present.c",
@@ -329,6 +447,30 @@ def main() -> int:
         DEEPFIELD_PROJECT,
         "..\\..\\..\\products\\savers\\deepfield\\src\\deepfield_entry.c",
         "deepfield",
+        errors,
+    )
+    require_saver_project(
+        EMBER_PROJECT,
+        "..\\..\\..\\products\\savers\\ember\\src\\ember_entry.c",
+        "ember",
+        errors,
+    )
+    require_saver_project(
+        OSCILLOSCOPE_DREAMS_PROJECT,
+        "..\\..\\..\\products\\savers\\oscilloscope_dreams\\src\\oscilloscope_dreams_entry.c",
+        "oscilloscope_dreams",
+        errors,
+    )
+    require_saver_project(
+        PIPEWORKS_PROJECT,
+        "..\\..\\..\\products\\savers\\pipeworks\\src\\pipeworks_entry.c",
+        "pipeworks",
+        errors,
+    )
+    require_saver_project(
+        LIFEFORMS_PROJECT,
+        "..\\..\\..\\products\\savers\\lifeforms\\src\\lifeforms_entry.c",
+        "lifeforms",
         errors,
     )
 
@@ -380,6 +522,7 @@ def main() -> int:
         "$(PLATFORM_DIR)/saver_registry.o",
         "$(PLATFORM_DIR)/config.o",
         "$(PLATFORM_DIR)/diagnostics.o",
+        "$(PLATFORM_DIR)/grid_buffer.o",
         "$(PLATFORM_DIR)/rng.o",
         "$(PLATFORM_DIR)/timing.o",
         "$(PLATFORM_DIR)/version.o",
@@ -405,10 +548,22 @@ def main() -> int:
         "$(RICOCHET_DIR)/ricochet_entry.o",
         "$(DEEPFIELD_DIR)/deepfield_config.o",
         "$(DEEPFIELD_DIR)/deepfield_entry.o",
+        "$(EMBER_DIR)/ember_config.o",
+        "$(EMBER_DIR)/ember_entry.o",
+        "$(OSCILLOSCOPE_DREAMS_DIR)/oscilloscope_dreams_config.o",
+        "$(OSCILLOSCOPE_DREAMS_DIR)/oscilloscope_dreams_entry.o",
+        "$(PIPEWORKS_DIR)/pipeworks_config.o",
+        "$(PIPEWORKS_DIR)/pipeworks_entry.o",
+        "$(LIFEFORMS_DIR)/lifeforms_config.o",
+        "$(LIFEFORMS_DIR)/lifeforms_entry.o",
         "screensave_host.rc",
         "nocturne.scr",
         "ricochet.scr",
         "deepfield.scr",
+        "ember.scr",
+        "oscilloscope_dreams.scr",
+        "pipeworks.scr",
+        "lifeforms.scr",
         "$(BENCHLAB_DIR)/benchlab_app.o",
         "$(BENCHLAB_DIR)/benchlab_config.o",
         "$(BENCHLAB_DIR)/benchlab_diag.o",
@@ -442,6 +597,7 @@ def main() -> int:
     require("selection_reason" in renderer_api_text, "renderer_api.h must expose selection-reason reporting.", errors)
     require("fallback_reason" in renderer_api_text, "renderer_api.h must expose fallback-reason reporting.", errors)
     require("vendor_name" in renderer_api_text, "renderer_api.h must expose backend identity strings for GL diagnostics.", errors)
+    require("screensave_bitmap_view" in renderer_api_text, "renderer_api.h must expose bitmap-view presentation for framebuffer-backed savers.", errors)
 
     renderer_dispatch_text = (ROOT / "platform" / "src" / "core" / "base" / "renderer_dispatch.c").read_text(encoding="utf-8")
     require("SCREENSAVE_RENDERER_KIND_GL11" in renderer_dispatch_text, "renderer_dispatch.c must route the optional GL11 backend.", errors)
@@ -473,6 +629,10 @@ def main() -> int:
         ("nocturne", "nocturne_entry.c", "nocturne_get_module"),
         ("ricochet", "ricochet_entry.c", "ricochet_get_module"),
         ("deepfield", "deepfield_entry.c", "deepfield_get_module"),
+        ("ember", "ember_entry.c", "ember_get_module"),
+        ("oscilloscope_dreams", "oscilloscope_dreams_entry.c", "oscilloscope_dreams_get_module"),
+        ("pipeworks", "pipeworks_entry.c", "pipeworks_get_module"),
+        ("lifeforms", "lifeforms_entry.c", "lifeforms_get_module"),
     ):
         entry_text = (ROOT / "products" / "savers" / product_key / "src" / entry_name).read_text(encoding="utf-8")
         module_text = (ROOT / "products" / "savers" / product_key / "src" / f"{product_key}_module.c").read_text(encoding="utf-8")
@@ -497,6 +657,10 @@ def main() -> int:
     require("screensave_saver_registry_find" in benchlab_session_text, "benchlab_session.c must resolve selected saver products through the shared private registry helper.", errors)
     require("ricochet_get_module" in benchlab_session_text, "benchlab_session.c must bind Ricochet for the current stage.", errors)
     require("deepfield_get_module" in benchlab_session_text, "benchlab_session.c must bind Deepfield for the current stage.", errors)
+    require("ember_get_module" in benchlab_session_text, "benchlab_session.c must bind Ember for the current stage.", errors)
+    require("oscilloscope_dreams_get_module" in benchlab_session_text, "benchlab_session.c must bind Oscilloscope Dreams for the current stage.", errors)
+    require("pipeworks_get_module" in benchlab_session_text, "benchlab_session.c must bind Pipeworks for the current stage.", errors)
+    require("lifeforms_get_module" in benchlab_session_text, "benchlab_session.c must bind Lifeforms for the current stage.", errors)
     require("show_config_dialog" in benchlab_session_text, "benchlab_session.c must support product-owned saver configuration dialogs.", errors)
     require("fallback_reason" in benchlab_overlay_text, "benchlab_overlay.c must report renderer fallback reasons.", errors)
     require("vendor_name" in benchlab_overlay_text, "benchlab_overlay.c must report GL identity strings when available.", errors)

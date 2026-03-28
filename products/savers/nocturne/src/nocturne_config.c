@@ -229,13 +229,11 @@ void nocturne_config_clamp(
     if (common_config->theme_key == NULL || nocturne_find_theme_descriptor(common_config->theme_key) == NULL) {
         if (common_config->preset_key != NULL) {
             unsigned int preset_count;
+            const screensave_preset_descriptor *presets;
             const screensave_preset_descriptor *preset_descriptor;
 
-            preset_descriptor = screensave_find_preset(
-                nocturne_get_presets(&preset_count),
-                preset_count,
-                common_config->preset_key
-            );
+            presets = nocturne_get_presets(&preset_count);
+            preset_descriptor = screensave_find_preset(presets, preset_count, common_config->preset_key);
             common_config->theme_key = preset_descriptor != NULL ? preset_descriptor->theme_key : NOCTURNE_DEFAULT_THEME_KEY;
         } else {
             common_config->theme_key = NOCTURNE_DEFAULT_THEME_KEY;

@@ -24,5 +24,17 @@ Series 09 extends the same app into the current multi-product harness:
 - persistence of the selected saver key alongside renderer and deterministic-run preferences
 - continued use of the shared saver dialogs and shared renderer path without turning BenchLab into the final player or gallery
 
+Series 10 extends the same app to the current five-product harness:
+
+- explicit saver selection for Nocturne, Ricochet, Deepfield, Ember, and Oscilloscope Dreams
+- continued use of the shared saver dialogs and shared renderer path for both motion-family and framebuffer/vector-family validation
+- preservation of deterministic restart/reseed value while keeping the UI modest and developer-facing
+
+Series 11 extends the same app to the current seven-product harness:
+
+- explicit saver selection for Nocturne, Ricochet, Deepfield, Ember, Oscilloscope Dreams, Pipeworks, and Lifeforms
+- continued use of the shared saver dialogs and shared renderer path for motion-family, framebuffer/vector-family, and grid/simulation-family validation
+- preservation of deterministic restart/reseed value while keeping the UI modest and developer-facing
+
 BenchLab is intentionally narrow. It is a validation harness for developers, not the final end-user player.
 Type: product runtime space.

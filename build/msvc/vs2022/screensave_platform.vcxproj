@@ -74,9 +74,11 @@
     <ClCompile Include="..\..\..\platform\src\core\base\saver_registry.c" />
     <ClCompile Include="..\..\..\platform\src\core\config\config.c" />
     <ClCompile Include="..\..\..\platform\src\core\diagnostics\diagnostics.c" />
+    <ClCompile Include="..\..\..\platform\src\core\grid\grid_buffer.c" />
     <ClCompile Include="..\..\..\platform\src\core\rng\rng.c" />
     <ClCompile Include="..\..\..\platform\src\core\timing\timing.c" />
     <ClCompile Include="..\..\..\platform\src\core\version\version.c" />
+    <ClCompile Include="..\..\..\platform\src\core\visual\visual_buffer.c" />
     <ClCompile Include="..\..\..\platform\src\render\gdi\gdi_backend.c" />
     <ClCompile Include="..\..\..\platform\src\render\gdi\gdi_bitmap.c" />
     <ClCompile Include="..\..\..\platform\src\render\gdi\gdi_present.c" />

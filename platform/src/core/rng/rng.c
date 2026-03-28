@@ -1,3 +1,5 @@
+#include <stddef.h>
+
 #include "rng_internal.h"
 
 #define SCREENSAVE_RNG_DEFAULT_SEED 0x13579BDFUL

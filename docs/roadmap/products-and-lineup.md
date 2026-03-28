@@ -6,7 +6,6 @@ Names are planning anchors, not release claims.
 ## Quiet, Utility, And Ambient
 
 - `nocturne`: low-distraction ambient saver and the first real product.
-- `ember`: warm low-motion abstract saver.
 - `weather_glass`: ambient utility-style saver for clocks, weather, or similar display concepts if the platform grows that far.
 
 ## Motion Family And Related Studies
@@ -14,13 +13,21 @@ Names are planning anchors, not release claims.
 - `ricochet`: polished bounce-motion saver and a real Motion Family product.
 - `deepfield`: atmospheric drift and fly-through saver and a real Motion Family product.
 
-- `oscilloscope_dreams`: waveform and phosphor-inspired motion.
+## Framebuffer And Vector Family And Related Studies
+
+- `ember`: warm low-motion abstract saver and a real Framebuffer and Vector Family product.
+- `oscilloscope_dreams`: waveform and phosphor-inspired motion and a real Framebuffer and Vector Family product.
 - `starfield`: classic depth and drift presentation.
 - `ribbon_drift`: simple motion study built around lines and trails.
 
+## Grid And Simulation Family And Related Studies
+
+- `pipeworks`: procedural network-growth saver and a real Grid and Simulation Family product.
+- `lifeforms`: contemplative cellular-automata saver and a real Grid and Simulation Family product.
+- `lattice`: grid, field, and topology-driven motion.
+
 ## Mathematical And Procedural
 
-- `lattice`: grid, field, and topology-driven motion.
 - `pendulum_study`: deterministic physics-inspired motion.
 - `signal_garden`: procedural waveform and rule-based animation.
 

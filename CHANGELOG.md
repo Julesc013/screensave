@@ -2,6 +2,50 @@
 
 All notable repository changes are recorded here in series order.
 
+## S11 - 2026-03-28
+
+### Added
+
+- Pipeworks under `products/savers/pipeworks/` as the Grid and Simulation Family network-growth product, including real growth, pulse, rebuild, config, presets, themes, a manifest, and lightweight smoke validation.
+- Lifeforms under `products/savers/lifeforms/` as the Grid and Simulation Family cellular product, including real Conway and HighLife evolution, reseed handling, config, presets, themes, a manifest, and lightweight smoke validation.
+- A narrow shared byte-grid helper under `platform/src/core/grid/` and `platform/include/screensave/grid_buffer_api.h` so the current stateful grid products can share small occupancy and double-buffered state storage without introducing a broad simulation framework.
+
+### Changed
+
+- Updated the built-in saver wiring so the current `.scr` products can default to Nocturne, Ricochet, Deepfield, Ember, Oscilloscope Dreams, Pipeworks, or Lifeforms while preserving the shared saver/module contract, explicit product identity, and automatic renderer-selection behavior.
+- Updated BenchLab so the diagnostics harness can select and inspect Nocturne, Ricochet, Deepfield, Ember, Oscilloscope Dreams, Pipeworks, and Lifeforms through the shared saver and renderer paths while keeping the UI modest and developer-facing.
+- Updated the concrete VS2022 and MinGW i686 build lanes, static build checks, product manifests, and repo docs so Series 11 truthfully describes the new grid/simulation family and the widened seven-product harness.
+
+### Validation
+
+- Confirmed Series 00 through Series 10 prerequisites existed before changes.
+- Built `build/msvc/vs2022/ScreenSave.sln` for `Debug|Win32` and produced the shared platform library plus `nocturne.scr`, `ricochet.scr`, `deepfield.scr`, `ember.scr`, `oscilloscope_dreams.scr`, `pipeworks.scr`, `lifeforms.scr`, and `benchlab.exe`.
+- Ran `python tools/scripts/check_repo_structure.py`, `python tools/scripts/check_codex_config.py`, and `python tools/scripts/check_build_layout.py`; all passed.
+- Compiled and ran smoke executables for Nocturne, Ricochet, Deepfield, Ember, Oscilloscope Dreams, Pipeworks, Lifeforms, and BenchLab against the built Win32 debug objects and shared platform library; all returned success.
+- Confirmed no GL-plus or modern-context work, next-family work, gallery/player scope, packaging logic, or unsupported compatibility claims were added in this series.
+
+## S10 - 2026-03-28
+
+### Added
+
+- Ember under `products/savers/ember/` as the Framebuffer and Vector Family framebuffer product, including real plasma, fire, and interference modes, product-owned config/presets/themes, a manifest, and lightweight smoke validation.
+- Oscilloscope Dreams under `products/savers/oscilloscope_dreams/` as the Framebuffer and Vector Family vector product, including real Lissajous, harmonograph, and dense-trace modes, product-owned config/presets/themes, a manifest, and lightweight smoke validation.
+- A narrow shared visual-buffer helper under `platform/src/core/visual/` and `platform/include/screensave/visual_buffer_api.h` so the current framebuffer and persistence-oriented products can share bitmap-state operations without introducing a broad effects or vector framework.
+
+### Changed
+
+- Updated the built-in saver wiring so the current `.scr` products can default to Nocturne, Ricochet, Deepfield, Ember, or Oscilloscope Dreams while preserving the shared saver/module contract, explicit product identity, and automatic renderer-selection behavior.
+- Updated BenchLab so the diagnostics harness can select and inspect Nocturne, Ricochet, Deepfield, Ember, and Oscilloscope Dreams through the shared saver and renderer paths while keeping the UI modest and developer-facing.
+- Updated the concrete VS2022 and MinGW i686 build lanes, static build checks, product manifests, and repo docs so Series 10 truthfully describes the new framebuffer/vector family and the widened five-product harness.
+
+### Validation
+
+- Confirmed Series 00 through Series 09 prerequisites existed before changes.
+- Ran `python tools/scripts/check_repo_structure.py`, `python tools/scripts/check_codex_config.py`, and `python tools/scripts/check_build_layout.py`; all passed.
+- Built `build/msvc/vs2022/ScreenSave.sln` for `Debug|Win32` and produced the shared platform library plus `nocturne.scr`, `ricochet.scr`, `deepfield.scr`, `ember.scr`, `oscilloscope_dreams.scr`, and `benchlab.exe`.
+- Compiled and ran smoke executables for Nocturne, Ricochet, Deepfield, Ember, Oscilloscope Dreams, and BenchLab against the built Win32 debug objects and shared platform library; all returned success.
+- Confirmed no GL-plus or modern-context work, next-family work, gallery/player scope, packaging logic, or unsupported compatibility claims were added in this series.
+
 ## S09 - 2026-03-27
 
 ### Added
@@ -15,11 +59,13 @@ All notable repository changes are recorded here in series order.
 - Updated the Win32 `.scr` host to support modest built-in saver selection, persist the selected product key, and delegate configuration to the selected real saver product while preserving the existing host lifecycle and automatic renderer-selection behavior.
 - Updated BenchLab so the diagnostics harness can select and run Nocturne, Ricochet, or Deepfield through the shared saver and renderer contracts while keeping deterministic restart/reseed and renderer diagnostics intact.
 - Updated the concrete VS2022 and MinGW i686 build lanes, static build checks, manifests, and repo docs so Series 09 truthfully describes the first multi-product saver family and current multi-product wiring.
+- Tightened the Win32 build path with narrow C89/MSVC-safe preset/theme lookup fixes, a small shared RNG header fix, and unique Ricochet resource IDs so the bundled multi-product targets build and link cleanly.
 
 ### Validation
 
 - Confirmed Series 00 through Series 08 prerequisites existed before changes.
-- Performed static validation of the Motion Family product file graph, multi-product host and BenchLab wiring, build integration, and documentation consistency.
+- Built `build/msvc/vs2022/ScreenSave.sln` for `Debug|Win32` and produced the shared platform library plus `nocturne.scr`, `ricochet.scr`, `deepfield.scr`, and `benchlab.exe`.
+- Ran the existing Nocturne, Ricochet, Deepfield, and BenchLab smoke harnesses against the built debug artifacts and confirmed module validity, preset/theme presence, and multi-product selection wiring.
 - Confirmed no GL-plus or modern-context work, next-family work, gallery/player scope, packaging logic, or unsupported compatibility claims were added in this series.
 
 ## S08 - 2026-03-27

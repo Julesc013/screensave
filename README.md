@@ -14,7 +14,7 @@ The platform target is intentionally conservative:
 
 ## Current Status
 
-The repository is in Series 09.
+The repository is in Series 11.
 Series 00 established repository law, structure, roadmap, and agent guidance.
 Series 01 added contribution, review, governance, and CI foundations.
 Series 02 added the checked-in build scaffold and toolchain lane structure.
@@ -46,6 +46,18 @@ Series 09 adds the first true multi-product saver family:
 - Deepfield as the atmospheric parallax and fly-through saver with restrained density, camera, and pulse presets
 - narrow host and BenchLab product selection so Nocturne, Ricochet, and Deepfield can all be exercised honestly through the shared saver and renderer paths
 
+Series 10 adds the Framebuffer and Vector Family:
+
+- Ember as the palette-and-framebuffer saver with restrained plasma, fire, and interference modes
+- Oscilloscope Dreams as the phosphor-and-vector saver with curated Lissajous, harmonograph, and dense-trace modes
+- a narrow shared visual-buffer helper plus explicit host and BenchLab wiring so all current savers continue to run through the same shared saver and renderer paths
+
+Series 11 adds the Grid and Simulation Family:
+
+- Pipeworks as the procedural network-growth saver with curated density, branch, rebuild, and theme presets
+- Lifeforms as the contemplative cellular-automata saver with curated ruleset, reseed, density, and theme presets
+- a narrow shared grid-buffer helper plus explicit host and BenchLab wiring so all current savers continue to run through the same shared saver and renderer paths
+
 GL-plus, gallery/player work, and packaging remain deferred.
 
 ## Planned Product Shape
@@ -56,7 +68,7 @@ ScreenSave is structured as one shared platform with many releasable products:
 - Suite-level applications such as Gallery, Player, and BenchLab under `products/apps/`
 - SDK material under `products/sdk/`
 
-`nocturne`, `ricochet`, and `deepfield` are now the real saver products in the tree.
+`nocturne`, `ricochet`, `deepfield`, `ember`, `oscilloscope_dreams`, `pipeworks`, and `lifeforms` are now the real saver products in the tree.
 `benchlab` is now the first real non-saver app in the tree.
 Additional saver families and suite-level products are described in `docs/roadmap/products-and-lineup.md`.
 
@@ -91,15 +103,15 @@ For explanatory architecture and execution order, start with:
 
 ## Build Status
 
-The checked-in build scaffold now integrates the real Series 09 saver-family-plus-harness path on top of the Series 05 GDI renderer, the Series 08 optional GL11 renderer, the Series 04 shared core runtime, and the Series 03 host:
+The checked-in build scaffold now integrates the real Series 11 multi-family saver-plus-harness path on top of the Series 05 GDI renderer, the Series 08 optional GL11 renderer, the Series 04 shared core runtime, and the Series 03 host:
 
 - a concrete MSVC VS2022 solution lane under `build/msvc/vs2022/`
 - a concrete MinGW i686 make lane under `build/mingw/i686/`
 - documentation-only VS6 and VS2008 lanes that preserve long-term intent without claiming present build completeness
 
-The shared platform target now compiles the reusable non-renderer core runtime, the mandatory GDI backend, the optional GL11 backend, and the Win32 host.
-The `.scr` targets now run Nocturne, Ricochet, and Deepfield through the shared saver path with automatic renderer selection and explicit fallback to GDI.
-The app target now runs BenchLab as a real windowed harness for Nocturne, Ricochet, and Deepfield through the same shared contracts, with explicit renderer-selection controls and fallback diagnostics.
+The shared platform target now compiles the reusable non-renderer core runtime, the mandatory GDI backend, the optional GL11 backend, the Win32 host, the narrow shared visual-buffer helper used by the current framebuffer and vector products, and the narrow shared grid-buffer helper used by the current grid and simulation products.
+The `.scr` targets now run Nocturne, Ricochet, Deepfield, Ember, Oscilloscope Dreams, Pipeworks, and Lifeforms through the shared saver path with automatic renderer selection and explicit fallback to GDI.
+The app target now runs BenchLab as a real windowed harness for all seven current savers through the same shared contracts, with explicit renderer-selection controls and fallback diagnostics.
 
 Read the specs before adding code.
 This repository should stay truthful, reconstructable, and conservative about compatibility.

@@ -22,7 +22,7 @@ int main(void)
     }
 
     module_count = benchlab_get_available_module_count();
-    if (module_count < 3U) {
+    if (module_count < 7U) {
         return 3;
     }
 
@@ -36,6 +36,22 @@ int main(void)
 
     if (benchlab_find_target_module("deepfield") == NULL) {
         return 6;
+    }
+
+    if (benchlab_find_target_module("ember") == NULL) {
+        return 7;
+    }
+
+    if (benchlab_find_target_module("oscilloscope_dreams") == NULL) {
+        return 8;
+    }
+
+    if (benchlab_find_target_module("pipeworks") == NULL) {
+        return 9;
+    }
+
+    if (benchlab_find_target_module("lifeforms") == NULL) {
+        return 10;
     }
 
     return 0;

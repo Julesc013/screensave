@@ -50,6 +50,8 @@ const screensave_theme_descriptor *deepfield_get_themes(unsigned int *count_out)
 const screensave_theme_descriptor *deepfield_find_theme_descriptor(const char *theme_key)
 {
     unsigned int theme_count;
+    const screensave_theme_descriptor *themes;
 
-    return screensave_find_theme(deepfield_get_themes(&theme_count), theme_count, theme_key);
+    themes = deepfield_get_themes(&theme_count);
+    return screensave_find_theme(themes, theme_count, theme_key);
 }

@@ -168,6 +168,7 @@ void nocturne_apply_preset_to_config(
 )
 {
     unsigned int preset_count;
+    const screensave_preset_descriptor *presets;
     const screensave_preset_descriptor *preset_descriptor;
     const nocturne_preset_values *preset_values;
 
@@ -175,7 +176,8 @@ void nocturne_apply_preset_to_config(
         return;
     }
 
-    preset_descriptor = screensave_find_preset(nocturne_get_presets(&preset_count), preset_count, preset_key);
+    presets = nocturne_get_presets(&preset_count);
+    preset_descriptor = screensave_find_preset(presets, preset_count, preset_key);
     preset_values = nocturne_find_preset_values(preset_key);
     if (preset_descriptor == NULL || preset_values == NULL) {
         return;
