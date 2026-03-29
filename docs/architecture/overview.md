@@ -13,7 +13,8 @@ The platform side exists to solve the common problems once:
 The product side exists to keep each saver or suite-level application separate:
 
 - savers define their own identity, presets, themes, and content
-- applications such as Gallery, Player, and BenchLab serve different purposes than the `.scr` products
+- applications such as the future `suite` control app and `benchlab` serve different purposes than the `.scr` products
+- the current `gallery` and `player` app placeholders are transitional naming artifacts, not the durable post-`S15` app model
 - SDK material supports later contributors without becoming part of the runtime baseline
 
 The architecture is intentionally conservative.
@@ -32,3 +33,4 @@ Series 12 proves the same contracts can also host layered system-interface, kine
 Series 13 proves the same contracts can also host layered weather, transit-infrastructure, and celestial exhibit products by adding Stormglass, Night Transit, and Observatory without promoting a broad weather, route, astronomy, or scenic framework into the platform.
 Series 14 proves the same contracts can also host heavyweight software-3D, traversal, urban night-world, and fractal-voyage products by adding Vector Worlds, Retro Explorer, City Nocturne, and Fractal Atlas without promoting a broad 3D, map, city, or fractal framework into the platform.
 Series 15 proves the same contracts can also host a versioned renderer ladder by adding the optional capability-gated GL21 backend, explicit GL33 and GL46 placeholders, the internal null safety fallback, and GL Gallery without weakening the GDI baseline, the conservative GL11 tier, or the product/local ownership boundaries.
+Post-`S15` continuation planning is now tracked in `docs/roadmap/post-s15-plan.md`, and the next implementation step is the rename/taxonomy normalization pass rather than a direct jump to packaging or suite handoff.

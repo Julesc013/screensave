@@ -15,6 +15,8 @@ The platform target is intentionally conservative:
 ## Current Status
 
 The repository is in Series 15.
+Implementation currently exists through `S15`, and `C00` now records the post-`S15` continuation reset in the roadmap docs.
+The older short `S16` / `S17` endpoint is superseded by `docs/roadmap/post-s15-plan.md`.
 Series 00 established repository law, structure, roadmap, and agent guidance.
 Series 01 added contribution, review, governance, and CI foundations.
 Series 02 added the checked-in build scaffold and toolchain lane structure.
@@ -87,18 +89,20 @@ Series 15 adds the advanced GL capability path and GL Gallery:
 - GL Gallery as the renderer-showcase saver with deliberate GDI, GL11, and advanced-tier scene variants plus curated compatibility, classic, and advanced presets
 - explicit host and BenchLab wiring so the current saver set can be exercised honestly through the tiered renderer stack without turning the repo into the final meta-gallery
 
-The final suite gallery/meta-product and packaging remain deferred.
+The next implementation step after this planning reset is `C01`: the rename and renderer-taxonomy normalization refactor.
 
 ## Planned Product Shape
 
 ScreenSave is structured as one shared platform with many releasable products:
 
 - Individual savers under `products/savers/`
-- Suite-level applications such as Gallery, Player, and BenchLab under `products/apps/`
+- Suite-level applications such as `suite` and `benchlab` under `products/apps/`
 - SDK material under `products/sdk/`
 
 `nocturne`, `ricochet`, `deepfield`, `ember`, `oscilloscope_dreams`, `pipeworks`, `lifeforms`, `signal_lab`, `mechanical_dreams`, `ecosystems`, `stormglass`, `night_transit`, `observatory`, `vector_worlds`, `retro_explorer`, `city_nocturne`, `fractal_atlas`, and `gl_gallery` are now the real saver products in the tree.
 `benchlab` is now the first real non-saver app in the tree.
+The current `products/apps/gallery/` and `products/apps/player/` directories are legacy placeholders scheduled to be superseded by the canonical `suite` app in the continuation line.
+Canonical post-`S15` saver and app naming targets are tracked in `docs/roadmap/rename-map.md`; the current tree slugs remain in place until `C01`.
 Additional saver families and suite-level products are described in `docs/roadmap/products-and-lineup.md`.
 
 ## Repository Authority
