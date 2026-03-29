@@ -40,7 +40,7 @@
 #define IDM_BENCHLAB_RENDERER_GL33 41013
 #define IDM_BENCHLAB_RENDERER_GL46 41014
 #define IDM_BENCHLAB_PRODUCT_FIRST 41020
-#define IDM_BENCHLAB_PRODUCT_LAST 41037
+#define IDM_BENCHLAB_PRODUCT_LAST 41038
 
 typedef struct benchlab_app_config_tag {
     int client_width;

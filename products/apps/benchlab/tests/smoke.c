@@ -22,7 +22,7 @@ int main(void)
     }
 
     module_count = benchlab_get_available_module_count();
-    if (module_count < 18U) {
+    if (module_count < 19U) {
         return 3;
     }
 
@@ -96,6 +96,10 @@ int main(void)
 
     if (benchlab_find_target_module("gallery") == NULL) {
         return 21;
+    }
+
+    if (benchlab_find_target_module("anthology") == NULL) {
+        return 22;
     }
 
     return 0;

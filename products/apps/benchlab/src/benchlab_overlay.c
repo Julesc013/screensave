@@ -1,5 +1,11 @@
 #include "benchlab_internal.h"
 
+int anthology_session_build_summary(
+    const screensave_saver_session *session,
+    char *buffer,
+    unsigned int buffer_size
+);
+
 static int benchlab_append_text(char *buffer, int buffer_size, const char *text)
 {
     int used;
@@ -48,6 +54,7 @@ static void benchlab_build_overlay_text(const benchlab_app *app, char *buffer, i
 {
     screensave_renderer_info renderer_info;
     unsigned int index;
+    char anthology_summary[512];
 
     if (buffer == NULL || buffer_size <= 0) {
         return;
@@ -137,6 +144,17 @@ static void benchlab_build_overlay_text(const benchlab_app *app, char *buffer, i
             buffer_size,
             screensave_randomization_mode_name(app->resolved_config.common.randomization_mode)
         );
+    }
+
+    if (
+        app->session != NULL &&
+        app->module != NULL &&
+        app->module->identity.product_key != NULL &&
+        lstrcmpiA(app->module->identity.product_key, "anthology") == 0 &&
+        anthology_session_build_summary(app->session, anthology_summary, sizeof(anthology_summary))
+    ) {
+        benchlab_append_text(buffer, buffer_size, "\r\n");
+        benchlab_append_text(buffer, buffer_size, anthology_summary);
     }
 
     benchlab_append_text(buffer, buffer_size, "\r\nDiag: emitted=");
