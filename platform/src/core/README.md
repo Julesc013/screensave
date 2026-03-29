@@ -19,4 +19,5 @@ Series 08 adds only narrow renderer-selection and fallback-reporting glue here s
 Series 09 adds only a narrow private saver-registry helper here so the host and BenchLab can resolve the current built-in saver set without introducing broad discovery or plugin machinery.
 Series 10 adds only a narrow shared software-visual-buffer helper here so Ember and Oscilloscope Dreams can share bitmap- and persistence-oriented drawing without promoting a broad effects or vector framework.
 Series 11 adds only a narrow shared byte-grid helper here so Pipeworks and Lifeforms can share small occupancy and double-buffered state storage without promoting a broad simulation or tile framework.
+Series 15 adds only narrow three-tier renderer-selection and fallback-reporting glue here so GDI remains the guaranteed floor, GL11 remains the conservative accelerated middle tier, and GL-plus stays strictly optional and capability-gated.
 Type: runtime implementation.

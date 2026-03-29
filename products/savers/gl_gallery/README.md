@@ -1,12 +1,13 @@
 # GL Gallery
 
-GL Gallery is the renderer-showcase saver in the Heavyweight Worlds Family.
+GL Gallery is the renderer-showcase saver in Series 15.
 
 It provides:
 
 - curated compatibility, GL11-classic, advanced-showcase, neon-abstract, technical-exhibit, and quiet-museum renderer tour presets
 - a real saver module with product-owned config, presets, and themes
-- deliberate degradation across GDI, GL11, and the reserved GL-plus tier
+- deliberate degradation across GDI, GL11, and the optional GL-plus tier
+- scene families that remain coherent on the baseline while exposing richer treatment on higher renderer tiers when available
 - preview-safe, long-run-stable behavior through the shared saver and renderer contracts
 
 GL Gallery stays intentionally bounded.

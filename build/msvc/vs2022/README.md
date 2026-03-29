@@ -1,6 +1,6 @@
 # VS2022 Lane
 
-This is the concrete modern MSVC lane for Series 14.
+This is the concrete modern MSVC lane for Series 15.
 
 ## What Exists Now
 
@@ -23,14 +23,15 @@ This is the concrete modern MSVC lane for Series 14.
 - `retro_explorer.vcxproj`
 - `city_nocturne.vcxproj`
 - `fractal_atlas.vcxproj`
+- `gl_gallery.vcxproj`
 - `benchlab.vcxproj`
 
 These files stay intentionally small.
-They define one shared static-library target, seventeen `.scr` saver targets, and one windowed diagnostics app target with a shared core runtime, the mandatory GDI backend, the optional GL11 backend, a real host skeleton, seventeen real saver products, and the current diagnostics app.
+They define one shared static-library target, eighteen `.scr` saver targets, and one windowed diagnostics app target with a shared core runtime, the mandatory GDI backend, the optional GL11 backend, the optional GL-plus backend, a real host skeleton, eighteen real saver products, and the current diagnostics app.
 
 ## What The Targets Mean
 
-- `screensave_platform` compiles the shared non-renderer core runtime, the mandatory GDI backend, the optional GL11 backend, and the Win32 host implementation.
+- `screensave_platform` compiles the shared non-renderer core runtime, the mandatory GDI backend, the optional GL11 backend, the optional GL-plus backend, and the Win32 host implementation.
 - `nocturne` compiles the real Nocturne product sources, the current built-in saver registry, the product config dialog resources, the shared host resource, links `opengl32` for the optional GL11 path, and links the `.scr` executable target that defaults to Nocturne.
 - `ricochet` compiles the same shared platform plus saver set and links the `.scr` executable target that defaults to Ricochet.
 - `deepfield` compiles the same shared platform plus saver set and links the `.scr` executable target that defaults to Deepfield.
@@ -48,7 +49,8 @@ They define one shared static-library target, seventeen `.scr` saver targets, an
 - `retro_explorer` compiles the same shared platform plus saver set and links the `.scr` executable target that defaults to Retro Explorer.
 - `city_nocturne` compiles the same shared platform plus saver set and links the `.scr` executable target that defaults to City Nocturne.
 - `fractal_atlas` compiles the same shared platform plus saver set and links the `.scr` executable target that defaults to Fractal Atlas.
-- `benchlab` compiles the BenchLab app sources, reuses the real Nocturne, Ricochet, Deepfield, Ember, Oscilloscope Dreams, Pipeworks, Lifeforms, Signal Lab, Mechanical Dreams, Ecosystems, Stormglass, Night Transit, Observatory, Vector Worlds, Retro Explorer, City Nocturne, and Fractal Atlas product sources through the shared saver contract, links `opengl32` for explicit backend validation, and links the diagnostics harness executable target.
+- `gl_gallery` compiles the same shared platform plus saver set and links the `.scr` executable target that defaults to GL Gallery.
+- `benchlab` compiles the BenchLab app sources, reuses the real Nocturne, Ricochet, Deepfield, Ember, Oscilloscope Dreams, Pipeworks, Lifeforms, Signal Lab, Mechanical Dreams, Ecosystems, Stormglass, Night Transit, Observatory, Vector Worlds, Retro Explorer, City Nocturne, Fractal Atlas, and GL Gallery product sources through the shared saver contract, links `opengl32` for explicit tier validation, and links the diagnostics harness executable target.
 
 The concrete host lifecycle now lives in the checked-in target graph.
 Later series should extend these targets in place instead of introducing parallel demo targets.
@@ -72,6 +74,6 @@ No generated files should be checked into this directory.
 
 ## Deferred Work
 
-- GL-plus and later renderer tiers
+- later renderer tiers beyond the current GL-plus path
 - richer version stamping and metadata resources
 - broader solution structure for later saver families and suite apps

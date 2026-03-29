@@ -62,7 +62,7 @@ Names are planning anchors, not release claims.
 
 ## Heavyweight And Showcase
 
-- `gl_gallery`: accelerated showcase saver reserved for optional higher renderer tiers.
+- `gl_gallery`: renderer-showcase saver and the real Series 15 product for validating the optional GL-plus tier with honest fallback to GL11 and GDI.
 
 ## Suite-Level Products
 

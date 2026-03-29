@@ -2,6 +2,28 @@
 
 All notable repository changes are recorded here in series order.
 
+## S15 - 2026-03-29
+
+### Added
+
+- A real optional advanced GL backend under `platform/src/render/gl_plus/`, including capability-gated context creation, capability capture, backend-private state management, and the narrow primitive surface required by GL Gallery.
+- GL Gallery under `products/savers/gl_gallery/` as the renderer-showcase saver, including real compatibility, GL11-classic, and advanced-showcase scene families, product-owned config, curated presets/themes, a manifest, and lightweight smoke coverage.
+
+### Changed
+
+- Updated the shared renderer dispatch so the runtime now supports explicit `auto`, `gdi`, `gl11`, and `gl_plus` request paths, records requested-versus-active renderer state, and reports explicit fallback reasons across the three renderer tiers.
+- Updated the Win32 `.scr` host so the current built-in saver selection dialog also persists the requested renderer tier and surfaces tier state through the existing host diagnostics without turning the host into the final gallery or a renderer lab.
+- Updated BenchLab so the diagnostics harness can select and inspect all eighteen current savers plus all three renderer tiers, including requested renderer, active renderer, fallback reason, and useful GL capability identity.
+- Updated the concrete VS2022 and MinGW i686 build lanes, static build checks, product manifests, and repo docs so Series 15 truthfully describes the GL-plus tier, the GL Gallery product, and the widened eighteen-product harness.
+
+### Validation
+
+- Confirmed Series 00 through Series 14 prerequisites existed before changes.
+- Ran `python tools/scripts/check_repo_structure.py`, `python tools/scripts/check_codex_config.py`, and `python tools/scripts/check_build_layout.py`; all passed.
+- Confirmed the checked-in VS2022 solution, saver projects, BenchLab project, platform project, and MinGW i686 make lane now include the GL-plus backend and GL Gallery alongside the existing saver set.
+- Confirmed that full Win32 build and smoke execution could not be completed in this environment because `MSBuild.exe` / Visual C++ targets were not installed and `mingw32-make` was unavailable.
+- Confirmed no Series 16 meta-product work, packaging logic, or unsupported compatibility claims were added in this series.
+
 ## S14 - 2026-03-29
 
 ### Added
