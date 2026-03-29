@@ -1,6 +1,25 @@
 # Changelog
 
-All notable repository changes are recorded here in series order.
+All notable repository changes are recorded here in prompt history order.
+
+## C00 - 2026-03-30
+
+### Added
+
+- `docs/roadmap/post-s15-plan.md` as the explicit post-`S15` continuation program, starting from the real `S15` baseline, retiring the old short `S16` / `S17` endpoint, and naming `C01` as the next implementation prompt.
+- `docs/roadmap/rename-map.md` as the canonical saver/app normalization guide, including the one-word saver slug targets, the `suite` app decision, and the `Infinity Atlas -> atlas` merge rule.
+
+### Changed
+
+- Updated `docs/roadmap/prompt-program.md` and `docs/roadmap/series-map.md` so the active continuation line now runs `C00` through `C14` instead of stopping at the older short post-`S15` endpoint.
+- Updated `docs/roadmap/products-and-lineup.md`, `README.md`, `docs/architecture/overview.md`, and the `products/apps/` placeholder READMEs so the public planning layer no longer implies the old saver/app naming model.
+- Normalized `specs/renderer_contract.md` and the post-`S15` planning docs around the explicit `gdi -> gl11 -> gl21 -> gl33 -> gl46 -> null` ladder without claiming future tiers as implemented facts.
+
+### Validation
+
+- Confirmed before editing that the repo already contained the implemented `S00` through `S15` history in `CHANGELOG.md`, roadmap docs under `docs/roadmap/`, saver/app placeholders, renderer directories, subtree `AGENTS.md` files, and the project-scoped `.codex` config.
+- Ran `python tools/scripts/check_repo_structure.py`, `python tools/scripts/check_codex_config.py`, `python tools/scripts/check_docs_basics.py`, and `python tools/scripts/check_build_layout.py`; all passed.
+- Confirmed this prompt remained planning-only and did not rename directories, move code, change build targets, change manifests, add runtime features, or implement packaging/suite/product logic.
 
 ## S15 - 2026-03-29
 
