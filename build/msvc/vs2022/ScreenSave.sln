@@ -40,6 +40,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "atlas", "atlas.vcxproj", "{
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gallery", "gallery.vcxproj", "{7C4E6B87-48A3-4BB6-A7F0-9D243C8CE158}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "anthology", "anthology.vcxproj", "{B2C7C852-2D57-4E84-9E50-7B5BA8302C68}"
+EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "benchlab", "benchlab.vcxproj", "{4E7545AE-BFD8-4E24-A9B8-7B901F90D16E}"
 EndProject
 Global
@@ -124,6 +126,10 @@ Global
 		{7C4E6B87-48A3-4BB6-A7F0-9D243C8CE158}.Debug|Win32.Build.0 = Debug|Win32
 		{7C4E6B87-48A3-4BB6-A7F0-9D243C8CE158}.Release|Win32.ActiveCfg = Release|Win32
 		{7C4E6B87-48A3-4BB6-A7F0-9D243C8CE158}.Release|Win32.Build.0 = Release|Win32
+		{B2C7C852-2D57-4E84-9E50-7B5BA8302C68}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B2C7C852-2D57-4E84-9E50-7B5BA8302C68}.Debug|Win32.Build.0 = Debug|Win32
+		{B2C7C852-2D57-4E84-9E50-7B5BA8302C68}.Release|Win32.ActiveCfg = Release|Win32
+		{B2C7C852-2D57-4E84-9E50-7B5BA8302C68}.Release|Win32.Build.0 = Release|Win32
 		{4E7545AE-BFD8-4E24-A9B8-7B901F90D16E}.Debug|Win32.ActiveCfg = Debug|Win32
 		{4E7545AE-BFD8-4E24-A9B8-7B901F90D16E}.Debug|Win32.Build.0 = Debug|Win32
 		{4E7545AE-BFD8-4E24-A9B8-7B901F90D16E}.Release|Win32.ActiveCfg = Release|Win32

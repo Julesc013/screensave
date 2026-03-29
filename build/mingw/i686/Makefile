@@ -9,9 +9,14 @@ OUTROOT := $(ROOT)/out
 INT_ROOT := $(OUTROOT)/intermediate/mingw/i686/$(PROFILE)
 PLATFORM_DIR := $(INT_ROOT)/screensave_platform
 BENCHLAB_DIR := $(INT_ROOT)/benchlab
-SAVERS := nocturne ricochet deepfield plasma phosphor pipeworks lifeforms signals mechanize ecosystems stormglass transit observatory vector explorer city atlas gallery
+INNER_SAVERS := nocturne ricochet deepfield plasma phosphor pipeworks lifeforms signals mechanize ecosystems stormglass transit observatory vector explorer city atlas gallery
+SAVERS := $(INNER_SAVERS) anthology
 SAVER_UNITS := config module presets render sim themes
 SAVER_TARGETS := $(foreach saver,$(SAVERS),$(OUTROOT)/mingw/i686/$(PROFILE)/$(saver)/$(saver).scr)
+ANTHOLOGY_TARGET := $(OUTROOT)/mingw/i686/$(PROFILE)/anthology/anthology.scr
+ANTHOLOGY_INNER_OBJS = $(foreach owner,$(INNER_SAVERS),$(call saver_objs,$(owner)))
+ANTHOLOGY_OBJS = $(call saver_objs,anthology)
+ANTHOLOGY_RESOURCE_OBJS = $(call saver_resource_objs,anthology)
 BENCHLAB_TARGET := $(OUTROOT)/mingw/i686/$(PROFILE)/benchlab/benchlab.exe
 PLATFORM_LIB := $(PLATFORM_DIR)/libscreensave_platform.a
 CFLAGS_COMMON := -std=c89 -Wall -Wextra -pedantic -I$(ROOT)/platform/include
@@ -164,7 +169,27 @@ $(INT_ROOT)/$(1)/screensave_host_res.o: $(ROOT)/platform/src/host/win32_scr/scre
 	$(RC) $(RCFLAGS_COMMON) -i $$< -o $$@
 endef
 
-$(foreach saver,$(SAVERS),$(eval $(call SAVER_template,$(saver))))
+$(foreach saver,$(INNER_SAVERS),$(eval $(call SAVER_template,$(saver))))
+
+$(ANTHOLOGY_TARGET): $(PLATFORM_LIB) $(ANTHOLOGY_INNER_OBJS) $(ANTHOLOGY_OBJS) $(INT_ROOT)/anthology/anthology_entry.o $(ANTHOLOGY_RESOURCE_OBJS)
+	mkdir -p $(OUTROOT)/mingw/i686/$(PROFILE)/anthology
+	$(CC) $(CFLAGS) -mwindows -o $@ $(ANTHOLOGY_INNER_OBJS) $(ANTHOLOGY_OBJS) $(INT_ROOT)/anthology/anthology_entry.o $(ANTHOLOGY_RESOURCE_OBJS) $(PLATFORM_LIB) $(LDLIBS_COMMON)
+
+$(INT_ROOT)/anthology/anthology_%.o: $(ROOT)/products/savers/anthology/src/anthology_%.c
+	mkdir -p $(INT_ROOT)/anthology
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(INT_ROOT)/anthology/anthology_config_res.o: $(ROOT)/products/savers/anthology/src/anthology_config.rc
+	mkdir -p $(INT_ROOT)/anthology
+	$(RC) $(RCFLAGS_COMMON) -I$(ROOT)/products/savers/anthology/src -i $< -o $@
+
+$(INT_ROOT)/anthology/anthology_version_res.o: $(ROOT)/products/savers/anthology/src/anthology_version.rc
+	mkdir -p $(INT_ROOT)/anthology
+	$(RC) $(RCFLAGS_COMMON) -I$(ROOT)/products/savers/anthology/src -i $< -o $@
+
+$(INT_ROOT)/anthology/screensave_host_res.o: $(ROOT)/platform/src/host/win32_scr/screensave_host.rc
+	mkdir -p $(INT_ROOT)/anthology
+	$(RC) $(RCFLAGS_COMMON) -i $< -o $@
 
 $(BENCHLAB_TARGET): $(PLATFORM_LIB) $(benchlab_saver_objs) $(benchlab_resource_objs) $(BENCHLAB_DIR)/benchlab_app.o $(BENCHLAB_DIR)/benchlab_config.o $(BENCHLAB_DIR)/benchlab_diag.o $(BENCHLAB_DIR)/benchlab_main.o $(BENCHLAB_DIR)/benchlab_overlay.o $(BENCHLAB_DIR)/benchlab_session.o
 	mkdir -p $(OUTROOT)/mingw/i686/$(PROFILE)/benchlab

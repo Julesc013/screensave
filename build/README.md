@@ -32,12 +32,13 @@ Real now:
 - a real internal null safety backend under `platform/src/render/null/`
 - a narrow shared software visual-buffer helper under `platform/src/core/visual/`
 - a narrow shared grid-state helper under `platform/src/core/grid/`
-- real saver products under `products/savers/nocturne/`, `products/savers/ricochet/`, `products/savers/deepfield/`, `products/savers/plasma/`, `products/savers/phosphor/`, `products/savers/pipeworks/`, `products/savers/lifeforms/`, `products/savers/signals/`, `products/savers/mechanize/`, `products/savers/ecosystems/`, `products/savers/stormglass/`, `products/savers/transit/`, `products/savers/observatory/`, `products/savers/vector/`, `products/savers/explorer/`, `products/savers/city/`, `products/savers/atlas/`, and `products/savers/gallery/`
+- real saver products under `products/savers/nocturne/`, `products/savers/ricochet/`, `products/savers/deepfield/`, `products/savers/plasma/`, `products/savers/phosphor/`, `products/savers/pipeworks/`, `products/savers/lifeforms/`, `products/savers/signals/`, `products/savers/mechanize/`, `products/savers/ecosystems/`, `products/savers/stormglass/`, `products/savers/transit/`, `products/savers/observatory/`, `products/savers/vector/`, `products/savers/explorer/`, `products/savers/city/`, `products/savers/atlas/`, `products/savers/gallery/`, and `products/savers/anthology/`
 - a real BenchLab diagnostics app under `products/apps/benchlab/`
 - product-owned configuration, presets, and themes wired through the shared saver contract
 - a windowed harness path that runs the active saver through the shared saver and renderer contracts outside the `.scr` host
 - explicit versioned renderer selection and fallback reporting through the shared renderer path
-- one true `.scr` output per saver across the current eighteen-product saver line
+- one true `.scr` output per saver across the current nineteen-product saver line
+- `anthology.scr` staying explicit as the suite meta-saver target that links its own product code plus the current eighteen inner saver modules in-process instead of hiding cross-saver orchestration behind external process launch
 - BenchLab remaining separate as the direct multi-saver diagnostics harness
 - a tiny renderer-driven validation scene retained only as a non-product fallback path
 - build-layout validation in `tools/scripts/check_build_layout.py`
@@ -45,7 +46,7 @@ Real now:
 Deferred:
 
 - later real renderer tiers beyond the current GDI, GL11, GL21, GL33-placeholder, GL46-placeholder, and null safety stack
-- later-series work beyond Nocturne, Ricochet, Deepfield, Plasma, Phosphor, Pipeworks, Lifeforms, Signals, Mechanize, Ecosystems, Stormglass, Transit, Observatory, Vector, Explorer, City, Atlas, and Gallery
+- later-series work beyond Nocturne, Ricochet, Deepfield, Plasma, Phosphor, Pipeworks, Lifeforms, Signals, Mechanize, Ecosystems, Stormglass, Transit, Observatory, Vector, Explorer, City, Atlas, Gallery, and Anthology
 - the future `suite` app or a suite-level meta-product
 - full legacy project files for VS6 and VS2008
 - packaging and release production

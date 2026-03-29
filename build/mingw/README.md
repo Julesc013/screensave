@@ -11,7 +11,7 @@ At the current `C02` baseline, the practical lane is `i686/`.
 
 Real now:
 
-- `i686/` contains a concrete make-based lane for the same shared core, host, mandatory GDI backend, optional GL11 and GL21 capability paths, the current canonical saver targets through `gallery.scr`, and the real BenchLab app used by the VS2022 lane
+- `i686/` contains a concrete make-based lane for the same shared core, host, mandatory GDI backend, optional GL11 and GL21 capability paths, the current canonical saver targets through `anthology.scr`, and the real BenchLab app used by the VS2022 lane
 
 Deferred:
 

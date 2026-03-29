@@ -24,17 +24,19 @@ This is the concrete modern MSVC lane for the `C03` saver-product baseline.
 - `city.vcxproj`
 - `atlas.vcxproj`
 - `gallery.vcxproj`
+- `anthology.vcxproj`
 - `benchlab.vcxproj`
 
 These files stay intentionally small.
-They define one shared static-library target, eighteen first-class `.scr` saver targets, and one windowed diagnostics app target with a shared core runtime, the mandatory GDI backend, the optional GL11 backend, the optional GL21 backend, explicit GL33 and GL46 placeholders, the internal null safety backend, a real host skeleton, eighteen real saver products, and the current diagnostics app.
+They define one shared static-library target, nineteen first-class `.scr` saver targets, and one windowed diagnostics app target with a shared core runtime, the mandatory GDI backend, the optional GL11 backend, the optional GL21 backend, explicit GL33 and GL46 placeholders, the internal null safety backend, a real host skeleton, nineteen real saver products, and the current diagnostics app.
 
 ## What The Targets Mean
 
 - `screensave_platform` compiles the shared non-renderer core runtime, the mandatory GDI backend, the optional GL11 backend, the optional GL21 backend, the explicit GL33 and GL46 placeholders, the internal null safety backend, and the Win32 host implementation.
 - `nocturne` through `gallery` each compile only their owning saver sources, their product config dialog resource, their product version resource, and the shared host resource, then emit the matching saver-named `.scr` target.
+- `anthology` stays explicit as the suite meta-saver target: it compiles its owning anthology sources plus the current eighteen inner saver modules in-process, then emits `anthology.scr` without turning the build graph into a plugin loader or external-orchestration wrapper.
 - Each saver target binds directly to its owning saver module through the shared host entry instead of depending on the older multi-saver default-selection distribution pattern.
-- `benchlab` compiles the BenchLab app sources, reuses the real Nocturne, Ricochet, Deepfield, Plasma, Phosphor, Pipeworks, Lifeforms, Signals, Mechanize, Ecosystems, Stormglass, Transit, Observatory, Vector, Explorer, City, Atlas, and Gallery product sources through the shared saver contract, links `opengl32` for explicit tier validation, and links the diagnostics harness executable target.
+- `benchlab` compiles the BenchLab app sources, reuses the real Nocturne, Ricochet, Deepfield, Plasma, Phosphor, Pipeworks, Lifeforms, Signals, Mechanize, Ecosystems, Stormglass, Transit, Observatory, Vector, Explorer, City, Atlas, Gallery, and Anthology product sources through the shared saver contract, links `opengl32` for explicit tier validation, and links the diagnostics harness executable target.
 
 The concrete host lifecycle now lives in the checked-in target graph.
 Later series should extend these targets in place instead of introducing parallel demo targets.

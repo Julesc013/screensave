@@ -55,7 +55,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\platform\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\platform\src\host\win32_scr;$(SolutionDir)..\..\..\products\savers\nocturne\src;$(SolutionDir)..\..\..\products\savers\ricochet\src;$(SolutionDir)..\..\..\products\savers\deepfield\src;$(SolutionDir)..\..\..\products\savers\plasma\src;$(SolutionDir)..\..\..\products\savers\phosphor\src;$(SolutionDir)..\..\..\products\savers\pipeworks\src;$(SolutionDir)..\..\..\products\savers\lifeforms\src;$(SolutionDir)..\..\..\products\savers\signals\src;$(SolutionDir)..\..\..\products\savers\mechanize\src;$(SolutionDir)..\..\..\products\savers\ecosystems\src;$(SolutionDir)..\..\..\products\savers\stormglass\src;$(SolutionDir)..\..\..\products\savers\transit\src;$(SolutionDir)..\..\..\products\savers\observatory\src;$(SolutionDir)..\..\..\products\savers\vector\src;$(SolutionDir)..\..\..\products\savers\explorer\src;$(SolutionDir)..\..\..\products\savers\city\src;$(SolutionDir)..\..\..\products\savers\atlas\src;$(SolutionDir)..\..\..\products\savers\gallery\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\platform\src\host\win32_scr;$(SolutionDir)..\..\..\products\savers\nocturne\src;$(SolutionDir)..\..\..\products\savers\ricochet\src;$(SolutionDir)..\..\..\products\savers\deepfield\src;$(SolutionDir)..\..\..\products\savers\plasma\src;$(SolutionDir)..\..\..\products\savers\phosphor\src;$(SolutionDir)..\..\..\products\savers\pipeworks\src;$(SolutionDir)..\..\..\products\savers\lifeforms\src;$(SolutionDir)..\..\..\products\savers\signals\src;$(SolutionDir)..\..\..\products\savers\mechanize\src;$(SolutionDir)..\..\..\products\savers\ecosystems\src;$(SolutionDir)..\..\..\products\savers\stormglass\src;$(SolutionDir)..\..\..\products\savers\transit\src;$(SolutionDir)..\..\..\products\savers\observatory\src;$(SolutionDir)..\..\..\products\savers\vector\src;$(SolutionDir)..\..\..\products\savers\explorer\src;$(SolutionDir)..\..\..\products\savers\city\src;$(SolutionDir)..\..\..\products\savers\atlas\src;$(SolutionDir)..\..\..\products\savers\gallery\src;$(SolutionDir)..\..\..\products\savers\anthology\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -74,7 +74,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\platform\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\platform\src\host\win32_scr;$(SolutionDir)..\..\..\products\savers\nocturne\src;$(SolutionDir)..\..\..\products\savers\ricochet\src;$(SolutionDir)..\..\..\products\savers\deepfield\src;$(SolutionDir)..\..\..\products\savers\plasma\src;$(SolutionDir)..\..\..\products\savers\phosphor\src;$(SolutionDir)..\..\..\products\savers\pipeworks\src;$(SolutionDir)..\..\..\products\savers\lifeforms\src;$(SolutionDir)..\..\..\products\savers\signals\src;$(SolutionDir)..\..\..\products\savers\mechanize\src;$(SolutionDir)..\..\..\products\savers\ecosystems\src;$(SolutionDir)..\..\..\products\savers\stormglass\src;$(SolutionDir)..\..\..\products\savers\transit\src;$(SolutionDir)..\..\..\products\savers\observatory\src;$(SolutionDir)..\..\..\products\savers\vector\src;$(SolutionDir)..\..\..\products\savers\explorer\src;$(SolutionDir)..\..\..\products\savers\city\src;$(SolutionDir)..\..\..\products\savers\atlas\src;$(SolutionDir)..\..\..\products\savers\gallery\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\platform\src\host\win32_scr;$(SolutionDir)..\..\..\products\savers\nocturne\src;$(SolutionDir)..\..\..\products\savers\ricochet\src;$(SolutionDir)..\..\..\products\savers\deepfield\src;$(SolutionDir)..\..\..\products\savers\plasma\src;$(SolutionDir)..\..\..\products\savers\phosphor\src;$(SolutionDir)..\..\..\products\savers\pipeworks\src;$(SolutionDir)..\..\..\products\savers\lifeforms\src;$(SolutionDir)..\..\..\products\savers\signals\src;$(SolutionDir)..\..\..\products\savers\mechanize\src;$(SolutionDir)..\..\..\products\savers\ecosystems\src;$(SolutionDir)..\..\..\products\savers\stormglass\src;$(SolutionDir)..\..\..\products\savers\transit\src;$(SolutionDir)..\..\..\products\savers\observatory\src;$(SolutionDir)..\..\..\products\savers\vector\src;$(SolutionDir)..\..\..\products\savers\explorer\src;$(SolutionDir)..\..\..\products\savers\city\src;$(SolutionDir)..\..\..\products\savers\atlas\src;$(SolutionDir)..\..\..\products\savers\gallery\src;$(SolutionDir)..\..\..\products\savers\anthology\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -199,6 +199,12 @@
     <ClCompile Include="..\..\..\products\savers\gallery\src\gallery_render.c" />
     <ClCompile Include="..\..\..\products\savers\gallery\src\gallery_sim.c" />
     <ClCompile Include="..\..\..\products\savers\gallery\src\gallery_themes.c" />
+    <ClCompile Include="..\..\..\products\savers\anthology\src\anthology_config.c" />
+    <ClCompile Include="..\..\..\products\savers\anthology\src\anthology_module.c" />
+    <ClCompile Include="..\..\..\products\savers\anthology\src\anthology_presets.c" />
+    <ClCompile Include="..\..\..\products\savers\anthology\src\anthology_render.c" />
+    <ClCompile Include="..\..\..\products\savers\anthology\src\anthology_sim.c" />
+    <ClCompile Include="..\..\..\products\savers\anthology\src\anthology_themes.c" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\..\products\savers\nocturne\src\nocturne_config.rc" />
@@ -219,6 +225,7 @@
     <ResourceCompile Include="..\..\..\products\savers\city\src\city_config.rc" />
     <ResourceCompile Include="..\..\..\products\savers\atlas\src\atlas_config.rc" />
     <ResourceCompile Include="..\..\..\products\savers\gallery\src\gallery_config.rc" />
+    <ResourceCompile Include="..\..\..\products\savers\anthology\src\anthology_config.rc" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="screensave_platform.vcxproj">

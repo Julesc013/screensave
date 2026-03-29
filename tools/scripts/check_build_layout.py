@@ -12,13 +12,14 @@ SOLUTION = ROOT / "build" / "msvc" / "vs2022" / "ScreenSave.sln"
 PLATFORM_PROJECT = ROOT / "build" / "msvc" / "vs2022" / "screensave_platform.vcxproj"
 BENCHLAB_PROJECT = ROOT / "build" / "msvc" / "vs2022" / "benchlab.vcxproj"
 SAVER_COMMON_PROPS = ROOT / "build" / "msvc" / "vs2022" / "saver_target_common.props"
+ANTHOLOGY_TARGET_SOURCES_PROPS = ROOT / "build" / "msvc" / "vs2022" / "anthology_target_sources.props"
 MINGW_MAKEFILE = ROOT / "build" / "mingw" / "i686" / "Makefile"
 
 NS = {"msb": "http://schemas.microsoft.com/developer/msbuild/2003"}
 SAVER_UNITS = ("config", "module", "presets", "render", "sim", "themes")
 BENCHLAB_APP_UNITS = ("app", "config", "diag", "main", "overlay", "session")
 
-SAVERS = (
+INNER_SAVERS = (
     ("nocturne", "Nocturne"),
     ("ricochet", "Ricochet"),
     ("deepfield", "Deepfield"),
@@ -38,6 +39,8 @@ SAVERS = (
     ("atlas", "Atlas"),
     ("gallery", "Gallery"),
 )
+META_SAVER = ("anthology", "Anthology")
+SAVERS = INNER_SAVERS + (META_SAVER,)
 
 
 def require(condition: bool, message: str, errors: list[str]) -> None:
@@ -76,6 +79,7 @@ def saver_required_paths(saver_key: str) -> list[pathlib.Path]:
     preset_names = {
         "nocturne": ("defaults.ini", "museum.ini", "night_modes.ini"),
         "ricochet": ("defaults.ini", "themed.ini"),
+        "anthology": ("defaults.ini", "weighted.ini", "families.ini"),
     }.get(saver_key, ("defaults.ini", "themed.ini", "performance.ini"))
     paths = [
         base / "manifest.ini",
@@ -113,6 +117,7 @@ def required_paths() -> list[pathlib.Path]:
         PLATFORM_PROJECT,
         BENCHLAB_PROJECT,
         SAVER_COMMON_PROPS,
+        ANTHOLOGY_TARGET_SOURCES_PROPS,
         MINGW_MAKEFILE,
         ROOT / "platform" / "include" / "screensave" / "config_api.h",
         ROOT / "platform" / "include" / "screensave" / "diagnostics_api.h",
@@ -173,6 +178,42 @@ def require_saver_project(project_path: pathlib.Path, saver_key: str, errors: li
     require("saver_target_common.props" in project_text, f"{project_path.name} must import saver_target_common.props.", errors)
 
 
+def anthology_source_paths() -> list[str]:
+    sources = saver_source_paths("anthology")
+    for saver_key, _ in INNER_SAVERS:
+        sources.extend(saver_source_paths(saver_key)[:-1])
+    return sources
+
+
+def anthology_resource_paths() -> list[str]:
+    return saver_resource_paths("anthology")
+
+
+def require_anthology_project(project_path: pathlib.Path, errors: list[str]) -> None:
+    project_root = parse_project(project_path)
+    project_refs = collect_items(project_root, "ProjectReference")
+    project_text = project_path.read_text(encoding="utf-8")
+    props_root = parse_project(ANTHOLOGY_TARGET_SOURCES_PROPS)
+
+    require("<TargetExt>.scr</TargetExt>" in project_text, f"{project_path.name} must emit a .scr target.", errors)
+    require("<TargetName>anthology</TargetName>" in project_text, f"{project_path.name} must set the expected target name.", errors)
+    require("saver_target_common.props" in project_text, f"{project_path.name} must import saver_target_common.props.", errors)
+    require("anthology_target_sources.props" in project_text, f"{project_path.name} must import anthology_target_sources.props.", errors)
+    require("screensave_platform.vcxproj" in project_refs, f"{project_path.name} must reference the platform project.", errors)
+    require_exact(
+        collect_items(props_root, "ClCompile"),
+        anthology_source_paths(),
+        "anthology_target_sources.props",
+        errors,
+    )
+    require_exact(
+        collect_items(props_root, "ResourceCompile"),
+        anthology_resource_paths(),
+        "anthology_target_sources.props",
+        errors,
+    )
+
+
 def main() -> int:
     errors: list[str] = []
 
@@ -229,8 +270,9 @@ def main() -> int:
         errors,
     )
 
-    for saver_key, _ in SAVERS:
+    for saver_key, _ in INNER_SAVERS:
         require_saver_project(saver_project_path(saver_key), saver_key, errors)
+    require_anthology_project(saver_project_path("anthology"), errors)
 
     benchlab_project = parse_project(BENCHLAB_PROJECT)
     benchlab_sources = collect_items(benchlab_project, "ClCompile")
@@ -241,7 +283,8 @@ def main() -> int:
     require_all(
         benchlab_sources,
         [f"..\\..\\..\\products\\apps\\benchlab\\src\\benchlab_{unit}.c" for unit in BENCHLAB_APP_UNITS]
-        + [source for saver_key, _ in SAVERS for source in saver_source_paths(saver_key)[:-1]],
+        + [source for saver_key, _ in INNER_SAVERS for source in saver_source_paths(saver_key)[:-1]]
+        + saver_source_paths("anthology")[:-1],
         "benchlab.vcxproj",
         errors,
     )
@@ -257,6 +300,8 @@ def main() -> int:
     makefile_text = MINGW_MAKEFILE.read_text(encoding="utf-8")
     for expected in (
         "SAVERS :=",
+        "INNER_SAVERS :=",
+        "ANTHOLOGY_TARGET :=",
         "SAVER_template",
         "_version_res.o",
         "screensave_host_res.o",
@@ -268,6 +313,8 @@ def main() -> int:
         "null_backend",
     ):
         require(expected in makefile_text, f"Makefile is missing {expected!r}.", errors)
+    require("anthology" in makefile_text, "Makefile must wire the anthology saver target.", errors)
+    require("ANTHOLOGY_INNER_OBJS" in makefile_text, "Makefile must define the anthology inner-saver object list.", errors)
     require("$(1)_version_res.o" in makefile_text, "Makefile must compile per-saver version resources.", errors)
     require("$(1)_version.rc" in makefile_text, "Makefile must reference the per-saver version resource template.", errors)
 
@@ -295,6 +342,7 @@ def main() -> int:
     build_readme = (ROOT / "build" / "README.md").read_text(encoding="utf-8").lower()
     for phrase in (
         "one true `.scr` output per saver",
+        "anthology",
         "benchlab",
         "gl21",
         "gl33",
