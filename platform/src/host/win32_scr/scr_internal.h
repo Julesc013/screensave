@@ -49,6 +49,7 @@ typedef struct scr_host_context_tag {
     screensave_session_seed session_seed;
     screensave_config_binding config_binding;
     screensave_diag_context diagnostics;
+    screensave_renderer_kind requested_renderer_kind;
     screensave_renderer *renderer;
     screensave_saver_session *session;
 } scr_host_context;
@@ -69,6 +70,8 @@ int scr_settings_save(
 );
 int scr_load_selected_product_key(char *buffer, unsigned int buffer_size);
 int scr_save_selected_product_key(const char *product_key);
+screensave_renderer_kind scr_load_renderer_request(void);
+int scr_save_renderer_request(screensave_renderer_kind requested_kind);
 int scr_parse_command_line(LPSTR command_line, scr_parsed_args *parsed_args);
 int scr_run_window(scr_host_context *context);
 INT_PTR scr_show_config_dialog(scr_host_context *context);

@@ -38,6 +38,35 @@ static LONG scr_write_string(HKEY key, const char *value_name, const char *value
     );
 }
 
+static int scr_read_dword(HKEY key, const char *value_name, unsigned long *value_out)
+{
+    DWORD data;
+    DWORD type;
+    DWORD size;
+
+    if (value_out == NULL) {
+        return 0;
+    }
+
+    data = 0UL;
+    type = 0UL;
+    size = sizeof(data);
+    if (RegQueryValueExA(key, value_name, NULL, &type, (LPBYTE)&data, &size) != ERROR_SUCCESS || type != REG_DWORD) {
+        return 0;
+    }
+
+    *value_out = (unsigned long)data;
+    return 1;
+}
+
+static int scr_is_valid_renderer_request(screensave_renderer_kind requested_kind)
+{
+    return requested_kind == SCREENSAVE_RENDERER_KIND_UNKNOWN ||
+        requested_kind == SCREENSAVE_RENDERER_KIND_GDI ||
+        requested_kind == SCREENSAVE_RENDERER_KIND_GL11 ||
+        requested_kind == SCREENSAVE_RENDERER_KIND_GL_PLUS;
+}
+
 int scr_settings_init(const screensave_saver_module *module, scr_settings *settings)
 {
     return screensave_saver_config_state_init(module, settings);
@@ -118,6 +147,68 @@ int scr_save_selected_product_key(const char *product_key)
     }
 
     result = scr_write_string(key, "CurrentProductKey", product_key);
+    RegCloseKey(key);
+    return result == ERROR_SUCCESS;
+}
+
+screensave_renderer_kind scr_load_renderer_request(void)
+{
+    HKEY key;
+    unsigned long value;
+
+    value = (unsigned long)SCREENSAVE_RENDERER_KIND_UNKNOWN;
+    if (RegOpenKeyExA(HKEY_CURRENT_USER, SCR_HOST_REGISTRY_ROOTA, 0, KEY_QUERY_VALUE, &key) != ERROR_SUCCESS) {
+        return SCREENSAVE_RENDERER_KIND_UNKNOWN;
+    }
+
+    if (!scr_read_dword(key, "RendererRequest", &value)) {
+        value = (unsigned long)SCREENSAVE_RENDERER_KIND_UNKNOWN;
+    }
+
+    RegCloseKey(key);
+    if (!scr_is_valid_renderer_request((screensave_renderer_kind)value)) {
+        return SCREENSAVE_RENDERER_KIND_UNKNOWN;
+    }
+
+    return (screensave_renderer_kind)value;
+}
+
+int scr_save_renderer_request(screensave_renderer_kind requested_kind)
+{
+    HKEY key;
+    DWORD disposition;
+    LONG result;
+    DWORD value;
+
+    if (!scr_is_valid_renderer_request(requested_kind)) {
+        requested_kind = SCREENSAVE_RENDERER_KIND_UNKNOWN;
+    }
+
+    result = RegCreateKeyExA(
+        HKEY_CURRENT_USER,
+        SCR_HOST_REGISTRY_ROOTA,
+        0,
+        NULL,
+        REG_OPTION_NON_VOLATILE,
+        KEY_SET_VALUE,
+        NULL,
+        &key,
+        &disposition
+    );
+    (void)disposition;
+    if (result != ERROR_SUCCESS) {
+        return 0;
+    }
+
+    value = (DWORD)requested_kind;
+    result = RegSetValueExA(
+        key,
+        "RendererRequest",
+        0,
+        REG_DWORD,
+        (const BYTE *)&value,
+        sizeof(DWORD)
+    );
     RegCloseKey(key);
     return result == ERROR_SUCCESS;
 }

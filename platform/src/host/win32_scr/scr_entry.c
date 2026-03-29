@@ -118,6 +118,7 @@ int screensave_scr_main_with_registry(
     context.available_modules = available_modules;
     context.available_module_count = available_module_count;
     context.module = active_module;
+    context.requested_renderer_kind = scr_load_renderer_request();
 
     screensave_diag_context_init(
         &context.diagnostics,

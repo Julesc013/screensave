@@ -113,7 +113,7 @@ static int scr_create_renderer_and_session(scr_host_context *context, HWND windo
 
     scr_get_client_size(window, &drawable_size);
     if (!screensave_renderer_create_for_window(
-            SCREENSAVE_RENDERER_KIND_UNKNOWN,
+            context->requested_renderer_kind,
             window,
             &drawable_size,
             &context->diagnostics,
@@ -275,7 +275,7 @@ static int scr_overlay_can_draw(const scr_host_context *context)
     }
 
     screensave_renderer_get_info(context->renderer, &renderer_info);
-    return renderer_info.active_kind != SCREENSAVE_RENDERER_KIND_GL11;
+    return renderer_info.active_kind == SCREENSAVE_RENDERER_KIND_GDI;
 }
 
 static LRESULT CALLBACK scr_window_proc(HWND window, UINT message, WPARAM wParam, LPARAM lParam)

@@ -9,7 +9,7 @@ OUTROOT := $(ROOT)/out
 INT_ROOT := $(OUTROOT)/intermediate/mingw/i686/$(PROFILE)
 PLATFORM_DIR := $(INT_ROOT)/screensave_platform
 BENCHLAB_DIR := $(INT_ROOT)/benchlab
-SAVERS := nocturne ricochet deepfield ember oscilloscope_dreams pipeworks lifeforms signal_lab mechanical_dreams ecosystems stormglass night_transit observatory vector_worlds retro_explorer city_nocturne fractal_atlas
+SAVERS := nocturne ricochet deepfield ember oscilloscope_dreams pipeworks lifeforms signal_lab mechanical_dreams ecosystems stormglass night_transit observatory vector_worlds retro_explorer city_nocturne fractal_atlas gl_gallery
 SAVER_UNITS := config module presets render sim themes
 SAVER_TARGETS := $(foreach saver,$(SAVERS),$(OUTROOT)/mingw/i686/$(PROFILE)/$(saver)/$(saver).scr)
 BENCHLAB_TARGET := $(OUTROOT)/mingw/i686/$(PROFILE)/benchlab/benchlab.exe
@@ -47,6 +47,12 @@ PLATFORM_OBJS := \
 	$(PLATFORM_DIR)/gl11_present.o \
 	$(PLATFORM_DIR)/gl11_primitives.o \
 	$(PLATFORM_DIR)/gl11_state.o \
+	$(PLATFORM_DIR)/glp_backend.o \
+	$(PLATFORM_DIR)/glp_caps.o \
+	$(PLATFORM_DIR)/glp_context.o \
+	$(PLATFORM_DIR)/glp_present.o \
+	$(PLATFORM_DIR)/glp_primitives.o \
+	$(PLATFORM_DIR)/glp_state.o \
 	$(PLATFORM_DIR)/scr_args.o \
 	$(PLATFORM_DIR)/scr_config_dialog.o \
 	$(PLATFORM_DIR)/scr_diagnostics.o \
@@ -104,6 +110,10 @@ $(PLATFORM_DIR)/gdi_%.o: $(ROOT)/platform/src/render/gdi/gdi_%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(PLATFORM_DIR)/gl11_%.o: $(ROOT)/platform/src/render/gl11/gl11_%.c
+	mkdir -p $(PLATFORM_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(PLATFORM_DIR)/glp_%.o: $(ROOT)/platform/src/render/gl_plus/glp_%.c
 	mkdir -p $(PLATFORM_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
@@ -250,6 +260,14 @@ $(INT_ROOT)/$(1)/fractal_atlas_%.o: $(ROOT)/products/savers/fractal_atlas/src/fr
 $(INT_ROOT)/$(1)/fractal_atlas_config_res.o: $(ROOT)/products/savers/fractal_atlas/src/fractal_atlas_config.rc
 	mkdir -p $(INT_ROOT)/$(1)
 	$(RC) -I$(ROOT)/products/savers/fractal_atlas/src -i $$< -o $$@
+
+$(INT_ROOT)/$(1)/gl_gallery_%.o: $(ROOT)/products/savers/gl_gallery/src/gl_gallery_%.c
+	mkdir -p $(INT_ROOT)/$(1)
+	$(CC) $(CFLAGS) -c $$< -o $$@
+
+$(INT_ROOT)/$(1)/gl_gallery_config_res.o: $(ROOT)/products/savers/gl_gallery/src/gl_gallery_config.rc
+	mkdir -p $(INT_ROOT)/$(1)
+	$(RC) -I$(ROOT)/products/savers/gl_gallery/src -i $$< -o $$@
 
 $(INT_ROOT)/$(1)/screensave_host_res.o: $(ROOT)/platform/src/host/win32_scr/screensave_host.rc
 	mkdir -p $(INT_ROOT)/$(1)
@@ -421,6 +439,14 @@ $(BENCHLAB_DIR)/fractal_atlas_%.o: $(ROOT)/products/savers/fractal_atlas/src/fra
 $(BENCHLAB_DIR)/fractal_atlas_config_res.o: $(ROOT)/products/savers/fractal_atlas/src/fractal_atlas_config.rc
 	mkdir -p $(BENCHLAB_DIR)
 	$(RC) -I$(ROOT)/products/savers/fractal_atlas/src -i $< -o $@
+
+$(BENCHLAB_DIR)/gl_gallery_%.o: $(ROOT)/products/savers/gl_gallery/src/gl_gallery_%.c
+	mkdir -p $(BENCHLAB_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BENCHLAB_DIR)/gl_gallery_config_res.o: $(ROOT)/products/savers/gl_gallery/src/gl_gallery_config.rc
+	mkdir -p $(BENCHLAB_DIR)
+	$(RC) -I$(ROOT)/products/savers/gl_gallery/src -i $< -o $@
 
 clean:
 	rm -rf $(OUTROOT)/mingw/i686/$(PROFILE) $(INT_ROOT)

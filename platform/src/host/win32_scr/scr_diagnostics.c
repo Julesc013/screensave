@@ -93,7 +93,7 @@ void scr_build_version_text(const scr_host_context *context, char *buffer, int b
     scr_append_text(
         buffer,
         buffer_size,
-        "Shared diagnostics, common config, the saver/module runtime, the mandatory GDI renderer, and the optional GL11 selection path are active."
+        "Shared diagnostics, common config, the saver/module runtime, the mandatory GDI renderer, the optional GL11 tier, and the optional capability-gated GL-plus tier are active."
     );
 }
 

@@ -142,7 +142,8 @@ static int benchlab_is_valid_renderer_request(int renderer_request)
 {
     return renderer_request == (int)SCREENSAVE_RENDERER_KIND_UNKNOWN ||
         renderer_request == (int)SCREENSAVE_RENDERER_KIND_GDI ||
-        renderer_request == (int)SCREENSAVE_RENDERER_KIND_GL11;
+        renderer_request == (int)SCREENSAVE_RENDERER_KIND_GL11 ||
+        renderer_request == (int)SCREENSAVE_RENDERER_KIND_GL_PLUS;
 }
 
 void benchlab_app_config_set_defaults(benchlab_app_config *config)
@@ -356,6 +357,10 @@ void benchlab_app_config_apply_command_line(benchlab_app *app, LPSTR command_lin
             app->app_config.renderer_request = (int)SCREENSAVE_RENDERER_KIND_GL11;
             continue;
         }
+        if (benchlab_command_equals(token, "gl_plus") || benchlab_command_equals(token, "glplus")) {
+            app->app_config.renderer_request = (int)SCREENSAVE_RENDERER_KIND_GL_PLUS;
+            continue;
+        }
         if (benchlab_command_starts_with(token, "renderer:")) {
             const char *renderer_name;
 
@@ -366,6 +371,8 @@ void benchlab_app_config_apply_command_line(benchlab_app *app, LPSTR command_lin
                 app->app_config.renderer_request = (int)SCREENSAVE_RENDERER_KIND_GDI;
             } else if (lstrcmpiA(renderer_name, "gl11") == 0) {
                 app->app_config.renderer_request = (int)SCREENSAVE_RENDERER_KIND_GL11;
+            } else if (lstrcmpiA(renderer_name, "gl_plus") == 0 || lstrcmpiA(renderer_name, "glplus") == 0) {
+                app->app_config.renderer_request = (int)SCREENSAVE_RENDERER_KIND_GL_PLUS;
             } else {
                 benchlab_emit_app_diag(
                     app,

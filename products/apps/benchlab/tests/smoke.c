@@ -22,7 +22,7 @@ int main(void)
     }
 
     module_count = benchlab_get_available_module_count();
-    if (module_count < 17U) {
+    if (module_count < 18U) {
         return 3;
     }
 
@@ -92,6 +92,10 @@ int main(void)
 
     if (benchlab_find_target_module("fractal_atlas") == NULL) {
         return 20;
+    }
+
+    if (benchlab_find_target_module("gl_gallery") == NULL) {
+        return 21;
     }
 
     return 0;

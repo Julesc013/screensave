@@ -12,7 +12,44 @@ typedef struct scr_fallback_dialog_state_tag {
 typedef struct scr_selector_dialog_state_tag {
     scr_host_context *context;
     const screensave_saver_module *selected_module;
+    screensave_renderer_kind selected_renderer_kind;
 } scr_selector_dialog_state;
+
+static screensave_renderer_kind scr_selector_renderer_kind_from_index(LRESULT selection)
+{
+    switch ((int)selection) {
+    case 1:
+        return SCREENSAVE_RENDERER_KIND_GDI;
+
+    case 2:
+        return SCREENSAVE_RENDERER_KIND_GL11;
+
+    case 3:
+        return SCREENSAVE_RENDERER_KIND_GL_PLUS;
+
+    case 0:
+    default:
+        return SCREENSAVE_RENDERER_KIND_UNKNOWN;
+    }
+}
+
+static int scr_selector_renderer_index_from_kind(screensave_renderer_kind requested_kind)
+{
+    switch (requested_kind) {
+    case SCREENSAVE_RENDERER_KIND_GDI:
+        return 1;
+
+    case SCREENSAVE_RENDERER_KIND_GL11:
+        return 2;
+
+    case SCREENSAVE_RENDERER_KIND_GL_PLUS:
+        return 3;
+
+    case SCREENSAVE_RENDERER_KIND_UNKNOWN:
+    default:
+        return 0;
+    }
+}
 
 static const screensave_saver_config_hooks *scr_get_config_hooks(const screensave_saver_module *module)
 {
@@ -265,6 +302,13 @@ static void scr_selector_update_info(HWND dialog, const scr_selector_dialog_stat
     scr_append_text(info, sizeof(info), "\r\n");
     scr_append_text(info, sizeof(info), version_text);
     scr_append_text(info, sizeof(info), "\r\n");
+    scr_append_text(info, sizeof(info), "Requested renderer\r\n");
+    if (dialog_state->selected_renderer_kind == SCREENSAVE_RENDERER_KIND_UNKNOWN) {
+        scr_append_text(info, sizeof(info), "auto");
+    } else {
+        scr_append_text(info, sizeof(info), screensave_renderer_kind_name(dialog_state->selected_renderer_kind));
+    }
+    scr_append_text(info, sizeof(info), "\r\n");
     scr_append_text(info, sizeof(info), dialog_state->selected_module->identity.description);
     SetDlgItemTextA(dialog, IDC_SCR_PRODUCT_INFO, info);
 }
@@ -315,10 +359,33 @@ static void scr_selector_select_current(HWND dialog, const scr_selector_dialog_s
     }
 }
 
+static void scr_selector_populate_renderer_combo(HWND dialog)
+{
+    SendDlgItemMessageA(dialog, IDC_SCR_RENDERER, CB_RESETCONTENT, 0U, 0L);
+    SendDlgItemMessageA(dialog, IDC_SCR_RENDERER, CB_ADDSTRING, 0U, (LPARAM)"Auto (best available)");
+    SendDlgItemMessageA(dialog, IDC_SCR_RENDERER, CB_ADDSTRING, 0U, (LPARAM)"GDI");
+    SendDlgItemMessageA(dialog, IDC_SCR_RENDERER, CB_ADDSTRING, 0U, (LPARAM)"GL11");
+    SendDlgItemMessageA(dialog, IDC_SCR_RENDERER, CB_ADDSTRING, 0U, (LPARAM)"GL Plus");
+}
+
+static void scr_selector_select_renderer(HWND dialog, const scr_selector_dialog_state *dialog_state)
+{
+    int selection;
+
+    if (dialog_state == NULL) {
+        return;
+    }
+
+    selection = scr_selector_renderer_index_from_kind(dialog_state->selected_renderer_kind);
+    SendDlgItemMessageA(dialog, IDC_SCR_RENDERER, CB_SETCURSEL, (WPARAM)selection, 0L);
+}
+
 static void scr_selector_initialize_dialog(HWND dialog, scr_selector_dialog_state *dialog_state)
 {
     scr_selector_populate_combo(dialog, dialog_state);
+    scr_selector_populate_renderer_combo(dialog);
     scr_selector_select_current(dialog, dialog_state);
+    scr_selector_select_renderer(dialog, dialog_state);
     scr_selector_update_info(dialog, dialog_state);
 }
 
@@ -339,6 +406,23 @@ static void scr_selector_handle_product_change(HWND dialog, scr_selector_dialog_
     }
 
     dialog_state->selected_module = dialog_state->context->available_modules[(unsigned int)selection];
+    scr_selector_update_info(dialog, dialog_state);
+}
+
+static void scr_selector_handle_renderer_change(HWND dialog, scr_selector_dialog_state *dialog_state)
+{
+    LRESULT selection;
+
+    if (dialog_state == NULL) {
+        return;
+    }
+
+    selection = SendDlgItemMessageA(dialog, IDC_SCR_RENDERER, CB_GETCURSEL, 0U, 0L);
+    if (selection == CB_ERR) {
+        return;
+    }
+
+    dialog_state->selected_renderer_kind = scr_selector_renderer_kind_from_index(selection);
     scr_selector_update_info(dialog, dialog_state);
 }
 
@@ -367,6 +451,11 @@ static INT_PTR CALLBACK scr_selector_dialog_proc(HWND dialog, UINT message, WPAR
             return TRUE;
         }
 
+        if (LOWORD(wParam) == IDC_SCR_RENDERER && HIWORD(wParam) == CBN_SELCHANGE) {
+            scr_selector_handle_renderer_change(dialog, dialog_state);
+            return TRUE;
+        }
+
         if (LOWORD(wParam) == IDC_SCR_PRODUCT_SETTINGS) {
             int result;
 
@@ -382,20 +471,22 @@ static INT_PTR CALLBACK scr_selector_dialog_proc(HWND dialog, UINT message, WPAR
         if (LOWORD(wParam) == IDOK) {
             if (
                 dialog_state->selected_module == NULL ||
-                !scr_save_selected_product_key(dialog_state->selected_module->identity.product_key)
+                !scr_save_selected_product_key(dialog_state->selected_module->identity.product_key) ||
+                !scr_save_renderer_request(dialog_state->selected_renderer_kind)
             ) {
                 scr_show_message_box(
                     dialog_state->context->owner_window,
                     dialog_state->selected_module != NULL
                         ? dialog_state->selected_module
                         : dialog_state->context->default_module,
-                    "The host could not save the current built-in saver selection.",
+                    "The host could not save the current built-in saver selection and renderer preference.",
                     MB_OK | MB_ICONERROR
                 );
                 return TRUE;
             }
 
             dialog_state->context->module = dialog_state->selected_module;
+            dialog_state->context->requested_renderer_kind = dialog_state->selected_renderer_kind;
             EndDialog(dialog, IDOK);
             return TRUE;
         }
@@ -421,6 +512,7 @@ static INT_PTR scr_show_selector_dialog(scr_host_context *context)
 
     dialog_state.context = context;
     dialog_state.selected_module = context->module;
+    dialog_state.selected_renderer_kind = context->requested_renderer_kind;
 
     result = DialogBoxParamA(
         context->instance,

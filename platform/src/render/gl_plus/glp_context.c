@@ -107,9 +107,16 @@ static int screensave_glp_load_create_context_attribs(screensave_glp_state *stat
 
 static int screensave_glp_create_advanced_context(screensave_glp_state *state)
 {
-    static const int context_attributes[] = {
+    static const int context_attributes_32[] = {
         WGL_CONTEXT_MAJOR_VERSION_ARB, 3,
         WGL_CONTEXT_MINOR_VERSION_ARB, 2,
+        WGL_CONTEXT_FLAGS_ARB, 0,
+        WGL_CONTEXT_PROFILE_MASK_ARB, WGL_CONTEXT_COMPATIBILITY_PROFILE_BIT_ARB,
+        0
+    };
+    static const int context_attributes_21[] = {
+        WGL_CONTEXT_MAJOR_VERSION_ARB, 2,
+        WGL_CONTEXT_MINOR_VERSION_ARB, 1,
         WGL_CONTEXT_FLAGS_ARB, 0,
         WGL_CONTEXT_PROFILE_MASK_ARB, WGL_CONTEXT_COMPATIBILITY_PROFILE_BIT_ARB,
         0
@@ -119,12 +126,12 @@ static int screensave_glp_create_advanced_context(screensave_glp_state *state)
         return 0;
     }
 
-    state->gl_context = state->create_context_attribs(state->window_dc, NULL, context_attributes);
+    state->gl_context = state->create_context_attribs(state->window_dc, NULL, context_attributes_32);
     if (state->gl_context == NULL) {
-        return 0;
+        state->gl_context = state->create_context_attribs(state->window_dc, NULL, context_attributes_21);
     }
 
-    return 1;
+    return state->gl_context != NULL;
 }
 
 int screensave_glp_context_create(

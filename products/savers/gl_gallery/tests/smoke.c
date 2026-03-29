@@ -25,16 +25,20 @@ int main(void)
         return 4;
     }
 
-    if (gl_gallery_find_preset_values("compatibility_gallery") == NULL) {
+    if ((module->capability_flags & SCREENSAVE_SAVER_CAP_OPTIONAL_GL_PLUS) == 0UL) {
         return 5;
     }
 
-    if (gl_gallery_find_theme_descriptor("advanced_showcase") == NULL) {
+    if (gl_gallery_find_preset_values("compatibility_gallery") == NULL) {
         return 6;
     }
 
-    if (gl_gallery_find_theme_descriptor(common_config.theme_key) == NULL) {
+    if (gl_gallery_find_theme_descriptor("advanced_showcase") == NULL) {
         return 7;
+    }
+
+    if (gl_gallery_find_theme_descriptor(common_config.theme_key) == NULL) {
+        return 8;
     }
 
     return 0;

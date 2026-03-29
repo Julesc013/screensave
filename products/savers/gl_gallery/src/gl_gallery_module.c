@@ -23,7 +23,10 @@ static const screensave_saver_module g_gl_gallery_module = {
         "GL Gallery",
         "Renderer-showcase saver with compatibility, GL11 classic, and advanced showcase scene families."
     },
-    SCREENSAVE_SAVER_CAP_UNIVERSAL_GDI | SCREENSAVE_SAVER_CAP_OPTIONAL_GL11 | SCREENSAVE_SAVER_CAP_LONG_RUN_STABLE,
+    SCREENSAVE_SAVER_CAP_UNIVERSAL_GDI |
+        SCREENSAVE_SAVER_CAP_OPTIONAL_GL11 |
+        SCREENSAVE_SAVER_CAP_OPTIONAL_GL_PLUS |
+        SCREENSAVE_SAVER_CAP_LONG_RUN_STABLE,
     g_gl_gallery_presets,
     GL_GALLERY_PRESET_COUNT,
     g_gl_gallery_themes,

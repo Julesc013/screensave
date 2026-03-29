@@ -35,6 +35,7 @@ SAVERS = (
     ("retro_explorer", "Retro Explorer"),
     ("city_nocturne", "City Nocturne"),
     ("fractal_atlas", "Fractal Atlas"),
+    ("gl_gallery", "GL Gallery"),
 )
 
 
@@ -122,6 +123,13 @@ def required_paths() -> list[pathlib.Path]:
         ROOT / "platform" / "src" / "core" / "grid" / "grid_buffer.c",
         ROOT / "platform" / "src" / "core" / "visual" / "visual_buffer.c",
         ROOT / "platform" / "src" / "host" / "win32_scr" / "screensave_host.rc",
+        ROOT / "platform" / "src" / "render" / "gl_plus" / "README.md",
+        ROOT / "platform" / "src" / "render" / "gl_plus" / "glp_backend.c",
+        ROOT / "platform" / "src" / "render" / "gl_plus" / "glp_caps.c",
+        ROOT / "platform" / "src" / "render" / "gl_plus" / "glp_context.c",
+        ROOT / "platform" / "src" / "render" / "gl_plus" / "glp_present.c",
+        ROOT / "platform" / "src" / "render" / "gl_plus" / "glp_primitives.c",
+        ROOT / "platform" / "src" / "render" / "gl_plus" / "glp_state.c",
         ROOT / "products" / "apps" / "benchlab" / "README.md",
         ROOT / "products" / "apps" / "benchlab" / "src" / "benchlab_session.c",
         ROOT / "products" / "apps" / "benchlab" / "tests" / "smoke.c",
@@ -189,6 +197,8 @@ def main() -> int:
         "retro explorer",
         "city nocturne",
         "fractal atlas",
+        "gl plus",
+        "gl gallery",
     ):
         require(phrase in build_readme, f"build/README.md is missing expected phrase: {phrase!r}", errors)
 
@@ -213,6 +223,7 @@ def main() -> int:
         "retro_explorer.vcxproj",
         "city_nocturne.vcxproj",
         "fractal_atlas.vcxproj",
+        "gl_gallery.vcxproj",
         "Debug|Win32",
         "Release|Win32",
     ):
@@ -238,6 +249,12 @@ def main() -> int:
             "..\\..\\..\\platform\\src\\render\\gdi\\gdi_backend.c",
             "..\\..\\..\\platform\\src\\render\\gdi\\gdi_primitives.c",
             "..\\..\\..\\platform\\src\\render\\gl11\\gl11_backend.c",
+            "..\\..\\..\\platform\\src\\render\\gl_plus\\glp_backend.c",
+            "..\\..\\..\\platform\\src\\render\\gl_plus\\glp_caps.c",
+            "..\\..\\..\\platform\\src\\render\\gl_plus\\glp_context.c",
+            "..\\..\\..\\platform\\src\\render\\gl_plus\\glp_present.c",
+            "..\\..\\..\\platform\\src\\render\\gl_plus\\glp_primitives.c",
+            "..\\..\\..\\platform\\src\\render\\gl_plus\\glp_state.c",
             "..\\..\\..\\platform\\src\\host\\win32_scr\\scr_entry.c",
             "..\\..\\..\\platform\\src\\host\\win32_scr\\scr_window.c",
         ],
@@ -285,6 +302,8 @@ def main() -> int:
         "retro_explorer",
         "city_nocturne",
         "fractal_atlas",
+        "gl_gallery",
+        "glp_backend",
     ):
         require(expected in makefile_text, f"Makefile is missing {expected!r}.", errors)
 

@@ -3,6 +3,7 @@
 #include "renderer_private.h"
 #include "../../render/gdi/gdi_internal.h"
 #include "../../render/gl11/gl11_internal.h"
+#include "../../render/gl_plus/glp_internal.h"
 
 static void screensave_renderer_emit_create_diag(
     screensave_diag_context *diagnostics,
@@ -103,14 +104,16 @@ int screensave_renderer_create_for_window(
     screensave_renderer **renderer_out
 )
 {
-    const char *failure_reason;
+    const char *gl11_failure_reason;
+    const char *glp_failure_reason;
 
     if (renderer_out == NULL) {
         return 0;
     }
 
     *renderer_out = NULL;
-    failure_reason = NULL;
+    gl11_failure_reason = NULL;
+    glp_failure_reason = NULL;
 
     if (requested_kind == SCREENSAVE_RENDERER_KIND_GDI) {
         if (!screensave_gdi_renderer_create(target_window, drawable_size, diagnostics, renderer_out)) {
@@ -128,13 +131,13 @@ int screensave_renderer_create_for_window(
 
     if (
         requested_kind == SCREENSAVE_RENDERER_KIND_UNKNOWN ||
-        requested_kind == SCREENSAVE_RENDERER_KIND_GL11
+        requested_kind == SCREENSAVE_RENDERER_KIND_GL_PLUS
     ) {
-        if (screensave_gl11_renderer_create(target_window, drawable_size, diagnostics, renderer_out, &failure_reason)) {
+        if (screensave_glp_renderer_create(target_window, drawable_size, diagnostics, renderer_out, &glp_failure_reason)) {
             screensave_renderer_apply_selection_info(
                 *renderer_out,
                 requested_kind,
-                requested_kind == SCREENSAVE_RENDERER_KIND_GL11 ? "force-gl11" : "auto-prefer-gl11",
+                requested_kind == SCREENSAVE_RENDERER_KIND_GL_PLUS ? "force-gl-plus" : "auto-prefer-gl-plus",
                 NULL,
                 NULL
             );
@@ -144,18 +147,44 @@ int screensave_renderer_create_for_window(
         screensave_renderer_emit_create_diag(
             diagnostics,
             SCREENSAVE_DIAG_LEVEL_WARNING,
-            4101UL,
-            requested_kind == SCREENSAVE_RENDERER_KIND_GL11
-                ? "The requested GL11 renderer could not be initialized; falling back to GDI."
-                : "GL11 could not be initialized during automatic selection; falling back to GDI."
+            requested_kind == SCREENSAVE_RENDERER_KIND_GL_PLUS ? 4102UL : 4103UL,
+            requested_kind == SCREENSAVE_RENDERER_KIND_GL_PLUS
+                ? "The requested GL-plus renderer could not be initialized; trying lower renderer tiers."
+                : "GL-plus could not be initialized during automatic selection; trying lower renderer tiers."
         );
-    } else if (requested_kind == SCREENSAVE_RENDERER_KIND_GL_PLUS) {
-        failure_reason = "gl-plus-not-implemented";
+    }
+
+    if (
+        requested_kind == SCREENSAVE_RENDERER_KIND_UNKNOWN ||
+        requested_kind == SCREENSAVE_RENDERER_KIND_GL11 ||
+        requested_kind == SCREENSAVE_RENDERER_KIND_GL_PLUS
+    ) {
+        if (screensave_gl11_renderer_create(target_window, drawable_size, diagnostics, renderer_out, &gl11_failure_reason)) {
+            screensave_renderer_apply_selection_info(
+                *renderer_out,
+                requested_kind,
+                requested_kind == SCREENSAVE_RENDERER_KIND_GL11
+                    ? "force-gl11"
+                    : (requested_kind == SCREENSAVE_RENDERER_KIND_GL_PLUS
+                    ? "force-gl-plus-fallback-gl11"
+                        : "auto-fallback-gl11"),
+                glp_failure_reason,
+                requested_kind == SCREENSAVE_RENDERER_KIND_UNKNOWN || requested_kind == SCREENSAVE_RENDERER_KIND_GL_PLUS
+                    ? "fallback-gl11"
+                    : NULL
+            );
+            return 1;
+        }
+
         screensave_renderer_emit_create_diag(
             diagnostics,
             SCREENSAVE_DIAG_LEVEL_WARNING,
-            4102UL,
-            "The requested GL-plus renderer is not implemented yet; falling back to GDI."
+            requested_kind == SCREENSAVE_RENDERER_KIND_GL11 ? 4101UL : 4104UL,
+            requested_kind == SCREENSAVE_RENDERER_KIND_GL11
+                ? "The requested GL11 renderer could not be initialized; falling back to GDI."
+                : (requested_kind == SCREENSAVE_RENDERER_KIND_GL_PLUS
+                    ? "The requested GL-plus renderer also could not fall back to GL11; falling back to GDI."
+                    : "GL11 could not be initialized during automatic selection; falling back to GDI.")
         );
     }
 
@@ -171,7 +200,7 @@ int screensave_renderer_create_for_window(
             : (requested_kind == SCREENSAVE_RENDERER_KIND_GL_PLUS
                 ? "force-gl-plus-fallback-gdi"
                 : "auto-fallback-gdi"),
-        failure_reason,
+        gl11_failure_reason != NULL ? gl11_failure_reason : glp_failure_reason,
         "fallback-gdi"
     );
     return 1;
@@ -191,6 +220,8 @@ int screensave_renderer_resize_for_window(screensave_renderer *renderer, const s
         return screensave_gl11_renderer_resize(renderer, drawable_size);
 
     case SCREENSAVE_RENDERER_KIND_GL_PLUS:
+        return screensave_glp_renderer_resize(renderer, drawable_size);
+
     case SCREENSAVE_RENDERER_KIND_UNKNOWN:
     default:
         return 0;
@@ -213,6 +244,9 @@ void screensave_renderer_set_present_dc(screensave_renderer *renderer, HDC prese
         break;
 
     case SCREENSAVE_RENDERER_KIND_GL_PLUS:
+        screensave_glp_renderer_set_present_dc(renderer, present_dc);
+        break;
+
     case SCREENSAVE_RENDERER_KIND_UNKNOWN:
     default:
         break;
@@ -235,6 +269,9 @@ void screensave_renderer_clear_present_dc(screensave_renderer *renderer)
         break;
 
     case SCREENSAVE_RENDERER_KIND_GL_PLUS:
+        screensave_glp_renderer_clear_present_dc(renderer);
+        break;
+
     case SCREENSAVE_RENDERER_KIND_UNKNOWN:
     default:
         break;

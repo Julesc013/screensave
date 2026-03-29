@@ -11,10 +11,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{C967D0E0-6C4E-4D5F-8C7E-4F3DB0C9A221}</ProjectGuid>
+    <ProjectGuid>{7C4E6B87-48A3-4BB6-A7F0-9D243C8CE158}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>oscilloscope_dreams</RootNamespace>
-    <ProjectName>oscilloscope_dreams</ProjectName>
+    <RootNamespace>gl_gallery</RootNamespace>
+    <ProjectName>gl_gallery</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -43,7 +43,7 @@
   <PropertyGroup>
     <OutDir>$(SolutionDir)..\..\..\out\msvc\vs2022\$(Configuration)\$(ProjectName)\</OutDir>
     <IntDir>$(SolutionDir)..\..\..\out\intermediate\msvc\vs2022\$(Configuration)\$(ProjectName)\</IntDir>
-    <TargetName>oscilloscope_dreams</TargetName>
+    <TargetName>gl_gallery</TargetName>
     <TargetExt>.scr</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -193,7 +193,7 @@
     <ClCompile Include="..\..\..\products\savers\gl_gallery\src\gl_gallery_render.c" />
     <ClCompile Include="..\..\..\products\savers\gl_gallery\src\gl_gallery_sim.c" />
     <ClCompile Include="..\..\..\products\savers\gl_gallery\src\gl_gallery_themes.c" />
-    <ClCompile Include="..\..\..\products\savers\oscilloscope_dreams\src\oscilloscope_dreams_entry.c" />
+    <ClCompile Include="..\..\..\products\savers\gl_gallery\src\gl_gallery_entry.c" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\..\products\savers\nocturne\src\nocturne_config.rc" />

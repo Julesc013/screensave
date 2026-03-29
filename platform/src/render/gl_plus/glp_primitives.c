@@ -171,6 +171,8 @@ int screensave_glp_blit_bitmap_impl(
 {
     screensave_glp_state *state;
     GLenum pixel_format;
+    GLfloat zoom_x;
+    GLfloat zoom_y;
 
     if (
         !screensave_glp_can_draw(renderer, &state) ||
@@ -194,12 +196,14 @@ int screensave_glp_blit_bitmap_impl(
 
     glDisable(GL_TEXTURE_2D);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    zoom_x = (GLfloat)destination_rect->width / (GLfloat)bitmap->size.width;
+    zoom_y = (GLfloat)destination_rect->height / (GLfloat)bitmap->size.height;
     if (bitmap->origin_top_left) {
         glRasterPos2i(destination_rect->x, destination_rect->y + destination_rect->height);
-        glPixelZoom(1.0f, -1.0f);
+        glPixelZoom(zoom_x, -zoom_y);
     } else {
         glRasterPos2i(destination_rect->x, destination_rect->y);
-        glPixelZoom(1.0f, 1.0f);
+        glPixelZoom(zoom_x, zoom_y);
     }
     glDrawPixels(
         bitmap->size.width,
