@@ -135,12 +135,20 @@ def check_pack_samples(errors: list[str]) -> None:
                 require(scene.has_section("scene"), f"{target_path.relative_to(ROOT)} is missing the [scene] section.", errors)
 
 
+def check_architecture_note(errors: list[str]) -> None:
+    note = read_text(ROOT / "validation" / "notes" / "c04-shared-settings-architecture.md")
+    require("# C04 Shared Settings Architecture" in note, "C04 architecture note is missing its title.", errors)
+    require("`C05` Windows picker, config, preview, and fullscreen validation" in note, "C04 architecture note must name the next continuation step.", errors)
+    require("Built-in pack location: `products/savers/<slug>/packs/<pack_key>/pack.ini`" in note, "C04 architecture note must record the built-in pack location.", errors)
+
+
 def main() -> int:
     errors: list[str] = []
 
     check_module_contract(errors)
     check_host_and_benchlab(errors)
     check_pack_samples(errors)
+    check_architecture_note(errors)
 
     if errors:
         for error in errors:

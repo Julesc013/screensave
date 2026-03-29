@@ -15,8 +15,8 @@ The platform target is intentionally conservative:
 ## Current Status
 
 The repository is in Series 15.
-Implementation currently exists through `S15` plus continuation `C00`, `C01`, `C02`, and `C03`.
-C00 reset the post-`S15` continuation roadmap, C01 applied the canonical saver/app rename and renderer-taxonomy normalization pass, C02 locked the post-rename migration baseline and recovery checkpoint, and C03 converted the eighteen current savers into first-class standalone `.scr` product targets.
+Implementation currently exists through `S15` plus continuation `C00`, `C01`, `C02`, `C03`, and `C04`.
+C00 reset the post-`S15` continuation roadmap, C01 applied the canonical saver/app rename and renderer-taxonomy normalization pass, C02 locked the post-rename migration baseline and recovery checkpoint, C03 converted the eighteen current savers into first-class standalone `.scr` product targets, and C04 established the shared settings taxonomy, versioned preset/theme import-export files, within-saver session randomization, pack manifest discovery/validation helpers, and modest host plus BenchLab inspection foundations.
 The older short `S16` / `S17` endpoint is superseded by `docs/roadmap/post-s15-plan.md`.
 Series 00 established repository law, structure, roadmap, and agent guidance.
 Series 01 added contribution, review, governance, and CI foundations.
@@ -90,7 +90,7 @@ Series 15 adds the advanced GL capability path and Gallery:
 - Gallery as the renderer-showcase saver with deliberate GDI, GL11, and GL21-tier scene variants plus curated compatibility, classic, and advanced presets
 - explicit host and BenchLab wiring so the current saver set can be exercised honestly through the tiered renderer stack without turning the repo into the final meta-gallery
 
-The next continuation phase is `C04` for shared settings, presets, randomization, and pack architecture.
+The next continuation phase is `C05` for Windows picker, config, preview, and fullscreen validation.
 
 ## Planned Product Shape
 
@@ -104,6 +104,7 @@ ScreenSave is structured as one shared platform with many releasable products:
 `benchlab` is now the first real non-saver app in the tree.
 `products/apps/suite/` is now the canonical suite-app placeholder location.
 `products/apps/player/` remains only as a superseded legacy stub and must not grow into a separate public app.
+The saver line now also shares a versioned settings, preset, theme, randomization, and pack contract while keeping product-local meaning and content in the owning saver tree.
 Canonical post-`S15` saver and app naming plus migration aliases are tracked in `docs/roadmap/rename-map.md`.
 Additional saver families and suite-level products are described in `docs/roadmap/products-and-lineup.md`.
 

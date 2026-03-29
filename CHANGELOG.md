@@ -2,6 +2,29 @@
 
 All notable repository changes are recorded here in prompt history order.
 
+## C04 - 2026-03-30
+
+### Added
+
+- `platform/include/screensave/settings_api.h` plus `platform/src/core/config/settings.c` as the shared settings, preset/theme import-export, pack manifest, and pack discovery surface for the renamed eighteen-saver product line.
+- `validation/notes/c04-shared-settings-architecture.md` as the explicit baseline note for the shared settings taxonomy, file formats, pack rules, migration/version boundaries, representative saver adoption, and the next continuation step.
+- Sample built-in packs under `products/savers/plasma/packs/`, `products/savers/transit/packs/`, and `products/savers/atlas/packs/` so the new pack format is exercised by real repository data instead of documentation-only examples.
+
+### Changed
+
+- Extended the shared config and saver-module contracts with schema-versioned common state, settings capability flags, import/export hooks, and product-local randomization hooks while preserving product-local ownership of actual saver semantics.
+- Updated the Win32 host to carry both stored and resolved per-session saver config, added a modest shared randomization control to the fallback settings dialog, and kept the configuration path bounded to the normal saver dialog flow instead of building a new suite UI framework.
+- Updated BenchLab to inspect the resolved per-session config state and surface active preset, theme, detail, and randomization information without turning the diagnostics harness into the future `suite` app.
+- Adopted the shared settings surface broadly across the saver line and added deeper import/export/randomization support in representative savers `nocturne`, `plasma`, `vector`, `ecosystems`, `transit`, and `atlas`.
+- Updated `README.md`, roadmap docs, `specs/config_schema.md`, BenchLab docs, and the validation helpers so the repository now records `C04` as complete and names `C05` Windows picker, config, preview, and fullscreen validation as the next continuation step.
+
+### Validation
+
+- Confirmed before editing that the roadmap reset, rename/taxonomy normalization, post-rename checkpoint, and all-saver `.scr` productization baselines already existed in the repo.
+- Performed a narrow audit of shared config state, host dialog wiring, BenchLab diagnostics, representative saver hooks, pack sample layout, roadmap status notes, and the config schema spec to remove the remaining `C04 is next` drift from active repo truth.
+- Ran `python tools/scripts/check_repo_structure.py`, `python tools/scripts/check_codex_config.py`, `python tools/scripts/check_docs_basics.py`, `python tools/scripts/check_build_layout.py`, `python tools/scripts/check_canonical_naming.py`, `python tools/scripts/check_shared_settings_layout.py`, and `git diff --check` on the final tree.
+- Confirmed this prompt did not add packaging, installer, suite-meta, suite-app, or plugin-SDK work.
+
 ## C03 - 2026-03-30
 
 ### Added

@@ -1,4 +1,4 @@
-"""Validate the locked C03 canonical saver/app naming baseline."""
+"""Validate the locked canonical saver/app naming baseline and continuation status."""
 
 from __future__ import annotations
 
@@ -73,8 +73,8 @@ def main() -> int:
     require_text(
         ROOT / "README.md",
         (
-            "Implementation currently exists through `S15` plus continuation `C00`, `C01`, `C02`, and `C03`.",
-            "The next continuation phase is `C04` for shared settings, presets, randomization, and pack architecture.",
+            "Implementation currently exists through `S15` plus continuation `C00`, `C01`, `C02`, `C03`, and `C04`.",
+            "The next continuation phase is `C05` for Windows picker, config, preview, and fullscreen validation.",
             "`products/apps/suite/` is now the canonical suite-app placeholder location.",
         ),
         errors,
@@ -82,17 +82,17 @@ def main() -> int:
     require_text(
         ROOT / "docs" / "roadmap" / "prompt-program.md",
         (
-            "Post-`S15` work now follows committed `C00`, `C01`, `C02`, and `C03` work plus later continuation prompts.",
-            "C04 is the next planned implementation prompt after saver productization.",
-            "- `C00`, `C01`, `C02`, and `C03` are complete.",
+            "Post-`S15` work now follows committed `C00`, `C01`, `C02`, `C03`, and `C04` work plus later continuation prompts.",
+            "C05 is the next planned implementation prompt after the shared settings baseline.",
+            "- `C00`, `C01`, `C02`, `C03`, and `C04` are complete.",
         ),
         errors,
     )
     require_text(
         ROOT / "docs" / "roadmap" / "series-map.md",
         (
-            "`C00`, `C01`, `C02`, and `C03` are complete.",
-            "The next planned implementation prompt is `C04` shared settings, presets, randomization, and pack architecture.",
+            "`C00`, `C01`, `C02`, `C03`, and `C04` are complete.",
+            "The next planned implementation prompt is `C05` Windows picker, config, preview, and fullscreen validation.",
         ),
         errors,
     )
@@ -100,7 +100,7 @@ def main() -> int:
         ROOT / "docs" / "roadmap" / "post-s15-plan.md",
         (
             "the locked `C02` post-rename checkpoint",
-            "The next continuation prompt should be `C04` for shared settings, presets, randomization, and pack architecture.",
+            "The next continuation prompt should be `C05` for Windows picker, config, preview, and fullscreen validation.",
         ),
         errors,
     )
@@ -126,6 +126,15 @@ def main() -> int:
             "# C03 Productization Matrix",
             "- `C04` shared settings, presets, randomization, and pack architecture",
             "- BenchLab remains a separate diagnostics app",
+        ),
+        errors,
+    )
+    require_text(
+        ROOT / "validation" / "notes" / "c04-shared-settings-architecture.md",
+        (
+            "# C04 Shared Settings Architecture",
+            "- `C05` Windows picker, config, preview, and fullscreen validation",
+            "- Built-in pack location: `products/savers/<slug>/packs/<pack_key>/pack.ini`",
         ),
         errors,
     )
