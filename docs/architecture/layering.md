@@ -38,6 +38,9 @@ Series 08 proves the renderer contract can support both the mandatory GDI floor 
 Series 09 proves the same layering can support multiple real saver products while keeping only narrow selection helpers in shared code and leaving product motion logic inside each saver.
 Series 10 proves the same layering can also support richer framebuffer and vector products while promoting only a narrow shared visual-buffer helper and keeping palette, formula, persistence, and theme choices inside the owning products.
 Series 11 proves the same layering can also support stateful grid and cellular products while promoting only a narrow shared byte-grid helper and keeping growth, reseed, rule, and simulation choices inside the owning products.
+Series 12 proves the same layering can also support layered system-interface, kinetic-assembly, and ambient-behavior products without promoting a broad widget, animation, or ecology framework into shared code.
+Series 13 proves the same layering can also support atmospheric weather, transit-infrastructure, and celestial exhibit products without promoting a broad weather, route, astronomy, or scenic framework into shared code.
+Series 14 proves the same layering can also support heavyweight software-3D, traversal, urban-scenic, and fractal-voyage products while keeping projection, route, scene, and refinement behavior inside the owning products rather than promoting a broad engine.
 
 ## Product Boundary
 

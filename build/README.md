@@ -16,7 +16,7 @@ The build scaffold is not the constitutional source of truth.
 The normative compatibility and target rules remain in `specs/build_targets.md` and related specs.
 This directory translates those rules into reviewable build lanes.
 
-## Current State In Series 13
+## Current State In Series 14
 
 Real now:
 
@@ -29,19 +29,19 @@ Real now:
 - a real optional OpenGL 1.1 backend under `platform/src/render/gl11/`
 - a narrow shared software visual-buffer helper under `platform/src/core/visual/`
 - a narrow shared grid-state helper under `platform/src/core/grid/`
-- real saver products under `products/savers/nocturne/`, `products/savers/ricochet/`, `products/savers/deepfield/`, `products/savers/ember/`, `products/savers/oscilloscope_dreams/`, `products/savers/pipeworks/`, `products/savers/lifeforms/`, `products/savers/signal_lab/`, `products/savers/mechanical_dreams/`, `products/savers/ecosystems/`, `products/savers/stormglass/`, `products/savers/night_transit/`, and `products/savers/observatory/`
+- real saver products under `products/savers/nocturne/`, `products/savers/ricochet/`, `products/savers/deepfield/`, `products/savers/ember/`, `products/savers/oscilloscope_dreams/`, `products/savers/pipeworks/`, `products/savers/lifeforms/`, `products/savers/signal_lab/`, `products/savers/mechanical_dreams/`, `products/savers/ecosystems/`, `products/savers/stormglass/`, `products/savers/night_transit/`, `products/savers/observatory/`, `products/savers/vector_worlds/`, `products/savers/retro_explorer/`, `products/savers/city_nocturne/`, and `products/savers/fractal_atlas/`
 - a real BenchLab diagnostics app under `products/apps/benchlab/`
 - product-owned configuration, presets, and themes wired through the shared saver contract
 - a windowed harness path that runs the active saver through the shared saver and renderer contracts outside the `.scr` host
 - explicit renderer selection and fallback reporting through the shared renderer path
-- narrow multi-product host and BenchLab wiring for the current thirteen-product saver set
+- narrow multi-product host and BenchLab wiring for the current seventeen-product saver set
 - a tiny renderer-driven validation scene retained only as a non-product fallback path
 - build-layout validation in `tools/scripts/check_build_layout.py`
 
 Deferred:
 
 - GL-plus and later accelerated renderer tiers
-- additional saver families beyond Nocturne, Ricochet, Deepfield, Ember, Oscilloscope Dreams, Pipeworks, Lifeforms, Signal Lab, Mechanical Dreams, Ecosystems, Stormglass, Night Transit, and Observatory
+- later-series work beyond Nocturne, Ricochet, Deepfield, Ember, Oscilloscope Dreams, Pipeworks, Lifeforms, Signal Lab, Mechanical Dreams, Ecosystems, Stormglass, Night Transit, Observatory, Vector Worlds, Retro Explorer, City Nocturne, and Fractal Atlas
 - a final player or gallery app
 - full legacy project files for VS6 and VS2008
 - packaging and release production

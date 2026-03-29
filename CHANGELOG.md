@@ -2,6 +2,29 @@
 
 All notable repository changes are recorded here in series order.
 
+## S14 - 2026-03-29
+
+### Added
+
+- Vector Worlds under `products/savers/vector_worlds/` as the Heavyweight Worlds Family software-3D product, including real wireframe-field, tunnel-flow, and terrain-line scene modes, product-owned config, curated presets/themes, a manifest, and lightweight smoke coverage.
+- Retro Explorer under `products/savers/retro_explorer/` as the Heavyweight Worlds Family traversal product, including real corridor, industrial-passage, and canyon-run scene modes, product-owned config, curated presets/themes, a manifest, and lightweight smoke coverage.
+- City Nocturne under `products/savers/city_nocturne/` as the Heavyweight Worlds Family urban scenic product, including real skyline, harbor-edge, and rooftop-flyover scene modes, product-owned config, curated presets/themes, a manifest, and lightweight smoke coverage.
+- Fractal Atlas under `products/savers/fractal_atlas/` as the Heavyweight Worlds Family fractal-voyage product, including real atlas, voyage, and Julia-style presentation modes, product-owned config, curated presets/themes, a manifest, and lightweight smoke coverage.
+
+### Changed
+
+- Updated the built-in saver wiring so the current `.scr` products can default to Nocturne, Ricochet, Deepfield, Ember, Oscilloscope Dreams, Pipeworks, Lifeforms, Signal Lab, Mechanical Dreams, Ecosystems, Stormglass, Night Transit, Observatory, Vector Worlds, Retro Explorer, City Nocturne, or Fractal Atlas while preserving the shared saver/module contract, explicit product identity, and automatic renderer-selection behavior.
+- Updated BenchLab so the diagnostics harness can select and inspect all seventeen current savers through the shared saver and renderer paths while keeping the UI modest and developer-facing.
+- Updated the concrete VS2022 and MinGW i686 build lanes, static build checks, product manifests, and repo docs so Series 14 truthfully describes the heavyweight worlds family and the widened seventeen-product harness.
+
+### Validation
+
+- Confirmed Series 00 through Series 13 prerequisites existed before changes.
+- Ran `python tools/scripts/check_repo_structure.py`, `python tools/scripts/check_codex_config.py`, and `python tools/scripts/check_build_layout.py`; all passed.
+- Confirmed the checked-in VS2022 solution, saver projects, BenchLab project, and MinGW i686 make lane now include Vector Worlds, Retro Explorer, City Nocturne, and Fractal Atlas alongside the existing saver set.
+- Confirmed that full Win32 build and smoke execution could not be completed in this environment because `MSBuild.exe` / Visual C++ targets were not installed and `mingw32-make` was unavailable.
+- Confirmed no GL-plus or modern-context work, next-series work, gallery/player scope, packaging logic, or unsupported compatibility claims were added in this series.
+
 ## S13 - 2026-03-29
 
 ### Added

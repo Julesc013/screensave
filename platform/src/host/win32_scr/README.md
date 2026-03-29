@@ -25,5 +25,6 @@ Series 08 keeps the host on automatic shared-renderer selection so GDI remains t
 Series 09 adds a narrow built-in saver selector for the current real saver set, persists the selected product key at the host level, and keeps product-specific settings inside each saver's own dialog instead of turning the host UI into a suite manager.
 Series 12 extends the same explicit built-in selector to the current ten-product saver set, including Signal Lab, Mechanical Dreams, and Ecosystems, while preserving the existing host lifecycle and automatic renderer-selection behavior.
 Series 13 extends the same explicit built-in selector to the current thirteen-product saver set, including Stormglass, Night Transit, and Observatory, while preserving the existing host lifecycle and automatic renderer-selection behavior.
+Series 14 extends the same explicit built-in selector to the current seventeen-product saver set, including Vector Worlds, Retro Explorer, City Nocturne, and Fractal Atlas, while preserving the existing host lifecycle and automatic renderer-selection behavior.
 The validation scene remains only as a fallback path for non-product sessions.
 Type: runtime host implementation.

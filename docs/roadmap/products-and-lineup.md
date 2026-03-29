@@ -42,6 +42,14 @@ Names are planning anchors, not release claims.
 - `canopy`: layered scenic motion with strong fallback discipline.
 - `glass_reef`: watery or reflective scenic study, only if it remains baseline-safe.
 
+## Heavyweight Worlds Family And Related Studies
+
+- `vector_worlds`: abstract software-3D and wireframe flyover saver and a real Heavyweight Worlds Family product.
+- `retro_explorer`: raycast-and-autopilot traversal saver and a real Heavyweight Worlds Family product.
+- `city_nocturne`: urban night-world scenic saver and a real Heavyweight Worlds Family product.
+- `fractal_atlas`: curated fractal-voyage saver and a real Heavyweight Worlds Family product.
+- `prism_hall`: future showcase concept if later renderer-expansion work proves stable.
+
 ## Mathematical And Procedural
 
 - `pendulum_study`: deterministic physics-inspired motion.
@@ -55,7 +63,6 @@ Names are planning anchors, not release claims.
 ## Heavyweight And Showcase
 
 - `gl_gallery`: accelerated showcase saver reserved for optional higher renderer tiers.
-- `prism_hall`: future showcase concept if `gl_plus` proves stable.
 
 ## Suite-Level Products
 

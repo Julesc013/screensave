@@ -48,5 +48,11 @@ Series 13 extends the same app to the current thirteen-product harness:
 - continued use of the shared saver dialogs and shared renderer path for motion-family, framebuffer/vector-family, grid/simulation-family, systems/ambient-family, and places/atmosphere-family validation
 - preservation of deterministic restart/reseed value while keeping the UI modest and developer-facing
 
+Series 14 extends the same app to the current seventeen-product harness:
+
+- explicit saver selection for Nocturne, Ricochet, Deepfield, Ember, Oscilloscope Dreams, Pipeworks, Lifeforms, Signal Lab, Mechanical Dreams, Ecosystems, Stormglass, Night Transit, Observatory, Vector Worlds, Retro Explorer, City Nocturne, and Fractal Atlas
+- continued use of the shared saver dialogs and shared renderer path for heavyweight software-3D, traversal, urban-scenic, and fractal-family validation alongside the earlier families
+- preservation of deterministic restart/reseed value while keeping the UI modest and developer-facing
+
 BenchLab is intentionally narrow. It is a validation harness for developers, not the final end-user player.
 Type: product runtime space.

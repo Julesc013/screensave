@@ -1,6 +1,6 @@
 # VS2022 Lane
 
-This is the concrete modern MSVC lane for Series 13.
+This is the concrete modern MSVC lane for Series 14.
 
 ## What Exists Now
 
@@ -19,10 +19,14 @@ This is the concrete modern MSVC lane for Series 13.
 - `stormglass.vcxproj`
 - `night_transit.vcxproj`
 - `observatory.vcxproj`
+- `vector_worlds.vcxproj`
+- `retro_explorer.vcxproj`
+- `city_nocturne.vcxproj`
+- `fractal_atlas.vcxproj`
 - `benchlab.vcxproj`
 
 These files stay intentionally small.
-They define one shared static-library target, thirteen `.scr` saver targets, and one windowed diagnostics app target with a shared core runtime, the mandatory GDI backend, the optional GL11 backend, a real host skeleton, thirteen real saver products, and the current diagnostics app.
+They define one shared static-library target, seventeen `.scr` saver targets, and one windowed diagnostics app target with a shared core runtime, the mandatory GDI backend, the optional GL11 backend, a real host skeleton, seventeen real saver products, and the current diagnostics app.
 
 ## What The Targets Mean
 
@@ -40,7 +44,11 @@ They define one shared static-library target, thirteen `.scr` saver targets, and
 - `stormglass` compiles the same shared platform plus saver set and links the `.scr` executable target that defaults to Stormglass.
 - `night_transit` compiles the same shared platform plus saver set and links the `.scr` executable target that defaults to Night Transit.
 - `observatory` compiles the same shared platform plus saver set and links the `.scr` executable target that defaults to Observatory.
-- `benchlab` compiles the BenchLab app sources, reuses the real Nocturne, Ricochet, Deepfield, Ember, Oscilloscope Dreams, Pipeworks, Lifeforms, Signal Lab, Mechanical Dreams, Ecosystems, Stormglass, Night Transit, and Observatory product sources through the shared saver contract, links `opengl32` for explicit backend validation, and links the diagnostics harness executable target.
+- `vector_worlds` compiles the same shared platform plus saver set and links the `.scr` executable target that defaults to Vector Worlds.
+- `retro_explorer` compiles the same shared platform plus saver set and links the `.scr` executable target that defaults to Retro Explorer.
+- `city_nocturne` compiles the same shared platform plus saver set and links the `.scr` executable target that defaults to City Nocturne.
+- `fractal_atlas` compiles the same shared platform plus saver set and links the `.scr` executable target that defaults to Fractal Atlas.
+- `benchlab` compiles the BenchLab app sources, reuses the real Nocturne, Ricochet, Deepfield, Ember, Oscilloscope Dreams, Pipeworks, Lifeforms, Signal Lab, Mechanical Dreams, Ecosystems, Stormglass, Night Transit, Observatory, Vector Worlds, Retro Explorer, City Nocturne, and Fractal Atlas product sources through the shared saver contract, links `opengl32` for explicit backend validation, and links the diagnostics harness executable target.
 
 The concrete host lifecycle now lives in the checked-in target graph.
 Later series should extend these targets in place instead of introducing parallel demo targets.
