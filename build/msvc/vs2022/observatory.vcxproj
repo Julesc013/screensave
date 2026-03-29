@@ -11,10 +11,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{6A35B8DB-EADF-4B29-B3CB-F6CB99A6B421}</ProjectGuid>
+    <ProjectGuid>{6B6AD7EF-5AD2-4B72-A67D-16BCE8455C63}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>ricochet</RootNamespace>
-    <ProjectName>ricochet</ProjectName>
+    <RootNamespace>observatory</RootNamespace>
+    <ProjectName>observatory</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -43,7 +43,7 @@
   <PropertyGroup>
     <OutDir>$(SolutionDir)..\..\..\out\msvc\vs2022\$(Configuration)\$(ProjectName)\</OutDir>
     <IntDir>$(SolutionDir)..\..\..\out\intermediate\msvc\vs2022\$(Configuration)\$(ProjectName)\</IntDir>
-    <TargetName>ricochet</TargetName>
+    <TargetName>observatory</TargetName>
     <TargetExt>.scr</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -163,7 +163,7 @@
     <ClCompile Include="..\..\..\products\savers\observatory\src\observatory_render.c" />
     <ClCompile Include="..\..\..\products\savers\observatory\src\observatory_sim.c" />
     <ClCompile Include="..\..\..\products\savers\observatory\src\observatory_themes.c" />
-    <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_entry.c" />
+    <ClCompile Include="..\..\..\products\savers\observatory\src\observatory_entry.c" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\..\products\savers\nocturne\src\nocturne_config.rc" />

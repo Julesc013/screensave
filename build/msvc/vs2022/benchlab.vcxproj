@@ -55,7 +55,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\platform\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\products\savers\nocturne\src;$(SolutionDir)..\..\..\products\savers\ricochet\src;$(SolutionDir)..\..\..\products\savers\deepfield\src;$(SolutionDir)..\..\..\products\savers\ember\src;$(SolutionDir)..\..\..\products\savers\oscilloscope_dreams\src;$(SolutionDir)..\..\..\products\savers\pipeworks\src;$(SolutionDir)..\..\..\products\savers\lifeforms\src;$(SolutionDir)..\..\..\products\savers\signal_lab\src;$(SolutionDir)..\..\..\products\savers\mechanical_dreams\src;$(SolutionDir)..\..\..\products\savers\ecosystems\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\products\savers\nocturne\src;$(SolutionDir)..\..\..\products\savers\ricochet\src;$(SolutionDir)..\..\..\products\savers\deepfield\src;$(SolutionDir)..\..\..\products\savers\ember\src;$(SolutionDir)..\..\..\products\savers\oscilloscope_dreams\src;$(SolutionDir)..\..\..\products\savers\pipeworks\src;$(SolutionDir)..\..\..\products\savers\lifeforms\src;$(SolutionDir)..\..\..\products\savers\signal_lab\src;$(SolutionDir)..\..\..\products\savers\mechanical_dreams\src;$(SolutionDir)..\..\..\products\savers\ecosystems\src;$(SolutionDir)..\..\..\products\savers\stormglass\src;$(SolutionDir)..\..\..\products\savers\night_transit\src;$(SolutionDir)..\..\..\products\savers\observatory\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -74,7 +74,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\platform\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\products\savers\nocturne\src;$(SolutionDir)..\..\..\products\savers\ricochet\src;$(SolutionDir)..\..\..\products\savers\deepfield\src;$(SolutionDir)..\..\..\products\savers\ember\src;$(SolutionDir)..\..\..\products\savers\oscilloscope_dreams\src;$(SolutionDir)..\..\..\products\savers\pipeworks\src;$(SolutionDir)..\..\..\products\savers\lifeforms\src;$(SolutionDir)..\..\..\products\savers\signal_lab\src;$(SolutionDir)..\..\..\products\savers\mechanical_dreams\src;$(SolutionDir)..\..\..\products\savers\ecosystems\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\products\savers\nocturne\src;$(SolutionDir)..\..\..\products\savers\ricochet\src;$(SolutionDir)..\..\..\products\savers\deepfield\src;$(SolutionDir)..\..\..\products\savers\ember\src;$(SolutionDir)..\..\..\products\savers\oscilloscope_dreams\src;$(SolutionDir)..\..\..\products\savers\pipeworks\src;$(SolutionDir)..\..\..\products\savers\lifeforms\src;$(SolutionDir)..\..\..\products\savers\signal_lab\src;$(SolutionDir)..\..\..\products\savers\mechanical_dreams\src;$(SolutionDir)..\..\..\products\savers\ecosystems\src;$(SolutionDir)..\..\..\products\savers\stormglass\src;$(SolutionDir)..\..\..\products\savers\night_transit\src;$(SolutionDir)..\..\..\products\savers\observatory\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -91,6 +91,18 @@
     <ClCompile Include="..\..\..\products\apps\benchlab\src\benchlab_main.c" />
     <ClCompile Include="..\..\..\products\apps\benchlab\src\benchlab_overlay.c" />
     <ClCompile Include="..\..\..\products\apps\benchlab\src\benchlab_session.c" />
+    <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_config.c" />
+    <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_module.c" />
+    <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_presets.c" />
+    <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_render.c" />
+    <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_sim.c" />
+    <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_themes.c" />
+    <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_config.c" />
+    <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_module.c" />
+    <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_presets.c" />
+    <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_render.c" />
+    <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_sim.c" />
+    <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_themes.c" />
     <ClCompile Include="..\..\..\products\savers\deepfield\src\deepfield_config.c" />
     <ClCompile Include="..\..\..\products\savers\deepfield\src\deepfield_module.c" />
     <ClCompile Include="..\..\..\products\savers\deepfield\src\deepfield_presets.c" />
@@ -103,12 +115,6 @@
     <ClCompile Include="..\..\..\products\savers\ember\src\ember_render.c" />
     <ClCompile Include="..\..\..\products\savers\ember\src\ember_sim.c" />
     <ClCompile Include="..\..\..\products\savers\ember\src\ember_themes.c" />
-    <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_config.c" />
-    <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_module.c" />
-    <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_presets.c" />
-    <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_render.c" />
-    <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_sim.c" />
-    <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_themes.c" />
     <ClCompile Include="..\..\..\products\savers\oscilloscope_dreams\src\oscilloscope_dreams_config.c" />
     <ClCompile Include="..\..\..\products\savers\oscilloscope_dreams\src\oscilloscope_dreams_module.c" />
     <ClCompile Include="..\..\..\products\savers\oscilloscope_dreams\src\oscilloscope_dreams_presets.c" />
@@ -145,24 +151,39 @@
     <ClCompile Include="..\..\..\products\savers\ecosystems\src\ecosystems_render.c" />
     <ClCompile Include="..\..\..\products\savers\ecosystems\src\ecosystems_sim.c" />
     <ClCompile Include="..\..\..\products\savers\ecosystems\src\ecosystems_themes.c" />
-    <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_config.c" />
-    <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_module.c" />
-    <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_presets.c" />
-    <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_render.c" />
-    <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_sim.c" />
-    <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_themes.c" />
+    <ClCompile Include="..\..\..\products\savers\stormglass\src\stormglass_config.c" />
+    <ClCompile Include="..\..\..\products\savers\stormglass\src\stormglass_module.c" />
+    <ClCompile Include="..\..\..\products\savers\stormglass\src\stormglass_presets.c" />
+    <ClCompile Include="..\..\..\products\savers\stormglass\src\stormglass_render.c" />
+    <ClCompile Include="..\..\..\products\savers\stormglass\src\stormglass_sim.c" />
+    <ClCompile Include="..\..\..\products\savers\stormglass\src\stormglass_themes.c" />
+    <ClCompile Include="..\..\..\products\savers\night_transit\src\night_transit_config.c" />
+    <ClCompile Include="..\..\..\products\savers\night_transit\src\night_transit_module.c" />
+    <ClCompile Include="..\..\..\products\savers\night_transit\src\night_transit_presets.c" />
+    <ClCompile Include="..\..\..\products\savers\night_transit\src\night_transit_render.c" />
+    <ClCompile Include="..\..\..\products\savers\night_transit\src\night_transit_sim.c" />
+    <ClCompile Include="..\..\..\products\savers\night_transit\src\night_transit_themes.c" />
+    <ClCompile Include="..\..\..\products\savers\observatory\src\observatory_config.c" />
+    <ClCompile Include="..\..\..\products\savers\observatory\src\observatory_module.c" />
+    <ClCompile Include="..\..\..\products\savers\observatory\src\observatory_presets.c" />
+    <ClCompile Include="..\..\..\products\savers\observatory\src\observatory_render.c" />
+    <ClCompile Include="..\..\..\products\savers\observatory\src\observatory_sim.c" />
+    <ClCompile Include="..\..\..\products\savers\observatory\src\observatory_themes.c" />
   </ItemGroup>
   <ItemGroup>
+    <ResourceCompile Include="..\..\..\products\savers\nocturne\src\nocturne_config.rc" />
+    <ResourceCompile Include="..\..\..\products\savers\ricochet\src\ricochet_config.rc" />
     <ResourceCompile Include="..\..\..\products\savers\deepfield\src\deepfield_config.rc" />
     <ResourceCompile Include="..\..\..\products\savers\ember\src\ember_config.rc" />
+    <ResourceCompile Include="..\..\..\products\savers\oscilloscope_dreams\src\oscilloscope_dreams_config.rc" />
+    <ResourceCompile Include="..\..\..\products\savers\pipeworks\src\pipeworks_config.rc" />
     <ResourceCompile Include="..\..\..\products\savers\lifeforms\src\lifeforms_config.rc" />
     <ResourceCompile Include="..\..\..\products\savers\signal_lab\src\signal_lab_config.rc" />
     <ResourceCompile Include="..\..\..\products\savers\mechanical_dreams\src\mechanical_dreams_config.rc" />
     <ResourceCompile Include="..\..\..\products\savers\ecosystems\src\ecosystems_config.rc" />
-    <ResourceCompile Include="..\..\..\products\savers\nocturne\src\nocturne_config.rc" />
-    <ResourceCompile Include="..\..\..\products\savers\oscilloscope_dreams\src\oscilloscope_dreams_config.rc" />
-    <ResourceCompile Include="..\..\..\products\savers\pipeworks\src\pipeworks_config.rc" />
-    <ResourceCompile Include="..\..\..\products\savers\ricochet\src\ricochet_config.rc" />
+    <ResourceCompile Include="..\..\..\products\savers\stormglass\src\stormglass_config.rc" />
+    <ResourceCompile Include="..\..\..\products\savers\night_transit\src\night_transit_config.rc" />
+    <ResourceCompile Include="..\..\..\products\savers\observatory\src\observatory_config.rc" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="screensave_platform.vcxproj">
@@ -172,4 +193,3 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
 </Project>
-

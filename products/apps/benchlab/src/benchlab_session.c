@@ -13,6 +13,9 @@ const screensave_saver_module *lifeforms_get_module(void);
 const screensave_saver_module *signal_lab_get_module(void);
 const screensave_saver_module *mechanical_dreams_get_module(void);
 const screensave_saver_module *ecosystems_get_module(void);
+const screensave_saver_module *stormglass_get_module(void);
+const screensave_saver_module *night_transit_get_module(void);
+const screensave_saver_module *observatory_get_module(void);
 
 typedef const screensave_saver_module *(*benchlab_module_getter)(void);
 
@@ -26,7 +29,10 @@ static const benchlab_module_getter g_benchlab_module_getters[] = {
     lifeforms_get_module,
     signal_lab_get_module,
     mechanical_dreams_get_module,
-    ecosystems_get_module
+    ecosystems_get_module,
+    stormglass_get_module,
+    night_transit_get_module,
+    observatory_get_module
 };
 
 static void benchlab_update_config_binding(benchlab_app *app)

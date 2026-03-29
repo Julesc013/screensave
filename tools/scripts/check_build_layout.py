@@ -28,6 +28,9 @@ SAVERS = (
     ("signal_lab", "Signal Lab"),
     ("mechanical_dreams", "Mechanical Dreams"),
     ("ecosystems", "Ecosystems"),
+    ("stormglass", "Stormglass"),
+    ("night_transit", "Night Transit"),
+    ("observatory", "Observatory"),
 )
 
 
@@ -175,6 +178,9 @@ def main() -> int:
         "signal lab",
         "mechanical dreams",
         "ecosystems",
+        "stormglass",
+        "night transit",
+        "observatory",
     ):
         require(phrase in build_readme, f"build/README.md is missing expected phrase: {phrase!r}", errors)
 
@@ -192,6 +198,9 @@ def main() -> int:
         "signal_lab.vcxproj",
         "mechanical_dreams.vcxproj",
         "ecosystems.vcxproj",
+        "stormglass.vcxproj",
+        "night_transit.vcxproj",
+        "observatory.vcxproj",
         "Debug|Win32",
         "Release|Win32",
     ):
@@ -257,6 +266,9 @@ def main() -> int:
         "signal_lab",
         "mechanical_dreams",
         "ecosystems",
+        "stormglass",
+        "night_transit",
+        "observatory",
     ):
         require(expected in makefile_text, f"Makefile is missing {expected!r}.", errors)
 
@@ -273,7 +285,7 @@ def main() -> int:
 
     for saver_key, _ in SAVERS:
         entry_text = (ROOT / "products" / "savers" / saver_key / "src" / f"{saver_key}_entry.c").read_text(encoding="utf-8")
-        for required_saver in ("signal_lab", "mechanical_dreams", "ecosystems"):
+        for required_saver, _ in SAVERS:
             require(f"{required_saver}_get_module" in entry_text, f"{saver_key}_entry.c must reference {required_saver}_get_module.", errors)
 
     if errors:

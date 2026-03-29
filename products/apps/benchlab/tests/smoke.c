@@ -22,7 +22,7 @@ int main(void)
     }
 
     module_count = benchlab_get_available_module_count();
-    if (module_count < 10U) {
+    if (module_count < 13U) {
         return 3;
     }
 
@@ -64,6 +64,18 @@ int main(void)
 
     if (benchlab_find_target_module("ecosystems") == NULL) {
         return 13;
+    }
+
+    if (benchlab_find_target_module("stormglass") == NULL) {
+        return 14;
+    }
+
+    if (benchlab_find_target_module("night_transit") == NULL) {
+        return 15;
+    }
+
+    if (benchlab_find_target_module("observatory") == NULL) {
+        return 16;
     }
 
     return 0;
