@@ -11,13 +11,16 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 SOLUTION = ROOT / "build" / "msvc" / "vs2022" / "ScreenSave.sln"
 PLATFORM_PROJECT = ROOT / "build" / "msvc" / "vs2022" / "screensave_platform.vcxproj"
 BENCHLAB_PROJECT = ROOT / "build" / "msvc" / "vs2022" / "benchlab.vcxproj"
+SUITE_PROJECT = ROOT / "build" / "msvc" / "vs2022" / "suite.vcxproj"
 SAVER_COMMON_PROPS = ROOT / "build" / "msvc" / "vs2022" / "saver_target_common.props"
 ANTHOLOGY_TARGET_SOURCES_PROPS = ROOT / "build" / "msvc" / "vs2022" / "anthology_target_sources.props"
+SUITE_TARGET_SOURCES_PROPS = ROOT / "build" / "msvc" / "vs2022" / "suite_target_sources.props"
 MINGW_MAKEFILE = ROOT / "build" / "mingw" / "i686" / "Makefile"
 
 NS = {"msb": "http://schemas.microsoft.com/developer/msbuild/2003"}
 SAVER_UNITS = ("config", "module", "presets", "render", "sim", "themes")
 BENCHLAB_APP_UNITS = ("app", "config", "diag", "main", "overlay", "session")
+SUITE_APP_UNITS = ("app", "browser", "config", "launch", "main", "manifest", "state")
 
 INNER_SAVERS = (
     ("nocturne", "Nocturne"),
@@ -116,8 +119,10 @@ def required_paths() -> list[pathlib.Path]:
         SOLUTION,
         PLATFORM_PROJECT,
         BENCHLAB_PROJECT,
+        SUITE_PROJECT,
         SAVER_COMMON_PROPS,
         ANTHOLOGY_TARGET_SOURCES_PROPS,
+        SUITE_TARGET_SOURCES_PROPS,
         MINGW_MAKEFILE,
         ROOT / "platform" / "include" / "screensave" / "config_api.h",
         ROOT / "platform" / "include" / "screensave" / "diagnostics_api.h",
@@ -149,6 +154,19 @@ def required_paths() -> list[pathlib.Path]:
         ROOT / "products" / "apps" / "benchlab" / "README.md",
         ROOT / "products" / "apps" / "benchlab" / "src" / "benchlab_session.c",
         ROOT / "products" / "apps" / "benchlab" / "tests" / "smoke.c",
+        ROOT / "products" / "apps" / "suite" / "README.md",
+        ROOT / "products" / "apps" / "suite" / "manifest.ini",
+        ROOT / "products" / "apps" / "suite" / "notes" / "README.md",
+        ROOT / "products" / "apps" / "suite" / "tests" / "README.md",
+        ROOT / "products" / "apps" / "suite" / "tests" / "smoke.c",
+        ROOT / "products" / "apps" / "suite" / "src" / "suite_app.c",
+        ROOT / "products" / "apps" / "suite" / "src" / "suite_browser.c",
+        ROOT / "products" / "apps" / "suite" / "src" / "suite_config.c",
+        ROOT / "products" / "apps" / "suite" / "src" / "suite_internal.h",
+        ROOT / "products" / "apps" / "suite" / "src" / "suite_launch.c",
+        ROOT / "products" / "apps" / "suite" / "src" / "suite_main.c",
+        ROOT / "products" / "apps" / "suite" / "src" / "suite_manifest.c",
+        ROOT / "products" / "apps" / "suite" / "src" / "suite_state.c",
     ]
     for saver_key, _ in SAVERS:
         paths.append(saver_project_path(saver_key))
@@ -216,6 +234,42 @@ def require_anthology_project(project_path: pathlib.Path, errors: list[str]) -> 
     )
 
 
+def suite_source_paths() -> list[str]:
+    return (
+        [f"..\\..\\..\\products\\apps\\suite\\src\\suite_{unit}.c" for unit in SUITE_APP_UNITS]
+        + [source for saver_key, _ in INNER_SAVERS for source in saver_source_paths(saver_key)[:-1]]
+        + saver_source_paths("anthology")[:-1]
+    )
+
+
+def suite_resource_paths() -> list[str]:
+    return [f"..\\..\\..\\products\\savers\\{saver_key}\\src\\{saver_key}_config.rc" for saver_key, _ in SAVERS]
+
+
+def require_suite_project(project_path: pathlib.Path, errors: list[str]) -> None:
+    project_root = parse_project(project_path)
+    project_refs = collect_items(project_root, "ProjectReference")
+    project_text = project_path.read_text(encoding="utf-8")
+    props_root = parse_project(SUITE_TARGET_SOURCES_PROPS)
+
+    require("<TargetExt>.exe</TargetExt>" in project_text, f"{project_path.name} must emit an .exe target.", errors)
+    require("<TargetName>suite</TargetName>" in project_text, f"{project_path.name} must set the expected target name.", errors)
+    require("suite_target_sources.props" in project_text, f"{project_path.name} must import suite_target_sources.props.", errors)
+    require("screensave_platform.vcxproj" in project_refs, f"{project_path.name} must reference the platform project.", errors)
+    require_exact(
+        collect_items(props_root, "ClCompile"),
+        suite_source_paths(),
+        "suite_target_sources.props",
+        errors,
+    )
+    require_exact(
+        collect_items(props_root, "ResourceCompile"),
+        suite_resource_paths(),
+        "suite_target_sources.props",
+        errors,
+    )
+
+
 def main() -> int:
     errors: list[str] = []
 
@@ -231,6 +285,7 @@ def main() -> int:
     for expected in (
         "screensave_platform.vcxproj",
         "benchlab.vcxproj",
+        "suite.vcxproj",
         "Debug|Win32",
         "Release|Win32",
     ):
@@ -300,15 +355,21 @@ def main() -> int:
     require("screensave_platform.vcxproj" in benchlab_project_refs, "benchlab.vcxproj must reference the platform project.", errors)
     require("<TargetExt>.exe</TargetExt>" in benchlab_project_text, "benchlab.vcxproj must emit an .exe target.", errors)
 
+    require_suite_project(SUITE_PROJECT, errors)
+
     makefile_text = MINGW_MAKEFILE.read_text(encoding="utf-8")
     for expected in (
         "SAVERS :=",
         "INNER_SAVERS :=",
         "ANTHOLOGY_TARGET :=",
+        "SUITE_TARGET :=",
+        "SUITE_APP_UNITS :=",
         "SAVER_template",
+        "SUITE_SAVER_template",
         "_version_res.o",
         "screensave_host_res.o",
         "benchlab.exe",
+        "suite.exe",
         "windres",
         "gl21_backend",
         "gl33_backend",
@@ -347,6 +408,7 @@ def main() -> int:
         "one true `.scr` output per saver",
         "anthology",
         "benchlab",
+        "suite",
         "gl21",
         "gl33",
         "gl46",

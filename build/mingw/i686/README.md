@@ -1,10 +1,10 @@
 # MinGW i686 Lane
 
-This is the concrete GCC-family x86 lane for the current `C08` saver-product baseline.
+This is the concrete GCC-family x86 lane for the current `C09` saver-and-app baseline.
 
 ## What Exists Now
 
-- `Makefile` for the shared platform library, one true `.scr` output per saver through `anthology.scr`, the real `benchlab.exe` target, the core-plus-GDI-plus-GL11-plus-GL21 platform objects, the explicit GL33/GL46 placeholder objects, the internal null safety backend object, the owning saver product objects, anthology's explicit inner-saver linkage objects, per-saver config and version resources, the shared host resource, and the conservative `opengl32` link dependency required for the optional renderer tiers
+- `Makefile` for the shared platform library, one true `.scr` output per saver through `anthology.scr`, the real `benchlab.exe` and `suite.exe` targets, the core-plus-GDI-plus-GL11-plus-GL21 platform objects, the explicit GL33/GL46 placeholder objects, the internal null safety backend object, the owning saver product objects, anthology's explicit inner-saver linkage objects, Suite's explicit linked-saver browser/preview objects, per-saver config and version resources, the shared host resource, and the conservative `opengl32` link dependency required for the optional renderer tiers
 
 The target graph mirrors the VS2022 lane closely so later implementation work does not have to invent two unrelated build stories.
 

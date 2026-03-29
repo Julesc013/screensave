@@ -9,15 +9,18 @@ OUTROOT := $(ROOT)/out
 INT_ROOT := $(OUTROOT)/intermediate/mingw/i686/$(PROFILE)
 PLATFORM_DIR := $(INT_ROOT)/screensave_platform
 BENCHLAB_DIR := $(INT_ROOT)/benchlab
+SUITE_DIR := $(INT_ROOT)/suite
 INNER_SAVERS := nocturne ricochet deepfield plasma phosphor pipeworks lifeforms signals mechanize ecosystems stormglass transit observatory vector explorer city atlas gallery
 SAVERS := $(INNER_SAVERS) anthology
 SAVER_UNITS := config module presets render sim themes
+SUITE_APP_UNITS := app browser config launch main manifest state
 SAVER_TARGETS := $(foreach saver,$(SAVERS),$(OUTROOT)/mingw/i686/$(PROFILE)/$(saver)/$(saver).scr)
 ANTHOLOGY_TARGET := $(OUTROOT)/mingw/i686/$(PROFILE)/anthology/anthology.scr
 ANTHOLOGY_INNER_OBJS = $(foreach owner,$(INNER_SAVERS),$(call saver_objs,$(owner)))
 ANTHOLOGY_OBJS = $(call saver_objs,anthology)
 ANTHOLOGY_RESOURCE_OBJS = $(call saver_resource_objs,anthology)
 BENCHLAB_TARGET := $(OUTROOT)/mingw/i686/$(PROFILE)/benchlab/benchlab.exe
+SUITE_TARGET := $(OUTROOT)/mingw/i686/$(PROFILE)/suite/suite.exe
 PLATFORM_LIB := $(PLATFORM_DIR)/libscreensave_platform.a
 CFLAGS_COMMON := -std=c89 -Wall -Wextra -pedantic -I$(ROOT)/platform/include
 RCFLAGS_COMMON := -I$(ROOT)/platform/include -I$(ROOT)/platform/src/host/win32_scr
@@ -76,9 +79,12 @@ saver_objs = $(foreach unit,$(SAVER_UNITS),$(INT_ROOT)/$(1)/$(1)_$(unit).o)
 saver_resource_objs = $(INT_ROOT)/$(1)/$(1)_config_res.o $(INT_ROOT)/$(1)/$(1)_version_res.o $(INT_ROOT)/$(1)/screensave_host_res.o
 benchlab_saver_objs = $(foreach owner,$(SAVERS),$(foreach unit,$(SAVER_UNITS),$(BENCHLAB_DIR)/$(owner)_$(unit).o))
 benchlab_resource_objs = $(foreach owner,$(SAVERS),$(BENCHLAB_DIR)/$(owner)_config_res.o)
+suite_saver_objs = $(foreach owner,$(SAVERS),$(foreach unit,$(SAVER_UNITS),$(SUITE_DIR)/$(owner)_$(unit).o))
+suite_resource_objs = $(foreach owner,$(SAVERS),$(SUITE_DIR)/$(owner)_config_res.o)
+suite_app_objs = $(foreach unit,$(SUITE_APP_UNITS),$(SUITE_DIR)/suite_$(unit).o)
 
 .PHONY: all clean
-all: $(SAVER_TARGETS) $(BENCHLAB_TARGET)
+all: $(SAVER_TARGETS) $(BENCHLAB_TARGET) $(SUITE_TARGET)
 
 $(PLATFORM_LIB): $(PLATFORM_OBJS)
 	mkdir -p $(PLATFORM_DIR)
@@ -231,6 +237,50 @@ $(BENCHLAB_DIR)/$(1)_config_res.o: $(ROOT)/products/savers/$(1)/src/$(1)_config.
 endef
 
 $(foreach saver,$(SAVERS),$(eval $(call BENCHLAB_SAVER_template,$(saver))))
+
+$(SUITE_TARGET): $(PLATFORM_LIB) $(suite_saver_objs) $(suite_resource_objs) $(suite_app_objs)
+	mkdir -p $(OUTROOT)/mingw/i686/$(PROFILE)/suite
+	$(CC) $(CFLAGS) -mwindows -o $@ $(suite_saver_objs) $(suite_resource_objs) $(suite_app_objs) $(PLATFORM_LIB) $(LDLIBS_COMMON)
+
+$(SUITE_DIR)/suite_app.o: $(ROOT)/products/apps/suite/src/suite_app.c
+	mkdir -p $(SUITE_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(SUITE_DIR)/suite_browser.o: $(ROOT)/products/apps/suite/src/suite_browser.c
+	mkdir -p $(SUITE_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(SUITE_DIR)/suite_config.o: $(ROOT)/products/apps/suite/src/suite_config.c
+	mkdir -p $(SUITE_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(SUITE_DIR)/suite_launch.o: $(ROOT)/products/apps/suite/src/suite_launch.c
+	mkdir -p $(SUITE_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(SUITE_DIR)/suite_main.o: $(ROOT)/products/apps/suite/src/suite_main.c
+	mkdir -p $(SUITE_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(SUITE_DIR)/suite_manifest.o: $(ROOT)/products/apps/suite/src/suite_manifest.c
+	mkdir -p $(SUITE_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(SUITE_DIR)/suite_state.o: $(ROOT)/products/apps/suite/src/suite_state.c
+	mkdir -p $(SUITE_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+define SUITE_SAVER_template
+$(SUITE_DIR)/$(1)_%.o: $(ROOT)/products/savers/$(1)/src/$(1)_%.c
+	mkdir -p $(SUITE_DIR)
+	$(CC) $(CFLAGS) -c $$< -o $$@
+
+$(SUITE_DIR)/$(1)_config_res.o: $(ROOT)/products/savers/$(1)/src/$(1)_config.rc
+	mkdir -p $(SUITE_DIR)
+	$(RC) $(RCFLAGS_COMMON) -I$(ROOT)/products/savers/$(1)/src -i $$< -o $$@
+endef
+
+$(foreach saver,$(SAVERS),$(eval $(call SUITE_SAVER_template,$(saver))))
 
 clean:
 	rm -rf $(OUTROOT)/mingw/i686/$(PROFILE) $(INT_ROOT)

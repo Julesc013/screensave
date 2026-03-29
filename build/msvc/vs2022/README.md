@@ -1,6 +1,6 @@
 # VS2022 Lane
 
-This is the concrete modern MSVC lane for the current `C08` saver-product baseline.
+This is the concrete modern MSVC lane for the current `C09` saver-and-app baseline.
 
 ## What Exists Now
 
@@ -26,9 +26,10 @@ This is the concrete modern MSVC lane for the current `C08` saver-product baseli
 - `gallery.vcxproj`
 - `anthology.vcxproj`
 - `benchlab.vcxproj`
+- `suite.vcxproj`
 
 These files stay intentionally small.
-They define one shared static-library target, nineteen first-class `.scr` saver targets, and one windowed diagnostics app target with a shared core runtime, the mandatory GDI backend, the optional GL11 backend, the optional GL21 backend, explicit GL33 and GL46 placeholders, the internal null safety backend, a real host skeleton, nineteen real saver products, and the current diagnostics app.
+They define one shared static-library target, nineteen first-class `.scr` saver targets, and two windowed app targets with a shared core runtime, the mandatory GDI backend, the optional GL11 backend, the optional GL21 backend, explicit GL33 and GL46 placeholders, the internal null safety backend, a real host skeleton, nineteen real saver products, and the current app pair.
 
 ## What The Targets Mean
 
@@ -37,6 +38,7 @@ They define one shared static-library target, nineteen first-class `.scr` saver 
 - `anthology` stays explicit as the suite meta-saver target: it compiles its owning anthology sources plus the current eighteen inner saver modules in-process, then emits `anthology.scr` without turning the build graph into a plugin loader or external-orchestration wrapper.
 - Each saver target binds directly to its owning saver module through the shared host entry instead of depending on the older multi-saver default-selection distribution pattern.
 - `benchlab` compiles the BenchLab app sources, reuses the real Nocturne, Ricochet, Deepfield, Plasma, Phosphor, Pipeworks, Lifeforms, Signals, Mechanize, Ecosystems, Stormglass, Transit, Observatory, Vector, Explorer, City, Atlas, Gallery, and Anthology product sources through the shared saver contract, links `opengl32` for explicit tier validation, and links the diagnostics harness executable target.
+- `suite` compiles the Suite app sources, reuses the real saver modules plus saver-owned config dialog resources for bounded preview, detached windowed run, metadata browsing, and saver `Settings...` handoff, and emits `suite.exe` without replacing the standalone `.scr` products, `anthology`, or BenchLab.
 
 The concrete host lifecycle now lives in the checked-in target graph.
 Later series should extend these targets in place instead of introducing parallel demo targets.
@@ -62,4 +64,4 @@ No generated files should be checked into this directory.
 
 - later real renderer tiers beyond the current GL21 path and the explicit GL33/GL46 placeholders
 - packaging, installer, and release-production work
-- broader solution structure for later suite-level products
+- broader solution structure for later suite-level products beyond the current real `suite` app

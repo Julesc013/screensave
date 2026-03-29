@@ -13,5 +13,6 @@ Current stage:
 - `check_portable_bundle_layout.py` validates the C06 portable bundle definition, staged bundle, and continuation-status docs.
 - `check_installer_layout.py` validates the C07 installer definition, staged installer package, payload provenance, and continuation-status docs.
 - `check_meta_saver_layout.py` validates the C08 anthology meta-saver product tree, orchestration hooks, BenchLab inspection hooks, and continuation-status docs.
+- `check_suite_app_layout.py` validates the C09 suite app product tree, build-lane integration, manifest-driven saver coverage, role boundaries, and continuation-status docs.
 - `check_release_scaffold.py` generates a manual release-scaffold report without publishing anything.
 Type: tooling.
