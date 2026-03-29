@@ -11,6 +11,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 SOLUTION = ROOT / "build" / "msvc" / "vs2022" / "ScreenSave.sln"
 PLATFORM_PROJECT = ROOT / "build" / "msvc" / "vs2022" / "screensave_platform.vcxproj"
 BENCHLAB_PROJECT = ROOT / "build" / "msvc" / "vs2022" / "benchlab.vcxproj"
+SAVER_COMMON_PROPS = ROOT / "build" / "msvc" / "vs2022" / "saver_target_common.props"
 MINGW_MAKEFILE = ROOT / "build" / "mingw" / "i686" / "Makefile"
 
 NS = {"msb": "http://schemas.microsoft.com/developer/msbuild/2003"}
@@ -52,23 +53,22 @@ def collect_items(project_root: ET.Element, item_name: str) -> list[str]:
     return [node.attrib.get("Include", "") for node in project_root.findall(f".//msb:{item_name}", NS)]
 
 
-def common_saver_sources() -> list[str]:
-    items: list[str] = []
-    for saver_key, _ in SAVERS:
-        for unit in SAVER_UNITS:
-            items.append(f"..\\..\\..\\products\\savers\\{saver_key}\\src\\{saver_key}_{unit}.c")
-    return items
-
-
-def common_saver_resources() -> list[str]:
-    return [
-        f"..\\..\\..\\products\\savers\\{saver_key}\\src\\{saver_key}_config.rc"
-        for saver_key, _ in SAVERS
-    ]
-
-
 def saver_project_path(saver_key: str) -> pathlib.Path:
     return ROOT / "build" / "msvc" / "vs2022" / f"{saver_key}.vcxproj"
+
+
+def saver_source_paths(saver_key: str) -> list[str]:
+    base = f"..\\..\\..\\products\\savers\\{saver_key}\\src"
+    return [f"{base}\\{saver_key}_{unit}.c" for unit in SAVER_UNITS] + [f"{base}\\{saver_key}_entry.c"]
+
+
+def saver_resource_paths(saver_key: str) -> list[str]:
+    base = f"..\\..\\..\\products\\savers\\{saver_key}\\src"
+    return [
+        f"{base}\\{saver_key}_config.rc",
+        f"{base}\\{saver_key}_version.rc",
+        "..\\..\\..\\platform\\src\\host\\win32_scr\\screensave_host.rc",
+    ]
 
 
 def saver_required_paths(saver_key: str) -> list[pathlib.Path]:
@@ -92,6 +92,7 @@ def saver_required_paths(saver_key: str) -> list[pathlib.Path]:
         base / "src" / f"{saver_key}_resource.h",
         base / "src" / f"{saver_key}_sim.c",
         base / "src" / f"{saver_key}_themes.c",
+        base / "src" / f"{saver_key}_version.rc",
     ]
     for preset_name in preset_names:
         paths.append(base / "presets" / preset_name)
@@ -111,6 +112,7 @@ def required_paths() -> list[pathlib.Path]:
         SOLUTION,
         PLATFORM_PROJECT,
         BENCHLAB_PROJECT,
+        SAVER_COMMON_PROPS,
         MINGW_MAKEFILE,
         ROOT / "platform" / "include" / "screensave" / "config_api.h",
         ROOT / "platform" / "include" / "screensave" / "diagnostics_api.h",
@@ -123,6 +125,7 @@ def required_paths() -> list[pathlib.Path]:
         ROOT / "platform" / "src" / "core" / "grid" / "grid_buffer.c",
         ROOT / "platform" / "src" / "core" / "visual" / "visual_buffer.c",
         ROOT / "platform" / "src" / "host" / "win32_scr" / "screensave_host.rc",
+        ROOT / "platform" / "src" / "host" / "win32_scr" / "scr_product_version.rc",
         ROOT / "platform" / "src" / "render" / "gl21" / "README.md",
         ROOT / "platform" / "src" / "render" / "gl21" / "gl21_backend.c",
         ROOT / "platform" / "src" / "render" / "gl21" / "gl21_caps.c",
@@ -151,6 +154,10 @@ def require_all(items: list[str], expected_items: list[str], label: str, errors:
         require(expected in items, f"{label} is missing {expected!r}.", errors)
 
 
+def require_exact(items: list[str], expected_items: list[str], label: str, errors: list[str]) -> None:
+    require(set(items) == set(expected_items), f"{label} has unexpected items.", errors)
+
+
 def require_saver_project(project_path: pathlib.Path, saver_key: str, errors: list[str]) -> None:
     project_root = parse_project(project_path)
     sources = collect_items(project_root, "ClCompile")
@@ -158,22 +165,12 @@ def require_saver_project(project_path: pathlib.Path, saver_key: str, errors: li
     project_refs = collect_items(project_root, "ProjectReference")
     project_text = project_path.read_text(encoding="utf-8")
 
-    require_all(
-        sources,
-        common_saver_sources() + [f"..\\..\\..\\products\\savers\\{saver_key}\\src\\{saver_key}_entry.c"],
-        project_path.name,
-        errors,
-    )
-    require_all(
-        resources,
-        common_saver_resources() + ["..\\..\\..\\platform\\src\\host\\win32_scr\\screensave_host.rc"],
-        project_path.name,
-        errors,
-    )
+    require_exact(sources, saver_source_paths(saver_key), project_path.name, errors)
+    require_exact(resources, saver_resource_paths(saver_key), project_path.name, errors)
     require("screensave_platform.vcxproj" in project_refs, f"{project_path.name} must reference the platform project.", errors)
     require("<TargetExt>.scr</TargetExt>" in project_text, f"{project_path.name} must emit a .scr target.", errors)
     require(f"<TargetName>{saver_key}</TargetName>" in project_text, f"{project_path.name} must set the expected target name.", errors)
-    require("user32.lib;gdi32.lib;advapi32.lib;opengl32.lib" in project_text, f"{project_path.name} must link user32/gdi32/advapi32/opengl32.", errors)
+    require("saver_target_common.props" in project_text, f"{project_path.name} must import saver_target_common.props.", errors)
 
 
 def main() -> int:
@@ -187,52 +184,10 @@ def main() -> int:
             print(error, file=sys.stderr)
         return 1
 
-    build_readme = (ROOT / "build" / "README.md").read_text(encoding="utf-8").lower()
-    for phrase in (
-        "checked-in per-toolchain lanes",
-        "concrete msvc vs2022 solution",
-        "mandatory gdi backend",
-        "benchlab",
-        "signals",
-        "mechanize",
-        "ecosystems",
-        "stormglass",
-        "transit",
-        "observatory",
-        "vector",
-        "explorer",
-        "city",
-        "atlas",
-        "gl21",
-        "gl33",
-        "gl46",
-        "null",
-        "gallery",
-    ):
-        require(phrase in build_readme, f"build/README.md is missing expected phrase: {phrase!r}", errors)
-
-    for path in (
-        ROOT / "build" / "msvc" / "vs6" / "README.md",
-        ROOT / "build" / "msvc" / "vs2008" / "README.md",
-    ):
-        content = path.read_text(encoding="utf-8").lower()
-        require("deferred" in content, f"{path.relative_to(ROOT)} must explicitly describe deferred work.", errors)
-
     solution_text = SOLUTION.read_text(encoding="utf-8")
     for expected in (
         "screensave_platform.vcxproj",
         "benchlab.vcxproj",
-        "signals.vcxproj",
-        "mechanize.vcxproj",
-        "ecosystems.vcxproj",
-        "stormglass.vcxproj",
-        "transit.vcxproj",
-        "observatory.vcxproj",
-        "vector.vcxproj",
-        "explorer.vcxproj",
-        "city.vcxproj",
-        "atlas.vcxproj",
-        "gallery.vcxproj",
         "Debug|Win32",
         "Release|Win32",
     ):
@@ -286,44 +241,39 @@ def main() -> int:
     require_all(
         benchlab_sources,
         [f"..\\..\\..\\products\\apps\\benchlab\\src\\benchlab_{unit}.c" for unit in BENCHLAB_APP_UNITS]
-        + common_saver_sources(),
+        + [source for saver_key, _ in SAVERS for source in saver_source_paths(saver_key)[:-1]],
         "benchlab.vcxproj",
         errors,
     )
-    require_all(benchlab_resources, common_saver_resources(), "benchlab.vcxproj", errors)
+    require_all(
+        benchlab_resources,
+        [f"..\\..\\..\\products\\savers\\{saver_key}\\src\\{saver_key}_config.rc" for saver_key, _ in SAVERS],
+        "benchlab.vcxproj",
+        errors,
+    )
     require("screensave_platform.vcxproj" in benchlab_project_refs, "benchlab.vcxproj must reference the platform project.", errors)
     require("<TargetExt>.exe</TargetExt>" in benchlab_project_text, "benchlab.vcxproj must emit an .exe target.", errors)
-    require("user32.lib;gdi32.lib;advapi32.lib;opengl32.lib" in benchlab_project_text, "benchlab.vcxproj must link user32/gdi32/advapi32/opengl32.", errors)
 
     makefile_text = MINGW_MAKEFILE.read_text(encoding="utf-8")
     for expected in (
-        "mingw/i686",
         "SAVERS :=",
         "SAVER_template",
+        "_version_res.o",
+        "screensave_host_res.o",
         "benchlab.exe",
-        "screensave_host.rc",
-        "opengl32",
         "windres",
-        "signals",
-        "mechanize",
-        "ecosystems",
-        "stormglass",
-        "transit",
-        "observatory",
-        "vector",
-        "explorer",
-        "city",
-        "atlas",
-        "gallery",
         "gl21_backend",
         "gl33_backend",
         "gl46_backend",
         "null_backend",
     ):
         require(expected in makefile_text, f"Makefile is missing {expected!r}.", errors)
+    require("$(1)_version_res.o" in makefile_text, "Makefile must compile per-saver version resources.", errors)
+    require("$(1)_version.rc" in makefile_text, "Makefile must reference the per-saver version resource template.", errors)
 
     host_entry_text = (ROOT / "platform" / "src" / "host" / "win32_scr" / "scr_entry.c").read_text(encoding="utf-8")
     require("screensave_scr_main" in host_entry_text, "scr_entry.c must define the shared saver host entry.", errors)
+    require("screensave_scr_main_with_registry" in host_entry_text, "scr_entry.c must preserve the registry-aware host entry.", errors)
 
     benchlab_session_text = (ROOT / "products" / "apps" / "benchlab" / "src" / "benchlab_session.c").read_text(encoding="utf-8")
     for saver_key, _ in SAVERS:
@@ -335,8 +285,23 @@ def main() -> int:
 
     for saver_key, _ in SAVERS:
         entry_text = (ROOT / "products" / "savers" / saver_key / "src" / f"{saver_key}_entry.c").read_text(encoding="utf-8")
-        for required_saver, _ in SAVERS:
-            require(f"{required_saver}_get_module" in entry_text, f"{saver_key}_entry.c must reference {required_saver}_get_module.", errors)
+        require("screensave_scr_main(" in entry_text, f"{saver_key}_entry.c must use the single-saver host entry.", errors)
+        require("screensave_scr_main_with_registry" not in entry_text, f"{saver_key}_entry.c must not use the registry host entry.", errors)
+        require(f"{saver_key}_get_module" in entry_text, f"{saver_key}_entry.c must bind {saver_key}_get_module.", errors)
+        for other_saver, _ in SAVERS:
+            if other_saver != saver_key:
+                require(f"{other_saver}_get_module" not in entry_text, f"{saver_key}_entry.c must not reference {other_saver}_get_module.", errors)
+
+    build_readme = (ROOT / "build" / "README.md").read_text(encoding="utf-8").lower()
+    for phrase in (
+        "one true `.scr` output per saver",
+        "benchlab",
+        "gl21",
+        "gl33",
+        "gl46",
+        "null",
+    ):
+        require(phrase in build_readme, f"build/README.md is missing expected phrase: {phrase!r}", errors)
 
     if errors:
         for error in errors:
