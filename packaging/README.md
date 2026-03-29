@@ -9,4 +9,6 @@ Type: release support.
 
 - `packaging/portable/` now holds the real `C06` portable bundle manifest, layout note, assembly script, and related release-support docs.
 - Generated portable staging and zip artifacts belong under `out/portable/`, not under this source-controlled tree.
-- Installer, registration, and uninstall behavior remain deferred to `C07`.
+- `packaging/installer/` now holds the real `C07` current-user installer manifest, scripted install and uninstall logic, layout note, and installer assembly path.
+- Generated installer staging and zip artifacts belong under `out/installer/`, not under this source-controlled tree.
+- Portable and installed distribution are now explicit parallel delivery modes; suite-level products remain future work.

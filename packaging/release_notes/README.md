@@ -8,4 +8,4 @@ Type: release support.
 ## Current State
 
 - `portable-release-notes.md` is the current `C06` user-facing release note source for the portable bundle.
-- Installer and registration release notes remain deferred until `C07`.
+- `installer-release-notes.md` is the current `C07` user-facing release note source for the installed distribution path.
