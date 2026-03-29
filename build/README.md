@@ -32,7 +32,7 @@ Real now:
 - a real internal null safety backend under `platform/src/render/null/`
 - a narrow shared software visual-buffer helper under `platform/src/core/visual/`
 - a narrow shared grid-state helper under `platform/src/core/grid/`
-- real saver products under `products/savers/nocturne/`, `products/savers/ricochet/`, `products/savers/deepfield/`, `products/savers/ember/`, `products/savers/oscilloscope_dreams/`, `products/savers/pipeworks/`, `products/savers/lifeforms/`, `products/savers/signal_lab/`, `products/savers/mechanical_dreams/`, `products/savers/ecosystems/`, `products/savers/stormglass/`, `products/savers/night_transit/`, `products/savers/observatory/`, `products/savers/vector_worlds/`, `products/savers/retro_explorer/`, `products/savers/city_nocturne/`, `products/savers/fractal_atlas/`, and `products/savers/gl_gallery/`
+- real saver products under `products/savers/nocturne/`, `products/savers/ricochet/`, `products/savers/deepfield/`, `products/savers/plasma/`, `products/savers/phosphor/`, `products/savers/pipeworks/`, `products/savers/lifeforms/`, `products/savers/signals/`, `products/savers/mechanize/`, `products/savers/ecosystems/`, `products/savers/stormglass/`, `products/savers/transit/`, `products/savers/observatory/`, `products/savers/vector/`, `products/savers/explorer/`, `products/savers/city/`, `products/savers/atlas/`, and `products/savers/gallery/`
 - a real BenchLab diagnostics app under `products/apps/benchlab/`
 - product-owned configuration, presets, and themes wired through the shared saver contract
 - a windowed harness path that runs the active saver through the shared saver and renderer contracts outside the `.scr` host
@@ -44,8 +44,8 @@ Real now:
 Deferred:
 
 - later real renderer tiers beyond the current GDI, GL11, GL21, GL33-placeholder, GL46-placeholder, and null safety stack
-- later-series work beyond Nocturne, Ricochet, Deepfield, Ember, Oscilloscope Dreams, Pipeworks, Lifeforms, Signal Lab, Mechanical Dreams, Ecosystems, Stormglass, Night Transit, Observatory, Vector Worlds, Retro Explorer, City Nocturne, Fractal Atlas, and GL Gallery
-- the final suite gallery or meta-product app
+- later-series work beyond Nocturne, Ricochet, Deepfield, Plasma, Phosphor, Pipeworks, Lifeforms, Signals, Mechanize, Ecosystems, Stormglass, Transit, Observatory, Vector, Explorer, City, Atlas, and Gallery
+- the future `suite` app or a suite-level meta-product
 - full legacy project files for VS6 and VS2008
 - packaging and release production
 

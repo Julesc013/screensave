@@ -11,4 +11,4 @@ It provides:
 - preview-safe, long-run-stable behavior through the shared saver and renderer contracts
 
 Gallery stays intentionally bounded.
-It is not the final suite gallery, a randomizer, a scene editor, or a broad rendering lab.
+It is not the future `suite` app, a randomizer, a scene editor, or a broad rendering lab.

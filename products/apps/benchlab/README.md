@@ -2,7 +2,7 @@
 
 Purpose: developer-facing diagnostics and validation harness for the current ScreenSave platform.
 Belongs here: BenchLab app lifecycle, harness control, overlay diagnostics, app-local persistence, and smoke checks.
-Does not belong here: the final player, gallery, packaging logic, or broad platform abstractions that only one app needs.
+Does not belong here: the future `suite` app, the `gallery` saver, packaging logic, or broad platform abstractions that only one app needs.
 
 Series 07 makes BenchLab real:
 
@@ -22,7 +22,7 @@ Series 09 extends the same app into the current multi-product harness:
 
 - explicit saver selection for Nocturne, Ricochet, and Deepfield
 - persistence of the selected saver key alongside renderer and deterministic-run preferences
-- continued use of the shared saver dialogs and shared renderer path without turning BenchLab into the final player or gallery
+- continued use of the shared saver dialogs and shared renderer path without turning BenchLab into the future `suite` app or the `gallery` saver
 
 Series 10 extends the same app to the current five-product harness:
 
@@ -59,7 +59,7 @@ Series 15 extends the same app into the current eighteen-product and versioned r
 - explicit saver selection for Nocturne, Ricochet, Deepfield, Plasma, Phosphor, Pipeworks, Lifeforms, Signals, Mechanize, Ecosystems, Stormglass, Transit, Observatory, Vector, Explorer, City, Atlas, and Gallery
 - explicit `auto`, `gdi`, `gl11`, `gl21`, `gl33`, and `gl46` request paths with honest requested-versus-active renderer reporting
 - explicit fallback-reason reporting plus GL vendor, renderer, and version reporting when accelerated tiers are active
-- continued use of the shared saver dialogs and shared renderer path without turning BenchLab into the final gallery or meta-product
+- continued use of the shared saver dialogs and shared renderer path without turning BenchLab into the future `suite` app or a suite-level meta-product
 
-BenchLab is intentionally narrow. It is a validation harness for developers, not the final end-user player.
+BenchLab is intentionally narrow. It is a validation harness for developers, not the end-user `suite` app.
 Type: product runtime space.

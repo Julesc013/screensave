@@ -41,7 +41,7 @@ Series 11 proves the same layering can also support stateful grid and cellular p
 Series 12 proves the same layering can also support layered system-interface, kinetic-assembly, and ambient-behavior products without promoting a broad widget, animation, or ecology framework into shared code.
 Series 13 proves the same layering can also support atmospheric weather, transit-infrastructure, and celestial exhibit products without promoting a broad weather, route, astronomy, or scenic framework into shared code.
 Series 14 proves the same layering can also support heavyweight software-3D, traversal, urban-scenic, and fractal-voyage products while keeping projection, route, scene, and refinement behavior inside the owning products rather than promoting a broad engine.
-Series 15 proves the same layering can also support a capability-gated GL21 backend, explicit GL33 and GL46 placeholders, an internal null safety fallback, and a renderer-showcase product while keeping advanced context logic backend-private, renderer selection narrow in shared core code, and GL Gallery product behavior inside the owning product.
+Series 15 proves the same layering can also support a capability-gated GL21 backend, explicit GL33 and GL46 placeholders, an internal null safety fallback, and a renderer-showcase product while keeping advanced context logic backend-private, renderer selection narrow in shared core code, and Gallery product behavior inside the owning product.
 
 ## Product Boundary
 

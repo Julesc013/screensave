@@ -2,6 +2,23 @@
 
 All notable repository changes are recorded here in prompt history order.
 
+## C01 - 2026-03-30
+
+### Changed
+
+- Renamed the implemented saver products, directories, manifests, build targets, and project references to the canonical post-`S15` slugs: `plasma`, `phosphor`, `signals`, `mechanize`, `transit`, `explorer`, `vector`, `atlas`, `city`, and `gallery`.
+- Renamed the old app-level `gallery` placeholder to `products/apps/suite/`, kept `products/apps/player/` only as a superseded legacy stub, and updated the repo docs so `gallery` is now unambiguously the saver while `suite` is the future app identity.
+- Normalized active renderer-tier naming across code, manifests, docs, and diagnostics to the explicit `gdi -> gl11 -> gl21 -> gl33 -> gl46 -> null` ladder without claiming new renderer functionality beyond the existing baseline.
+- Added narrow old-to-new migration handling so legacy saver selection keys resolve to canonical slugs, renamed savers can load legacy per-product registry roots before resaving under canonical roots, `plasma` accepts the legacy `ember_lava` preset/theme key, and BenchLab retains `gl_plus` / `glplus` only as legacy aliases for canonical `gl21`.
+- Updated roadmap, architecture, build, saver, and app docs so `C01` is recorded as complete and the next continuation path is `C02` checkpointing followed by `C03` all-saver `.scr` productization.
+
+### Validation
+
+- Confirmed the `C00` continuation roadmap reset, rename map, renderer-tier taxonomy note, `S00` through `S15` changelog history, saver/app placeholder tree, and legacy saver/build identifiers existed before applying the rename/taxonomy refactor.
+- Ran targeted stale-name and stale-taxonomy searches across active repo truth to confirm the canonical saver slugs, the `suite` app identity, the `atlas` merge, and the explicit renderer ladder are now the active naming baseline.
+- Ran `python tools/scripts/check_repo_structure.py`, `python tools/scripts/check_codex_config.py`, `python tools/scripts/check_docs_basics.py`, `python tools/scripts/check_build_layout.py`, and `git diff --check`; all passed.
+- Confirmed this prompt did not add new saver features, new renderer tiers, all-saver `.scr` productization, packaging logic, installer work, or suite/meta-product behavior.
+
 ## C00 - 2026-03-30
 
 ### Added

@@ -14,12 +14,12 @@ This is the short operational view of the implemented baseline and the active po
 - `S07`: BenchLab and validation instrumentation.
 - `S08`: optional GL11 backend and runtime selection.
 - `S09`: Motion Family with `ricochet` and `deepfield`.
-- `S10`: Framebuffer and vector family with `ember` and `oscilloscope_dreams`.
+- `S10`: Framebuffer and vector family with `plasma` and `phosphor`.
 - `S11`: Grid and simulation family with `pipeworks` and `lifeforms`.
-- `S12`: Systems and ambient family with `signal_lab`, `mechanical_dreams`, and `ecosystems`.
+- `S12`: Systems and ambient family with `signals`, `mechanize`, and `ecosystems`.
 - `S13`: Places and atmosphere family.
 - `S14`: Heavyweight worlds family.
-- `S15`: optional `gl21`, explicit `gl33` and `gl46` placeholders, internal `null`, and `gl_gallery`.
+- `S15`: optional `gl21`, explicit `gl33` and `gl46` placeholders, internal `null`, and `gallery`.
 
 ## Active Post-S15 Continuation
 
@@ -40,4 +40,5 @@ This is the short operational view of the implemented baseline and the active po
 - `C14`: final rerelease hardening.
 
 The earlier `S16` and `S17` endpoint is superseded.
-The next implementation prompt after `C00` is `C01`.
+`C00` and `C01` are complete.
+The next planned checkpoint is `C02`, followed by `C03` all-saver `.scr` productization.

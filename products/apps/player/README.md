@@ -1,7 +1,7 @@
-# Player Placeholder
+# Player Superseded Stub
 
-Purpose: legacy placeholder directory retained until the post-`S15` continuation app consolidation work lands.
-Canonical future app name: `suite`.
-Status: the old standalone `player` concept is superseded by the `suite` app plan rather than remaining a separate enduring product.
-Does not belong here: broad new runtime scope under the legacy `player` name.
-Type: transitional product runtime space.
+Purpose: durable marker that the old standalone `player` concept was retired during `C01`.
+Canonical app name: `suite`.
+Status: keep this directory only as a legacy stub; do not grow new public app scope here.
+Does not belong here: new end-user runtime work, separate app identity, or gallery-saver responsibilities.
+Type: transitional legacy stub.

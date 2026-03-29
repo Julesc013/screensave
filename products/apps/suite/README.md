@@ -1,7 +1,6 @@
-# Gallery Placeholder
+# Suite Placeholder
 
-Purpose: legacy placeholder directory retained until the post-`S15` continuation rename/app consolidation work lands.
-Canonical future app name: `suite`.
-Do not preserve `gallery` as the public app name, because `gallery` is reserved for the saver currently stored under `products/savers/gallery/`.
-Does not belong here: new long-lived app scope under the legacy `gallery` name.
+Purpose: canonical placeholder directory for the future `suite` control app.
+Status: `C01` retired the old app-level `gallery` name, and this directory now owns the canonical suite-app identity without claiming that the suite runtime is already implemented.
+Does not belong here: saver code, `gallery` saver logic, or a resurrected separate `player` app identity.
 Type: transitional product runtime space.

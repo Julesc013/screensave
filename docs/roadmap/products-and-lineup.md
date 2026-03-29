@@ -1,7 +1,8 @@
 # Products And Lineup
 
 This document groups the intended ScreenSave lineup.
-Implemented saver products use the canonical post-`S15` names defined in [rename-map.md](./rename-map.md), even where the current repo tree still carries older slugs pending `C01`.
+Implemented saver products now use the canonical post-`S15` names defined in [rename-map.md](./rename-map.md).
+That same document records the legacy-to-canonical migration aliases introduced during `C01`.
 Future concept entries that still read like working titles are descriptive anchors, not committed final slugs.
 
 ## Quiet, Utility, And Ambient
@@ -16,8 +17,8 @@ Future concept entries that still read like working titles are descriptive ancho
 
 ## Framebuffer And Vector Family And Related Studies
 
-- `plasma` (current repo slug `ember`): warm low-motion abstract saver and a real Framebuffer and Vector Family product.
-- `phosphor` (current repo slug `oscilloscope_dreams`): waveform and phosphor-inspired motion and a real Framebuffer and Vector Family product.
+- `plasma`: warm low-motion abstract saver and a real Framebuffer and Vector Family product.
+- `phosphor`: waveform and phosphor-inspired motion and a real Framebuffer and Vector Family product.
 - Working title `starfield`: classic depth and drift presentation.
 - Working title `ribbon_drift`: simple motion study built around lines and trails.
 
@@ -29,15 +30,15 @@ Future concept entries that still read like working titles are descriptive ancho
 
 ## Systems And Ambient Family And Related Studies
 
-- `signals` (current repo slug `signal_lab`): synthetic instrument-and-panel saver and a real Systems and Ambient Family product.
-- `mechanize` (current repo slug `mechanical_dreams`): restrained kinetic-assembly saver and a real Systems and Ambient Family product.
+- `signals`: synthetic instrument-and-panel saver and a real Systems and Ambient Family product.
+- `mechanize`: restrained kinetic-assembly saver and a real Systems and Ambient Family product.
 - `ecosystems`: ambient habitat-and-behavior saver and a real Systems and Ambient Family product.
 - Working title `signal_garden`: procedural waveform and rule-based animation.
 
 ## Places And Atmosphere Family And Related Studies
 
 - `stormglass`: weather-on-glass saver and a real Places and Atmosphere Family product.
-- `transit` (current repo slug `night_transit`): nocturnal route-and-infrastructure saver and a real Places and Atmosphere Family product.
+- `transit`: nocturnal route-and-infrastructure saver and a real Places and Atmosphere Family product.
 - `observatory`: celestial exhibit saver and a real Places and Atmosphere Family product.
 - Working title `midnight_city`: atmospheric city-light presentation.
 - Working title `canopy`: layered scenic motion with strong fallback discipline.
@@ -45,10 +46,10 @@ Future concept entries that still read like working titles are descriptive ancho
 
 ## Heavyweight Worlds Family And Related Studies
 
-- `vector` (current repo slug `vector_worlds`): abstract software-3D and wireframe flyover saver and a real Heavyweight Worlds Family product.
-- `explorer` (current repo slug `retro_explorer`): raycast-and-autopilot traversal saver and a real Heavyweight Worlds Family product.
-- `city` (current repo slug `city_nocturne`): urban night-world scenic saver and a real Heavyweight Worlds Family product.
-- `atlas` (current repo slug `fractal_atlas`): curated fractal-voyage saver and a real Heavyweight Worlds Family product. Future Infinity Atlas ideas merge here rather than forming a separate saver.
+- `vector`: abstract software-3D and wireframe flyover saver and a real Heavyweight Worlds Family product.
+- `explorer`: raycast-and-autopilot traversal saver and a real Heavyweight Worlds Family product.
+- `city`: urban night-world scenic saver and a real Heavyweight Worlds Family product.
+- `atlas`: curated fractal-voyage saver and a real Heavyweight Worlds Family product. Future Infinity Atlas ideas merge here rather than forming a separate saver.
 - Working title `prism_hall`: future showcase concept only if later renderer-expansion work proves stable.
 
 ## Mathematical And Procedural
@@ -63,11 +64,11 @@ Future concept entries that still read like working titles are descriptive ancho
 
 ## Heavyweight And Showcase
 
-- `gallery` (current repo slug `gl_gallery`): renderer-showcase saver for validating the current tier ladder and honest fallback behavior.
+- `gallery`: renderer-showcase saver for validating the current tier ladder and honest fallback behavior.
 
 ## Suite-Level Products
 
-- `suite`: canonical future suite control app for browse, launch, preview, settings, randomization, and pack management. The current `gallery` and `player` app directories are legacy placeholders and must not survive as separate public app names.
+- `suite`: canonical future suite control app for browse, launch, preview, settings, randomization, and pack management. `products/apps/suite/` now holds the canonical app placeholder, and `products/apps/player/` remains only as a superseded stub.
 - `benchlab`: developer-facing diagnostics harness for saver, renderer, deterministic validation, and current multi-product inspection.
 - `sdk`: headers, templates, examples, and contributor-oriented materials.
 

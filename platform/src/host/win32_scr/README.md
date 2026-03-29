@@ -26,6 +26,6 @@ Series 09 adds a narrow built-in saver selector for the current real saver set, 
 Series 12 extends the same explicit built-in selector to the current ten-product saver set, including Signals, Mechanize, and Ecosystems, while preserving the existing host lifecycle and automatic renderer-selection behavior.
 Series 13 extends the same explicit built-in selector to the current thirteen-product saver set, including Stormglass, Transit, and Observatory, while preserving the existing host lifecycle and automatic renderer-selection behavior.
 Series 14 extends the same explicit built-in selector to the current seventeen-product saver set, including Vector, Explorer, City, and Atlas, while preserving the existing host lifecycle and automatic renderer-selection behavior.
-Series 15 keeps the selector narrow while adding persistence for the requested renderer ladder (`auto`, `gdi`, `gl11`, `gl21`, `gl33`, or `gl46`) and surfacing requested-versus-active renderer diagnostics without turning the host config UI into the final gallery or a renderer lab.
+Series 15 keeps the selector narrow while adding persistence for the requested renderer ladder (`auto`, `gdi`, `gl11`, `gl21`, `gl33`, or `gl46`) and surfacing requested-versus-active renderer diagnostics without turning the host config UI into the future `suite` surface or a renderer lab.
 The validation scene remains only as a fallback path for non-product sessions.
 Type: runtime host implementation.

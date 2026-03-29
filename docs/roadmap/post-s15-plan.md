@@ -8,9 +8,9 @@ The repository already contains a real implemented history through `S15`.
 That baseline currently includes:
 
 - one shared platform with the required `gdi` floor, optional `gl11`, real optional `gl21`, explicit `gl33` and `gl46` placeholders, and the internal `null` backend
-- eighteen real saver products in the tree, still using some legacy pre-normalization slugs
+- eighteen real saver products in the tree under the canonical post-`C01` slugs, with explicit old-to-new migration aliases where recoverability requires them
 - BenchLab as the real developer diagnostics harness
-- placeholder app directories under `products/apps/gallery/` and `products/apps/player/` that are not the durable post-`S15` suite naming
+- the canonical `products/apps/suite/` placeholder for the future suite app plus a superseded `products/apps/player/` legacy stub
 
 This document supersedes the older public assumption that the remaining work fit inside `S16` and `S17`.
 That endpoint is retired for future planning.
@@ -18,8 +18,8 @@ That endpoint is retired for future planning.
 ## Continuation Decisions
 
 1. `C00` is planning-only and performs no runtime, build-target, packaging, or product implementation work.
-2. `C01` rename and taxonomy normalization is the first implementation step after `S15`.
-3. `C02` establishes a post-rename checkpoint before wider continuation work proceeds.
+2. `C01` completed the rename and taxonomy normalization pass and now defines the canonical naming baseline.
+3. `C02` establishes the explicit post-rename checkpoint before wider continuation work proceeds.
 4. `C03` all-saver `.scr` productization happens before suite/meta products, idea ingestion, or polish waves.
 5. `C04` shared settings, presets, randomization, and pack architecture happens before distribution work.
 6. `C05` Windows picker, config, preview, and fullscreen validation happens before release/distribution work is treated as credible.
@@ -73,5 +73,6 @@ Interpretation rules:
 
 ## Immediate Next Step
 
-The next implementation prompt after this planning prompt is `C01`: the actual rename and renderer-taxonomy normalization refactor.
-That prompt should not need to renegotiate naming, suite/app ownership, or tier terminology.
+The rename and renderer-taxonomy work from `C01` is complete.
+The near-term continuation path is `C02` for the post-rename checkpoint baseline and `C03` for all-saver `.scr` productization.
+Further continuation work should not need to renegotiate saver/app ownership or renderer-tier terminology.

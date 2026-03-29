@@ -5,13 +5,13 @@ This directory holds GCC-family Windows lanes that preserve the x86 target inten
 ## Strategy
 
 The MinGW lane exists so the build story is not defined only by one Microsoft toolchain generation.
-For Series 11, the practical lane is `i686/`.
+At the current `C01` baseline, the practical lane is `i686/`.
 
 ## Current State
 
 Real now:
 
-- `i686/` contains a concrete make-based lane for the same shared core, host, mandatory GDI backend, optional GL11 backend, real Nocturne, Ricochet, Deepfield, Ember, Oscilloscope Dreams, Pipeworks, and Lifeforms saver targets, and the real BenchLab app used by the VS2022 lane
+- `i686/` contains a concrete make-based lane for the same shared core, host, mandatory GDI backend, optional GL11 and GL21 capability paths, the current canonical saver targets through `gallery.scr`, and the real BenchLab app used by the VS2022 lane
 
 Deferred:
 

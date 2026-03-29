@@ -5,7 +5,8 @@ Earlier docs described an intended Series 00 through 17 program; that shorter en
 
 Implementation currently exists through `S15`.
 The older public endpoint that treated `S16` and `S17` as the whole remaining plan is superseded.
-Post-`S15` work now follows `C00` and later continuation prompts.
+Post-`S15` work now follows committed `C00` and `C01` work plus later continuation prompts.
+C02 is the next planned checkpoint before C03 all-saver `.scr` productization.
 
 ## Implemented Baseline
 
@@ -21,12 +22,12 @@ Post-`S15` work now follows `C00` and later continuation prompts.
 | S07 | BenchLab and validation instrumentation | Real windowed diagnostics harness with deterministic restart and reseed controls |
 | S08 | Optional GL11 backend and runtime selection | Capability-gated GL11 backend, explicit selection, and fallback reporting |
 | S09 | Motion Family with `ricochet` and `deepfield` | First true multi-product saver family on the shared platform |
-| S10 | Framebuffer and vector family with `ember` and `oscilloscope_dreams` | Product-local framebuffer and vector savers plus a narrow shared visual-buffer helper |
+| S10 | Framebuffer and vector family with `plasma` and `phosphor` | Product-local framebuffer and vector savers plus a narrow shared visual-buffer helper |
 | S11 | Grid and simulation family with `pipeworks` and `lifeforms` | Product-local grid and state-driven savers plus a narrow shared grid helper |
-| S12 | Systems and ambient family with `signal_lab`, `mechanical_dreams`, and `ecosystems` | Layered system-interface, kinetic, and ambient savers without broad framework sprawl |
+| S12 | Systems and ambient family with `signals`, `mechanize`, and `ecosystems` | Layered system-interface, kinetic, and ambient savers without broad framework sprawl |
 | S13 | Places and atmosphere family | Scenic weather, transit, and celestial savers on the same shared contracts |
 | S14 | Heavyweight worlds family | Software-3D, traversal, urban, and fractal savers without redefining the platform |
-| S15 | `gl21` backend, explicit higher-tier placeholders, and `gl_gallery` | Real optional GL21 backend, explicit `gl33`/`gl46` placeholders, internal `null`, and the eighteen-saver harness |
+| S15 | `gl21` backend, explicit higher-tier placeholders, and `gallery` | Real optional GL21 backend, explicit `gl33`/`gl46` placeholders, internal `null`, and the eighteen-saver harness |
 
 ## Active Continuation Line
 
@@ -60,7 +61,7 @@ Do not schedule new continuation work under `S16` or `S17`.
 ## Continuation Rules
 
 - `C00` is planning-only and records the new continuation structure without performing runtime work.
-- `C01` is the next implementation prompt after `C00`.
+- `C01` completed the rename/taxonomy pass; `C02` is the next checkpoint prompt before `C03` productization.
 - Rename and renderer-taxonomy normalization land before any productization or suite/meta work.
 - All-saver `.scr` productization lands before suite/meta products, backlog ingestion, or polish waves.
 - Shared settings, presets, randomization, and pack architecture land before distribution work.

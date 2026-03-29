@@ -15,7 +15,8 @@ The platform target is intentionally conservative:
 ## Current Status
 
 The repository is in Series 15.
-Implementation currently exists through `S15`, and `C00` now records the post-`S15` continuation reset in the roadmap docs.
+Implementation currently exists through `S15` plus continuation `C00` and `C01`.
+C00 reset the post-`S15` continuation roadmap, and C01 applied the canonical saver/app rename and renderer-taxonomy normalization pass.
 The older short `S16` / `S17` endpoint is superseded by `docs/roadmap/post-s15-plan.md`.
 Series 00 established repository law, structure, roadmap, and agent guidance.
 Series 01 added contribution, review, governance, and CI foundations.
@@ -50,8 +51,8 @@ Series 09 adds the first true multi-product saver family:
 
 Series 10 adds the Framebuffer and Vector Family:
 
-- Ember as the palette-and-framebuffer saver with restrained plasma, fire, and interference modes
-- Oscilloscope Dreams as the phosphor-and-vector saver with curated Lissajous, harmonograph, and dense-trace modes
+- Plasma as the palette-and-framebuffer saver with restrained plasma, fire, and interference modes
+- Phosphor as the phosphor-and-vector saver with curated Lissajous, harmonograph, and dense-trace modes
 - a narrow shared visual-buffer helper plus explicit host and BenchLab wiring so all current savers continue to run through the same shared saver and renderer paths
 
 Series 11 adds the Grid and Simulation Family:
@@ -62,34 +63,34 @@ Series 11 adds the Grid and Simulation Family:
 
 Series 12 adds the Systems and Ambient Family:
 
-- Signal Lab as the synthetic instrument-and-panel saver with curated scope, terminal, and telemetry presets
-- Mechanical Dreams as the restrained kinetic-assembly saver with curated workshop, instrument, and machine-room presets
+- Signals as the synthetic instrument-and-panel saver with curated scope, terminal, and telemetry presets
+- Mechanize as the restrained kinetic-assembly saver with curated workshop, instrument, and machine-room presets
 - Ecosystems as the ambient habitat-and-behavior saver with curated aquarium, aviary, and firefly presets
 - explicit host and BenchLab wiring so all current savers continue to run through the same shared saver and renderer paths without adding a broad widget, animation, or ecology framework
 
 Series 13 adds the Places and Atmosphere Family:
 
 - Stormglass as the weather-on-glass saver with curated rain-pane, fogged-pane, and winter-pane presets
-- Night Transit as the nocturnal infrastructure-and-route saver with curated motorway, rail-corridor, and harbor-night presets
+- Transit as the nocturnal infrastructure-and-route saver with curated motorway, rail-corridor, and harbor-night presets
 - Observatory as the celestial exhibit saver with curated orrery, chart-room, and dome-watch presets
 - explicit host and BenchLab wiring so all current savers continue to run through the same shared saver and renderer paths without adding a broad weather, route, astronomy, or scenic framework
 
 Series 14 adds the Heavyweight Worlds Family:
 
-- Vector Worlds as the abstract software-3D and wireframe flyover saver with curated structure-field, tunnel-flow, and terrain-line presets
-- Retro Explorer as the restrained raycast-and-autopilot traversal saver with curated corridor, industrial passage, and canyon-run presets
-- City Nocturne as the urban night-world scenic saver with curated skyline, harbor-edge, and rooftop-flyover presets
-- Fractal Atlas as the curated fractal-voyage saver with atlas, voyage, and Julia-style presets plus restrained progressive refinement
+- Vector as the abstract software-3D and wireframe flyover saver with curated structure-field, tunnel-flow, and terrain-line presets
+- Explorer as the restrained raycast-and-autopilot traversal saver with curated corridor, industrial passage, and canyon-run presets
+- City as the urban night-world scenic saver with curated skyline, harbor-edge, and rooftop-flyover presets
+- Atlas as the curated fractal-voyage saver with atlas, voyage, and Julia-style presets plus restrained progressive refinement
 - explicit host and BenchLab wiring so all current savers continue to run through the same shared saver and renderer paths without adding a broad 3D, map, city, or fractal framework
 
-Series 15 adds the advanced GL capability path and GL Gallery:
+Series 15 adds the advanced GL capability path and Gallery:
 
 - a real optional GL21 backend under `platform/src/render/gl21/` with explicit advanced-context probing, capability capture, and backend-private state ownership
 - explicit versioned renderer selection and fallback among `gdi`, `gl11`, `gl21`, `gl33`, `gl46`, and the internal `null` safety path, with requested-versus-active reporting and explicit fallback reasons
-- GL Gallery as the renderer-showcase saver with deliberate GDI, GL11, and advanced-tier scene variants plus curated compatibility, classic, and advanced presets
+- Gallery as the renderer-showcase saver with deliberate GDI, GL11, and GL21-tier scene variants plus curated compatibility, classic, and advanced presets
 - explicit host and BenchLab wiring so the current saver set can be exercised honestly through the tiered renderer stack without turning the repo into the final meta-gallery
 
-The next implementation step after this planning reset is `C01`: the rename and renderer-taxonomy normalization refactor.
+The next continuation phases are `C02` for the post-rename checkpoint baseline and `C03` for all-saver `.scr` productization.
 
 ## Planned Product Shape
 
@@ -99,10 +100,11 @@ ScreenSave is structured as one shared platform with many releasable products:
 - Suite-level applications such as `suite` and `benchlab` under `products/apps/`
 - SDK material under `products/sdk/`
 
-`nocturne`, `ricochet`, `deepfield`, `ember`, `oscilloscope_dreams`, `pipeworks`, `lifeforms`, `signal_lab`, `mechanical_dreams`, `ecosystems`, `stormglass`, `night_transit`, `observatory`, `vector_worlds`, `retro_explorer`, `city_nocturne`, `fractal_atlas`, and `gl_gallery` are now the real saver products in the tree.
+`nocturne`, `ricochet`, `deepfield`, `plasma`, `phosphor`, `pipeworks`, `lifeforms`, `signals`, `mechanize`, `ecosystems`, `stormglass`, `transit`, `observatory`, `vector`, `explorer`, `city`, `atlas`, and `gallery` are now the real saver products in the tree.
 `benchlab` is now the first real non-saver app in the tree.
-The current `products/apps/gallery/` and `products/apps/player/` directories are legacy placeholders scheduled to be superseded by the canonical `suite` app in the continuation line.
-Canonical post-`S15` saver and app naming targets are tracked in `docs/roadmap/rename-map.md`; the current tree slugs remain in place until `C01`.
+`products/apps/suite/` is now the canonical suite-app placeholder location.
+`products/apps/player/` remains only as a superseded legacy stub and must not grow into a separate public app.
+Canonical post-`S15` saver and app naming plus migration aliases are tracked in `docs/roadmap/rename-map.md`.
 Additional saver families and suite-level products are described in `docs/roadmap/products-and-lineup.md`.
 
 ## Repository Authority
@@ -143,7 +145,7 @@ The checked-in build scaffold now integrates the real Series 15 multi-family sav
 - documentation-only VS6 and VS2008 lanes that preserve long-term intent without claiming present build completeness
 
 The shared platform target now compiles the reusable non-renderer core runtime, the mandatory GDI backend, the optional GL11 backend, the optional capability-gated GL21 backend, the explicit GL33 and GL46 placeholders, the internal null safety backend, the Win32 host, the narrow shared visual-buffer helper used by the current framebuffer and vector products, and the narrow shared grid-buffer helper used by the current grid and simulation products.
-The `.scr` targets now run Nocturne, Ricochet, Deepfield, Ember, Oscilloscope Dreams, Pipeworks, Lifeforms, Signal Lab, Mechanical Dreams, Ecosystems, Stormglass, Night Transit, Observatory, Vector Worlds, Retro Explorer, City Nocturne, Fractal Atlas, and GL Gallery through the shared saver path with explicit tiered renderer selection and honest fallback.
+The `.scr` targets now run Nocturne, Ricochet, Deepfield, Plasma, Phosphor, Pipeworks, Lifeforms, Signals, Mechanize, Ecosystems, Stormglass, Transit, Observatory, Vector, Explorer, City, Atlas, and Gallery through the shared saver path with explicit tiered renderer selection and honest fallback.
 The app target now runs BenchLab as a real windowed harness for all eighteen current savers through the same shared contracts, with explicit `auto`, `gdi`, `gl11`, `gl21`, `gl33`, and `gl46` controls plus requested-versus-active renderer diagnostics.
 
 Read the specs before adding code.

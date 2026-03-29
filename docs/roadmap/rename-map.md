@@ -1,15 +1,11 @@
 # Rename Map
 
-This document defines the canonical post-`S15` saver and app naming plan.
-It is planning guidance only in `C00`.
-No directories, manifests, build targets, or runtime identifiers are renamed here.
+This document records the canonical post-`S15` saver and app naming baseline that landed in `C01`.
+It remains the durable reference for legacy-to-canonical migration behavior.
 
 ## Saver Canonical Slugs
 
-The implemented saver line adopts one-word canonical slugs.
-Where the current tree still carries an older slug, `C01` performs the actual rename.
-
-| Current Repo Slug | Canonical Saver Slug | Notes |
+| Legacy Saver Slug | Canonical Saver Slug | Notes |
 | --- | --- | --- |
 | `ember` | `plasma` | One-word canonical saver slug for the framebuffer-plasma product |
 | `oscilloscope_dreams` | `phosphor` | One-word canonical saver slug for the phosphor/vector product |
@@ -27,8 +23,8 @@ Unless a later product-specific branding decision is documented explicitly, the 
 ## App Naming Decisions
 
 - `suite` is the canonical future suite-level control app.
-- The current `products/apps/gallery/` placeholder must not remain the public app name, because `gallery` is reserved for the saver formerly known as `gl_gallery`.
-- The current `products/apps/player/` placeholder is superseded by the `suite` plan rather than surviving as a separate enduring app product.
+- `products/apps/suite/` now holds the canonical suite-app placeholder location.
+- `products/apps/player/` is superseded by the `suite` plan rather than surviving as a separate enduring app product.
 - `benchlab` remains the diagnostics harness and does not merge into `suite`.
 - `sdk` remains the contributor-facing surface and does not become the suite app.
 
@@ -44,3 +40,10 @@ Do not create a parallel atlas-family saver unless a later roadmap update explic
 - Preserve saver product ownership while applying the canonical slug map.
 - Preserve BenchLab as diagnostics-only while retiring the placeholder `gallery` and `player` app naming.
 - Apply the renderer-tier ladder `gdi -> gl11 -> gl21 -> gl33 -> gl46 -> null` consistently in docs and identifiers where the public naming is visible.
+
+## Migration Rules
+
+- Old saver selection keys continue to resolve through the shared old-to-new alias table.
+- Renamed savers load from legacy per-product registry roots and resave under canonical roots.
+- `plasma` accepts the legacy `ember_lava` preset/theme key as a narrow migration alias.
+- BenchLab retains `gl_plus` and `glplus` only as legacy command-line aliases that resolve to canonical `gl21`.
