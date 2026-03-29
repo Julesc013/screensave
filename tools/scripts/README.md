@@ -15,5 +15,6 @@ Current stage:
 - `check_meta_saver_layout.py` validates the C08 anthology meta-saver product tree, orchestration hooks, BenchLab inspection hooks, and continuation-status docs.
 - `check_suite_app_layout.py` validates the C09 suite app product tree, build-lane integration, manifest-driven saver coverage, role boundaries, and continuation-status docs.
 - `check_sdk_surface.py` validates the C10 contributor-facing SDK surface, the real saver template, and contributor-authored saver or pack roots.
+- `check_backlog_surface.py` validates the C11 backlog, routing, wave-planning, and refinement-thread surface plus the active continuation-status docs.
 - `check_release_scaffold.py` generates a manual release-scaffold report without publishing anything.
 Type: tooling.
