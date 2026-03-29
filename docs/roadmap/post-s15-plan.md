@@ -14,6 +14,7 @@ That baseline currently includes:
 - BenchLab as the real developer diagnostics harness
 - the real `suite` app under `products/apps/suite/` plus a superseded `products/apps/player/` legacy stub
 - `anthology` as the real suite meta-saver with bounded in-process cross-saver rotation across the other eighteen savers
+- the real contributor-facing SDK surface under `products/sdk/` plus the canonical starter saver tree under `products/savers/_template/`
 - the locked `C02` post-rename checkpoint, including the migration-baseline note and recovery tag for the canonical naming regime
 
 This document supersedes the older public assumption that the remaining work fit inside `S16` and `S17`.
@@ -31,7 +32,7 @@ That endpoint is retired for future planning.
 8. `C07` completed installer, registration, and uninstall work before `C08` suite meta-saver work.
 9. `C08` completed the suite-level meta saver before `C09` `suite` app work begins.
 10. `C09` completed the real `suite` browser, launcher, preview, and saver-settings surface before `C10` SDK stabilization.
-11. `C10` SDK and contributor surface stabilization happens before backlog ingestion.
+11. `C10` completed the real SDK and contributor surface before `C11` backlog ingestion begins.
 12. `C11` idea backlog ingestion happens before the major polish waves.
 13. `C12` cross-cutting polish precedes `C13` per-family polish waves.
 14. `C14` final rerelease hardening closes the continuation line.
@@ -79,6 +80,6 @@ Interpretation rules:
 
 ## Immediate Next Step
 
-The rename, renderer-taxonomy, checkpoint, saver productization, shared settings, Windows integration, portable distribution, installer, suite meta-saver, and suite-app work from `C01` through `C09` is complete.
-The next continuation prompt should be `C10` for the SDK / contributor surface.
-Further continuation work should not need to renegotiate saver/app ownership, migration aliases, renderer-tier terminology, per-saver `.scr` product identity, the shared settings/preset/theme/pack contract, the bounded Win32 `.scr` lifecycle behavior validated in `C05`, the portable bundle layout and inclusion rules defined in `C06`, the current-user installer and uninstall rules defined in `C07`, the bounded in-process cross-saver orchestration baseline defined by `anthology` in `C08`, or the role boundaries and launch/config surface established by the real `suite` app in `C09`.
+The rename, renderer-taxonomy, checkpoint, saver productization, shared settings, Windows integration, portable distribution, installer, suite meta-saver, suite-app, and SDK work from `C01` through `C10` is complete.
+The next continuation prompt should be `C11` for backlog ingestion and routing of new ideas.
+Further continuation work should not need to renegotiate saver/app ownership, migration aliases, renderer-tier terminology, per-saver `.scr` product identity, the shared settings/preset/theme/pack contract, the bounded Win32 `.scr` lifecycle behavior validated in `C05`, the portable bundle layout and inclusion rules defined in `C06`, the current-user installer and uninstall rules defined in `C07`, the bounded in-process cross-saver orchestration baseline defined by `anthology` in `C08`, the role boundaries and launch/config surface established by the real `suite` app in `C09`, or the contributor-facing templates and validation surface established in `C10`.

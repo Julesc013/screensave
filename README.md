@@ -15,8 +15,8 @@ The platform target is intentionally conservative:
 ## Current Status
 
 The repository is in Series 15.
-Implementation currently exists through `S15` plus continuation `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, and `C09`.
-C00 reset the post-`S15` continuation roadmap, C01 applied the canonical saver/app rename and renderer-taxonomy normalization pass, C02 locked the post-rename migration baseline and recovery checkpoint, C03 converted the eighteen current savers into first-class standalone `.scr` product targets, C04 established the shared settings taxonomy, versioned preset/theme import-export files, within-saver session randomization, pack manifest discovery/validation helpers, and modest host plus BenchLab inspection foundations, C05 hardened the real Win32 `.scr` lifecycle across screen, preview, config, persistence, renderer fallback, and Windows-facing identity paths, C06 added the first portable bundle assembly path under `packaging/portable/` plus a real staged bundle and zip under `out/portable/` from the canonical saver outputs currently available in the local output roots, C07 added a current-user installer package under `packaging/installer/` plus a real staged installer and zip under `out/installer/` with opt-in saver selection assistance and conservative uninstall behavior, C08 added `anthology` as the real suite meta-saver with bounded in-process cross-saver rotation, weighted filtering, family/favorites selection, renderer-aware fallback, and BenchLab inspection support, and C09 added `suite` as the real suite-level browser, launcher, embedded preview, detached run, and saver-settings control app with honest manifest-driven discovery and local artifact reporting.
+Implementation currently exists through `S15` plus continuation `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, and `C10`.
+C00 reset the post-`S15` continuation roadmap, C01 applied the canonical saver/app rename and renderer-taxonomy normalization pass, C02 locked the post-rename migration baseline and recovery checkpoint, C03 converted the eighteen current savers into first-class standalone `.scr` product targets, C04 established the shared settings taxonomy, versioned preset/theme import-export files, within-saver session randomization, pack manifest discovery/validation helpers, and modest host plus BenchLab inspection foundations, C05 hardened the real Win32 `.scr` lifecycle across screen, preview, config, persistence, renderer fallback, and Windows-facing identity paths, C06 added the first portable bundle assembly path under `packaging/portable/` plus a real staged bundle and zip under `out/portable/` from the canonical saver outputs currently available in the local output roots, C07 added a current-user installer package under `packaging/installer/` plus a real staged installer and zip under `out/installer/` with opt-in saver selection assistance and conservative uninstall behavior, C08 added `anthology` as the real suite meta-saver with bounded in-process cross-saver rotation, weighted filtering, family/favorites selection, renderer-aware fallback, and BenchLab inspection support, C09 added `suite` as the real suite-level browser, launcher, embedded preview, detached run, and saver-settings control app with honest manifest-driven discovery and local artifact reporting, and C10 added the real contributor-facing SDK surface under `products/sdk/` plus the canonical `products/savers/_template/` starter saver with pack examples, manifest guidance, and contributor validation helpers.
 The older short `S16` / `S17` endpoint is superseded by `docs/roadmap/post-s15-plan.md`.
 Series 00 established repository law, structure, roadmap, and agent guidance.
 Series 01 added contribution, review, governance, and CI foundations.
@@ -90,7 +90,7 @@ Series 15 adds the advanced GL capability path and Gallery:
 - Gallery as the renderer-showcase saver with deliberate GDI, GL11, and GL21-tier scene variants plus curated compatibility, classic, and advanced presets
 - explicit host and BenchLab wiring so the current saver set can be exercised honestly through the tiered renderer stack without turning the repo into the final meta-gallery
 
-The next continuation phase is `C10` for the SDK / contributor surface.
+The next continuation phase is `C11` for backlog ingestion and routing of new ideas.
 
 ## Planned Product Shape
 
@@ -106,6 +106,7 @@ ScreenSave is structured as one shared platform with many releasable products:
 `suite` is now the canonical suite-level browser, launcher, preview, and configuration app under `products/apps/suite/`.
 `products/apps/player/` remains only as a superseded legacy stub and must not grow into a separate public app.
 The saver line now also shares a versioned settings, preset, theme, randomization, and pack contract while keeping product-local meaning and content in the owning saver tree.
+`products/sdk/` and `products/savers/_template/` now provide the real contributor-facing authoring surface for new saver products and data-driven packs.
 Canonical post-`S15` saver and app naming plus migration aliases are tracked in `docs/roadmap/rename-map.md`.
 Additional saver families and suite-level products are described in `docs/roadmap/products-and-lineup.md`.
 

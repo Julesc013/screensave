@@ -74,7 +74,7 @@ Future concept entries that still read like working titles are descriptive ancho
 
 - `suite`: real suite control app for browse, launch, preview, settings, randomization visibility, and pack visibility. `products/apps/suite/` now holds the canonical real app, and `products/apps/player/` remains only as a superseded stub.
 - `benchlab`: developer-facing diagnostics harness for saver, renderer, deterministic validation, and current multi-product inspection.
-- `sdk`: headers, templates, examples, and contributor-oriented materials.
+- `sdk`: real contributor-facing headers, templates, examples, validation helpers, and authoring guidance for new saver products and data-driven packs.
 
 Every product group is subordinate to the shared compatibility contract.
 If a product cannot preserve the universal baseline, it must be classified explicitly rather than quietly redefining the whole suite.
