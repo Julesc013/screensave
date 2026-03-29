@@ -40,5 +40,5 @@ This is the short operational view of the implemented baseline and the active po
 - `C14`: final rerelease hardening.
 
 The earlier `S16` and `S17` endpoint is superseded.
-`C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, and `C10` are complete.
-The next planned implementation prompt is `C11` for backlog ingestion and routing of new ideas.
+`C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, and `C11` are complete.
+The next planned implementation prompt is `C12` for the cross-cutting polish pass.

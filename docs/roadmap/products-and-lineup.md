@@ -3,7 +3,7 @@
 This document groups the intended ScreenSave lineup.
 Implemented saver products now use the canonical post-`S15` names defined in [rename-map.md](./rename-map.md).
 That same document records the legacy-to-canonical migration aliases introduced during `C01`.
-Future concept entries that still read like working titles are descriptive anchors, not committed final slugs.
+Future concept entries that still read like working titles are descriptive anchors, not committed final slugs. `C11` parks and routes them through `backlog-inventory.md` rather than treating them as near-term implementation promises.
 
 ## Quiet, Utility, And Ambient
 

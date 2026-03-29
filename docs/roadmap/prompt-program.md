@@ -5,8 +5,8 @@ Earlier docs described an intended Series 00 through 17 program; that shorter en
 
 Implementation currently exists through `S15`.
 The older public endpoint that treated `S16` and `S17` as the whole remaining plan is superseded.
-Post-`S15` work now follows committed `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, and `C10` work plus later continuation prompts.
-C11 is the next planned implementation prompt after the SDK / contributor surface baseline.
+Post-`S15` work now follows committed `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, and `C11` work plus later continuation prompts.
+C12 is the next planned implementation prompt after the backlog-ingestion baseline.
 
 ## Implemented Baseline
 
@@ -60,8 +60,8 @@ Do not schedule new continuation work under `S16` or `S17`.
 
 ## Continuation Rules
 
-- `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, and `C10` are complete.
-- `C11` is the next implementation prompt after the SDK / contributor surface baseline.
+- `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, and `C11` are complete.
+- `C12` is the next implementation prompt after the backlog-ingestion baseline.
 - Rename and renderer-taxonomy normalization land before any productization or suite/meta work.
 - All-saver `.scr` productization lands before suite/meta products, backlog ingestion, or polish waves.
 - Shared settings, presets, randomization, and pack architecture land before distribution work.
@@ -70,3 +70,4 @@ Do not schedule new continuation work under `S16` or `S17`.
 - The suite meta-saver lands before the `suite` app so cross-saver orchestration is real before browse-and-control UI work expands.
 - The `suite` app lands before SDK stabilization so contributor-facing templates and examples can target the real browse-and-control surface instead of a placeholder.
 - Creative backlog ingestion waits until the renamed product surface, suite surface, and SDK surface are stable enough to absorb new ideas without immediate rework.
+- Cross-cutting polish starts only after the backlog, routing, and wave buckets are explicit enough to keep saver-local work from forking shared architecture.
