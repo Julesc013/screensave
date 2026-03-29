@@ -1,0 +1,6 @@
+#define SCREENSAVE_PRODUCT_NAME "ScreenSave Template Saver"
+#define SCREENSAVE_FILE_DESCRIPTION "ScreenSave template saver product"
+#define SCREENSAVE_INTERNAL_NAME "template_saver.scr"
+#define SCREENSAVE_ORIGINAL_FILENAME "template_saver.scr"
+#define SCREENSAVE_PRODUCT_COMMENT "Contributor starter saver template"
+#include "../../../../platform/src/host/win32_scr/scr_product_version.rc"
