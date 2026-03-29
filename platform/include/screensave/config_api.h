@@ -9,9 +9,23 @@ typedef enum screensave_detail_level_tag {
     SCREENSAVE_DETAIL_LEVEL_HIGH = 2
 } screensave_detail_level;
 
+typedef enum screensave_randomization_mode_tag {
+    SCREENSAVE_RANDOMIZATION_MODE_OFF = 0,
+    SCREENSAVE_RANDOMIZATION_MODE_SESSION = 1
+} screensave_randomization_mode;
+
+#define SCREENSAVE_CONFIG_SCHEMA_VERSION 1UL
+#define SCREENSAVE_RANDOMIZATION_SCOPE_PRESET 0x00000001UL
+#define SCREENSAVE_RANDOMIZATION_SCOPE_THEME 0x00000002UL
+#define SCREENSAVE_RANDOMIZATION_SCOPE_DETAIL 0x00000004UL
+#define SCREENSAVE_RANDOMIZATION_SCOPE_PRODUCT 0x00000008UL
+
 #define SCREENSAVE_CONFIG_ISSUE_BAD_DETAIL 0x00000001UL
 #define SCREENSAVE_CONFIG_ISSUE_EMPTY_PRESET 0x00000002UL
 #define SCREENSAVE_CONFIG_ISSUE_EMPTY_THEME 0x00000004UL
+#define SCREENSAVE_CONFIG_ISSUE_BAD_SCHEMA_VERSION 0x00000008UL
+#define SCREENSAVE_CONFIG_ISSUE_BAD_RANDOMIZATION_MODE 0x00000010UL
+#define SCREENSAVE_CONFIG_ISSUE_BAD_RANDOMIZATION_SCOPE 0x00000020UL
 
 typedef struct screensave_theme_descriptor_tag {
     const char *theme_key;
@@ -32,10 +46,13 @@ typedef struct screensave_preset_descriptor_tag {
 } screensave_preset_descriptor;
 
 typedef struct screensave_common_config_tag {
+    unsigned long schema_version;
     screensave_detail_level detail_level;
     int diagnostics_overlay_enabled;
     int use_deterministic_seed;
     unsigned long deterministic_seed;
+    screensave_randomization_mode randomization_mode;
+    unsigned long randomization_scope;
     const char *preset_key;
     const char *theme_key;
 } screensave_common_config;
@@ -66,5 +83,8 @@ const screensave_theme_descriptor *screensave_find_theme(
     const char *theme_key
 );
 const char *screensave_detail_level_name(screensave_detail_level level);
+const char *screensave_seed_mode_name(const screensave_common_config *config);
+const char *screensave_randomization_mode_name(screensave_randomization_mode mode);
+unsigned long screensave_randomization_default_scope(void);
 
 #endif /* SCREENSAVE_CONFIG_API_H */

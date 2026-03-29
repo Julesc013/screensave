@@ -1,5 +1,3 @@
-#include <string.h>
-
 #include "../../../../platform/src/core/base/saver_registry.h"
 #include "benchlab_internal.h"
 
@@ -53,9 +51,9 @@ static void benchlab_update_config_binding(benchlab_app *app)
 
     screensave_config_binding_init(
         &app->config_binding,
-        &app->saver_config.common,
-        app->saver_config.product_config,
-        app->saver_config.product_config_size
+        &app->resolved_config.common,
+        app->resolved_config.product_config,
+        app->resolved_config.product_config_size
     );
 }
 
@@ -172,12 +170,24 @@ static void benchlab_build_environment(
     }
 }
 
+static int benchlab_resolve_runtime_config(benchlab_app *app);
+
 static int benchlab_create_session_only(benchlab_app *app)
 {
     screensave_saver_environment environment;
     screensave_renderer_info renderer_info;
 
     if (app == NULL || app->renderer == NULL || app->module == NULL) {
+        return 0;
+    }
+
+    if (!benchlab_resolve_runtime_config(app)) {
+        benchlab_emit_app_diag(
+            app,
+            SCREENSAVE_DIAG_LEVEL_ERROR,
+            7211UL,
+            "BenchLab could not resolve the active saver configuration for this session."
+        );
         return 0;
     }
 
@@ -234,24 +244,41 @@ static void benchlab_advance_clock(benchlab_app *app, unsigned long delta_millis
 }
 
 static int benchlab_copy_config_state(
+    const screensave_saver_module *module,
     screensave_saver_config_state *target,
     const screensave_saver_config_state *source
 )
 {
-    if (target == NULL || source == NULL) {
+    return screensave_saver_config_state_copy(module, target, source);
+}
+
+static int benchlab_resolve_runtime_config(benchlab_app *app)
+{
+    if (app == NULL || app->module == NULL) {
         return 0;
     }
 
-    target->common = source->common;
-    if (
-        target->product_config != NULL &&
-        source->product_config != NULL &&
-        target->product_config_size == source->product_config_size &&
-        source->product_config_size > 0U
-    ) {
-        memcpy(target->product_config, source->product_config, source->product_config_size);
+    if (!benchlab_copy_config_state(app->module, &app->resolved_config, &app->saver_config)) {
+        return 0;
     }
 
+    if (!screensave_saver_config_state_resolve_for_session(
+            app->module,
+            &app->saver_config,
+            &app->session_seed,
+            &app->resolved_config,
+            &app->diagnostics
+        )) {
+        screensave_saver_config_state_clamp(app->module, &app->resolved_config);
+        benchlab_emit_app_diag(
+            app,
+            SCREENSAVE_DIAG_LEVEL_WARNING,
+            7210UL,
+            "BenchLab fell back to the stored saver configuration because session randomization could not be resolved."
+        );
+    }
+
+    benchlab_update_config_binding(app);
     return 1;
 }
 
@@ -297,6 +324,10 @@ int benchlab_session_initialize_config(benchlab_app *app)
     if (!screensave_saver_config_state_init(app->module, &app->saver_config)) {
         return 0;
     }
+    if (!screensave_saver_config_state_init(app->module, &app->resolved_config)) {
+        screensave_saver_config_state_dispose(&app->saver_config);
+        return 0;
+    }
 
     screensave_saver_config_state_set_defaults(app->module, &app->saver_config);
     if (!screensave_saver_config_state_load(app->module, &app->saver_config, &app->diagnostics)) {
@@ -308,6 +339,8 @@ int benchlab_session_initialize_config(benchlab_app *app)
         );
     }
     screensave_saver_config_state_clamp(app->module, &app->saver_config);
+    benchlab_copy_config_state(app->module, &app->resolved_config, &app->saver_config);
+    screensave_saver_config_state_clamp(app->module, &app->resolved_config);
     benchlab_update_config_binding(app);
     return 1;
 }
@@ -319,6 +352,7 @@ void benchlab_session_dispose_config(benchlab_app *app)
     }
 
     screensave_saver_config_state_dispose(&app->saver_config);
+    screensave_saver_config_state_dispose(&app->resolved_config);
     ZeroMemory(&app->config_binding, sizeof(app->config_binding));
 }
 
@@ -594,7 +628,7 @@ INT_PTR benchlab_session_show_saver_dialog(benchlab_app *app)
     }
 
     screensave_saver_config_state_set_defaults(app->module, &dialog_config);
-    benchlab_copy_config_state(&dialog_config, &app->saver_config);
+    benchlab_copy_config_state(app->module, &dialog_config, &app->saver_config);
 
     was_paused = app->paused;
     app->paused = 1;
@@ -613,8 +647,10 @@ INT_PTR benchlab_session_show_saver_dialog(benchlab_app *app)
         if (!screensave_saver_config_state_save(app->module, &dialog_config, &app->diagnostics)) {
             result = -1;
         } else {
-            benchlab_copy_config_state(&app->saver_config, &dialog_config);
+            benchlab_copy_config_state(app->module, &app->saver_config, &dialog_config);
             screensave_saver_config_state_clamp(app->module, &app->saver_config);
+            benchlab_copy_config_state(app->module, &app->resolved_config, &app->saver_config);
+            screensave_saver_config_state_clamp(app->module, &app->resolved_config);
             benchlab_update_config_binding(app);
             if (!benchlab_session_restart(app, 0)) {
                 result = -1;

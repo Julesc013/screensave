@@ -13,10 +13,13 @@ void screensave_common_config_set_defaults(screensave_common_config *config)
         return;
     }
 
+    config->schema_version = SCREENSAVE_CONFIG_SCHEMA_VERSION;
     config->detail_level = SCREENSAVE_DETAIL_LEVEL_STANDARD;
     config->diagnostics_overlay_enabled = 0;
     config->use_deterministic_seed = 0;
     config->deterministic_seed = 0UL;
+    config->randomization_mode = SCREENSAVE_RANDOMIZATION_MODE_OFF;
+    config->randomization_scope = 0UL;
     config->preset_key = NULL;
     config->theme_key = NULL;
 }
@@ -27,6 +30,10 @@ void screensave_common_config_clamp(screensave_common_config *config)
         return;
     }
 
+    if (config->schema_version != SCREENSAVE_CONFIG_SCHEMA_VERSION) {
+        config->schema_version = SCREENSAVE_CONFIG_SCHEMA_VERSION;
+    }
+
     if (config->detail_level < SCREENSAVE_DETAIL_LEVEL_LOW) {
         config->detail_level = SCREENSAVE_DETAIL_LEVEL_LOW;
     } else if (config->detail_level > SCREENSAVE_DETAIL_LEVEL_HIGH) {
@@ -35,6 +42,26 @@ void screensave_common_config_clamp(screensave_common_config *config)
 
     config->diagnostics_overlay_enabled = config->diagnostics_overlay_enabled != 0;
     config->use_deterministic_seed = config->use_deterministic_seed != 0;
+    if (
+        config->randomization_mode != SCREENSAVE_RANDOMIZATION_MODE_OFF &&
+        config->randomization_mode != SCREENSAVE_RANDOMIZATION_MODE_SESSION
+    ) {
+        config->randomization_mode = SCREENSAVE_RANDOMIZATION_MODE_OFF;
+    }
+    config->randomization_scope &=
+        SCREENSAVE_RANDOMIZATION_SCOPE_PRESET |
+        SCREENSAVE_RANDOMIZATION_SCOPE_THEME |
+        SCREENSAVE_RANDOMIZATION_SCOPE_DETAIL |
+        SCREENSAVE_RANDOMIZATION_SCOPE_PRODUCT;
+    if (
+        config->randomization_mode == SCREENSAVE_RANDOMIZATION_MODE_SESSION &&
+        config->randomization_scope == 0UL
+    ) {
+        config->randomization_scope = screensave_randomization_default_scope();
+    }
+    if (config->randomization_mode == SCREENSAVE_RANDOMIZATION_MODE_OFF) {
+        config->randomization_scope = 0UL;
+    }
 
     if (screensave_text_is_empty(config->preset_key)) {
         config->preset_key = NULL;
@@ -53,11 +80,31 @@ int screensave_common_config_validate(const screensave_common_config *config, un
     if (config == NULL) {
         flags = SCREENSAVE_CONFIG_ISSUE_BAD_DETAIL;
     } else {
+        if (config->schema_version != SCREENSAVE_CONFIG_SCHEMA_VERSION) {
+            flags |= SCREENSAVE_CONFIG_ISSUE_BAD_SCHEMA_VERSION;
+        }
+
         if (
             config->detail_level < SCREENSAVE_DETAIL_LEVEL_LOW ||
             config->detail_level > SCREENSAVE_DETAIL_LEVEL_HIGH
         ) {
             flags |= SCREENSAVE_CONFIG_ISSUE_BAD_DETAIL;
+        }
+
+        if (
+            config->randomization_mode != SCREENSAVE_RANDOMIZATION_MODE_OFF &&
+            config->randomization_mode != SCREENSAVE_RANDOMIZATION_MODE_SESSION
+        ) {
+            flags |= SCREENSAVE_CONFIG_ISSUE_BAD_RANDOMIZATION_MODE;
+        }
+
+        if ((config->randomization_scope & ~(
+            SCREENSAVE_RANDOMIZATION_SCOPE_PRESET |
+            SCREENSAVE_RANDOMIZATION_SCOPE_THEME |
+            SCREENSAVE_RANDOMIZATION_SCOPE_DETAIL |
+            SCREENSAVE_RANDOMIZATION_SCOPE_PRODUCT
+        )) != 0UL) {
+            flags |= SCREENSAVE_CONFIG_ISSUE_BAD_RANDOMIZATION_SCOPE;
         }
 
         if (config->preset_key != NULL && config->preset_key[0] == '\0') {
@@ -153,4 +200,34 @@ const char *screensave_detail_level_name(screensave_detail_level level)
     default:
         return "standard";
     }
+}
+
+const char *screensave_seed_mode_name(const screensave_common_config *config)
+{
+    if (config != NULL && config->use_deterministic_seed) {
+        return "fixed";
+    }
+
+    return "session";
+}
+
+const char *screensave_randomization_mode_name(screensave_randomization_mode mode)
+{
+    switch (mode) {
+    case SCREENSAVE_RANDOMIZATION_MODE_SESSION:
+        return "session";
+
+    case SCREENSAVE_RANDOMIZATION_MODE_OFF:
+    default:
+        return "off";
+    }
+}
+
+unsigned long screensave_randomization_default_scope(void)
+{
+    return
+        SCREENSAVE_RANDOMIZATION_SCOPE_PRESET |
+        SCREENSAVE_RANDOMIZATION_SCOPE_THEME |
+        SCREENSAVE_RANDOMIZATION_SCOPE_DETAIL |
+        SCREENSAVE_RANDOMIZATION_SCOPE_PRODUCT;
 }

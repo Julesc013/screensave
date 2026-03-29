@@ -119,10 +119,10 @@ void scr_build_overlay_text(const scr_host_context *context, char *buffer, int b
     scr_append_number(buffer, buffer_size, context->clock.elapsed_millis / 1000UL);
     scr_append_text(buffer, buffer_size, "s");
     scr_append_text(buffer, buffer_size, "\r\nDetail: ");
-    scr_append_text(buffer, buffer_size, screensave_detail_level_name(context->settings.common.detail_level));
+    scr_append_text(buffer, buffer_size, screensave_detail_level_name(context->resolved_settings.common.detail_level));
     scr_append_text(buffer, buffer_size, "\r\nSeed: ");
-    if (context->settings.common.use_deterministic_seed) {
-        if (context->settings.common.deterministic_seed != 0UL) {
+    if (context->resolved_settings.common.use_deterministic_seed) {
+        if (context->resolved_settings.common.deterministic_seed != 0UL) {
             scr_append_text(buffer, buffer_size, "fixed");
         } else {
             scr_append_text(buffer, buffer_size, "module-default");
@@ -130,13 +130,21 @@ void scr_build_overlay_text(const scr_host_context *context, char *buffer, int b
     } else {
         scr_append_text(buffer, buffer_size, "session");
     }
-    if (context->settings.common.preset_key != NULL) {
-        scr_append_text(buffer, buffer_size, "\r\nPreset: ");
-        scr_append_text(buffer, buffer_size, context->settings.common.preset_key);
+    if (context->resolved_settings.common.randomization_mode != SCREENSAVE_RANDOMIZATION_MODE_OFF) {
+        scr_append_text(buffer, buffer_size, "\r\nRandomization: ");
+        scr_append_text(
+            buffer,
+            buffer_size,
+            screensave_randomization_mode_name(context->resolved_settings.common.randomization_mode)
+        );
     }
-    if (context->settings.common.theme_key != NULL) {
+    if (context->resolved_settings.common.preset_key != NULL) {
+        scr_append_text(buffer, buffer_size, "\r\nPreset: ");
+        scr_append_text(buffer, buffer_size, context->resolved_settings.common.preset_key);
+    }
+    if (context->resolved_settings.common.theme_key != NULL) {
         scr_append_text(buffer, buffer_size, "\r\nTheme: ");
-        scr_append_text(buffer, buffer_size, context->settings.common.theme_key);
+        scr_append_text(buffer, buffer_size, context->resolved_settings.common.theme_key);
     }
     if (context->renderer != NULL) {
         screensave_renderer_get_info(context->renderer, &renderer_info);

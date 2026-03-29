@@ -6,6 +6,7 @@
 #include "screensave/config_api.h"
 #include "screensave/diagnostics_api.h"
 #include "screensave/renderer_api.h"
+#include "screensave/settings_api.h"
 
 typedef enum screensave_session_mode_tag {
     SCREENSAVE_SESSION_MODE_SCREEN = 0,
@@ -86,6 +87,43 @@ typedef struct screensave_saver_config_hooks_tag {
         unsigned int product_config_size,
         screensave_diag_context *diagnostics
     );
+    void (*apply_preset)(
+        const struct screensave_saver_module_tag *module,
+        const char *preset_key,
+        screensave_common_config *common_config,
+        void *product_config,
+        unsigned int product_config_size
+    );
+    int (*export_settings_entries)(
+        const struct screensave_saver_module_tag *module,
+        const screensave_common_config *common_config,
+        const void *product_config,
+        unsigned int product_config_size,
+        screensave_settings_file_kind kind,
+        screensave_settings_writer *writer,
+        screensave_diag_context *diagnostics
+    );
+    int (*import_settings_entry)(
+        const struct screensave_saver_module_tag *module,
+        screensave_common_config *common_config,
+        void *product_config,
+        unsigned int product_config_size,
+        screensave_settings_file_kind kind,
+        const char *section,
+        const char *key,
+        const char *value,
+        screensave_diag_context *diagnostics
+    );
+    void (*randomize_settings)(
+        const struct screensave_saver_module_tag *module,
+        screensave_common_config *common_config,
+        void *product_config,
+        unsigned int product_config_size,
+        const screensave_session_seed *seed,
+        screensave_diag_context *diagnostics
+    );
+    unsigned long settings_schema_version;
+    unsigned long settings_capability_flags;
 } screensave_saver_config_hooks;
 
 typedef struct screensave_saver_config_state_tag {
@@ -122,6 +160,11 @@ int screensave_saver_config_state_init(
     const screensave_saver_module *module,
     screensave_saver_config_state *config_state
 );
+int screensave_saver_config_state_copy(
+    const screensave_saver_module *module,
+    screensave_saver_config_state *target,
+    const screensave_saver_config_state *source
+);
 void screensave_saver_config_state_dispose(screensave_saver_config_state *config_state);
 void screensave_saver_config_state_set_defaults(
     const screensave_saver_module *module,
@@ -139,6 +182,13 @@ int screensave_saver_config_state_load(
 int screensave_saver_config_state_save(
     const screensave_saver_module *module,
     const screensave_saver_config_state *config_state,
+    screensave_diag_context *diagnostics
+);
+int screensave_saver_config_state_resolve_for_session(
+    const screensave_saver_module *module,
+    const screensave_saver_config_state *stored_state,
+    const screensave_session_seed *seed,
+    screensave_saver_config_state *resolved_state,
     screensave_diag_context *diagnostics
 );
 const char *screensave_session_mode_name(screensave_session_mode mode);

@@ -653,3 +653,169 @@ INT_PTR vector_config_show_dialog(
 
     return result;
 }
+
+static int vector_parse_scene_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "field") == 0) {
+        *value_out = VECTOR_SCENE_FIELD;
+        return 1;
+    }
+    if (lstrcmpiA(text, "tunnel") == 0) {
+        *value_out = VECTOR_SCENE_TUNNEL;
+        return 1;
+    }
+    if (lstrcmpiA(text, "terrain") == 0) {
+        *value_out = VECTOR_SCENE_TERRAIN;
+        return 1;
+    }
+    return 0;
+}
+
+static int vector_parse_speed_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "calm") == 0) {
+        *value_out = VECTOR_SPEED_CALM;
+        return 1;
+    }
+    if (lstrcmpiA(text, "standard") == 0) {
+        *value_out = VECTOR_SPEED_STANDARD;
+        return 1;
+    }
+    if (lstrcmpiA(text, "surge") == 0) {
+        *value_out = VECTOR_SPEED_SURGE;
+        return 1;
+    }
+    return 0;
+}
+
+static int vector_parse_detail_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "low") == 0) {
+        *value_out = VECTOR_DETAIL_LOW;
+        return 1;
+    }
+    if (lstrcmpiA(text, "standard") == 0) {
+        *value_out = VECTOR_DETAIL_STANDARD;
+        return 1;
+    }
+    if (lstrcmpiA(text, "high") == 0) {
+        *value_out = VECTOR_DETAIL_HIGH;
+        return 1;
+    }
+    return 0;
+}
+
+int vector_config_export_settings_entries(
+    const screensave_saver_module *module,
+    const screensave_common_config *common_config,
+    const void *product_config,
+    unsigned int product_config_size,
+    screensave_settings_file_kind kind,
+    screensave_settings_writer *writer,
+    screensave_diag_context *diagnostics
+)
+{
+    const vector_config *config;
+
+    (void)module;
+    (void)common_config;
+    (void)diagnostics;
+
+    config = vector_as_const_config(product_config, product_config_size);
+    if (kind != SCREENSAVE_SETTINGS_FILE_PRESET) {
+        return 1;
+    }
+    if (config == NULL || writer == NULL || writer->write_string == NULL) {
+        return 0;
+    }
+
+    return writer->write_string(writer->context, "product", "scene_mode", vector_scene_mode_name(config->scene_mode)) &&
+        writer->write_string(writer->context, "product", "speed_mode", vector_speed_mode_name(config->speed_mode)) &&
+        writer->write_string(writer->context, "product", "detail_mode", vector_detail_mode_name(config->detail_mode));
+}
+
+int vector_config_import_settings_entry(
+    const screensave_saver_module *module,
+    screensave_common_config *common_config,
+    void *product_config,
+    unsigned int product_config_size,
+    screensave_settings_file_kind kind,
+    const char *section,
+    const char *key,
+    const char *value,
+    screensave_diag_context *diagnostics
+)
+{
+    vector_config *config;
+
+    (void)module;
+    (void)diagnostics;
+
+    config = vector_as_config(product_config, product_config_size);
+    if (kind != SCREENSAVE_SETTINGS_FILE_PRESET) {
+        return 1;
+    }
+    if (config == NULL || section == NULL || key == NULL || value == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(section, "product") != 0) {
+        return 1;
+    }
+    if (lstrcmpiA(key, "scene_mode") == 0) {
+        return vector_parse_scene_mode(value, &config->scene_mode);
+    }
+    if (lstrcmpiA(key, "speed_mode") == 0) {
+        return vector_parse_speed_mode(value, &config->speed_mode);
+    }
+    if (lstrcmpiA(key, "detail_mode") == 0) {
+        if (!vector_parse_detail_mode(value, &config->detail_mode)) {
+            return 0;
+        }
+        if (common_config != NULL) {
+            common_config->detail_level = (screensave_detail_level)config->detail_mode;
+        }
+        return 1;
+    }
+
+    return 1;
+}
+
+void vector_config_randomize_settings(
+    const screensave_saver_module *module,
+    screensave_common_config *common_config,
+    void *product_config,
+    unsigned int product_config_size,
+    const screensave_session_seed *seed,
+    screensave_diag_context *diagnostics
+)
+{
+    vector_config *config;
+    vector_rng_state rng;
+    unsigned long random_seed;
+
+    (void)module;
+    (void)diagnostics;
+
+    config = vector_as_config(product_config, product_config_size);
+    if (config == NULL) {
+        return;
+    }
+
+    random_seed = seed != NULL ? seed->stream_seed : 0x56454354UL;
+    vector_rng_seed(&rng, random_seed ^ 0x56454354UL);
+    config->scene_mode = (int)vector_rng_range(&rng, 3UL);
+    config->speed_mode = (int)vector_rng_range(&rng, 3UL);
+    config->detail_mode = (int)vector_rng_range(&rng, 3UL);
+    if (common_config != NULL) {
+        common_config->detail_level = (screensave_detail_level)config->detail_mode;
+    }
+}

@@ -11,6 +11,7 @@ Current stage: the first narrow public header set remains real here, with Series
 - `version.h` for runtime version identity
 - `diagnostics_api.h` for lightweight diagnostics reporting
 - `config_api.h` for shared common-config, preset, and theme descriptors
+- `settings_api.h` for versioned settings documents, pack manifests, and shared import/export validation helpers
 - `renderer_api.h` for the renderer contract now exercised by the mandatory GDI backend, the optional GL11 backend, and BenchLab's renderer-selection harness path
 - `saver_api.h` for the saver/module lifecycle boundary, shared host entry, product-owned config hooks, and reusable saver-config state helpers
 - `grid_buffer_api.h` for the narrow shared byte-grid helper promoted in Series 11 for Pipeworks and Lifeforms

@@ -72,6 +72,7 @@ typedef struct benchlab_app_tag {
     benchlab_diag_buffer diag_buffer;
     benchlab_app_config app_config;
     screensave_saver_config_state saver_config;
+    screensave_saver_config_state resolved_config;
     screensave_config_binding config_binding;
     screensave_renderer *renderer;
     screensave_saver_session *session;

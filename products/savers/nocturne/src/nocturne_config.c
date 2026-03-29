@@ -760,3 +760,181 @@ INT_PTR nocturne_config_show_dialog(
 
     return result;
 }
+
+static int nocturne_parse_motion_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+
+    if (lstrcmpiA(text, "none") == 0) {
+        *value_out = NOCTURNE_MOTION_NONE;
+        return 1;
+    }
+    if (lstrcmpiA(text, "drift_mark") == 0) {
+        *value_out = NOCTURNE_MOTION_DRIFT_MARK;
+        return 1;
+    }
+    if (lstrcmpiA(text, "quiet_line") == 0) {
+        *value_out = NOCTURNE_MOTION_QUIET_LINE;
+        return 1;
+    }
+    if (lstrcmpiA(text, "monolith") == 0) {
+        *value_out = NOCTURNE_MOTION_MONOLITH;
+        return 1;
+    }
+    if (lstrcmpiA(text, "breath") == 0) {
+        *value_out = NOCTURNE_MOTION_BREATH;
+        return 1;
+    }
+
+    return 0;
+}
+
+static int nocturne_parse_fade_speed(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+
+    if (lstrcmpiA(text, "slow") == 0) {
+        *value_out = NOCTURNE_FADE_SLOW;
+        return 1;
+    }
+    if (lstrcmpiA(text, "standard") == 0) {
+        *value_out = NOCTURNE_FADE_STANDARD;
+        return 1;
+    }
+    if (lstrcmpiA(text, "gentle") == 0) {
+        *value_out = NOCTURNE_FADE_GENTLE;
+        return 1;
+    }
+
+    return 0;
+}
+
+static int nocturne_parse_motion_strength(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+
+    if (lstrcmpiA(text, "still") == 0) {
+        *value_out = NOCTURNE_STRENGTH_STILL;
+        return 1;
+    }
+    if (lstrcmpiA(text, "subtle") == 0) {
+        *value_out = NOCTURNE_STRENGTH_SUBTLE;
+        return 1;
+    }
+    if (lstrcmpiA(text, "soft") == 0) {
+        *value_out = NOCTURNE_STRENGTH_SOFT;
+        return 1;
+    }
+
+    return 0;
+}
+
+int nocturne_config_export_settings_entries(
+    const screensave_saver_module *module,
+    const screensave_common_config *common_config,
+    const void *product_config,
+    unsigned int product_config_size,
+    screensave_settings_file_kind kind,
+    screensave_settings_writer *writer,
+    screensave_diag_context *diagnostics
+)
+{
+    const nocturne_config *config;
+
+    (void)module;
+    (void)common_config;
+    (void)diagnostics;
+
+    config = nocturne_as_const_config(product_config, product_config_size);
+    if (kind != SCREENSAVE_SETTINGS_FILE_PRESET) {
+        return 1;
+    }
+    if (config == NULL || writer == NULL || writer->write_string == NULL) {
+        return 0;
+    }
+
+    return writer->write_string(writer->context, "product", "motion_mode", nocturne_motion_mode_name(config->motion_mode)) &&
+        writer->write_string(writer->context, "product", "fade_speed", nocturne_fade_speed_name(config->fade_speed)) &&
+        writer->write_string(
+            writer->context,
+            "product",
+            "motion_strength",
+            nocturne_motion_strength_name(config->motion_strength)
+        );
+}
+
+int nocturne_config_import_settings_entry(
+    const screensave_saver_module *module,
+    screensave_common_config *common_config,
+    void *product_config,
+    unsigned int product_config_size,
+    screensave_settings_file_kind kind,
+    const char *section,
+    const char *key,
+    const char *value,
+    screensave_diag_context *diagnostics
+)
+{
+    nocturne_config *config;
+
+    (void)module;
+    (void)common_config;
+    (void)diagnostics;
+
+    config = nocturne_as_config(product_config, product_config_size);
+    if (kind != SCREENSAVE_SETTINGS_FILE_PRESET) {
+        return 1;
+    }
+    if (config == NULL || section == NULL || key == NULL || value == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(section, "product") != 0) {
+        return 1;
+    }
+    if (lstrcmpiA(key, "motion_mode") == 0) {
+        return nocturne_parse_motion_mode(value, &config->motion_mode);
+    }
+    if (lstrcmpiA(key, "fade_speed") == 0) {
+        return nocturne_parse_fade_speed(value, &config->fade_speed);
+    }
+    if (lstrcmpiA(key, "motion_strength") == 0) {
+        return nocturne_parse_motion_strength(value, &config->motion_strength);
+    }
+
+    return 1;
+}
+
+void nocturne_config_randomize_settings(
+    const screensave_saver_module *module,
+    screensave_common_config *common_config,
+    void *product_config,
+    unsigned int product_config_size,
+    const screensave_session_seed *seed,
+    screensave_diag_context *diagnostics
+)
+{
+    nocturne_config *config;
+    nocturne_rng_state rng;
+    unsigned long random_seed;
+
+    (void)module;
+    (void)common_config;
+    (void)diagnostics;
+
+    config = nocturne_as_config(product_config, product_config_size);
+    if (config == NULL) {
+        return;
+    }
+
+    random_seed = seed != NULL ? seed->stream_seed : 0x4E4F4354UL;
+    nocturne_rng_seed(&rng, random_seed ^ 0x4E4F4354UL);
+    config->motion_mode = (int)nocturne_rng_range(&rng, 5UL);
+    config->fade_speed = (int)nocturne_rng_range(&rng, 3UL);
+    config->motion_strength = (int)nocturne_rng_range(&rng, 3UL);
+}

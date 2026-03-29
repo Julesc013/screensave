@@ -117,6 +117,34 @@ INT_PTR plasma_config_show_dialog(
     unsigned int product_config_size,
     screensave_diag_context *diagnostics
 );
+int plasma_config_export_settings_entries(
+    const screensave_saver_module *module,
+    const screensave_common_config *common_config,
+    const void *product_config,
+    unsigned int product_config_size,
+    screensave_settings_file_kind kind,
+    screensave_settings_writer *writer,
+    screensave_diag_context *diagnostics
+);
+int plasma_config_import_settings_entry(
+    const screensave_saver_module *module,
+    screensave_common_config *common_config,
+    void *product_config,
+    unsigned int product_config_size,
+    screensave_settings_file_kind kind,
+    const char *section,
+    const char *key,
+    const char *value,
+    screensave_diag_context *diagnostics
+);
+void plasma_config_randomize_settings(
+    const screensave_saver_module *module,
+    screensave_common_config *common_config,
+    void *product_config,
+    unsigned int product_config_size,
+    const screensave_session_seed *seed,
+    screensave_diag_context *diagnostics
+);
 
 int plasma_create_session(
     const screensave_saver_module *module,

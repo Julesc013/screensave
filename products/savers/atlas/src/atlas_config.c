@@ -698,3 +698,167 @@ INT_PTR atlas_config_show_dialog(
 
     return result;
 }
+
+static int atlas_parse_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "voyage") == 0) {
+        *value_out = ATLAS_MODE_VOYAGE;
+        return 1;
+    }
+    if (lstrcmpiA(text, "atlas") == 0) {
+        *value_out = ATLAS_MODE_ATLAS;
+        return 1;
+    }
+    if (lstrcmpiA(text, "julia") == 0) {
+        *value_out = ATLAS_MODE_JULIA;
+        return 1;
+    }
+    return 0;
+}
+
+static int atlas_parse_speed_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "still") == 0) {
+        *value_out = ATLAS_SPEED_STILL;
+        return 1;
+    }
+    if (lstrcmpiA(text, "standard") == 0) {
+        *value_out = ATLAS_SPEED_STANDARD;
+        return 1;
+    }
+    if (lstrcmpiA(text, "brisk") == 0) {
+        *value_out = ATLAS_SPEED_BRISK;
+        return 1;
+    }
+    return 0;
+}
+
+static int atlas_parse_refinement_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "draft") == 0) {
+        *value_out = ATLAS_REFINEMENT_DRAFT;
+        return 1;
+    }
+    if (lstrcmpiA(text, "standard") == 0) {
+        *value_out = ATLAS_REFINEMENT_STANDARD;
+        return 1;
+    }
+    if (lstrcmpiA(text, "fine") == 0) {
+        *value_out = ATLAS_REFINEMENT_FINE;
+        return 1;
+    }
+    return 0;
+}
+
+int atlas_config_export_settings_entries(
+    const screensave_saver_module *module,
+    const screensave_common_config *common_config,
+    const void *product_config,
+    unsigned int product_config_size,
+    screensave_settings_file_kind kind,
+    screensave_settings_writer *writer,
+    screensave_diag_context *diagnostics
+)
+{
+    const atlas_config *config;
+
+    (void)module;
+    (void)common_config;
+    (void)diagnostics;
+
+    config = atlas_as_const_config(product_config, product_config_size);
+    if (kind != SCREENSAVE_SETTINGS_FILE_PRESET) {
+        return 1;
+    }
+    if (config == NULL || writer == NULL || writer->write_string == NULL) {
+        return 0;
+    }
+
+    return writer->write_string(writer->context, "product", "mode", atlas_mode_name(config->mode)) &&
+        writer->write_string(writer->context, "product", "speed_mode", atlas_speed_mode_name(config->speed_mode)) &&
+        writer->write_string(
+            writer->context,
+            "product",
+            "refinement_mode",
+            atlas_refinement_mode_name(config->refinement_mode)
+        );
+}
+
+int atlas_config_import_settings_entry(
+    const screensave_saver_module *module,
+    screensave_common_config *common_config,
+    void *product_config,
+    unsigned int product_config_size,
+    screensave_settings_file_kind kind,
+    const char *section,
+    const char *key,
+    const char *value,
+    screensave_diag_context *diagnostics
+)
+{
+    atlas_config *config;
+
+    (void)module;
+    (void)common_config;
+    (void)diagnostics;
+
+    config = atlas_as_config(product_config, product_config_size);
+    if (kind != SCREENSAVE_SETTINGS_FILE_PRESET) {
+        return 1;
+    }
+    if (config == NULL || section == NULL || key == NULL || value == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(section, "product") != 0) {
+        return 1;
+    }
+    if (lstrcmpiA(key, "mode") == 0) {
+        return atlas_parse_mode(value, &config->mode);
+    }
+    if (lstrcmpiA(key, "speed_mode") == 0) {
+        return atlas_parse_speed_mode(value, &config->speed_mode);
+    }
+    if (lstrcmpiA(key, "refinement_mode") == 0) {
+        return atlas_parse_refinement_mode(value, &config->refinement_mode);
+    }
+
+    return 1;
+}
+
+void atlas_config_randomize_settings(
+    const screensave_saver_module *module,
+    screensave_common_config *common_config,
+    void *product_config,
+    unsigned int product_config_size,
+    const screensave_session_seed *seed,
+    screensave_diag_context *diagnostics
+)
+{
+    atlas_config *config;
+    atlas_rng_state rng;
+    unsigned long random_seed;
+
+    (void)module;
+    (void)common_config;
+    (void)diagnostics;
+
+    config = atlas_as_config(product_config, product_config_size);
+    if (config == NULL) {
+        return;
+    }
+
+    random_seed = seed != NULL ? seed->stream_seed : 0x41544C41UL;
+    atlas_rng_seed(&rng, random_seed ^ 0x41544C41UL);
+    config->mode = (int)atlas_rng_range(&rng, 3UL);
+    config->speed_mode = (int)atlas_rng_range(&rng, 3UL);
+    config->refinement_mode = (int)atlas_rng_range(&rng, 3UL);
+}

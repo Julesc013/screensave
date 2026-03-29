@@ -134,6 +134,16 @@ int screensave_scr_main_with_registry(
         );
         return 1;
     }
+    if (!scr_settings_init(context.module, &context.resolved_settings)) {
+        scr_settings_dispose(&context.settings);
+        scr_show_message_box(
+            NULL,
+            context.module,
+            "The session configuration state could not be initialized.",
+            MB_OK | MB_ICONERROR
+        );
+        return 1;
+    }
 
     scr_settings_set_defaults(context.module, &context.settings);
     if (!scr_settings_load(context.module, &context.settings, &context.diagnostics)) {
@@ -190,11 +200,13 @@ int screensave_scr_main_with_registry(
     if (context.mode == SCREENSAVE_SESSION_MODE_CONFIG) {
         dialog_result = scr_show_config_dialog(&context);
         result = dialog_result == -1 ? 1 : 0;
+        scr_settings_dispose(&context.resolved_settings);
         scr_settings_dispose(&context.settings);
         return result;
     }
 
     result = scr_run_window(&context);
+    scr_settings_dispose(&context.resolved_settings);
     scr_settings_dispose(&context.settings);
     return result;
 }

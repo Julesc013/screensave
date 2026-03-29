@@ -122,13 +122,21 @@ static void benchlab_build_overlay_text(const benchlab_app *app, char *buffer, i
     benchlab_append_number(buffer, buffer_size, app->clock.delta_millis);
     benchlab_append_text(buffer, buffer_size, "ms");
 
-    if (app->saver_config.common.preset_key != NULL) {
+    if (app->resolved_config.common.preset_key != NULL) {
         benchlab_append_text(buffer, buffer_size, "\r\nPreset: ");
-        benchlab_append_text(buffer, buffer_size, app->saver_config.common.preset_key);
+        benchlab_append_text(buffer, buffer_size, app->resolved_config.common.preset_key);
     }
-    if (app->saver_config.common.theme_key != NULL) {
+    if (app->resolved_config.common.theme_key != NULL) {
         benchlab_append_text(buffer, buffer_size, "\r\nTheme: ");
-        benchlab_append_text(buffer, buffer_size, app->saver_config.common.theme_key);
+        benchlab_append_text(buffer, buffer_size, app->resolved_config.common.theme_key);
+    }
+    if (app->resolved_config.common.randomization_mode != SCREENSAVE_RANDOMIZATION_MODE_OFF) {
+        benchlab_append_text(buffer, buffer_size, "\r\nRandomization: ");
+        benchlab_append_text(
+            buffer,
+            buffer_size,
+            screensave_randomization_mode_name(app->resolved_config.common.randomization_mode)
+        );
     }
 
     benchlab_append_text(buffer, buffer_size, "\r\nDiag: emitted=");

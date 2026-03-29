@@ -69,6 +69,26 @@ static void scr_prepare_runtime_state(scr_host_context *context)
     screensave_rng_seed(&seed_rng, context->session_seed.base_seed);
     context->session_seed.stream_seed = screensave_rng_next_u32(&seed_rng);
     context->session_seed.deterministic = context->settings.common.use_deterministic_seed != 0;
+    if (!screensave_saver_config_state_resolve_for_session(
+            context->module,
+            &context->settings,
+            &context->session_seed,
+            &context->resolved_settings,
+            &context->diagnostics
+        )) {
+        screensave_saver_config_state_copy(
+            context->module,
+            &context->resolved_settings,
+            &context->settings
+        );
+        screensave_saver_config_state_clamp(context->module, &context->resolved_settings);
+    }
+    screensave_config_binding_init(
+        &context->config_binding,
+        &context->resolved_settings.common,
+        context->resolved_settings.product_config,
+        context->resolved_settings.product_config_size
+    );
 }
 
 static void scr_build_saver_environment(
@@ -267,6 +287,10 @@ static int scr_overlay_can_draw(const scr_host_context *context)
     screensave_renderer_info renderer_info;
 
     if (context == NULL || !context->settings.common.diagnostics_overlay_enabled) {
+        return 0;
+    }
+
+    if (!context->resolved_settings.common.diagnostics_overlay_enabled) {
         return 0;
     }
 

@@ -1,12 +1,37 @@
 #include "lifeforms_internal.h"
 
+static void lifeforms_apply_shared_preset(
+    const screensave_saver_module *module,
+    const char *preset_key,
+    screensave_common_config *common_config,
+    void *product_config,
+    unsigned int product_config_size
+)
+{
+    (void)module;
+    if (common_config == NULL || product_config == NULL || product_config_size != sizeof(lifeforms_config)) {
+        return;
+    }
+
+    lifeforms_apply_preset_to_config(preset_key, common_config, (lifeforms_config *)product_config);
+}
+
 static const screensave_saver_config_hooks g_lifeforms_config_hooks = {
     sizeof(lifeforms_config),
     lifeforms_config_set_defaults,
     lifeforms_config_clamp,
     lifeforms_config_load,
     lifeforms_config_save,
-    lifeforms_config_show_dialog
+    lifeforms_config_show_dialog,
+    lifeforms_apply_shared_preset,
+    NULL,
+    NULL,
+    NULL,
+    SCREENSAVE_CONFIG_SCHEMA_VERSION,
+    SCREENSAVE_SETTINGS_CAP_PRESET_FILES |
+        SCREENSAVE_SETTINGS_CAP_THEME_FILES |
+        SCREENSAVE_SETTINGS_CAP_RANDOMIZATION |
+        SCREENSAVE_SETTINGS_CAP_PACKS
 };
 
 static const screensave_saver_callbacks g_lifeforms_callbacks = {

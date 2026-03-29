@@ -73,6 +73,7 @@
     <ClCompile Include="..\..\..\platform\src\core\base\saver_contract.c" />
     <ClCompile Include="..\..\..\platform\src\core\base\saver_registry.c" />
     <ClCompile Include="..\..\..\platform\src\core\config\config.c" />
+    <ClCompile Include="..\..\..\platform\src\core\config\settings.c" />
     <ClCompile Include="..\..\..\platform\src\core\diagnostics\diagnostics.c" />
     <ClCompile Include="..\..\..\platform\src\core\grid\grid_buffer.c" />
     <ClCompile Include="..\..\..\platform\src\core\rng\rng.c" />

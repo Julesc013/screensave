@@ -29,6 +29,7 @@ PLATFORM_OBJS := \
 	$(PLATFORM_DIR)/saver_contract.o \
 	$(PLATFORM_DIR)/saver_registry.o \
 	$(PLATFORM_DIR)/config.o \
+	$(PLATFORM_DIR)/settings.o \
 	$(PLATFORM_DIR)/diagnostics.o \
 	$(PLATFORM_DIR)/grid_buffer.o \
 	$(PLATFORM_DIR)/rng.o \
@@ -82,6 +83,10 @@ $(PLATFORM_DIR)/%.o: $(ROOT)/platform/src/core/base/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(PLATFORM_DIR)/config.o: $(ROOT)/platform/src/core/config/config.c
+	mkdir -p $(PLATFORM_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(PLATFORM_DIR)/settings.o: $(ROOT)/platform/src/core/config/settings.c
 	mkdir -p $(PLATFORM_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 

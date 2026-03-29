@@ -1,6 +1,8 @@
 #include <stdlib.h>
+#include <string.h>
 
 #include "screensave/saver_api.h"
+#include "../config/settings_internal.h"
 
 int screensave_saver_module_is_valid(const screensave_saver_module *module)
 {
@@ -52,6 +54,11 @@ static const screensave_saver_config_hooks *screensave_saver_get_config_hooks(
     return module->config_hooks;
 }
 
+static unsigned long screensave_saver_mix_seed(unsigned long value)
+{
+    return (value * 1664525UL) + 1013904223UL;
+}
+
 int screensave_saver_config_state_init(
     const screensave_saver_module *module,
     screensave_saver_config_state *config_state
@@ -76,6 +83,41 @@ int screensave_saver_config_state_init(
 
     config_state->product_config_size = config_hooks->product_config_size;
     ZeroMemory(config_state->product_config, config_state->product_config_size);
+    return 1;
+}
+
+int screensave_saver_config_state_copy(
+    const screensave_saver_module *module,
+    screensave_saver_config_state *target,
+    const screensave_saver_config_state *source
+)
+{
+    const screensave_saver_config_hooks *config_hooks;
+
+    if (target == NULL || source == NULL) {
+        return 0;
+    }
+
+    config_hooks = screensave_saver_get_config_hooks(module);
+    if (
+        target->product_config == NULL &&
+        config_hooks != NULL &&
+        config_hooks->product_config_size > 0U &&
+        !screensave_saver_config_state_init(module, target)
+    ) {
+        return 0;
+    }
+
+    target->common = source->common;
+    if (
+        target->product_config != NULL &&
+        source->product_config != NULL &&
+        target->product_config_size == source->product_config_size &&
+        source->product_config_size > 0U
+    ) {
+        memcpy(target->product_config, source->product_config, source->product_config_size);
+    }
+
     return 1;
 }
 
@@ -154,16 +196,20 @@ int screensave_saver_config_state_load(
 
     config_hooks = screensave_saver_get_config_hooks(module);
     if (config_hooks == NULL || config_hooks->load_config == NULL) {
-        return 1;
+        return screensave_settings_load_shared_state(module, &config_state->common, diagnostics);
     }
 
-    return config_hooks->load_config(
+    if (!config_hooks->load_config(
         module,
         &config_state->common,
         config_state->product_config,
         config_state->product_config_size,
         diagnostics
-    );
+    )) {
+        return 0;
+    }
+
+    return screensave_settings_load_shared_state(module, &config_state->common, diagnostics);
 }
 
 int screensave_saver_config_state_save(
@@ -180,16 +226,107 @@ int screensave_saver_config_state_save(
 
     config_hooks = screensave_saver_get_config_hooks(module);
     if (config_hooks == NULL || config_hooks->save_config == NULL) {
+        return screensave_settings_save_shared_state(module, &config_state->common, diagnostics);
+    }
+
+    if (!config_hooks->save_config(
+            module,
+            &config_state->common,
+            config_state->product_config,
+            config_state->product_config_size,
+            diagnostics
+        )) {
+        return 0;
+    }
+
+    return screensave_settings_save_shared_state(module, &config_state->common, diagnostics);
+}
+
+int screensave_saver_config_state_resolve_for_session(
+    const screensave_saver_module *module,
+    const screensave_saver_config_state *stored_state,
+    const screensave_session_seed *seed,
+    screensave_saver_config_state *resolved_state,
+    screensave_diag_context *diagnostics
+)
+{
+    const screensave_saver_config_hooks *config_hooks;
+    unsigned long random_value;
+
+    if (module == NULL || stored_state == NULL || resolved_state == NULL) {
+        return 0;
+    }
+
+    if (!screensave_saver_config_state_copy(module, resolved_state, stored_state)) {
+        return 0;
+    }
+
+    config_hooks = screensave_saver_get_config_hooks(module);
+    if (
+        seed == NULL ||
+        resolved_state->common.randomization_mode != SCREENSAVE_RANDOMIZATION_MODE_SESSION
+    ) {
+        screensave_saver_config_state_clamp(module, resolved_state);
         return 1;
     }
 
-    return config_hooks->save_config(
-        module,
-        &config_state->common,
-        config_state->product_config,
-        config_state->product_config_size,
-        diagnostics
-    );
+    random_value = seed->stream_seed;
+    if (
+        config_hooks != NULL &&
+        config_hooks->apply_preset != NULL &&
+        module->preset_count > 0U &&
+        (resolved_state->common.randomization_scope & SCREENSAVE_RANDOMIZATION_SCOPE_PRESET) != 0UL
+    ) {
+        unsigned int preset_index;
+
+        preset_index = (unsigned int)(random_value % module->preset_count);
+        config_hooks->apply_preset(
+            module,
+            module->presets[preset_index].preset_key,
+            &resolved_state->common,
+            resolved_state->product_config,
+            resolved_state->product_config_size
+        );
+        random_value = screensave_saver_mix_seed(random_value);
+    }
+
+    if (
+        module->theme_count > 0U &&
+        (resolved_state->common.randomization_scope & SCREENSAVE_RANDOMIZATION_SCOPE_THEME) != 0UL
+    ) {
+        unsigned int theme_index;
+
+        theme_index = (unsigned int)(random_value % module->theme_count);
+        resolved_state->common.theme_key = module->themes[theme_index].theme_key;
+        random_value = screensave_saver_mix_seed(random_value);
+    }
+
+    if ((resolved_state->common.randomization_scope & SCREENSAVE_RANDOMIZATION_SCOPE_DETAIL) != 0UL) {
+        resolved_state->common.detail_level = (screensave_detail_level)(random_value % 3UL);
+        random_value = screensave_saver_mix_seed(random_value);
+    }
+
+    if (
+        config_hooks != NULL &&
+        config_hooks->randomize_settings != NULL &&
+        (resolved_state->common.randomization_scope & SCREENSAVE_RANDOMIZATION_SCOPE_PRODUCT) != 0UL
+    ) {
+        screensave_session_seed random_seed;
+
+        random_seed = *seed;
+        random_seed.stream_seed = random_value;
+        config_hooks->randomize_settings(
+            module,
+            &resolved_state->common,
+            resolved_state->product_config,
+            resolved_state->product_config_size,
+            &random_seed,
+            diagnostics
+        );
+    }
+
+    screensave_saver_config_state_clamp(module, resolved_state);
+    return 1;
 }
 
 const char *screensave_session_mode_name(screensave_session_mode mode)

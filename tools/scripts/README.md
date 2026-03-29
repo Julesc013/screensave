@@ -8,5 +8,6 @@ Current stage:
 - `check_codex_config.py` validates the project-scoped Codex configuration.
 - `check_docs_basics.py` checks markdown links and roadmap/doc basics.
 - `check_build_layout.py` validates the checked-in build scaffold and target relationships.
+- `check_shared_settings_layout.py` validates the C04 shared settings, preset, randomization, and pack scaffold.
 - `check_release_scaffold.py` generates a manual release-scaffold report without publishing anything.
 Type: tooling.

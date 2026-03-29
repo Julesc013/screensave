@@ -44,6 +44,7 @@ typedef struct scr_host_context_tag {
     int exit_pending;
     POINT initial_cursor;
     scr_settings settings;
+    scr_settings resolved_settings;
     screensave_timebase timebase;
     screensave_runtime_clock clock;
     screensave_session_seed session_seed;

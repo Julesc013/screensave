@@ -1,12 +1,37 @@
 #include "observatory_internal.h"
 
+static void observatory_apply_shared_preset(
+    const screensave_saver_module *module,
+    const char *preset_key,
+    screensave_common_config *common_config,
+    void *product_config,
+    unsigned int product_config_size
+)
+{
+    (void)module;
+    if (common_config == NULL || product_config == NULL || product_config_size != sizeof(observatory_config)) {
+        return;
+    }
+
+    observatory_apply_preset_to_config(preset_key, common_config, (observatory_config *)product_config);
+}
+
 static const screensave_saver_config_hooks g_observatory_config_hooks = {
     sizeof(observatory_config),
     observatory_config_set_defaults,
     observatory_config_clamp,
     observatory_config_load,
     observatory_config_save,
-    observatory_config_show_dialog
+    observatory_config_show_dialog,
+    observatory_apply_shared_preset,
+    NULL,
+    NULL,
+    NULL,
+    SCREENSAVE_CONFIG_SCHEMA_VERSION,
+    SCREENSAVE_SETTINGS_CAP_PRESET_FILES |
+        SCREENSAVE_SETTINGS_CAP_THEME_FILES |
+        SCREENSAVE_SETTINGS_CAP_RANDOMIZATION |
+        SCREENSAVE_SETTINGS_CAP_PACKS
 };
 
 static const screensave_saver_callbacks g_observatory_callbacks = {

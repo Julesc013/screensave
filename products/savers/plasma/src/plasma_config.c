@@ -755,3 +755,197 @@ INT_PTR plasma_config_show_dialog(
 
     return result;
 }
+
+static int plasma_parse_effect_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "plasma") == 0) {
+        *value_out = PLASMA_EFFECT_PLASMA;
+        return 1;
+    }
+    if (lstrcmpiA(text, "fire") == 0) {
+        *value_out = PLASMA_EFFECT_FIRE;
+        return 1;
+    }
+    if (lstrcmpiA(text, "interference") == 0) {
+        *value_out = PLASMA_EFFECT_INTERFERENCE;
+        return 1;
+    }
+    return 0;
+}
+
+static int plasma_parse_speed_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "gentle") == 0) {
+        *value_out = PLASMA_SPEED_GENTLE;
+        return 1;
+    }
+    if (lstrcmpiA(text, "standard") == 0) {
+        *value_out = PLASMA_SPEED_STANDARD;
+        return 1;
+    }
+    if (lstrcmpiA(text, "lively") == 0) {
+        *value_out = PLASMA_SPEED_LIVELY;
+        return 1;
+    }
+    return 0;
+}
+
+static int plasma_parse_resolution_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "coarse") == 0) {
+        *value_out = PLASMA_RESOLUTION_COARSE;
+        return 1;
+    }
+    if (lstrcmpiA(text, "standard") == 0) {
+        *value_out = PLASMA_RESOLUTION_STANDARD;
+        return 1;
+    }
+    if (lstrcmpiA(text, "fine") == 0) {
+        *value_out = PLASMA_RESOLUTION_FINE;
+        return 1;
+    }
+    return 0;
+}
+
+static int plasma_parse_smoothing_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "off") == 0) {
+        *value_out = PLASMA_SMOOTHING_OFF;
+        return 1;
+    }
+    if (lstrcmpiA(text, "soft") == 0) {
+        *value_out = PLASMA_SMOOTHING_SOFT;
+        return 1;
+    }
+    if (lstrcmpiA(text, "glow") == 0) {
+        *value_out = PLASMA_SMOOTHING_GLOW;
+        return 1;
+    }
+    return 0;
+}
+
+int plasma_config_export_settings_entries(
+    const screensave_saver_module *module,
+    const screensave_common_config *common_config,
+    const void *product_config,
+    unsigned int product_config_size,
+    screensave_settings_file_kind kind,
+    screensave_settings_writer *writer,
+    screensave_diag_context *diagnostics
+)
+{
+    const plasma_config *config;
+
+    (void)module;
+    (void)common_config;
+    (void)diagnostics;
+
+    config = plasma_as_const_config(product_config, product_config_size);
+    if (kind != SCREENSAVE_SETTINGS_FILE_PRESET) {
+        return 1;
+    }
+    if (config == NULL || writer == NULL || writer->write_string == NULL) {
+        return 0;
+    }
+
+    return writer->write_string(writer->context, "product", "effect_mode", plasma_effect_mode_name(config->effect_mode)) &&
+        writer->write_string(writer->context, "product", "speed_mode", plasma_speed_mode_name(config->speed_mode)) &&
+        writer->write_string(
+            writer->context,
+            "product",
+            "resolution_mode",
+            plasma_resolution_mode_name(config->resolution_mode)
+        ) &&
+        writer->write_string(
+            writer->context,
+            "product",
+            "smoothing_mode",
+            plasma_smoothing_mode_name(config->smoothing_mode)
+        );
+}
+
+int plasma_config_import_settings_entry(
+    const screensave_saver_module *module,
+    screensave_common_config *common_config,
+    void *product_config,
+    unsigned int product_config_size,
+    screensave_settings_file_kind kind,
+    const char *section,
+    const char *key,
+    const char *value,
+    screensave_diag_context *diagnostics
+)
+{
+    plasma_config *config;
+
+    (void)module;
+    (void)common_config;
+    (void)diagnostics;
+
+    config = plasma_as_config(product_config, product_config_size);
+    if (kind != SCREENSAVE_SETTINGS_FILE_PRESET) {
+        return 1;
+    }
+    if (config == NULL || section == NULL || key == NULL || value == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(section, "product") != 0) {
+        return 1;
+    }
+    if (lstrcmpiA(key, "effect_mode") == 0) {
+        return plasma_parse_effect_mode(value, &config->effect_mode);
+    }
+    if (lstrcmpiA(key, "speed_mode") == 0) {
+        return plasma_parse_speed_mode(value, &config->speed_mode);
+    }
+    if (lstrcmpiA(key, "resolution_mode") == 0) {
+        return plasma_parse_resolution_mode(value, &config->resolution_mode);
+    }
+    if (lstrcmpiA(key, "smoothing_mode") == 0) {
+        return plasma_parse_smoothing_mode(value, &config->smoothing_mode);
+    }
+
+    return 1;
+}
+
+void plasma_config_randomize_settings(
+    const screensave_saver_module *module,
+    screensave_common_config *common_config,
+    void *product_config,
+    unsigned int product_config_size,
+    const screensave_session_seed *seed,
+    screensave_diag_context *diagnostics
+)
+{
+    plasma_config *config;
+    plasma_rng_state rng;
+    unsigned long random_seed;
+
+    (void)module;
+    (void)common_config;
+    (void)diagnostics;
+
+    config = plasma_as_config(product_config, product_config_size);
+    if (config == NULL) {
+        return;
+    }
+
+    random_seed = seed != NULL ? seed->stream_seed : 0x504C4153UL;
+    plasma_rng_seed(&rng, random_seed ^ 0x504C4153UL);
+    config->effect_mode = (int)plasma_rng_range(&rng, 3UL);
+    config->speed_mode = (int)plasma_rng_range(&rng, 3UL);
+    config->resolution_mode = (int)plasma_rng_range(&rng, 3UL);
+    config->smoothing_mode = (int)plasma_rng_range(&rng, 3UL);
+}

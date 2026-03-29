@@ -85,6 +85,13 @@ static void scr_apply_fallback_settings_to_dialog(HWND dialog, const scr_setting
         IDC_SCR_DIAGNOSTICS,
         settings->common.diagnostics_overlay_enabled ? BST_CHECKED : BST_UNCHECKED
     );
+    CheckDlgButton(
+        dialog,
+        IDC_SCR_RANDOMIZE_SESSION,
+        settings->common.randomization_mode != SCREENSAVE_RANDOMIZATION_MODE_OFF
+            ? BST_CHECKED
+            : BST_UNCHECKED
+    );
 }
 
 static void scr_read_fallback_settings_from_dialog(HWND dialog, scr_settings *settings)
@@ -93,6 +100,14 @@ static void scr_read_fallback_settings_from_dialog(HWND dialog, scr_settings *se
         IsDlgButtonChecked(dialog, IDC_SCR_DETERMINISTIC_SEED) == BST_CHECKED;
     settings->common.diagnostics_overlay_enabled =
         IsDlgButtonChecked(dialog, IDC_SCR_DIAGNOSTICS) == BST_CHECKED;
+    settings->common.randomization_mode =
+        IsDlgButtonChecked(dialog, IDC_SCR_RANDOMIZE_SESSION) == BST_CHECKED
+            ? SCREENSAVE_RANDOMIZATION_MODE_SESSION
+            : SCREENSAVE_RANDOMIZATION_MODE_OFF;
+    settings->common.randomization_scope =
+        settings->common.randomization_mode != SCREENSAVE_RANDOMIZATION_MODE_OFF
+            ? screensave_randomization_default_scope()
+            : 0UL;
 }
 
 static void scr_initialize_fallback_dialog(
