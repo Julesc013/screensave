@@ -15,6 +15,49 @@ static void scr_request_exit(scr_host_context *context, HWND window)
     DestroyWindow(window);
 }
 
+static void scr_get_fullscreen_bounds(RECT *rect)
+{
+    int left;
+    int top;
+    int width;
+    int height;
+
+    if (rect == NULL) {
+        return;
+    }
+
+    left = 0;
+    top = 0;
+    width = GetSystemMetrics(SM_CXSCREEN);
+    height = GetSystemMetrics(SM_CYSCREEN);
+
+    if (GetSystemMetrics(SM_CMONITORS) > 1) {
+        int virtual_width;
+        int virtual_height;
+
+        virtual_width = GetSystemMetrics(SM_CXVIRTUALSCREEN);
+        virtual_height = GetSystemMetrics(SM_CYVIRTUALSCREEN);
+        if (virtual_width > 0 && virtual_height > 0) {
+            left = GetSystemMetrics(SM_XVIRTUALSCREEN);
+            top = GetSystemMetrics(SM_YVIRTUALSCREEN);
+            width = virtual_width;
+            height = virtual_height;
+        }
+    }
+
+    if (width <= 0) {
+        width = 1;
+    }
+    if (height <= 0) {
+        height = 1;
+    }
+
+    rect->left = left;
+    rect->top = top;
+    rect->right = left + width;
+    rect->bottom = top + height;
+}
+
 static void scr_get_client_size(HWND window, screensave_sizei *size)
 {
     RECT rect;
@@ -52,6 +95,74 @@ static unsigned long scr_resolve_session_seed(const scr_host_context *context)
     }
 
     return screensave_rng_seed_from_text(context->module->identity.product_key, fallback_seed);
+}
+
+static int scr_preview_parent_is_valid(const scr_host_context *context)
+{
+    return context != NULL && context->preview_parent != NULL && IsWindow(context->preview_parent);
+}
+
+static void scr_sync_preview_window(scr_host_context *context, HWND window)
+{
+    RECT parent_rect;
+    RECT window_rect;
+    int width;
+    int height;
+
+    if (context == NULL || window == NULL || !context->preview_mode) {
+        return;
+    }
+
+    if (!scr_preview_parent_is_valid(context)) {
+        DestroyWindow(window);
+        return;
+    }
+
+    GetClientRect(context->preview_parent, &parent_rect);
+    width = parent_rect.right - parent_rect.left;
+    height = parent_rect.bottom - parent_rect.top;
+    if (width <= 0) {
+        width = 1;
+    }
+    if (height <= 0) {
+        height = 1;
+    }
+
+    GetClientRect(window, &window_rect);
+    if (
+        window_rect.right - window_rect.left != width ||
+        window_rect.bottom - window_rect.top != height
+    ) {
+        SetWindowPos(
+            window,
+            NULL,
+            0,
+            0,
+            width,
+            height,
+            SWP_NOACTIVATE | SWP_NOZORDER
+        );
+    }
+}
+
+static void scr_sync_screen_window(scr_host_context *context, HWND window)
+{
+    RECT bounds;
+
+    if (context == NULL || window == NULL || context->preview_mode) {
+        return;
+    }
+
+    scr_get_fullscreen_bounds(&bounds);
+    SetWindowPos(
+        window,
+        HWND_TOPMOST,
+        bounds.left,
+        bounds.top,
+        bounds.right - bounds.left,
+        bounds.bottom - bounds.top,
+        SWP_NOACTIVATE | SWP_SHOWWINDOW
+    );
 }
 
 static void scr_prepare_runtime_state(scr_host_context *context)
@@ -326,6 +437,11 @@ static LRESULT CALLBACK scr_window_proc(HWND window, UINT message, WPARAM wParam
     case WM_CREATE:
         if (context != NULL) {
             context->preview_mode = context->mode == SCREENSAVE_SESSION_MODE_PREVIEW;
+            if (context->preview_mode) {
+                scr_sync_preview_window(context, window);
+            } else {
+                scr_sync_screen_window(context, window);
+            }
             scr_prepare_runtime_state(context);
             if (!scr_create_renderer_and_session(context, window)) {
                 return -1;
@@ -351,6 +467,13 @@ static LRESULT CALLBACK scr_window_proc(HWND window, UINT message, WPARAM wParam
 
     case WM_TIMER:
         if (context != NULL && wParam == SCR_TIMER_ID) {
+            if (context->preview_mode) {
+                if (!scr_preview_parent_is_valid(context)) {
+                    DestroyWindow(window);
+                    return 0;
+                }
+                scr_sync_preview_window(context, window);
+            }
             screensave_timebase_sample(&context->timebase, &context->clock);
             if (
                 context->session != NULL &&
@@ -368,6 +491,18 @@ static LRESULT CALLBACK scr_window_proc(HWND window, UINT message, WPARAM wParam
 
     case WM_SIZE:
         if (context != NULL) {
+            scr_resize_renderer_and_session(context, window);
+        }
+        InvalidateRect(window, NULL, TRUE);
+        return 0;
+
+    case WM_DISPLAYCHANGE:
+        if (context != NULL) {
+            if (context->preview_mode) {
+                scr_sync_preview_window(context, window);
+            } else {
+                scr_sync_screen_window(context, window);
+            }
             scr_resize_renderer_and_session(context, window);
         }
         InvalidateRect(window, NULL, TRUE);
@@ -530,16 +665,17 @@ static HWND scr_create_window(scr_host_context *context)
 
     style = WS_POPUP | WS_VISIBLE;
     extended_style = WS_EX_TOPMOST;
+    scr_get_fullscreen_bounds(&rect);
 
     return CreateWindowExA(
         extended_style,
         SCR_HOST_WINDOW_CLASSA,
         context->module->identity.display_name,
         style,
-        0,
-        0,
-        GetSystemMetrics(SM_CXSCREEN),
-        GetSystemMetrics(SM_CYSCREEN),
+        rect.left,
+        rect.top,
+        rect.right - rect.left,
+        rect.bottom - rect.top,
         NULL,
         NULL,
         context->instance,

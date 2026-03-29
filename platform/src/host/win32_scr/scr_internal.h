@@ -15,6 +15,26 @@
 #define SCR_TIMER_INTERVAL_MS 33
 #define SCR_EXIT_MOUSE_DELTA 4
 
+#ifndef SM_CMONITORS
+#define SM_CMONITORS 80
+#endif
+
+#ifndef SM_XVIRTUALSCREEN
+#define SM_XVIRTUALSCREEN 76
+#endif
+
+#ifndef SM_YVIRTUALSCREEN
+#define SM_YVIRTUALSCREEN 77
+#endif
+
+#ifndef SM_CXVIRTUALSCREEN
+#define SM_CXVIRTUALSCREEN 78
+#endif
+
+#ifndef SM_CYVIRTUALSCREEN
+#define SM_CYVIRTUALSCREEN 79
+#endif
+
 typedef screensave_saver_config_state scr_settings;
 
 typedef struct scr_parsed_args_tag {

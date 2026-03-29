@@ -15,6 +15,13 @@ typedef struct scr_selector_dialog_state_tag {
     screensave_renderer_kind selected_renderer_kind;
 } scr_selector_dialog_state;
 
+typedef struct scr_single_dialog_state_tag {
+    scr_host_context *context;
+    const screensave_saver_module *module;
+    scr_settings settings;
+    screensave_renderer_kind selected_renderer_kind;
+} scr_single_dialog_state;
+
 static screensave_renderer_kind scr_selector_renderer_kind_from_index(LRESULT selection)
 {
     switch ((int)selection) {
@@ -231,15 +238,61 @@ static INT_PTR scr_show_fallback_dialog(
     return result;
 }
 
+static int scr_edit_module_settings_dialog(
+    scr_host_context *context,
+    const screensave_saver_module *module,
+    scr_settings *settings,
+    HWND owner_window
+)
+{
+    INT_PTR result;
+    const screensave_saver_config_hooks *config_hooks;
+
+    if (context == NULL || module == NULL || settings == NULL) {
+        return -1;
+    }
+
+    config_hooks = scr_get_config_hooks(module);
+    if (config_hooks != NULL && config_hooks->show_config_dialog != NULL) {
+        result = config_hooks->show_config_dialog(
+            context->instance,
+            owner_window,
+            module,
+            &settings->common,
+            settings->product_config,
+            settings->product_config_size,
+            &context->diagnostics
+        );
+    } else {
+        result = scr_show_fallback_dialog(context, module, settings, owner_window);
+    }
+
+    if (result == IDOK) {
+        scr_settings_clamp(module, settings);
+        return IDOK;
+    }
+
+    if (result == IDCANCEL) {
+        return IDCANCEL;
+    }
+
+    scr_show_message_box(
+        context->owner_window,
+        module,
+        "The saver configuration dialog could not be loaded.",
+        MB_OK | MB_ICONERROR
+    );
+    return -1;
+}
+
 static int scr_run_module_settings_dialog(
     scr_host_context *context,
     const screensave_saver_module *module,
     HWND owner_window
 )
 {
-    INT_PTR result;
+    int result;
     scr_settings dialog_settings;
-    const screensave_saver_config_hooks *config_hooks;
 
     if (context == NULL || module == NULL) {
         return -1;
@@ -267,20 +320,7 @@ static int scr_run_module_settings_dialog(
     }
     scr_settings_clamp(module, &dialog_settings);
 
-    config_hooks = scr_get_config_hooks(module);
-    if (config_hooks != NULL && config_hooks->show_config_dialog != NULL) {
-        result = config_hooks->show_config_dialog(
-            context->instance,
-            owner_window,
-            module,
-            &dialog_settings.common,
-            dialog_settings.product_config,
-            dialog_settings.product_config_size,
-            &context->diagnostics
-        );
-    } else {
-        result = scr_show_fallback_dialog(context, module, &dialog_settings, owner_window);
-    }
+    result = scr_edit_module_settings_dialog(context, module, &dialog_settings, owner_window);
 
     if (result == IDOK) {
         scr_settings_clamp(module, &dialog_settings);
@@ -300,17 +340,218 @@ static int scr_run_module_settings_dialog(
             );
             result = -1;
         }
-    } else if (result == -1) {
-        scr_show_message_box(
-            context->owner_window,
-            module,
-            "The saver configuration dialog could not be loaded.",
-            MB_OK | MB_ICONERROR
-        );
     }
 
     scr_settings_dispose(&dialog_settings);
     return (int)result;
+}
+
+static void scr_single_saver_update_info(HWND dialog, const scr_single_dialog_state *dialog_state)
+{
+    char info[320];
+    char version_text[192];
+
+    if (
+        dialog == NULL ||
+        dialog_state == NULL ||
+        dialog_state->context == NULL ||
+        dialog_state->module == NULL
+    ) {
+        return;
+    }
+
+    scr_build_version_text(dialog_state->context, version_text, sizeof(version_text));
+    info[0] = '\0';
+    scr_append_text(info, sizeof(info), version_text);
+    scr_append_text(info, sizeof(info), "\r\nRenderer preference\r\n");
+    if (dialog_state->selected_renderer_kind == SCREENSAVE_RENDERER_KIND_UNKNOWN) {
+        scr_append_text(info, sizeof(info), "auto");
+    } else {
+        scr_append_text(info, sizeof(info), screensave_renderer_kind_name(dialog_state->selected_renderer_kind));
+    }
+    scr_append_text(info, sizeof(info), "\r\nUse Settings... for saver-specific options.");
+    SetDlgItemTextA(dialog, IDC_SCR_INFO, info);
+}
+
+static void scr_single_saver_apply_settings(HWND dialog, const scr_single_dialog_state *dialog_state)
+{
+    if (dialog == NULL || dialog_state == NULL) {
+        return;
+    }
+
+    scr_apply_fallback_settings_to_dialog(dialog, &dialog_state->settings);
+    SendDlgItemMessageA(
+        dialog,
+        IDC_SCR_RENDERER,
+        CB_SETCURSEL,
+        (WPARAM)scr_selector_renderer_index_from_kind(dialog_state->selected_renderer_kind),
+        0L
+    );
+    scr_single_saver_update_info(dialog, dialog_state);
+}
+
+static void scr_single_saver_read_settings(HWND dialog, scr_single_dialog_state *dialog_state)
+{
+    LRESULT selection;
+
+    if (dialog == NULL || dialog_state == NULL) {
+        return;
+    }
+
+    scr_read_fallback_settings_from_dialog(dialog, &dialog_state->settings);
+    selection = SendDlgItemMessageA(dialog, IDC_SCR_RENDERER, CB_GETCURSEL, 0U, 0L);
+    if (selection == CB_ERR) {
+        dialog_state->selected_renderer_kind = SCREENSAVE_RENDERER_KIND_UNKNOWN;
+    } else {
+        dialog_state->selected_renderer_kind = scr_selector_renderer_kind_from_index(selection);
+    }
+}
+
+static INT_PTR CALLBACK scr_single_saver_dialog_proc(HWND dialog, UINT message, WPARAM wParam, LPARAM lParam)
+{
+    scr_single_dialog_state *dialog_state;
+
+    dialog_state = (scr_single_dialog_state *)GetWindowLongA(dialog, DWL_USER);
+
+    switch (message) {
+    case WM_INITDIALOG:
+        dialog_state = (scr_single_dialog_state *)lParam;
+        SetWindowLongA(dialog, DWL_USER, (LONG)dialog_state);
+        if (dialog_state != NULL) {
+            char title[96];
+
+            title[0] = '\0';
+            scr_append_text(title, sizeof(title), dialog_state->module->identity.display_name);
+            scr_append_text(title, sizeof(title), " Settings");
+            SetWindowTextA(dialog, title);
+            scr_selector_populate_renderer_combo(dialog);
+            scr_single_saver_apply_settings(dialog, dialog_state);
+        }
+        return TRUE;
+
+    case WM_COMMAND:
+        if (dialog_state == NULL) {
+            return FALSE;
+        }
+
+        if (LOWORD(wParam) == IDC_SCR_RENDERER && HIWORD(wParam) == CBN_SELCHANGE) {
+            scr_single_saver_read_settings(dialog, dialog_state);
+            scr_single_saver_update_info(dialog, dialog_state);
+            return TRUE;
+        }
+
+        if (LOWORD(wParam) == IDC_SCR_PRODUCT_SETTINGS) {
+            int result;
+
+            scr_single_saver_read_settings(dialog, dialog_state);
+            result = scr_edit_module_settings_dialog(
+                dialog_state->context,
+                dialog_state->module,
+                &dialog_state->settings,
+                dialog
+            );
+            if (result == -1) {
+                return TRUE;
+            }
+
+            scr_single_saver_apply_settings(dialog, dialog_state);
+            return TRUE;
+        }
+
+        if (LOWORD(wParam) == IDC_SCR_RESET_DEFAULTS) {
+            scr_settings_set_defaults(dialog_state->module, &dialog_state->settings);
+            dialog_state->selected_renderer_kind = SCREENSAVE_RENDERER_KIND_UNKNOWN;
+            scr_single_saver_apply_settings(dialog, dialog_state);
+            return TRUE;
+        }
+
+        if (LOWORD(wParam) == IDOK) {
+            scr_single_saver_read_settings(dialog, dialog_state);
+            scr_settings_clamp(dialog_state->module, &dialog_state->settings);
+            if (
+                !scr_settings_save(dialog_state->module, &dialog_state->settings, &dialog_state->context->diagnostics) ||
+                !scr_save_selected_product_key(dialog_state->module->identity.product_key) ||
+                !scr_save_renderer_request(dialog_state->selected_renderer_kind)
+            ) {
+                scr_show_message_box(
+                    dialog_state->context->owner_window,
+                    dialog_state->module,
+                    "The saver settings or renderer preference could not be saved.",
+                    MB_OK | MB_ICONERROR
+                );
+                return TRUE;
+            }
+
+            dialog_state->context->module = dialog_state->module;
+            dialog_state->context->requested_renderer_kind = dialog_state->selected_renderer_kind;
+            EndDialog(dialog, IDOK);
+            return TRUE;
+        }
+
+        if (LOWORD(wParam) == IDCANCEL) {
+            EndDialog(dialog, IDCANCEL);
+            return TRUE;
+        }
+        break;
+    }
+
+    return FALSE;
+}
+
+static INT_PTR scr_show_single_saver_dialog(scr_host_context *context)
+{
+    INT_PTR result;
+    scr_single_dialog_state dialog_state;
+
+    if (context == NULL || context->module == NULL) {
+        return -1;
+    }
+
+    ZeroMemory(&dialog_state, sizeof(dialog_state));
+    dialog_state.context = context;
+    dialog_state.module = context->module;
+    dialog_state.selected_renderer_kind = context->requested_renderer_kind;
+
+    if (!scr_settings_init(dialog_state.module, &dialog_state.settings)) {
+        scr_show_message_box(
+            context->owner_window,
+            dialog_state.module,
+            "The saver configuration state could not be initialized for editing.",
+            MB_OK | MB_ICONERROR
+        );
+        return -1;
+    }
+
+    scr_settings_set_defaults(dialog_state.module, &dialog_state.settings);
+    if (!scr_settings_load(dialog_state.module, &dialog_state.settings, &context->diagnostics)) {
+        scr_emit_host_diagnostic(
+            context,
+            SCREENSAVE_DIAG_LEVEL_WARNING,
+            2203UL,
+            "scr_show_single_saver_dialog",
+            "The saver settings could not be loaded; defaults will be shown for editing."
+        );
+    }
+    scr_settings_clamp(dialog_state.module, &dialog_state.settings);
+
+    result = DialogBoxParamA(
+        context->instance,
+        MAKEINTRESOURCEA(IDD_SCR_SAVER_SHELL),
+        context->owner_window,
+        scr_single_saver_dialog_proc,
+        (LPARAM)&dialog_state
+    );
+    if (result == -1) {
+        scr_show_message_box(
+            context->owner_window,
+            dialog_state.module,
+            "The saver settings dialog could not be loaded.",
+            MB_OK | MB_ICONERROR
+        );
+    }
+
+    scr_settings_dispose(&dialog_state.settings);
+    return result;
 }
 
 static void scr_selector_update_info(HWND dialog, const scr_selector_dialog_state *dialog_state)
@@ -574,5 +815,5 @@ INT_PTR scr_show_config_dialog(scr_host_context *context)
         return scr_show_selector_dialog(context);
     }
 
-    return scr_run_module_settings_dialog(context, context->module, context->owner_window);
+    return scr_show_single_saver_dialog(context);
 }
