@@ -2,6 +2,28 @@
 
 All notable repository changes are recorded here in series order.
 
+## S13 - 2026-03-29
+
+### Added
+
+- Stormglass under `products/savers/stormglass/` as the Places and Atmosphere Family weather-on-glass product, including real pane-weather modes, product-owned config, curated presets/themes, a manifest, and lightweight smoke coverage.
+- Night Transit under `products/savers/night_transit/` as the Places and Atmosphere Family nocturnal infrastructure product, including real motorway, rail, and harbor scene modes, product-owned config, curated presets/themes, a manifest, and lightweight smoke coverage.
+- Observatory under `products/savers/observatory/` as the Places and Atmosphere Family celestial exhibit product, including real orrery, chart-room, and dome-watch modes, product-owned config, curated presets/themes, a manifest, and lightweight smoke coverage.
+
+### Changed
+
+- Updated the built-in saver wiring so the current `.scr` products can default to Nocturne, Ricochet, Deepfield, Ember, Oscilloscope Dreams, Pipeworks, Lifeforms, Signal Lab, Mechanical Dreams, Ecosystems, Stormglass, Night Transit, or Observatory while preserving the shared saver/module contract, explicit product identity, and automatic renderer-selection behavior.
+- Updated BenchLab so the diagnostics harness can select and inspect all thirteen current savers through the shared saver and renderer paths while keeping the UI modest and developer-facing.
+- Updated the concrete VS2022 and MinGW i686 build lanes, static build checks, product manifests, and repo docs so Series 13 truthfully describes the new places/atmosphere family and the widened thirteen-product harness.
+
+### Validation
+
+- Confirmed Series 00 through Series 12 prerequisites existed before changes.
+- Ran `python tools/scripts/check_repo_structure.py`, `python tools/scripts/check_codex_config.py`, and `python tools/scripts/check_build_layout.py`; all passed.
+- Confirmed the checked-in VS2022 solution, saver projects, BenchLab project, and MinGW i686 make lane now include Stormglass, Night Transit, and Observatory alongside the existing saver set.
+- Confirmed that full Win32 build and smoke execution could not be completed in this environment because `MSBuild.exe` / Visual C++ targets were not installed and `mingw32-make` was unavailable.
+- Confirmed no GL-plus or modern-context work, next-family work, gallery/player scope, packaging logic, or unsupported compatibility claims were added in this series.
+
 ## S12 - 2026-03-29
 
 ### Added

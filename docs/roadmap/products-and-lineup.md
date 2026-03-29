@@ -33,6 +33,15 @@ Names are planning anchors, not release claims.
 - `ecosystems`: ambient habitat-and-behavior saver and a real Systems and Ambient Family product.
 - `signal_garden`: procedural waveform and rule-based animation.
 
+## Places And Atmosphere Family And Related Studies
+
+- `stormglass`: weather-on-glass saver and a real Places and Atmosphere Family product.
+- `night_transit`: nocturnal route-and-infrastructure saver and a real Places and Atmosphere Family product.
+- `observatory`: celestial exhibit saver and a real Places and Atmosphere Family product.
+- `midnight_city`: atmospheric city-light presentation.
+- `canopy`: layered scenic motion with strong fallback discipline.
+- `glass_reef`: watery or reflective scenic study, only if it remains baseline-safe.
+
 ## Mathematical And Procedural
 
 - `pendulum_study`: deterministic physics-inspired motion.
@@ -42,12 +51,6 @@ Names are planning anchors, not release claims.
 - `cell_garden`: cellular or automata-style saver.
 - `particle_foundry`: longer-running particle systems with conservative fallback behavior.
 - `ecosystem_sketch`: simulation-oriented saver if later series justify the scope.
-
-## Scenic And Atmospheric
-
-- `canopy`: layered scenic motion with strong fallback discipline.
-- `glass_reef`: watery or reflective scenic study, only if it remains baseline-safe.
-- `midnight_city`: atmospheric city-light presentation.
 
 ## Heavyweight And Showcase
 
