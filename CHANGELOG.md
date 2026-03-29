@@ -6,21 +6,22 @@ All notable repository changes are recorded here in series order.
 
 ### Added
 
-- A real optional advanced GL backend under `platform/src/render/gl_plus/`, including capability-gated context creation, capability capture, backend-private state management, and the narrow primitive surface required by GL Gallery.
+- A real optional advanced GL backend under `platform/src/render/gl21/`, including capability-gated context creation, capability capture, backend-private state management, and the narrow primitive surface required by GL Gallery.
 - GL Gallery under `products/savers/gl_gallery/` as the renderer-showcase saver, including real compatibility, GL11-classic, and advanced-showcase scene families, product-owned config, curated presets/themes, a manifest, and lightweight smoke coverage.
+- Explicit GL33 and GL46 placeholder backend directories plus an internal null safety backend so the renderer ladder can be named honestly without pretending higher tiers already exist.
 
 ### Changed
 
-- Updated the shared renderer dispatch so the runtime now supports explicit `auto`, `gdi`, `gl11`, and `gl_plus` request paths, records requested-versus-active renderer state, and reports explicit fallback reasons across the three renderer tiers.
+- Updated the shared renderer dispatch so the runtime now supports explicit `auto`, `gdi`, `gl11`, `gl21`, `gl33`, and `gl46` request paths, records requested-versus-active renderer state, and reports explicit fallback reasons across the versioned renderer ladder down to the internal null safety backend.
 - Updated the Win32 `.scr` host so the current built-in saver selection dialog also persists the requested renderer tier and surfaces tier state through the existing host diagnostics without turning the host into the final gallery or a renderer lab.
-- Updated BenchLab so the diagnostics harness can select and inspect all eighteen current savers plus all three renderer tiers, including requested renderer, active renderer, fallback reason, and useful GL capability identity.
-- Updated the concrete VS2022 and MinGW i686 build lanes, static build checks, product manifests, and repo docs so Series 15 truthfully describes the GL-plus tier, the GL Gallery product, and the widened eighteen-product harness.
+- Updated BenchLab so the diagnostics harness can select and inspect all eighteen current savers plus the explicit `gdi`, `gl11`, `gl21`, `gl33`, and `gl46` request paths, including requested renderer, active renderer, fallback reason, and useful GL capability identity.
+- Updated the concrete VS2022 and MinGW i686 build lanes, static build checks, product manifests, and repo docs so Series 15 truthfully describes the versioned GL tier ladder, the GL Gallery product, and the widened eighteen-product harness.
 
 ### Validation
 
 - Confirmed Series 00 through Series 14 prerequisites existed before changes.
 - Ran `python tools/scripts/check_repo_structure.py`, `python tools/scripts/check_codex_config.py`, and `python tools/scripts/check_build_layout.py`; all passed.
-- Confirmed the checked-in VS2022 solution, saver projects, BenchLab project, platform project, and MinGW i686 make lane now include the GL-plus backend and GL Gallery alongside the existing saver set.
+- Confirmed the checked-in VS2022 solution, saver projects, BenchLab project, platform project, and MinGW i686 make lane now include the GL21 backend, GL33 and GL46 placeholders, the null safety backend, and GL Gallery alongside the existing saver set.
 - Confirmed that full Win32 build and smoke execution could not be completed in this environment because `MSBuild.exe` / Visual C++ targets were not installed and `mingw32-make` was unavailable.
 - Confirmed no Series 16 meta-product work, packaging logic, or unsupported compatibility claims were added in this series.
 
@@ -45,7 +46,7 @@ All notable repository changes are recorded here in series order.
 - Ran `python tools/scripts/check_repo_structure.py`, `python tools/scripts/check_codex_config.py`, and `python tools/scripts/check_build_layout.py`; all passed.
 - Confirmed the checked-in VS2022 solution, saver projects, BenchLab project, and MinGW i686 make lane now include Vector Worlds, Retro Explorer, City Nocturne, and Fractal Atlas alongside the existing saver set.
 - Confirmed that full Win32 build and smoke execution could not be completed in this environment because `MSBuild.exe` / Visual C++ targets were not installed and `mingw32-make` was unavailable.
-- Confirmed no GL-plus or modern-context work, next-series work, gallery/player scope, packaging logic, or unsupported compatibility claims were added in this series.
+- Confirmed no higher-capability GL tier or modern-context work, next-series work, gallery/player scope, packaging logic, or unsupported compatibility claims were added in this series.
 
 ## S13 - 2026-03-29
 
@@ -67,7 +68,7 @@ All notable repository changes are recorded here in series order.
 - Ran `python tools/scripts/check_repo_structure.py`, `python tools/scripts/check_codex_config.py`, and `python tools/scripts/check_build_layout.py`; all passed.
 - Confirmed the checked-in VS2022 solution, saver projects, BenchLab project, and MinGW i686 make lane now include Stormglass, Night Transit, and Observatory alongside the existing saver set.
 - Confirmed that full Win32 build and smoke execution could not be completed in this environment because `MSBuild.exe` / Visual C++ targets were not installed and `mingw32-make` was unavailable.
-- Confirmed no GL-plus or modern-context work, next-family work, gallery/player scope, packaging logic, or unsupported compatibility claims were added in this series.
+- Confirmed no higher-capability GL tier or modern-context work, next-family work, gallery/player scope, packaging logic, or unsupported compatibility claims were added in this series.
 
 ## S12 - 2026-03-29
 
@@ -89,7 +90,7 @@ All notable repository changes are recorded here in series order.
 - Ran `python tools/scripts/check_repo_structure.py`, `python tools/scripts/check_codex_config.py`, and `python tools/scripts/check_build_layout.py`; all passed.
 - Confirmed the checked-in VS2022 solution, saver projects, BenchLab project, and MinGW i686 make lane now include Signal Lab, Mechanical Dreams, and Ecosystems alongside the existing saver set.
 - Confirmed that full Win32 build and smoke execution could not be completed in this environment because `MSBuild.exe` / Visual C++ targets were not installed and `mingw32-make` was unavailable.
-- Confirmed no GL-plus or modern-context work, next-family work, gallery/player scope, packaging logic, or unsupported compatibility claims were added in this series.
+- Confirmed no higher-capability GL tier or modern-context work, next-family work, gallery/player scope, packaging logic, or unsupported compatibility claims were added in this series.
 
 ## S11 - 2026-03-28
 
@@ -111,7 +112,7 @@ All notable repository changes are recorded here in series order.
 - Built `build/msvc/vs2022/ScreenSave.sln` for `Debug|Win32` and produced the shared platform library plus `nocturne.scr`, `ricochet.scr`, `deepfield.scr`, `ember.scr`, `oscilloscope_dreams.scr`, `pipeworks.scr`, `lifeforms.scr`, and `benchlab.exe`.
 - Ran `python tools/scripts/check_repo_structure.py`, `python tools/scripts/check_codex_config.py`, and `python tools/scripts/check_build_layout.py`; all passed.
 - Compiled and ran smoke executables for Nocturne, Ricochet, Deepfield, Ember, Oscilloscope Dreams, Pipeworks, Lifeforms, and BenchLab against the built Win32 debug objects and shared platform library; all returned success.
-- Confirmed no GL-plus or modern-context work, next-family work, gallery/player scope, packaging logic, or unsupported compatibility claims were added in this series.
+- Confirmed no higher-capability GL tier or modern-context work, next-family work, gallery/player scope, packaging logic, or unsupported compatibility claims were added in this series.
 
 ## S10 - 2026-03-28
 
@@ -133,7 +134,7 @@ All notable repository changes are recorded here in series order.
 - Ran `python tools/scripts/check_repo_structure.py`, `python tools/scripts/check_codex_config.py`, and `python tools/scripts/check_build_layout.py`; all passed.
 - Built `build/msvc/vs2022/ScreenSave.sln` for `Debug|Win32` and produced the shared platform library plus `nocturne.scr`, `ricochet.scr`, `deepfield.scr`, `ember.scr`, `oscilloscope_dreams.scr`, and `benchlab.exe`.
 - Compiled and ran smoke executables for Nocturne, Ricochet, Deepfield, Ember, Oscilloscope Dreams, and BenchLab against the built Win32 debug objects and shared platform library; all returned success.
-- Confirmed no GL-plus or modern-context work, next-family work, gallery/player scope, packaging logic, or unsupported compatibility claims were added in this series.
+- Confirmed no higher-capability GL tier or modern-context work, next-family work, gallery/player scope, packaging logic, or unsupported compatibility claims were added in this series.
 
 ## S09 - 2026-03-27
 
@@ -155,7 +156,7 @@ All notable repository changes are recorded here in series order.
 - Confirmed Series 00 through Series 08 prerequisites existed before changes.
 - Built `build/msvc/vs2022/ScreenSave.sln` for `Debug|Win32` and produced the shared platform library plus `nocturne.scr`, `ricochet.scr`, `deepfield.scr`, and `benchlab.exe`.
 - Ran the existing Nocturne, Ricochet, Deepfield, and BenchLab smoke harnesses against the built debug artifacts and confirmed module validity, preset/theme presence, and multi-product selection wiring.
-- Confirmed no GL-plus or modern-context work, next-family work, gallery/player scope, packaging logic, or unsupported compatibility claims were added in this series.
+- Confirmed no higher-capability GL tier or modern-context work, next-family work, gallery/player scope, packaging logic, or unsupported compatibility claims were added in this series.
 
 ## S08 - 2026-03-27
 
@@ -166,7 +167,7 @@ All notable repository changes are recorded here in series order.
 
 ### Changed
 
-- Updated the shared renderer dispatch and renderer-info model narrowly so requested renderer, active renderer, fallback reason, and GL vendor/renderer/version can be reported honestly without introducing GL-plus or modern-context assumptions.
+- Updated the shared renderer dispatch and renderer-info model narrowly so requested renderer, active renderer, fallback reason, and GL vendor/renderer/version can be reported honestly without introducing higher-capability GL-tier or modern-context assumptions.
 - Updated the Win32 `.scr` host to use automatic shared-renderer selection while keeping the host lifecycle narrow and preserving GDI as the fallback baseline.
 - Updated BenchLab so developers can select the requested renderer explicitly, inspect requested-versus-active backend state, and validate Nocturne across both renderer paths without adding player or gallery scope.
 - Updated the concrete VS2022 and MinGW i686 build lanes, static build checks, manifests, and repo docs so Series 08 truthfully describes the optional GL11 backend and dual-backend validation state.
@@ -175,7 +176,7 @@ All notable repository changes are recorded here in series order.
 
 - Confirmed Series 00 through Series 07 prerequisites existed before changes.
 - Performed static validation of the GL11 backend file graph, renderer-selection wiring, build integration, and documentation consistency.
-- Confirmed no GL-plus or modern-context work, second-saver work, gallery/player scope, packaging logic, or unsupported compatibility claims were added in this series.
+- Confirmed no higher-capability GL tier or modern-context work, second-saver work, gallery/player scope, packaging logic, or unsupported compatibility claims were added in this series.
 
 ## S07 - 2026-03-27
 

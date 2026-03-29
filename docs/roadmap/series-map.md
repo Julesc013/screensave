@@ -17,7 +17,7 @@ This is the short operational view of the prompt program.
 - `S12`: Systems and ambient family with `signal_lab`, `mechanical_dreams`, and `ecosystems`.
 - `S13`: Places and atmosphere family.
 - `S14`: systemic and simulation saver pack.
-- `S15`: optional `gl_plus` backend and accelerated gallery work.
+- `S15`: optional `gl21` backend, explicit higher-tier GL placeholders, and accelerated gallery work.
 - `S16`: packaging, release notes, and delivery flow.
 - `S17`: release hardening, SDK examples, and suite handoff.
 

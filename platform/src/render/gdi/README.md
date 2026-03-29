@@ -12,5 +12,5 @@ Current stage: Series 05 makes the first reusable renderer backend real here:
 - `gdi_bitmap.c` provides modest bitmap-view blit support
 - `gdi_state.c` keeps backend diagnostics/info helpers private
 
-The design stays immediate and compatibility-first. Series 06 exercises this backend through the real Nocturne product, Series 07 exercises the same path through the BenchLab windowed harness, Series 08 keeps it as the explicit fallback floor when the optional GL11 backend is unavailable or not requested, and Series 15 preserves it as the guaranteed floor beneath both GL11 and the optional GL-plus tier.
+The design stays immediate and compatibility-first. Series 06 exercises this backend through the real Nocturne product, Series 07 exercises the same path through the BenchLab windowed harness, Series 08 keeps it as the explicit fallback floor when the optional GL11 backend is unavailable or not requested, and Series 15 preserves it as the guaranteed floor beneath GL11, GL21, later GL placeholders, and the internal null safety fallback.
 Type: runtime implementation.

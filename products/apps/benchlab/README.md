@@ -54,10 +54,10 @@ Series 14 extends the same app to the current seventeen-product harness:
 - continued use of the shared saver dialogs and shared renderer path for heavyweight software-3D, traversal, urban-scenic, and fractal-family validation alongside the earlier families
 - preservation of deterministic restart/reseed value while keeping the UI modest and developer-facing
 
-Series 15 extends the same app into the current eighteen-product and three-tier renderer harness:
+Series 15 extends the same app into the current eighteen-product and versioned renderer-tier harness:
 
 - explicit saver selection for Nocturne, Ricochet, Deepfield, Ember, Oscilloscope Dreams, Pipeworks, Lifeforms, Signal Lab, Mechanical Dreams, Ecosystems, Stormglass, Night Transit, Observatory, Vector Worlds, Retro Explorer, City Nocturne, Fractal Atlas, and GL Gallery
-- explicit `auto`, `gdi`, `gl11`, and `gl_plus` request paths with honest requested-versus-active renderer reporting
+- explicit `auto`, `gdi`, `gl11`, `gl21`, `gl33`, and `gl46` request paths with honest requested-versus-active renderer reporting
 - explicit fallback-reason reporting plus GL vendor, renderer, and version reporting when accelerated tiers are active
 - continued use of the shared saver dialogs and shared renderer path without turning BenchLab into the final gallery or meta-product
 

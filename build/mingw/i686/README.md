@@ -4,7 +4,7 @@ This is the concrete GCC-family x86 lane for Series 15.
 
 ## What Exists Now
 
-- `Makefile` for the shared platform library, the real current saver `.scr` targets through `gl_gallery.scr`, the real `benchlab.exe` target, the core-plus-GDI-plus-GL11-plus-GL-plus platform objects, the current saver product objects, the host/product dialog resources, and the conservative `opengl32` link dependency required for the optional renderer tiers
+- `Makefile` for the shared platform library, the real current saver `.scr` targets through `gl_gallery.scr`, the real `benchlab.exe` target, the core-plus-GDI-plus-GL11-plus-GL21 platform objects, the explicit GL33/GL46 placeholder objects, the internal null safety backend object, the current saver product objects, the host/product dialog resources, and the conservative `opengl32` link dependency required for the optional renderer tiers
 
 The target graph mirrors the VS2022 lane closely so later implementation work does not have to invent two unrelated build stories.
 
@@ -35,7 +35,7 @@ Profiles are currently `debug` or `release`.
 ## Deferred Work
 
 - historical MinGW variant documentation beyond this lane
-- later renderer tiers beyond the current GL-plus path
+- later real renderer tiers beyond the current GL21 path and the explicit GL33/GL46 placeholders
 - validation on actual target machines
 
 This lane is concrete enough for static review and later extension, not a claim of complete shipping readiness.

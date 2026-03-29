@@ -14,11 +14,14 @@ The renderer contract must:
 
 ## Capability Classes
 
-The repository uses three conceptual renderer classes:
+The repository uses explicit renderer tiers:
 
 - `universal_gdi`: always required and always supported by baseline products.
 - `optional_gl11`: available only when OpenGL 1.1 initialization succeeds at runtime.
-- `optional_gl_plus`: reserved for later capability-gated work.
+- `optional_gl21`: the first later-capability OpenGL tier and the current real advanced backend.
+- `optional_gl33`: an explicit later-tier placeholder until a real backend exists.
+- `optional_gl46`: an explicit later-tier placeholder until a real backend exists.
+- `internal_null`: an emergency no-op fallback that keeps host lifecycles alive but does not redefine the product baseline.
 
 Products may advertise use of enhanced classes, but baseline saver products must always define a valid `universal_gdi` behavior.
 
@@ -54,10 +57,10 @@ It may expose:
 It must remain optional.
 Failure to initialize GL11 must fall back to a supported lower tier without crashing the host.
 
-## Reserved GL-Plus Backend
+## Optional GL21 Backend And Later GL Placeholders
 
-`gl_plus` is reserved for later enhanced rendering work.
-It may add broader feature coverage, but only when all of the following are true:
+`gl21` is the current real later-capability OpenGL tier.
+Later `gl33` and `gl46` tiers may add broader feature coverage, but only when all of the following are true:
 
 - Runtime capability detection succeeds.
 - The product explicitly supports the higher tier.
@@ -68,6 +71,7 @@ It may add broader feature coverage, but only when all of the following are true
 Fallback behavior is part of the contract:
 
 - If a requested higher tier is unavailable, the platform selects the highest available compatible lower tier.
+- Automatic selection may walk `gl46 -> gl33 -> gl21 -> gl11 -> gdi -> null`, but `null` remains an internal safety fallback rather than a normal product capability class.
 - Products must degrade behavior intentionally instead of failing unpredictably.
 - If a product cannot offer a valid universal path, it must be classified explicitly later as outside the universal saver set.
 

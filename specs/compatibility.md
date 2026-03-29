@@ -48,7 +48,9 @@ Renderer support is tiered:
 
 - GDI is mandatory and universal.
 - OpenGL 1.1 is optional and must be detected at runtime.
-- Any later GL-plus path is optional, capability-gated, and subordinate to the universal baseline.
+- OpenGL 2.1 is the current real later-capability tier and remains optional, capability-gated, and subordinate to the universal baseline.
+- OpenGL 3.3 and 4.6 may be named explicitly as later optional tiers before they are implemented, but they remain placeholders until real backends exist.
+- An internal null safety fallback may exist beneath GDI for host stability, but it does not change the required product baseline.
 
 No product may rely on a renderer tier that is unavailable on the baseline machine unless that product is explicitly designated later as an enhanced-only product class.
 

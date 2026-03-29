@@ -82,9 +82,9 @@ Series 14 adds the Heavyweight Worlds Family:
 
 Series 15 adds the advanced GL capability path and GL Gallery:
 
-- a real optional GL-plus backend under `platform/src/render/gl_plus/` with explicit advanced-context probing, capability capture, and backend-private state ownership
-- explicit three-tier renderer selection and fallback among `gdi`, `gl11`, and `gl_plus`, with requested-versus-active reporting and explicit fallback reasons
-- GL Gallery as the renderer-showcase saver with deliberate GDI, GL11, and GL-plus scene variants plus curated compatibility, classic, and advanced presets
+- a real optional GL21 backend under `platform/src/render/gl21/` with explicit advanced-context probing, capability capture, and backend-private state ownership
+- explicit versioned renderer selection and fallback among `gdi`, `gl11`, `gl21`, `gl33`, `gl46`, and the internal `null` safety path, with requested-versus-active reporting and explicit fallback reasons
+- GL Gallery as the renderer-showcase saver with deliberate GDI, GL11, and advanced-tier scene variants plus curated compatibility, classic, and advanced presets
 - explicit host and BenchLab wiring so the current saver set can be exercised honestly through the tiered renderer stack without turning the repo into the final meta-gallery
 
 The final suite gallery/meta-product and packaging remain deferred.
@@ -132,15 +132,15 @@ For explanatory architecture and execution order, start with:
 
 ## Build Status
 
-The checked-in build scaffold now integrates the real Series 15 multi-family saver-plus-harness path on top of the Series 05 GDI renderer, the Series 08 optional GL11 renderer, the Series 15 optional GL-plus renderer, the Series 04 shared core runtime, and the Series 03 host:
+The checked-in build scaffold now integrates the real Series 15 multi-family saver-plus-harness path on top of the Series 05 GDI renderer, the Series 08 optional GL11 renderer, the Series 15 optional GL21 renderer plus explicit GL33 and GL46 placeholders, the Series 04 shared core runtime, and the Series 03 host:
 
 - a concrete MSVC VS2022 solution lane under `build/msvc/vs2022/`
 - a concrete MinGW i686 make lane under `build/mingw/i686/`
 - documentation-only VS6 and VS2008 lanes that preserve long-term intent without claiming present build completeness
 
-The shared platform target now compiles the reusable non-renderer core runtime, the mandatory GDI backend, the optional GL11 backend, the optional capability-gated GL-plus backend, the Win32 host, the narrow shared visual-buffer helper used by the current framebuffer and vector products, and the narrow shared grid-buffer helper used by the current grid and simulation products.
+The shared platform target now compiles the reusable non-renderer core runtime, the mandatory GDI backend, the optional GL11 backend, the optional capability-gated GL21 backend, the explicit GL33 and GL46 placeholders, the internal null safety backend, the Win32 host, the narrow shared visual-buffer helper used by the current framebuffer and vector products, and the narrow shared grid-buffer helper used by the current grid and simulation products.
 The `.scr` targets now run Nocturne, Ricochet, Deepfield, Ember, Oscilloscope Dreams, Pipeworks, Lifeforms, Signal Lab, Mechanical Dreams, Ecosystems, Stormglass, Night Transit, Observatory, Vector Worlds, Retro Explorer, City Nocturne, Fractal Atlas, and GL Gallery through the shared saver path with explicit tiered renderer selection and honest fallback.
-The app target now runs BenchLab as a real windowed harness for all eighteen current savers through the same shared contracts, with explicit `auto`, `gdi`, `gl11`, and `gl_plus` controls plus requested-versus-active renderer diagnostics.
+The app target now runs BenchLab as a real windowed harness for all eighteen current savers through the same shared contracts, with explicit `auto`, `gdi`, `gl11`, `gl21`, `gl33`, and `gl46` controls plus requested-versus-active renderer diagnostics.
 
 Read the specs before adding code.
 This repository should stay truthful, reconstructable, and conservative about compatibility.

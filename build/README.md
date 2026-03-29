@@ -27,21 +27,23 @@ Real now:
 - a narrow public platform header set under `platform/include/screensave/`
 - a real mandatory GDI backend under `platform/src/render/gdi/`
 - a real optional OpenGL 1.1 backend under `platform/src/render/gl11/`
-- a real optional advanced GL plus capability path under `platform/src/render/gl_plus/`
+- a real optional GL21 capability path under `platform/src/render/gl21/`
+- explicit GL33 and GL46 placeholder tiers under `platform/src/render/gl33/` and `platform/src/render/gl46/`
+- a real internal null safety backend under `platform/src/render/null/`
 - a narrow shared software visual-buffer helper under `platform/src/core/visual/`
 - a narrow shared grid-state helper under `platform/src/core/grid/`
 - real saver products under `products/savers/nocturne/`, `products/savers/ricochet/`, `products/savers/deepfield/`, `products/savers/ember/`, `products/savers/oscilloscope_dreams/`, `products/savers/pipeworks/`, `products/savers/lifeforms/`, `products/savers/signal_lab/`, `products/savers/mechanical_dreams/`, `products/savers/ecosystems/`, `products/savers/stormglass/`, `products/savers/night_transit/`, `products/savers/observatory/`, `products/savers/vector_worlds/`, `products/savers/retro_explorer/`, `products/savers/city_nocturne/`, `products/savers/fractal_atlas/`, and `products/savers/gl_gallery/`
 - a real BenchLab diagnostics app under `products/apps/benchlab/`
 - product-owned configuration, presets, and themes wired through the shared saver contract
 - a windowed harness path that runs the active saver through the shared saver and renderer contracts outside the `.scr` host
-- explicit three-tier renderer selection and fallback reporting through the shared renderer path
+- explicit versioned renderer selection and fallback reporting through the shared renderer path
 - narrow multi-product host and BenchLab wiring for the current eighteen-product saver set
 - a tiny renderer-driven validation scene retained only as a non-product fallback path
 - build-layout validation in `tools/scripts/check_build_layout.py`
 
 Deferred:
 
-- later renderer tiers beyond the current GDI, GL11, and GL plus stack
+- later real renderer tiers beyond the current GDI, GL11, GL21, GL33-placeholder, GL46-placeholder, and null safety stack
 - later-series work beyond Nocturne, Ricochet, Deepfield, Ember, Oscilloscope Dreams, Pipeworks, Lifeforms, Signal Lab, Mechanical Dreams, Ecosystems, Stormglass, Night Transit, Observatory, Vector Worlds, Retro Explorer, City Nocturne, Fractal Atlas, and GL Gallery
 - the final suite gallery or meta-product app
 - full legacy project files for VS6 and VS2008

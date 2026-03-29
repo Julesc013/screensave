@@ -27,11 +27,11 @@ This is the concrete modern MSVC lane for Series 15.
 - `benchlab.vcxproj`
 
 These files stay intentionally small.
-They define one shared static-library target, eighteen `.scr` saver targets, and one windowed diagnostics app target with a shared core runtime, the mandatory GDI backend, the optional GL11 backend, the optional GL-plus backend, a real host skeleton, eighteen real saver products, and the current diagnostics app.
+They define one shared static-library target, eighteen `.scr` saver targets, and one windowed diagnostics app target with a shared core runtime, the mandatory GDI backend, the optional GL11 backend, the optional GL21 backend, explicit GL33 and GL46 placeholders, the internal null safety backend, a real host skeleton, eighteen real saver products, and the current diagnostics app.
 
 ## What The Targets Mean
 
-- `screensave_platform` compiles the shared non-renderer core runtime, the mandatory GDI backend, the optional GL11 backend, the optional GL-plus backend, and the Win32 host implementation.
+- `screensave_platform` compiles the shared non-renderer core runtime, the mandatory GDI backend, the optional GL11 backend, the optional GL21 backend, the explicit GL33 and GL46 placeholders, the internal null safety backend, and the Win32 host implementation.
 - `nocturne` compiles the real Nocturne product sources, the current built-in saver registry, the product config dialog resources, the shared host resource, links `opengl32` for the optional GL11 path, and links the `.scr` executable target that defaults to Nocturne.
 - `ricochet` compiles the same shared platform plus saver set and links the `.scr` executable target that defaults to Ricochet.
 - `deepfield` compiles the same shared platform plus saver set and links the `.scr` executable target that defaults to Deepfield.
@@ -74,6 +74,6 @@ No generated files should be checked into this directory.
 
 ## Deferred Work
 
-- later renderer tiers beyond the current GL-plus path
+- later real renderer tiers beyond the current GL21 path and the explicit GL33/GL46 placeholders
 - richer version stamping and metadata resources
 - broader solution structure for later saver families and suite apps

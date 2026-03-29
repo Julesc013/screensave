@@ -7,11 +7,12 @@ Scope: advanced GL capability path, tiered renderer selection/fallback, BenchLab
 Checks performed:
 
 - Confirmed the Series 00 through Series 14 prerequisite files were present before changes.
-- Confirmed `platform/src/render/gl_plus/` now contains the real backend-private Series 15 source split.
-- Confirmed the shared renderer dispatcher now supports `auto`, `gdi`, `gl11`, and `gl_plus` request paths with explicit requested-versus-active renderer reporting and explicit fallback reasons.
+- Confirmed `platform/src/render/gl21/` now contains the real backend-private Series 15 source split.
+- Confirmed `platform/src/render/gl33/`, `platform/src/render/gl46/`, and `platform/src/render/null/` now exist as explicit placeholder and safety-backend tiers.
+- Confirmed the shared renderer dispatcher now supports `auto`, `gdi`, `gl11`, `gl21`, `gl33`, and `gl46` request paths with explicit requested-versus-active renderer reporting and explicit fallback reasons.
 - Confirmed the Win32 host persists the requested renderer tier and surfaces renderer state through existing diagnostics.
-- Confirmed BenchLab now exposes `auto`, `gdi`, `gl11`, and `gl_plus` request paths and includes `gl_gallery` in the current saver harness.
-- Confirmed the VS2022 solution, platform project, saver projects, BenchLab project, and MinGW i686 make lane now include the GL-plus backend and GL Gallery.
+- Confirmed BenchLab now exposes `auto`, `gdi`, `gl11`, `gl21`, `gl33`, and `gl46` request paths and includes `gl_gallery` in the current saver harness.
+- Confirmed the VS2022 solution, platform project, saver projects, BenchLab project, and MinGW i686 make lane now include the GL21 backend, GL33 and GL46 placeholders, the null safety backend, and GL Gallery.
 - Ran `python tools/scripts/check_repo_structure.py`.
 - Ran `python tools/scripts/check_codex_config.py`.
 - Ran `python tools/scripts/check_build_layout.py`.
