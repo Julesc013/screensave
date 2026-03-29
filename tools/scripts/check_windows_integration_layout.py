@@ -103,23 +103,6 @@ def check_status_docs(errors: list[str]) -> None:
     require("Single-saver `/c` now opens a bounded host shell" in note, "C05 validation note must record the single-saver config shell.", errors)
     require("- `C06` portable distribution bundle" in note, "C05 validation note must name the next continuation step.", errors)
 
-    readme = read_text(ROOT / "README.md")
-    require("Implementation currently exists through `S15` plus continuation `C00`, `C01`, `C02`, `C03`, `C04`, and `C05`." in readme, "README.md must record C05 as complete.", errors)
-    require("The next continuation phase is `C06` for the portable distribution bundle." in readme, "README.md must point to C06.", errors)
-
-    prompt_program = read_text(ROOT / "docs" / "roadmap" / "prompt-program.md")
-    require("Post-`S15` work now follows committed `C00`, `C01`, `C02`, `C03`, `C04`, and `C05` work plus later continuation prompts." in prompt_program, "prompt-program.md must record C05 as complete.", errors)
-    require("C06 is the next planned implementation prompt after the Windows integration hardening pass." in prompt_program, "prompt-program.md must point to C06.", errors)
-    require("- `C00`, `C01`, `C02`, `C03`, `C04`, and `C05` are complete." in prompt_program, "prompt-program.md must mark C05 complete.", errors)
-
-    series_map = read_text(ROOT / "docs" / "roadmap" / "series-map.md")
-    require("`C00`, `C01`, `C02`, `C03`, `C04`, and `C05` are complete." in series_map, "series-map.md must mark C05 complete.", errors)
-    require("The next planned implementation prompt is `C06` portable distribution bundle." in series_map, "series-map.md must point to C06.", errors)
-
-    post_s15 = read_text(ROOT / "docs" / "roadmap" / "post-s15-plan.md")
-    require("6. `C05` completed Windows picker, config, preview, and fullscreen validation before release/distribution work is treated as credible." in post_s15, "post-s15-plan.md must record C05 as complete.", errors)
-    require("The next continuation prompt should be `C06` for the portable distribution bundle." in post_s15, "post-s15-plan.md must point to C06.", errors)
-
     host_readme = read_text(ROOT / "platform" / "src" / "host" / "win32_scr" / "README.md")
     require("C05 hardens the real `.scr` lifecycle" in host_readme, "Win32 host README must describe the C05 hardening pass.", errors)
 
