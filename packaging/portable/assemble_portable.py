@@ -145,6 +145,7 @@ def build_root_readme(
         "4. Use the saver's own Settings dialog for configuration.",
         "",
         "This portable bundle does not include installer, registration, or uninstall automation.",
+        "Installed distribution is now available separately through the C07 installer package.",
         "BenchLab and the future suite app are intentionally excluded from the end-user payload.",
         "",
         "Renderer notes:",
@@ -261,7 +262,7 @@ def build_status_note(
             "",
             "- This portable stage is partial when canonical saver outputs are missing.",
             "- The included binaries were not rebuilt during C06 because no supported toolchain was available here.",
-            "- Installer, registration, and uninstall behavior remain deferred to C07.",
+            "- Installed distribution is now available separately through the C07 installer package.",
         ]
     )
 

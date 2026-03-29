@@ -27,11 +27,12 @@ That endpoint is retired for future planning.
 5. `C04` completed the shared settings, presets, randomization, and pack architecture baseline before distribution work.
 6. `C05` completed Windows picker, config, preview, and fullscreen validation before release/distribution work is treated as credible.
 7. `C06` completed portable distribution before `C07` installer, registration, and uninstall work.
-8. `C08` suite-level meta saver and `C09` `suite` app happen after saver productization and Windows-path validation.
-9. `C10` SDK and contributor surface stabilization happens before backlog ingestion.
-10. `C11` idea backlog ingestion happens before the major polish waves.
-11. `C12` cross-cutting polish precedes `C13` per-family polish waves.
-12. `C14` final rerelease hardening closes the continuation line.
+8. `C07` completed installer, registration, and uninstall work before `C08` suite meta-saver work.
+9. `C08` suite-level meta saver and `C09` `suite` app happen after saver productization and Windows-path validation.
+10. `C10` SDK and contributor surface stabilization happens before backlog ingestion.
+11. `C11` idea backlog ingestion happens before the major polish waves.
+12. `C12` cross-cutting polish precedes `C13` per-family polish waves.
+13. `C14` final rerelease hardening closes the continuation line.
 
 ## Renderer Tier Taxonomy Note
 
@@ -76,6 +77,6 @@ Interpretation rules:
 
 ## Immediate Next Step
 
-The rename, renderer-taxonomy, checkpoint, saver productization, shared settings, Windows integration, and portable distribution work from `C01` through `C06` is complete.
-The next continuation prompt should be `C07` for installer, registration, and uninstall flow.
-Further continuation work should not need to renegotiate saver/app ownership, migration aliases, renderer-tier terminology, per-saver `.scr` product identity, the shared settings/preset/theme/pack contract, the bounded Win32 `.scr` lifecycle behavior validated in `C05`, or the portable bundle layout and inclusion rules defined in `C06`.
+The rename, renderer-taxonomy, checkpoint, saver productization, shared settings, Windows integration, portable distribution, and installer work from `C01` through `C07` is complete.
+The next continuation prompt should be `C08` for the suite meta-saver and cross-saver randomization.
+Further continuation work should not need to renegotiate saver/app ownership, migration aliases, renderer-tier terminology, per-saver `.scr` product identity, the shared settings/preset/theme/pack contract, the bounded Win32 `.scr` lifecycle behavior validated in `C05`, the portable bundle layout and inclusion rules defined in `C06`, or the current-user installer and uninstall rules defined in `C07`.

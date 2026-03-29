@@ -73,8 +73,8 @@ def main() -> int:
     require_text(
         ROOT / "README.md",
         (
-            "Implementation currently exists through `S15` plus continuation `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, and `C06`.",
-            "The next continuation phase is `C07` for installer, registration, and uninstall flow.",
+            "Implementation currently exists through `S15` plus continuation `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, and `C07`.",
+            "The next continuation phase is `C08` for the suite meta-saver and cross-saver randomization.",
             "`products/apps/suite/` is now the canonical suite-app placeholder location.",
         ),
         errors,
@@ -82,17 +82,17 @@ def main() -> int:
     require_text(
         ROOT / "docs" / "roadmap" / "prompt-program.md",
         (
-            "Post-`S15` work now follows committed `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, and `C06` work plus later continuation prompts.",
-            "C07 is the next planned implementation prompt after the portable distribution bundle.",
-            "- `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, and `C06` are complete.",
+            "Post-`S15` work now follows committed `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, and `C07` work plus later continuation prompts.",
+            "C08 is the next planned implementation prompt after installer, registration, and uninstall flow.",
+            "- `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, and `C07` are complete.",
         ),
         errors,
     )
     require_text(
         ROOT / "docs" / "roadmap" / "series-map.md",
         (
-            "`C00`, `C01`, `C02`, `C03`, `C04`, `C05`, and `C06` are complete.",
-            "The next planned implementation prompt is `C07` installer, registration, and uninstall flow.",
+            "`C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, and `C07` are complete.",
+            "The next planned implementation prompt is `C08` suite meta-saver for cross-saver randomization.",
         ),
         errors,
     )
@@ -100,7 +100,7 @@ def main() -> int:
         ROOT / "docs" / "roadmap" / "post-s15-plan.md",
         (
             "the locked `C02` post-rename checkpoint",
-            "The next continuation prompt should be `C07` for installer, registration, and uninstall flow.",
+            "The next continuation prompt should be `C08` for the suite meta-saver and cross-saver randomization.",
         ),
         errors,
     )
@@ -143,6 +143,14 @@ def main() -> int:
         (
             "# C06 Portable Bundle Matrix",
             "The next continuation step is `C07` installer, registration, and uninstall flow.",
+        ),
+        errors,
+    )
+    require_text(
+        ROOT / "validation" / "notes" / "c07-installer-matrix.md",
+        (
+            "# C07 Installer Matrix",
+            "- `C08` suite meta-saver for cross-saver randomization",
         ),
         errors,
     )

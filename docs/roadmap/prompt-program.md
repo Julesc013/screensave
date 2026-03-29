@@ -5,8 +5,8 @@ Earlier docs described an intended Series 00 through 17 program; that shorter en
 
 Implementation currently exists through `S15`.
 The older public endpoint that treated `S16` and `S17` as the whole remaining plan is superseded.
-Post-`S15` work now follows committed `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, and `C06` work plus later continuation prompts.
-C07 is the next planned implementation prompt after the portable distribution bundle.
+Post-`S15` work now follows committed `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, and `C07` work plus later continuation prompts.
+C08 is the next planned implementation prompt after installer, registration, and uninstall flow.
 
 ## Implemented Baseline
 
@@ -60,10 +60,11 @@ Do not schedule new continuation work under `S16` or `S17`.
 
 ## Continuation Rules
 
-- `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, and `C06` are complete.
-- `C07` is the next implementation prompt after the portable distribution bundle.
+- `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, and `C07` are complete.
+- `C08` is the next implementation prompt after installer, registration, and uninstall flow.
 - Rename and renderer-taxonomy normalization land before any productization or suite/meta work.
 - All-saver `.scr` productization lands before suite/meta products, backlog ingestion, or polish waves.
 - Shared settings, presets, randomization, and pack architecture land before distribution work.
 - Portable distribution lands before installer, registration, and uninstall flow work.
+- Installer, registration, and uninstall flow land before suite meta-saver work.
 - Creative backlog ingestion waits until the renamed product surface, suite surface, and SDK surface are stable enough to absorb new ideas without immediate rework.

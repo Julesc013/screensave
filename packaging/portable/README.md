@@ -29,4 +29,4 @@ The assembly script writes generated staging and zip artifacts under `out/portab
 ## Current Prompt Boundary
 
 This directory defines portable delivery only.
-Installer, registration, and uninstall behavior remain deferred to `C07`.
+Installed distribution now lives beside it under `packaging/installer/`.

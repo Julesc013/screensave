@@ -43,4 +43,5 @@ The staged bundle uses this layout:
 
 - The portable bundle may be partial when some current saver outputs are unavailable.
 - The bundle does not perform installation, registration, or uninstall work.
+- Installed distribution now exists separately under `packaging/installer/`.
 - The bundle does not include the future `suite` app or any suite-level meta saver.

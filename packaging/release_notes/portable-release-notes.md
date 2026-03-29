@@ -35,4 +35,4 @@ This note is the user-facing release-support source for the `C06` portable bundl
 
 - The `C06` portable stage may be partial when some canonical saver outputs are unavailable in the local output roots.
 - The bundle assembly may rely on pre-existing binaries when a supported toolchain is unavailable.
-- Installer, registration, and uninstall flow are deferred to `C07`.
+- Installed distribution now exists separately through the `C07` installer path.
