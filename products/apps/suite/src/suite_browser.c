@@ -86,14 +86,74 @@ static void suite_browser_append_unsigned_line(
 static const char *suite_browser_renderer_request_label(const suite_app *app)
 {
     if (app == NULL) {
-        return "auto";
+        return "Auto";
     }
 
-    if ((screensave_renderer_kind)app->app_config.renderer_request == SCREENSAVE_RENDERER_KIND_UNKNOWN) {
-        return "auto";
+    return screensave_display_renderer_kind((screensave_renderer_kind)app->app_config.renderer_request);
+}
+
+static const char *suite_browser_preset_label(
+    const suite_catalog_entry *entry,
+    const char *preset_key
+)
+{
+    const screensave_preset_descriptor *preset_descriptor;
+
+    if (
+        entry == NULL ||
+        entry->module == NULL ||
+        preset_key == NULL ||
+        preset_key[0] == '\0'
+    ) {
+        return NULL;
     }
 
-    return screensave_renderer_kind_name((screensave_renderer_kind)app->app_config.renderer_request);
+    preset_descriptor = screensave_find_preset(
+        entry->module->presets,
+        entry->module->preset_count,
+        preset_key
+    );
+    if (
+        preset_descriptor != NULL &&
+        preset_descriptor->display_name != NULL &&
+        preset_descriptor->display_name[0] != '\0'
+    ) {
+        return preset_descriptor->display_name;
+    }
+
+    return preset_key;
+}
+
+static const char *suite_browser_theme_label(
+    const suite_catalog_entry *entry,
+    const char *theme_key
+)
+{
+    const screensave_theme_descriptor *theme_descriptor;
+
+    if (
+        entry == NULL ||
+        entry->module == NULL ||
+        theme_key == NULL ||
+        theme_key[0] == '\0'
+    ) {
+        return NULL;
+    }
+
+    theme_descriptor = screensave_find_theme(
+        entry->module->themes,
+        entry->module->theme_count,
+        theme_key
+    );
+    if (
+        theme_descriptor != NULL &&
+        theme_descriptor->display_name != NULL &&
+        theme_descriptor->display_name[0] != '\0'
+    ) {
+        return theme_descriptor->display_name;
+    }
+
+    return theme_key;
 }
 
 static void suite_browser_pack_summary(
@@ -171,6 +231,9 @@ void suite_draw_info(HDC dc, const RECT *client_rect, const suite_app *app)
     const char *theme_key;
     const char *selection_reason;
     const char *fallback_reason;
+    char selection_text[128];
+    char fallback_text[128];
+    char status_text[128];
 
     if (dc == NULL || client_rect == NULL) {
         return;
@@ -234,14 +297,30 @@ void suite_draw_info(HDC dc, const RECT *client_rect, const suite_app *app)
         "Theme count",
         (unsigned long)entry->module->theme_count
     );
-    suite_browser_append_line(info_text, sizeof(info_text), "Selected preset", preset_key);
-    suite_browser_append_line(info_text, sizeof(info_text), "Selected theme", theme_key);
+    suite_browser_append_line(
+        info_text,
+        sizeof(info_text),
+        "Selected preset",
+        suite_browser_preset_label(entry, preset_key)
+    );
+    suite_browser_append_line(
+        info_text,
+        sizeof(info_text),
+        "Selected theme",
+        suite_browser_theme_label(entry, theme_key)
+    );
     if (app != NULL) {
         suite_browser_append_line(
             info_text,
             sizeof(info_text),
-            "Randomization",
-            screensave_randomization_mode_name(app->working_config.common.randomization_mode)
+            "Detail level",
+            screensave_display_detail_level(app->working_config.common.detail_level)
+        );
+        suite_browser_append_line(
+            info_text,
+            sizeof(info_text),
+            "Randomization mode",
+            screensave_display_randomization_mode(app->working_config.common.randomization_mode)
         );
     }
 
@@ -265,34 +344,56 @@ void suite_draw_info(HDC dc, const RECT *client_rect, const suite_app *app)
     suite_browser_append_line(
         info_text,
         sizeof(info_text),
-        "Requested preview renderer",
+        "Preview renderer preference",
         suite_browser_renderer_request_label(app)
     );
 
-    selection_reason = "preview not active";
-    fallback_reason = "none";
+    selection_reason = "Preview not active";
+    fallback_reason = "None";
     if (app != NULL && app->preview_runtime.renderer != NULL) {
         screensave_renderer_get_info(app->preview_runtime.renderer, &renderer_info);
         suite_browser_append_line(
             info_text,
             sizeof(info_text),
             "Active preview renderer",
-            screensave_renderer_kind_name(renderer_info.active_kind)
+            screensave_display_renderer_kind(renderer_info.active_kind)
         );
         if (renderer_info.backend_name != NULL && renderer_info.backend_name[0] != '\0') {
             suite_browser_append_line(info_text, sizeof(info_text), "Preview backend", renderer_info.backend_name);
         }
-        selection_reason = renderer_info.selection_reason != NULL && renderer_info.selection_reason[0] != '\0'
-            ? renderer_info.selection_reason
-            : "default selection path";
-        fallback_reason = renderer_info.fallback_reason != NULL && renderer_info.fallback_reason[0] != '\0'
-            ? renderer_info.fallback_reason
-            : "none";
+        if (renderer_info.selection_reason != NULL && renderer_info.selection_reason[0] != '\0') {
+            screensave_display_renderer_reason(
+                renderer_info.selection_reason,
+                selection_text,
+                sizeof(selection_text)
+            );
+            selection_reason = selection_text;
+        } else {
+            selection_reason = "Default selection path";
+        }
+        if (renderer_info.fallback_reason != NULL && renderer_info.fallback_reason[0] != '\0') {
+            screensave_display_renderer_reason(
+                renderer_info.fallback_reason,
+                fallback_text,
+                sizeof(fallback_text)
+            );
+            fallback_reason = fallback_text;
+        } else {
+            fallback_reason = "None";
+        }
+        if (renderer_info.status_text != NULL && renderer_info.status_text[0] != '\0') {
+            screensave_display_renderer_status(
+                renderer_info.status_text,
+                status_text,
+                sizeof(status_text)
+            );
+            suite_browser_append_line(info_text, sizeof(info_text), "Renderer status", status_text);
+        }
     } else {
-        suite_browser_append_line(info_text, sizeof(info_text), "Active preview renderer", "not active");
+        suite_browser_append_line(info_text, sizeof(info_text), "Active preview renderer", "Not active");
     }
-    suite_browser_append_line(info_text, sizeof(info_text), "Renderer selection", selection_reason);
-    suite_browser_append_line(info_text, sizeof(info_text), "Renderer fallback", fallback_reason);
+    suite_browser_append_line(info_text, sizeof(info_text), "Selection path", selection_reason);
+    suite_browser_append_line(info_text, sizeof(info_text), "Fallback cause", fallback_reason);
 
     if (app != NULL && app->diagnostics.last_text[0] != '\0') {
         suite_browser_append_line(info_text, sizeof(info_text), "Last diagnostic", app->diagnostics.last_text);

@@ -69,6 +69,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\platform\src\core\base\display_text.c" />
     <ClCompile Include="..\..\..\platform\src\core\base\ini_file.c" />
     <ClCompile Include="..\..\..\platform\src\core\base\renderer_dispatch.c" />
     <ClCompile Include="..\..\..\platform\src\core\base\saver_contract.c" />

@@ -6,6 +6,7 @@
 #include "screensave/config_api.h"
 #include "screensave/diagnostics_api.h"
 #include "screensave/saver_api.h"
+#include "../../core/base/display_text.h"
 #include "../../core/timing/timing_internal.h"
 
 #define SCR_HOST_WINDOW_CLASSA "ScreenSaveHostWindow"

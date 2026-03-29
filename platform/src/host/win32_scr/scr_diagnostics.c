@@ -100,6 +100,8 @@ void scr_build_version_text(const scr_host_context *context, char *buffer, int b
 void scr_build_overlay_text(const scr_host_context *context, char *buffer, int buffer_size)
 {
     screensave_renderer_info renderer_info;
+    char reason_text[128];
+    char status_text[128];
 
     if (buffer == NULL || buffer_size <= 0) {
         return;
@@ -118,8 +120,12 @@ void scr_build_overlay_text(const scr_host_context *context, char *buffer, int b
     scr_append_text(buffer, buffer_size, "\r\nUptime: ");
     scr_append_number(buffer, buffer_size, context->clock.elapsed_millis / 1000UL);
     scr_append_text(buffer, buffer_size, "s");
-    scr_append_text(buffer, buffer_size, "\r\nDetail: ");
-    scr_append_text(buffer, buffer_size, screensave_detail_level_name(context->resolved_settings.common.detail_level));
+    scr_append_text(buffer, buffer_size, "\r\nDetail level: ");
+    scr_append_text(
+        buffer,
+        buffer_size,
+        screensave_display_detail_level(context->resolved_settings.common.detail_level)
+    );
     scr_append_text(buffer, buffer_size, "\r\nSeed: ");
     if (context->resolved_settings.common.use_deterministic_seed) {
         if (context->resolved_settings.common.deterministic_seed != 0UL) {
@@ -130,43 +136,55 @@ void scr_build_overlay_text(const scr_host_context *context, char *buffer, int b
     } else {
         scr_append_text(buffer, buffer_size, "session");
     }
-    if (context->resolved_settings.common.randomization_mode != SCREENSAVE_RANDOMIZATION_MODE_OFF) {
-        scr_append_text(buffer, buffer_size, "\r\nRandomization: ");
-        scr_append_text(
-            buffer,
-            buffer_size,
-            screensave_randomization_mode_name(context->resolved_settings.common.randomization_mode)
-        );
-    }
+    scr_append_text(buffer, buffer_size, "\r\nRandomization mode: ");
+    scr_append_text(
+        buffer,
+        buffer_size,
+        screensave_display_randomization_mode(context->resolved_settings.common.randomization_mode)
+    );
     if (context->resolved_settings.common.preset_key != NULL) {
-        scr_append_text(buffer, buffer_size, "\r\nPreset: ");
+        scr_append_text(buffer, buffer_size, "\r\nPreset key: ");
         scr_append_text(buffer, buffer_size, context->resolved_settings.common.preset_key);
     }
     if (context->resolved_settings.common.theme_key != NULL) {
-        scr_append_text(buffer, buffer_size, "\r\nTheme: ");
+        scr_append_text(buffer, buffer_size, "\r\nTheme key: ");
         scr_append_text(buffer, buffer_size, context->resolved_settings.common.theme_key);
     }
     if (context->renderer != NULL) {
         screensave_renderer_get_info(context->renderer, &renderer_info);
-        scr_append_text(buffer, buffer_size, "\r\nRequested: ");
-        if (renderer_info.requested_kind == SCREENSAVE_RENDERER_KIND_UNKNOWN) {
-            scr_append_text(buffer, buffer_size, "auto");
-        } else {
-            scr_append_text(buffer, buffer_size, screensave_renderer_kind_name(renderer_info.requested_kind));
-        }
-        scr_append_text(buffer, buffer_size, "\r\nRenderer: ");
-        scr_append_text(buffer, buffer_size, screensave_renderer_kind_name(renderer_info.active_kind));
+        scr_append_text(buffer, buffer_size, "\r\nRenderer preference: ");
+        scr_append_text(
+            buffer,
+            buffer_size,
+            screensave_display_renderer_kind(renderer_info.requested_kind)
+        );
+        scr_append_text(buffer, buffer_size, "\r\nActive renderer: ");
+        scr_append_text(
+            buffer,
+            buffer_size,
+            screensave_display_renderer_kind(renderer_info.active_kind)
+        );
         if (renderer_info.backend_name != NULL) {
-            scr_append_text(buffer, buffer_size, " ");
+            scr_append_text(buffer, buffer_size, "\r\nRenderer backend: ");
             scr_append_text(buffer, buffer_size, renderer_info.backend_name);
         }
         if (renderer_info.selection_reason != NULL) {
-            scr_append_text(buffer, buffer_size, "\r\nSelection: ");
-            scr_append_text(buffer, buffer_size, renderer_info.selection_reason);
+            screensave_display_renderer_reason(
+                renderer_info.selection_reason,
+                reason_text,
+                sizeof(reason_text)
+            );
+            scr_append_text(buffer, buffer_size, "\r\nSelection path: ");
+            scr_append_text(buffer, buffer_size, reason_text);
         }
         if (renderer_info.fallback_reason != NULL) {
-            scr_append_text(buffer, buffer_size, "\r\nFallback: ");
-            scr_append_text(buffer, buffer_size, renderer_info.fallback_reason);
+            screensave_display_renderer_reason(
+                renderer_info.fallback_reason,
+                reason_text,
+                sizeof(reason_text)
+            );
+            scr_append_text(buffer, buffer_size, "\r\nFallback cause: ");
+            scr_append_text(buffer, buffer_size, reason_text);
         }
         if (renderer_info.vendor_name != NULL) {
             scr_append_text(buffer, buffer_size, "\r\nGL vendor: ");
@@ -185,8 +203,13 @@ void scr_build_overlay_text(const scr_host_context *context, char *buffer, int b
         scr_append_text(buffer, buffer_size, "x");
         scr_append_number(buffer, buffer_size, (unsigned long)renderer_info.drawable_size.height);
         if (renderer_info.status_text != NULL) {
-            scr_append_text(buffer, buffer_size, "\r\nRender status: ");
-            scr_append_text(buffer, buffer_size, renderer_info.status_text);
+            screensave_display_renderer_status(
+                renderer_info.status_text,
+                status_text,
+                sizeof(status_text)
+            );
+            scr_append_text(buffer, buffer_size, "\r\nRenderer status: ");
+            scr_append_text(buffer, buffer_size, status_text);
         }
     }
     if (context->session == NULL) {

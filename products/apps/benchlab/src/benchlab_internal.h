@@ -8,6 +8,7 @@
 #include "screensave/renderer_api.h"
 #include "screensave/saver_api.h"
 #include "screensave/version.h"
+#include "../../../../platform/src/core/base/display_text.h"
 
 #define BENCHLAB_WINDOW_CLASSA "ScreenSaveBenchLabWindow"
 #define BENCHLAB_RENDER_WINDOW_CLASSA "ScreenSaveBenchLabRenderWindow"

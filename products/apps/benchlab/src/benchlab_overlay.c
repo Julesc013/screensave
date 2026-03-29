@@ -41,20 +41,13 @@ static int benchlab_append_hex(char *buffer, int buffer_size, unsigned long valu
     return benchlab_append_text(buffer, buffer_size, text);
 }
 
-static const char *benchlab_requested_renderer_text(screensave_renderer_kind requested_kind)
-{
-    if (requested_kind == SCREENSAVE_RENDERER_KIND_UNKNOWN) {
-        return "auto";
-    }
-
-    return screensave_renderer_kind_name(requested_kind);
-}
-
 static void benchlab_build_overlay_text(const benchlab_app *app, char *buffer, int buffer_size)
 {
     screensave_renderer_info renderer_info;
     unsigned int index;
     char anthology_summary[512];
+    char reason_text[128];
+    char status_text[128];
 
     if (buffer == NULL || buffer_size <= 0) {
         return;
@@ -70,20 +63,38 @@ static void benchlab_build_overlay_text(const benchlab_app *app, char *buffer, i
     benchlab_append_text(buffer, buffer_size, app->module->identity.display_name);
     benchlab_append_text(buffer, buffer_size, "\r\nRuntime: ");
     benchlab_append_text(buffer, buffer_size, screensave_version_get_text());
-    benchlab_append_text(buffer, buffer_size, "\r\nRequested renderer: ");
-    benchlab_append_text(buffer, buffer_size, benchlab_requested_renderer_text(app->requested_renderer_kind));
+    benchlab_append_text(buffer, buffer_size, "\r\nRenderer preference: ");
+    benchlab_append_text(
+        buffer,
+        buffer_size,
+        screensave_display_renderer_kind(app->requested_renderer_kind)
+    );
 
     if (app->renderer != NULL) {
         screensave_renderer_get_info(app->renderer, &renderer_info);
         benchlab_append_text(buffer, buffer_size, "\r\nActive renderer: ");
-        benchlab_append_text(buffer, buffer_size, screensave_renderer_kind_name(renderer_info.active_kind));
+        benchlab_append_text(
+            buffer,
+            buffer_size,
+            screensave_display_renderer_kind(renderer_info.active_kind)
+        );
         if (renderer_info.selection_reason != NULL) {
-            benchlab_append_text(buffer, buffer_size, "\r\nSelection: ");
-            benchlab_append_text(buffer, buffer_size, renderer_info.selection_reason);
+            screensave_display_renderer_reason(
+                renderer_info.selection_reason,
+                reason_text,
+                sizeof(reason_text)
+            );
+            benchlab_append_text(buffer, buffer_size, "\r\nSelection path: ");
+            benchlab_append_text(buffer, buffer_size, reason_text);
         }
         if (renderer_info.fallback_reason != NULL) {
-            benchlab_append_text(buffer, buffer_size, "\r\nFallback: ");
-            benchlab_append_text(buffer, buffer_size, renderer_info.fallback_reason);
+            screensave_display_renderer_reason(
+                renderer_info.fallback_reason,
+                reason_text,
+                sizeof(reason_text)
+            );
+            benchlab_append_text(buffer, buffer_size, "\r\nFallback cause: ");
+            benchlab_append_text(buffer, buffer_size, reason_text);
         }
         if (renderer_info.vendor_name != NULL) {
             benchlab_append_text(buffer, buffer_size, "\r\nGL vendor: ");
@@ -102,8 +113,13 @@ static void benchlab_build_overlay_text(const benchlab_app *app, char *buffer, i
         benchlab_append_text(buffer, buffer_size, "x");
         benchlab_append_number(buffer, buffer_size, (unsigned long)renderer_info.drawable_size.height);
         if (renderer_info.status_text != NULL) {
-            benchlab_append_text(buffer, buffer_size, "\r\nRender status: ");
-            benchlab_append_text(buffer, buffer_size, renderer_info.status_text);
+            screensave_display_renderer_status(
+                renderer_info.status_text,
+                status_text,
+                sizeof(status_text)
+            );
+            benchlab_append_text(buffer, buffer_size, "\r\nRenderer status: ");
+            benchlab_append_text(buffer, buffer_size, status_text);
         }
     }
 
@@ -128,23 +144,27 @@ static void benchlab_build_overlay_text(const benchlab_app *app, char *buffer, i
     benchlab_append_text(buffer, buffer_size, "ms delta=");
     benchlab_append_number(buffer, buffer_size, app->clock.delta_millis);
     benchlab_append_text(buffer, buffer_size, "ms");
+    benchlab_append_text(buffer, buffer_size, "\r\nDetail level: ");
+    benchlab_append_text(
+        buffer,
+        buffer_size,
+        screensave_display_detail_level(app->resolved_config.common.detail_level)
+    );
 
     if (app->resolved_config.common.preset_key != NULL) {
-        benchlab_append_text(buffer, buffer_size, "\r\nPreset: ");
+        benchlab_append_text(buffer, buffer_size, "\r\nPreset key: ");
         benchlab_append_text(buffer, buffer_size, app->resolved_config.common.preset_key);
     }
     if (app->resolved_config.common.theme_key != NULL) {
-        benchlab_append_text(buffer, buffer_size, "\r\nTheme: ");
+        benchlab_append_text(buffer, buffer_size, "\r\nTheme key: ");
         benchlab_append_text(buffer, buffer_size, app->resolved_config.common.theme_key);
     }
-    if (app->resolved_config.common.randomization_mode != SCREENSAVE_RANDOMIZATION_MODE_OFF) {
-        benchlab_append_text(buffer, buffer_size, "\r\nRandomization: ");
-        benchlab_append_text(
-            buffer,
-            buffer_size,
-            screensave_randomization_mode_name(app->resolved_config.common.randomization_mode)
-        );
-    }
+    benchlab_append_text(buffer, buffer_size, "\r\nRandomization mode: ");
+    benchlab_append_text(
+        buffer,
+        buffer_size,
+        screensave_display_randomization_mode(app->resolved_config.common.randomization_mode)
+    );
 
     if (
         app->session != NULL &&

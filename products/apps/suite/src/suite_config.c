@@ -48,22 +48,74 @@ static int suite_preset_descriptor_apply(
     return 1;
 }
 
-static int suite_select_combo_by_string(HWND combo, const char *text)
+static const char *suite_preset_display_name(const screensave_preset_descriptor *preset_descriptor)
 {
-    LRESULT count;
-    LRESULT index;
-    char item_text[96];
+    if (
+        preset_descriptor != NULL &&
+        preset_descriptor->display_name != NULL &&
+        preset_descriptor->display_name[0] != '\0'
+    ) {
+        return preset_descriptor->display_name;
+    }
 
-    if (combo == NULL || text == NULL || text[0] == '\0') {
+    return preset_descriptor != NULL ? preset_descriptor->preset_key : "";
+}
+
+static const char *suite_theme_display_name(const screensave_theme_descriptor *theme_descriptor)
+{
+    if (
+        theme_descriptor != NULL &&
+        theme_descriptor->display_name != NULL &&
+        theme_descriptor->display_name[0] != '\0'
+    ) {
+        return theme_descriptor->display_name;
+    }
+
+    return theme_descriptor != NULL ? theme_descriptor->theme_key : "";
+}
+
+static int suite_select_preset_combo_by_key(
+    HWND combo,
+    const screensave_saver_module *module,
+    const char *preset_key
+)
+{
+    unsigned int index;
+
+    if (combo == NULL || module == NULL || preset_key == NULL || preset_key[0] == '\0') {
         return 0;
     }
 
-    count = SendMessageA(combo, CB_GETCOUNT, 0U, 0L);
-    for (index = 0L; index < count; ++index) {
-        if (SendMessageA(combo, CB_GETLBTEXT, (WPARAM)index, (LPARAM)item_text) == CB_ERR) {
-            continue;
+    for (index = 0U; index < module->preset_count; ++index) {
+        if (
+            module->presets[index].preset_key != NULL &&
+            lstrcmpiA(module->presets[index].preset_key, preset_key) == 0
+        ) {
+            SendMessageA(combo, CB_SETCURSEL, (WPARAM)index, 0L);
+            return 1;
         }
-        if (lstrcmpiA(item_text, text) == 0) {
+    }
+
+    return 0;
+}
+
+static int suite_select_theme_combo_by_key(
+    HWND combo,
+    const screensave_saver_module *module,
+    const char *theme_key
+)
+{
+    unsigned int index;
+
+    if (combo == NULL || module == NULL || theme_key == NULL || theme_key[0] == '\0') {
+        return 0;
+    }
+
+    for (index = 0U; index < module->theme_count; ++index) {
+        if (
+            module->themes[index].theme_key != NULL &&
+            lstrcmpiA(module->themes[index].theme_key, theme_key) == 0
+        ) {
             SendMessageA(combo, CB_SETCURSEL, (WPARAM)index, 0L);
             return 1;
         }
@@ -195,7 +247,7 @@ int suite_select_entry(suite_app *app, unsigned int index)
             SCREENSAVE_DIAG_DOMAIN_APP,
             9001UL,
             "suite_select_entry",
-            "Suite could not load the stored saver configuration and is using defaults."
+            "Suite could not load stored saver settings; product defaults are active."
         );
     }
     screensave_saver_config_state_clamp(module, &app->stored_config);
@@ -268,6 +320,11 @@ int suite_handle_preset_combo_change(suite_app *app)
     }
 
     selection = SendMessageA(app->preset_combo, CB_GETCURSEL, 0U, 0L);
+    if (selection == CB_ERR) {
+        return 0;
+    }
+
+    selection = SendMessageA(app->preset_combo, CB_GETITEMDATA, (WPARAM)selection, 0L);
     if (selection == CB_ERR || (unsigned int)selection >= module->preset_count) {
         return 0;
     }
@@ -320,6 +377,11 @@ int suite_handle_theme_combo_change(suite_app *app)
     }
 
     selection = SendMessageA(app->theme_combo, CB_GETCURSEL, 0U, 0L);
+    if (selection == CB_ERR) {
+        return 0;
+    }
+
+    selection = SendMessageA(app->theme_combo, CB_GETITEMDATA, (WPARAM)selection, 0L);
     if (selection == CB_ERR || (unsigned int)selection >= module->theme_count) {
         return 0;
     }
@@ -527,11 +589,21 @@ void suite_sync_controls_from_working_config(suite_app *app)
     if (app->preset_combo != NULL) {
         SendMessageA(app->preset_combo, CB_RESETCONTENT, 0U, 0L);
         for (index = 0U; index < module->preset_count; ++index) {
-            SendMessageA(app->preset_combo, CB_ADDSTRING, 0U, (LPARAM)module->presets[index].preset_key);
+            LRESULT item_index;
+
+            item_index = SendMessageA(
+                app->preset_combo,
+                CB_ADDSTRING,
+                0U,
+                (LPARAM)suite_preset_display_name(&module->presets[index])
+            );
+            if (item_index != CB_ERR) {
+                SendMessageA(app->preset_combo, CB_SETITEMDATA, (WPARAM)item_index, (LPARAM)index);
+            }
         }
         if (
             app->working_config.common.preset_key != NULL &&
-            !suite_select_combo_by_string(app->preset_combo, app->working_config.common.preset_key) &&
+            !suite_select_preset_combo_by_key(app->preset_combo, module, app->working_config.common.preset_key) &&
             module->preset_count > 0U
         ) {
             SendMessageA(app->preset_combo, CB_SETCURSEL, 0U, 0L);
@@ -545,11 +617,21 @@ void suite_sync_controls_from_working_config(suite_app *app)
     if (app->theme_combo != NULL) {
         SendMessageA(app->theme_combo, CB_RESETCONTENT, 0U, 0L);
         for (index = 0U; index < module->theme_count; ++index) {
-            SendMessageA(app->theme_combo, CB_ADDSTRING, 0U, (LPARAM)module->themes[index].theme_key);
+            LRESULT item_index;
+
+            item_index = SendMessageA(
+                app->theme_combo,
+                CB_ADDSTRING,
+                0U,
+                (LPARAM)suite_theme_display_name(&module->themes[index])
+            );
+            if (item_index != CB_ERR) {
+                SendMessageA(app->theme_combo, CB_SETITEMDATA, (WPARAM)item_index, (LPARAM)index);
+            }
         }
         if (
             app->working_config.common.theme_key != NULL &&
-            !suite_select_combo_by_string(app->theme_combo, app->working_config.common.theme_key) &&
+            !suite_select_theme_combo_by_key(app->theme_combo, module, app->working_config.common.theme_key) &&
             module->theme_count > 0U
         ) {
             SendMessageA(app->theme_combo, CB_SETCURSEL, 0U, 0L);

@@ -8,6 +8,7 @@
 #include "screensave/renderer_api.h"
 #include "screensave/saver_api.h"
 #include "screensave/settings_api.h"
+#include "../../../../platform/src/core/base/display_text.h"
 
 #define SUITE_WINDOW_CLASSA "ScreenSaveSuiteWindow"
 #define SUITE_PREVIEW_WINDOW_CLASSA "ScreenSaveSuitePreviewWindow"

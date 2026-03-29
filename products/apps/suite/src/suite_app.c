@@ -211,14 +211,14 @@ static int suite_create_controls(suite_app *app)
     app->preset_combo = suite_create_combo(app, IDC_SUITE_PRESET);
     app->theme_label = suite_create_label(app, IDC_SUITE_THEME_LABEL, "Theme");
     app->theme_combo = suite_create_combo(app, IDC_SUITE_THEME);
-    app->renderer_label = suite_create_label(app, IDC_SUITE_RENDERER_LABEL, "Renderer");
+    app->renderer_label = suite_create_label(app, IDC_SUITE_RENDERER_LABEL, "Renderer preference");
     app->renderer_combo = suite_create_combo(app, IDC_SUITE_RENDERER);
     app->randomize_check = suite_create_button(app, IDC_SUITE_RANDOMIZE, "Session randomization", BS_AUTOCHECKBOX);
     app->restart_button = suite_create_button(app, IDC_SUITE_RESTART, "Restart Preview", BS_PUSHBUTTON);
     app->windowed_button = suite_create_button(app, IDC_SUITE_WINDOWED, "Run Windowed", BS_PUSHBUTTON);
     app->settings_button = suite_create_button(app, IDC_SUITE_SETTINGS, "Settings...", BS_PUSHBUTTON);
-    app->save_button = suite_create_button(app, IDC_SUITE_SAVE, "Save", BS_PUSHBUTTON);
-    app->reset_button = suite_create_button(app, IDC_SUITE_RESET, "Reset", BS_PUSHBUTTON);
+    app->save_button = suite_create_button(app, IDC_SUITE_SAVE, "Apply", BS_PUSHBUTTON);
+    app->reset_button = suite_create_button(app, IDC_SUITE_RESET, "Revert Changes", BS_PUSHBUTTON);
 
     if (
         app->browser_window == NULL ||
@@ -240,12 +240,12 @@ static int suite_create_controls(suite_app *app)
         return 0;
     }
 
-    SendMessageA(app->renderer_combo, CB_ADDSTRING, 0U, (LPARAM)"Auto");
-    SendMessageA(app->renderer_combo, CB_ADDSTRING, 0U, (LPARAM)"GDI");
-    SendMessageA(app->renderer_combo, CB_ADDSTRING, 0U, (LPARAM)"GL11");
-    SendMessageA(app->renderer_combo, CB_ADDSTRING, 0U, (LPARAM)"GL21");
-    SendMessageA(app->renderer_combo, CB_ADDSTRING, 0U, (LPARAM)"GL33");
-    SendMessageA(app->renderer_combo, CB_ADDSTRING, 0U, (LPARAM)"GL46");
+    SendMessageA(app->renderer_combo, CB_ADDSTRING, 0U, (LPARAM)"Auto (best available)");
+    SendMessageA(app->renderer_combo, CB_ADDSTRING, 0U, (LPARAM)"GDI floor");
+    SendMessageA(app->renderer_combo, CB_ADDSTRING, 0U, (LPARAM)"OpenGL 1.1");
+    SendMessageA(app->renderer_combo, CB_ADDSTRING, 0U, (LPARAM)"OpenGL 2.1");
+    SendMessageA(app->renderer_combo, CB_ADDSTRING, 0U, (LPARAM)"OpenGL 3.3 (placeholder)");
+    SendMessageA(app->renderer_combo, CB_ADDSTRING, 0U, (LPARAM)"OpenGL 4.6 (placeholder)");
     SendMessageA(app->renderer_combo, CB_SETCURSEL, 0U, 0L);
     return 1;
 }

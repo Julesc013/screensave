@@ -387,24 +387,25 @@ static int suite_load_manifest_file(const char *path, suite_manifest_info *manif
 
 static void suite_build_renderer_string_from_manifest(suite_manifest_info *manifest)
 {
-    if (manifest == NULL || manifest->renderer[0] != '\0') {
+    if (manifest == NULL) {
         return;
     }
 
+    manifest->renderer[0] = '\0';
     if (manifest->supports_gdi) {
-        suite_append_text(manifest->renderer, sizeof(manifest->renderer), "gdi");
+        suite_append_text(manifest->renderer, sizeof(manifest->renderer), "GDI floor");
     }
     if (manifest->supports_gl11) {
         if (manifest->renderer[0] != '\0') {
             suite_append_text(manifest->renderer, sizeof(manifest->renderer), ", ");
         }
-        suite_append_text(manifest->renderer, sizeof(manifest->renderer), "gl11");
+        suite_append_text(manifest->renderer, sizeof(manifest->renderer), "OpenGL 1.1 optional");
     }
     if (manifest->supports_gl21) {
         if (manifest->renderer[0] != '\0') {
             suite_append_text(manifest->renderer, sizeof(manifest->renderer), ", ");
         }
-        suite_append_text(manifest->renderer, sizeof(manifest->renderer), "gl21");
+        suite_append_text(manifest->renderer, sizeof(manifest->renderer), "OpenGL 2.1 optional");
     }
 }
 
@@ -415,22 +416,22 @@ static const char *suite_scope_display_name(const char *scope)
     }
 
     if (lstrcmpiA(scope, "first_real_product") == 0) {
-        return "Quiet + Foundation";
+        return "Quiet and Foundation";
     }
     if (lstrcmpiA(scope, "motion_family") == 0) {
         return "Motion Family";
     }
     if (lstrcmpiA(scope, "framebuffer_vector_family") == 0) {
-        return "Framebuffer + Vector";
+        return "Framebuffer and Vector";
     }
     if (lstrcmpiA(scope, "grid_simulation_family") == 0) {
-        return "Grid + Simulation";
+        return "Grid and Simulation";
     }
     if (lstrcmpiA(scope, "systems_ambient_family") == 0) {
-        return "Systems + Ambient";
+        return "Systems and Ambient";
     }
     if (lstrcmpiA(scope, "places_atmosphere_family") == 0) {
-        return "Places + Atmosphere";
+        return "Places and Atmosphere";
     }
     if (lstrcmpiA(scope, "heavyweight_worlds_family") == 0) {
         return "Heavyweight Worlds";

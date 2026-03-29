@@ -813,9 +813,9 @@ int anthology_session_build_summary(
     );
     anthology_append_text(buffer, buffer_size, "\r\nFamilies: ");
     anthology_append_text(buffer, buffer_size, family_text);
-    anthology_append_text(buffer, buffer_size, "\r\nSelection: ");
+    anthology_append_text(buffer, buffer_size, "\r\nSelection path: ");
     anthology_append_text(buffer, buffer_size, session->last_selection_reason);
-    anthology_append_text(buffer, buffer_size, "\r\nFilter: ");
+    anthology_append_text(buffer, buffer_size, "\r\nFilter summary: ");
     anthology_append_text(buffer, buffer_size, session->last_filter_summary);
     return 1;
 }

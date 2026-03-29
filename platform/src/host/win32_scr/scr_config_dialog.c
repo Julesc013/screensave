@@ -315,7 +315,7 @@ static int scr_run_module_settings_dialog(
             SCREENSAVE_DIAG_LEVEL_WARNING,
             2201UL,
             "scr_run_module_settings_dialog",
-            "The saver settings could not be loaded; defaults will be shown for editing."
+            "Stored saver settings could not be loaded; product defaults are shown for editing."
         );
     }
     scr_settings_clamp(module, &dialog_settings);
@@ -364,12 +364,12 @@ static void scr_single_saver_update_info(HWND dialog, const scr_single_dialog_st
     info[0] = '\0';
     scr_append_text(info, sizeof(info), version_text);
     scr_append_text(info, sizeof(info), "\r\nRenderer preference\r\n");
-    if (dialog_state->selected_renderer_kind == SCREENSAVE_RENDERER_KIND_UNKNOWN) {
-        scr_append_text(info, sizeof(info), "auto");
-    } else {
-        scr_append_text(info, sizeof(info), screensave_renderer_kind_name(dialog_state->selected_renderer_kind));
-    }
-    scr_append_text(info, sizeof(info), "\r\nUse Settings... for saver-specific options.");
+    scr_append_text(
+        info,
+        sizeof(info),
+        screensave_display_renderer_kind(dialog_state->selected_renderer_kind)
+    );
+    scr_append_text(info, sizeof(info), "\r\nUse Settings... for product-specific options.");
     SetDlgItemTextA(dialog, IDC_SCR_INFO, info);
 }
 
@@ -476,7 +476,7 @@ static INT_PTR CALLBACK scr_single_saver_dialog_proc(HWND dialog, UINT message, 
                 scr_show_message_box(
                     dialog_state->context->owner_window,
                     dialog_state->module,
-                    "The saver settings or renderer preference could not be saved.",
+                    "Saver settings and renderer preference could not be saved.",
                     MB_OK | MB_ICONERROR
                 );
                 return TRUE;
@@ -529,7 +529,7 @@ static INT_PTR scr_show_single_saver_dialog(scr_host_context *context)
             SCREENSAVE_DIAG_LEVEL_WARNING,
             2203UL,
             "scr_show_single_saver_dialog",
-            "The saver settings could not be loaded; defaults will be shown for editing."
+            "Stored saver settings could not be loaded; product defaults are shown for editing."
         );
     }
     scr_settings_clamp(dialog_state.module, &dialog_state.settings);
@@ -571,12 +571,12 @@ static void scr_selector_update_info(HWND dialog, const scr_selector_dialog_stat
     scr_append_text(info, sizeof(info), "\r\n");
     scr_append_text(info, sizeof(info), version_text);
     scr_append_text(info, sizeof(info), "\r\n");
-    scr_append_text(info, sizeof(info), "Requested renderer\r\n");
-    if (dialog_state->selected_renderer_kind == SCREENSAVE_RENDERER_KIND_UNKNOWN) {
-        scr_append_text(info, sizeof(info), "auto");
-    } else {
-        scr_append_text(info, sizeof(info), screensave_renderer_kind_name(dialog_state->selected_renderer_kind));
-    }
+    scr_append_text(info, sizeof(info), "Renderer preference\r\n");
+    scr_append_text(
+        info,
+        sizeof(info),
+        screensave_display_renderer_kind(dialog_state->selected_renderer_kind)
+    );
     scr_append_text(info, sizeof(info), "\r\n");
     scr_append_text(info, sizeof(info), dialog_state->selected_module->identity.description);
     SetDlgItemTextA(dialog, IDC_SCR_PRODUCT_INFO, info);
@@ -632,11 +632,11 @@ static void scr_selector_populate_renderer_combo(HWND dialog)
 {
     SendDlgItemMessageA(dialog, IDC_SCR_RENDERER, CB_RESETCONTENT, 0U, 0L);
     SendDlgItemMessageA(dialog, IDC_SCR_RENDERER, CB_ADDSTRING, 0U, (LPARAM)"Auto (best available)");
-    SendDlgItemMessageA(dialog, IDC_SCR_RENDERER, CB_ADDSTRING, 0U, (LPARAM)"GDI");
-    SendDlgItemMessageA(dialog, IDC_SCR_RENDERER, CB_ADDSTRING, 0U, (LPARAM)"GL11");
-    SendDlgItemMessageA(dialog, IDC_SCR_RENDERER, CB_ADDSTRING, 0U, (LPARAM)"GL21");
-    SendDlgItemMessageA(dialog, IDC_SCR_RENDERER, CB_ADDSTRING, 0U, (LPARAM)"GL33 (placeholder)");
-    SendDlgItemMessageA(dialog, IDC_SCR_RENDERER, CB_ADDSTRING, 0U, (LPARAM)"GL46 (placeholder)");
+    SendDlgItemMessageA(dialog, IDC_SCR_RENDERER, CB_ADDSTRING, 0U, (LPARAM)"GDI floor");
+    SendDlgItemMessageA(dialog, IDC_SCR_RENDERER, CB_ADDSTRING, 0U, (LPARAM)"OpenGL 1.1");
+    SendDlgItemMessageA(dialog, IDC_SCR_RENDERER, CB_ADDSTRING, 0U, (LPARAM)"OpenGL 2.1");
+    SendDlgItemMessageA(dialog, IDC_SCR_RENDERER, CB_ADDSTRING, 0U, (LPARAM)"OpenGL 3.3 (placeholder)");
+    SendDlgItemMessageA(dialog, IDC_SCR_RENDERER, CB_ADDSTRING, 0U, (LPARAM)"OpenGL 4.6 (placeholder)");
 }
 
 static void scr_selector_select_renderer(HWND dialog, const scr_selector_dialog_state *dialog_state)
@@ -750,7 +750,7 @@ static INT_PTR CALLBACK scr_selector_dialog_proc(HWND dialog, UINT message, WPAR
                     dialog_state->selected_module != NULL
                         ? dialog_state->selected_module
                         : dialog_state->context->default_module,
-                    "The host could not save the current built-in saver selection and renderer preference.",
+                    "The selected saver and renderer preference could not be saved.",
                     MB_OK | MB_ICONERROR
                 );
                 return TRUE;
