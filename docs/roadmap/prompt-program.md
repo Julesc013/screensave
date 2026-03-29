@@ -5,8 +5,8 @@ Earlier docs described an intended Series 00 through 17 program; that shorter en
 
 Implementation currently exists through `S15`.
 The older public endpoint that treated `S16` and `S17` as the whole remaining plan is superseded.
-Post-`S15` work now follows committed `C00`, `C01`, and `C02` work plus later continuation prompts.
-C03 is the next planned implementation prompt after the post-rename checkpoint.
+Post-`S15` work now follows committed `C00`, `C01`, `C02`, and `C03` work plus later continuation prompts.
+C04 is the next planned implementation prompt after saver productization.
 
 ## Implemented Baseline
 
@@ -60,8 +60,8 @@ Do not schedule new continuation work under `S16` or `S17`.
 
 ## Continuation Rules
 
-- `C00`, `C01`, and `C02` are complete.
-- `C03` is the next implementation prompt after the locked post-rename checkpoint.
+- `C00`, `C01`, `C02`, and `C03` are complete.
+- `C04` is the next implementation prompt after the all-saver `.scr` productization baseline.
 - Rename and renderer-taxonomy normalization land before any productization or suite/meta work.
 - All-saver `.scr` productization lands before suite/meta products, backlog ingestion, or polish waves.
 - Shared settings, presets, randomization, and pack architecture land before distribution work.

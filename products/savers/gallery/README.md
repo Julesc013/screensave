@@ -9,6 +9,7 @@ It provides:
 - deliberate degradation across GDI, GL11, and the optional GL21 tier while remaining compatible with the explicit higher-tier placeholder ladder
 - scene families that remain coherent on the baseline while exposing richer treatment on higher renderer tiers when available
 - preview-safe, long-run-stable behavior through the shared saver and renderer contracts
+- a standalone `gallery.scr` product target with product-owned config and version resources on top of the shared host path
 
 Gallery stays intentionally bounded.
 It is not the future `suite` app, a randomizer, a scene editor, or a broad rendering lab.

@@ -1,10 +1,10 @@
 # MinGW i686 Lane
 
-This is the concrete GCC-family x86 lane for Series 15.
+This is the concrete GCC-family x86 lane for the `C03` saver-product baseline.
 
 ## What Exists Now
 
-- `Makefile` for the shared platform library, the real current saver `.scr` targets through `gallery.scr`, the real `benchlab.exe` target, the core-plus-GDI-plus-GL11-plus-GL21 platform objects, the explicit GL33/GL46 placeholder objects, the internal null safety backend object, the current saver product objects, the host/product dialog resources, and the conservative `opengl32` link dependency required for the optional renderer tiers
+- `Makefile` for the shared platform library, one true `.scr` output per saver through `gallery.scr`, the real `benchlab.exe` target, the core-plus-GDI-plus-GL11-plus-GL21 platform objects, the explicit GL33/GL46 placeholder objects, the internal null safety backend object, the owning saver product objects, per-saver config and version resources, the shared host resource, and the conservative `opengl32` link dependency required for the optional renderer tiers
 
 The target graph mirrors the VS2022 lane closely so later implementation work does not have to invent two unrelated build stories.
 

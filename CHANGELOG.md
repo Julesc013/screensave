@@ -2,6 +2,30 @@
 
 All notable repository changes are recorded here in prompt history order.
 
+## C03 - 2026-03-30
+
+### Added
+
+- `platform/src/host/win32_scr/scr_product_version.rc` as the shared version-resource template for saver product binaries.
+- Product-local `*_version.rc` files for every current saver so the standalone saver line now carries explicit per-product version and identity metadata.
+- `build/msvc/vs2022/saver_target_common.props` as the shared VS2022 saver-project property sheet for the one-saver-per-target productization matrix.
+- `validation/notes/c03-productization-matrix.md` as the explicit all-saver `.scr` productization record.
+
+### Changed
+
+- Updated every saver entry shim so `nocturne` through `gallery` now bind directly to their owning saver module through `screensave_scr_main()` instead of embedding the full multi-saver registry into every distributed `.scr`.
+- Updated the VS2022 saver projects and the MinGW i686 make lane so each saver target now compiles only its owning saver sources, its product config dialog resource, its product version resource, the shared host resource, and the shared platform library.
+- Preserved BenchLab as a separate diagnostics harness that still links the saver modules directly rather than depending on the distributed `.scr` product line.
+- Narrowed remaining host wording away from the earlier built-in-saver distribution assumption and updated repo truth docs so `C03` is complete and `C04` shared settings/presets/randomization/pack architecture is the next continuation step.
+- Updated `tools/scripts/check_build_layout.py` so the checked-in build validator now enforces the single-saver entry/binding contract, the per-saver resource matrix, and the continued separation between saver products and BenchLab.
+
+### Validation
+
+- Confirmed before editing that the `C00` roadmap reset, `C01` rename/taxonomy normalization, and `C02` migration-baseline checkpoint already existed in the repo.
+- Performed static audit and cleanup of the saver entry shims, saver project files, MinGW lane, host diagnostics wording, and current build/docs language to remove the old shared multi-saver distribution assumption from active repo truth.
+- Ran `python tools/scripts/check_build_layout.py` after the build/docs reconciliation; it passed on the final tree.
+- Confirmed this prompt did not add packaging, installer, suite-meta, suite-app, shared settings/randomization framework, or new saver-feature work.
+
 ## C02 - 2026-03-30
 
 ### Added

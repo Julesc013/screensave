@@ -1,4 +1,4 @@
-"""Validate the locked C02 canonical saver/app naming baseline."""
+"""Validate the locked C03 canonical saver/app naming baseline."""
 
 from __future__ import annotations
 
@@ -73,8 +73,8 @@ def main() -> int:
     require_text(
         ROOT / "README.md",
         (
-            "Implementation currently exists through `S15` plus continuation `C00`, `C01`, and `C02`.",
-            "The next continuation phase is `C03` for all-saver `.scr` productization.",
+            "Implementation currently exists through `S15` plus continuation `C00`, `C01`, `C02`, and `C03`.",
+            "The next continuation phase is `C04` for shared settings, presets, randomization, and pack architecture.",
             "`products/apps/suite/` is now the canonical suite-app placeholder location.",
         ),
         errors,
@@ -82,17 +82,17 @@ def main() -> int:
     require_text(
         ROOT / "docs" / "roadmap" / "prompt-program.md",
         (
-            "Post-`S15` work now follows committed `C00`, `C01`, and `C02` work plus later continuation prompts.",
-            "C03 is the next planned implementation prompt after the post-rename checkpoint.",
-            "- `C00`, `C01`, and `C02` are complete.",
+            "Post-`S15` work now follows committed `C00`, `C01`, `C02`, and `C03` work plus later continuation prompts.",
+            "C04 is the next planned implementation prompt after saver productization.",
+            "- `C00`, `C01`, `C02`, and `C03` are complete.",
         ),
         errors,
     )
     require_text(
         ROOT / "docs" / "roadmap" / "series-map.md",
         (
-            "`C00`, `C01`, and `C02` are complete.",
-            "The next planned implementation prompt is `C03` all-saver `.scr` productization.",
+            "`C00`, `C01`, `C02`, and `C03` are complete.",
+            "The next planned implementation prompt is `C04` shared settings, presets, randomization, and pack architecture.",
         ),
         errors,
     )
@@ -100,7 +100,7 @@ def main() -> int:
         ROOT / "docs" / "roadmap" / "post-s15-plan.md",
         (
             "the locked `C02` post-rename checkpoint",
-            "The next continuation prompt should be `C03` for all-saver `.scr` productization.",
+            "The next continuation prompt should be `C04` for shared settings, presets, randomization, and pack architecture.",
         ),
         errors,
     )
@@ -117,6 +117,15 @@ def main() -> int:
             "# C02 Migration Baseline",
             "- `C03` all-saver `.scr` productization",
             "- Annotated git tag for this baseline: `c02-post-rename-baseline`",
+        ),
+        errors,
+    )
+    require_text(
+        ROOT / "validation" / "notes" / "c03-productization-matrix.md",
+        (
+            "# C03 Productization Matrix",
+            "- `C04` shared settings, presets, randomization, and pack architecture",
+            "- BenchLab remains a separate diagnostics app",
         ),
         errors,
     )

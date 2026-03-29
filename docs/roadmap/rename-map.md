@@ -45,5 +45,6 @@ Do not create a parallel atlas-family saver unless a later roadmap update explic
 
 - Old saver selection keys continue to resolve through the shared old-to-new alias table.
 - Renamed savers load from legacy per-product registry roots and resave under canonical roots.
+- The standalone saver line now emits one true `.scr` output per canonical saver slug; do not reintroduce a shared multi-saver distribution target as the public saver artifact model.
 - `plasma` accepts the legacy `ember_lava` preset/theme key as a narrow migration alias.
 - BenchLab retains `gl_plus` and `glplus` only as legacy command-line aliases that resolve to canonical `gl21`.

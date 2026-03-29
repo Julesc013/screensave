@@ -16,14 +16,14 @@ The checked-in layout makes those lanes explicit instead of hiding them behind o
 
 Real now:
 
-- `vs2022/` contains the concrete modern solution and project files used to build the shared core runtime, the real host skeleton, the mandatory GDI backend, the optional GL11 and GL21 capability paths, the current canonical saver targets through `gallery.scr`, and the real `benchlab.exe` diagnostics app target.
+- `vs2022/` contains the concrete modern solution and project files used to build the shared core runtime, the real host skeleton, the mandatory GDI backend, the optional GL11 and GL21 capability paths, the current canonical saver line as one true `.scr` output per saver through `gallery.scr`, and the real `benchlab.exe` diagnostics app target.
 
 Documented scaffold only:
 
 - `vs6/`
 - `vs2008/`
 
-Those older lanes are intentionally documentation-heavy at the current `C02` baseline.
+Those older lanes are intentionally documentation-heavy at the current `C03` baseline.
 They preserve file layout and intent without claiming build completeness that does not yet exist.
 
 ## Output Intent

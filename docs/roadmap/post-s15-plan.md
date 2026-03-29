@@ -9,6 +9,7 @@ That baseline currently includes:
 
 - one shared platform with the required `gdi` floor, optional `gl11`, real optional `gl21`, explicit `gl33` and `gl46` placeholders, and the internal `null` backend
 - eighteen real saver products in the tree under the canonical post-`C01` slugs, with explicit old-to-new migration aliases where recoverability requires them
+- one true `.scr` output per saver across the current eighteen-product line, with product-specific entry binding and version/resource identity on the shared host path
 - BenchLab as the real developer diagnostics harness
 - the canonical `products/apps/suite/` placeholder for the future suite app plus a superseded `products/apps/player/` legacy stub
 - the locked `C02` post-rename checkpoint, including the migration-baseline note and recovery tag for the canonical naming regime
@@ -21,8 +22,8 @@ That endpoint is retired for future planning.
 1. `C00` is planning-only and performs no runtime, build-target, packaging, or product implementation work.
 2. `C01` completed the rename and taxonomy normalization pass and now defines the canonical naming baseline.
 3. `C02` established and locked the explicit post-rename checkpoint before wider continuation work proceeds.
-4. `C03` all-saver `.scr` productization happens before suite/meta products, idea ingestion, or polish waves.
-5. `C04` shared settings, presets, randomization, and pack architecture happens before distribution work.
+4. `C03` completed all-saver `.scr` productization before suite/meta products, idea ingestion, or polish waves.
+5. `C04` shared settings, presets, randomization, and pack architecture happens next and before distribution work.
 6. `C05` Windows picker, config, preview, and fullscreen validation happens before release/distribution work is treated as credible.
 7. `C06` portable distribution happens before `C07` installer, registration, and uninstall work.
 8. `C08` suite-level meta saver and `C09` `suite` app happen after saver productization and Windows-path validation.
@@ -74,6 +75,6 @@ Interpretation rules:
 
 ## Immediate Next Step
 
-The rename, renderer-taxonomy, and checkpoint work from `C01` and `C02` is complete.
-The next continuation prompt should be `C03` for all-saver `.scr` productization.
-Further continuation work should not need to renegotiate saver/app ownership, migration aliases, or renderer-tier terminology.
+The rename, renderer-taxonomy, checkpoint, and saver productization work from `C01` through `C03` is complete.
+The next continuation prompt should be `C04` for shared settings, presets, randomization, and pack architecture.
+Further continuation work should not need to renegotiate saver/app ownership, migration aliases, renderer-tier terminology, or per-saver `.scr` product identity.

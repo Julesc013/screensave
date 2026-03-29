@@ -1,6 +1,6 @@
 # CI Build Notes
 
-CI does not attempt a native ScreenSave build at the current `C02` baseline.
+CI does not attempt a native ScreenSave build at the current `C03` baseline.
 
 ## What CI Checks Now
 
@@ -9,7 +9,8 @@ CI does not attempt a native ScreenSave build at the current `C02` baseline.
 - build-lane layout and checked-in core/renderer/host/build-file consistency through `tools/scripts/check_build_layout.py`
 - current saver/app presence and wiring through the shared platform contracts
 - explicit `gdi`, `gl11`, `gl21`, `gl33`, and `gl46` renderer-tier naming across the active build graph
-- narrow multi-product host and BenchLab integration for the current canonical saver set
+- one true `.scr` output per saver for the current canonical saver set
+- BenchLab remaining separate from the distributed saver targets while still exercising the same saver modules directly
 
 ## Why CI Does Not Build Yet
 

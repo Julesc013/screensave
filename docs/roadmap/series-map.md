@@ -40,5 +40,5 @@ This is the short operational view of the implemented baseline and the active po
 - `C14`: final rerelease hardening.
 
 The earlier `S16` and `S17` endpoint is superseded.
-`C00`, `C01`, and `C02` are complete.
-The next planned implementation prompt is `C03` all-saver `.scr` productization.
+`C00`, `C01`, `C02`, and `C03` are complete.
+The next planned implementation prompt is `C04` shared settings, presets, randomization, and pack architecture.

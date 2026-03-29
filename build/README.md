@@ -37,7 +37,8 @@ Real now:
 - product-owned configuration, presets, and themes wired through the shared saver contract
 - a windowed harness path that runs the active saver through the shared saver and renderer contracts outside the `.scr` host
 - explicit versioned renderer selection and fallback reporting through the shared renderer path
-- narrow multi-product host and BenchLab wiring for the current eighteen-product saver set
+- one true `.scr` output per saver across the current eighteen-product saver line
+- BenchLab remaining separate as the direct multi-saver diagnostics harness
 - a tiny renderer-driven validation scene retained only as a non-product fallback path
 - build-layout validation in `tools/scripts/check_build_layout.py`
 
