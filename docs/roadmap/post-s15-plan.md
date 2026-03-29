@@ -26,7 +26,7 @@ That endpoint is retired for future planning.
 4. `C03` completed all-saver `.scr` productization before suite/meta products, idea ingestion, or polish waves.
 5. `C04` completed the shared settings, presets, randomization, and pack architecture baseline before distribution work.
 6. `C05` completed Windows picker, config, preview, and fullscreen validation before release/distribution work is treated as credible.
-7. `C06` portable distribution happens next and before `C07` installer, registration, and uninstall work.
+7. `C06` completed portable distribution before `C07` installer, registration, and uninstall work.
 8. `C08` suite-level meta saver and `C09` `suite` app happen after saver productization and Windows-path validation.
 9. `C10` SDK and contributor surface stabilization happens before backlog ingestion.
 10. `C11` idea backlog ingestion happens before the major polish waves.
@@ -64,7 +64,7 @@ Interpretation rules:
 | `C03` | Make every current saver a truthful standalone `.scr` product | Every implemented saver has an honest productized `.scr` path and product metadata |
 | `C04` | Add shared settings/preset/randomization/pack architecture | Shared reuse exists where justified without collapsing products into one runtime blob |
 | `C05` | Validate the real Windows screensaver lifecycle | Picker, config, preview, fullscreen, and fallback behavior are verified on the actual host path |
-| `C06` | Produce a portable suite bundle | Portable distribution structure and metadata are defined and validated honestly |
+| `C06` | Produce a portable saver bundle | Portable distribution structure and metadata are defined and validated honestly |
 | `C07` | Add installer and uninstall flow | Registration, install, and uninstall behavior is explicit and reviewable |
 | `C08` | Introduce the suite-level meta saver | Meta saver exists without replacing separate saver products |
 | `C09` | Introduce the `suite` control app | One canonical suite app replaces the legacy `gallery`/`player` placeholder plan |
@@ -76,6 +76,6 @@ Interpretation rules:
 
 ## Immediate Next Step
 
-The rename, renderer-taxonomy, checkpoint, saver productization, shared settings, and Windows integration work from `C01` through `C05` is complete.
-The next continuation prompt should be `C06` for the portable distribution bundle.
-Further continuation work should not need to renegotiate saver/app ownership, migration aliases, renderer-tier terminology, per-saver `.scr` product identity, the shared settings/preset/theme/pack contract, or the bounded Win32 `.scr` lifecycle behavior validated in `C05`.
+The rename, renderer-taxonomy, checkpoint, saver productization, shared settings, Windows integration, and portable distribution work from `C01` through `C06` is complete.
+The next continuation prompt should be `C07` for installer, registration, and uninstall flow.
+Further continuation work should not need to renegotiate saver/app ownership, migration aliases, renderer-tier terminology, per-saver `.scr` product identity, the shared settings/preset/theme/pack contract, the bounded Win32 `.scr` lifecycle behavior validated in `C05`, or the portable bundle layout and inclusion rules defined in `C06`.

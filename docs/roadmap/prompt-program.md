@@ -5,8 +5,8 @@ Earlier docs described an intended Series 00 through 17 program; that shorter en
 
 Implementation currently exists through `S15`.
 The older public endpoint that treated `S16` and `S17` as the whole remaining plan is superseded.
-Post-`S15` work now follows committed `C00`, `C01`, `C02`, `C03`, `C04`, and `C05` work plus later continuation prompts.
-C06 is the next planned implementation prompt after the Windows integration hardening pass.
+Post-`S15` work now follows committed `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, and `C06` work plus later continuation prompts.
+C07 is the next planned implementation prompt after the portable distribution bundle.
 
 ## Implemented Baseline
 
@@ -39,7 +39,7 @@ C06 is the next planned implementation prompt after the Windows integration hard
 | C03 | All-saver `.scr` productization | Every current saver packaged as an honest standalone `.scr` product with product-owned manifests and bounded metadata | C02 | Separate saver products, no silent suite coupling, no baseline regression |
 | C04 | Shared settings, presets, randomization, and pack architecture | Shared-but-bounded settings/preset/randomizer/pack surface that multiple saver products can reuse without collapsing into a meta-product | C03 | Product ownership, stable public contracts only where reuse is proven |
 | C05 | Windows picker, config, preview, and fullscreen validation | Explicit validation of saver selection, config dialogs, preview hosting, fullscreen lifecycle, and fallback behavior on the real Windows screensaver path | C03-C04 | Classic Win32 `.scr` behavior, ANSI host path, truthful validation |
-| C06 | Portable distribution bundle | Portable suite bundle layout, manifest assembly, release metadata, and validation notes for manual distribution | C03-C05 | Packaging consumes artifacts and metadata; it does not redefine runtime behavior |
+| C06 | Portable distribution bundle | Portable saver bundle layout, manifest assembly, release metadata, and validation notes for manual distribution | C03-C05 | Packaging consumes artifacts and metadata; it does not redefine runtime behavior |
 | C07 | Installer, registration, and uninstall flow | Installer/uninstaller, saver registration flow, and conservative shell integration guidance | C06 | Truthful installation claims, no hidden runtime logic in packaging |
 | C08 | Suite-level meta saver | A suite-facing saver that can represent or orchestrate the saver collection without replacing individual saver products | C03-C07 | Individual saver products remain first-class `.scr` artifacts |
 | C09 | `suite` app | One canonical suite control application for browse, launch, preview, settings, randomization, and pack management; legacy `gallery`/`player` placeholders are superseded here | C03-C08 | BenchLab remains diagnostics-only; suite app does not redefine the compatibility baseline |
@@ -60,8 +60,8 @@ Do not schedule new continuation work under `S16` or `S17`.
 
 ## Continuation Rules
 
-- `C00`, `C01`, `C02`, `C03`, `C04`, and `C05` are complete.
-- `C06` is the next implementation prompt after the Windows integration validation and hardening pass.
+- `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, and `C06` are complete.
+- `C07` is the next implementation prompt after the portable distribution bundle.
 - Rename and renderer-taxonomy normalization land before any productization or suite/meta work.
 - All-saver `.scr` productization lands before suite/meta products, backlog ingestion, or polish waves.
 - Shared settings, presets, randomization, and pack architecture land before distribution work.

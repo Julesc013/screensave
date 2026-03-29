@@ -40,5 +40,5 @@ This is the short operational view of the implemented baseline and the active po
 - `C14`: final rerelease hardening.
 
 The earlier `S16` and `S17` endpoint is superseded.
-`C00`, `C01`, `C02`, `C03`, `C04`, and `C05` are complete.
-The next planned implementation prompt is `C06` portable distribution bundle.
+`C00`, `C01`, `C02`, `C03`, `C04`, `C05`, and `C06` are complete.
+The next planned implementation prompt is `C07` installer, registration, and uninstall flow.

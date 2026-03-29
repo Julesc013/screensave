@@ -73,8 +73,8 @@ def main() -> int:
     require_text(
         ROOT / "README.md",
         (
-            "Implementation currently exists through `S15` plus continuation `C00`, `C01`, `C02`, `C03`, `C04`, and `C05`.",
-            "The next continuation phase is `C06` for the portable distribution bundle.",
+            "Implementation currently exists through `S15` plus continuation `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, and `C06`.",
+            "The next continuation phase is `C07` for installer, registration, and uninstall flow.",
             "`products/apps/suite/` is now the canonical suite-app placeholder location.",
         ),
         errors,
@@ -82,17 +82,17 @@ def main() -> int:
     require_text(
         ROOT / "docs" / "roadmap" / "prompt-program.md",
         (
-            "Post-`S15` work now follows committed `C00`, `C01`, `C02`, `C03`, `C04`, and `C05` work plus later continuation prompts.",
-            "C06 is the next planned implementation prompt after the Windows integration hardening pass.",
-            "- `C00`, `C01`, `C02`, `C03`, `C04`, and `C05` are complete.",
+            "Post-`S15` work now follows committed `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, and `C06` work plus later continuation prompts.",
+            "C07 is the next planned implementation prompt after the portable distribution bundle.",
+            "- `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, and `C06` are complete.",
         ),
         errors,
     )
     require_text(
         ROOT / "docs" / "roadmap" / "series-map.md",
         (
-            "`C00`, `C01`, `C02`, `C03`, `C04`, and `C05` are complete.",
-            "The next planned implementation prompt is `C06` portable distribution bundle.",
+            "`C00`, `C01`, `C02`, `C03`, `C04`, `C05`, and `C06` are complete.",
+            "The next planned implementation prompt is `C07` installer, registration, and uninstall flow.",
         ),
         errors,
     )
@@ -100,7 +100,7 @@ def main() -> int:
         ROOT / "docs" / "roadmap" / "post-s15-plan.md",
         (
             "the locked `C02` post-rename checkpoint",
-            "The next continuation prompt should be `C06` for the portable distribution bundle.",
+            "The next continuation prompt should be `C07` for installer, registration, and uninstall flow.",
         ),
         errors,
     )
@@ -135,6 +135,14 @@ def main() -> int:
             "# C04 Shared Settings Architecture",
             "- `C05` Windows picker, config, preview, and fullscreen validation",
             "- Built-in pack location: `products/savers/<slug>/packs/<pack_key>/pack.ini`",
+        ),
+        errors,
+    )
+    require_text(
+        ROOT / "validation" / "notes" / "c06-portable-bundle-matrix.md",
+        (
+            "# C06 Portable Bundle Matrix",
+            "The next continuation step is `C07` installer, registration, and uninstall flow.",
         ),
         errors,
     )

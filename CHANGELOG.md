@@ -2,6 +2,30 @@
 
 All notable repository changes are recorded here in prompt history order.
 
+## C06 - 2026-03-30
+
+### Added
+
+- `packaging/portable/bundle_manifest.ini`, `packaging/portable/layout.md`, and `packaging/portable/assemble_portable.py` as the explicit `C06` portable bundle definition, layout note, and stdlib-only assembly path.
+- `packaging/release_notes/portable-release-notes.md` as the user-facing release-support note for the portable bundle.
+- `validation/notes/c06-portable-bundle-matrix.md` as the explicit inclusion matrix for the current canonical saver line, including the discovered canonical outputs, excluded legacy outputs, BenchLab exclusion, pack policy, and next continuation step.
+- `tools/scripts/check_portable_bundle_layout.py` as the small static validator for the portable bundle definition, staged output, and post-`C06` status docs.
+
+### Changed
+
+- Updated `packaging/README.md`, `packaging/portable/README.md`, and `packaging/release_notes/README.md` so the packaging tree now describes the real portable-bundle architecture and the continued deferment of installer work to `C07`.
+- Generated a real staged portable bundle at `out/portable/screensave-portable-c06/` and a matching zip at `out/portable/screensave-portable-c06.zip` from the canonical saver outputs currently present in local output roots, while excluding legacy saver outputs, BenchLab, and suite-level products.
+- Updated `README.md`, roadmap docs, and the continuation-status validators so `C06` is recorded as complete and `C07` installer, registration, and uninstall flow is the next continuation step.
+
+### Validation
+
+- Confirmed before editing that the roadmap reset, canonical rename baseline, `C02` migration checkpoint, `C03` saver productization matrix, `C04` shared settings architecture, and `C05` Windows integration validation note already existed in the repo.
+- Audited `out/` and the checked-in build-output conventions to distinguish currently available canonical saver outputs from missing savers, legacy pre-rename outputs, and developer-only BenchLab binaries before assembling the portable bundle.
+- Ran `python packaging/portable/assemble_portable.py` to stage the portable folder and generate the zip from real discovered outputs only.
+- Ran `python tools/scripts/check_repo_structure.py`, `python tools/scripts/check_codex_config.py`, `python tools/scripts/check_docs_basics.py`, `python tools/scripts/check_build_layout.py`, `python tools/scripts/check_canonical_naming.py`, `python tools/scripts/check_shared_settings_layout.py`, `python tools/scripts/check_windows_integration_layout.py`, `python tools/scripts/check_portable_bundle_layout.py`, `python -m py_compile packaging/portable/assemble_portable.py tools/scripts/check_canonical_naming.py tools/scripts/check_shared_settings_layout.py tools/scripts/check_windows_integration_layout.py tools/scripts/check_portable_bundle_layout.py`, and `git diff --check` on the final tree.
+- Confirmed that supported C/C++ toolchains were unavailable in this environment, so the `C06` portable bundle is an honest staged partial bundle assembled from pre-existing canonical outputs instead of a freshly rebuilt full saver line.
+- Confirmed this prompt did not add installer logic, suite-app work, suite-meta work, or unrelated saver/renderer feature work.
+
 ## C05 - 2026-03-30
 
 ### Added
