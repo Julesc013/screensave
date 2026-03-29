@@ -1,6 +1,14 @@
-# Suite Placeholder
+# Suite
 
-Purpose: canonical placeholder directory for the future `suite` control app.
-Status: `C01` retired the old app-level `gallery` name, and this directory now owns the canonical suite-app identity without claiming that the suite runtime is already implemented.
-Does not belong here: saver code, `gallery` saver logic, or a resurrected separate `player` app identity.
-Type: transitional product runtime space.
+Suite is the real suite-level browser, launcher, preview, and configuration surface introduced in continuation `C09`.
+
+It provides:
+
+- a real `suite.exe` app product under `products/apps/suite/`
+- manifest-driven browsing across the current standalone saver line plus the `anthology` meta-saver
+- embedded live preview, detached windowed run, and bounded saver `Settings...` handoff
+- visibility into saver metadata, presets, themes, randomization state, local pack samples, and honest `.scr` artifact availability
+- use of the shared saver, renderer, config, and settings contracts without replacing the standalone `.scr` products
+
+Suite is intentionally bounded.
+It is not BenchLab, not the `anthology` meta-saver, not a marketplace, not a content IDE, and not the future SDK surface.
