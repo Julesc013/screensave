@@ -30,6 +30,7 @@ else
 endif
 
 PLATFORM_OBJS := \
+	$(PLATFORM_DIR)/ini_file.o \
 	$(PLATFORM_DIR)/renderer_dispatch.o \
 	$(PLATFORM_DIR)/saver_contract.o \
 	$(PLATFORM_DIR)/saver_registry.o \

@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "../base/ini_file.h"
 #include "../base/saver_registry.h"
 #include "settings_internal.h"
 
@@ -489,79 +490,6 @@ static int screensave_file_writer_write_unsigned_long(
 
     wsprintfA(text, "%lu", value);
     return screensave_file_writer_write_string(context, section, key, text);
-}
-
-static int screensave_parse_ini_file(
-    const char *path,
-    int (*entry_callback)(void *context, const char *section, const char *key, const char *value),
-    void *callback_context
-)
-{
-    FILE *file;
-    char line[512];
-    char current_section[64];
-
-    if (path == NULL || entry_callback == NULL) {
-        return 0;
-    }
-
-    file = fopen(path, "r");
-    if (file == NULL) {
-        return 0;
-    }
-
-    current_section[0] = '\0';
-    while (fgets(line, sizeof(line), file) != NULL) {
-        char *cursor;
-        char *separator;
-
-        cursor = screensave_trim_text(line);
-        if (
-            cursor == NULL ||
-            cursor[0] == '\0' ||
-            cursor[0] == ';' ||
-            cursor[0] == '#'
-        ) {
-            continue;
-        }
-
-        if (cursor[0] == '[') {
-            char *end;
-
-            end = strchr(cursor, ']');
-            if (end == NULL) {
-                fclose(file);
-                return 0;
-            }
-
-            *end = '\0';
-            if (!screensave_text_copy(current_section, sizeof(current_section), cursor + 1)) {
-                fclose(file);
-                return 0;
-            }
-            continue;
-        }
-
-        separator = strchr(cursor, '=');
-        if (separator == NULL) {
-            fclose(file);
-            return 0;
-        }
-
-        *separator = '\0';
-        if (!entry_callback(
-                callback_context,
-                current_section,
-                screensave_trim_text(cursor),
-                screensave_trim_text(separator + 1)
-            )) {
-            fclose(file);
-            return 0;
-        }
-    }
-
-    fclose(file);
-    return 1;
 }
 
 int screensave_settings_load_shared_state(
@@ -1098,7 +1026,7 @@ int screensave_settings_import_file(
     import_context.expected_kind = kind;
     import_context.diagnostics = diagnostics;
 
-    if (!screensave_parse_ini_file(path, screensave_settings_import_callback, &import_context)) {
+    if (!screensave_ini_parse_file(path, screensave_settings_import_callback, &import_context)) {
         screensave_settings_emit_diag(
             diagnostics,
             SCREENSAVE_DIAG_LEVEL_ERROR,
@@ -1378,7 +1306,7 @@ int screensave_pack_manifest_load(
     }
 
     load_context.manifest = manifest;
-    if (!screensave_parse_ini_file(path, screensave_pack_load_callback, &load_context)) {
+    if (!screensave_ini_parse_file(path, screensave_pack_load_callback, &load_context)) {
         screensave_settings_emit_diag(
             diagnostics,
             SCREENSAVE_DIAG_LEVEL_WARNING,
