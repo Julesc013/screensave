@@ -9,7 +9,7 @@ OUTROOT := $(ROOT)/out
 INT_ROOT := $(OUTROOT)/intermediate/mingw/i686/$(PROFILE)
 PLATFORM_DIR := $(INT_ROOT)/screensave_platform
 BENCHLAB_DIR := $(INT_ROOT)/benchlab
-SAVERS := nocturne ricochet deepfield ember oscilloscope_dreams pipeworks lifeforms signal_lab mechanical_dreams ecosystems stormglass night_transit observatory
+SAVERS := nocturne ricochet deepfield ember oscilloscope_dreams pipeworks lifeforms signal_lab mechanical_dreams ecosystems stormglass night_transit observatory vector_worlds retro_explorer city_nocturne fractal_atlas
 SAVER_UNITS := config module presets render sim themes
 SAVER_TARGETS := $(foreach saver,$(SAVERS),$(OUTROOT)/mingw/i686/$(PROFILE)/$(saver)/$(saver).scr)
 BENCHLAB_TARGET := $(OUTROOT)/mingw/i686/$(PROFILE)/benchlab/benchlab.exe
@@ -195,6 +195,62 @@ $(INT_ROOT)/$(1)/ecosystems_config_res.o: $(ROOT)/products/savers/ecosystems/src
 	mkdir -p $(INT_ROOT)/$(1)
 	$(RC) -I$(ROOT)/products/savers/ecosystems/src -i $$< -o $$@
 
+$(INT_ROOT)/$(1)/stormglass_%.o: $(ROOT)/products/savers/stormglass/src/stormglass_%.c
+	mkdir -p $(INT_ROOT)/$(1)
+	$(CC) $(CFLAGS) -c $$< -o $$@
+
+$(INT_ROOT)/$(1)/stormglass_config_res.o: $(ROOT)/products/savers/stormglass/src/stormglass_config.rc
+	mkdir -p $(INT_ROOT)/$(1)
+	$(RC) -I$(ROOT)/products/savers/stormglass/src -i $$< -o $$@
+
+$(INT_ROOT)/$(1)/night_transit_%.o: $(ROOT)/products/savers/night_transit/src/night_transit_%.c
+	mkdir -p $(INT_ROOT)/$(1)
+	$(CC) $(CFLAGS) -c $$< -o $$@
+
+$(INT_ROOT)/$(1)/night_transit_config_res.o: $(ROOT)/products/savers/night_transit/src/night_transit_config.rc
+	mkdir -p $(INT_ROOT)/$(1)
+	$(RC) -I$(ROOT)/products/savers/night_transit/src -i $$< -o $$@
+
+$(INT_ROOT)/$(1)/observatory_%.o: $(ROOT)/products/savers/observatory/src/observatory_%.c
+	mkdir -p $(INT_ROOT)/$(1)
+	$(CC) $(CFLAGS) -c $$< -o $$@
+
+$(INT_ROOT)/$(1)/observatory_config_res.o: $(ROOT)/products/savers/observatory/src/observatory_config.rc
+	mkdir -p $(INT_ROOT)/$(1)
+	$(RC) -I$(ROOT)/products/savers/observatory/src -i $$< -o $$@
+
+$(INT_ROOT)/$(1)/vector_worlds_%.o: $(ROOT)/products/savers/vector_worlds/src/vector_worlds_%.c
+	mkdir -p $(INT_ROOT)/$(1)
+	$(CC) $(CFLAGS) -c $$< -o $$@
+
+$(INT_ROOT)/$(1)/vector_worlds_config_res.o: $(ROOT)/products/savers/vector_worlds/src/vector_worlds_config.rc
+	mkdir -p $(INT_ROOT)/$(1)
+	$(RC) -I$(ROOT)/products/savers/vector_worlds/src -i $$< -o $$@
+
+$(INT_ROOT)/$(1)/retro_explorer_%.o: $(ROOT)/products/savers/retro_explorer/src/retro_explorer_%.c
+	mkdir -p $(INT_ROOT)/$(1)
+	$(CC) $(CFLAGS) -c $$< -o $$@
+
+$(INT_ROOT)/$(1)/retro_explorer_config_res.o: $(ROOT)/products/savers/retro_explorer/src/retro_explorer_config.rc
+	mkdir -p $(INT_ROOT)/$(1)
+	$(RC) -I$(ROOT)/products/savers/retro_explorer/src -i $$< -o $$@
+
+$(INT_ROOT)/$(1)/city_nocturne_%.o: $(ROOT)/products/savers/city_nocturne/src/city_nocturne_%.c
+	mkdir -p $(INT_ROOT)/$(1)
+	$(CC) $(CFLAGS) -c $$< -o $$@
+
+$(INT_ROOT)/$(1)/city_nocturne_config_res.o: $(ROOT)/products/savers/city_nocturne/src/city_nocturne_config.rc
+	mkdir -p $(INT_ROOT)/$(1)
+	$(RC) -I$(ROOT)/products/savers/city_nocturne/src -i $$< -o $$@
+
+$(INT_ROOT)/$(1)/fractal_atlas_%.o: $(ROOT)/products/savers/fractal_atlas/src/fractal_atlas_%.c
+	mkdir -p $(INT_ROOT)/$(1)
+	$(CC) $(CFLAGS) -c $$< -o $$@
+
+$(INT_ROOT)/$(1)/fractal_atlas_config_res.o: $(ROOT)/products/savers/fractal_atlas/src/fractal_atlas_config.rc
+	mkdir -p $(INT_ROOT)/$(1)
+	$(RC) -I$(ROOT)/products/savers/fractal_atlas/src -i $$< -o $$@
+
 $(INT_ROOT)/$(1)/screensave_host_res.o: $(ROOT)/platform/src/host/win32_scr/screensave_host.rc
 	mkdir -p $(INT_ROOT)/$(1)
 	$(RC) -I$(ROOT)/platform/src/host/win32_scr -i $$< -o $$@
@@ -310,6 +366,61 @@ $(BENCHLAB_DIR)/ecosystems_config_res.o: $(ROOT)/products/savers/ecosystems/src/
 	mkdir -p $(BENCHLAB_DIR)
 	$(RC) -I$(ROOT)/products/savers/ecosystems/src -i $< -o $@
 
+$(BENCHLAB_DIR)/stormglass_%.o: $(ROOT)/products/savers/stormglass/src/stormglass_%.c
+	mkdir -p $(BENCHLAB_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BENCHLAB_DIR)/stormglass_config_res.o: $(ROOT)/products/savers/stormglass/src/stormglass_config.rc
+	mkdir -p $(BENCHLAB_DIR)
+	$(RC) -I$(ROOT)/products/savers/stormglass/src -i $< -o $@
+
+$(BENCHLAB_DIR)/night_transit_%.o: $(ROOT)/products/savers/night_transit/src/night_transit_%.c
+	mkdir -p $(BENCHLAB_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BENCHLAB_DIR)/night_transit_config_res.o: $(ROOT)/products/savers/night_transit/src/night_transit_config.rc
+	mkdir -p $(BENCHLAB_DIR)
+	$(RC) -I$(ROOT)/products/savers/night_transit/src -i $< -o $@
+
+$(BENCHLAB_DIR)/observatory_%.o: $(ROOT)/products/savers/observatory/src/observatory_%.c
+	mkdir -p $(BENCHLAB_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BENCHLAB_DIR)/observatory_config_res.o: $(ROOT)/products/savers/observatory/src/observatory_config.rc
+	mkdir -p $(BENCHLAB_DIR)
+	$(RC) -I$(ROOT)/products/savers/observatory/src -i $< -o $@
+
+$(BENCHLAB_DIR)/vector_worlds_%.o: $(ROOT)/products/savers/vector_worlds/src/vector_worlds_%.c
+	mkdir -p $(BENCHLAB_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BENCHLAB_DIR)/vector_worlds_config_res.o: $(ROOT)/products/savers/vector_worlds/src/vector_worlds_config.rc
+	mkdir -p $(BENCHLAB_DIR)
+	$(RC) -I$(ROOT)/products/savers/vector_worlds/src -i $< -o $@
+
+$(BENCHLAB_DIR)/retro_explorer_%.o: $(ROOT)/products/savers/retro_explorer/src/retro_explorer_%.c
+	mkdir -p $(BENCHLAB_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BENCHLAB_DIR)/retro_explorer_config_res.o: $(ROOT)/products/savers/retro_explorer/src/retro_explorer_config.rc
+	mkdir -p $(BENCHLAB_DIR)
+	$(RC) -I$(ROOT)/products/savers/retro_explorer/src -i $< -o $@
+
+$(BENCHLAB_DIR)/city_nocturne_%.o: $(ROOT)/products/savers/city_nocturne/src/city_nocturne_%.c
+	mkdir -p $(BENCHLAB_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BENCHLAB_DIR)/city_nocturne_config_res.o: $(ROOT)/products/savers/city_nocturne/src/city_nocturne_config.rc
+	mkdir -p $(BENCHLAB_DIR)
+	$(RC) -I$(ROOT)/products/savers/city_nocturne/src -i $< -o $@
+
+$(BENCHLAB_DIR)/fractal_atlas_%.o: $(ROOT)/products/savers/fractal_atlas/src/fractal_atlas_%.c
+	mkdir -p $(BENCHLAB_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BENCHLAB_DIR)/fractal_atlas_config_res.o: $(ROOT)/products/savers/fractal_atlas/src/fractal_atlas_config.rc
+	mkdir -p $(BENCHLAB_DIR)
+	$(RC) -I$(ROOT)/products/savers/fractal_atlas/src -i $< -o $@
+
 clean:
 	rm -rf $(OUTROOT)/mingw/i686/$(PROFILE) $(INT_ROOT)
-

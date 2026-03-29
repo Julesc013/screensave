@@ -11,10 +11,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{6B6AD7EF-5AD2-4B72-A67D-16BCE8455C63}</ProjectGuid>
+    <ProjectGuid>{5B45D52E-91D2-41AC-B1C1-850A7D41B8B6}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>observatory</RootNamespace>
-    <ProjectName>observatory</ProjectName>
+    <RootNamespace>fractal_atlas</RootNamespace>
+    <ProjectName>fractal_atlas</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -43,7 +43,7 @@
   <PropertyGroup>
     <OutDir>$(SolutionDir)..\..\..\out\msvc\vs2022\$(Configuration)\$(ProjectName)\</OutDir>
     <IntDir>$(SolutionDir)..\..\..\out\intermediate\msvc\vs2022\$(Configuration)\$(ProjectName)\</IntDir>
-    <TargetName>observatory</TargetName>
+    <TargetName>fractal_atlas</TargetName>
     <TargetExt>.scr</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -187,7 +187,7 @@
     <ClCompile Include="..\..\..\products\savers\fractal_atlas\src\fractal_atlas_render.c" />
     <ClCompile Include="..\..\..\products\savers\fractal_atlas\src\fractal_atlas_sim.c" />
     <ClCompile Include="..\..\..\products\savers\fractal_atlas\src\fractal_atlas_themes.c" />
-    <ClCompile Include="..\..\..\products\savers\observatory\src\observatory_entry.c" />
+    <ClCompile Include="..\..\..\products\savers\fractal_atlas\src\fractal_atlas_entry.c" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\..\products\savers\nocturne\src\nocturne_config.rc" />

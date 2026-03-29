@@ -55,7 +55,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\platform\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\platform\src\host\win32_scr;$(SolutionDir)..\..\..\products\savers\nocturne\src;$(SolutionDir)..\..\..\products\savers\ricochet\src;$(SolutionDir)..\..\..\products\savers\deepfield\src;$(SolutionDir)..\..\..\products\savers\ember\src;$(SolutionDir)..\..\..\products\savers\oscilloscope_dreams\src;$(SolutionDir)..\..\..\products\savers\pipeworks\src;$(SolutionDir)..\..\..\products\savers\lifeforms\src;$(SolutionDir)..\..\..\products\savers\signal_lab\src;$(SolutionDir)..\..\..\products\savers\mechanical_dreams\src;$(SolutionDir)..\..\..\products\savers\ecosystems\src;$(SolutionDir)..\..\..\products\savers\stormglass\src;$(SolutionDir)..\..\..\products\savers\night_transit\src;$(SolutionDir)..\..\..\products\savers\observatory\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\platform\src\host\win32_scr;$(SolutionDir)..\..\..\products\savers\nocturne\src;$(SolutionDir)..\..\..\products\savers\ricochet\src;$(SolutionDir)..\..\..\products\savers\deepfield\src;$(SolutionDir)..\..\..\products\savers\ember\src;$(SolutionDir)..\..\..\products\savers\oscilloscope_dreams\src;$(SolutionDir)..\..\..\products\savers\pipeworks\src;$(SolutionDir)..\..\..\products\savers\lifeforms\src;$(SolutionDir)..\..\..\products\savers\signal_lab\src;$(SolutionDir)..\..\..\products\savers\mechanical_dreams\src;$(SolutionDir)..\..\..\products\savers\ecosystems\src;$(SolutionDir)..\..\..\products\savers\stormglass\src;$(SolutionDir)..\..\..\products\savers\night_transit\src;$(SolutionDir)..\..\..\products\savers\observatory\src;$(SolutionDir)..\..\..\products\savers\vector_worlds\src;$(SolutionDir)..\..\..\products\savers\retro_explorer\src;$(SolutionDir)..\..\..\products\savers\city_nocturne\src;$(SolutionDir)..\..\..\products\savers\fractal_atlas\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -74,7 +74,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\platform\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\platform\src\host\win32_scr;$(SolutionDir)..\..\..\products\savers\nocturne\src;$(SolutionDir)..\..\..\products\savers\ricochet\src;$(SolutionDir)..\..\..\products\savers\deepfield\src;$(SolutionDir)..\..\..\products\savers\ember\src;$(SolutionDir)..\..\..\products\savers\oscilloscope_dreams\src;$(SolutionDir)..\..\..\products\savers\pipeworks\src;$(SolutionDir)..\..\..\products\savers\lifeforms\src;$(SolutionDir)..\..\..\products\savers\signal_lab\src;$(SolutionDir)..\..\..\products\savers\mechanical_dreams\src;$(SolutionDir)..\..\..\products\savers\ecosystems\src;$(SolutionDir)..\..\..\products\savers\stormglass\src;$(SolutionDir)..\..\..\products\savers\night_transit\src;$(SolutionDir)..\..\..\products\savers\observatory\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\platform\src\host\win32_scr;$(SolutionDir)..\..\..\products\savers\nocturne\src;$(SolutionDir)..\..\..\products\savers\ricochet\src;$(SolutionDir)..\..\..\products\savers\deepfield\src;$(SolutionDir)..\..\..\products\savers\ember\src;$(SolutionDir)..\..\..\products\savers\oscilloscope_dreams\src;$(SolutionDir)..\..\..\products\savers\pipeworks\src;$(SolutionDir)..\..\..\products\savers\lifeforms\src;$(SolutionDir)..\..\..\products\savers\signal_lab\src;$(SolutionDir)..\..\..\products\savers\mechanical_dreams\src;$(SolutionDir)..\..\..\products\savers\ecosystems\src;$(SolutionDir)..\..\..\products\savers\stormglass\src;$(SolutionDir)..\..\..\products\savers\night_transit\src;$(SolutionDir)..\..\..\products\savers\observatory\src;$(SolutionDir)..\..\..\products\savers\vector_worlds\src;$(SolutionDir)..\..\..\products\savers\retro_explorer\src;$(SolutionDir)..\..\..\products\savers\city_nocturne\src;$(SolutionDir)..\..\..\products\savers\fractal_atlas\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -163,6 +163,30 @@
     <ClCompile Include="..\..\..\products\savers\observatory\src\observatory_render.c" />
     <ClCompile Include="..\..\..\products\savers\observatory\src\observatory_sim.c" />
     <ClCompile Include="..\..\..\products\savers\observatory\src\observatory_themes.c" />
+    <ClCompile Include="..\..\..\products\savers\vector_worlds\src\vector_worlds_config.c" />
+    <ClCompile Include="..\..\..\products\savers\vector_worlds\src\vector_worlds_module.c" />
+    <ClCompile Include="..\..\..\products\savers\vector_worlds\src\vector_worlds_presets.c" />
+    <ClCompile Include="..\..\..\products\savers\vector_worlds\src\vector_worlds_render.c" />
+    <ClCompile Include="..\..\..\products\savers\vector_worlds\src\vector_worlds_sim.c" />
+    <ClCompile Include="..\..\..\products\savers\vector_worlds\src\vector_worlds_themes.c" />
+    <ClCompile Include="..\..\..\products\savers\retro_explorer\src\retro_explorer_config.c" />
+    <ClCompile Include="..\..\..\products\savers\retro_explorer\src\retro_explorer_module.c" />
+    <ClCompile Include="..\..\..\products\savers\retro_explorer\src\retro_explorer_presets.c" />
+    <ClCompile Include="..\..\..\products\savers\retro_explorer\src\retro_explorer_render.c" />
+    <ClCompile Include="..\..\..\products\savers\retro_explorer\src\retro_explorer_sim.c" />
+    <ClCompile Include="..\..\..\products\savers\retro_explorer\src\retro_explorer_themes.c" />
+    <ClCompile Include="..\..\..\products\savers\city_nocturne\src\city_nocturne_config.c" />
+    <ClCompile Include="..\..\..\products\savers\city_nocturne\src\city_nocturne_module.c" />
+    <ClCompile Include="..\..\..\products\savers\city_nocturne\src\city_nocturne_presets.c" />
+    <ClCompile Include="..\..\..\products\savers\city_nocturne\src\city_nocturne_render.c" />
+    <ClCompile Include="..\..\..\products\savers\city_nocturne\src\city_nocturne_sim.c" />
+    <ClCompile Include="..\..\..\products\savers\city_nocturne\src\city_nocturne_themes.c" />
+    <ClCompile Include="..\..\..\products\savers\fractal_atlas\src\fractal_atlas_config.c" />
+    <ClCompile Include="..\..\..\products\savers\fractal_atlas\src\fractal_atlas_module.c" />
+    <ClCompile Include="..\..\..\products\savers\fractal_atlas\src\fractal_atlas_presets.c" />
+    <ClCompile Include="..\..\..\products\savers\fractal_atlas\src\fractal_atlas_render.c" />
+    <ClCompile Include="..\..\..\products\savers\fractal_atlas\src\fractal_atlas_sim.c" />
+    <ClCompile Include="..\..\..\products\savers\fractal_atlas\src\fractal_atlas_themes.c" />
     <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_entry.c" />
   </ItemGroup>
   <ItemGroup>
@@ -179,6 +203,10 @@
     <ResourceCompile Include="..\..\..\products\savers\stormglass\src\stormglass_config.rc" />
     <ResourceCompile Include="..\..\..\products\savers\night_transit\src\night_transit_config.rc" />
     <ResourceCompile Include="..\..\..\products\savers\observatory\src\observatory_config.rc" />
+    <ResourceCompile Include="..\..\..\products\savers\vector_worlds\src\vector_worlds_config.rc" />
+    <ResourceCompile Include="..\..\..\products\savers\retro_explorer\src\retro_explorer_config.rc" />
+    <ResourceCompile Include="..\..\..\products\savers\city_nocturne\src\city_nocturne_config.rc" />
+    <ResourceCompile Include="..\..\..\products\savers\fractal_atlas\src\fractal_atlas_config.rc" />
     <ResourceCompile Include="..\..\..\platform\src\host\win32_scr\screensave_host.rc" />
   </ItemGroup>
   <ItemGroup>

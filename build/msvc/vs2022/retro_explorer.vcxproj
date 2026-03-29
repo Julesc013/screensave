@@ -11,10 +11,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{6B6AD7EF-5AD2-4B72-A67D-16BCE8455C63}</ProjectGuid>
+    <ProjectGuid>{D4A8B3C8-31FC-4D0B-964A-0A2550F4E3E2}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>observatory</RootNamespace>
-    <ProjectName>observatory</ProjectName>
+    <RootNamespace>retro_explorer</RootNamespace>
+    <ProjectName>retro_explorer</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -43,7 +43,7 @@
   <PropertyGroup>
     <OutDir>$(SolutionDir)..\..\..\out\msvc\vs2022\$(Configuration)\$(ProjectName)\</OutDir>
     <IntDir>$(SolutionDir)..\..\..\out\intermediate\msvc\vs2022\$(Configuration)\$(ProjectName)\</IntDir>
-    <TargetName>observatory</TargetName>
+    <TargetName>retro_explorer</TargetName>
     <TargetExt>.scr</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -187,7 +187,7 @@
     <ClCompile Include="..\..\..\products\savers\fractal_atlas\src\fractal_atlas_render.c" />
     <ClCompile Include="..\..\..\products\savers\fractal_atlas\src\fractal_atlas_sim.c" />
     <ClCompile Include="..\..\..\products\savers\fractal_atlas\src\fractal_atlas_themes.c" />
-    <ClCompile Include="..\..\..\products\savers\observatory\src\observatory_entry.c" />
+    <ClCompile Include="..\..\..\products\savers\retro_explorer\src\retro_explorer_entry.c" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\..\products\savers\nocturne\src\nocturne_config.rc" />

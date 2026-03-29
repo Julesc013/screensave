@@ -16,8 +16,8 @@ const screensave_saver_module *night_transit_get_module(void);
 const screensave_saver_module *observatory_get_module(void);
 const screensave_saver_module *vector_worlds_get_module(void);
 const screensave_saver_module *retro_explorer_get_module(void);
-const screensave_saver_module *city_nocturne_get_module(void);
 const screensave_saver_module *fractal_atlas_get_module(void);
+const screensave_saver_module *city_nocturne_get_module(void);
 
 int PASCAL WinMain(HINSTANCE instance, HINSTANCE previous, LPSTR command_line, int show_code)
 {

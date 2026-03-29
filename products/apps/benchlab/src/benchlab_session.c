@@ -16,6 +16,10 @@ const screensave_saver_module *ecosystems_get_module(void);
 const screensave_saver_module *stormglass_get_module(void);
 const screensave_saver_module *night_transit_get_module(void);
 const screensave_saver_module *observatory_get_module(void);
+const screensave_saver_module *vector_worlds_get_module(void);
+const screensave_saver_module *retro_explorer_get_module(void);
+const screensave_saver_module *city_nocturne_get_module(void);
+const screensave_saver_module *fractal_atlas_get_module(void);
 
 typedef const screensave_saver_module *(*benchlab_module_getter)(void);
 
@@ -32,7 +36,11 @@ static const benchlab_module_getter g_benchlab_module_getters[] = {
     ecosystems_get_module,
     stormglass_get_module,
     night_transit_get_module,
-    observatory_get_module
+    observatory_get_module,
+    vector_worlds_get_module,
+    retro_explorer_get_module,
+    city_nocturne_get_module,
+    fractal_atlas_get_module
 };
 
 static void benchlab_update_config_binding(benchlab_app *app)

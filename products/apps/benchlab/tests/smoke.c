@@ -22,7 +22,7 @@ int main(void)
     }
 
     module_count = benchlab_get_available_module_count();
-    if (module_count < 13U) {
+    if (module_count < 17U) {
         return 3;
     }
 
@@ -76,6 +76,22 @@ int main(void)
 
     if (benchlab_find_target_module("observatory") == NULL) {
         return 16;
+    }
+
+    if (benchlab_find_target_module("vector_worlds") == NULL) {
+        return 17;
+    }
+
+    if (benchlab_find_target_module("retro_explorer") == NULL) {
+        return 18;
+    }
+
+    if (benchlab_find_target_module("city_nocturne") == NULL) {
+        return 19;
+    }
+
+    if (benchlab_find_target_module("fractal_atlas") == NULL) {
+        return 20;
     }
 
     return 0;

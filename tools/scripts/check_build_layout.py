@@ -31,6 +31,10 @@ SAVERS = (
     ("stormglass", "Stormglass"),
     ("night_transit", "Night Transit"),
     ("observatory", "Observatory"),
+    ("vector_worlds", "Vector Worlds"),
+    ("retro_explorer", "Retro Explorer"),
+    ("city_nocturne", "City Nocturne"),
+    ("fractal_atlas", "Fractal Atlas"),
 )
 
 
@@ -181,6 +185,10 @@ def main() -> int:
         "stormglass",
         "night transit",
         "observatory",
+        "vector worlds",
+        "retro explorer",
+        "city nocturne",
+        "fractal atlas",
     ):
         require(phrase in build_readme, f"build/README.md is missing expected phrase: {phrase!r}", errors)
 
@@ -201,6 +209,10 @@ def main() -> int:
         "stormglass.vcxproj",
         "night_transit.vcxproj",
         "observatory.vcxproj",
+        "vector_worlds.vcxproj",
+        "retro_explorer.vcxproj",
+        "city_nocturne.vcxproj",
+        "fractal_atlas.vcxproj",
         "Debug|Win32",
         "Release|Win32",
     ):
@@ -269,6 +281,10 @@ def main() -> int:
         "stormglass",
         "night_transit",
         "observatory",
+        "vector_worlds",
+        "retro_explorer",
+        "city_nocturne",
+        "fractal_atlas",
     ):
         require(expected in makefile_text, f"Makefile is missing {expected!r}.", errors)
 
