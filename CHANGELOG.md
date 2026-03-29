@@ -2,6 +2,28 @@
 
 All notable repository changes are recorded here in prompt history order.
 
+## C12 - 2026-03-30
+
+### Added
+
+- `docs/roadmap/c12-suite-quality-bar.md` as the durable suite-consistency standard for the later saver-specific polish waves, including the canonical shared outer vocabulary, action semantics, renderer wording, and preservation rules.
+- `validation/notes/c12-suite-consistency-audit.md` as the explicit audit note for the bounded cross-cutting normalization pass and the next continuation step.
+- `tools/scripts/check_suite_consistency_surface.py` as the small static validator for the C12 quality-bar surface, vocabulary normalization, BenchLab manifest coverage, and active continuation-status docs.
+
+### Changed
+
+- Added the shared internal display-text helper under `platform/src/core/base/` and wired it into the host, Suite, and BenchLab so renderer names, selection paths, fallback causes, renderer status, detail levels, and randomization labels now use one coherent human-readable grammar instead of leaking raw internal tokens.
+- Normalized the shared Win32 host shell wording to `Renderer preference` and `Session randomization`, tightened the single-saver and selector dialog wording, and aligned host renderer choice labels with the current `gdi` / `gl11` / `gl21` vocabulary plus the later placeholders.
+- Updated Suite so presets and themes now surface display names in end-user combo boxes and the info pane, renderer support and family labels are human-readable, and the app-level actions now distinguish `Apply` from `Revert Changes` instead of overloading `Reset`.
+- Updated BenchLab and anthology to keep diagnostics or product-owned specificity while aligning with the suite-wide vocabulary, and corrected BenchLab's manifest so it truthfully describes the full current saver line including `anthology`.
+- Updated root, roadmap, architecture, product, tooling, and validation docs so `C12` is recorded as complete, the suite quality bar is explicit, and `C13` first saver-specific polish work is the next continuation step.
+
+### Validation
+
+- Confirmed before editing that the roadmap reset, canonical rename baseline, migration checkpoint, saver productization matrix, shared settings architecture, Windows integration baseline, portable bundle, installer baseline, suite meta-saver, suite app, SDK surface, and backlog-routing surface already existed in the repo.
+- Kept `C12` bounded to cross-cutting polish only: this prompt did not add new saver-local deep features, new renderer capabilities, packaging changes, installer changes, or new product families.
+- Final verification for `C12` is static and source-level in this environment; no supported MSVC or MinGW toolchain was available for a fresh native build or runtime checkpoint.
+
 ## C11 - 2026-03-30
 
 ### Added

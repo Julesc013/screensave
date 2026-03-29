@@ -74,8 +74,8 @@ def main() -> int:
     require_text(
         ROOT / "README.md",
         (
-            "Implementation currently exists through `S15` plus continuation `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, and `C11`.",
-            "The next continuation phase is `C12` for the cross-cutting polish pass.",
+            "Implementation currently exists through `S15` plus continuation `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, and `C12`.",
+            "The next continuation phase is `C13` for the first saver-specific polish wave.",
             "`suite` is now the canonical suite-level browser, launcher, preview, and configuration app under `products/apps/suite/`.",
             "`anthology` is the real suite meta-saver `.scr`",
         ),
@@ -84,17 +84,17 @@ def main() -> int:
     require_text(
         ROOT / "docs" / "roadmap" / "prompt-program.md",
         (
-            "Post-`S15` work now follows committed `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, and `C11` work plus later continuation prompts.",
-            "C12 is the next planned implementation prompt after the backlog-ingestion baseline.",
-            "- `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, and `C11` are complete.",
+            "Post-`S15` work now follows committed `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, and `C12` work plus later continuation prompts.",
+            "C13 is the next planned implementation prompt after the cross-cutting polish baseline.",
+            "- `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, and `C12` are complete.",
         ),
         errors,
     )
     require_text(
         ROOT / "docs" / "roadmap" / "series-map.md",
         (
-            "`C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, and `C11` are complete.",
-            "The next planned implementation prompt is `C12` for the cross-cutting polish pass.",
+            "`C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, and `C12` are complete.",
+            "The next planned implementation prompt is `C13` for the first saver-specific polish wave.",
         ),
         errors,
     )
@@ -102,8 +102,8 @@ def main() -> int:
         ROOT / "docs" / "roadmap" / "post-s15-plan.md",
         (
             "the locked `C02` post-rename checkpoint",
-            "12. `C11` completed structured backlog ingestion and routing before `C12` cross-cutting polish begins.",
-            "The next continuation prompt should be `C12` for the cross-cutting polish pass.",
+            "13. `C12` completed the cross-cutting polish and quality-bar pass before the first `C13` saver-specific polish wave begins.",
+            "The next continuation prompt should be `C13` for the first saver-specific polish wave.",
         ),
         errors,
     )

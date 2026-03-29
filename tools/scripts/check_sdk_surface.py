@@ -87,29 +87,29 @@ def validate_sdk_baseline(errors: list[str]) -> None:
         errors,
     )
     require(
-        "The next continuation phase is `C12` for the cross-cutting polish pass." in read_text(ROOT / "README.md"),
-        "README.md must point to C12.",
+        "The next continuation phase is `C13` for the first saver-specific polish wave." in read_text(ROOT / "README.md"),
+        "README.md must point to C13.",
         errors,
     )
     require(
-        "C12 is the next planned implementation prompt after the backlog-ingestion baseline." in read_text(
+        "C13 is the next planned implementation prompt after the cross-cutting polish baseline." in read_text(
             ROOT / "docs" / "roadmap" / "prompt-program.md"
         ),
-        "prompt-program.md must point to C12.",
+        "prompt-program.md must point to C13.",
         errors,
     )
     require(
-        "The next planned implementation prompt is `C12` for the cross-cutting polish pass." in read_text(
+        "The next planned implementation prompt is `C13` for the first saver-specific polish wave." in read_text(
             ROOT / "docs" / "roadmap" / "series-map.md"
         ),
-        "series-map.md must point to C12.",
+        "series-map.md must point to C13.",
         errors,
     )
     require(
-        "The next continuation prompt should be `C12` for the cross-cutting polish pass." in read_text(
+        "The next continuation prompt should be `C13` for the first saver-specific polish wave." in read_text(
             ROOT / "docs" / "roadmap" / "post-s15-plan.md"
         ),
-        "post-s15-plan.md must point to C12.",
+        "post-s15-plan.md must point to C13.",
         errors,
     )
     require(

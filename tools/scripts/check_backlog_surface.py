@@ -111,38 +111,38 @@ def main() -> int:
     require("- `C12` cross-cutting polish pass" in baseline, "C11 baseline note must name the next continuation step.", errors)
 
     require(
-        "Implementation currently exists through `S15` plus continuation `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, and `C11`." in readme,
-        "README.md must record C11 as complete.",
+        "Implementation currently exists through `S15` plus continuation `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, and `C12`." in readme,
+        "README.md must record C12 as complete.",
         errors,
     )
     require(
-        "The next continuation phase is `C12` for the cross-cutting polish pass." in readme,
-        "README.md must point to C12.",
+        "The next continuation phase is `C13` for the first saver-specific polish wave." in readme,
+        "README.md must point to C13.",
         errors,
     )
     require(
-        "Post-`S15` work now follows committed `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, and `C11` work plus later continuation prompts." in prompt_program,
-        "prompt-program.md must record C11 as complete.",
+        "Post-`S15` work now follows committed `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, and `C12` work plus later continuation prompts." in prompt_program,
+        "prompt-program.md must record C12 as complete.",
         errors,
     )
     require(
-        "C12 is the next planned implementation prompt after the backlog-ingestion baseline." in prompt_program,
-        "prompt-program.md must point to C12.",
+        "C13 is the next planned implementation prompt after the cross-cutting polish baseline." in prompt_program,
+        "prompt-program.md must point to C13.",
         errors,
     )
     require(
-        "`C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, and `C11` are complete." in prompt_program,
-        "prompt-program.md must mark C11 complete.",
+        "`C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, and `C12` are complete." in prompt_program,
+        "prompt-program.md must mark C12 complete.",
         errors,
     )
     require(
-        "`C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, and `C11` are complete." in series_map,
-        "series-map.md must mark C11 complete.",
+        "`C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, and `C12` are complete." in series_map,
+        "series-map.md must mark C12 complete.",
         errors,
     )
     require(
-        "The next planned implementation prompt is `C12` for the cross-cutting polish pass." in series_map,
-        "series-map.md must point to C12.",
+        "The next planned implementation prompt is `C13` for the first saver-specific polish wave." in series_map,
+        "series-map.md must point to C13.",
         errors,
     )
     require(
@@ -151,8 +151,13 @@ def main() -> int:
         errors,
     )
     require(
-        "The next continuation prompt should be `C12` for the cross-cutting polish pass." in post_s15,
-        "post-s15-plan.md must point to C12.",
+        "13. `C12` completed the cross-cutting polish and quality-bar pass before the first `C13` saver-specific polish wave begins." in post_s15,
+        "post-s15-plan.md must record C12 as complete.",
+        errors,
+    )
+    require(
+        "The next continuation prompt should be `C13` for the first saver-specific polish wave." in post_s15,
+        "post-s15-plan.md must point to C13.",
         errors,
     )
     require("## C11 - 2026-03-30" in changelog, "CHANGELOG.md must record C11.", errors)
