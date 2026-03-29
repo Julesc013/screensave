@@ -30,10 +30,13 @@ static gl_gallery_renderer_tier gl_gallery_resolve_tier(const screensave_rendere
 
     screensave_renderer_get_info(renderer, &info);
     switch (info.active_kind) {
-    case SCREENSAVE_RENDERER_KIND_GL_PLUS:
-        return GL_GALLERY_TIER_GL_PLUS;
+    case SCREENSAVE_RENDERER_KIND_GL46:
+    case SCREENSAVE_RENDERER_KIND_GL33:
+    case SCREENSAVE_RENDERER_KIND_GL21:
+        return GL_GALLERY_TIER_ADVANCED;
     case SCREENSAVE_RENDERER_KIND_GL11:
         return GL_GALLERY_TIER_GL11;
+    case SCREENSAVE_RENDERER_KIND_NULL:
     case SCREENSAVE_RENDERER_KIND_GDI:
     case SCREENSAVE_RENDERER_KIND_UNKNOWN:
     default:
@@ -79,7 +82,7 @@ static unsigned int gl_gallery_marker_count(const screensave_saver_session *sess
         break;
     }
 
-    if (session->tier == GL_GALLERY_TIER_GL_PLUS && count < 12U) {
+    if (session->tier == GL_GALLERY_TIER_ADVANCED && count < 12U) {
         count += 2U;
     } else if (session->tier == GL_GALLERY_TIER_GL11 && count < 10U) {
         count += 1U;

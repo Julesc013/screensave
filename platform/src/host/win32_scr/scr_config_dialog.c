@@ -25,7 +25,13 @@ static screensave_renderer_kind scr_selector_renderer_kind_from_index(LRESULT se
         return SCREENSAVE_RENDERER_KIND_GL11;
 
     case 3:
-        return SCREENSAVE_RENDERER_KIND_GL_PLUS;
+        return SCREENSAVE_RENDERER_KIND_GL21;
+
+    case 4:
+        return SCREENSAVE_RENDERER_KIND_GL33;
+
+    case 5:
+        return SCREENSAVE_RENDERER_KIND_GL46;
 
     case 0:
     default:
@@ -42,9 +48,16 @@ static int scr_selector_renderer_index_from_kind(screensave_renderer_kind reques
     case SCREENSAVE_RENDERER_KIND_GL11:
         return 2;
 
-    case SCREENSAVE_RENDERER_KIND_GL_PLUS:
+    case SCREENSAVE_RENDERER_KIND_GL21:
         return 3;
 
+    case SCREENSAVE_RENDERER_KIND_GL33:
+        return 4;
+
+    case SCREENSAVE_RENDERER_KIND_GL46:
+        return 5;
+
+    case SCREENSAVE_RENDERER_KIND_NULL:
     case SCREENSAVE_RENDERER_KIND_UNKNOWN:
     default:
         return 0;
@@ -365,7 +378,9 @@ static void scr_selector_populate_renderer_combo(HWND dialog)
     SendDlgItemMessageA(dialog, IDC_SCR_RENDERER, CB_ADDSTRING, 0U, (LPARAM)"Auto (best available)");
     SendDlgItemMessageA(dialog, IDC_SCR_RENDERER, CB_ADDSTRING, 0U, (LPARAM)"GDI");
     SendDlgItemMessageA(dialog, IDC_SCR_RENDERER, CB_ADDSTRING, 0U, (LPARAM)"GL11");
-    SendDlgItemMessageA(dialog, IDC_SCR_RENDERER, CB_ADDSTRING, 0U, (LPARAM)"GL Plus");
+    SendDlgItemMessageA(dialog, IDC_SCR_RENDERER, CB_ADDSTRING, 0U, (LPARAM)"GL21");
+    SendDlgItemMessageA(dialog, IDC_SCR_RENDERER, CB_ADDSTRING, 0U, (LPARAM)"GL33 (placeholder)");
+    SendDlgItemMessageA(dialog, IDC_SCR_RENDERER, CB_ADDSTRING, 0U, (LPARAM)"GL46 (placeholder)");
 }
 
 static void scr_selector_select_renderer(HWND dialog, const scr_selector_dialog_state *dialog_state)

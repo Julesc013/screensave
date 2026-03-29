@@ -64,7 +64,9 @@ static int scr_is_valid_renderer_request(screensave_renderer_kind requested_kind
     return requested_kind == SCREENSAVE_RENDERER_KIND_UNKNOWN ||
         requested_kind == SCREENSAVE_RENDERER_KIND_GDI ||
         requested_kind == SCREENSAVE_RENDERER_KIND_GL11 ||
-        requested_kind == SCREENSAVE_RENDERER_KIND_GL_PLUS;
+        requested_kind == SCREENSAVE_RENDERER_KIND_GL21 ||
+        requested_kind == SCREENSAVE_RENDERER_KIND_GL33 ||
+        requested_kind == SCREENSAVE_RENDERER_KIND_GL46;
 }
 
 int scr_settings_init(const screensave_saver_module *module, scr_settings *settings)

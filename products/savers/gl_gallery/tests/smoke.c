@@ -25,7 +25,7 @@ int main(void)
         return 4;
     }
 
-    if ((module->capability_flags & SCREENSAVE_SAVER_CAP_OPTIONAL_GL_PLUS) == 0UL) {
+    if ((module->capability_flags & SCREENSAVE_SAVER_CAP_OPTIONAL_GL21) == 0UL) {
         return 5;
     }
 

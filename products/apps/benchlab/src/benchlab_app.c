@@ -95,7 +95,9 @@ static HMENU benchlab_create_menu(void)
     AppendMenuA(options_menu, MF_STRING, IDM_BENCHLAB_RENDERER_AUTO, "Renderer &Auto");
     AppendMenuA(options_menu, MF_STRING, IDM_BENCHLAB_RENDERER_GDI, "Renderer &GDI");
     AppendMenuA(options_menu, MF_STRING, IDM_BENCHLAB_RENDERER_GL11, "Renderer &GL11");
-    AppendMenuA(options_menu, MF_STRING, IDM_BENCHLAB_RENDERER_GL_PLUS, "Renderer GL &Plus");
+    AppendMenuA(options_menu, MF_STRING, IDM_BENCHLAB_RENDERER_GL21, "Renderer GL&21");
+    AppendMenuA(options_menu, MF_STRING, IDM_BENCHLAB_RENDERER_GL33, "Renderer GL&33");
+    AppendMenuA(options_menu, MF_STRING, IDM_BENCHLAB_RENDERER_GL46, "Renderer GL&46");
 
     AppendMenuA(root_menu, MF_POPUP, (UINT_PTR)run_menu, "&Run");
     AppendMenuA(root_menu, MF_POPUP, (UINT_PTR)saver_menu, "&Saver");
@@ -129,10 +131,17 @@ static UINT benchlab_current_renderer_command(const benchlab_app *app)
     case SCREENSAVE_RENDERER_KIND_GL11:
         return IDM_BENCHLAB_RENDERER_GL11;
 
-    case SCREENSAVE_RENDERER_KIND_GL_PLUS:
-        return IDM_BENCHLAB_RENDERER_GL_PLUS;
+    case SCREENSAVE_RENDERER_KIND_GL21:
+        return IDM_BENCHLAB_RENDERER_GL21;
+
+    case SCREENSAVE_RENDERER_KIND_GL33:
+        return IDM_BENCHLAB_RENDERER_GL33;
+
+    case SCREENSAVE_RENDERER_KIND_GL46:
+        return IDM_BENCHLAB_RENDERER_GL46;
 
     case SCREENSAVE_RENDERER_KIND_UNKNOWN:
+    case SCREENSAVE_RENDERER_KIND_NULL:
     default:
         return IDM_BENCHLAB_RENDERER_AUTO;
     }
@@ -169,7 +178,7 @@ static void benchlab_update_menu_state(benchlab_app *app)
     CheckMenuRadioItem(
         app->menu,
         IDM_BENCHLAB_RENDERER_AUTO,
-        IDM_BENCHLAB_RENDERER_GL_PLUS,
+        IDM_BENCHLAB_RENDERER_GL46,
         benchlab_current_renderer_command(app),
         MF_BYCOMMAND
     );
@@ -616,8 +625,14 @@ static int benchlab_handle_command(benchlab_app *app, WORD command_id)
     case IDM_BENCHLAB_RENDERER_GL11:
         return benchlab_handle_renderer_request(app, SCREENSAVE_RENDERER_KIND_GL11);
 
-    case IDM_BENCHLAB_RENDERER_GL_PLUS:
-        return benchlab_handle_renderer_request(app, SCREENSAVE_RENDERER_KIND_GL_PLUS);
+    case IDM_BENCHLAB_RENDERER_GL21:
+        return benchlab_handle_renderer_request(app, SCREENSAVE_RENDERER_KIND_GL21);
+
+    case IDM_BENCHLAB_RENDERER_GL33:
+        return benchlab_handle_renderer_request(app, SCREENSAVE_RENDERER_KIND_GL33);
+
+    case IDM_BENCHLAB_RENDERER_GL46:
+        return benchlab_handle_renderer_request(app, SCREENSAVE_RENDERER_KIND_GL46);
 
     case IDM_BENCHLAB_EXIT:
         DestroyWindow(app->main_window);
