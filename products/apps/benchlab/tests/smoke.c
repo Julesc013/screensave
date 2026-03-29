@@ -38,11 +38,11 @@ int main(void)
         return 6;
     }
 
-    if (benchlab_find_target_module("ember") == NULL) {
+    if (benchlab_find_target_module("plasma") == NULL) {
         return 7;
     }
 
-    if (benchlab_find_target_module("oscilloscope_dreams") == NULL) {
+    if (benchlab_find_target_module("phosphor") == NULL) {
         return 8;
     }
 
@@ -54,11 +54,11 @@ int main(void)
         return 10;
     }
 
-    if (benchlab_find_target_module("signal_lab") == NULL) {
+    if (benchlab_find_target_module("signals") == NULL) {
         return 11;
     }
 
-    if (benchlab_find_target_module("mechanical_dreams") == NULL) {
+    if (benchlab_find_target_module("mechanize") == NULL) {
         return 12;
     }
 
@@ -70,7 +70,7 @@ int main(void)
         return 14;
     }
 
-    if (benchlab_find_target_module("night_transit") == NULL) {
+    if (benchlab_find_target_module("transit") == NULL) {
         return 15;
     }
 
@@ -78,23 +78,23 @@ int main(void)
         return 16;
     }
 
-    if (benchlab_find_target_module("vector_worlds") == NULL) {
+    if (benchlab_find_target_module("vector") == NULL) {
         return 17;
     }
 
-    if (benchlab_find_target_module("retro_explorer") == NULL) {
+    if (benchlab_find_target_module("explorer") == NULL) {
         return 18;
     }
 
-    if (benchlab_find_target_module("city_nocturne") == NULL) {
+    if (benchlab_find_target_module("city") == NULL) {
         return 19;
     }
 
-    if (benchlab_find_target_module("fractal_atlas") == NULL) {
+    if (benchlab_find_target_module("atlas") == NULL) {
         return 20;
     }
 
-    if (benchlab_find_target_module("gl_gallery") == NULL) {
+    if (benchlab_find_target_module("gallery") == NULL) {
         return 21;
     }
 

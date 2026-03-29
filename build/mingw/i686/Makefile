@@ -9,7 +9,7 @@ OUTROOT := $(ROOT)/out
 INT_ROOT := $(OUTROOT)/intermediate/mingw/i686/$(PROFILE)
 PLATFORM_DIR := $(INT_ROOT)/screensave_platform
 BENCHLAB_DIR := $(INT_ROOT)/benchlab
-SAVERS := nocturne ricochet deepfield ember oscilloscope_dreams pipeworks lifeforms signal_lab mechanical_dreams ecosystems stormglass night_transit observatory vector_worlds retro_explorer city_nocturne fractal_atlas gl_gallery
+SAVERS := nocturne ricochet deepfield plasma phosphor pipeworks lifeforms signals mechanize ecosystems stormglass transit observatory vector explorer city atlas gallery
 SAVER_UNITS := config module presets render sim themes
 SAVER_TARGETS := $(foreach saver,$(SAVERS),$(OUTROOT)/mingw/i686/$(PROFILE)/$(saver)/$(saver).scr)
 BENCHLAB_TARGET := $(OUTROOT)/mingw/i686/$(PROFILE)/benchlab/benchlab.exe
@@ -164,21 +164,21 @@ $(INT_ROOT)/$(1)/deepfield_config_res.o: $(ROOT)/products/savers/deepfield/src/d
 	mkdir -p $(INT_ROOT)/$(1)
 	$(RC) -I$(ROOT)/products/savers/deepfield/src -i $$< -o $$@
 
-$(INT_ROOT)/$(1)/ember_%.o: $(ROOT)/products/savers/ember/src/ember_%.c
+$(INT_ROOT)/$(1)/plasma_%.o: $(ROOT)/products/savers/plasma/src/plasma_%.c
 	mkdir -p $(INT_ROOT)/$(1)
 	$(CC) $(CFLAGS) -c $$< -o $$@
 
-$(INT_ROOT)/$(1)/ember_config_res.o: $(ROOT)/products/savers/ember/src/ember_config.rc
+$(INT_ROOT)/$(1)/plasma_config_res.o: $(ROOT)/products/savers/plasma/src/plasma_config.rc
 	mkdir -p $(INT_ROOT)/$(1)
-	$(RC) -I$(ROOT)/products/savers/ember/src -i $$< -o $$@
+	$(RC) -I$(ROOT)/products/savers/plasma/src -i $$< -o $$@
 
-$(INT_ROOT)/$(1)/oscilloscope_dreams_%.o: $(ROOT)/products/savers/oscilloscope_dreams/src/oscilloscope_dreams_%.c
+$(INT_ROOT)/$(1)/phosphor_%.o: $(ROOT)/products/savers/phosphor/src/phosphor_%.c
 	mkdir -p $(INT_ROOT)/$(1)
 	$(CC) $(CFLAGS) -c $$< -o $$@
 
-$(INT_ROOT)/$(1)/oscilloscope_dreams_config_res.o: $(ROOT)/products/savers/oscilloscope_dreams/src/oscilloscope_dreams_config.rc
+$(INT_ROOT)/$(1)/phosphor_config_res.o: $(ROOT)/products/savers/phosphor/src/phosphor_config.rc
 	mkdir -p $(INT_ROOT)/$(1)
-	$(RC) -I$(ROOT)/products/savers/oscilloscope_dreams/src -i $$< -o $$@
+	$(RC) -I$(ROOT)/products/savers/phosphor/src -i $$< -o $$@
 
 $(INT_ROOT)/$(1)/pipeworks_%.o: $(ROOT)/products/savers/pipeworks/src/pipeworks_%.c
 	mkdir -p $(INT_ROOT)/$(1)
@@ -196,21 +196,21 @@ $(INT_ROOT)/$(1)/lifeforms_config_res.o: $(ROOT)/products/savers/lifeforms/src/l
 	mkdir -p $(INT_ROOT)/$(1)
 	$(RC) -I$(ROOT)/products/savers/lifeforms/src -i $$< -o $$@
 
-$(INT_ROOT)/$(1)/signal_lab_%.o: $(ROOT)/products/savers/signal_lab/src/signal_lab_%.c
+$(INT_ROOT)/$(1)/signals_%.o: $(ROOT)/products/savers/signals/src/signals_%.c
 	mkdir -p $(INT_ROOT)/$(1)
 	$(CC) $(CFLAGS) -c $$< -o $$@
 
-$(INT_ROOT)/$(1)/signal_lab_config_res.o: $(ROOT)/products/savers/signal_lab/src/signal_lab_config.rc
+$(INT_ROOT)/$(1)/signals_config_res.o: $(ROOT)/products/savers/signals/src/signals_config.rc
 	mkdir -p $(INT_ROOT)/$(1)
-	$(RC) -I$(ROOT)/products/savers/signal_lab/src -i $$< -o $$@
+	$(RC) -I$(ROOT)/products/savers/signals/src -i $$< -o $$@
 
-$(INT_ROOT)/$(1)/mechanical_dreams_%.o: $(ROOT)/products/savers/mechanical_dreams/src/mechanical_dreams_%.c
+$(INT_ROOT)/$(1)/mechanize_%.o: $(ROOT)/products/savers/mechanize/src/mechanize_%.c
 	mkdir -p $(INT_ROOT)/$(1)
 	$(CC) $(CFLAGS) -c $$< -o $$@
 
-$(INT_ROOT)/$(1)/mechanical_dreams_config_res.o: $(ROOT)/products/savers/mechanical_dreams/src/mechanical_dreams_config.rc
+$(INT_ROOT)/$(1)/mechanize_config_res.o: $(ROOT)/products/savers/mechanize/src/mechanize_config.rc
 	mkdir -p $(INT_ROOT)/$(1)
-	$(RC) -I$(ROOT)/products/savers/mechanical_dreams/src -i $$< -o $$@
+	$(RC) -I$(ROOT)/products/savers/mechanize/src -i $$< -o $$@
 
 $(INT_ROOT)/$(1)/ecosystems_%.o: $(ROOT)/products/savers/ecosystems/src/ecosystems_%.c
 	mkdir -p $(INT_ROOT)/$(1)
@@ -228,13 +228,13 @@ $(INT_ROOT)/$(1)/stormglass_config_res.o: $(ROOT)/products/savers/stormglass/src
 	mkdir -p $(INT_ROOT)/$(1)
 	$(RC) -I$(ROOT)/products/savers/stormglass/src -i $$< -o $$@
 
-$(INT_ROOT)/$(1)/night_transit_%.o: $(ROOT)/products/savers/night_transit/src/night_transit_%.c
+$(INT_ROOT)/$(1)/transit_%.o: $(ROOT)/products/savers/transit/src/transit_%.c
 	mkdir -p $(INT_ROOT)/$(1)
 	$(CC) $(CFLAGS) -c $$< -o $$@
 
-$(INT_ROOT)/$(1)/night_transit_config_res.o: $(ROOT)/products/savers/night_transit/src/night_transit_config.rc
+$(INT_ROOT)/$(1)/transit_config_res.o: $(ROOT)/products/savers/transit/src/transit_config.rc
 	mkdir -p $(INT_ROOT)/$(1)
-	$(RC) -I$(ROOT)/products/savers/night_transit/src -i $$< -o $$@
+	$(RC) -I$(ROOT)/products/savers/transit/src -i $$< -o $$@
 
 $(INT_ROOT)/$(1)/observatory_%.o: $(ROOT)/products/savers/observatory/src/observatory_%.c
 	mkdir -p $(INT_ROOT)/$(1)
@@ -244,45 +244,45 @@ $(INT_ROOT)/$(1)/observatory_config_res.o: $(ROOT)/products/savers/observatory/s
 	mkdir -p $(INT_ROOT)/$(1)
 	$(RC) -I$(ROOT)/products/savers/observatory/src -i $$< -o $$@
 
-$(INT_ROOT)/$(1)/vector_worlds_%.o: $(ROOT)/products/savers/vector_worlds/src/vector_worlds_%.c
+$(INT_ROOT)/$(1)/vector_%.o: $(ROOT)/products/savers/vector/src/vector_%.c
 	mkdir -p $(INT_ROOT)/$(1)
 	$(CC) $(CFLAGS) -c $$< -o $$@
 
-$(INT_ROOT)/$(1)/vector_worlds_config_res.o: $(ROOT)/products/savers/vector_worlds/src/vector_worlds_config.rc
+$(INT_ROOT)/$(1)/vector_config_res.o: $(ROOT)/products/savers/vector/src/vector_config.rc
 	mkdir -p $(INT_ROOT)/$(1)
-	$(RC) -I$(ROOT)/products/savers/vector_worlds/src -i $$< -o $$@
+	$(RC) -I$(ROOT)/products/savers/vector/src -i $$< -o $$@
 
-$(INT_ROOT)/$(1)/retro_explorer_%.o: $(ROOT)/products/savers/retro_explorer/src/retro_explorer_%.c
+$(INT_ROOT)/$(1)/explorer_%.o: $(ROOT)/products/savers/explorer/src/explorer_%.c
 	mkdir -p $(INT_ROOT)/$(1)
 	$(CC) $(CFLAGS) -c $$< -o $$@
 
-$(INT_ROOT)/$(1)/retro_explorer_config_res.o: $(ROOT)/products/savers/retro_explorer/src/retro_explorer_config.rc
+$(INT_ROOT)/$(1)/explorer_config_res.o: $(ROOT)/products/savers/explorer/src/explorer_config.rc
 	mkdir -p $(INT_ROOT)/$(1)
-	$(RC) -I$(ROOT)/products/savers/retro_explorer/src -i $$< -o $$@
+	$(RC) -I$(ROOT)/products/savers/explorer/src -i $$< -o $$@
 
-$(INT_ROOT)/$(1)/city_nocturne_%.o: $(ROOT)/products/savers/city_nocturne/src/city_nocturne_%.c
+$(INT_ROOT)/$(1)/city_%.o: $(ROOT)/products/savers/city/src/city_%.c
 	mkdir -p $(INT_ROOT)/$(1)
 	$(CC) $(CFLAGS) -c $$< -o $$@
 
-$(INT_ROOT)/$(1)/city_nocturne_config_res.o: $(ROOT)/products/savers/city_nocturne/src/city_nocturne_config.rc
+$(INT_ROOT)/$(1)/city_config_res.o: $(ROOT)/products/savers/city/src/city_config.rc
 	mkdir -p $(INT_ROOT)/$(1)
-	$(RC) -I$(ROOT)/products/savers/city_nocturne/src -i $$< -o $$@
+	$(RC) -I$(ROOT)/products/savers/city/src -i $$< -o $$@
 
-$(INT_ROOT)/$(1)/fractal_atlas_%.o: $(ROOT)/products/savers/fractal_atlas/src/fractal_atlas_%.c
+$(INT_ROOT)/$(1)/atlas_%.o: $(ROOT)/products/savers/atlas/src/atlas_%.c
 	mkdir -p $(INT_ROOT)/$(1)
 	$(CC) $(CFLAGS) -c $$< -o $$@
 
-$(INT_ROOT)/$(1)/fractal_atlas_config_res.o: $(ROOT)/products/savers/fractal_atlas/src/fractal_atlas_config.rc
+$(INT_ROOT)/$(1)/atlas_config_res.o: $(ROOT)/products/savers/atlas/src/atlas_config.rc
 	mkdir -p $(INT_ROOT)/$(1)
-	$(RC) -I$(ROOT)/products/savers/fractal_atlas/src -i $$< -o $$@
+	$(RC) -I$(ROOT)/products/savers/atlas/src -i $$< -o $$@
 
-$(INT_ROOT)/$(1)/gl_gallery_%.o: $(ROOT)/products/savers/gl_gallery/src/gl_gallery_%.c
+$(INT_ROOT)/$(1)/gallery_%.o: $(ROOT)/products/savers/gallery/src/gallery_%.c
 	mkdir -p $(INT_ROOT)/$(1)
 	$(CC) $(CFLAGS) -c $$< -o $$@
 
-$(INT_ROOT)/$(1)/gl_gallery_config_res.o: $(ROOT)/products/savers/gl_gallery/src/gl_gallery_config.rc
+$(INT_ROOT)/$(1)/gallery_config_res.o: $(ROOT)/products/savers/gallery/src/gallery_config.rc
 	mkdir -p $(INT_ROOT)/$(1)
-	$(RC) -I$(ROOT)/products/savers/gl_gallery/src -i $$< -o $$@
+	$(RC) -I$(ROOT)/products/savers/gallery/src -i $$< -o $$@
 
 $(INT_ROOT)/$(1)/screensave_host_res.o: $(ROOT)/platform/src/host/win32_scr/screensave_host.rc
 	mkdir -p $(INT_ROOT)/$(1)
@@ -343,21 +343,21 @@ $(BENCHLAB_DIR)/deepfield_config_res.o: $(ROOT)/products/savers/deepfield/src/de
 	mkdir -p $(BENCHLAB_DIR)
 	$(RC) -I$(ROOT)/products/savers/deepfield/src -i $< -o $@
 
-$(BENCHLAB_DIR)/ember_%.o: $(ROOT)/products/savers/ember/src/ember_%.c
+$(BENCHLAB_DIR)/plasma_%.o: $(ROOT)/products/savers/plasma/src/plasma_%.c
 	mkdir -p $(BENCHLAB_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(BENCHLAB_DIR)/ember_config_res.o: $(ROOT)/products/savers/ember/src/ember_config.rc
+$(BENCHLAB_DIR)/plasma_config_res.o: $(ROOT)/products/savers/plasma/src/plasma_config.rc
 	mkdir -p $(BENCHLAB_DIR)
-	$(RC) -I$(ROOT)/products/savers/ember/src -i $< -o $@
+	$(RC) -I$(ROOT)/products/savers/plasma/src -i $< -o $@
 
-$(BENCHLAB_DIR)/oscilloscope_dreams_%.o: $(ROOT)/products/savers/oscilloscope_dreams/src/oscilloscope_dreams_%.c
+$(BENCHLAB_DIR)/phosphor_%.o: $(ROOT)/products/savers/phosphor/src/phosphor_%.c
 	mkdir -p $(BENCHLAB_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(BENCHLAB_DIR)/oscilloscope_dreams_config_res.o: $(ROOT)/products/savers/oscilloscope_dreams/src/oscilloscope_dreams_config.rc
+$(BENCHLAB_DIR)/phosphor_config_res.o: $(ROOT)/products/savers/phosphor/src/phosphor_config.rc
 	mkdir -p $(BENCHLAB_DIR)
-	$(RC) -I$(ROOT)/products/savers/oscilloscope_dreams/src -i $< -o $@
+	$(RC) -I$(ROOT)/products/savers/phosphor/src -i $< -o $@
 
 $(BENCHLAB_DIR)/pipeworks_%.o: $(ROOT)/products/savers/pipeworks/src/pipeworks_%.c
 	mkdir -p $(BENCHLAB_DIR)
@@ -375,21 +375,21 @@ $(BENCHLAB_DIR)/lifeforms_config_res.o: $(ROOT)/products/savers/lifeforms/src/li
 	mkdir -p $(BENCHLAB_DIR)
 	$(RC) -I$(ROOT)/products/savers/lifeforms/src -i $< -o $@
 
-$(BENCHLAB_DIR)/signal_lab_%.o: $(ROOT)/products/savers/signal_lab/src/signal_lab_%.c
+$(BENCHLAB_DIR)/signals_%.o: $(ROOT)/products/savers/signals/src/signals_%.c
 	mkdir -p $(BENCHLAB_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(BENCHLAB_DIR)/signal_lab_config_res.o: $(ROOT)/products/savers/signal_lab/src/signal_lab_config.rc
+$(BENCHLAB_DIR)/signals_config_res.o: $(ROOT)/products/savers/signals/src/signals_config.rc
 	mkdir -p $(BENCHLAB_DIR)
-	$(RC) -I$(ROOT)/products/savers/signal_lab/src -i $< -o $@
+	$(RC) -I$(ROOT)/products/savers/signals/src -i $< -o $@
 
-$(BENCHLAB_DIR)/mechanical_dreams_%.o: $(ROOT)/products/savers/mechanical_dreams/src/mechanical_dreams_%.c
+$(BENCHLAB_DIR)/mechanize_%.o: $(ROOT)/products/savers/mechanize/src/mechanize_%.c
 	mkdir -p $(BENCHLAB_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(BENCHLAB_DIR)/mechanical_dreams_config_res.o: $(ROOT)/products/savers/mechanical_dreams/src/mechanical_dreams_config.rc
+$(BENCHLAB_DIR)/mechanize_config_res.o: $(ROOT)/products/savers/mechanize/src/mechanize_config.rc
 	mkdir -p $(BENCHLAB_DIR)
-	$(RC) -I$(ROOT)/products/savers/mechanical_dreams/src -i $< -o $@
+	$(RC) -I$(ROOT)/products/savers/mechanize/src -i $< -o $@
 
 $(BENCHLAB_DIR)/ecosystems_%.o: $(ROOT)/products/savers/ecosystems/src/ecosystems_%.c
 	mkdir -p $(BENCHLAB_DIR)
@@ -407,13 +407,13 @@ $(BENCHLAB_DIR)/stormglass_config_res.o: $(ROOT)/products/savers/stormglass/src/
 	mkdir -p $(BENCHLAB_DIR)
 	$(RC) -I$(ROOT)/products/savers/stormglass/src -i $< -o $@
 
-$(BENCHLAB_DIR)/night_transit_%.o: $(ROOT)/products/savers/night_transit/src/night_transit_%.c
+$(BENCHLAB_DIR)/transit_%.o: $(ROOT)/products/savers/transit/src/transit_%.c
 	mkdir -p $(BENCHLAB_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(BENCHLAB_DIR)/night_transit_config_res.o: $(ROOT)/products/savers/night_transit/src/night_transit_config.rc
+$(BENCHLAB_DIR)/transit_config_res.o: $(ROOT)/products/savers/transit/src/transit_config.rc
 	mkdir -p $(BENCHLAB_DIR)
-	$(RC) -I$(ROOT)/products/savers/night_transit/src -i $< -o $@
+	$(RC) -I$(ROOT)/products/savers/transit/src -i $< -o $@
 
 $(BENCHLAB_DIR)/observatory_%.o: $(ROOT)/products/savers/observatory/src/observatory_%.c
 	mkdir -p $(BENCHLAB_DIR)
@@ -423,45 +423,45 @@ $(BENCHLAB_DIR)/observatory_config_res.o: $(ROOT)/products/savers/observatory/sr
 	mkdir -p $(BENCHLAB_DIR)
 	$(RC) -I$(ROOT)/products/savers/observatory/src -i $< -o $@
 
-$(BENCHLAB_DIR)/vector_worlds_%.o: $(ROOT)/products/savers/vector_worlds/src/vector_worlds_%.c
+$(BENCHLAB_DIR)/vector_%.o: $(ROOT)/products/savers/vector/src/vector_%.c
 	mkdir -p $(BENCHLAB_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(BENCHLAB_DIR)/vector_worlds_config_res.o: $(ROOT)/products/savers/vector_worlds/src/vector_worlds_config.rc
+$(BENCHLAB_DIR)/vector_config_res.o: $(ROOT)/products/savers/vector/src/vector_config.rc
 	mkdir -p $(BENCHLAB_DIR)
-	$(RC) -I$(ROOT)/products/savers/vector_worlds/src -i $< -o $@
+	$(RC) -I$(ROOT)/products/savers/vector/src -i $< -o $@
 
-$(BENCHLAB_DIR)/retro_explorer_%.o: $(ROOT)/products/savers/retro_explorer/src/retro_explorer_%.c
+$(BENCHLAB_DIR)/explorer_%.o: $(ROOT)/products/savers/explorer/src/explorer_%.c
 	mkdir -p $(BENCHLAB_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(BENCHLAB_DIR)/retro_explorer_config_res.o: $(ROOT)/products/savers/retro_explorer/src/retro_explorer_config.rc
+$(BENCHLAB_DIR)/explorer_config_res.o: $(ROOT)/products/savers/explorer/src/explorer_config.rc
 	mkdir -p $(BENCHLAB_DIR)
-	$(RC) -I$(ROOT)/products/savers/retro_explorer/src -i $< -o $@
+	$(RC) -I$(ROOT)/products/savers/explorer/src -i $< -o $@
 
-$(BENCHLAB_DIR)/city_nocturne_%.o: $(ROOT)/products/savers/city_nocturne/src/city_nocturne_%.c
+$(BENCHLAB_DIR)/city_%.o: $(ROOT)/products/savers/city/src/city_%.c
 	mkdir -p $(BENCHLAB_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(BENCHLAB_DIR)/city_nocturne_config_res.o: $(ROOT)/products/savers/city_nocturne/src/city_nocturne_config.rc
+$(BENCHLAB_DIR)/city_config_res.o: $(ROOT)/products/savers/city/src/city_config.rc
 	mkdir -p $(BENCHLAB_DIR)
-	$(RC) -I$(ROOT)/products/savers/city_nocturne/src -i $< -o $@
+	$(RC) -I$(ROOT)/products/savers/city/src -i $< -o $@
 
-$(BENCHLAB_DIR)/fractal_atlas_%.o: $(ROOT)/products/savers/fractal_atlas/src/fractal_atlas_%.c
+$(BENCHLAB_DIR)/atlas_%.o: $(ROOT)/products/savers/atlas/src/atlas_%.c
 	mkdir -p $(BENCHLAB_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(BENCHLAB_DIR)/fractal_atlas_config_res.o: $(ROOT)/products/savers/fractal_atlas/src/fractal_atlas_config.rc
+$(BENCHLAB_DIR)/atlas_config_res.o: $(ROOT)/products/savers/atlas/src/atlas_config.rc
 	mkdir -p $(BENCHLAB_DIR)
-	$(RC) -I$(ROOT)/products/savers/fractal_atlas/src -i $< -o $@
+	$(RC) -I$(ROOT)/products/savers/atlas/src -i $< -o $@
 
-$(BENCHLAB_DIR)/gl_gallery_%.o: $(ROOT)/products/savers/gl_gallery/src/gl_gallery_%.c
+$(BENCHLAB_DIR)/gallery_%.o: $(ROOT)/products/savers/gallery/src/gallery_%.c
 	mkdir -p $(BENCHLAB_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(BENCHLAB_DIR)/gl_gallery_config_res.o: $(ROOT)/products/savers/gl_gallery/src/gl_gallery_config.rc
+$(BENCHLAB_DIR)/gallery_config_res.o: $(ROOT)/products/savers/gallery/src/gallery_config.rc
 	mkdir -p $(BENCHLAB_DIR)
-	$(RC) -I$(ROOT)/products/savers/gl_gallery/src -i $< -o $@
+	$(RC) -I$(ROOT)/products/savers/gallery/src -i $< -o $@
 
 clean:
 	rm -rf $(OUTROOT)/mingw/i686/$(PROFILE) $(INT_ROOT)

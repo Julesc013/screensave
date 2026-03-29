@@ -23,7 +23,7 @@ static const screensave_saver_module g_nocturne_module = {
         "Nocturne",
         "A restrained dark-room saver with subtle motion and curated night presets."
     },
-    SCREENSAVE_SAVER_CAP_UNIVERSAL_GDI | SCREENSAVE_SAVER_CAP_OPTIONAL_GL11 | SCREENSAVE_SAVER_CAP_LONG_RUN_STABLE,
+    SCREENSAVE_SAVER_CAP_GDI | SCREENSAVE_SAVER_CAP_GL11 | SCREENSAVE_SAVER_CAP_LONG_RUN_STABLE,
     g_nocturne_presets,
     NOCTURNE_PRESET_COUNT,
     g_nocturne_themes,

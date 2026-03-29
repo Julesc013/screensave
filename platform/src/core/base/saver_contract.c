@@ -19,7 +19,7 @@ int screensave_saver_module_is_valid(const screensave_saver_module *module)
         return 0;
     }
 
-    if ((module->capability_flags & SCREENSAVE_SAVER_CAP_UNIVERSAL_GDI) == 0UL) {
+    if ((module->capability_flags & SCREENSAVE_SAVER_CAP_GDI) == 0UL) {
         return 0;
     }
 

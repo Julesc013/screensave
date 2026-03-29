@@ -10,7 +10,7 @@ Current stage: Series 15 made the first capability-gated advanced GL tier real h
 - `gl21_context.c` owns explicit advanced-context probing, compatibility-profile fallback, and teardown
 - `gl21_caps.c` captures vendor, renderer, version, and backend-private capability flags after context creation
 - `gl21_present.c` owns buffer-swap presentation
-- `gl21_primitives.c` provides the current rect, line, polyline, and bitmap path required by GL Gallery
+- `gl21_primitives.c` provides the current rect, line, polyline, and bitmap path required by Gallery
 - `gl21_state.c` keeps backend-private renderer-info and diagnostics helpers local
 
 This backend stays strictly optional and capability-gated. The shared runtime may select it only when requested or when automatic selection proves it is supported; otherwise the runtime must fall back explicitly to GL11, GDI, or the internal null safety backend.

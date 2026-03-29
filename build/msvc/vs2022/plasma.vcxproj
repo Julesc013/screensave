@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{A4D6D17B-4B8D-4FBA-A8E7-7A7F037E8D54}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>plasma</RootNamespace>
+    <ProjectName>plasma</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Label="Shared" />
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <OutDir>$(SolutionDir)..\..\..\out\msvc\vs2022\$(Configuration)\$(ProjectName)\</OutDir>
+    <IntDir>$(SolutionDir)..\..\..\out\intermediate\msvc\vs2022\$(Configuration)\$(ProjectName)\</IntDir>
+    <TargetName>plasma</TargetName>
+    <TargetExt>.scr</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <CompileAs>CompileAsC</CompileAs>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\platform\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\platform\src\host\win32_scr;$(SolutionDir)..\..\..\products\savers\nocturne\src;$(SolutionDir)..\..\..\products\savers\ricochet\src;$(SolutionDir)..\..\..\products\savers\deepfield\src;$(SolutionDir)..\..\..\products\savers\plasma\src;$(SolutionDir)..\..\..\products\savers\phosphor\src;$(SolutionDir)..\..\..\products\savers\pipeworks\src;$(SolutionDir)..\..\..\products\savers\lifeforms\src;$(SolutionDir)..\..\..\products\savers\signals\src;$(SolutionDir)..\..\..\products\savers\mechanize\src;$(SolutionDir)..\..\..\products\savers\ecosystems\src;$(SolutionDir)..\..\..\products\savers\stormglass\src;$(SolutionDir)..\..\..\products\savers\transit\src;$(SolutionDir)..\..\..\products\savers\observatory\src;$(SolutionDir)..\..\..\products\savers\vector\src;$(SolutionDir)..\..\..\products\savers\explorer\src;$(SolutionDir)..\..\..\products\savers\city\src;$(SolutionDir)..\..\..\products\savers\atlas\src;$(SolutionDir)..\..\..\products\savers\gallery\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>user32.lib;gdi32.lib;advapi32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <CompileAs>CompileAsC</CompileAs>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\platform\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\platform\src\host\win32_scr;$(SolutionDir)..\..\..\products\savers\nocturne\src;$(SolutionDir)..\..\..\products\savers\ricochet\src;$(SolutionDir)..\..\..\products\savers\deepfield\src;$(SolutionDir)..\..\..\products\savers\plasma\src;$(SolutionDir)..\..\..\products\savers\phosphor\src;$(SolutionDir)..\..\..\products\savers\pipeworks\src;$(SolutionDir)..\..\..\products\savers\lifeforms\src;$(SolutionDir)..\..\..\products\savers\signals\src;$(SolutionDir)..\..\..\products\savers\mechanize\src;$(SolutionDir)..\..\..\products\savers\ecosystems\src;$(SolutionDir)..\..\..\products\savers\stormglass\src;$(SolutionDir)..\..\..\products\savers\transit\src;$(SolutionDir)..\..\..\products\savers\observatory\src;$(SolutionDir)..\..\..\products\savers\vector\src;$(SolutionDir)..\..\..\products\savers\explorer\src;$(SolutionDir)..\..\..\products\savers\city\src;$(SolutionDir)..\..\..\products\savers\atlas\src;$(SolutionDir)..\..\..\products\savers\gallery\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>user32.lib;gdi32.lib;advapi32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_config.c" />
+    <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_module.c" />
+    <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_presets.c" />
+    <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_render.c" />
+    <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_sim.c" />
+    <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_themes.c" />
+    <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_config.c" />
+    <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_module.c" />
+    <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_presets.c" />
+    <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_render.c" />
+    <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_sim.c" />
+    <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_themes.c" />
+    <ClCompile Include="..\..\..\products\savers\deepfield\src\deepfield_config.c" />
+    <ClCompile Include="..\..\..\products\savers\deepfield\src\deepfield_module.c" />
+    <ClCompile Include="..\..\..\products\savers\deepfield\src\deepfield_presets.c" />
+    <ClCompile Include="..\..\..\products\savers\deepfield\src\deepfield_render.c" />
+    <ClCompile Include="..\..\..\products\savers\deepfield\src\deepfield_sim.c" />
+    <ClCompile Include="..\..\..\products\savers\deepfield\src\deepfield_themes.c" />
+    <ClCompile Include="..\..\..\products\savers\plasma\src\plasma_config.c" />
+    <ClCompile Include="..\..\..\products\savers\plasma\src\plasma_module.c" />
+    <ClCompile Include="..\..\..\products\savers\plasma\src\plasma_presets.c" />
+    <ClCompile Include="..\..\..\products\savers\plasma\src\plasma_render.c" />
+    <ClCompile Include="..\..\..\products\savers\plasma\src\plasma_sim.c" />
+    <ClCompile Include="..\..\..\products\savers\plasma\src\plasma_themes.c" />
+    <ClCompile Include="..\..\..\products\savers\phosphor\src\phosphor_config.c" />
+    <ClCompile Include="..\..\..\products\savers\phosphor\src\phosphor_module.c" />
+    <ClCompile Include="..\..\..\products\savers\phosphor\src\phosphor_presets.c" />
+    <ClCompile Include="..\..\..\products\savers\phosphor\src\phosphor_render.c" />
+    <ClCompile Include="..\..\..\products\savers\phosphor\src\phosphor_sim.c" />
+    <ClCompile Include="..\..\..\products\savers\phosphor\src\phosphor_themes.c" />
+    <ClCompile Include="..\..\..\products\savers\pipeworks\src\pipeworks_config.c" />
+    <ClCompile Include="..\..\..\products\savers\pipeworks\src\pipeworks_module.c" />
+    <ClCompile Include="..\..\..\products\savers\pipeworks\src\pipeworks_presets.c" />
+    <ClCompile Include="..\..\..\products\savers\pipeworks\src\pipeworks_render.c" />
+    <ClCompile Include="..\..\..\products\savers\pipeworks\src\pipeworks_sim.c" />
+    <ClCompile Include="..\..\..\products\savers\pipeworks\src\pipeworks_themes.c" />
+    <ClCompile Include="..\..\..\products\savers\lifeforms\src\lifeforms_config.c" />
+    <ClCompile Include="..\..\..\products\savers\lifeforms\src\lifeforms_module.c" />
+    <ClCompile Include="..\..\..\products\savers\lifeforms\src\lifeforms_presets.c" />
+    <ClCompile Include="..\..\..\products\savers\lifeforms\src\lifeforms_render.c" />
+    <ClCompile Include="..\..\..\products\savers\lifeforms\src\lifeforms_sim.c" />
+    <ClCompile Include="..\..\..\products\savers\lifeforms\src\lifeforms_themes.c" />
+    <ClCompile Include="..\..\..\products\savers\signals\src\signals_config.c" />
+    <ClCompile Include="..\..\..\products\savers\signals\src\signals_module.c" />
+    <ClCompile Include="..\..\..\products\savers\signals\src\signals_presets.c" />
+    <ClCompile Include="..\..\..\products\savers\signals\src\signals_render.c" />
+    <ClCompile Include="..\..\..\products\savers\signals\src\signals_sim.c" />
+    <ClCompile Include="..\..\..\products\savers\signals\src\signals_themes.c" />
+    <ClCompile Include="..\..\..\products\savers\mechanize\src\mechanize_config.c" />
+    <ClCompile Include="..\..\..\products\savers\mechanize\src\mechanize_module.c" />
+    <ClCompile Include="..\..\..\products\savers\mechanize\src\mechanize_presets.c" />
+    <ClCompile Include="..\..\..\products\savers\mechanize\src\mechanize_render.c" />
+    <ClCompile Include="..\..\..\products\savers\mechanize\src\mechanize_sim.c" />
+    <ClCompile Include="..\..\..\products\savers\mechanize\src\mechanize_themes.c" />
+    <ClCompile Include="..\..\..\products\savers\ecosystems\src\ecosystems_config.c" />
+    <ClCompile Include="..\..\..\products\savers\ecosystems\src\ecosystems_module.c" />
+    <ClCompile Include="..\..\..\products\savers\ecosystems\src\ecosystems_presets.c" />
+    <ClCompile Include="..\..\..\products\savers\ecosystems\src\ecosystems_render.c" />
+    <ClCompile Include="..\..\..\products\savers\ecosystems\src\ecosystems_sim.c" />
+    <ClCompile Include="..\..\..\products\savers\ecosystems\src\ecosystems_themes.c" />
+    <ClCompile Include="..\..\..\products\savers\stormglass\src\stormglass_config.c" />
+    <ClCompile Include="..\..\..\products\savers\stormglass\src\stormglass_module.c" />
+    <ClCompile Include="..\..\..\products\savers\stormglass\src\stormglass_presets.c" />
+    <ClCompile Include="..\..\..\products\savers\stormglass\src\stormglass_render.c" />
+    <ClCompile Include="..\..\..\products\savers\stormglass\src\stormglass_sim.c" />
+    <ClCompile Include="..\..\..\products\savers\stormglass\src\stormglass_themes.c" />
+    <ClCompile Include="..\..\..\products\savers\transit\src\transit_config.c" />
+    <ClCompile Include="..\..\..\products\savers\transit\src\transit_module.c" />
+    <ClCompile Include="..\..\..\products\savers\transit\src\transit_presets.c" />
+    <ClCompile Include="..\..\..\products\savers\transit\src\transit_render.c" />
+    <ClCompile Include="..\..\..\products\savers\transit\src\transit_sim.c" />
+    <ClCompile Include="..\..\..\products\savers\transit\src\transit_themes.c" />
+    <ClCompile Include="..\..\..\products\savers\observatory\src\observatory_config.c" />
+    <ClCompile Include="..\..\..\products\savers\observatory\src\observatory_module.c" />
+    <ClCompile Include="..\..\..\products\savers\observatory\src\observatory_presets.c" />
+    <ClCompile Include="..\..\..\products\savers\observatory\src\observatory_render.c" />
+    <ClCompile Include="..\..\..\products\savers\observatory\src\observatory_sim.c" />
+    <ClCompile Include="..\..\..\products\savers\observatory\src\observatory_themes.c" />
+    <ClCompile Include="..\..\..\products\savers\vector\src\vector_config.c" />
+    <ClCompile Include="..\..\..\products\savers\vector\src\vector_module.c" />
+    <ClCompile Include="..\..\..\products\savers\vector\src\vector_presets.c" />
+    <ClCompile Include="..\..\..\products\savers\vector\src\vector_render.c" />
+    <ClCompile Include="..\..\..\products\savers\vector\src\vector_sim.c" />
+    <ClCompile Include="..\..\..\products\savers\vector\src\vector_themes.c" />
+    <ClCompile Include="..\..\..\products\savers\explorer\src\explorer_config.c" />
+    <ClCompile Include="..\..\..\products\savers\explorer\src\explorer_module.c" />
+    <ClCompile Include="..\..\..\products\savers\explorer\src\explorer_presets.c" />
+    <ClCompile Include="..\..\..\products\savers\explorer\src\explorer_render.c" />
+    <ClCompile Include="..\..\..\products\savers\explorer\src\explorer_sim.c" />
+    <ClCompile Include="..\..\..\products\savers\explorer\src\explorer_themes.c" />
+    <ClCompile Include="..\..\..\products\savers\city\src\city_config.c" />
+    <ClCompile Include="..\..\..\products\savers\city\src\city_module.c" />
+    <ClCompile Include="..\..\..\products\savers\city\src\city_presets.c" />
+    <ClCompile Include="..\..\..\products\savers\city\src\city_render.c" />
+    <ClCompile Include="..\..\..\products\savers\city\src\city_sim.c" />
+    <ClCompile Include="..\..\..\products\savers\city\src\city_themes.c" />
+    <ClCompile Include="..\..\..\products\savers\atlas\src\atlas_config.c" />
+    <ClCompile Include="..\..\..\products\savers\atlas\src\atlas_module.c" />
+    <ClCompile Include="..\..\..\products\savers\atlas\src\atlas_presets.c" />
+    <ClCompile Include="..\..\..\products\savers\atlas\src\atlas_render.c" />
+    <ClCompile Include="..\..\..\products\savers\atlas\src\atlas_sim.c" />
+    <ClCompile Include="..\..\..\products\savers\atlas\src\atlas_themes.c" />
+    <ClCompile Include="..\..\..\products\savers\gallery\src\gallery_config.c" />
+    <ClCompile Include="..\..\..\products\savers\gallery\src\gallery_module.c" />
+    <ClCompile Include="..\..\..\products\savers\gallery\src\gallery_presets.c" />
+    <ClCompile Include="..\..\..\products\savers\gallery\src\gallery_render.c" />
+    <ClCompile Include="..\..\..\products\savers\gallery\src\gallery_sim.c" />
+    <ClCompile Include="..\..\..\products\savers\gallery\src\gallery_themes.c" />
+    <ClCompile Include="..\..\..\products\savers\plasma\src\plasma_entry.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\..\..\products\savers\nocturne\src\nocturne_config.rc" />
+    <ResourceCompile Include="..\..\..\products\savers\ricochet\src\ricochet_config.rc" />
+    <ResourceCompile Include="..\..\..\products\savers\deepfield\src\deepfield_config.rc" />
+    <ResourceCompile Include="..\..\..\products\savers\plasma\src\plasma_config.rc" />
+    <ResourceCompile Include="..\..\..\products\savers\phosphor\src\phosphor_config.rc" />
+    <ResourceCompile Include="..\..\..\products\savers\pipeworks\src\pipeworks_config.rc" />
+    <ResourceCompile Include="..\..\..\products\savers\lifeforms\src\lifeforms_config.rc" />
+    <ResourceCompile Include="..\..\..\products\savers\signals\src\signals_config.rc" />
+    <ResourceCompile Include="..\..\..\products\savers\mechanize\src\mechanize_config.rc" />
+    <ResourceCompile Include="..\..\..\products\savers\ecosystems\src\ecosystems_config.rc" />
+    <ResourceCompile Include="..\..\..\products\savers\stormglass\src\stormglass_config.rc" />
+    <ResourceCompile Include="..\..\..\products\savers\transit\src\transit_config.rc" />
+    <ResourceCompile Include="..\..\..\products\savers\observatory\src\observatory_config.rc" />
+    <ResourceCompile Include="..\..\..\products\savers\vector\src\vector_config.rc" />
+    <ResourceCompile Include="..\..\..\products\savers\explorer\src\explorer_config.rc" />
+    <ResourceCompile Include="..\..\..\products\savers\city\src\city_config.rc" />
+    <ResourceCompile Include="..\..\..\products\savers\atlas\src\atlas_config.rc" />
+    <ResourceCompile Include="..\..\..\products\savers\gallery\src\gallery_config.rc" />
+    <ResourceCompile Include="..\..\..\platform\src\host\win32_scr\screensave_host.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="screensave_platform.vcxproj">
+      <Project>{27C5F6A5-7D40-4A3B-A344-1D8A23F63C01}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+</Project>

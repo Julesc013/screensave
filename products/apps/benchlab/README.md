@@ -26,37 +26,37 @@ Series 09 extends the same app into the current multi-product harness:
 
 Series 10 extends the same app to the current five-product harness:
 
-- explicit saver selection for Nocturne, Ricochet, Deepfield, Ember, and Oscilloscope Dreams
+- explicit saver selection for Nocturne, Ricochet, Deepfield, Plasma, and Phosphor
 - continued use of the shared saver dialogs and shared renderer path for both motion-family and framebuffer/vector-family validation
 - preservation of deterministic restart/reseed value while keeping the UI modest and developer-facing
 
 Series 11 extends the same app to the current seven-product harness:
 
-- explicit saver selection for Nocturne, Ricochet, Deepfield, Ember, Oscilloscope Dreams, Pipeworks, and Lifeforms
+- explicit saver selection for Nocturne, Ricochet, Deepfield, Plasma, Phosphor, Pipeworks, and Lifeforms
 - continued use of the shared saver dialogs and shared renderer path for motion-family, framebuffer/vector-family, and grid/simulation-family validation
 - preservation of deterministic restart/reseed value while keeping the UI modest and developer-facing
 
 Series 12 extends the same app to the current ten-product harness:
 
-- explicit saver selection for Nocturne, Ricochet, Deepfield, Ember, Oscilloscope Dreams, Pipeworks, Lifeforms, Signal Lab, Mechanical Dreams, and Ecosystems
+- explicit saver selection for Nocturne, Ricochet, Deepfield, Plasma, Phosphor, Pipeworks, Lifeforms, Signals, Mechanize, and Ecosystems
 - continued use of the shared saver dialogs and shared renderer path for motion-family, framebuffer/vector-family, grid/simulation-family, and systems/ambient-family validation
 - preservation of deterministic restart/reseed value while keeping the UI modest and developer-facing
 
 Series 13 extends the same app to the current thirteen-product harness:
 
-- explicit saver selection for Nocturne, Ricochet, Deepfield, Ember, Oscilloscope Dreams, Pipeworks, Lifeforms, Signal Lab, Mechanical Dreams, Ecosystems, Stormglass, Night Transit, and Observatory
+- explicit saver selection for Nocturne, Ricochet, Deepfield, Plasma, Phosphor, Pipeworks, Lifeforms, Signals, Mechanize, Ecosystems, Stormglass, Transit, and Observatory
 - continued use of the shared saver dialogs and shared renderer path for motion-family, framebuffer/vector-family, grid/simulation-family, systems/ambient-family, and places/atmosphere-family validation
 - preservation of deterministic restart/reseed value while keeping the UI modest and developer-facing
 
 Series 14 extends the same app to the current seventeen-product harness:
 
-- explicit saver selection for Nocturne, Ricochet, Deepfield, Ember, Oscilloscope Dreams, Pipeworks, Lifeforms, Signal Lab, Mechanical Dreams, Ecosystems, Stormglass, Night Transit, Observatory, Vector Worlds, Retro Explorer, City Nocturne, and Fractal Atlas
+- explicit saver selection for Nocturne, Ricochet, Deepfield, Plasma, Phosphor, Pipeworks, Lifeforms, Signals, Mechanize, Ecosystems, Stormglass, Transit, Observatory, Vector, Explorer, City, and Atlas
 - continued use of the shared saver dialogs and shared renderer path for heavyweight software-3D, traversal, urban-scenic, and fractal-family validation alongside the earlier families
 - preservation of deterministic restart/reseed value while keeping the UI modest and developer-facing
 
 Series 15 extends the same app into the current eighteen-product and versioned renderer-tier harness:
 
-- explicit saver selection for Nocturne, Ricochet, Deepfield, Ember, Oscilloscope Dreams, Pipeworks, Lifeforms, Signal Lab, Mechanical Dreams, Ecosystems, Stormglass, Night Transit, Observatory, Vector Worlds, Retro Explorer, City Nocturne, Fractal Atlas, and GL Gallery
+- explicit saver selection for Nocturne, Ricochet, Deepfield, Plasma, Phosphor, Pipeworks, Lifeforms, Signals, Mechanize, Ecosystems, Stormglass, Transit, Observatory, Vector, Explorer, City, Atlas, and Gallery
 - explicit `auto`, `gdi`, `gl11`, `gl21`, `gl33`, and `gl46` request paths with honest requested-versus-active renderer reporting
 - explicit fallback-reason reporting plus GL vendor, renderer, and version reporting when accelerated tiers are active
 - continued use of the shared saver dialogs and shared renderer path without turning BenchLab into the final gallery or meta-product

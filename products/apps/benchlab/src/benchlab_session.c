@@ -6,21 +6,21 @@
 const screensave_saver_module *nocturne_get_module(void);
 const screensave_saver_module *ricochet_get_module(void);
 const screensave_saver_module *deepfield_get_module(void);
-const screensave_saver_module *ember_get_module(void);
-const screensave_saver_module *oscilloscope_dreams_get_module(void);
+const screensave_saver_module *plasma_get_module(void);
+const screensave_saver_module *phosphor_get_module(void);
 const screensave_saver_module *pipeworks_get_module(void);
 const screensave_saver_module *lifeforms_get_module(void);
-const screensave_saver_module *signal_lab_get_module(void);
-const screensave_saver_module *mechanical_dreams_get_module(void);
+const screensave_saver_module *signals_get_module(void);
+const screensave_saver_module *mechanize_get_module(void);
 const screensave_saver_module *ecosystems_get_module(void);
 const screensave_saver_module *stormglass_get_module(void);
-const screensave_saver_module *night_transit_get_module(void);
+const screensave_saver_module *transit_get_module(void);
 const screensave_saver_module *observatory_get_module(void);
-const screensave_saver_module *vector_worlds_get_module(void);
-const screensave_saver_module *retro_explorer_get_module(void);
-const screensave_saver_module *city_nocturne_get_module(void);
-const screensave_saver_module *fractal_atlas_get_module(void);
-const screensave_saver_module *gl_gallery_get_module(void);
+const screensave_saver_module *vector_get_module(void);
+const screensave_saver_module *explorer_get_module(void);
+const screensave_saver_module *city_get_module(void);
+const screensave_saver_module *atlas_get_module(void);
+const screensave_saver_module *gallery_get_module(void);
 
 typedef const screensave_saver_module *(*benchlab_module_getter)(void);
 
@@ -28,21 +28,21 @@ static const benchlab_module_getter g_benchlab_module_getters[] = {
     nocturne_get_module,
     ricochet_get_module,
     deepfield_get_module,
-    ember_get_module,
-    oscilloscope_dreams_get_module,
+    plasma_get_module,
+    phosphor_get_module,
     pipeworks_get_module,
     lifeforms_get_module,
-    signal_lab_get_module,
-    mechanical_dreams_get_module,
+    signals_get_module,
+    mechanize_get_module,
     ecosystems_get_module,
     stormglass_get_module,
-    night_transit_get_module,
+    transit_get_module,
     observatory_get_module,
-    vector_worlds_get_module,
-    retro_explorer_get_module,
-    city_nocturne_get_module,
-    fractal_atlas_get_module,
-    gl_gallery_get_module
+    vector_get_module,
+    explorer_get_module,
+    city_get_module,
+    atlas_get_module,
+    gallery_get_module
 };
 
 static void benchlab_update_config_binding(benchlab_app *app)

@@ -359,6 +359,7 @@ void benchlab_app_config_apply_command_line(benchlab_app *app, LPSTR command_lin
             app->app_config.renderer_request = (int)SCREENSAVE_RENDERER_KIND_GL11;
             continue;
         }
+        /* Legacy gl_plus aliases migrate to the canonical gl21 request. */
         if (
             benchlab_command_equals(token, "gl21") ||
             benchlab_command_equals(token, "gl_plus") ||
@@ -385,6 +386,7 @@ void benchlab_app_config_apply_command_line(benchlab_app *app, LPSTR command_lin
                 app->app_config.renderer_request = (int)SCREENSAVE_RENDERER_KIND_GDI;
             } else if (lstrcmpiA(renderer_name, "gl11") == 0) {
                 app->app_config.renderer_request = (int)SCREENSAVE_RENDERER_KIND_GL11;
+            /* Legacy gl_plus aliases migrate to the canonical gl21 request. */
             } else if (
                 lstrcmpiA(renderer_name, "gl21") == 0 ||
                 lstrcmpiA(renderer_name, "gl_plus") == 0 ||

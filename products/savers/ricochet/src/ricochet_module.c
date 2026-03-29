@@ -23,7 +23,7 @@ static const screensave_saver_module g_ricochet_module = {
         "Ricochet",
         "Polished bounce-motion saver with restrained trails and curated motion presets."
     },
-    SCREENSAVE_SAVER_CAP_UNIVERSAL_GDI | SCREENSAVE_SAVER_CAP_OPTIONAL_GL11 | SCREENSAVE_SAVER_CAP_LONG_RUN_STABLE,
+    SCREENSAVE_SAVER_CAP_GDI | SCREENSAVE_SAVER_CAP_GL11 | SCREENSAVE_SAVER_CAP_LONG_RUN_STABLE,
     g_ricochet_presets,
     RICOCHET_PRESET_COUNT,
     g_ricochet_themes,

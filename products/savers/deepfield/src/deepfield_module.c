@@ -23,7 +23,7 @@ static const screensave_saver_module g_deepfield_module = {
         "Deepfield",
         "Atmospheric drift and fly-through saver with restrained depth cues and curated space presets."
     },
-    SCREENSAVE_SAVER_CAP_UNIVERSAL_GDI | SCREENSAVE_SAVER_CAP_OPTIONAL_GL11 | SCREENSAVE_SAVER_CAP_LONG_RUN_STABLE,
+    SCREENSAVE_SAVER_CAP_GDI | SCREENSAVE_SAVER_CAP_GL11 | SCREENSAVE_SAVER_CAP_LONG_RUN_STABLE,
     g_deepfield_presets,
     DEEPFIELD_PRESET_COUNT,
     g_deepfield_themes,

@@ -9,21 +9,21 @@ This is the concrete modern MSVC lane for Series 15.
 - `nocturne.vcxproj`
 - `ricochet.vcxproj`
 - `deepfield.vcxproj`
-- `ember.vcxproj`
-- `oscilloscope_dreams.vcxproj`
+- `plasma.vcxproj`
+- `phosphor.vcxproj`
 - `pipeworks.vcxproj`
 - `lifeforms.vcxproj`
-- `signal_lab.vcxproj`
-- `mechanical_dreams.vcxproj`
+- `signals.vcxproj`
+- `mechanize.vcxproj`
 - `ecosystems.vcxproj`
 - `stormglass.vcxproj`
-- `night_transit.vcxproj`
+- `transit.vcxproj`
 - `observatory.vcxproj`
-- `vector_worlds.vcxproj`
-- `retro_explorer.vcxproj`
-- `city_nocturne.vcxproj`
-- `fractal_atlas.vcxproj`
-- `gl_gallery.vcxproj`
+- `vector.vcxproj`
+- `explorer.vcxproj`
+- `city.vcxproj`
+- `atlas.vcxproj`
+- `gallery.vcxproj`
 - `benchlab.vcxproj`
 
 These files stay intentionally small.
@@ -35,22 +35,22 @@ They define one shared static-library target, eighteen `.scr` saver targets, and
 - `nocturne` compiles the real Nocturne product sources, the current built-in saver registry, the product config dialog resources, the shared host resource, links `opengl32` for the optional GL11 path, and links the `.scr` executable target that defaults to Nocturne.
 - `ricochet` compiles the same shared platform plus saver set and links the `.scr` executable target that defaults to Ricochet.
 - `deepfield` compiles the same shared platform plus saver set and links the `.scr` executable target that defaults to Deepfield.
-- `ember` compiles the same shared platform plus saver set and links the `.scr` executable target that defaults to Ember.
-- `oscilloscope_dreams` compiles the same shared platform plus saver set and links the `.scr` executable target that defaults to Oscilloscope Dreams.
+- `plasma` compiles the same shared platform plus saver set and links the `.scr` executable target that defaults to Plasma.
+- `phosphor` compiles the same shared platform plus saver set and links the `.scr` executable target that defaults to Phosphor.
 - `pipeworks` compiles the same shared platform plus saver set and links the `.scr` executable target that defaults to Pipeworks.
 - `lifeforms` compiles the same shared platform plus saver set and links the `.scr` executable target that defaults to Lifeforms.
-- `signal_lab` compiles the same shared platform plus saver set and links the `.scr` executable target that defaults to Signal Lab.
-- `mechanical_dreams` compiles the same shared platform plus saver set and links the `.scr` executable target that defaults to Mechanical Dreams.
+- `signals` compiles the same shared platform plus saver set and links the `.scr` executable target that defaults to Signals.
+- `mechanize` compiles the same shared platform plus saver set and links the `.scr` executable target that defaults to Mechanize.
 - `ecosystems` compiles the same shared platform plus saver set and links the `.scr` executable target that defaults to Ecosystems.
 - `stormglass` compiles the same shared platform plus saver set and links the `.scr` executable target that defaults to Stormglass.
-- `night_transit` compiles the same shared platform plus saver set and links the `.scr` executable target that defaults to Night Transit.
+- `transit` compiles the same shared platform plus saver set and links the `.scr` executable target that defaults to Transit.
 - `observatory` compiles the same shared platform plus saver set and links the `.scr` executable target that defaults to Observatory.
-- `vector_worlds` compiles the same shared platform plus saver set and links the `.scr` executable target that defaults to Vector Worlds.
-- `retro_explorer` compiles the same shared platform plus saver set and links the `.scr` executable target that defaults to Retro Explorer.
-- `city_nocturne` compiles the same shared platform plus saver set and links the `.scr` executable target that defaults to City Nocturne.
-- `fractal_atlas` compiles the same shared platform plus saver set and links the `.scr` executable target that defaults to Fractal Atlas.
-- `gl_gallery` compiles the same shared platform plus saver set and links the `.scr` executable target that defaults to GL Gallery.
-- `benchlab` compiles the BenchLab app sources, reuses the real Nocturne, Ricochet, Deepfield, Ember, Oscilloscope Dreams, Pipeworks, Lifeforms, Signal Lab, Mechanical Dreams, Ecosystems, Stormglass, Night Transit, Observatory, Vector Worlds, Retro Explorer, City Nocturne, Fractal Atlas, and GL Gallery product sources through the shared saver contract, links `opengl32` for explicit tier validation, and links the diagnostics harness executable target.
+- `vector` compiles the same shared platform plus saver set and links the `.scr` executable target that defaults to Vector.
+- `explorer` compiles the same shared platform plus saver set and links the `.scr` executable target that defaults to Explorer.
+- `city` compiles the same shared platform plus saver set and links the `.scr` executable target that defaults to City.
+- `atlas` compiles the same shared platform plus saver set and links the `.scr` executable target that defaults to Atlas.
+- `gallery` compiles the same shared platform plus saver set and links the `.scr` executable target that defaults to Gallery.
+- `benchlab` compiles the BenchLab app sources, reuses the real Nocturne, Ricochet, Deepfield, Plasma, Phosphor, Pipeworks, Lifeforms, Signals, Mechanize, Ecosystems, Stormglass, Transit, Observatory, Vector, Explorer, City, Atlas, and Gallery product sources through the shared saver contract, links `opengl32` for explicit tier validation, and links the diagnostics harness executable target.
 
 The concrete host lifecycle now lives in the checked-in target graph.
 Later series should extend these targets in place instead of introducing parallel demo targets.

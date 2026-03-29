@@ -23,7 +23,7 @@ static const screensave_saver_module g_observatory_module = {
         "Observatory",
         "Celestial exhibit saver with calm orrery motion, chart framing, and dome-watch atmosphere."
     },
-    SCREENSAVE_SAVER_CAP_UNIVERSAL_GDI | SCREENSAVE_SAVER_CAP_OPTIONAL_GL11 | SCREENSAVE_SAVER_CAP_LONG_RUN_STABLE,
+    SCREENSAVE_SAVER_CAP_GDI | SCREENSAVE_SAVER_CAP_GL11 | SCREENSAVE_SAVER_CAP_LONG_RUN_STABLE,
     g_observatory_presets,
     OBSERVATORY_PRESET_COUNT,
     g_observatory_themes,
