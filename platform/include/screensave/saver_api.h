@@ -17,7 +17,7 @@ typedef enum screensave_session_mode_tag {
 #define SCREENSAVE_SAVER_CAP_UNIVERSAL_GDI 0x00000001UL
 #define SCREENSAVE_SAVER_CAP_OPTIONAL_GL11 0x00000002UL
 #define SCREENSAVE_SAVER_CAP_LONG_RUN_STABLE 0x00000004UL
-#define SCREENSAVE_SAVER_CAP_OPTIONAL_GL_PLUS 0x00000008UL
+#define SCREENSAVE_SAVER_CAP_OPTIONAL_GL21 0x00000008UL
 
 typedef struct screensave_saver_identity_tag {
     const char *product_key;

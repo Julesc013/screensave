@@ -1,8 +1,8 @@
-#include "glp_internal.h"
+#include "gl21_internal.h"
 
-int screensave_glp_state_from_renderer(screensave_renderer *renderer, screensave_glp_state **state_out)
+int screensave_gl21_state_from_renderer(screensave_renderer *renderer, screensave_gl21_state **state_out)
 {
-    screensave_glp_state *state;
+    screensave_gl21_state *state;
 
     if (state_out != NULL) {
         *state_out = NULL;
@@ -12,7 +12,7 @@ int screensave_glp_state_from_renderer(screensave_renderer *renderer, screensave
         return 0;
     }
 
-    state = (screensave_glp_state *)renderer->backend_state;
+    state = (screensave_gl21_state *)renderer->backend_state;
     if (state_out != NULL) {
         *state_out = state;
     }
@@ -20,21 +20,21 @@ int screensave_glp_state_from_renderer(screensave_renderer *renderer, screensave
     return 1;
 }
 
-void screensave_glp_update_renderer_info(
+void screensave_gl21_update_renderer_info(
     screensave_renderer *renderer,
     const screensave_sizei *drawable_size,
     const char *status_text
 )
 {
-    screensave_glp_state *state;
+    screensave_gl21_state *state;
 
-    if (!screensave_glp_state_from_renderer(renderer, &state)) {
+    if (!screensave_gl21_state_from_renderer(renderer, &state)) {
         return;
     }
 
-    renderer->info.active_kind = SCREENSAVE_RENDERER_KIND_GL_PLUS;
-    renderer->info.capability_flags = SCREENSAVE_GLP_CAPABILITIES | state->caps.private_flags;
-    renderer->info.backend_name = "gl_plus";
+    renderer->info.active_kind = SCREENSAVE_RENDERER_KIND_GL21;
+    renderer->info.capability_flags = SCREENSAVE_GL21_CAPABILITIES | state->caps.private_flags;
+    renderer->info.backend_name = "gl21";
     renderer->info.status_text = status_text != NULL ? status_text : "ready";
     renderer->info.vendor_name = state->caps.vendor[0] != '\0' ? state->caps.vendor : NULL;
     renderer->info.renderer_name = state->caps.renderer[0] != '\0' ? state->caps.renderer : NULL;
@@ -45,8 +45,8 @@ void screensave_glp_update_renderer_info(
     }
 }
 
-void screensave_glp_emit_diag(
-    screensave_glp_state *state,
+void screensave_gl21_emit_diag(
+    screensave_gl21_state *state,
     screensave_diag_level level,
     unsigned long code,
     const char *origin,
@@ -66,3 +66,5 @@ void screensave_glp_emit_diag(
         text
     );
 }
+
+

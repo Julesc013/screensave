@@ -47,12 +47,15 @@ PLATFORM_OBJS := \
 	$(PLATFORM_DIR)/gl11_present.o \
 	$(PLATFORM_DIR)/gl11_primitives.o \
 	$(PLATFORM_DIR)/gl11_state.o \
-	$(PLATFORM_DIR)/glp_backend.o \
-	$(PLATFORM_DIR)/glp_caps.o \
-	$(PLATFORM_DIR)/glp_context.o \
-	$(PLATFORM_DIR)/glp_present.o \
-	$(PLATFORM_DIR)/glp_primitives.o \
-	$(PLATFORM_DIR)/glp_state.o \
+	$(PLATFORM_DIR)/gl21_backend.o \
+	$(PLATFORM_DIR)/gl21_caps.o \
+	$(PLATFORM_DIR)/gl21_context.o \
+	$(PLATFORM_DIR)/gl21_present.o \
+	$(PLATFORM_DIR)/gl21_primitives.o \
+	$(PLATFORM_DIR)/gl21_state.o \
+	$(PLATFORM_DIR)/gl33_backend.o \
+	$(PLATFORM_DIR)/gl46_backend.o \
+	$(PLATFORM_DIR)/null_backend.o \
 	$(PLATFORM_DIR)/scr_args.o \
 	$(PLATFORM_DIR)/scr_config_dialog.o \
 	$(PLATFORM_DIR)/scr_diagnostics.o \
@@ -113,7 +116,19 @@ $(PLATFORM_DIR)/gl11_%.o: $(ROOT)/platform/src/render/gl11/gl11_%.c
 	mkdir -p $(PLATFORM_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(PLATFORM_DIR)/glp_%.o: $(ROOT)/platform/src/render/gl_plus/glp_%.c
+$(PLATFORM_DIR)/gl21_%.o: $(ROOT)/platform/src/render/gl21/gl21_%.c
+	mkdir -p $(PLATFORM_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(PLATFORM_DIR)/gl33_%.o: $(ROOT)/platform/src/render/gl33/gl33_%.c
+	mkdir -p $(PLATFORM_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(PLATFORM_DIR)/gl46_%.o: $(ROOT)/platform/src/render/gl46/gl46_%.c
+	mkdir -p $(PLATFORM_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(PLATFORM_DIR)/null_%.o: $(ROOT)/platform/src/render/null/null_%.c
 	mkdir -p $(PLATFORM_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 

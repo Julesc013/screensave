@@ -1,13 +1,13 @@
-#include "glp_internal.h"
+#include "gl21_internal.h"
 
-static int screensave_glp_can_draw(
+static int screensave_gl21_can_draw(
     screensave_renderer *renderer,
-    screensave_glp_state **state_out
+    screensave_gl21_state **state_out
 )
 {
-    screensave_glp_state *state;
+    screensave_gl21_state *state;
 
-    if (!screensave_glp_state_from_renderer(renderer, &state)) {
+    if (!screensave_gl21_state_from_renderer(renderer, &state)) {
         return 0;
     }
 
@@ -21,16 +21,16 @@ static int screensave_glp_can_draw(
     return 1;
 }
 
-static void screensave_glp_set_color(screensave_color color)
+static void screensave_gl21_set_color(screensave_color color)
 {
     glColor4ub(color.red, color.green, color.blue, color.alpha);
 }
 
-void screensave_glp_clear_impl(screensave_renderer *renderer, screensave_color color)
+void screensave_gl21_clear_impl(screensave_renderer *renderer, screensave_color color)
 {
-    screensave_glp_state *state;
+    screensave_gl21_state *state;
 
-    if (!screensave_glp_can_draw(renderer, &state)) {
+    if (!screensave_gl21_can_draw(renderer, &state)) {
         return;
     }
 
@@ -45,19 +45,19 @@ void screensave_glp_clear_impl(screensave_renderer *renderer, screensave_color c
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void screensave_glp_fill_rect_impl(
+void screensave_gl21_fill_rect_impl(
     screensave_renderer *renderer,
     const screensave_recti *rect,
     screensave_color color
 )
 {
-    screensave_glp_state *state;
+    screensave_gl21_state *state;
     GLfloat left;
     GLfloat top;
     GLfloat right;
     GLfloat bottom;
 
-    if (!screensave_glp_can_draw(renderer, &state) || rect == NULL) {
+    if (!screensave_gl21_can_draw(renderer, &state) || rect == NULL) {
         return;
     }
 
@@ -68,7 +68,7 @@ void screensave_glp_fill_rect_impl(
     bottom = (GLfloat)(rect->y + rect->height);
 
     glDisable(GL_TEXTURE_2D);
-    screensave_glp_set_color(color);
+    screensave_gl21_set_color(color);
     glBegin(GL_QUADS);
     glVertex2f(left, top);
     glVertex2f(right, top);
@@ -77,19 +77,19 @@ void screensave_glp_fill_rect_impl(
     glEnd();
 }
 
-void screensave_glp_draw_frame_rect_impl(
+void screensave_gl21_draw_frame_rect_impl(
     screensave_renderer *renderer,
     const screensave_recti *rect,
     screensave_color color
 )
 {
-    screensave_glp_state *state;
+    screensave_gl21_state *state;
     GLfloat left;
     GLfloat top;
     GLfloat right;
     GLfloat bottom;
 
-    if (!screensave_glp_can_draw(renderer, &state) || rect == NULL) {
+    if (!screensave_gl21_can_draw(renderer, &state) || rect == NULL) {
         return;
     }
 
@@ -100,7 +100,7 @@ void screensave_glp_draw_frame_rect_impl(
     bottom = (GLfloat)(rect->y + rect->height);
 
     glDisable(GL_TEXTURE_2D);
-    screensave_glp_set_color(color);
+    screensave_gl21_set_color(color);
     glBegin(GL_LINE_LOOP);
     glVertex2f(left, top);
     glVertex2f(right, top);
@@ -109,17 +109,17 @@ void screensave_glp_draw_frame_rect_impl(
     glEnd();
 }
 
-void screensave_glp_draw_line_impl(
+void screensave_gl21_draw_line_impl(
     screensave_renderer *renderer,
     const screensave_pointi *start_point,
     const screensave_pointi *end_point,
     screensave_color color
 )
 {
-    screensave_glp_state *state;
+    screensave_gl21_state *state;
 
     if (
-        !screensave_glp_can_draw(renderer, &state) ||
+        !screensave_gl21_can_draw(renderer, &state) ||
         start_point == NULL ||
         end_point == NULL
     ) {
@@ -128,25 +128,25 @@ void screensave_glp_draw_line_impl(
 
     (void)state;
     glDisable(GL_TEXTURE_2D);
-    screensave_glp_set_color(color);
+    screensave_gl21_set_color(color);
     glBegin(GL_LINES);
     glVertex2i(start_point->x, start_point->y);
     glVertex2i(end_point->x, end_point->y);
     glEnd();
 }
 
-void screensave_glp_draw_polyline_impl(
+void screensave_gl21_draw_polyline_impl(
     screensave_renderer *renderer,
     const screensave_pointi *points,
     unsigned int point_count,
     screensave_color color
 )
 {
-    screensave_glp_state *state;
+    screensave_gl21_state *state;
     unsigned int index;
 
     if (
-        !screensave_glp_can_draw(renderer, &state) ||
+        !screensave_gl21_can_draw(renderer, &state) ||
         points == NULL ||
         point_count < 2U
     ) {
@@ -155,7 +155,7 @@ void screensave_glp_draw_polyline_impl(
 
     (void)state;
     glDisable(GL_TEXTURE_2D);
-    screensave_glp_set_color(color);
+    screensave_gl21_set_color(color);
     glBegin(GL_LINE_STRIP);
     for (index = 0U; index < point_count; ++index) {
         glVertex2i(points[index].x, points[index].y);
@@ -163,19 +163,19 @@ void screensave_glp_draw_polyline_impl(
     glEnd();
 }
 
-int screensave_glp_blit_bitmap_impl(
+int screensave_gl21_blit_bitmap_impl(
     screensave_renderer *renderer,
     const screensave_bitmap_view *bitmap,
     const screensave_recti *destination_rect
 )
 {
-    screensave_glp_state *state;
+    screensave_gl21_state *state;
     GLenum pixel_format;
     GLfloat zoom_x;
     GLfloat zoom_y;
 
     if (
-        !screensave_glp_can_draw(renderer, &state) ||
+        !screensave_gl21_can_draw(renderer, &state) ||
         bitmap == NULL ||
         destination_rect == NULL ||
         bitmap->pixels == NULL ||
@@ -215,3 +215,5 @@ int screensave_glp_blit_bitmap_impl(
     glPixelZoom(1.0f, 1.0f);
     return 1;
 }
+
+

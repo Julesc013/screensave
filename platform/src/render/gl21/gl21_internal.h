@@ -1,5 +1,5 @@
-#ifndef SCREENSAVE_GLP_INTERNAL_H
-#define SCREENSAVE_GLP_INTERNAL_H
+#ifndef SCREENSAVE_GL21_INTERNAL_H
+#define SCREENSAVE_GL21_INTERNAL_H
 
 #include <stdlib.h>
 #include <string.h>
@@ -49,7 +49,7 @@
 
 typedef HGLRC (WINAPI *PFNWGLCREATECONTEXTATTRIBSARBPROC)(HDC, HGLRC, const int *);
 
-#define SCREENSAVE_GLP_CAPABILITIES \
+#define SCREENSAVE_GL21_CAPABILITIES \
     (SCREENSAVE_RENDERER_CAP_CLEAR | \
      SCREENSAVE_RENDERER_CAP_FILL_RECT | \
      SCREENSAVE_RENDERER_CAP_FRAME_RECT | \
@@ -57,13 +57,13 @@ typedef HGLRC (WINAPI *PFNWGLCREATECONTEXTATTRIBSARBPROC)(HDC, HGLRC, const int 
      SCREENSAVE_RENDERER_CAP_POLYLINE | \
      SCREENSAVE_RENDERER_CAP_BITMAP)
 
-#define SCREENSAVE_GLP_PRIVATE_CAP_ADVANCED_CONTEXT 0x01000000UL
-#define SCREENSAVE_GLP_PRIVATE_CAP_COMPAT_PROFILE   0x02000000UL
-#define SCREENSAVE_GLP_PRIVATE_CAP_VBO              0x04000000UL
-#define SCREENSAVE_GLP_PRIVATE_CAP_FBO              0x08000000UL
-#define SCREENSAVE_GLP_PRIVATE_CAP_TEXTURE_RECT     0x10000000UL
+#define SCREENSAVE_GL21_PRIVATE_CAP_ADVANCED_CONTEXT 0x01000000UL
+#define SCREENSAVE_GL21_PRIVATE_CAP_COMPAT_PROFILE   0x02000000UL
+#define SCREENSAVE_GL21_PRIVATE_CAP_VBO              0x04000000UL
+#define SCREENSAVE_GL21_PRIVATE_CAP_FBO              0x08000000UL
+#define SCREENSAVE_GL21_PRIVATE_CAP_TEXTURE_RECT     0x10000000UL
 
-typedef struct screensave_glp_caps_tag {
+typedef struct screensave_gl21_caps_tag {
     unsigned long private_flags;
     int advanced_context;
     int compatibility_profile;
@@ -78,9 +78,9 @@ typedef struct screensave_glp_caps_tag {
     char vendor[64];
     char renderer[96];
     char version[64];
-} screensave_glp_caps;
+} screensave_gl21_caps;
 
-typedef struct screensave_glp_state_tag {
+typedef struct screensave_gl21_state_tag {
     HWND target_window;
     HDC window_dc;
     HGLRC bootstrap_context;
@@ -90,80 +90,82 @@ typedef struct screensave_glp_state_tag {
     int pixel_format;
     int frame_open;
     PFNWGLCREATECONTEXTATTRIBSARBPROC create_context_attribs;
-    screensave_glp_caps caps;
-} screensave_glp_state;
+    screensave_gl21_caps caps;
+} screensave_gl21_state;
 
-int screensave_glp_renderer_create(
+int screensave_gl21_renderer_create(
     HWND target_window,
     const screensave_sizei *drawable_size,
     screensave_diag_context *diagnostics,
     screensave_renderer **renderer_out,
     const char **failure_reason_out
 );
-int screensave_glp_renderer_resize(screensave_renderer *renderer, const screensave_sizei *drawable_size);
-void screensave_glp_renderer_set_present_dc(screensave_renderer *renderer, HDC present_dc);
-void screensave_glp_renderer_clear_present_dc(screensave_renderer *renderer);
+int screensave_gl21_renderer_resize(screensave_renderer *renderer, const screensave_sizei *drawable_size);
+void screensave_gl21_renderer_set_present_dc(screensave_renderer *renderer, HDC present_dc);
+void screensave_gl21_renderer_clear_present_dc(screensave_renderer *renderer);
 
-int screensave_glp_state_from_renderer(screensave_renderer *renderer, screensave_glp_state **state_out);
-void screensave_glp_update_renderer_info(
+int screensave_gl21_state_from_renderer(screensave_renderer *renderer, screensave_gl21_state **state_out);
+void screensave_gl21_update_renderer_info(
     screensave_renderer *renderer,
     const screensave_sizei *drawable_size,
     const char *status_text
 );
-void screensave_glp_emit_diag(
-    screensave_glp_state *state,
+void screensave_gl21_emit_diag(
+    screensave_gl21_state *state,
     screensave_diag_level level,
     unsigned long code,
     const char *origin,
     const char *text
 );
 
-int screensave_glp_context_create(
-    screensave_glp_state *state,
+int screensave_gl21_context_create(
+    screensave_gl21_state *state,
     const screensave_sizei *drawable_size,
     const char **failure_reason_out
 );
-void screensave_glp_context_destroy(screensave_glp_state *state);
-int screensave_glp_context_make_current(
-    screensave_glp_state *state,
+void screensave_gl21_context_destroy(screensave_gl21_state *state);
+int screensave_gl21_context_make_current(
+    screensave_gl21_state *state,
     const char *origin,
     unsigned long code
 );
-void screensave_glp_context_release_current(screensave_glp_state *state);
+void screensave_gl21_context_release_current(screensave_gl21_state *state);
 
-int screensave_glp_capture_caps(
-    screensave_glp_state *state,
+int screensave_gl21_capture_caps(
+    screensave_gl21_state *state,
     const char **failure_reason_out
 );
-int screensave_glp_present(screensave_renderer *renderer);
+int screensave_gl21_present(screensave_renderer *renderer);
 
-void screensave_glp_clear_impl(screensave_renderer *renderer, screensave_color color);
-void screensave_glp_fill_rect_impl(
+void screensave_gl21_clear_impl(screensave_renderer *renderer, screensave_color color);
+void screensave_gl21_fill_rect_impl(
     screensave_renderer *renderer,
     const screensave_recti *rect,
     screensave_color color
 );
-void screensave_glp_draw_frame_rect_impl(
+void screensave_gl21_draw_frame_rect_impl(
     screensave_renderer *renderer,
     const screensave_recti *rect,
     screensave_color color
 );
-void screensave_glp_draw_line_impl(
+void screensave_gl21_draw_line_impl(
     screensave_renderer *renderer,
     const screensave_pointi *start_point,
     const screensave_pointi *end_point,
     screensave_color color
 );
-void screensave_glp_draw_polyline_impl(
+void screensave_gl21_draw_polyline_impl(
     screensave_renderer *renderer,
     const screensave_pointi *points,
     unsigned int point_count,
     screensave_color color
 );
-int screensave_glp_blit_bitmap_impl(
+int screensave_gl21_blit_bitmap_impl(
     screensave_renderer *renderer,
     const screensave_bitmap_view *bitmap,
     const screensave_recti *destination_rect
 );
 
-#endif /* SCREENSAVE_GLP_INTERNAL_H */
+#endif /* SCREENSAVE_GL21_INTERNAL_H */
+
+

@@ -1,6 +1,6 @@
-#include "glp_internal.h"
+#include "gl21_internal.h"
 
-static int screensave_glp_string_contains(const char *haystack, const char *needle)
+static int screensave_gl21_string_contains(const char *haystack, const char *needle)
 {
     if (haystack == NULL || needle == NULL || needle[0] == '\0') {
         return 0;
@@ -9,8 +9,8 @@ static int screensave_glp_string_contains(const char *haystack, const char *need
     return strstr(haystack, needle) != NULL;
 }
 
-int screensave_glp_capture_caps(
-    screensave_glp_state *state,
+int screensave_gl21_capture_caps(
+    screensave_gl21_state *state,
     const char **failure_reason_out
 )
 {
@@ -30,7 +30,7 @@ int screensave_glp_capture_caps(
 
     if (state == NULL) {
         if (failure_reason_out != NULL) {
-            *failure_reason_out = "glp-capture-invalid-state";
+            *failure_reason_out = "gl21-capture-invalid-state";
         }
         return 0;
     }
@@ -45,13 +45,13 @@ int screensave_glp_capture_caps(
     extensions = glGetString(GL_EXTENSIONS);
     if (vendor == NULL || renderer == NULL || version == NULL) {
         if (failure_reason_out != NULL) {
-            *failure_reason_out = "glp-capture-string-failed";
+            *failure_reason_out = "gl21-capture-string-failed";
         }
-        screensave_glp_emit_diag(
+        screensave_gl21_emit_diag(
             state,
             SCREENSAVE_DIAG_LEVEL_ERROR,
             6701UL,
-            "glp_caps",
+            "gl21_caps",
             "The advanced GL path could not query core renderer strings."
         );
         return 0;
@@ -64,8 +64,8 @@ int screensave_glp_capture_caps(
     state->caps.advanced_context = 1;
     state->caps.compatibility_profile = 1;
     state->caps.private_flags =
-        SCREENSAVE_GLP_PRIVATE_CAP_ADVANCED_CONTEXT |
-        SCREENSAVE_GLP_PRIVATE_CAP_COMPAT_PROFILE;
+        SCREENSAVE_GL21_PRIVATE_CAP_ADVANCED_CONTEXT |
+        SCREENSAVE_GL21_PRIVATE_CAP_COMPAT_PROFILE;
     lstrcpynA(state->caps.vendor, (const char *)vendor, sizeof(state->caps.vendor));
     lstrcpynA(state->caps.renderer, (const char *)renderer, sizeof(state->caps.renderer));
     lstrcpynA(state->caps.version, (const char *)version, sizeof(state->caps.version));
@@ -76,32 +76,34 @@ int screensave_glp_capture_caps(
     state->caps.minor_version = (int)minor_version;
 
     if (extensions != NULL) {
-        if (screensave_glp_string_contains((const char *)extensions, "GL_ARB_vertex_buffer_object")) {
+        if (screensave_gl21_string_contains((const char *)extensions, "GL_ARB_vertex_buffer_object")) {
             state->caps.has_vbo = 1;
-            state->caps.private_flags |= SCREENSAVE_GLP_PRIVATE_CAP_VBO;
+            state->caps.private_flags |= SCREENSAVE_GL21_PRIVATE_CAP_VBO;
         }
         if (
-            screensave_glp_string_contains((const char *)extensions, "GL_ARB_framebuffer_object") ||
-            screensave_glp_string_contains((const char *)extensions, "GL_EXT_framebuffer_object")
+            screensave_gl21_string_contains((const char *)extensions, "GL_ARB_framebuffer_object") ||
+            screensave_gl21_string_contains((const char *)extensions, "GL_EXT_framebuffer_object")
         ) {
             state->caps.has_fbo = 1;
-            state->caps.private_flags |= SCREENSAVE_GLP_PRIVATE_CAP_FBO;
+            state->caps.private_flags |= SCREENSAVE_GL21_PRIVATE_CAP_FBO;
         }
         if (
-            screensave_glp_string_contains((const char *)extensions, "GL_ARB_texture_rectangle") ||
-            screensave_glp_string_contains((const char *)extensions, "GL_EXT_texture_rectangle")
+            screensave_gl21_string_contains((const char *)extensions, "GL_ARB_texture_rectangle") ||
+            screensave_gl21_string_contains((const char *)extensions, "GL_EXT_texture_rectangle")
         ) {
             state->caps.has_texture_rectangle = 1;
-            state->caps.private_flags |= SCREENSAVE_GLP_PRIVATE_CAP_TEXTURE_RECT;
+            state->caps.private_flags |= SCREENSAVE_GL21_PRIVATE_CAP_TEXTURE_RECT;
         }
     }
 
-    screensave_glp_emit_diag(
+    screensave_gl21_emit_diag(
         state,
         SCREENSAVE_DIAG_LEVEL_INFO,
         6702UL,
-        "glp_caps",
-        "The advanced GL path captured renderer capability details successfully."
+        "gl21_caps",
+        "The GL21 path captured renderer capability details successfully."
     );
     return 1;
 }
+
+
