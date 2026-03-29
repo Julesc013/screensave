@@ -102,7 +102,7 @@ int screensave_scr_main_with_registry(
     if (active_module == NULL) {
         MessageBoxA(
             NULL,
-            "The saver target did not provide a valid built-in saver registry.",
+            "The saver target did not provide a valid saver registry.",
             "ScreenSave",
             MB_OK | MB_ICONERROR | MB_SETFOREGROUND
         );

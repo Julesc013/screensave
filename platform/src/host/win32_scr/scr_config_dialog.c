@@ -310,7 +310,7 @@ static void scr_selector_update_info(HWND dialog, const scr_selector_dialog_stat
     scr_build_version_text(dialog_state->context, version_text, sizeof(version_text));
 
     info[0] = '\0';
-    scr_append_text(info, sizeof(info), "Current built-in saver\r\n");
+    scr_append_text(info, sizeof(info), "Current saver\r\n");
     scr_append_text(info, sizeof(info), dialog_state->selected_module->identity.display_name);
     scr_append_text(info, sizeof(info), "\r\n");
     scr_append_text(info, sizeof(info), version_text);

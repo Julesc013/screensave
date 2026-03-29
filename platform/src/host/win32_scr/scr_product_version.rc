@@ -1,0 +1,52 @@
+#include <winver.h>
+
+#include "screensave/version.h"
+
+#ifndef SCREENSAVE_PRODUCT_NAME
+#error SCREENSAVE_PRODUCT_NAME must be defined before including scr_product_version.rc
+#endif
+
+#ifndef SCREENSAVE_FILE_DESCRIPTION
+#error SCREENSAVE_FILE_DESCRIPTION must be defined before including scr_product_version.rc
+#endif
+
+#ifndef SCREENSAVE_INTERNAL_NAME
+#error SCREENSAVE_INTERNAL_NAME must be defined before including scr_product_version.rc
+#endif
+
+#ifndef SCREENSAVE_ORIGINAL_FILENAME
+#error SCREENSAVE_ORIGINAL_FILENAME must be defined before including scr_product_version.rc
+#endif
+
+#ifndef SCREENSAVE_PRODUCT_COMMENT
+#error SCREENSAVE_PRODUCT_COMMENT must be defined before including scr_product_version.rc
+#endif
+
+VS_VERSION_INFO VERSIONINFO
+FILEVERSION SCREENSAVE_VERSION_MAJOR, SCREENSAVE_VERSION_MINOR, SCREENSAVE_VERSION_PATCH, 0
+PRODUCTVERSION SCREENSAVE_VERSION_MAJOR, SCREENSAVE_VERSION_MINOR, SCREENSAVE_VERSION_PATCH, 0
+FILEFLAGSMASK 0x3fL
+FILEFLAGS 0x0L
+FILEOS VOS__WINDOWS32
+FILETYPE VFT_APP
+FILESUBTYPE VFT2_UNKNOWN
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904E4"
+        BEGIN
+            VALUE "Comments", SCREENSAVE_PRODUCT_COMMENT
+            VALUE "CompanyName", "ScreenSave Project"
+            VALUE "FileDescription", SCREENSAVE_FILE_DESCRIPTION
+            VALUE "FileVersion", SCREENSAVE_VERSION_TEXT
+            VALUE "InternalName", SCREENSAVE_INTERNAL_NAME
+            VALUE "OriginalFilename", SCREENSAVE_ORIGINAL_FILENAME
+            VALUE "ProductName", SCREENSAVE_PRODUCT_NAME
+            VALUE "ProductVersion", SCREENSAVE_VERSION_TEXT
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0409, 1252
+    END
+END

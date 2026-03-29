@@ -1,0 +1,6 @@
+#define SCREENSAVE_PRODUCT_NAME "ScreenSave Observatory"
+#define SCREENSAVE_FILE_DESCRIPTION "ScreenSave Observatory screen saver"
+#define SCREENSAVE_INTERNAL_NAME "observatory.scr"
+#define SCREENSAVE_ORIGINAL_FILENAME "observatory.scr"
+#define SCREENSAVE_PRODUCT_COMMENT "Standalone ScreenSave saver product"
+#include "../../../../platform/src/host/win32_scr/scr_product_version.rc"

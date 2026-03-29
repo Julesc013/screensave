@@ -1,0 +1,6 @@
+#define SCREENSAVE_PRODUCT_NAME "ScreenSave Stormglass"
+#define SCREENSAVE_FILE_DESCRIPTION "ScreenSave Stormglass screen saver"
+#define SCREENSAVE_INTERNAL_NAME "stormglass.scr"
+#define SCREENSAVE_ORIGINAL_FILENAME "stormglass.scr"
+#define SCREENSAVE_PRODUCT_COMMENT "Standalone ScreenSave saver product"
+#include "../../../../platform/src/host/win32_scr/scr_product_version.rc"

@@ -1,0 +1,6 @@
+#define SCREENSAVE_PRODUCT_NAME "ScreenSave Plasma"
+#define SCREENSAVE_FILE_DESCRIPTION "ScreenSave Plasma screen saver"
+#define SCREENSAVE_INTERNAL_NAME "plasma.scr"
+#define SCREENSAVE_ORIGINAL_FILENAME "plasma.scr"
+#define SCREENSAVE_PRODUCT_COMMENT "Standalone ScreenSave saver product"
+#include "../../../../platform/src/host/win32_scr/scr_product_version.rc"

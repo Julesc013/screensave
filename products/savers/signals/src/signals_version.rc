@@ -1,0 +1,6 @@
+#define SCREENSAVE_PRODUCT_NAME "ScreenSave Signals"
+#define SCREENSAVE_FILE_DESCRIPTION "ScreenSave Signals screen saver"
+#define SCREENSAVE_INTERNAL_NAME "signals.scr"
+#define SCREENSAVE_ORIGINAL_FILENAME "signals.scr"
+#define SCREENSAVE_PRODUCT_COMMENT "Standalone ScreenSave saver product"
+#include "../../../../platform/src/host/win32_scr/scr_product_version.rc"

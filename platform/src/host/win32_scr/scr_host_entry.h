@@ -3,6 +3,14 @@
 
 #include "screensave/saver_api.h"
 
+int screensave_scr_main(
+    HINSTANCE instance,
+    HINSTANCE previous_instance,
+    LPSTR command_line,
+    int show_code,
+    const screensave_saver_module *module
+);
+
 int screensave_scr_main_with_registry(
     HINSTANCE instance,
     HINSTANCE previous_instance,

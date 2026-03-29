@@ -1,0 +1,6 @@
+#define SCREENSAVE_PRODUCT_NAME "ScreenSave Nocturne"
+#define SCREENSAVE_FILE_DESCRIPTION "ScreenSave Nocturne screen saver"
+#define SCREENSAVE_INTERNAL_NAME "nocturne.scr"
+#define SCREENSAVE_ORIGINAL_FILENAME "nocturne.scr"
+#define SCREENSAVE_PRODUCT_COMMENT "Standalone ScreenSave saver product"
+#include "../../../../platform/src/host/win32_scr/scr_product_version.rc"
