@@ -7,6 +7,7 @@ All notable repository changes are recorded here in prompt history order.
 ### Added
 
 - `validation/notes/c02-migration-baseline.md` as the explicit post-rename migration-baseline record, including the canonical saver/app/renderer naming regime, the legacy-to-canonical mapping summary, the intentional historical exceptions, the remaining migration aliases, and the next continuation step.
+- `tools/scripts/check_canonical_naming.py` as a small checkpoint-integrity helper for the locked canonical saver/app naming baseline and its key status docs.
 
 ### Changed
 
@@ -19,7 +20,7 @@ All notable repository changes are recorded here in prompt history order.
 
 - Confirmed before editing that the repo already contained the `C00` roadmap reset, the explicit rename map, the renderer-tier taxonomy note, the completed `C01` rename/taxonomy refactor, the canonical `suite` placeholder, the canonical `atlas` identity, and the implemented `S00` through `S15` history.
 - Ran targeted stale-name and stale-taxonomy audits to distinguish acceptable historical references in changelog and older validation notes from the active canonical repo truth.
-- Ran `python tools/scripts/check_repo_structure.py`, `python tools/scripts/check_codex_config.py`, `python tools/scripts/check_docs_basics.py`, `python tools/scripts/check_build_layout.py`, and `git diff --check`; all passed.
+- Ran `python tools/scripts/check_repo_structure.py`, `python tools/scripts/check_codex_config.py`, `python tools/scripts/check_docs_basics.py`, `python tools/scripts/check_build_layout.py`, `python tools/scripts/check_canonical_naming.py`, and `git diff --check`; all passed.
 - Confirmed this prompt remained a stabilization/checkpoint step and did not add new saver features, new renderer behavior, all-saver `.scr` productization, packaging logic, installer work, or suite/meta-product implementation.
 
 ## C01 - 2026-03-30
