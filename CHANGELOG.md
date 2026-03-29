@@ -2,6 +2,34 @@
 
 All notable repository changes are recorded here in prompt history order.
 
+## C07 - 2026-03-30
+
+### Added
+
+- `packaging/installer/installer_manifest.ini`, `packaging/installer/layout.md`, and `packaging/installer/build_installer.py` as the explicit `C07` installer package definition, install-layout note, and stdlib-only installer assembly path.
+- `packaging/installer/installer_common.ps1`, `packaging/installer/install_screensave.ps1`, and `packaging/installer/uninstall_screensave.ps1` as the bounded current-user installer, optional saver-selection assistance, uninstall-record, and conservative uninstall implementation.
+- `packaging/release_notes/installer-release-notes.md` as the user-facing release-support note for the installed distribution path.
+- `validation/notes/c07-installer-matrix.md` as the explicit install, update, uninstall, current payload coverage, and evidence-level note for `C07`.
+- `tools/scripts/check_installer_layout.py` as the small static validator for the `C07` installer definition, staged installer package, payload provenance, and active status docs.
+
+### Changed
+
+- Updated `packaging/README.md`, `packaging/installer/README.md`, and `packaging/release_notes/README.md` so the packaging tree now describes the real installed-distribution architecture beside the existing portable bundle path.
+- Updated `packaging/portable/README.md`, `packaging/portable/layout.md`, `packaging/release_notes/portable-release-notes.md`, and `packaging/portable/assemble_portable.py` so the portable path now truthfully records installed distribution as a separate `C07` delivery mode instead of a future placeholder.
+- Generated a real staged installer package at `out/installer/screensave-installer-c07/` and a matching zip at `out/installer/screensave-installer-c07.zip` from the current staged portable payload under `out/portable/screensave-portable-c06/`.
+- Updated `README.md`, roadmap docs, architecture overview, and continuation-status validators so `C07` is recorded as complete and `C08` suite meta-saver work is the next continuation step.
+
+### Validation
+
+- Confirmed before editing that the roadmap reset, canonical rename baseline, `C02` migration checkpoint, `C03` saver productization matrix, `C04` shared settings architecture, `C05` Windows integration validation note, and `C06` portable bundle baseline already existed in the repo.
+- Audited the packaging tree, portable payload, release-contract notes, staged `out/portable/` artifacts, and current saver metadata before defining the installer architecture.
+- Ran `python packaging/installer/build_installer.py` to stage the installer package and generate the installer zip from the real portable payload only.
+- Ran the staged installer in mock mode for first install with `-SetActiveSaver nocturne`, conservative overlay reinstall without changing the active saver request, and uninstall from the installed `INSTALLER\\` copy, leaving logs under `out/installer/validation/` and restoring the mock desktop state to an empty saver path plus no uninstall entries.
+- Re-ran `python packaging/portable/assemble_portable.py` after updating the portable release notes so the staged portable bundle now reflects the existence of the separate installed-distribution path.
+- Ran `python tools/scripts/check_repo_structure.py`, `python tools/scripts/check_codex_config.py`, `python tools/scripts/check_docs_basics.py`, `python tools/scripts/check_build_layout.py`, `python tools/scripts/check_canonical_naming.py`, `python tools/scripts/check_shared_settings_layout.py`, `python tools/scripts/check_windows_integration_layout.py`, `python tools/scripts/check_portable_bundle_layout.py`, `python tools/scripts/check_installer_layout.py`, `python -m py_compile packaging/portable/assemble_portable.py packaging/installer/build_installer.py tools/scripts/check_canonical_naming.py tools/scripts/check_shared_settings_layout.py tools/scripts/check_windows_integration_layout.py tools/scripts/check_portable_bundle_layout.py tools/scripts/check_installer_layout.py`, and `git diff --check` on the final tree.
+- Confirmed that supported C/C++ toolchains were still unavailable in this environment, so the `C07` installer package is an honest current-user scripted installer built from the partial real portable payload instead of a freshly rebuilt full saver line.
+- Confirmed this prompt did not add suite-app work, suite meta-saver work, new saver features, or new renderer functionality.
+
 ## C06 - 2026-03-30
 
 ### Added
