@@ -5,8 +5,8 @@ Earlier docs described an intended Series 00 through 17 program; that shorter en
 
 Implementation currently exists through `S15`.
 The older public endpoint that treated `S16` and `S17` as the whole remaining plan is superseded.
-Post-`S15` work now follows committed `C00` and `C01` work plus later continuation prompts.
-C02 is the next planned checkpoint before C03 all-saver `.scr` productization.
+Post-`S15` work now follows committed `C00`, `C01`, and `C02` work plus later continuation prompts.
+C03 is the next planned implementation prompt after the post-rename checkpoint.
 
 ## Implemented Baseline
 
@@ -35,7 +35,7 @@ C02 is the next planned checkpoint before C03 all-saver `.scr` productization.
 | --- | --- | --- | --- | --- |
 | C00 | Roadmap reset and normalization planning | Post-`S15` continuation docs, rename map, renderer taxonomy note, and truthful changelog/status updates only | S00-S15 | No runtime, build-target, packaging, or product implementation changes |
 | C01 | Rename and taxonomy normalization | Canonical saver/product/app naming, renderer-tier terminology normalization, and replacement of legacy placeholder names across code, docs, manifests, and build references | C00 | C89, x86 Win32 `.scr`, ANSI host path, one shared platform, BenchLab role, GDI floor |
-| C02 | Post-rename baseline checkpoint | A stable renamed baseline with reconciled docs, manifests, identifiers, and verification evidence before wider continuation work | C01 | Recoverable one-pass rename history and truthful repo state |
+| C02 | Post-rename baseline checkpoint | A stable renamed baseline with reconciled docs, manifests, identifiers, migration-baseline notes, and verification evidence before wider continuation work | C01 | Recoverable one-pass rename history and truthful repo state |
 | C03 | All-saver `.scr` productization | Every current saver packaged as an honest standalone `.scr` product with product-owned manifests and bounded metadata | C02 | Separate saver products, no silent suite coupling, no baseline regression |
 | C04 | Shared settings, presets, randomization, and pack architecture | Shared-but-bounded settings/preset/randomizer/pack surface that multiple saver products can reuse without collapsing into a meta-product | C03 | Product ownership, stable public contracts only where reuse is proven |
 | C05 | Windows picker, config, preview, and fullscreen validation | Explicit validation of saver selection, config dialogs, preview hosting, fullscreen lifecycle, and fallback behavior on the real Windows screensaver path | C03-C04 | Classic Win32 `.scr` behavior, ANSI host path, truthful validation |
@@ -60,8 +60,8 @@ Do not schedule new continuation work under `S16` or `S17`.
 
 ## Continuation Rules
 
-- `C00` is planning-only and records the new continuation structure without performing runtime work.
-- `C01` completed the rename/taxonomy pass; `C02` is the next checkpoint prompt before `C03` productization.
+- `C00`, `C01`, and `C02` are complete.
+- `C03` is the next implementation prompt after the locked post-rename checkpoint.
 - Rename and renderer-taxonomy normalization land before any productization or suite/meta work.
 - All-saver `.scr` productization lands before suite/meta products, backlog ingestion, or polish waves.
 - Shared settings, presets, randomization, and pack architecture land before distribution work.

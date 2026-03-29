@@ -23,7 +23,7 @@ Documented scaffold only:
 - `vs6/`
 - `vs2008/`
 
-Those older lanes are intentionally documentation-heavy at the current `C01` baseline.
+Those older lanes are intentionally documentation-heavy at the current `C02` baseline.
 They preserve file layout and intent without claiming build completeness that does not yet exist.
 
 ## Output Intent

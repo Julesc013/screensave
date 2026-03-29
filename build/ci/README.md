@@ -1,6 +1,6 @@
 # CI Build Notes
 
-CI does not attempt a native ScreenSave build at the current `C01` baseline.
+CI does not attempt a native ScreenSave build at the current `C02` baseline.
 
 ## What CI Checks Now
 

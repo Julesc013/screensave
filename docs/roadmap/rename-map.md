@@ -1,6 +1,6 @@
 # Rename Map
 
-This document records the canonical post-`S15` saver and app naming baseline that landed in `C01`.
+This document records the canonical post-`S15` saver and app naming baseline that landed in `C01` and was locked as the post-rename checkpoint in `C02`.
 It remains the durable reference for legacy-to-canonical migration behavior.
 
 ## Saver Canonical Slugs

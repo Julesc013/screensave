@@ -2,6 +2,26 @@
 
 All notable repository changes are recorded here in prompt history order.
 
+## C02 - 2026-03-30
+
+### Added
+
+- `validation/notes/c02-migration-baseline.md` as the explicit post-rename migration-baseline record, including the canonical saver/app/renderer naming regime, the legacy-to-canonical mapping summary, the intentional historical exceptions, the remaining migration aliases, and the next continuation step.
+
+### Changed
+
+- Updated `README.md`, `docs/roadmap/prompt-program.md`, `docs/roadmap/series-map.md`, `docs/roadmap/post-s15-plan.md`, and `docs/roadmap/rename-map.md` so the repo now records `C02` as complete and names `C03` all-saver `.scr` productization as the next continuation prompt.
+- Updated the narrow build-status READMEs under `build/` so they describe the current repository as the locked `C02` post-rename baseline instead of the earlier `C01` checkpoint-in-progress state.
+- Audited active docs, manifests, build files, host strings, BenchLab labels, and migration paths to confirm that canonical saver/app naming is coherent and that the remaining old-name references are either explicit migration aliases or historical evidence.
+- Created the annotated recovery tag `c02-post-rename-baseline` for the locked post-rename checkpoint.
+
+### Validation
+
+- Confirmed before editing that the repo already contained the `C00` roadmap reset, the explicit rename map, the renderer-tier taxonomy note, the completed `C01` rename/taxonomy refactor, the canonical `suite` placeholder, the canonical `atlas` identity, and the implemented `S00` through `S15` history.
+- Ran targeted stale-name and stale-taxonomy audits to distinguish acceptable historical references in changelog and older validation notes from the active canonical repo truth.
+- Ran `python tools/scripts/check_repo_structure.py`, `python tools/scripts/check_codex_config.py`, `python tools/scripts/check_docs_basics.py`, `python tools/scripts/check_build_layout.py`, and `git diff --check`; all passed.
+- Confirmed this prompt remained a stabilization/checkpoint step and did not add new saver features, new renderer behavior, all-saver `.scr` productization, packaging logic, installer work, or suite/meta-product implementation.
+
 ## C01 - 2026-03-30
 
 ### Changed

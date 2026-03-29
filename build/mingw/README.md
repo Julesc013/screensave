@@ -5,7 +5,7 @@ This directory holds GCC-family Windows lanes that preserve the x86 target inten
 ## Strategy
 
 The MinGW lane exists so the build story is not defined only by one Microsoft toolchain generation.
-At the current `C01` baseline, the practical lane is `i686/`.
+At the current `C02` baseline, the practical lane is `i686/`.
 
 ## Current State
 

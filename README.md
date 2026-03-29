@@ -15,8 +15,8 @@ The platform target is intentionally conservative:
 ## Current Status
 
 The repository is in Series 15.
-Implementation currently exists through `S15` plus continuation `C00` and `C01`.
-C00 reset the post-`S15` continuation roadmap, and C01 applied the canonical saver/app rename and renderer-taxonomy normalization pass.
+Implementation currently exists through `S15` plus continuation `C00`, `C01`, and `C02`.
+C00 reset the post-`S15` continuation roadmap, C01 applied the canonical saver/app rename and renderer-taxonomy normalization pass, and C02 locked the post-rename migration baseline and recovery checkpoint.
 The older short `S16` / `S17` endpoint is superseded by `docs/roadmap/post-s15-plan.md`.
 Series 00 established repository law, structure, roadmap, and agent guidance.
 Series 01 added contribution, review, governance, and CI foundations.
@@ -90,7 +90,7 @@ Series 15 adds the advanced GL capability path and Gallery:
 - Gallery as the renderer-showcase saver with deliberate GDI, GL11, and GL21-tier scene variants plus curated compatibility, classic, and advanced presets
 - explicit host and BenchLab wiring so the current saver set can be exercised honestly through the tiered renderer stack without turning the repo into the final meta-gallery
 
-The next continuation phases are `C02` for the post-rename checkpoint baseline and `C03` for all-saver `.scr` productization.
+The next continuation phase is `C03` for all-saver `.scr` productization.
 
 ## Planned Product Shape
 
