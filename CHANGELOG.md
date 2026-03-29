@@ -2,6 +2,29 @@
 
 All notable repository changes are recorded here in prompt history order.
 
+## C10 - 2026-03-30
+
+### Added
+
+- `products/savers/_template/` as the real contributor starter saver tree, including a truthful manifest, starter preset sets, a real entry shim, module hooks, config skeleton, theme and preset descriptors, bounded session and render paths, config resources, version metadata, and lightweight smoke coverage.
+- `products/sdk/` contributor docs for saver authoring, pack authoring, manifest and file-format guidance, copy-map notes, and validation checklists that point at the real template surface rather than a placeholder.
+- `products/sdk/examples/template_pack/` as the minimal example data pack with a real `pack.ini`, one `.preset.ini`, and one `.theme.ini` aligned with the shared `C04` settings and pack formats.
+- `tools/scripts/check_sdk_surface.py` as the stdlib-only contributor validator for the checked-in SDK surface plus contributor-authored saver roots, pack roots, and preset/theme files.
+- `validation/notes/c10-sdk-contributor-surface.md` as the explicit baseline note for the new SDK and contributor surface, its boundaries, and the next continuation step.
+
+### Changed
+
+- Updated `products/sdk/README.md`, `products/sdk/examples/README.md`, `products/sdk/template_saver/README.md`, and `products/README.md` so the SDK area now describes the real contributor workflow instead of future placeholder material.
+- Updated root, roadmap, architecture, lineup, and tooling docs so `C10` is recorded as complete, the contributor surface is a real first-class part of the repo, and `C11` backlog ingestion and routing is the next continuation step.
+- Updated the continuation-status validators and tooling index so active repo truth now expects the real SDK and contributor-surface baseline rather than the earlier `C10 is next` placeholder state.
+
+### Validation
+
+- Confirmed before editing that the roadmap reset, canonical rename baseline, `C02` migration checkpoint, `C03` saver productization matrix, `C04` shared settings architecture, `C05` Windows integration baseline, `C06` portable distribution bundle, `C07` installer baseline, `C08` suite meta-saver, and `C09` suite app already existed in the repo.
+- Audited the existing placeholder `products/sdk/` and `products/savers/_template/` trees, representative saver manifests and source layouts, current preset/theme/pack formats, and current validation helpers before defining the real contributor surface.
+- Kept `C10` bounded to templates, examples, documentation, and contributor validation helpers only; this prompt did not add a runtime plugin loader, packaging changes, installer changes, broader suite-app work, or new shipping saver products.
+- Final verification for `C10` is static and source-level in this environment; no supported MSVC or MinGW toolchain was available for a fresh native compile checkpoint.
+
 ## C09 - 2026-03-30
 
 ### Added

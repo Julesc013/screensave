@@ -182,14 +182,14 @@ def main() -> int:
     require("static only" in note.lower(), "C09 suite note must record static-only evidence honestly.", errors)
 
     root_readme = read_text(ROOT / "README.md")
-    require("The next continuation phase is `C10` for the SDK / contributor surface." in root_readme, "README.md must point to C10.", errors)
+    require("The next continuation phase is `C11` for backlog ingestion and routing of new ideas." in root_readme, "README.md must point to C11.", errors)
     require("`benchlab` and `suite` are now the real non-saver apps in the tree." in root_readme, "README.md must describe the real app pair.", errors)
 
     prompt_program = read_text(ROOT / "docs" / "roadmap" / "prompt-program.md")
-    require("C10 is the next planned implementation prompt after the suite app baseline." in prompt_program, "prompt-program.md must point to C10.", errors)
+    require("C11 is the next planned implementation prompt after the SDK / contributor surface baseline." in prompt_program, "prompt-program.md must point to C11.", errors)
 
     series_map = read_text(ROOT / "docs" / "roadmap" / "series-map.md")
-    require("The next planned implementation prompt is `C10` for the SDK / contributor surface." in series_map, "series-map.md must point to C10.", errors)
+    require("The next planned implementation prompt is `C11` for backlog ingestion and routing of new ideas." in series_map, "series-map.md must point to C11.", errors)
 
     if errors:
         for error in errors:

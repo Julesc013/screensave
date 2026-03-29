@@ -74,8 +74,8 @@ def main() -> int:
     require_text(
         ROOT / "README.md",
         (
-            "Implementation currently exists through `S15` plus continuation `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, and `C09`.",
-            "The next continuation phase is `C10` for the SDK / contributor surface.",
+            "Implementation currently exists through `S15` plus continuation `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, and `C10`.",
+            "The next continuation phase is `C11` for backlog ingestion and routing of new ideas.",
             "`suite` is now the canonical suite-level browser, launcher, preview, and configuration app under `products/apps/suite/`.",
             "`anthology` is the real suite meta-saver `.scr`",
         ),
@@ -84,17 +84,17 @@ def main() -> int:
     require_text(
         ROOT / "docs" / "roadmap" / "prompt-program.md",
         (
-            "Post-`S15` work now follows committed `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, and `C09` work plus later continuation prompts.",
-            "C10 is the next planned implementation prompt after the suite app baseline.",
-            "- `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, and `C09` are complete.",
+            "Post-`S15` work now follows committed `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, and `C10` work plus later continuation prompts.",
+            "C11 is the next planned implementation prompt after the SDK / contributor surface baseline.",
+            "- `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, and `C10` are complete.",
         ),
         errors,
     )
     require_text(
         ROOT / "docs" / "roadmap" / "series-map.md",
         (
-            "`C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, and `C09` are complete.",
-            "The next planned implementation prompt is `C10` for the SDK / contributor surface.",
+            "`C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, and `C10` are complete.",
+            "The next planned implementation prompt is `C11` for backlog ingestion and routing of new ideas.",
         ),
         errors,
     )
@@ -102,7 +102,7 @@ def main() -> int:
         ROOT / "docs" / "roadmap" / "post-s15-plan.md",
         (
             "the locked `C02` post-rename checkpoint",
-            "The next continuation prompt should be `C10` for the SDK / contributor surface.",
+            "The next continuation prompt should be `C11` for backlog ingestion and routing of new ideas.",
         ),
         errors,
     )
