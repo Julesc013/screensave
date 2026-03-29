@@ -29,6 +29,7 @@ CANONICAL_SAVERS = (
     "city",
     "atlas",
     "gallery",
+    "anthology",
 )
 
 REPRESENTATIVE_SAVERS = ("nocturne", "plasma", "vector", "ecosystems", "transit", "atlas")

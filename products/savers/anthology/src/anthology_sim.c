@@ -159,6 +159,14 @@ static unsigned long anthology_candidate_weight(
 
     if (session->config.selection_mode == ANTHOLOGY_SELECTION_RANDOM_UNIFORM) {
         weight = 1UL;
+    } else if (
+        session->config.selection_mode == ANTHOLOGY_SELECTION_WEIGHTED_RANDOM ||
+        session->config.selection_mode == ANTHOLOGY_SELECTION_FAVORITES_FIRST
+    ) {
+        weight = session->config.saver_weights[catalog_index];
+        if (weight == 0UL) {
+            weight = anthology_catalog_get_default_weight(catalog_index);
+        }
     } else {
         weight = session->config.saver_weights[catalog_index];
         if (weight == 0UL) {

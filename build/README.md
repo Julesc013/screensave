@@ -16,7 +16,7 @@ The build scaffold is not the constitutional source of truth.
 The normative compatibility and target rules remain in `specs/build_targets.md` and related specs.
 This directory translates those rules into reviewable build lanes.
 
-## Current State In Series 15
+## Current State At The C08 Baseline
 
 Real now:
 
@@ -47,7 +47,7 @@ Deferred:
 
 - later real renderer tiers beyond the current GDI, GL11, GL21, GL33-placeholder, GL46-placeholder, and null safety stack
 - later-series work beyond Nocturne, Ricochet, Deepfield, Plasma, Phosphor, Pipeworks, Lifeforms, Signals, Mechanize, Ecosystems, Stormglass, Transit, Observatory, Vector, Explorer, City, Atlas, Gallery, and Anthology
-- the future `suite` app or a suite-level meta-product
+- the future `suite` app
 - full legacy project files for VS6 and VS2008
 - packaging and release production
 

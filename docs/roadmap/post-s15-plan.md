@@ -8,11 +8,12 @@ The repository already contains a real implemented history through `S15`.
 That baseline currently includes:
 
 - one shared platform with the required `gdi` floor, optional `gl11`, real optional `gl21`, explicit `gl33` and `gl46` placeholders, and the internal `null` backend
-- eighteen real saver products in the tree under the canonical post-`C01` slugs, with explicit old-to-new migration aliases where recoverability requires them
-- one true `.scr` output per saver across the current eighteen-product line, with product-specific entry binding and version/resource identity on the shared host path
+- nineteen real saver products in the tree under the canonical post-`C01` slugs plus `anthology`, with explicit old-to-new migration aliases where recoverability requires them
+- one true `.scr` output per saver across the current nineteen-product line, with product-specific entry binding and version/resource identity on the shared host path
 - one shared settings architecture with versioned common config, preset/theme import-export, within-saver session randomization, pack manifest discovery/validation helpers, and representative per-saver adoption without collapsing products into one runtime blob
 - BenchLab as the real developer diagnostics harness
 - the canonical `products/apps/suite/` placeholder for the future suite app plus a superseded `products/apps/player/` legacy stub
+- `anthology` as the real suite meta-saver with bounded in-process cross-saver rotation across the other eighteen savers
 - the locked `C02` post-rename checkpoint, including the migration-baseline note and recovery tag for the canonical naming regime
 
 This document supersedes the older public assumption that the remaining work fit inside `S16` and `S17`.
@@ -28,7 +29,7 @@ That endpoint is retired for future planning.
 6. `C05` completed Windows picker, config, preview, and fullscreen validation before release/distribution work is treated as credible.
 7. `C06` completed portable distribution before `C07` installer, registration, and uninstall work.
 8. `C07` completed installer, registration, and uninstall work before `C08` suite meta-saver work.
-9. `C08` suite-level meta saver and `C09` `suite` app happen after saver productization and Windows-path validation.
+9. `C08` completed the suite-level meta saver before `C09` `suite` app work begins.
 10. `C10` SDK and contributor surface stabilization happens before backlog ingestion.
 11. `C11` idea backlog ingestion happens before the major polish waves.
 12. `C12` cross-cutting polish precedes `C13` per-family polish waves.
@@ -77,6 +78,6 @@ Interpretation rules:
 
 ## Immediate Next Step
 
-The rename, renderer-taxonomy, checkpoint, saver productization, shared settings, Windows integration, portable distribution, and installer work from `C01` through `C07` is complete.
-The next continuation prompt should be `C08` for the suite meta-saver and cross-saver randomization.
-Further continuation work should not need to renegotiate saver/app ownership, migration aliases, renderer-tier terminology, per-saver `.scr` product identity, the shared settings/preset/theme/pack contract, the bounded Win32 `.scr` lifecycle behavior validated in `C05`, the portable bundle layout and inclusion rules defined in `C06`, or the current-user installer and uninstall rules defined in `C07`.
+The rename, renderer-taxonomy, checkpoint, saver productization, shared settings, Windows integration, portable distribution, installer, and suite meta-saver work from `C01` through `C08` is complete.
+The next continuation prompt should be `C09` for the `suite` app.
+Further continuation work should not need to renegotiate saver/app ownership, migration aliases, renderer-tier terminology, per-saver `.scr` product identity, the shared settings/preset/theme/pack contract, the bounded Win32 `.scr` lifecycle behavior validated in `C05`, the portable bundle layout and inclusion rules defined in `C06`, the current-user installer and uninstall rules defined in `C07`, or the bounded in-process cross-saver orchestration baseline defined by `anthology` in `C08`.

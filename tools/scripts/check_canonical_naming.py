@@ -27,6 +27,7 @@ CANONICAL_SAVERS = (
     "city",
     "atlas",
     "gallery",
+    "anthology",
 )
 
 LEGACY_SAVERS = (
@@ -73,26 +74,27 @@ def main() -> int:
     require_text(
         ROOT / "README.md",
         (
-            "Implementation currently exists through `S15` plus continuation `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, and `C07`.",
-            "The next continuation phase is `C08` for the suite meta-saver and cross-saver randomization.",
+            "Implementation currently exists through `S15` plus continuation `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, and `C08`.",
+            "The next continuation phase is `C09` for the `suite` app.",
             "`products/apps/suite/` is now the canonical suite-app placeholder location.",
+            "`anthology` is the real suite meta-saver `.scr`",
         ),
         errors,
     )
     require_text(
         ROOT / "docs" / "roadmap" / "prompt-program.md",
         (
-            "Post-`S15` work now follows committed `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, and `C07` work plus later continuation prompts.",
-            "C08 is the next planned implementation prompt after installer, registration, and uninstall flow.",
-            "- `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, and `C07` are complete.",
+            "Post-`S15` work now follows committed `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, and `C08` work plus later continuation prompts.",
+            "C09 is the next planned implementation prompt after the suite meta-saver baseline.",
+            "- `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, and `C08` are complete.",
         ),
         errors,
     )
     require_text(
         ROOT / "docs" / "roadmap" / "series-map.md",
         (
-            "`C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, and `C07` are complete.",
-            "The next planned implementation prompt is `C08` suite meta-saver for cross-saver randomization.",
+            "`C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, and `C08` are complete.",
+            "The next planned implementation prompt is `C09` for the `suite` app.",
         ),
         errors,
     )
@@ -100,7 +102,7 @@ def main() -> int:
         ROOT / "docs" / "roadmap" / "post-s15-plan.md",
         (
             "the locked `C02` post-rename checkpoint",
-            "The next continuation prompt should be `C08` for the suite meta-saver and cross-saver randomization.",
+            "The next continuation prompt should be `C09` for the `suite` app.",
         ),
         errors,
     )
@@ -151,6 +153,15 @@ def main() -> int:
         (
             "# C07 Installer Matrix",
             "- `C08` suite meta-saver for cross-saver randomization",
+        ),
+        errors,
+    )
+    require_text(
+        ROOT / "validation" / "notes" / "c08-meta-saver-matrix.md",
+        (
+            "# C08 Meta-Saver Matrix",
+            "- `C09` `suite` app",
+            "Packaging artifacts under `out/portable/` and `out/installer/` predate `anthology`",
         ),
         errors,
     )

@@ -2,6 +2,28 @@
 
 All notable repository changes are recorded here in prompt history order.
 
+## C08 - 2026-03-30
+
+### Added
+
+- `products/savers/anthology/` as the real suite meta-saver product, including its manifest, bounded in-process orchestration module, weighted/favorites/family-filter config surface, presets, theme metadata, config dialog resources, and lightweight smoke coverage.
+- `build/msvc/vs2022/anthology.vcxproj` plus `build/msvc/vs2022/anthology_target_sources.props` as the explicit VS2022 saver target for `anthology.scr`, including the checked-in list of the eighteen inner saver modules that the meta-saver links in-process.
+- `validation/notes/c08-meta-saver-matrix.md` as the explicit product, filtering, renderer, host, BenchLab, and evidence-level record for the `C08` suite meta-saver baseline.
+
+### Changed
+
+- Updated BenchLab so the diagnostics harness can select `anthology` as a first-class saver module and surface the active inner saver, previous saver, filter summary, selection reason, and renderer context in the overlay without becoming the future `suite` app.
+- Updated the MinGW i686 and VS2022 build lanes so `anthology` is a first-class `.scr` target while preserving the explicit shared-platform plus many-product architecture and avoiding external `.scr` process orchestration.
+- Updated root, roadmap, architecture, build, and BenchLab docs so `C08` is recorded as complete, `anthology` is the canonical suite meta-saver identity, and `C09` `suite` app work is the next continuation step.
+
+### Validation
+
+- Confirmed before editing that the roadmap reset, rename normalization, post-rename checkpoint, all-saver productization matrix, shared settings architecture, Windows integration validation note, portable bundle architecture, and installer architecture already existed in the repo.
+- Audited the saver registry shape, shared settings hooks, current renderer-tier behavior, BenchLab diagnostics surface, build-lane conventions, and active roadmap status docs before introducing the suite meta-saver product.
+- Ran `python tools/scripts/check_build_layout.py` after wiring `anthology` into the checked-in VS2022 and MinGW lanes; it passed.
+- Confirmed that supported MSVC and MinGW toolchains were still unavailable in this environment, so `C08` evidence remains static and source-level rather than a fresh native build/run checkpoint.
+- Confirmed this prompt did not add suite-app work, packaging expansion, installer changes, new renderer functionality, or unrelated saver-feature work.
+
 ## C07 - 2026-03-30
 
 ### Added

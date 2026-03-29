@@ -66,6 +66,10 @@ Future concept entries that still read like working titles are descriptive ancho
 
 - `gallery`: renderer-showcase saver for validating the current tier ladder and honest fallback behavior.
 
+## Suite Meta Saver
+
+- `anthology`: real suite meta-saver for cross-saver randomization and anthology-style playback across the other eighteen saver products. It stays separate from the future `suite` app and does not replace the individual saver `.scr` products.
+
 ## Suite-Level Products
 
 - `suite`: canonical future suite control app for browse, launch, preview, settings, randomization, and pack management. `products/apps/suite/` now holds the canonical app placeholder, and `products/apps/player/` remains only as a superseded stub.

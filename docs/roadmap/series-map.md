@@ -40,5 +40,5 @@ This is the short operational view of the implemented baseline and the active po
 - `C14`: final rerelease hardening.
 
 The earlier `S16` and `S17` endpoint is superseded.
-`C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, and `C07` are complete.
-The next planned implementation prompt is `C08` suite meta-saver for cross-saver randomization.
+`C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, and `C08` are complete.
+The next planned implementation prompt is `C09` for the `suite` app.

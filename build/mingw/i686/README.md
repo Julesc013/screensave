@@ -1,6 +1,6 @@
 # MinGW i686 Lane
 
-This is the concrete GCC-family x86 lane for the `C03` saver-product baseline.
+This is the concrete GCC-family x86 lane for the current `C08` saver-product baseline.
 
 ## What Exists Now
 

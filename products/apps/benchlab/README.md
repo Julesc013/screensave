@@ -67,6 +67,12 @@ Continuation `C04` extends the same app into the shared-settings inspection harn
 - overlay reporting for active preset, theme, detail, and randomization state
 - continued use of shared saver dialogs and shared settings import/export helpers without turning BenchLab into the final end-user `suite` app
 
+Continuation `C08` extends the same app into the suite meta-saver inspection harness:
+
+- explicit saver selection now includes `anthology` beside the existing standalone saver line
+- the overlay surfaces anthology's current inner saver, previous saver, selection reason, family filter summary, and renderer-aware fallback context
+- BenchLab remains diagnostics-only and does not become the final suite browser or control app
+
 BenchLab is intentionally narrow. It is a validation harness for developers, not the end-user `suite` app.
 C03 leaves that boundary intact: the standalone saver `.scr` line now ships as one saver binary per product, while BenchLab continues to run the saver modules directly as a diagnostics harness instead of becoming a launcher for distributed saver binaries.
 Type: product runtime space.

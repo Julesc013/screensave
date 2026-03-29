@@ -5,8 +5,8 @@ Earlier docs described an intended Series 00 through 17 program; that shorter en
 
 Implementation currently exists through `S15`.
 The older public endpoint that treated `S16` and `S17` as the whole remaining plan is superseded.
-Post-`S15` work now follows committed `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, and `C07` work plus later continuation prompts.
-C08 is the next planned implementation prompt after installer, registration, and uninstall flow.
+Post-`S15` work now follows committed `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, and `C08` work plus later continuation prompts.
+C09 is the next planned implementation prompt after the suite meta-saver baseline.
 
 ## Implemented Baseline
 
@@ -41,7 +41,7 @@ C08 is the next planned implementation prompt after installer, registration, and
 | C05 | Windows picker, config, preview, and fullscreen validation | Explicit validation of saver selection, config dialogs, preview hosting, fullscreen lifecycle, and fallback behavior on the real Windows screensaver path | C03-C04 | Classic Win32 `.scr` behavior, ANSI host path, truthful validation |
 | C06 | Portable distribution bundle | Portable saver bundle layout, manifest assembly, release metadata, and validation notes for manual distribution | C03-C05 | Packaging consumes artifacts and metadata; it does not redefine runtime behavior |
 | C07 | Installer, registration, and uninstall flow | Installer/uninstaller, saver registration flow, and conservative shell integration guidance | C06 | Truthful installation claims, no hidden runtime logic in packaging |
-| C08 | Suite-level meta saver | A suite-facing saver that can represent or orchestrate the saver collection without replacing individual saver products | C03-C07 | Individual saver products remain first-class `.scr` artifacts |
+| C08 | Suite-level meta saver | `anthology.scr` plus bounded in-process cross-saver selection, weighting, renderer-aware filtering, and transition orchestration without replacing individual saver products | C03-C07 | Individual saver products remain first-class `.scr` artifacts |
 | C09 | `suite` app | One canonical suite control application for browse, launch, preview, settings, randomization, and pack management; legacy `gallery`/`player` placeholders are superseded here | C03-C08 | BenchLab remains diagnostics-only; suite app does not redefine the compatibility baseline |
 | C10 | SDK and contributor surface | Stable contributor-facing SDK, templates, examples, and docs aligned with the renamed product surface | C03-C09 | Small public platform surface and explicit contracts |
 | C11 | Idea backlog ingestion | Structured intake of deferred saver ideas and concept families onto the normalized product surface | C03-C10 | No speculative concept silently changes the platform contract |
@@ -60,11 +60,12 @@ Do not schedule new continuation work under `S16` or `S17`.
 
 ## Continuation Rules
 
-- `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, and `C07` are complete.
-- `C08` is the next implementation prompt after installer, registration, and uninstall flow.
+- `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, and `C08` are complete.
+- `C09` is the next implementation prompt after the suite meta-saver baseline.
 - Rename and renderer-taxonomy normalization land before any productization or suite/meta work.
 - All-saver `.scr` productization lands before suite/meta products, backlog ingestion, or polish waves.
 - Shared settings, presets, randomization, and pack architecture land before distribution work.
 - Portable distribution lands before installer, registration, and uninstall flow work.
 - Installer, registration, and uninstall flow land before suite meta-saver work.
+- The suite meta-saver lands before the `suite` app so cross-saver orchestration is real before browse-and-control UI work expands.
 - Creative backlog ingestion waits until the renamed product surface, suite surface, and SDK surface are stable enough to absorb new ideas without immediate rework.

@@ -1,6 +1,6 @@
 # VS2022 Lane
 
-This is the concrete modern MSVC lane for the `C03` saver-product baseline.
+This is the concrete modern MSVC lane for the current `C08` saver-product baseline.
 
 ## What Exists Now
 
