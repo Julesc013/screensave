@@ -61,6 +61,12 @@ Series 15 extends the same app into the current eighteen-product and versioned r
 - explicit fallback-reason reporting plus GL vendor, renderer, and version reporting when accelerated tiers are active
 - continued use of the shared saver dialogs and shared renderer path without turning BenchLab into the future `suite` app or a suite-level meta-product
 
+Continuation `C04` extends the same app into the shared-settings inspection harness:
+
+- per-session resolved config alongside stored config so within-saver randomization can be inspected honestly
+- overlay reporting for active preset, theme, detail, and randomization state
+- continued use of shared saver dialogs and shared settings import/export helpers without turning BenchLab into the final end-user `suite` app
+
 BenchLab is intentionally narrow. It is a validation harness for developers, not the end-user `suite` app.
 C03 leaves that boundary intact: the standalone saver `.scr` line now ships as one saver binary per product, while BenchLab continues to run the saver modules directly as a diagnostics harness instead of becoming a launcher for distributed saver binaries.
 Type: product runtime space.
