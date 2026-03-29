@@ -1,32 +1,68 @@
 # Prompt Program
 
-This document defines the intended Series 00 through 17 prompt program.
-It is explanatory, but later series should treat it as the default execution map unless a newer roadmap update says otherwise.
+This document records the implemented `S00` through `S15` line and the active post-`S15` continuation line.
+Earlier docs described an intended Series 00 through 17 program; that shorter endpoint is now superseded by the continuation work recorded here.
 
-| Series | Purpose | Outputs | Dependencies | Allowed To Modify | Must Preserve |
-| --- | --- | --- | --- | --- | --- |
-| S00 | Constitutional foundation and control plane | Specs, docs, AGENTS hierarchy, `.codex` config, directory skeleton | None | Repo structure, docs, specs, control plane | No runtime implementation, compatibility baseline |
-| S01 | Governance, community-health, and CI foundation | Issue forms, PR template, CODEOWNERS, contribution guide, stage-appropriate workflows, lightweight repo-validation scripts | S00 | `.github/`, `tools/scripts/`, `CONTRIBUTING.md`, targeted docs and changelog updates | Constitutional specs, no runtime or packaging implementation |
-| S02 | Build scaffold and toolchain lane foundation | Build philosophy, concrete VS2022 and MinGW i686 lanes, honest VS6/VS2008 scaffold, build-layout validation | S01 | `build/`, `tools/scripts/`, minimal build-only stubs under `platform/` and product trees, targeted docs and changelog updates | Constitutional specs, no real runtime or packaging implementation |
-| S03 | Win32 `.scr` host skeleton and classic lifecycle groundwork | Real screen/preview/config dispatch, full-screen and preview child-window paths, a small configuration dialog, provisional settings persistence, and a host-local placeholder visual path | S02 | `platform/`, `build/`, targeted docs, and changelog updates | C89 baseline, ANSI host path, no reusable renderer yet, product isolation |
-| S04 | Shared core runtime and first public platform API layer | Narrow public headers, reusable core runtime modules, deterministic RNG/timing/diagnostics/config services, renderer and saver contracts, and light host adoption | S02-S03 | `platform/`, `build/`, targeted docs, and changelog updates | Product-local ownership, deterministic seed rules |
-| S05 | Mandatory GDI backend and shared present path | Reusable GDI renderer backend, offscreen-buffer present path, host integration, baseline primitives/bitmap support, and a tiny validation scene | S00-S04 | `platform/`, `build/`, targeted docs, and changelog updates | Compatibility-first renderer floor, no real product yet |
-| S06 | `nocturne` first saver product | First releasable saver path, product defaults, presets, validation notes | S03-S05 | `products/savers/nocturne/`, shared platform only if justified, tests, validation | Universal baseline first, product isolation |
-| S07 | BenchLab and validation instrumentation | `benchlab` app skeleton, measurement hooks, validation workflow refinement | S03-S06 | `products/apps/benchlab/`, `tests/`, `validation/`, `tools/`, narrow platform hooks | No runtime dependency on BenchLab |
-| S08 | Optional GL11 backend and runtime selection | Conservative GL11 backend, capability capture, renderer selection, explicit fallback, BenchLab validation | S03-S07 | `platform/`, `products/apps/benchlab/`, `build/`, targeted docs, tests | GDI remains mandatory, no higher GL tier, no product-level GL dependency |
-| S09 | Motion Family with `ricochet` and `deepfield` | First multi-product saver family on the dual-backend platform | S03-S08 | `products/savers/`, narrow platform/build/docs updates, tests | Shared changes must stay justified and reusable |
-| S10 | Framebuffer and vector family with `ember` and `oscilloscope_dreams` | Product-local framebuffer and vector savers with disciplined shared renderer use | S03-S09 | `products/savers/`, narrow platform/build/docs updates, tests | Baseline renderer floor remains intact |
-| S11 | Grid and simulation family with `pipeworks` and `lifeforms` | Stateful grid-driven saver family with narrow shared helpers only where reused | S03-S10 | `products/savers/`, narrow platform/build/docs updates, tests, validation | No accidental general simulation framework |
-| S12 | Systems and ambient family with `signal_lab`, `mechanical_dreams`, and `ecosystems` | Layered composition, ambient behavior, and modest system-interface savers | S03-S11 | `products/savers/`, narrow platform/build/docs updates, tests, validation | No accidental player, gallery, or framework scope |
-| S13 | Places and atmosphere family | Scenic and atmospheric savers built on the mature multi-product, dual-backend platform | S03-S12 | `products/savers/`, `assets/`, tests, validation, narrow platform | No mandatory higher renderer tier |
-| S14 | Systemic and simulation saver pack | Longer-running systems or simulation-style savers and soak validation | S03-S13 | `products/savers/`, `tests/soak/`, `validation/`, narrow platform | Stability over long unattended runs |
-| S15 | `gl21` backend and accelerated gallery paths | Optional advanced renderer tier, explicit higher-tier GL placeholders, accelerated showcase paths | S03-S14 | `platform/src/render/gl21/`, `platform/src/render/gl33/`, `platform/src/render/gl46/`, `platform/src/render/null/`, platform contracts, tests, validation, docs | GDI universal baseline, GL11 optional tier remains intact |
-| S16 | Packaging and release pipeline material | Installer and portable packaging docs, release note flow, product metadata hardening | S06-S15 | `packaging/`, `docs/`, `validation/`, `products/`, narrow tooling | No runtime logic in packaging, truthful release evidence |
-| S17 | Release hardening and suite handoff | Final compatibility sweep, SDK examples, suite-level release readiness, cleanup | S06-S16 | Whole repo as needed for stabilization | Preserve all normative contracts and recorded evidence |
+Implementation currently exists through `S15`.
+The older public endpoint that treated `S16` and `S17` as the whole remaining plan is superseded.
+Post-`S15` work now follows `C00` and later continuation prompts.
 
-## Program Rules
+## Implemented Baseline
 
-- Earlier series establish the floor that later series must preserve.
-- Shared APIs should only grow when multiple products need them.
-- Product series may update specs and docs when the repository truth changes, but they must do so explicitly.
-- Validation evidence should accumulate alongside implementation maturity.
+| Series | Purpose | Baseline Achieved |
+| --- | --- | --- |
+| S00 | Constitutional foundation and control plane | Specs, docs, AGENTS hierarchy, `.codex` config, and permanent skeleton |
+| S01 | Governance, community-health, and CI foundation | Contribution path, review hygiene, workflows, and lightweight repository validation |
+| S02 | Build scaffold and toolchain lane foundation | Concrete VS2022 and MinGW i686 lanes plus honest legacy-lane placeholders |
+| S03 | Win32 `.scr` host skeleton and classic lifecycle groundwork | Real screen, preview, and config dispatch on the ANSI Win32 path |
+| S04 | Shared core runtime and first public platform API layer | Narrow public headers and reusable non-renderer runtime services |
+| S05 | Mandatory GDI backend and shared present path | Real reusable GDI renderer backend and baseline present path |
+| S06 | `nocturne` first saver product | First real saver module with product-owned config, presets, and themes |
+| S07 | BenchLab and validation instrumentation | Real windowed diagnostics harness with deterministic restart and reseed controls |
+| S08 | Optional GL11 backend and runtime selection | Capability-gated GL11 backend, explicit selection, and fallback reporting |
+| S09 | Motion Family with `ricochet` and `deepfield` | First true multi-product saver family on the shared platform |
+| S10 | Framebuffer and vector family with `ember` and `oscilloscope_dreams` | Product-local framebuffer and vector savers plus a narrow shared visual-buffer helper |
+| S11 | Grid and simulation family with `pipeworks` and `lifeforms` | Product-local grid and state-driven savers plus a narrow shared grid helper |
+| S12 | Systems and ambient family with `signal_lab`, `mechanical_dreams`, and `ecosystems` | Layered system-interface, kinetic, and ambient savers without broad framework sprawl |
+| S13 | Places and atmosphere family | Scenic weather, transit, and celestial savers on the same shared contracts |
+| S14 | Heavyweight worlds family | Software-3D, traversal, urban, and fractal savers without redefining the platform |
+| S15 | `gl21` backend, explicit higher-tier placeholders, and `gl_gallery` | Real optional GL21 backend, explicit `gl33`/`gl46` placeholders, internal `null`, and the eighteen-saver harness |
+
+## Active Continuation Line
+
+| Series | Purpose | Outputs | Depends On | Must Preserve |
+| --- | --- | --- | --- | --- |
+| C00 | Roadmap reset and normalization planning | Post-`S15` continuation docs, rename map, renderer taxonomy note, and truthful changelog/status updates only | S00-S15 | No runtime, build-target, packaging, or product implementation changes |
+| C01 | Rename and taxonomy normalization | Canonical saver/product/app naming, renderer-tier terminology normalization, and replacement of legacy placeholder names across code, docs, manifests, and build references | C00 | C89, x86 Win32 `.scr`, ANSI host path, one shared platform, BenchLab role, GDI floor |
+| C02 | Post-rename baseline checkpoint | A stable renamed baseline with reconciled docs, manifests, identifiers, and verification evidence before wider continuation work | C01 | Recoverable one-pass rename history and truthful repo state |
+| C03 | All-saver `.scr` productization | Every current saver packaged as an honest standalone `.scr` product with product-owned manifests and bounded metadata | C02 | Separate saver products, no silent suite coupling, no baseline regression |
+| C04 | Shared settings, presets, randomization, and pack architecture | Shared-but-bounded settings/preset/randomizer/pack surface that multiple saver products can reuse without collapsing into a meta-product | C03 | Product ownership, stable public contracts only where reuse is proven |
+| C05 | Windows picker, config, preview, and fullscreen validation | Explicit validation of saver selection, config dialogs, preview hosting, fullscreen lifecycle, and fallback behavior on the real Windows screensaver path | C03-C04 | Classic Win32 `.scr` behavior, ANSI host path, truthful validation |
+| C06 | Portable distribution bundle | Portable suite bundle layout, manifest assembly, release metadata, and validation notes for manual distribution | C03-C05 | Packaging consumes artifacts and metadata; it does not redefine runtime behavior |
+| C07 | Installer, registration, and uninstall flow | Installer/uninstaller, saver registration flow, and conservative shell integration guidance | C06 | Truthful installation claims, no hidden runtime logic in packaging |
+| C08 | Suite-level meta saver | A suite-facing saver that can represent or orchestrate the saver collection without replacing individual saver products | C03-C07 | Individual saver products remain first-class `.scr` artifacts |
+| C09 | `suite` app | One canonical suite control application for browse, launch, preview, settings, randomization, and pack management; legacy `gallery`/`player` placeholders are superseded here | C03-C08 | BenchLab remains diagnostics-only; suite app does not redefine the compatibility baseline |
+| C10 | SDK and contributor surface | Stable contributor-facing SDK, templates, examples, and docs aligned with the renamed product surface | C03-C09 | Small public platform surface and explicit contracts |
+| C11 | Idea backlog ingestion | Structured intake of deferred saver ideas and concept families onto the normalized product surface | C03-C10 | No speculative concept silently changes the platform contract |
+| C12 | Cross-cutting polish | Shared quality passes across naming, config UX, metadata, validation notes, and distribution details | C03-C11 | Compatibility-first behavior and recoverable change sets |
+| C13 | Per-family polish waves | Focused polish passes by saver family after the shared product and suite surfaces have stabilized | C03-C12 | Product-local ownership, no broad framework creep |
+| C14 | Final rerelease hardening | End-to-end release readiness, compatibility sweep, validation reconciliation, and rerelease notes | C03-C13 | Truthful release evidence, preserved baseline, no silent tier inflation |
+
+## Superseded Legacy Endpoint
+
+The older two-step post-`S15` endpoint is retired for future planning:
+
+- Former `S16` packaging work is redistributed across `C06` and `C07`.
+- Former `S17` release-hardening and suite-handoff work is redistributed across `C08` through `C14`.
+
+Do not schedule new continuation work under `S16` or `S17`.
+
+## Continuation Rules
+
+- `C00` is planning-only and records the new continuation structure without performing runtime work.
+- `C01` is the next implementation prompt after `C00`.
+- Rename and renderer-taxonomy normalization land before any productization or suite/meta work.
+- All-saver `.scr` productization lands before suite/meta products, backlog ingestion, or polish waves.
+- Shared settings, presets, randomization, and pack architecture land before distribution work.
+- Portable distribution lands before installer, registration, and uninstall flow work.
+- Creative backlog ingestion waits until the renamed product surface, suite surface, and SDK surface are stable enough to absorb new ideas without immediate rework.

@@ -12,18 +12,18 @@ The renderer contract must:
 - Permit optional acceleration through OpenGL 1.1 when available.
 - Allow later enhanced backends without forcing them into the universal baseline.
 
-## Capability Classes
+## Renderer Tiers
 
-The repository uses explicit renderer tiers:
+The repository uses an explicit renderer tier ladder:
 
-- `universal_gdi`: always required and always supported by baseline products.
-- `optional_gl11`: available only when OpenGL 1.1 initialization succeeds at runtime.
-- `optional_gl21`: the first later-capability OpenGL tier and the current real advanced backend.
-- `optional_gl33`: an explicit later-tier placeholder until a real backend exists.
-- `optional_gl46`: an explicit later-tier placeholder until a real backend exists.
-- `internal_null`: an emergency no-op fallback that keeps host lifecycles alive but does not redefine the product baseline.
+- `gdi`: always required and always supported by baseline products.
+- `gl11`: available only when OpenGL 1.1 initialization succeeds at runtime.
+- `gl21`: the first real later-capability OpenGL tier and the current real advanced backend.
+- `gl33`: an explicit later-tier placeholder until a real backend exists.
+- `gl46`: an explicit later-tier placeholder until a real backend exists.
+- `null`: an emergency no-op fallback that keeps host lifecycles alive but does not redefine the product baseline.
 
-Products may advertise use of enhanced classes, but baseline saver products must always define a valid `universal_gdi` behavior.
+Products may advertise use of enhanced tiers, but baseline saver products must always define a valid `gdi` behavior.
 
 ## Required GDI Backend
 
