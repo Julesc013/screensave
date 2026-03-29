@@ -15,8 +15,8 @@ The platform target is intentionally conservative:
 ## Current Status
 
 The repository is in Series 15.
-Implementation currently exists through `S15` plus continuation `C00`, `C01`, `C02`, `C03`, and `C04`.
-C00 reset the post-`S15` continuation roadmap, C01 applied the canonical saver/app rename and renderer-taxonomy normalization pass, C02 locked the post-rename migration baseline and recovery checkpoint, C03 converted the eighteen current savers into first-class standalone `.scr` product targets, and C04 established the shared settings taxonomy, versioned preset/theme import-export files, within-saver session randomization, pack manifest discovery/validation helpers, and modest host plus BenchLab inspection foundations.
+Implementation currently exists through `S15` plus continuation `C00`, `C01`, `C02`, `C03`, `C04`, and `C05`.
+C00 reset the post-`S15` continuation roadmap, C01 applied the canonical saver/app rename and renderer-taxonomy normalization pass, C02 locked the post-rename migration baseline and recovery checkpoint, C03 converted the eighteen current savers into first-class standalone `.scr` product targets, C04 established the shared settings taxonomy, versioned preset/theme import-export files, within-saver session randomization, pack manifest discovery/validation helpers, and modest host plus BenchLab inspection foundations, and C05 hardened the real Win32 `.scr` lifecycle across screen, preview, config, persistence, renderer fallback, and Windows-facing identity paths.
 The older short `S16` / `S17` endpoint is superseded by `docs/roadmap/post-s15-plan.md`.
 Series 00 established repository law, structure, roadmap, and agent guidance.
 Series 01 added contribution, review, governance, and CI foundations.
@@ -90,7 +90,7 @@ Series 15 adds the advanced GL capability path and Gallery:
 - Gallery as the renderer-showcase saver with deliberate GDI, GL11, and GL21-tier scene variants plus curated compatibility, classic, and advanced presets
 - explicit host and BenchLab wiring so the current saver set can be exercised honestly through the tiered renderer stack without turning the repo into the final meta-gallery
 
-The next continuation phase is `C05` for Windows picker, config, preview, and fullscreen validation.
+The next continuation phase is `C06` for the portable distribution bundle.
 
 ## Planned Product Shape
 
@@ -147,6 +147,7 @@ The checked-in build scaffold now integrates the real Series 15 multi-family sav
 
 The shared platform target now compiles the reusable non-renderer core runtime, the mandatory GDI backend, the optional GL11 backend, the optional capability-gated GL21 backend, the explicit GL33 and GL46 placeholders, the internal null safety backend, the Win32 host, the narrow shared visual-buffer helper used by the current framebuffer and vector products, and the narrow shared grid-buffer helper used by the current grid and simulation products.
 The saver line now builds toward one true `.scr` output per saver across Nocturne, Ricochet, Deepfield, Plasma, Phosphor, Pipeworks, Lifeforms, Signals, Mechanize, Ecosystems, Stormglass, Transit, Observatory, Vector, Explorer, City, Atlas, and Gallery, each with product-specific entry binding and version/resource identity on top of the shared host and renderer stack.
+The Win32 host path now also carries the hardened C05 lifecycle baseline: bounded single-saver `Settings...` shell routing, preview-parent revalidation, virtual-desktop fullscreen sizing, display-change resynchronization, and explicit multi-monitor limits that keep one saver window spanning the current virtual desktop.
 The app target still runs BenchLab as a real windowed harness for all eighteen current savers through the same shared contracts, with explicit `auto`, `gdi`, `gl11`, `gl21`, `gl33`, and `gl46` controls plus requested-versus-active renderer diagnostics, without depending on the distributed `.scr` model.
 
 Read the specs before adding code.

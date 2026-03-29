@@ -2,6 +2,29 @@
 
 All notable repository changes are recorded here in prompt history order.
 
+## C05 - 2026-03-30
+
+### Added
+
+- `validation/notes/c05-windows-integration-matrix.md` as the explicit Windows lifecycle audit record for the current saver line, including per-saver notes for screen, preview, config, persistence, renderer, and multi-monitor status plus the remaining limitations and next continuation step.
+- `tools/scripts/check_windows_integration_layout.py` as the small static validator for the C05 Win32 host hardening surface, saver metadata consistency, and active repo status notes.
+- `IDD_SCR_SAVER_SHELL` in the shared host resources so standalone saver products can expose a bounded host-owned settings shell before opening their saver-specific dialog.
+
+### Changed
+
+- Hardened the Win32 `.scr` host so standalone saver `/c` mode now routes through a bounded single-saver settings shell that stages shared common settings, renderer preference, and saver-specific dialog edits before saving on `OK`.
+- Hardened preview and fullscreen behavior so preview remains a true child-window path with live parent revalidation and resize sync while fullscreen mode now sizes against the Windows virtual desktop and resynchronizes on `WM_DISPLAYCHANGE`.
+- Normalized the remaining stale saver metadata by updating `products/savers/lifeforms/manifest.ini` to the canonical product/identity/notes layout used by the rest of the current saver line.
+- Updated `README.md`, roadmap docs, the Win32 host README, and the naming validator so `C05` is recorded as complete and `C06` portable distribution bundle is the next continuation step.
+
+### Validation
+
+- Confirmed before editing that the roadmap reset, canonical rename baseline, `C02` migration checkpoint, `C03` saver productization matrix, and `C04` shared settings architecture already existed in the repo.
+- Performed a narrow audit of the real Win32 host lifecycle, single-saver config routing, preview-parent handling, fullscreen sizing, saver manifests, and active roadmap/status docs to distinguish concrete hardening work from still-deferred packaged runtime evidence.
+- Ran `python tools/scripts/check_repo_structure.py`, `python tools/scripts/check_codex_config.py`, `python tools/scripts/check_docs_basics.py`, `python tools/scripts/check_build_layout.py`, `python tools/scripts/check_canonical_naming.py`, `python tools/scripts/check_shared_settings_layout.py`, `python tools/scripts/check_windows_integration_layout.py`, `python -m py_compile tools/scripts/check_canonical_naming.py tools/scripts/check_shared_settings_layout.py tools/scripts/check_windows_integration_layout.py`, and `git diff --check` on the final tree.
+- Confirmed that native Windows Control Panel / packaged `.scr` smoke execution and toolchain builds could not be rerun in this environment, so the C05 matrix records honest static validation plus code hardening rather than fake runtime evidence.
+- Confirmed this prompt did not add portable distribution, installer flow, suite-meta behavior, suite-app work, or a broad saver polish wave.
+
 ## C04 - 2026-03-30
 
 ### Added

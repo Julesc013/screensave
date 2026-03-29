@@ -25,8 +25,8 @@ That endpoint is retired for future planning.
 3. `C02` established and locked the explicit post-rename checkpoint before wider continuation work proceeds.
 4. `C03` completed all-saver `.scr` productization before suite/meta products, idea ingestion, or polish waves.
 5. `C04` completed the shared settings, presets, randomization, and pack architecture baseline before distribution work.
-6. `C05` Windows picker, config, preview, and fullscreen validation happens next and before release/distribution work is treated as credible.
-7. `C06` portable distribution happens before `C07` installer, registration, and uninstall work.
+6. `C05` completed Windows picker, config, preview, and fullscreen validation before release/distribution work is treated as credible.
+7. `C06` portable distribution happens next and before `C07` installer, registration, and uninstall work.
 8. `C08` suite-level meta saver and `C09` `suite` app happen after saver productization and Windows-path validation.
 9. `C10` SDK and contributor surface stabilization happens before backlog ingestion.
 10. `C11` idea backlog ingestion happens before the major polish waves.
@@ -76,6 +76,6 @@ Interpretation rules:
 
 ## Immediate Next Step
 
-The rename, renderer-taxonomy, checkpoint, saver productization, and shared settings work from `C01` through `C04` is complete.
-The next continuation prompt should be `C05` for Windows picker, config, preview, and fullscreen validation.
-Further continuation work should not need to renegotiate saver/app ownership, migration aliases, renderer-tier terminology, per-saver `.scr` product identity, or the shared settings/preset/theme/pack contract.
+The rename, renderer-taxonomy, checkpoint, saver productization, shared settings, and Windows integration work from `C01` through `C05` is complete.
+The next continuation prompt should be `C06` for the portable distribution bundle.
+Further continuation work should not need to renegotiate saver/app ownership, migration aliases, renderer-tier terminology, per-saver `.scr` product identity, the shared settings/preset/theme/pack contract, or the bounded Win32 `.scr` lifecycle behavior validated in `C05`.

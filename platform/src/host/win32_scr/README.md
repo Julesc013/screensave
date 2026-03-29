@@ -27,5 +27,13 @@ Series 12 extends the same explicit built-in selector to the current ten-product
 Series 13 extends the same explicit built-in selector to the current thirteen-product saver set, including Stormglass, Transit, and Observatory, while preserving the existing host lifecycle and automatic renderer-selection behavior.
 Series 14 extends the same explicit built-in selector to the current seventeen-product saver set, including Vector, Explorer, City, and Atlas, while preserving the existing host lifecycle and automatic renderer-selection behavior.
 Series 15 keeps the selector narrow while adding persistence for the requested renderer ladder (`auto`, `gdi`, `gl11`, `gl21`, `gl33`, or `gl46`) and surfacing requested-versus-active renderer diagnostics without turning the host config UI into the future `suite` surface or a renderer lab.
+C05 hardens the real `.scr` lifecycle for the standalone saver line by:
+
+- keeping preview mode as a true child-window path while revalidating the preview parent and resynchronizing preview size during live preview
+- adding a bounded single-saver `/c` shell so standalone savers expose renderer preference plus shared common settings before delegating to the owning saver dialog
+- sizing fullscreen saver windows against the Windows virtual desktop when multiple monitors are reported instead of assuming only the primary screen
+- resynchronizing preview and fullscreen window bounds on `WM_DISPLAYCHANGE`
+- documenting the current multi-monitor policy as one saver window spanning the virtual desktop, not independent per-monitor saver sessions
+
 The validation scene remains only as a fallback path for non-product sessions.
 Type: runtime host implementation.

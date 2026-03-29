@@ -73,8 +73,8 @@ def main() -> int:
     require_text(
         ROOT / "README.md",
         (
-            "Implementation currently exists through `S15` plus continuation `C00`, `C01`, `C02`, `C03`, and `C04`.",
-            "The next continuation phase is `C05` for Windows picker, config, preview, and fullscreen validation.",
+            "Implementation currently exists through `S15` plus continuation `C00`, `C01`, `C02`, `C03`, `C04`, and `C05`.",
+            "The next continuation phase is `C06` for the portable distribution bundle.",
             "`products/apps/suite/` is now the canonical suite-app placeholder location.",
         ),
         errors,
@@ -82,17 +82,17 @@ def main() -> int:
     require_text(
         ROOT / "docs" / "roadmap" / "prompt-program.md",
         (
-            "Post-`S15` work now follows committed `C00`, `C01`, `C02`, `C03`, and `C04` work plus later continuation prompts.",
-            "C05 is the next planned implementation prompt after the shared settings baseline.",
-            "- `C00`, `C01`, `C02`, `C03`, and `C04` are complete.",
+            "Post-`S15` work now follows committed `C00`, `C01`, `C02`, `C03`, `C04`, and `C05` work plus later continuation prompts.",
+            "C06 is the next planned implementation prompt after the Windows integration hardening pass.",
+            "- `C00`, `C01`, `C02`, `C03`, `C04`, and `C05` are complete.",
         ),
         errors,
     )
     require_text(
         ROOT / "docs" / "roadmap" / "series-map.md",
         (
-            "`C00`, `C01`, `C02`, `C03`, and `C04` are complete.",
-            "The next planned implementation prompt is `C05` Windows picker, config, preview, and fullscreen validation.",
+            "`C00`, `C01`, `C02`, `C03`, `C04`, and `C05` are complete.",
+            "The next planned implementation prompt is `C06` portable distribution bundle.",
         ),
         errors,
     )
@@ -100,7 +100,7 @@ def main() -> int:
         ROOT / "docs" / "roadmap" / "post-s15-plan.md",
         (
             "the locked `C02` post-rename checkpoint",
-            "The next continuation prompt should be `C05` for Windows picker, config, preview, and fullscreen validation.",
+            "The next continuation prompt should be `C06` for the portable distribution bundle.",
         ),
         errors,
     )
