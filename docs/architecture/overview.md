@@ -13,8 +13,8 @@ The platform side exists to solve the common problems once:
 The product side exists to keep each saver or suite-level application separate:
 
 - savers define their own identity, presets, themes, and content
-- applications such as the future `suite` control app and `benchlab` serve different purposes than the `.scr` products
-- `products/apps/suite/` is the canonical suite-app placeholder location, and `products/apps/player/` is only a superseded legacy stub
+- applications such as the real `suite` control app and `benchlab` serve different purposes than the `.scr` products
+- `products/apps/suite/` is the canonical suite-app location, and `products/apps/player/` is only a superseded legacy stub
 - SDK material supports later contributors without becoming part of the runtime baseline
 
 The architecture is intentionally conservative.
@@ -33,4 +33,4 @@ Series 12 proves the same contracts can also host layered system-interface, kine
 Series 13 proves the same contracts can also host layered weather, transit-infrastructure, and celestial exhibit products by adding Stormglass, Transit, and Observatory without promoting a broad weather, route, astronomy, or scenic framework into the platform.
 Series 14 proves the same contracts can also host heavyweight software-3D, traversal, urban night-world, and fractal-voyage products by adding Vector, Explorer, City, and Atlas without promoting a broad 3D, map, city, or fractal framework into the platform.
 Series 15 proves the same contracts can also host a versioned renderer ladder by adding the optional capability-gated GL21 backend, explicit GL33 and GL46 placeholders, the internal null safety fallback, and Gallery without weakening the GDI baseline, the conservative GL11 tier, or the product/local ownership boundaries.
-Post-`S15` continuation planning is tracked in `docs/roadmap/post-s15-plan.md`, and the near-term continuation path is now the completed rename, checkpoint, productization, shared-settings, Windows-integration, portable-bundle, installer, and suite-meta-saver sequence followed by the `suite` app rather than more naming cleanup or host-lifecycle renegotiation.
+Post-`S15` continuation planning is tracked in `docs/roadmap/post-s15-plan.md`, and the near-term continuation path is now the completed rename, checkpoint, productization, shared-settings, Windows-integration, portable-bundle, installer, suite-meta-saver, and suite-app sequence followed by SDK stabilization rather than more naming cleanup or host-lifecycle renegotiation.

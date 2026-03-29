@@ -2,6 +2,30 @@
 
 All notable repository changes are recorded here in prompt history order.
 
+## C09 - 2026-03-30
+
+### Added
+
+- `products/apps/suite/` as the real suite app product, including its manifest, bounded browser/preview/launch/config sources, stable role-boundary notes, and lightweight smoke coverage.
+- `build/msvc/vs2022/suite.vcxproj` plus `build/msvc/vs2022/suite_target_sources.props` as the explicit VS2022 app target for `suite.exe`, including the checked-in list of linked saver modules and saver-owned config resources the app reuses.
+- `validation/notes/c09-suite-app-matrix.md` as the explicit product, discovery, launch/config, role-boundary, and evidence-level record for the `C09` suite app baseline.
+- `tools/scripts/check_suite_app_layout.py` as the small static validator for the `C09` suite product tree, build-lane integration, manifest-driven saver coverage, and continuation-status docs.
+
+### Changed
+
+- Updated the MinGW i686 and VS2022 build lanes so `suite` is a first-class app target beside BenchLab while preserving the existing shared-platform plus many-product architecture and keeping standalone `.scr` savers, `anthology`, BenchLab, and Suite in distinct roles.
+- Updated root, roadmap, architecture, build, app-boundary, and anthology docs so `C09` is recorded as complete, `suite` is the real suite-level browser and launcher surface, BenchLab remains diagnostics-only, `anthology` remains the meta-saver, and `C10` SDK / contributor-surface work is the next continuation step.
+- Updated the continuation-status validators so active repo truth now expects the real `suite` app baseline instead of the earlier `C09 is next` placeholder state.
+
+### Validation
+
+- Confirmed before editing that the roadmap reset, rename normalization, post-rename checkpoint, all-saver productization matrix, shared settings architecture, Windows integration validation note, portable bundle architecture, installer architecture, and `anthology` meta-saver baseline already existed in the repo.
+- Audited the saver manifests, shared settings hooks, BenchLab role, anthology role, suite placeholder tree, build-lane conventions, and active roadmap/status docs before promoting `suite` to a real app product.
+- Ran `python tools/scripts/check_build_layout.py` and `python tools/scripts/check_suite_app_layout.py` after wiring `suite` into the checked-in VS2022 and MinGW lanes; both passed.
+- Ran `python tools/scripts/check_repo_structure.py`, `python tools/scripts/check_codex_config.py`, `python tools/scripts/check_docs_basics.py`, `python tools/scripts/check_build_layout.py`, `python tools/scripts/check_canonical_naming.py`, `python tools/scripts/check_shared_settings_layout.py`, `python tools/scripts/check_windows_integration_layout.py`, `python tools/scripts/check_portable_bundle_layout.py`, `python tools/scripts/check_installer_layout.py`, `python tools/scripts/check_meta_saver_layout.py`, `python tools/scripts/check_suite_app_layout.py`, `python -m py_compile tools/scripts/check_build_layout.py tools/scripts/check_canonical_naming.py tools/scripts/check_shared_settings_layout.py tools/scripts/check_windows_integration_layout.py tools/scripts/check_portable_bundle_layout.py tools/scripts/check_installer_layout.py tools/scripts/check_meta_saver_layout.py tools/scripts/check_suite_app_layout.py`, and `git diff --check` on the final tree.
+- Confirmed that supported MSVC and MinGW toolchains were still unavailable in this environment, so `C09` evidence remains static and source-level rather than a fresh native build/run checkpoint.
+- Confirmed this prompt did not add SDK/plugin work, packaging refresh, installer expansion, renderer changes, or unrelated saver-feature work.
+
 ## C08 - 2026-03-30
 
 ### Added

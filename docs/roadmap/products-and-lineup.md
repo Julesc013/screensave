@@ -68,11 +68,11 @@ Future concept entries that still read like working titles are descriptive ancho
 
 ## Suite Meta Saver
 
-- `anthology`: real suite meta-saver for cross-saver randomization and anthology-style playback across the other eighteen saver products. It stays separate from the future `suite` app and does not replace the individual saver `.scr` products.
+- `anthology`: real suite meta-saver for cross-saver randomization and anthology-style playback across the other eighteen saver products. It stays separate from the real `suite` app and does not replace the individual saver `.scr` products.
 
 ## Suite-Level Products
 
-- `suite`: canonical future suite control app for browse, launch, preview, settings, randomization, and pack management. `products/apps/suite/` now holds the canonical app placeholder, and `products/apps/player/` remains only as a superseded stub.
+- `suite`: real suite control app for browse, launch, preview, settings, randomization visibility, and pack visibility. `products/apps/suite/` now holds the canonical real app, and `products/apps/player/` remains only as a superseded stub.
 - `benchlab`: developer-facing diagnostics harness for saver, renderer, deterministic validation, and current multi-product inspection.
 - `sdk`: headers, templates, examples, and contributor-oriented materials.
 

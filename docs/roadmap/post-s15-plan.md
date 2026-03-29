@@ -12,7 +12,7 @@ That baseline currently includes:
 - one true `.scr` output per saver across the current nineteen-product line, with product-specific entry binding and version/resource identity on the shared host path
 - one shared settings architecture with versioned common config, preset/theme import-export, within-saver session randomization, pack manifest discovery/validation helpers, and representative per-saver adoption without collapsing products into one runtime blob
 - BenchLab as the real developer diagnostics harness
-- the canonical `products/apps/suite/` placeholder for the future suite app plus a superseded `products/apps/player/` legacy stub
+- the real `suite` app under `products/apps/suite/` plus a superseded `products/apps/player/` legacy stub
 - `anthology` as the real suite meta-saver with bounded in-process cross-saver rotation across the other eighteen savers
 - the locked `C02` post-rename checkpoint, including the migration-baseline note and recovery tag for the canonical naming regime
 
@@ -30,10 +30,11 @@ That endpoint is retired for future planning.
 7. `C06` completed portable distribution before `C07` installer, registration, and uninstall work.
 8. `C07` completed installer, registration, and uninstall work before `C08` suite meta-saver work.
 9. `C08` completed the suite-level meta saver before `C09` `suite` app work begins.
-10. `C10` SDK and contributor surface stabilization happens before backlog ingestion.
-11. `C11` idea backlog ingestion happens before the major polish waves.
-12. `C12` cross-cutting polish precedes `C13` per-family polish waves.
-13. `C14` final rerelease hardening closes the continuation line.
+10. `C09` completed the real `suite` browser, launcher, preview, and saver-settings surface before `C10` SDK stabilization.
+11. `C10` SDK and contributor surface stabilization happens before backlog ingestion.
+12. `C11` idea backlog ingestion happens before the major polish waves.
+13. `C12` cross-cutting polish precedes `C13` per-family polish waves.
+14. `C14` final rerelease hardening closes the continuation line.
 
 ## Renderer Tier Taxonomy Note
 
@@ -78,6 +79,6 @@ Interpretation rules:
 
 ## Immediate Next Step
 
-The rename, renderer-taxonomy, checkpoint, saver productization, shared settings, Windows integration, portable distribution, installer, and suite meta-saver work from `C01` through `C08` is complete.
-The next continuation prompt should be `C09` for the `suite` app.
-Further continuation work should not need to renegotiate saver/app ownership, migration aliases, renderer-tier terminology, per-saver `.scr` product identity, the shared settings/preset/theme/pack contract, the bounded Win32 `.scr` lifecycle behavior validated in `C05`, the portable bundle layout and inclusion rules defined in `C06`, the current-user installer and uninstall rules defined in `C07`, or the bounded in-process cross-saver orchestration baseline defined by `anthology` in `C08`.
+The rename, renderer-taxonomy, checkpoint, saver productization, shared settings, Windows integration, portable distribution, installer, suite meta-saver, and suite-app work from `C01` through `C09` is complete.
+The next continuation prompt should be `C10` for the SDK / contributor surface.
+Further continuation work should not need to renegotiate saver/app ownership, migration aliases, renderer-tier terminology, per-saver `.scr` product identity, the shared settings/preset/theme/pack contract, the bounded Win32 `.scr` lifecycle behavior validated in `C05`, the portable bundle layout and inclusion rules defined in `C06`, the current-user installer and uninstall rules defined in `C07`, the bounded in-process cross-saver orchestration baseline defined by `anthology` in `C08`, or the role boundaries and launch/config surface established by the real `suite` app in `C09`.

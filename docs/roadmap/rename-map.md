@@ -22,8 +22,8 @@ Unless a later product-specific branding decision is documented explicitly, the 
 
 ## App Naming Decisions
 
-- `suite` is the canonical future suite-level control app.
-- `products/apps/suite/` now holds the canonical suite-app placeholder location.
+- `suite` is the canonical suite-level control app.
+- `products/apps/suite/` now holds the canonical real suite-app location.
 - `products/apps/player/` is superseded by the `suite` plan rather than surviving as a separate enduring app product.
 - `benchlab` remains the diagnostics harness and does not merge into `suite`.
 - `sdk` remains the contributor-facing surface and does not become the suite app.

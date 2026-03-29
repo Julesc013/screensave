@@ -5,8 +5,8 @@ Earlier docs described an intended Series 00 through 17 program; that shorter en
 
 Implementation currently exists through `S15`.
 The older public endpoint that treated `S16` and `S17` as the whole remaining plan is superseded.
-Post-`S15` work now follows committed `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, and `C08` work plus later continuation prompts.
-C09 is the next planned implementation prompt after the suite meta-saver baseline.
+Post-`S15` work now follows committed `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, and `C09` work plus later continuation prompts.
+C10 is the next planned implementation prompt after the suite app baseline.
 
 ## Implemented Baseline
 
@@ -60,12 +60,13 @@ Do not schedule new continuation work under `S16` or `S17`.
 
 ## Continuation Rules
 
-- `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, and `C08` are complete.
-- `C09` is the next implementation prompt after the suite meta-saver baseline.
+- `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, and `C09` are complete.
+- `C10` is the next implementation prompt after the suite app baseline.
 - Rename and renderer-taxonomy normalization land before any productization or suite/meta work.
 - All-saver `.scr` productization lands before suite/meta products, backlog ingestion, or polish waves.
 - Shared settings, presets, randomization, and pack architecture land before distribution work.
 - Portable distribution lands before installer, registration, and uninstall flow work.
 - Installer, registration, and uninstall flow land before suite meta-saver work.
 - The suite meta-saver lands before the `suite` app so cross-saver orchestration is real before browse-and-control UI work expands.
+- The `suite` app lands before SDK stabilization so contributor-facing templates and examples can target the real browse-and-control surface instead of a placeholder.
 - Creative backlog ingestion waits until the renamed product surface, suite surface, and SDK surface are stable enough to absorb new ideas without immediate rework.

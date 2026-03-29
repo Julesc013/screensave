@@ -76,21 +76,21 @@ def main() -> int:
     require("- `C08` suite meta-saver for cross-saver randomization" in note, "C07 installer note must name the next continuation step.", errors)
 
     readme = read_text(ROOT / "README.md")
-    require("Implementation currently exists through `S15` plus continuation `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, and `C08`." in readme, "README.md must record C08 as complete.", errors)
-    require("The next continuation phase is `C09` for the `suite` app." in readme, "README.md must point to C09.", errors)
+    require("Implementation currently exists through `S15` plus continuation `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, and `C09`." in readme, "README.md must record C09 as complete.", errors)
+    require("The next continuation phase is `C10` for the SDK / contributor surface." in readme, "README.md must point to C10.", errors)
 
     prompt_program = read_text(ROOT / "docs" / "roadmap" / "prompt-program.md")
-    require("Post-`S15` work now follows committed `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, and `C08` work plus later continuation prompts." in prompt_program, "prompt-program.md must record C08 as complete.", errors)
-    require("C09 is the next planned implementation prompt after the suite meta-saver baseline." in prompt_program, "prompt-program.md must point to C09.", errors)
-    require("- `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, and `C08` are complete." in prompt_program, "prompt-program.md must mark C08 complete.", errors)
+    require("Post-`S15` work now follows committed `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, and `C09` work plus later continuation prompts." in prompt_program, "prompt-program.md must record C09 as complete.", errors)
+    require("C10 is the next planned implementation prompt after the suite app baseline." in prompt_program, "prompt-program.md must point to C10.", errors)
+    require("- `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, and `C09` are complete." in prompt_program, "prompt-program.md must mark C09 complete.", errors)
 
     series_map = read_text(ROOT / "docs" / "roadmap" / "series-map.md")
-    require("`C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, and `C08` are complete." in series_map, "series-map.md must mark C08 complete.", errors)
-    require("The next planned implementation prompt is `C09` for the `suite` app." in series_map, "series-map.md must point to C09.", errors)
+    require("`C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, and `C09` are complete." in series_map, "series-map.md must mark C09 complete.", errors)
+    require("The next planned implementation prompt is `C10` for the SDK / contributor surface." in series_map, "series-map.md must point to C10.", errors)
 
     post_s15 = read_text(ROOT / "docs" / "roadmap" / "post-s15-plan.md")
-    require("9. `C08` completed the suite-level meta saver before `C09` `suite` app work begins." in post_s15, "post-s15-plan.md must record C08 as complete.", errors)
-    require("The next continuation prompt should be `C09` for the `suite` app." in post_s15, "post-s15-plan.md must point to C09.", errors)
+    require("10. `C09` completed the real `suite` browser, launcher, preview, and saver-settings surface before `C10` SDK stabilization." in post_s15, "post-s15-plan.md must record C09 as complete.", errors)
+    require("The next continuation prompt should be `C10` for the SDK / contributor surface." in post_s15, "post-s15-plan.md must point to C10.", errors)
 
     if errors:
         for message in errors:

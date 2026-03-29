@@ -71,7 +71,7 @@ def main() -> int:
 
     readme = read_text(ANTHOLOGY_ROOT / "README.md")
     require("cross-saver randomization" in readme, "Anthology README must describe cross-saver randomization.", errors)
-    require("future `suite` app" in readme, "Anthology README must keep the future suite app out of scope.", errors)
+    require("real `suite` app" in readme, "Anthology README must keep the real suite app out of scope.", errors)
     require("in-process" in readme, "Anthology README must describe the in-process orchestration model.", errors)
 
     module_text = read_text(ANTHOLOGY_ROOT / "src" / "anthology_module.c")
@@ -121,7 +121,7 @@ def main() -> int:
     require("predate `anthology`" in note, "C08 meta-saver note must record the packaging limitation honestly.", errors)
 
     root_readme = read_text(ROOT / "README.md")
-    require("The next continuation phase is `C09` for the `suite` app." in root_readme, "README.md must point to C09.", errors)
+    require("The next continuation phase is `C10` for the SDK / contributor surface." in root_readme, "README.md must point to C10.", errors)
     require("`anthology` is the real suite meta-saver `.scr`" in root_readme, "README.md must describe anthology explicitly.", errors)
 
     if errors:
