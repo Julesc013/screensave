@@ -133,6 +133,8 @@ def required_paths() -> list[pathlib.Path]:
         ROOT / "platform" / "include" / "screensave" / "version.h",
         ROOT / "platform" / "include" / "screensave" / "visual_buffer_api.h",
         ROOT / "platform" / "src" / "core" / "grid" / "grid_buffer.c",
+        ROOT / "platform" / "src" / "core" / "base" / "display_text.c",
+        ROOT / "platform" / "src" / "core" / "base" / "display_text.h",
         ROOT / "platform" / "src" / "core" / "base" / "ini_file.c",
         ROOT / "platform" / "src" / "core" / "base" / "ini_file.h",
         ROOT / "platform" / "src" / "core" / "visual" / "visual_buffer.c",
@@ -299,6 +301,7 @@ def main() -> int:
         platform_sources,
         [
             "..\\..\\..\\platform\\src\\core\\base\\renderer_dispatch.c",
+            "..\\..\\..\\platform\\src\\core\\base\\display_text.c",
             "..\\..\\..\\platform\\src\\core\\base\\ini_file.c",
             "..\\..\\..\\platform\\src\\core\\base\\saver_contract.c",
             "..\\..\\..\\platform\\src\\core\\base\\saver_registry.c",

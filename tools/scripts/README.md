@@ -16,5 +16,6 @@ Current stage:
 - `check_suite_app_layout.py` validates the C09 suite app product tree, build-lane integration, manifest-driven saver coverage, role boundaries, and continuation-status docs.
 - `check_sdk_surface.py` validates the C10 contributor-facing SDK surface, the real saver template, and contributor-authored saver or pack roots.
 - `check_backlog_surface.py` validates the C11 backlog, routing, wave-planning, and refinement-thread surface plus the active continuation-status docs.
+- `check_suite_consistency_surface.py` validates the C12 cross-cutting consistency pass, the quality-bar note, and the active continuation-status docs.
 - `check_release_scaffold.py` generates a manual release-scaffold report without publishing anything.
 Type: tooling.

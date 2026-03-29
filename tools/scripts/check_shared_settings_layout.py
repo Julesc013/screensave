@@ -87,10 +87,10 @@ def check_host_and_benchlab(errors: list[str]) -> None:
     benchlab_overlay = read_text(ROOT / "products" / "apps" / "benchlab" / "src" / "benchlab_overlay.c")
 
     require("IDC_SCR_RANDOMIZE_SESSION" in host_ids, "Fallback host dialog is missing the shared randomization control id.", errors)
-    require("Randomize each session" in host_resource, "Fallback host dialog is missing the shared randomization checkbox.", errors)
+    require("Session randomization" in host_resource, "Fallback host dialog is missing the shared randomization checkbox.", errors)
     require("screensave_randomization_default_scope()" in config_dialog, "Fallback host dialog is missing shared randomization scope handling.", errors)
     require("resolved_config" in benchlab_session, "BenchLab must resolve a per-session config state.", errors)
-    require("Randomization:" in benchlab_overlay, "BenchLab overlay must surface the active randomization state.", errors)
+    require("Randomization mode:" in benchlab_overlay, "BenchLab overlay must surface the active randomization state.", errors)
 
 
 def check_pack_samples(errors: list[str]) -> None:
