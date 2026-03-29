@@ -2,6 +2,28 @@
 
 All notable repository changes are recorded here in prompt history order.
 
+## C11 - 2026-03-30
+
+### Added
+
+- `docs/roadmap/backlog-routing.md` as the explicit routing taxonomy, priority model, field set, and wave-bucket definition for post-`C10` work.
+- `docs/roadmap/backlog-inventory.md` as the structured backlog inventory covering cross-cutting items, every current saver, the key non-saver products, release/distribution follow-on work, and the parked concept pool.
+- `docs/roadmap/refinement-threads.md` as the practical operating model for master coordination, shared-platform work, release/distribution work, suite/meta coordination, and per-saver refinement threads.
+- `validation/notes/c11-backlog-routing-baseline.md` as the compact baseline note recording the new planning surface and the next continuation step.
+- `tools/scripts/check_backlog_surface.py` as the small stdlib-only validator for backlog coverage, routing docs, refinement-thread notes, and active continuation-status docs.
+
+### Changed
+
+- Updated root and roadmap status docs so `C11` is recorded as complete, the suite is described as entering a structured refinement phase, and `C12` cross-cutting polish is the next continuation step.
+- Updated `docs/roadmap/products-and-lineup.md` so future working-title concepts are explicitly treated as parked backlog items rather than near-term implementation promises.
+- Updated the tooling index so the new backlog validator is discoverable beside the earlier continuation-status checks.
+
+### Validation
+
+- Confirmed before editing that the roadmap reset, canonical rename baseline, `C02` migration checkpoint, `C03` saver productization matrix, `C04` shared settings architecture, `C05` Windows integration baseline, `C06` portable bundle, `C07` installer baseline, `C08` suite meta-saver, `C09` suite app, and `C10` SDK surface already existed in the repo.
+- Kept `C11` planning-only: this prompt did not add saver features, renderer work, packaging expansion, installer changes, or polish-wave implementation.
+- Final verification for `C11` is documentation and static-validator based; no new runtime or toolchain evidence is claimed here.
+
 ## C10 - 2026-03-30
 
 ### Added
