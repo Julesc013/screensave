@@ -10,8 +10,8 @@
 #define VECTOR_PRODUCT_REGISTRY_ROOTA "Software\\Julesc013\\ScreenSave\\Products\\vector"
 #define VECTOR_DEFAULT_PRESET_KEY "quiet_vector_hall"
 #define VECTOR_DEFAULT_THEME_KEY "quiet_midnight_grid"
-#define VECTOR_PRESET_COUNT 5U
-#define VECTOR_THEME_COUNT 5U
+#define VECTOR_PRESET_COUNT 7U
+#define VECTOR_THEME_COUNT 7U
 #define VECTOR_MAX_OBJECTS 18U
 
 typedef enum vector_scene_mode_tag {

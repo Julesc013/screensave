@@ -47,6 +47,14 @@ static screensave_color lifeforms_background_color(
         color.red = 8;
         color.green = 16;
         color.blue = 24;
+    } else if (lstrcmpiA(session->theme->theme_key, "garden_green") == 0) {
+        color.red = 8;
+        color.green = 18;
+        color.blue = 10;
+    } else if (lstrcmpiA(session->theme->theme_key, "blue_archive") == 0) {
+        color.red = 10;
+        color.green = 14;
+        color.blue = 24;
     } else if (lstrcmpiA(session->theme->theme_key, "amber_phosphor") == 0) {
         color.red = 12;
         color.green = 8;

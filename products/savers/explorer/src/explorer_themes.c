@@ -35,6 +35,20 @@ const screensave_theme_descriptor g_explorer_themes[] = {
         "Dark blue night travel with soft forward movement and low contrast cues.",
         { 16, 26, 44, 255 },
         { 140, 170, 220, 255 }
+    },
+    {
+        "eerie_corridor_watch",
+        "Eerie Corridor Watch",
+        "Near-black corridor palette with pale lab markers and subdued instrument glints.",
+        { 28, 36, 54, 255 },
+        { 174, 204, 228, 255 }
+    },
+    {
+        "amber_service_drift",
+        "Amber Service Drift",
+        "Warm industrial service-light palette with darker steel shadows and calmer signage.",
+        { 84, 70, 48, 255 },
+        { 222, 176, 92, 255 }
     }
 };
 

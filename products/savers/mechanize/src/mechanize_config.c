@@ -624,7 +624,7 @@ static void mechanize_initialize_dialog(
     info[0] = '\0';
     lstrcpyA(info, "Mechanize\r\n");
     lstrcatA(info, version_info->version_text);
-    lstrcatA(info, "\r\nCoupled gears, cams, and dials with restrained mechanical choreography.");
+    lstrcatA(info, "\r\nCoupled gears, cams, and dials with restrained exhibit choreography, calmer preview pacing, and cleaner scene variants.");
     SetDlgItemTextA(dialog, IDC_MECHANIZE_INFO, info);
 
     mechanize_apply_settings_to_dialog(
@@ -740,4 +740,188 @@ INT_PTR mechanize_config_show_dialog(
     );
 
     return result;
+}
+
+static int mechanize_parse_scene_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "gear_train") == 0) {
+        *value_out = MECHANIZE_SCENE_GEAR_TRAIN;
+        return 1;
+    }
+    if (lstrcmpiA(text, "cam_bank") == 0) {
+        *value_out = MECHANIZE_SCENE_CAM_BANK;
+        return 1;
+    }
+    if (lstrcmpiA(text, "dial_assembly") == 0) {
+        *value_out = MECHANIZE_SCENE_DIAL_ASSEMBLY;
+        return 1;
+    }
+    return 0;
+}
+
+static int mechanize_parse_speed_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "patient") == 0) {
+        *value_out = MECHANIZE_SPEED_PATIENT;
+        return 1;
+    }
+    if (lstrcmpiA(text, "standard") == 0) {
+        *value_out = MECHANIZE_SPEED_STANDARD;
+        return 1;
+    }
+    if (lstrcmpiA(text, "brisk") == 0) {
+        *value_out = MECHANIZE_SPEED_BRISK;
+        return 1;
+    }
+    return 0;
+}
+
+static int mechanize_parse_density_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "sparse") == 0) {
+        *value_out = MECHANIZE_DENSITY_SPARSE;
+        return 1;
+    }
+    if (lstrcmpiA(text, "standard") == 0) {
+        *value_out = MECHANIZE_DENSITY_STANDARD;
+        return 1;
+    }
+    if (lstrcmpiA(text, "dense") == 0) {
+        *value_out = MECHANIZE_DENSITY_DENSE;
+        return 1;
+    }
+    return 0;
+}
+
+int mechanize_config_export_settings_entries(
+    const screensave_saver_module *module,
+    const screensave_common_config *common_config,
+    const void *product_config,
+    unsigned int product_config_size,
+    screensave_settings_file_kind kind,
+    screensave_settings_writer *writer,
+    screensave_diag_context *diagnostics
+)
+{
+    const mechanize_config *config;
+
+    (void)module;
+    (void)common_config;
+    (void)diagnostics;
+
+    config = mechanize_as_const_config(product_config, product_config_size);
+    if (kind != SCREENSAVE_SETTINGS_FILE_PRESET) {
+        return 1;
+    }
+    if (config == NULL || writer == NULL || writer->write_string == NULL) {
+        return 0;
+    }
+
+    return writer->write_string(writer->context, "product", "scene", mechanize_scene_mode_name(config->scene_mode)) &&
+        writer->write_string(writer->context, "product", "speed", mechanize_speed_mode_name(config->speed_mode)) &&
+        writer->write_string(writer->context, "product", "density", mechanize_density_mode_name(config->density_mode));
+}
+
+int mechanize_config_import_settings_entry(
+    const screensave_saver_module *module,
+    screensave_common_config *common_config,
+    void *product_config,
+    unsigned int product_config_size,
+    screensave_settings_file_kind kind,
+    const char *section,
+    const char *key,
+    const char *value,
+    screensave_diag_context *diagnostics
+)
+{
+    mechanize_config *config;
+
+    (void)module;
+    (void)common_config;
+    (void)diagnostics;
+
+    config = mechanize_as_config(product_config, product_config_size);
+    if (kind != SCREENSAVE_SETTINGS_FILE_PRESET) {
+        return 1;
+    }
+    if (config == NULL || section == NULL || key == NULL || value == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(section, "product") != 0) {
+        return 1;
+    }
+    if (lstrcmpiA(key, "scene") == 0 || lstrcmpiA(key, "scene_mode") == 0) {
+        return mechanize_parse_scene_mode(value, &config->scene_mode);
+    }
+    if (lstrcmpiA(key, "speed") == 0 || lstrcmpiA(key, "speed_mode") == 0) {
+        return mechanize_parse_speed_mode(value, &config->speed_mode);
+    }
+    if (lstrcmpiA(key, "density") == 0 || lstrcmpiA(key, "density_mode") == 0) {
+        return mechanize_parse_density_mode(value, &config->density_mode);
+    }
+
+    return 1;
+}
+
+void mechanize_config_randomize_settings(
+    const screensave_saver_module *module,
+    screensave_common_config *common_config,
+    void *product_config,
+    unsigned int product_config_size,
+    const screensave_session_seed *seed,
+    screensave_diag_context *diagnostics
+)
+{
+    mechanize_config *config;
+    mechanize_rng_state rng;
+    unsigned long random_seed;
+    unsigned long roll;
+
+    (void)module;
+    (void)common_config;
+    (void)diagnostics;
+
+    config = mechanize_as_config(product_config, product_config_size);
+    if (config == NULL) {
+        return;
+    }
+
+    random_seed = seed != NULL ? seed->stream_seed : 0x4D454342UL;
+    mechanize_rng_seed(&rng, random_seed ^ 0x4D454342UL);
+
+    roll = mechanize_rng_range(&rng, 100UL);
+    if (roll < 36UL) {
+        config->scene_mode = MECHANIZE_SCENE_GEAR_TRAIN;
+    } else if (roll < 66UL) {
+        config->scene_mode = MECHANIZE_SCENE_CAM_BANK;
+    } else {
+        config->scene_mode = MECHANIZE_SCENE_DIAL_ASSEMBLY;
+    }
+
+    roll = mechanize_rng_range(&rng, 100UL);
+    if (roll < 38UL) {
+        config->speed_mode = MECHANIZE_SPEED_PATIENT;
+    } else if (roll < 80UL) {
+        config->speed_mode = MECHANIZE_SPEED_STANDARD;
+    } else {
+        config->speed_mode = MECHANIZE_SPEED_BRISK;
+    }
+
+    roll = mechanize_rng_range(&rng, 100UL);
+    if (roll < 28UL) {
+        config->density_mode = MECHANIZE_DENSITY_SPARSE;
+    } else if (roll < 72UL) {
+        config->density_mode = MECHANIZE_DENSITY_STANDARD;
+    } else {
+        config->density_mode = MECHANIZE_DENSITY_DENSE;
+    }
 }

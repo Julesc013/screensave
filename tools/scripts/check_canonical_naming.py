@@ -74,8 +74,8 @@ def main() -> int:
     require_text(
         ROOT / "README.md",
         (
-            "Implementation currently exists through `S15` plus continuation `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, and `C12`.",
-            "The next continuation phase is `C13` for the first saver-specific polish wave.",
+            "Implementation currently exists through `S15` plus continuation `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, `C13` Wave A, Wave B, and Wave C, and `C14`.",
+            "The current continuation line is complete through `C14` final rerelease hardening.",
             "`suite` is now the canonical suite-level browser, launcher, preview, and configuration app under `products/apps/suite/`.",
             "`anthology` is the real suite meta-saver `.scr`",
         ),
@@ -84,17 +84,17 @@ def main() -> int:
     require_text(
         ROOT / "docs" / "roadmap" / "prompt-program.md",
         (
-            "Post-`S15` work now follows committed `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, and `C12` work plus later continuation prompts.",
-            "C13 is the next planned implementation prompt after the cross-cutting polish baseline.",
-            "- `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, and `C12` are complete.",
+            "Post-`S15` work now follows committed `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, the completed `C13` family-polish work, and the completed `C14` release-hardening pass.",
+            "`C13` Wave A, Wave B, and Wave C are complete, and `C14` final rerelease hardening has closed the current continuation line with the release-candidate pass.",
+            "- `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, and `C14` are complete.",
         ),
         errors,
     )
     require_text(
         ROOT / "docs" / "roadmap" / "series-map.md",
         (
-            "`C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, and `C12` are complete.",
-            "The next planned implementation prompt is `C13` for the first saver-specific polish wave.",
+            "`C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, `C13` Wave A, Wave B, and Wave C, and `C14` are complete.",
+            "The current continuation line is complete through `C14` final rerelease hardening.",
         ),
         errors,
     )
@@ -103,7 +103,9 @@ def main() -> int:
         (
             "the locked `C02` post-rename checkpoint",
             "13. `C12` completed the cross-cutting polish and quality-bar pass before the first `C13` saver-specific polish wave begins.",
-            "The next continuation prompt should be `C13` for the first saver-specific polish wave.",
+            "14. `C13` Wave A completed the first saver-specific polish pass for `nocturne`, `ricochet`, `deepfield`, `plasma`, and `phosphor`.",
+            "15. `C13` Wave B completed the second saver-specific polish pass for `pipeworks`, `lifeforms`, `signals`, `mechanize`, and `ecosystems`.",
+            "No further continuation prompt is scheduled on the current line after `C14` final rerelease hardening.",
         ),
         errors,
     )

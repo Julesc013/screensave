@@ -47,6 +47,24 @@ const screensave_preset_descriptor g_city_presets[] = {
         SCREENSAVE_DETAIL_LEVEL_STANDARD,
         1,
         0x000014C5UL
+    },
+    {
+        "blue_harbor_watch",
+        "Blue Harbor Watch",
+        "Sparse harbor study with calmer motion, colder water tones, and quieter docklight drift.",
+        "blue_harbor_watch",
+        SCREENSAVE_DETAIL_LEVEL_LOW,
+        1,
+        0x000014C6UL
+    },
+    {
+        "neon_rooftop_drift",
+        "Neon Rooftop Drift",
+        "Denser rooftop/window-river pass with cooler neon accents and measured camera drift.",
+        "neon_rooftop_drift",
+        SCREENSAVE_DETAIL_LEVEL_HIGH,
+        1,
+        0x000014C7UL
     }
 };
 
@@ -55,7 +73,9 @@ static const city_preset_values g_city_preset_values[] = {
     { CITY_SCENE_SKYLINE, CITY_SPEED_STANDARD, CITY_DENSITY_STANDARD },
     { CITY_SCENE_HARBOR, CITY_SPEED_STANDARD, CITY_DENSITY_STANDARD },
     { CITY_SCENE_WINDOW_RIVER, CITY_SPEED_BRISK, CITY_DENSITY_DENSE },
-    { CITY_SCENE_HARBOR, CITY_SPEED_STILL, CITY_DENSITY_SPARSE }
+    { CITY_SCENE_HARBOR, CITY_SPEED_STILL, CITY_DENSITY_SPARSE },
+    { CITY_SCENE_HARBOR, CITY_SPEED_STILL, CITY_DENSITY_SPARSE },
+    { CITY_SCENE_WINDOW_RIVER, CITY_SPEED_STANDARD, CITY_DENSITY_DENSE }
 };
 
 const screensave_preset_descriptor *city_get_presets(unsigned int *count_out)

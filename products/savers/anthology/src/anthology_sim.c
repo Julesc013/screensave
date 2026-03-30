@@ -565,6 +565,20 @@ static int anthology_choose_catalog_index(
             }
         }
     }
+    if (
+        candidate_count > 2 &&
+        session->previous_catalog_index >= 0 &&
+        session->previous_catalog_index != session->current_catalog_index
+    ) {
+        for (candidate_index = 0U; candidate_index < (unsigned int)candidate_count; ++candidate_index) {
+            if ((int)candidate_indices[candidate_index] == session->previous_catalog_index) {
+                if (candidate_weights[candidate_index] > 1UL) {
+                    candidate_weights[candidate_index] = (candidate_weights[candidate_index] + 1UL) / 2UL;
+                }
+                break;
+            }
+        }
+    }
 
     total_weight = 0UL;
     for (candidate_index = 0U; candidate_index < (unsigned int)candidate_count; ++candidate_index) {
@@ -881,6 +895,9 @@ int anthology_create_session(
     anthology_config_clamp(&scratch_common, &session->config, sizeof(session->config));
 
     session->interval_millis = session->config.interval_seconds * 1000UL;
+    if (session->preview_mode && session->interval_millis > 45000UL) {
+        session->interval_millis = 45000UL;
+    }
     session->selection_stream = anthology_mix_seed(environment->seed.stream_seed ^ environment->seed.base_seed ^ 0xA8710F08UL);
     anthology_text_copy(session->last_selection_reason, sizeof(session->last_selection_reason), "initial_selection_pending");
     anthology_text_copy(session->last_filter_summary, sizeof(session->last_filter_summary), "filters_pending");

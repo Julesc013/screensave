@@ -10,8 +10,8 @@
 #define NOCTURNE_PRODUCT_REGISTRY_ROOTA "Software\\Julesc013\\ScreenSave\\Products\\nocturne"
 #define NOCTURNE_DEFAULT_PRESET_KEY "observatory_night"
 #define NOCTURNE_DEFAULT_THEME_KEY "gray_black"
-#define NOCTURNE_PRESET_COUNT 7U
-#define NOCTURNE_THEME_COUNT 5U
+#define NOCTURNE_PRESET_COUNT 9U
+#define NOCTURNE_THEME_COUNT 7U
 
 typedef enum nocturne_motion_mode_tag {
     NOCTURNE_MOTION_NONE = 0,
@@ -62,6 +62,7 @@ struct screensave_saver_session_tag {
     unsigned long cycle_index;
     unsigned long cycle_duration_millis;
     unsigned long stage_elapsed_millis;
+    unsigned long drift_refresh_millis;
     unsigned long reseed_count;
     int stage;
     int fade_level;
@@ -75,6 +76,7 @@ struct screensave_saver_session_tag {
     long secondary_vy;
     int breath_direction;
     int breath_level;
+    int ambient_level;
 };
 
 const screensave_saver_module *nocturne_get_module(void);

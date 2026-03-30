@@ -47,6 +47,24 @@ const screensave_preset_descriptor g_observatory_presets[] = {
         SCREENSAVE_DETAIL_LEVEL_LOW,
         0,
         0UL
+    },
+    {
+        "planetarium_blue",
+        "Planetarium Blue",
+        "Calm dome-watch preset with slower sweep rates and richer deep-blue star layering.",
+        "planetarium_blue",
+        SCREENSAVE_DETAIL_LEVEL_HIGH,
+        1,
+        0x00000D54UL
+    },
+    {
+        "brass_eclipse",
+        "Brass Eclipse",
+        "Brass-and-shadow exhibit pass with slower orrery pacing and restrained central pulses.",
+        "brass_eclipse",
+        SCREENSAVE_DETAIL_LEVEL_STANDARD,
+        1,
+        0x00000D55UL
     }
 };
 
@@ -55,7 +73,9 @@ static const observatory_preset_values g_observatory_preset_values[] = {
     { OBSERVATORY_SCENE_CHART_ROOM, OBSERVATORY_SPEED_STILL, OBSERVATORY_DETAIL_STANDARD },
     { OBSERVATORY_SCENE_DOME, OBSERVATORY_SPEED_STANDARD, OBSERVATORY_DETAIL_RICH },
     { OBSERVATORY_SCENE_DOME, OBSERVATORY_SPEED_STILL, OBSERVATORY_DETAIL_SPARSE },
-    { OBSERVATORY_SCENE_CHART_ROOM, OBSERVATORY_SPEED_STILL, OBSERVATORY_DETAIL_SPARSE }
+    { OBSERVATORY_SCENE_CHART_ROOM, OBSERVATORY_SPEED_STILL, OBSERVATORY_DETAIL_SPARSE },
+    { OBSERVATORY_SCENE_DOME, OBSERVATORY_SPEED_STILL, OBSERVATORY_DETAIL_RICH },
+    { OBSERVATORY_SCENE_ORRERY, OBSERVATORY_SPEED_STILL, OBSERVATORY_DETAIL_SPARSE }
 };
 
 const screensave_preset_descriptor *observatory_get_presets(unsigned int *count_out)

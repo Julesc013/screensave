@@ -24,9 +24,9 @@ static const nocturne_combo_item g_nocturne_motion_items[] = {
 };
 
 static const nocturne_combo_item g_nocturne_fade_items[] = {
-    { NOCTURNE_FADE_SLOW, "Slow" },
-    { NOCTURNE_FADE_STANDARD, "Standard" },
-    { NOCTURNE_FADE_GENTLE, "Gentle" }
+    { NOCTURNE_FADE_SLOW, "Slow Fade" },
+    { NOCTURNE_FADE_STANDARD, "Standard Fade" },
+    { NOCTURNE_FADE_GENTLE, "Gentle Fade" }
 };
 
 static const nocturne_combo_item g_nocturne_strength_items[] = {
@@ -635,7 +635,7 @@ static void nocturne_initialize_dialog(HWND dialog, nocturne_dialog_state *dialo
     info[0] = '\0';
     lstrcpyA(info, "Nocturne\r\n");
     lstrcatA(info, version_info->version_text);
-    lstrcatA(info, "\r\nRestrained dark-room saver with curated themes.");
+    lstrcatA(info, "\r\nRestrained dark-room saver with curated near-black themes and calm long-run drift.");
     SetDlgItemTextA(dialog, IDC_NOCTURNE_INFO, info);
 
     nocturne_apply_settings_to_dialog(
@@ -859,12 +859,12 @@ int nocturne_config_export_settings_entries(
         return 0;
     }
 
-    return writer->write_string(writer->context, "product", "motion_mode", nocturne_motion_mode_name(config->motion_mode)) &&
-        writer->write_string(writer->context, "product", "fade_speed", nocturne_fade_speed_name(config->fade_speed)) &&
+    return writer->write_string(writer->context, "product", "motion", nocturne_motion_mode_name(config->motion_mode)) &&
+        writer->write_string(writer->context, "product", "fade", nocturne_fade_speed_name(config->fade_speed)) &&
         writer->write_string(
             writer->context,
             "product",
-            "motion_strength",
+            "strength",
             nocturne_motion_strength_name(config->motion_strength)
         );
 }
@@ -897,13 +897,13 @@ int nocturne_config_import_settings_entry(
     if (lstrcmpiA(section, "product") != 0) {
         return 1;
     }
-    if (lstrcmpiA(key, "motion_mode") == 0) {
+    if (lstrcmpiA(key, "motion_mode") == 0 || lstrcmpiA(key, "motion") == 0) {
         return nocturne_parse_motion_mode(value, &config->motion_mode);
     }
-    if (lstrcmpiA(key, "fade_speed") == 0) {
+    if (lstrcmpiA(key, "fade_speed") == 0 || lstrcmpiA(key, "fade") == 0) {
         return nocturne_parse_fade_speed(value, &config->fade_speed);
     }
-    if (lstrcmpiA(key, "motion_strength") == 0) {
+    if (lstrcmpiA(key, "motion_strength") == 0 || lstrcmpiA(key, "strength") == 0) {
         return nocturne_parse_motion_strength(value, &config->motion_strength);
     }
 
@@ -922,6 +922,7 @@ void nocturne_config_randomize_settings(
     nocturne_config *config;
     nocturne_rng_state rng;
     unsigned long random_seed;
+    unsigned long roll;
 
     (void)module;
     (void)common_config;
@@ -934,7 +935,35 @@ void nocturne_config_randomize_settings(
 
     random_seed = seed != NULL ? seed->stream_seed : 0x4E4F4354UL;
     nocturne_rng_seed(&rng, random_seed ^ 0x4E4F4354UL);
-    config->motion_mode = (int)nocturne_rng_range(&rng, 5UL);
-    config->fade_speed = (int)nocturne_rng_range(&rng, 3UL);
-    config->motion_strength = (int)nocturne_rng_range(&rng, 3UL);
+
+    roll = nocturne_rng_range(&rng, 100UL);
+    if (roll < 6UL) {
+        config->motion_mode = NOCTURNE_MOTION_NONE;
+    } else if (roll < 26UL) {
+        config->motion_mode = NOCTURNE_MOTION_DRIFT_MARK;
+    } else if (roll < 56UL) {
+        config->motion_mode = NOCTURNE_MOTION_QUIET_LINE;
+    } else if (roll < 82UL) {
+        config->motion_mode = NOCTURNE_MOTION_MONOLITH;
+    } else {
+        config->motion_mode = NOCTURNE_MOTION_BREATH;
+    }
+
+    roll = nocturne_rng_range(&rng, 100UL);
+    if (roll < 24UL) {
+        config->fade_speed = NOCTURNE_FADE_SLOW;
+    } else if (roll < 74UL) {
+        config->fade_speed = NOCTURNE_FADE_GENTLE;
+    } else {
+        config->fade_speed = NOCTURNE_FADE_STANDARD;
+    }
+
+    roll = nocturne_rng_range(&rng, 100UL);
+    if (roll < 18UL) {
+        config->motion_strength = NOCTURNE_STRENGTH_STILL;
+    } else if (roll < 76UL) {
+        config->motion_strength = NOCTURNE_STRENGTH_SUBTLE;
+    } else {
+        config->motion_strength = NOCTURNE_STRENGTH_SOFT;
+    }
 }

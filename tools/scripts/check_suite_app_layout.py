@@ -182,14 +182,14 @@ def main() -> int:
     require("static only" in note.lower(), "C09 suite note must record static-only evidence honestly.", errors)
 
     root_readme = read_text(ROOT / "README.md")
-    require("The next continuation phase is `C13` for the first saver-specific polish wave." in root_readme, "README.md must point to C13.", errors)
+    require("The current continuation line is complete through `C14` final rerelease hardening." in root_readme, "README.md must point to C14.", errors)
     require("`benchlab` and `suite` are now the real non-saver apps in the tree." in root_readme, "README.md must describe the real app pair.", errors)
 
     prompt_program = read_text(ROOT / "docs" / "roadmap" / "prompt-program.md")
-    require("C13 is the next planned implementation prompt after the cross-cutting polish baseline." in prompt_program, "prompt-program.md must point to C13.", errors)
+    require("`C13` Wave A, Wave B, and Wave C are complete, and `C14` final rerelease hardening has closed the current continuation line with the release-candidate pass." in prompt_program, "prompt-program.md must point to C14.", errors)
 
     series_map = read_text(ROOT / "docs" / "roadmap" / "series-map.md")
-    require("The next planned implementation prompt is `C13` for the first saver-specific polish wave." in series_map, "series-map.md must point to C13.", errors)
+    require("The current continuation line is complete through `C14` final rerelease hardening." in series_map, "series-map.md must point to C14.", errors)
 
     if errors:
         for error in errors:

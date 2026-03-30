@@ -47,6 +47,24 @@ const screensave_preset_descriptor g_pipeworks_presets[] = {
         SCREENSAVE_DETAIL_LEVEL_LOW,
         0,
         0UL
+    },
+    {
+        "amber_backplane",
+        "Amber Backplane",
+        "Warm amber backplane with orderly construction and readable pulse travel.",
+        "amber_backplane",
+        SCREENSAVE_DETAIL_LEVEL_STANDARD,
+        1,
+        0x00000B14UL
+    },
+    {
+        "midnight_blueprint",
+        "Midnight Blueprint",
+        "Cool blueprint night study with open spacing and patient rebuild cadence.",
+        "midnight_blueprint",
+        SCREENSAVE_DETAIL_LEVEL_LOW,
+        1,
+        0x00000B15UL
     }
 };
 
@@ -55,7 +73,9 @@ static const pipeworks_preset_values g_pipeworks_preset_values[] = {
     { PIPEWORKS_DENSITY_TIGHT, PIPEWORKS_SPEED_BRISK, PIPEWORKS_BRANCH_WILD, PIPEWORKS_REBUILD_FREQUENT },
     { PIPEWORKS_DENSITY_OPEN, PIPEWORKS_SPEED_PATIENT, PIPEWORKS_BRANCH_ORDERLY, PIPEWORKS_REBUILD_PATIENT },
     { PIPEWORKS_DENSITY_STANDARD, PIPEWORKS_SPEED_STANDARD, PIPEWORKS_BRANCH_BALANCED, PIPEWORKS_REBUILD_CYCLE },
-    { PIPEWORKS_DENSITY_OPEN, PIPEWORKS_SPEED_PATIENT, PIPEWORKS_BRANCH_ORDERLY, PIPEWORKS_REBUILD_PATIENT }
+    { PIPEWORKS_DENSITY_OPEN, PIPEWORKS_SPEED_PATIENT, PIPEWORKS_BRANCH_ORDERLY, PIPEWORKS_REBUILD_PATIENT },
+    { PIPEWORKS_DENSITY_STANDARD, PIPEWORKS_SPEED_STANDARD, PIPEWORKS_BRANCH_ORDERLY, PIPEWORKS_REBUILD_CYCLE },
+    { PIPEWORKS_DENSITY_OPEN, PIPEWORKS_SPEED_PATIENT, PIPEWORKS_BRANCH_BALANCED, PIPEWORKS_REBUILD_PATIENT }
 };
 
 const screensave_preset_descriptor *pipeworks_get_presets(unsigned int *count_out)

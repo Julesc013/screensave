@@ -660,3 +660,162 @@ INT_PTR observatory_config_show_dialog(
 
     return result;
 }
+
+static int observatory_parse_scene_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "orrery") == 0) {
+        *value_out = OBSERVATORY_SCENE_ORRERY;
+        return 1;
+    }
+    if (lstrcmpiA(text, "chart_room") == 0 || lstrcmpiA(text, "chart") == 0) {
+        *value_out = OBSERVATORY_SCENE_CHART_ROOM;
+        return 1;
+    }
+    if (lstrcmpiA(text, "dome") == 0 || lstrcmpiA(text, "dome_watch") == 0) {
+        *value_out = OBSERVATORY_SCENE_DOME;
+        return 1;
+    }
+    return 0;
+}
+
+static int observatory_parse_speed_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "still") == 0) {
+        *value_out = OBSERVATORY_SPEED_STILL;
+        return 1;
+    }
+    if (lstrcmpiA(text, "standard") == 0) {
+        *value_out = OBSERVATORY_SPEED_STANDARD;
+        return 1;
+    }
+    if (lstrcmpiA(text, "brisk") == 0) {
+        *value_out = OBSERVATORY_SPEED_BRISK;
+        return 1;
+    }
+    return 0;
+}
+
+static int observatory_parse_detail_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "sparse") == 0) {
+        *value_out = OBSERVATORY_DETAIL_SPARSE;
+        return 1;
+    }
+    if (lstrcmpiA(text, "standard") == 0) {
+        *value_out = OBSERVATORY_DETAIL_STANDARD;
+        return 1;
+    }
+    if (lstrcmpiA(text, "rich") == 0) {
+        *value_out = OBSERVATORY_DETAIL_RICH;
+        return 1;
+    }
+    return 0;
+}
+
+int observatory_config_export_settings_entries(
+    const screensave_saver_module *module,
+    const screensave_common_config *common_config,
+    const void *product_config,
+    unsigned int product_config_size,
+    screensave_settings_file_kind kind,
+    screensave_settings_writer *writer,
+    screensave_diag_context *diagnostics
+)
+{
+    const observatory_config *config;
+
+    (void)module;
+    (void)common_config;
+    (void)diagnostics;
+
+    config = observatory_as_const_config(product_config, product_config_size);
+    if (kind != SCREENSAVE_SETTINGS_FILE_PRESET) {
+        return 1;
+    }
+    if (config == NULL || writer == NULL || writer->write_string == NULL) {
+        return 0;
+    }
+
+    return writer->write_string(writer->context, "product", "scene", observatory_scene_mode_name(config->scene_mode)) &&
+        writer->write_string(writer->context, "product", "speed", observatory_speed_mode_name(config->speed_mode)) &&
+        writer->write_string(writer->context, "product", "detail_mode", observatory_detail_mode_name(config->detail_mode));
+}
+
+int observatory_config_import_settings_entry(
+    const screensave_saver_module *module,
+    screensave_common_config *common_config,
+    void *product_config,
+    unsigned int product_config_size,
+    screensave_settings_file_kind kind,
+    const char *section,
+    const char *key,
+    const char *value,
+    screensave_diag_context *diagnostics
+)
+{
+    observatory_config *config;
+
+    (void)module;
+    (void)common_config;
+    (void)diagnostics;
+
+    config = observatory_as_config(product_config, product_config_size);
+    if (kind != SCREENSAVE_SETTINGS_FILE_PRESET) {
+        return 1;
+    }
+    if (config == NULL || section == NULL || key == NULL || value == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(section, "product") != 0) {
+        return 1;
+    }
+    if (lstrcmpiA(key, "scene") == 0 || lstrcmpiA(key, "scene_mode") == 0) {
+        return observatory_parse_scene_mode(value, &config->scene_mode);
+    }
+    if (lstrcmpiA(key, "speed") == 0 || lstrcmpiA(key, "speed_mode") == 0) {
+        return observatory_parse_speed_mode(value, &config->speed_mode);
+    }
+    if (lstrcmpiA(key, "detail_mode") == 0 || lstrcmpiA(key, "detail") == 0) {
+        return observatory_parse_detail_mode(value, &config->detail_mode);
+    }
+
+    return 1;
+}
+
+void observatory_config_randomize_settings(
+    const screensave_saver_module *module,
+    screensave_common_config *common_config,
+    void *product_config,
+    unsigned int product_config_size,
+    const screensave_session_seed *seed,
+    screensave_diag_context *diagnostics
+)
+{
+    observatory_config *config;
+    observatory_rng_state rng;
+    unsigned long random_seed;
+
+    (void)module;
+    (void)common_config;
+    (void)diagnostics;
+
+    config = observatory_as_config(product_config, product_config_size);
+    if (config == NULL) {
+        return;
+    }
+
+    random_seed = seed != NULL ? seed->stream_seed : 0x4F627331UL;
+    observatory_rng_seed(&rng, random_seed ^ 0x4F627331UL);
+    config->scene_mode = (int)observatory_rng_range(&rng, 3UL);
+    config->speed_mode = (int)observatory_rng_range(&rng, 3UL);
+    config->detail_mode = (int)observatory_rng_range(&rng, 3UL);
+}

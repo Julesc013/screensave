@@ -570,7 +570,7 @@ static void signals_initialize_dialog(HWND dialog, signals_dialog_state *dialog_
     info[0] = '\0';
     lstrcpyA(info, "Signals\r\n");
     lstrcatA(info, version_info->version_text);
-    lstrcatA(info, "\r\nSynthetic scopes, counters, and status panes with restrained system cadence.");
+    lstrcatA(info, "\r\nSynthetic scopes, counters, and status panes with curated panel families, calmer preview cadence, and restrained alerts.");
     SetDlgItemTextA(dialog, IDC_SIGNALS_INFO, info);
 
     signals_apply_settings_to_dialog(
@@ -681,4 +681,188 @@ INT_PTR signals_config_show_dialog(
     );
 
     return result;
+}
+
+static int signals_parse_layout_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "operations") == 0) {
+        *value_out = SIGNALS_LAYOUT_OPERATIONS;
+        return 1;
+    }
+    if (lstrcmpiA(text, "spectrum") == 0) {
+        *value_out = SIGNALS_LAYOUT_SPECTRUM;
+        return 1;
+    }
+    if (lstrcmpiA(text, "telemetry") == 0) {
+        *value_out = SIGNALS_LAYOUT_TELEMETRY;
+        return 1;
+    }
+    return 0;
+}
+
+static int signals_parse_activity_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "quiet") == 0) {
+        *value_out = SIGNALS_ACTIVITY_QUIET;
+        return 1;
+    }
+    if (lstrcmpiA(text, "standard") == 0) {
+        *value_out = SIGNALS_ACTIVITY_STANDARD;
+        return 1;
+    }
+    if (lstrcmpiA(text, "busy") == 0) {
+        *value_out = SIGNALS_ACTIVITY_BUSY;
+        return 1;
+    }
+    return 0;
+}
+
+static int signals_parse_overlay_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "off") == 0) {
+        *value_out = SIGNALS_OVERLAY_OFF;
+        return 1;
+    }
+    if (lstrcmpiA(text, "grid") == 0) {
+        *value_out = SIGNALS_OVERLAY_GRID;
+        return 1;
+    }
+    if (lstrcmpiA(text, "scan") == 0) {
+        *value_out = SIGNALS_OVERLAY_SCAN;
+        return 1;
+    }
+    return 0;
+}
+
+int signals_config_export_settings_entries(
+    const screensave_saver_module *module,
+    const screensave_common_config *common_config,
+    const void *product_config,
+    unsigned int product_config_size,
+    screensave_settings_file_kind kind,
+    screensave_settings_writer *writer,
+    screensave_diag_context *diagnostics
+)
+{
+    const signals_config *config;
+
+    (void)module;
+    (void)common_config;
+    (void)diagnostics;
+
+    config = signals_as_const_config(product_config, product_config_size);
+    if (kind != SCREENSAVE_SETTINGS_FILE_PRESET) {
+        return 1;
+    }
+    if (config == NULL || writer == NULL || writer->write_string == NULL) {
+        return 0;
+    }
+
+    return writer->write_string(writer->context, "product", "layout", signals_layout_mode_name(config->layout_mode)) &&
+        writer->write_string(writer->context, "product", "activity", signals_activity_mode_name(config->activity_mode)) &&
+        writer->write_string(writer->context, "product", "overlay", signals_overlay_mode_name(config->overlay_mode));
+}
+
+int signals_config_import_settings_entry(
+    const screensave_saver_module *module,
+    screensave_common_config *common_config,
+    void *product_config,
+    unsigned int product_config_size,
+    screensave_settings_file_kind kind,
+    const char *section,
+    const char *key,
+    const char *value,
+    screensave_diag_context *diagnostics
+)
+{
+    signals_config *config;
+
+    (void)module;
+    (void)common_config;
+    (void)diagnostics;
+
+    config = signals_as_config(product_config, product_config_size);
+    if (kind != SCREENSAVE_SETTINGS_FILE_PRESET) {
+        return 1;
+    }
+    if (config == NULL || section == NULL || key == NULL || value == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(section, "product") != 0) {
+        return 1;
+    }
+    if (lstrcmpiA(key, "layout") == 0 || lstrcmpiA(key, "layout_mode") == 0) {
+        return signals_parse_layout_mode(value, &config->layout_mode);
+    }
+    if (lstrcmpiA(key, "activity") == 0 || lstrcmpiA(key, "activity_mode") == 0) {
+        return signals_parse_activity_mode(value, &config->activity_mode);
+    }
+    if (lstrcmpiA(key, "overlay") == 0 || lstrcmpiA(key, "overlay_mode") == 0) {
+        return signals_parse_overlay_mode(value, &config->overlay_mode);
+    }
+
+    return 1;
+}
+
+void signals_config_randomize_settings(
+    const screensave_saver_module *module,
+    screensave_common_config *common_config,
+    void *product_config,
+    unsigned int product_config_size,
+    const screensave_session_seed *seed,
+    screensave_diag_context *diagnostics
+)
+{
+    signals_config *config;
+    signals_rng_state rng;
+    unsigned long random_seed;
+    unsigned long roll;
+
+    (void)module;
+    (void)common_config;
+    (void)diagnostics;
+
+    config = signals_as_config(product_config, product_config_size);
+    if (config == NULL) {
+        return;
+    }
+
+    random_seed = seed != NULL ? seed->stream_seed : 0x53494742UL;
+    signals_rng_seed(&rng, random_seed ^ 0x53494742UL);
+
+    roll = signals_rng_range(&rng, 100UL);
+    if (roll < 34UL) {
+        config->layout_mode = SIGNALS_LAYOUT_OPERATIONS;
+    } else if (roll < 64UL) {
+        config->layout_mode = SIGNALS_LAYOUT_SPECTRUM;
+    } else {
+        config->layout_mode = SIGNALS_LAYOUT_TELEMETRY;
+    }
+
+    roll = signals_rng_range(&rng, 100UL);
+    if (roll < 38UL) {
+        config->activity_mode = SIGNALS_ACTIVITY_QUIET;
+    } else if (roll < 80UL) {
+        config->activity_mode = SIGNALS_ACTIVITY_STANDARD;
+    } else {
+        config->activity_mode = SIGNALS_ACTIVITY_BUSY;
+    }
+
+    roll = signals_rng_range(&rng, 100UL);
+    if (roll < 24UL) {
+        config->overlay_mode = SIGNALS_OVERLAY_OFF;
+    } else if (roll < 78UL) {
+        config->overlay_mode = SIGNALS_OVERLAY_GRID;
+    } else {
+        config->overlay_mode = SIGNALS_OVERLAY_SCAN;
+    }
 }

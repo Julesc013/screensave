@@ -11,8 +11,8 @@
 #define PLASMA_PRODUCT_REGISTRY_ROOTA "Software\\Julesc013\\ScreenSave\\Products\\plasma"
 #define PLASMA_DEFAULT_PRESET_KEY "plasma_lava"
 #define PLASMA_DEFAULT_THEME_KEY "plasma_lava"
-#define PLASMA_PRESET_COUNT 5U
-#define PLASMA_THEME_COUNT 5U
+#define PLASMA_PRESET_COUNT 7U
+#define PLASMA_THEME_COUNT 7U
 
 typedef enum plasma_effect_mode_tag {
     PLASMA_EFFECT_PLASMA = 0,
@@ -75,6 +75,7 @@ struct screensave_saver_session_tag {
     unsigned long source_phase_a;
     unsigned long source_phase_b;
     unsigned long source_phase_c;
+    unsigned long variation_elapsed_millis;
 };
 
 const screensave_saver_module *plasma_get_module(void);

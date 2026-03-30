@@ -32,9 +32,9 @@ static const ricochet_combo_item g_ricochet_speed_items[] = {
 };
 
 static const ricochet_combo_item g_ricochet_trail_items[] = {
-    { RICOCHET_TRAIL_NONE, "None" },
-    { RICOCHET_TRAIL_SHORT, "Short" },
-    { RICOCHET_TRAIL_PHOSPHOR, "Phosphor" }
+    { RICOCHET_TRAIL_NONE, "No Trail" },
+    { RICOCHET_TRAIL_SHORT, "Short Trail" },
+    { RICOCHET_TRAIL_PHOSPHOR, "Phosphor Trail" }
 };
 
 static void ricochet_emit_config_diag(
@@ -663,7 +663,7 @@ static void ricochet_initialize_dialog(HWND dialog, ricochet_dialog_state *dialo
     info[0] = '\0';
     lstrcpyA(info, "Ricochet\r\n");
     lstrcatA(info, version_info->version_text);
-    lstrcatA(info, "\r\nPolished bounce motion with restrained trails.");
+    lstrcatA(info, "\r\nPolished bounce motion with restrained trails, crisp starts, and calm long-run variety.");
     SetDlgItemTextA(dialog, IDC_RICOCHET_INFO, info);
 
     ricochet_apply_settings_to_dialog(
@@ -787,4 +787,223 @@ INT_PTR ricochet_config_show_dialog(
     }
 
     return result;
+}
+
+static int ricochet_parse_object_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "block") == 0) {
+        *value_out = RICOCHET_OBJECT_BLOCK;
+        return 1;
+    }
+    if (lstrcmpiA(text, "disc") == 0) {
+        *value_out = RICOCHET_OBJECT_DISC;
+        return 1;
+    }
+    if (lstrcmpiA(text, "emblem") == 0) {
+        *value_out = RICOCHET_OBJECT_EMBLEM;
+        return 1;
+    }
+    return 0;
+}
+
+static int ricochet_parse_object_count(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "1") == 0 || lstrcmpiA(text, "single") == 0) {
+        *value_out = 1;
+        return 1;
+    }
+    if (lstrcmpiA(text, "3") == 0 || lstrcmpiA(text, "three") == 0) {
+        *value_out = 3;
+        return 1;
+    }
+    if (lstrcmpiA(text, "5") == 0 || lstrcmpiA(text, "five") == 0) {
+        *value_out = 5;
+        return 1;
+    }
+    return 0;
+}
+
+static int ricochet_parse_speed_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "calm") == 0) {
+        *value_out = RICOCHET_SPEED_CALM;
+        return 1;
+    }
+    if (lstrcmpiA(text, "standard") == 0) {
+        *value_out = RICOCHET_SPEED_STANDARD;
+        return 1;
+    }
+    if (lstrcmpiA(text, "lively") == 0) {
+        *value_out = RICOCHET_SPEED_LIVELY;
+        return 1;
+    }
+    return 0;
+}
+
+static int ricochet_parse_trail_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "none") == 0) {
+        *value_out = RICOCHET_TRAIL_NONE;
+        return 1;
+    }
+    if (lstrcmpiA(text, "short") == 0) {
+        *value_out = RICOCHET_TRAIL_SHORT;
+        return 1;
+    }
+    if (lstrcmpiA(text, "phosphor") == 0) {
+        *value_out = RICOCHET_TRAIL_PHOSPHOR;
+        return 1;
+    }
+    return 0;
+}
+
+int ricochet_config_export_settings_entries(
+    const screensave_saver_module *module,
+    const screensave_common_config *common_config,
+    const void *product_config,
+    unsigned int product_config_size,
+    screensave_settings_file_kind kind,
+    screensave_settings_writer *writer,
+    screensave_diag_context *diagnostics
+)
+{
+    char object_count_text[4];
+    const ricochet_config *config;
+
+    (void)module;
+    (void)common_config;
+    (void)diagnostics;
+
+    config = ricochet_as_const_config(product_config, product_config_size);
+    if (kind != SCREENSAVE_SETTINGS_FILE_PRESET) {
+        return 1;
+    }
+    if (config == NULL || writer == NULL || writer->write_string == NULL) {
+        return 0;
+    }
+
+    wsprintfA(object_count_text, "%d", config->object_count);
+    return writer->write_string(writer->context, "product", "object_mode", ricochet_object_mode_name(config->object_mode)) &&
+        writer->write_string(writer->context, "product", "object_count", object_count_text) &&
+        writer->write_string(writer->context, "product", "speed", ricochet_speed_mode_name(config->speed_mode)) &&
+        writer->write_string(writer->context, "product", "trail", ricochet_trail_mode_name(config->trail_mode));
+}
+
+int ricochet_config_import_settings_entry(
+    const screensave_saver_module *module,
+    screensave_common_config *common_config,
+    void *product_config,
+    unsigned int product_config_size,
+    screensave_settings_file_kind kind,
+    const char *section,
+    const char *key,
+    const char *value,
+    screensave_diag_context *diagnostics
+)
+{
+    ricochet_config *config;
+
+    (void)module;
+    (void)common_config;
+    (void)diagnostics;
+
+    config = ricochet_as_config(product_config, product_config_size);
+    if (kind != SCREENSAVE_SETTINGS_FILE_PRESET) {
+        return 1;
+    }
+    if (config == NULL || section == NULL || key == NULL || value == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(section, "product") != 0) {
+        return 1;
+    }
+    if (lstrcmpiA(key, "object_mode") == 0) {
+        return ricochet_parse_object_mode(value, &config->object_mode);
+    }
+    if (lstrcmpiA(key, "object_count") == 0) {
+        return ricochet_parse_object_count(value, &config->object_count);
+    }
+    if (lstrcmpiA(key, "speed_mode") == 0 || lstrcmpiA(key, "speed") == 0) {
+        return ricochet_parse_speed_mode(value, &config->speed_mode);
+    }
+    if (lstrcmpiA(key, "trail_mode") == 0 || lstrcmpiA(key, "trail") == 0) {
+        return ricochet_parse_trail_mode(value, &config->trail_mode);
+    }
+
+    return 1;
+}
+
+void ricochet_config_randomize_settings(
+    const screensave_saver_module *module,
+    screensave_common_config *common_config,
+    void *product_config,
+    unsigned int product_config_size,
+    const screensave_session_seed *seed,
+    screensave_diag_context *diagnostics
+)
+{
+    ricochet_config *config;
+    ricochet_rng_state rng;
+    unsigned long random_seed;
+    unsigned long roll;
+
+    (void)module;
+    (void)common_config;
+    (void)diagnostics;
+
+    config = ricochet_as_config(product_config, product_config_size);
+    if (config == NULL) {
+        return;
+    }
+
+    random_seed = seed != NULL ? seed->stream_seed : 0x5249434FUL;
+    ricochet_rng_seed(&rng, random_seed ^ 0x5249434FUL);
+
+    roll = ricochet_rng_range(&rng, 100UL);
+    if (roll < 36UL) {
+        config->object_mode = RICOCHET_OBJECT_BLOCK;
+    } else if (roll < 64UL) {
+        config->object_mode = RICOCHET_OBJECT_DISC;
+    } else {
+        config->object_mode = RICOCHET_OBJECT_EMBLEM;
+    }
+
+    roll = ricochet_rng_range(&rng, 100UL);
+    if (roll < 36UL) {
+        config->object_count = 1;
+    } else if (roll < 80UL) {
+        config->object_count = 3;
+    } else {
+        config->object_count = 5;
+    }
+
+    roll = ricochet_rng_range(&rng, 100UL);
+    if (roll < 34UL) {
+        config->speed_mode = RICOCHET_SPEED_CALM;
+    } else if (roll < 82UL) {
+        config->speed_mode = RICOCHET_SPEED_STANDARD;
+    } else {
+        config->speed_mode = RICOCHET_SPEED_LIVELY;
+    }
+
+    roll = ricochet_rng_range(&rng, 100UL);
+    if (roll < 18UL) {
+        config->trail_mode = RICOCHET_TRAIL_NONE;
+    } else if (roll < 68UL) {
+        config->trail_mode = RICOCHET_TRAIL_SHORT;
+    } else {
+        config->trail_mode = RICOCHET_TRAIL_PHOSPHOR;
+    }
 }

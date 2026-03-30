@@ -6,7 +6,8 @@ It provides:
 
 - curated rain-pane, fogged-pane, and winter-pane studies with restrained layered motion
 - modest intensity and pane-emphasis controls instead of a general weather simulator
-- blue-storm, sodium-vapor, winter, midnight-rain, and museum-weather themes and presets
+- blue-storm, sodium-vapor, winter, midnight-rain, winter-streetlamp, monochrome-cold-pane, and museum-weather themes and presets
+- calmer long-run rivulet, light-bleed, and condensation refresh that stays preview-safe and dark-room-safe
 - deterministic startup when requested and preview-safe long-run behavior through the shared saver and renderer contracts
 
 Stormglass stays intentionally bounded.

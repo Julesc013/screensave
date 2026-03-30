@@ -7,5 +7,6 @@ Type: release support.
 
 ## Current State
 
-- `portable-release-notes.md` is the current `C06` user-facing release note source for the portable bundle.
-- `installer-release-notes.md` is the current `C07` user-facing release note source for the installed distribution path.
+- `portable-release-notes.md` is the current portable-bundle release note source.
+- `installer-release-notes.md` is the current installed-distribution release note source.
+- `release-candidate-notes.md` is the final `C14` release-candidate summary that ties the saver line, app surfaces, bundle state, installer state, and known limitations together.

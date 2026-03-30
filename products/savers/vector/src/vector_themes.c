@@ -35,6 +35,20 @@ const screensave_theme_descriptor g_vector_themes[] = {
         "Subdued neutral tones for a quiet gallery-style presentation.",
         { 178, 170, 154, 255 },
         { 92, 102, 120, 255 }
+    },
+    {
+        "amber_wire_tunnel",
+        "Amber Wire Tunnel",
+        "Warm amber vector-terminal tones with restrained drafting-board contrast.",
+        { 210, 168, 112, 255 },
+        { 96, 78, 48, 255 }
+    },
+    {
+        "terrain_museum_glide",
+        "Terrain Museum Glide",
+        "Quiet museum terrain palette with slate lines and pale exhibit highlights.",
+        { 164, 170, 182, 255 },
+        { 104, 118, 144, 255 }
     }
 };
 

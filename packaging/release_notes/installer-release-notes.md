@@ -1,18 +1,17 @@
 # ScreenSave Installer Release Notes
 
-This note is the user-facing release-support source for the `C07` installed distribution path.
+This note is the user-facing release-support source for the final `C14` installed-distribution refresh.
 
 ## What This Installer Is
 
 - A scripted current-user installer package for the current ScreenSave saver line.
-- A complement to the `C06` portable bundle, not a replacement for it.
+- A complement to the current portable bundle, not a replacement for it.
 - A package that installs the currently staged saver payload into a dedicated current-user install root and writes a current-user uninstall record.
 
 ## What This Installer Is Not
 
 - Not a machine-wide installer.
-- Not the future `suite` app.
-- Not the future suite meta-saver.
+- Not the separate `suite` app.
 - Not a broad deployment platform.
 - Not a guarantee that every canonical saver is present when the upstream portable payload is partial.
 
@@ -22,6 +21,7 @@ This note is the user-facing release-support source for the `C07` installed dist
 - Default install does not silently replace the current active saver.
 - Optional selection assistance is available through `install_screensave.ps1 -SetActiveSaver <slug>`.
 - Uninstall removes the dedicated install root and current-user uninstall record while preserving user configuration outside that managed tree.
+- `anthology` is treated like any other saver product and is installed only when the current payload includes `anthology.scr`.
 
 ## Update And Cleanup Policy
 
@@ -33,4 +33,5 @@ This note is the user-facing release-support source for the `C07` installed dist
 
 - The installer package is only as complete as the real portable payload it consumes.
 - Machine-wide install, shell-wide registration helpers, and richer upgrade repair modes remain deferred after `C07`.
+- `suite` and `benchlab` remain separate app products and are not installed by this saver-only package.
 - Portable distribution remains available as a separate delivery mode.

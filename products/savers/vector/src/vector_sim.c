@@ -185,7 +185,7 @@ static void vector_initialize_session(
     session->camera_phase = 0UL;
     session->route_phase = 0UL;
     session->event_phase = 0UL;
-    session->scene_variant = 0UL;
+    session->scene_variant = vector_rng_range(&session->rng, 256UL);
     vector_initialize_scene(session);
 }
 
@@ -312,6 +312,9 @@ void vector_resize_session(screensave_saver_session *session, const screensave_s
         if (session->drawable_size.height <= 0) {
             session->drawable_size.height = 1;
         }
+        session->preview_mode = environment->mode == SCREENSAVE_SESSION_MODE_PREVIEW ? 1 : 0;
+        session->theme = vector_resolve_theme(environment->config_binding);
+        vector_initialize_scene(session);
     }
 }
 
@@ -323,6 +326,7 @@ void vector_step_session(
     unsigned long delta_millis;
     unsigned long step_interval;
     unsigned long event_interval;
+    unsigned long scene_refresh_interval;
     unsigned int index;
 
     if (session == NULL || environment == NULL) {
@@ -332,6 +336,7 @@ void vector_step_session(
     delta_millis = environment->clock.delta_millis;
     step_interval = vector_step_interval(session);
     event_interval = session->config.scene_mode == VECTOR_SCENE_TUNNEL ? 5UL : 7UL;
+    scene_refresh_interval = session->preview_mode ? 36UL : 24UL;
 
     session->step_accumulator += delta_millis;
     while (session->step_accumulator >= step_interval) {
@@ -346,6 +351,10 @@ void vector_step_session(
 
         if ((session->event_phase % event_interval) == 0UL) {
             vector_mutate_scene(session);
+        }
+        if ((session->event_phase % scene_refresh_interval) == 0UL) {
+            session->scene_variant = (session->scene_variant + 1UL + vector_rng_range(&session->rng, 5UL)) & 255UL;
+            vector_initialize_scene(session);
         }
     }
 }

@@ -46,6 +46,20 @@ const screensave_theme_descriptor g_plasma_themes[] = {
         "Muted plasma tones for low-distraction rooms.",
         { 112, 58, 40, 255 },
         { 204, 132, 96, 255 }
+    },
+    {
+        "midnight_interference",
+        "Midnight Interference",
+        "Deep blue-black interference tones with pale electric highlights.",
+        { 28, 52, 116, 255 },
+        { 144, 208, 255, 255 }
+    },
+    {
+        "amber_terminal",
+        "Amber Terminal",
+        "Warm amber monochrome tuned for dark-room-safe museum presentation.",
+        { 168, 108, 44, 255 },
+        { 244, 194, 108, 255 }
     }
 };
 

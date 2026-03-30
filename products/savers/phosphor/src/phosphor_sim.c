@@ -24,6 +24,14 @@ static screensave_color phosphor_background_color(
         color.red = 230;
         color.green = 236;
         color.blue = 242;
+    } else if (lstrcmpiA(session->theme->theme_key, "white_instrument") == 0) {
+        color.red = 10;
+        color.green = 14;
+        color.blue = 16;
+    } else if (lstrcmpiA(session->theme->theme_key, "amber_harmonics") == 0) {
+        color.red = 10;
+        color.green = 8;
+        color.blue = 4;
     } else if (lstrcmpiA(session->theme->theme_key, "museum_quiet") == 0) {
         color.red = 22;
         color.green = 26;
@@ -79,8 +87,14 @@ static void phosphor_decay_to_background(
         break;
     }
 
+    if (session->config.curve_mode == PHOSPHOR_CURVE_DENSE && keep_scale < 236U) {
+        keep_scale += 12U;
+    } else if (session->config.curve_mode == PHOSPHOR_CURVE_HARMONOGRAPH && keep_scale > 12U) {
+        keep_scale -= 12U;
+    }
+
     if (session->preview_mode && keep_scale > 20U) {
-        keep_scale -= 20U;
+        keep_scale -= 28U;
     }
 
     background = phosphor_background_color(session);
@@ -201,6 +215,9 @@ static void phosphor_seed_ratios(
     if (session->ratio_a == session->ratio_b) {
         session->ratio_b += 1U;
     }
+    if (session->ratio_c == session->ratio_d) {
+        session->ratio_d += 1U;
+    }
 }
 
 static unsigned int phosphor_sample_count(
@@ -211,7 +228,7 @@ static unsigned int phosphor_sample_count(
 
     sample_count = 160U;
     if (session->detail_level == SCREENSAVE_DETAIL_LEVEL_LOW) {
-        sample_count = 96U;
+        sample_count = 88U;
     } else if (session->detail_level == SCREENSAVE_DETAIL_LEVEL_HIGH) {
         sample_count = 240U;
     }
@@ -219,8 +236,8 @@ static unsigned int phosphor_sample_count(
     if (session->config.curve_mode == PHOSPHOR_CURVE_DENSE && sample_count < 280U) {
         sample_count += 40U;
     }
-    if (session->preview_mode && sample_count > 128U) {
-        sample_count = 128U;
+    if (session->preview_mode && sample_count > 104U) {
+        sample_count = 104U;
     }
 
     return sample_count;
@@ -393,6 +410,39 @@ static unsigned long phosphor_drift_scale(
     return scale;
 }
 
+static unsigned long phosphor_variation_interval_millis(
+    const screensave_saver_session *session
+)
+{
+    if (session == NULL) {
+        return 12000UL;
+    }
+
+    if (session->preview_mode) {
+        return 7000UL;
+    }
+    if (session->config.curve_mode == PHOSPHOR_CURVE_HARMONOGRAPH) {
+        return 15000UL;
+    }
+    if (session->config.curve_mode == PHOSPHOR_CURVE_DENSE) {
+        return 11000UL;
+    }
+    return 12500UL;
+}
+
+static void phosphor_refresh_ratios(screensave_saver_session *session)
+{
+    if (session == NULL) {
+        return;
+    }
+
+    phosphor_seed_ratios(session);
+    session->phase_a += (48UL + phosphor_rng_range(&session->rng, 160UL)) * PHOSPHOR_PHASE_ONE;
+    session->phase_b += (32UL + phosphor_rng_range(&session->rng, 144UL)) * PHOSPHOR_PHASE_ONE;
+    session->phase_c += (40UL + phosphor_rng_range(&session->rng, 192UL)) * PHOSPHOR_PHASE_ONE;
+    session->phase_d += (24UL + phosphor_rng_range(&session->rng, 128UL)) * PHOSPHOR_PHASE_ONE;
+}
+
 static void phosphor_reset_visual_state(screensave_saver_session *session)
 {
     screensave_color background;
@@ -415,6 +465,9 @@ static void phosphor_warm_start(screensave_saver_session *session)
 
     phosphor_reset_visual_state(session);
     warm_steps = session->config.persistence_mode == PHOSPHOR_PERSISTENCE_LONG ? 8 : 4;
+    if (session->config.curve_mode == PHOSPHOR_CURVE_HARMONOGRAPH) {
+        warm_steps += 2;
+    }
     while (warm_steps-- > 0) {
         phosphor_decay_to_background(session);
         phosphor_draw_trace(session);
@@ -477,6 +530,7 @@ int phosphor_create_session(
     session->phase_b = ((environment->seed.base_seed >> 8) & 255UL) * PHOSPHOR_PHASE_ONE;
     session->phase_c = (environment->seed.stream_seed & 255UL) * PHOSPHOR_PHASE_ONE;
     session->phase_d = ((environment->seed.stream_seed >> 8) & 255UL) * PHOSPHOR_PHASE_ONE;
+    session->variation_elapsed_millis = 0UL;
 
     if (!screensave_visual_buffer_init(&session->visual_buffer, &session->drawable_size)) {
         phosphor_destroy_session(session);
@@ -534,6 +588,7 @@ void phosphor_step_session(
 
     drift_scale = phosphor_drift_scale(session);
     session->elapsed_millis += delta_millis;
+    session->variation_elapsed_millis += delta_millis;
     session->phase_a += delta_millis * (18UL + drift_scale);
     session->phase_b += delta_millis * (28UL + (drift_scale * 2UL));
     session->phase_c += delta_millis * (22UL + drift_scale);
@@ -541,4 +596,9 @@ void phosphor_step_session(
 
     phosphor_decay_to_background(session);
     phosphor_draw_trace(session);
+
+    if (session->variation_elapsed_millis >= phosphor_variation_interval_millis(session)) {
+        session->variation_elapsed_millis = 0UL;
+        phosphor_refresh_ratios(session);
+    }
 }

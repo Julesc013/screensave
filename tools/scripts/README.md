@@ -17,5 +17,9 @@ Current stage:
 - `check_sdk_surface.py` validates the C10 contributor-facing SDK surface, the real saver template, and contributor-authored saver or pack roots.
 - `check_backlog_surface.py` validates the C11 backlog, routing, wave-planning, and refinement-thread surface plus the active continuation-status docs.
 - `check_suite_consistency_surface.py` validates the C12 cross-cutting consistency pass, the quality-bar note, and the active continuation-status docs.
+- `check_wave_a_surface.py` validates the C13 Wave A saver-polish note, the in-wave saver preset/theme/config-hook surface, the updated wave routing docs, and the active continuation-status docs.
+- `check_wave_b_surface.py` validates the C13 Wave B saver-polish note, the in-wave saver preset/theme/config-hook surface, the updated wave routing docs, and the active continuation-status docs.
+- `check_wave_c_surface.py` validates the C13 Wave C saver-polish note, the in-wave saver preset/theme/config-hook surface, the anthology long-run safeguards, and the active continuation-status docs.
+- `check_release_candidate_surface.py` validates the final C14 release-candidate notes, manifest/version alignment, refreshed staged outputs, and the closed continuation-status docs.
 - `check_release_scaffold.py` generates a manual release-scaffold report without publishing anything.
 Type: tooling.

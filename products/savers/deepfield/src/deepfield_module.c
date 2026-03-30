@@ -24,9 +24,9 @@ static const screensave_saver_config_hooks g_deepfield_config_hooks = {
     deepfield_config_save,
     deepfield_config_show_dialog,
     deepfield_apply_shared_preset,
-    NULL,
-    NULL,
-    NULL,
+    deepfield_config_export_settings_entries,
+    deepfield_config_import_settings_entry,
+    deepfield_config_randomize_settings,
     SCREENSAVE_CONFIG_SCHEMA_VERSION,
     SCREENSAVE_SETTINGS_CAP_PRESET_FILES |
         SCREENSAVE_SETTINGS_CAP_THEME_FILES |
@@ -46,7 +46,7 @@ static const screensave_saver_module g_deepfield_module = {
     {
         "deepfield",
         "Deepfield",
-        "Atmospheric drift and fly-through saver with restrained depth cues and curated space presets."
+        "Atmospheric drift and fly-through saver with calmer preview pacing, animated twinkle, and curated observatory travel presets."
     },
     SCREENSAVE_SAVER_CAP_GDI | SCREENSAVE_SAVER_CAP_GL11 | SCREENSAVE_SAVER_CAP_LONG_RUN_STABLE,
     g_deepfield_presets,

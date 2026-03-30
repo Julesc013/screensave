@@ -11,8 +11,8 @@
 #define ATLAS_PRODUCT_REGISTRY_ROOTA "Software\\Julesc013\\ScreenSave\\Products\\atlas"
 #define ATLAS_DEFAULT_PRESET_KEY "atlas_monochrome"
 #define ATLAS_DEFAULT_THEME_KEY "atlas_monochrome"
-#define ATLAS_PRESET_COUNT 5U
-#define ATLAS_THEME_COUNT 5U
+#define ATLAS_PRESET_COUNT 7U
+#define ATLAS_THEME_COUNT 7U
 #define ATLAS_ROUTE_POINT_COUNT 5U
 
 typedef enum atlas_mode_tag {

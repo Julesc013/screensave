@@ -30,5 +30,13 @@ int main(void)
         return 5;
     }
 
+    if (ricochet_find_preset_values("amber_arc") == NULL) {
+        return 6;
+    }
+
+    if (module->config_hooks == NULL || module->config_hooks->randomize_settings == NULL) {
+        return 7;
+    }
+
     return 0;
 }

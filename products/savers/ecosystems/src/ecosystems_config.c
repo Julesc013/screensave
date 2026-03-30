@@ -559,7 +559,7 @@ static void ecosystems_initialize_dialog(HWND dialog, ecosystems_dialog_state *d
     info[0] = '\0';
     lstrcpyA(info, "Ecosystems\r\n");
     lstrcatA(info, version_info->version_text);
-    lstrcatA(info, "\r\nAmbient habitats with calm grouping, drift, and restrained event behavior.");
+    lstrcatA(info, "\r\nAmbient habitats with calmer regroup choreography, clearer habitat families, and preview-safe population pacing.");
     SetDlgItemTextA(dialog, IDC_ECOSYSTEMS_INFO, info);
 
     ecosystems_apply_settings_to_dialog(
@@ -759,19 +759,19 @@ int ecosystems_config_export_settings_entries(
     return writer->write_string(
             writer->context,
             "product",
-            "habitat_mode",
+            "habitat",
             ecosystems_habitat_mode_name(config->habitat_mode)
         ) &&
         writer->write_string(
             writer->context,
             "product",
-            "density_mode",
+            "density",
             ecosystems_density_mode_name(config->density_mode)
         ) &&
         writer->write_string(
             writer->context,
             "product",
-            "activity_mode",
+            "activity",
             ecosystems_activity_mode_name(config->activity_mode)
         );
 }
@@ -804,13 +804,13 @@ int ecosystems_config_import_settings_entry(
     if (lstrcmpiA(section, "product") != 0) {
         return 1;
     }
-    if (lstrcmpiA(key, "habitat_mode") == 0) {
+    if (lstrcmpiA(key, "habitat") == 0 || lstrcmpiA(key, "habitat_mode") == 0) {
         return ecosystems_parse_habitat_mode(value, &config->habitat_mode);
     }
-    if (lstrcmpiA(key, "density_mode") == 0) {
+    if (lstrcmpiA(key, "density") == 0 || lstrcmpiA(key, "density_mode") == 0) {
         return ecosystems_parse_density_mode(value, &config->density_mode);
     }
-    if (lstrcmpiA(key, "activity_mode") == 0) {
+    if (lstrcmpiA(key, "activity") == 0 || lstrcmpiA(key, "activity_mode") == 0) {
         return ecosystems_parse_activity_mode(value, &config->activity_mode);
     }
 
@@ -829,6 +829,7 @@ void ecosystems_config_randomize_settings(
     ecosystems_config *config;
     ecosystems_rng_state rng;
     unsigned long random_seed;
+    unsigned long roll;
 
     (void)module;
     (void)common_config;
@@ -841,7 +842,31 @@ void ecosystems_config_randomize_settings(
 
     random_seed = seed != NULL ? seed->stream_seed : 0x45434F53UL;
     ecosystems_rng_seed(&rng, random_seed ^ 0x45434F53UL);
-    config->habitat_mode = (int)ecosystems_rng_range(&rng, 3UL);
-    config->density_mode = (int)ecosystems_rng_range(&rng, 3UL);
-    config->activity_mode = (int)ecosystems_rng_range(&rng, 3UL);
+
+    roll = ecosystems_rng_range(&rng, 100UL);
+    if (roll < 38UL) {
+        config->habitat_mode = ECOSYSTEMS_HABITAT_AQUARIUM;
+    } else if (roll < 68UL) {
+        config->habitat_mode = ECOSYSTEMS_HABITAT_AVIARY;
+    } else {
+        config->habitat_mode = ECOSYSTEMS_HABITAT_FIREFLIES;
+    }
+
+    roll = ecosystems_rng_range(&rng, 100UL);
+    if (roll < 30UL) {
+        config->density_mode = ECOSYSTEMS_DENSITY_SPARSE;
+    } else if (roll < 76UL) {
+        config->density_mode = ECOSYSTEMS_DENSITY_STANDARD;
+    } else {
+        config->density_mode = ECOSYSTEMS_DENSITY_LUSH;
+    }
+
+    roll = ecosystems_rng_range(&rng, 100UL);
+    if (roll < 40UL) {
+        config->activity_mode = ECOSYSTEMS_ACTIVITY_CALM;
+    } else if (roll < 82UL) {
+        config->activity_mode = ECOSYSTEMS_ACTIVITY_STANDARD;
+    } else {
+        config->activity_mode = ECOSYSTEMS_ACTIVITY_LIVELY;
+    }
 }

@@ -18,6 +18,14 @@ static screensave_color phosphor_background_color(
         color.red = 230;
         color.green = 236;
         color.blue = 242;
+    } else if (lstrcmpiA(session->theme->theme_key, "white_instrument") == 0) {
+        color.red = 10;
+        color.green = 14;
+        color.blue = 16;
+    } else if (lstrcmpiA(session->theme->theme_key, "amber_harmonics") == 0) {
+        color.red = 10;
+        color.green = 8;
+        color.blue = 4;
     } else if (lstrcmpiA(session->theme->theme_key, "museum_quiet") == 0) {
         color.red = 22;
         color.green = 26;
@@ -80,14 +88,14 @@ void phosphor_render_session(
     }
 
     start_point.x = session->drawable_size.width / 2;
-    start_point.y = 18;
+    start_point.y = (session->drawable_size.height / 2) - 12;
     end_point.x = start_point.x;
-    end_point.y = session->drawable_size.height - 18;
+    end_point.y = (session->drawable_size.height / 2) + 12;
     screensave_renderer_draw_line(environment->renderer, &start_point, &end_point, accent_color);
 
-    start_point.x = 18;
+    start_point.x = (session->drawable_size.width / 2) - 12;
     start_point.y = session->drawable_size.height / 2;
-    end_point.x = session->drawable_size.width - 18;
+    end_point.x = (session->drawable_size.width / 2) + 12;
     end_point.y = start_point.y;
     screensave_renderer_draw_line(environment->renderer, &start_point, &end_point, accent_color);
 }

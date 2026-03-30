@@ -23,6 +23,13 @@ const screensave_theme_descriptor g_nocturne_themes[] = {
         { 0, 24, 10, 255 }
     },
     {
+        "phosphor_night",
+        "Phosphor Night",
+        "Green-blue phosphor accents against a very dark observatory floor.",
+        { 0, 12, 10, 255 },
+        { 0, 28, 24, 255 }
+    },
+    {
         "blue_black",
         "Blue Black",
         "Cool blue for quiet night viewing.",
@@ -35,6 +42,13 @@ const screensave_theme_descriptor g_nocturne_themes[] = {
         "Neutral near-black museum lighting.",
         { 8, 8, 8, 255 },
         { 20, 20, 20, 255 }
+    },
+    {
+        "museum_amber",
+        "Museum Amber",
+        "Warm amber-black exhibit lighting with a slightly brighter accent edge.",
+        { 12, 8, 3, 255 },
+        { 32, 22, 8, 255 }
     }
 };
 

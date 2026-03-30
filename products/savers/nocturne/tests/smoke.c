@@ -30,5 +30,13 @@ int main(void)
         return 5;
     }
 
+    if (nocturne_find_preset_values("phosphor_night") == NULL) {
+        return 6;
+    }
+
+    if (nocturne_find_theme_descriptor("museum_amber") == NULL) {
+        return 7;
+    }
+
     return 0;
 }

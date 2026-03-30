@@ -24,9 +24,15 @@ int main(void)
     if (atlas_find_preset_values("atlas_monochrome") == NULL) {
         return 3;
     }
+    if (atlas_find_preset_values("nebula_voyage") == NULL) {
+        return 4;
+    }
 
     if (atlas_find_theme_descriptor("deep_ultraviolet") == NULL) {
-        return 4;
+        return 5;
+    }
+    if (atlas_find_theme_descriptor("mathematics_plate") == NULL) {
+        return 6;
     }
 
     screensave_config_binding_init(&binding, &common_config, &product_config, sizeof(product_config));
@@ -40,14 +46,14 @@ int main(void)
 
     session = NULL;
     if (!atlas_create_session(module, &session, &environment) || session == NULL) {
-        return 5;
+        return 7;
     }
 
     environment.clock.delta_millis = 40UL;
     atlas_step_session(session, &environment);
     if (session->visual_buffer.pixels == NULL || session->escape_values == NULL) {
         atlas_destroy_session(session);
-        return 6;
+        return 8;
     }
 
     atlas_destroy_session(session);

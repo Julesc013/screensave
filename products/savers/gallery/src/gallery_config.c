@@ -684,3 +684,137 @@ INT_PTR gallery_config_show_dialog(
 
     return result;
 }
+
+static int gallery_parse_scene_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "compatibility") == 0 || lstrcmpiA(text, "compatibility_gallery") == 0 || lstrcmpiA(text, "0") == 0) {
+        *value_out = GALLERY_SCENE_COMPATIBILITY;
+        return 1;
+    }
+    if (lstrcmpiA(text, "neon") == 0 || lstrcmpiA(text, "neon_abstract") == 0 || lstrcmpiA(text, "1") == 0) {
+        *value_out = GALLERY_SCENE_NEON;
+        return 1;
+    }
+    if (lstrcmpiA(text, "showcase") == 0 || lstrcmpiA(text, "technical_exhibit") == 0 || lstrcmpiA(text, "2") == 0) {
+        *value_out = GALLERY_SCENE_SHOWCASE;
+        return 1;
+    }
+    return 0;
+}
+
+static int gallery_parse_motion_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "calm") == 0 || lstrcmpiA(text, "0") == 0) {
+        *value_out = GALLERY_MOTION_CALM;
+        return 1;
+    }
+    if (lstrcmpiA(text, "standard") == 0 || lstrcmpiA(text, "1") == 0) {
+        *value_out = GALLERY_MOTION_STANDARD;
+        return 1;
+    }
+    if (lstrcmpiA(text, "brisk") == 0 || lstrcmpiA(text, "2") == 0) {
+        *value_out = GALLERY_MOTION_BRISK;
+        return 1;
+    }
+    return 0;
+}
+
+int gallery_config_export_settings_entries(
+    const screensave_saver_module *module,
+    const screensave_common_config *common_config,
+    const void *product_config,
+    unsigned int product_config_size,
+    screensave_settings_file_kind kind,
+    screensave_settings_writer *writer,
+    screensave_diag_context *diagnostics
+)
+{
+    const gallery_config *config;
+
+    (void)module;
+    (void)common_config;
+    (void)diagnostics;
+
+    config = gallery_as_const_config(product_config, product_config_size);
+    if (kind != SCREENSAVE_SETTINGS_FILE_PRESET) {
+        return 1;
+    }
+    if (config == NULL || writer == NULL || writer->write_string == NULL) {
+        return 0;
+    }
+
+    return writer->write_string(writer->context, "product", "scene", gallery_scene_mode_name(config->scene_mode)) &&
+        writer->write_string(writer->context, "product", "motion", gallery_motion_mode_name(config->motion_mode));
+}
+
+int gallery_config_import_settings_entry(
+    const screensave_saver_module *module,
+    screensave_common_config *common_config,
+    void *product_config,
+    unsigned int product_config_size,
+    screensave_settings_file_kind kind,
+    const char *section,
+    const char *key,
+    const char *value,
+    screensave_diag_context *diagnostics
+)
+{
+    gallery_config *config;
+
+    (void)module;
+    (void)common_config;
+    (void)diagnostics;
+
+    config = gallery_as_config(product_config, product_config_size);
+    if (kind != SCREENSAVE_SETTINGS_FILE_PRESET) {
+        return 1;
+    }
+    if (config == NULL || section == NULL || key == NULL || value == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(section, "product") != 0) {
+        return 1;
+    }
+    if (lstrcmpiA(key, "scene") == 0 || lstrcmpiA(key, "scene_mode") == 0) {
+        return gallery_parse_scene_mode(value, &config->scene_mode);
+    }
+    if (lstrcmpiA(key, "motion") == 0 || lstrcmpiA(key, "motion_mode") == 0) {
+        return gallery_parse_motion_mode(value, &config->motion_mode);
+    }
+
+    return 1;
+}
+
+void gallery_config_randomize_settings(
+    const screensave_saver_module *module,
+    screensave_common_config *common_config,
+    void *product_config,
+    unsigned int product_config_size,
+    const screensave_session_seed *seed,
+    screensave_diag_context *diagnostics
+)
+{
+    gallery_config *config;
+    unsigned long state;
+
+    (void)module;
+    (void)common_config;
+    (void)diagnostics;
+
+    config = gallery_as_config(product_config, product_config_size);
+    if (config == NULL) {
+        return;
+    }
+
+    state = seed != NULL ? seed->stream_seed : 0x47414C4CUL;
+    state = state * 1664525UL + 1013904223UL;
+    config->scene_mode = (int)(state % 3UL);
+    state = state * 1664525UL + 1013904223UL;
+    config->motion_mode = (int)(state % 3UL);
+}

@@ -24,9 +24,9 @@ static const screensave_saver_config_hooks g_mechanize_config_hooks = {
     mechanize_config_save,
     mechanize_config_show_dialog,
     mechanize_apply_shared_preset,
-    NULL,
-    NULL,
-    NULL,
+    mechanize_config_export_settings_entries,
+    mechanize_config_import_settings_entry,
+    mechanize_config_randomize_settings,
     SCREENSAVE_CONFIG_SCHEMA_VERSION,
     SCREENSAVE_SETTINGS_CAP_PRESET_FILES |
         SCREENSAVE_SETTINGS_CAP_THEME_FILES |
@@ -46,7 +46,7 @@ static const screensave_saver_module g_mechanize_module = {
     {
         "mechanize",
         "Mechanize",
-        "Slow mechanical saver with coupled gears, cams, dials, and restrained event moments."
+        "Slow mechanical saver with coupled gears, cams, dials, and restrained exhibit-style event moments."
     },
     SCREENSAVE_SAVER_CAP_GDI | SCREENSAVE_SAVER_CAP_GL11 | SCREENSAVE_SAVER_CAP_LONG_RUN_STABLE,
     g_mechanize_presets,

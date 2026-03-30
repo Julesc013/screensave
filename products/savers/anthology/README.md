@@ -9,6 +9,7 @@ It provides:
 - explicit include or exclude lists, favorites, weighted randomization, and family filtering
 - renderer-aware selection rules that stay honest about the current `gdi`, `gl11`, and `gl21` ladder
 - product-owned presets and configuration for anthology-style playback without becoming the real `suite` app
+- curated compatibility-after-hours and scenic-grand-tour presets plus calmer preview-safe interval defaults and anti-repeat selection damping
 - the shared suite vocabulary for renderer policy and saver-local randomization handoff without absorbing the role of the standalone saver dialogs
 
 Anthology is intentionally narrow.

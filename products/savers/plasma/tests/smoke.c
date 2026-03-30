@@ -34,6 +34,15 @@ int main(void)
     if (plasma_find_theme_descriptor("ember_lava") == NULL) {
         return 6;
     }
+    if (plasma_find_preset_values("midnight_interference") == NULL) {
+        return 7;
+    }
+    if (plasma_find_theme_descriptor("amber_terminal") == NULL) {
+        return 8;
+    }
+    if (module->config_hooks == NULL || module->config_hooks->randomize_settings == NULL) {
+        return 9;
+    }
 
     screensave_config_binding_init(&binding, &common_config, &product_config, sizeof(product_config));
     ZeroMemory(&environment, sizeof(environment));
@@ -46,14 +55,14 @@ int main(void)
 
     session = NULL;
     if (!plasma_create_session(module, &session, &environment) || session == NULL) {
-        return 7;
+        return 10;
     }
 
     environment.clock.delta_millis = 33UL;
     plasma_step_session(session, &environment);
     if (session->visual_buffer.pixels == NULL || session->field_primary == NULL) {
         plasma_destroy_session(session);
-        return 8;
+        return 11;
     }
 
     plasma_destroy_session(session);

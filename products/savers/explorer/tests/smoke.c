@@ -24,9 +24,24 @@ int main(void)
     if (explorer_find_preset_values("quiet_night_run") == NULL) {
         return 3;
     }
+    if (explorer_find_preset_values("eerie_corridor_watch") == NULL) {
+        return 4;
+    }
 
     if (explorer_find_theme_descriptor("industrial_tunnel") == NULL) {
-        return 4;
+        return 5;
+    }
+    if (explorer_find_theme_descriptor("amber_service_drift") == NULL) {
+        return 6;
+    }
+
+    if (
+        module->callbacks == NULL ||
+        module->callbacks->export_settings_entries == NULL ||
+        module->callbacks->import_settings_entry == NULL ||
+        module->callbacks->randomize_settings == NULL
+    ) {
+        return 7;
     }
 
     screensave_config_binding_init(&binding, &common_config, &product_config, sizeof(product_config));
@@ -40,18 +55,18 @@ int main(void)
 
     session = NULL;
     if (!explorer_create_session(module, &session, &environment) || session == NULL) {
-        return 5;
+        return 8;
     }
 
     environment.clock.delta_millis = 96UL;
     explorer_step_session(session, &environment);
     if (session->theme == NULL) {
         explorer_destroy_session(session);
-        return 6;
+        return 9;
     }
     if (session->segment_count == 0U || session->current_segment_index >= session->segment_count) {
         explorer_destroy_session(session);
-        return 7;
+        return 10;
     }
 
     explorer_destroy_session(session);

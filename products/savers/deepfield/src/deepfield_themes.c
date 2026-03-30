@@ -35,6 +35,13 @@ const screensave_theme_descriptor g_deepfield_themes[] = {
         "Muted gray-green presentation tuned for quiet exhibits.",
         { 168, 176, 168, 255 },
         { 88, 108, 96, 255 }
+    },
+    {
+        "deep_midnight",
+        "Deep Midnight",
+        "Deep blue-black star tones tuned for long dark-room runs and quieter travel.",
+        { 120, 148, 216, 255 },
+        { 52, 88, 168, 255 }
     }
 };
 

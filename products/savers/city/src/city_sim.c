@@ -398,6 +398,20 @@ static void city_refresh_scene(screensave_saver_session *session)
         session->fog_bands[index].drift = (int)city_rng_range(&session->rng, 3UL) - 1;
         session->fog_bands[index].opacity = 32 + (int)city_rng_range(&session->rng, 72UL);
     }
+    if (session->light_count > 0U) {
+        city_seed_light(
+            session,
+            &session->lights[city_rng_range(&session->rng, (unsigned long)session->light_count)],
+            (unsigned int)city_rng_range(&session->rng, (unsigned long)session->light_count)
+        );
+    }
+    if (session->fog_count > 0U) {
+        city_seed_fog(
+            session,
+            &session->fog_bands[city_rng_range(&session->rng, (unsigned long)session->fog_count)],
+            (unsigned int)city_rng_range(&session->rng, (unsigned long)session->fog_count)
+        );
+    }
     session->pulse_phase = (session->pulse_phase + 1U) & 255U;
 }
 
@@ -535,6 +549,8 @@ void city_resize_session(screensave_saver_session *session, const screensave_sav
     }
 
     session->drawable_size = environment->drawable_size;
+    session->preview_mode = environment->mode == SCREENSAVE_SESSION_MODE_PREVIEW;
+    session->theme = city_resolve_theme(environment->config_binding);
     city_initialize_scene(session);
 }
 

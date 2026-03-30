@@ -21,12 +21,20 @@ int main(void)
         return 2;
     }
 
-    if (signals_find_preset_values("green_terminal") == NULL) {
+    if (signals_find_preset_values("telemetry_wall") == NULL) {
         return 3;
     }
 
-    if (signals_find_theme_descriptor("green_terminal") == NULL) {
+    if (signals_find_theme_descriptor("night_watch_console") == NULL) {
         return 4;
+    }
+    if (
+        module->config_hooks == NULL ||
+        module->config_hooks->export_settings_entries == NULL ||
+        module->config_hooks->import_settings_entry == NULL ||
+        module->config_hooks->randomize_settings == NULL
+    ) {
+        return 5;
     }
 
     screensave_config_binding_init(&binding, &common_config, &product_config, sizeof(product_config));
@@ -40,18 +48,18 @@ int main(void)
 
     session = NULL;
     if (!signals_create_session(module, &session, &environment) || session == NULL) {
-        return 5;
+        return 6;
     }
 
     environment.clock.delta_millis = 96UL;
     signals_step_session(session, &environment);
     if (session->theme == NULL) {
         signals_destroy_session(session);
-        return 6;
+        return 7;
     }
     if (session->counters[0] == 0U && session->counters[1] == 0U && session->counters[2] == 0U) {
         signals_destroy_session(session);
-        return 7;
+        return 8;
     }
 
     signals_destroy_session(session);

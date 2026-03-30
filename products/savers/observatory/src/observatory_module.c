@@ -24,9 +24,9 @@ static const screensave_saver_config_hooks g_observatory_config_hooks = {
     observatory_config_save,
     observatory_config_show_dialog,
     observatory_apply_shared_preset,
-    NULL,
-    NULL,
-    NULL,
+    observatory_config_export_settings_entries,
+    observatory_config_import_settings_entry,
+    observatory_config_randomize_settings,
     SCREENSAVE_CONFIG_SCHEMA_VERSION,
     SCREENSAVE_SETTINGS_CAP_PRESET_FILES |
         SCREENSAVE_SETTINGS_CAP_THEME_FILES |

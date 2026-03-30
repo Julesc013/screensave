@@ -6,7 +6,7 @@ It provides:
 
 - curated gear-train, cam-bank, and dial-assembly scenes with readable coupled motion
 - restrained speed and density controls instead of a physics or CAD-like system
-- brass, steel, black-enamel, industrial-green, and quiet-museum themes and presets
+- brass, steel, black-enamel, copper-foundry, ivory-gallery, industrial-green, and quiet-museum themes and presets
 - deterministic arrangement startup when requested and preview-safe long-run behavior through the shared saver and renderer contracts
 
 Mechanize stays intentionally bounded.

@@ -6,7 +6,7 @@ It provides:
 
 - curated aquarium, aviary, and firefly habitat studies with calm behavior-driven motion
 - restrained population and activity controls instead of a game AI or ecology lab
-- aquarium, aviary, dusk-firefly, wetland, and dark-oceanic themes and presets
+- aquarium, reef, aviary, dusk-firefly, wetland, night-marsh, and dark-oceanic themes and presets
 - deterministic session startup when requested and preview-safe long-run behavior through the shared saver and renderer contracts
 
 Ecosystems stays intentionally bounded.

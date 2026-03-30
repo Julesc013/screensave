@@ -29,6 +29,24 @@ const screensave_preset_descriptor g_anthology_presets[] = {
         SCREENSAVE_DETAIL_LEVEL_STANDARD,
         1,
         0x00000803UL
+    },
+    {
+        "compatibility_after_hours",
+        "Compatibility After Hours",
+        "Baseline-compatible anthology route with quieter room-safe pacing and gentle family bias.",
+        "anthology_amber",
+        SCREENSAVE_DETAIL_LEVEL_LOW,
+        1,
+        0x00000804UL
+    },
+    {
+        "scenic_grand_tour",
+        "Scenic Grand Tour",
+        "Curated scenic and heavyweight rotation with calmer transitions and stronger places-first weighting.",
+        "anthology_midnight",
+        SCREENSAVE_DETAIL_LEVEL_STANDARD,
+        1,
+        0x00000805UL
     }
 };
 
@@ -102,6 +120,51 @@ static const anthology_preset_values g_anthology_preset_values[] = {
         {
             120UL, 60UL, 60UL, 60UL, 60UL, 70UL, 70UL, 110UL, 110UL,
             120UL, 120UL, 120UL, 120UL, 60UL, 60UL, 60UL, 60UL, 40UL
+        }
+    },
+    {
+        ANTHOLOGY_SELECTION_WEIGHTED_RANDOM,
+        70UL,
+        ANTHOLOGY_FAMILY_QUIET |
+            ANTHOLOGY_FAMILY_PLACES_ATMOSPHERE |
+            ANTHOLOGY_FAMILY_SHOWCASE,
+        0x0003FFFFUL,
+        (1UL << 0) |
+            (1UL << 10) |
+            (1UL << 11) |
+            (1UL << 12) |
+            (1UL << 17),
+        ANTHOLOGY_RENDERER_POLICY_BASELINE_COMPATIBLE,
+        0,
+        0,
+        1,
+        {
+            130UL, 70UL, 70UL, 70UL, 70UL, 70UL, 70UL, 80UL, 80UL,
+            90UL, 140UL, 140UL, 140UL, 70UL, 70UL, 80UL, 90UL, 120UL
+        }
+    },
+    {
+        ANTHOLOGY_SELECTION_WEIGHTED_RANDOM,
+        105UL,
+        ANTHOLOGY_FAMILY_PLACES_ATMOSPHERE |
+            ANTHOLOGY_FAMILY_HEAVYWEIGHT_WORLDS |
+            ANTHOLOGY_FAMILY_SHOWCASE,
+        0x0003FFFFUL,
+        (1UL << 10) |
+            (1UL << 11) |
+            (1UL << 12) |
+            (1UL << 13) |
+            (1UL << 14) |
+            (1UL << 15) |
+            (1UL << 16) |
+            (1UL << 17),
+        ANTHOLOGY_RENDERER_POLICY_PREFER_EXPLICIT_TIER,
+        1,
+        1,
+        1,
+        {
+            50UL, 50UL, 60UL, 60UL, 60UL, 60UL, 60UL, 70UL, 70UL,
+            70UL, 140UL, 150UL, 140UL, 130UL, 130UL, 130UL, 150UL, 160UL
         }
     }
 };

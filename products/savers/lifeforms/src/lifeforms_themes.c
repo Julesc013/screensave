@@ -37,6 +37,20 @@ const screensave_theme_descriptor g_lifeforms_themes[] = {
         "Low-contrast dark-room presentation for calmer long runs.",
         { 154, 170, 184, 255 },
         { 222, 228, 234, 255 }
+    },
+    {
+        "garden_green",
+        "Garden Green",
+        "Soft garden phosphor green with quieter bloom highlights.",
+        { 110, 188, 104, 255 },
+        { 228, 252, 196, 255 }
+    },
+    {
+        "blue_archive",
+        "Blue Archive",
+        "Cool archive blues with pale specimen highlights for calmer study.",
+        { 112, 150, 204, 255 },
+        { 228, 238, 255, 255 }
     }
 };
 

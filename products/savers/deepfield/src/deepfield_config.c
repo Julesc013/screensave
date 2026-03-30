@@ -14,8 +14,8 @@ typedef struct deepfield_combo_item_tag {
 } deepfield_combo_item;
 
 static const deepfield_combo_item g_deepfield_scene_items[] = {
-    { DEEPFIELD_SCENE_PARALLAX, "Parallax" },
-    { DEEPFIELD_SCENE_FLYTHROUGH, "Fly-Through" }
+    { DEEPFIELD_SCENE_PARALLAX, "Parallax Drift" },
+    { DEEPFIELD_SCENE_FLYTHROUGH, "Fly-Through Travel" }
 };
 
 static const deepfield_combo_item g_deepfield_density_items[] = {
@@ -38,8 +38,8 @@ static const deepfield_combo_item g_deepfield_camera_items[] = {
 
 static const deepfield_combo_item g_deepfield_pulse_items[] = {
     { DEEPFIELD_PULSE_NONE, "None" },
-    { DEEPFIELD_PULSE_SOFT, "Soft" },
-    { DEEPFIELD_PULSE_WARP, "Warp" }
+    { DEEPFIELD_PULSE_SOFT, "Soft Pulse" },
+    { DEEPFIELD_PULSE_WARP, "Warp Pulse" }
 };
 
 static void deepfield_emit_config_diag(
@@ -690,7 +690,7 @@ static void deepfield_initialize_dialog(HWND dialog, deepfield_dialog_state *dia
     info[0] = '\0';
     lstrcpyA(info, "Deepfield\r\n");
     lstrcatA(info, version_info->version_text);
-    lstrcatA(info, "\r\nAtmospheric drift and fly-through motion with restrained depth cues.");
+    lstrcatA(info, "\r\nAtmospheric drift and fly-through motion with calmer preview pacing, curated travel presets, and restrained depth cues.");
     SetDlgItemTextA(dialog, IDC_DEEPFIELD_INFO, info);
 
     deepfield_apply_settings_to_dialog(
@@ -814,4 +814,244 @@ INT_PTR deepfield_config_show_dialog(
     }
 
     return result;
+}
+
+static int deepfield_parse_scene_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "parallax") == 0 || lstrcmpiA(text, "parallax_drift") == 0) {
+        *value_out = DEEPFIELD_SCENE_PARALLAX;
+        return 1;
+    }
+    if (lstrcmpiA(text, "flythrough") == 0 || lstrcmpiA(text, "fly_through") == 0) {
+        *value_out = DEEPFIELD_SCENE_FLYTHROUGH;
+        return 1;
+    }
+    return 0;
+}
+
+static int deepfield_parse_density_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "sparse") == 0) {
+        *value_out = DEEPFIELD_DENSITY_SPARSE;
+        return 1;
+    }
+    if (lstrcmpiA(text, "standard") == 0) {
+        *value_out = DEEPFIELD_DENSITY_STANDARD;
+        return 1;
+    }
+    if (lstrcmpiA(text, "rich") == 0) {
+        *value_out = DEEPFIELD_DENSITY_RICH;
+        return 1;
+    }
+    return 0;
+}
+
+static int deepfield_parse_speed_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "calm") == 0) {
+        *value_out = DEEPFIELD_SPEED_CALM;
+        return 1;
+    }
+    if (lstrcmpiA(text, "cruise") == 0) {
+        *value_out = DEEPFIELD_SPEED_CRUISE;
+        return 1;
+    }
+    if (lstrcmpiA(text, "surge") == 0) {
+        *value_out = DEEPFIELD_SPEED_SURGE;
+        return 1;
+    }
+    return 0;
+}
+
+static int deepfield_parse_camera_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "observe") == 0) {
+        *value_out = DEEPFIELD_CAMERA_OBSERVE;
+        return 1;
+    }
+    if (lstrcmpiA(text, "drift") == 0) {
+        *value_out = DEEPFIELD_CAMERA_DRIFT;
+        return 1;
+    }
+    if (lstrcmpiA(text, "arc") == 0) {
+        *value_out = DEEPFIELD_CAMERA_ARC;
+        return 1;
+    }
+    return 0;
+}
+
+static int deepfield_parse_pulse_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "none") == 0) {
+        *value_out = DEEPFIELD_PULSE_NONE;
+        return 1;
+    }
+    if (lstrcmpiA(text, "soft") == 0) {
+        *value_out = DEEPFIELD_PULSE_SOFT;
+        return 1;
+    }
+    if (lstrcmpiA(text, "warp") == 0) {
+        *value_out = DEEPFIELD_PULSE_WARP;
+        return 1;
+    }
+    return 0;
+}
+
+int deepfield_config_export_settings_entries(
+    const screensave_saver_module *module,
+    const screensave_common_config *common_config,
+    const void *product_config,
+    unsigned int product_config_size,
+    screensave_settings_file_kind kind,
+    screensave_settings_writer *writer,
+    screensave_diag_context *diagnostics
+)
+{
+    const deepfield_config *config;
+
+    (void)module;
+    (void)common_config;
+    (void)diagnostics;
+
+    config = deepfield_as_const_config(product_config, product_config_size);
+    if (kind != SCREENSAVE_SETTINGS_FILE_PRESET) {
+        return 1;
+    }
+    if (config == NULL || writer == NULL || writer->write_string == NULL) {
+        return 0;
+    }
+
+    return writer->write_string(writer->context, "product", "scene", deepfield_scene_mode_name(config->scene_mode)) &&
+        writer->write_string(writer->context, "product", "density", deepfield_density_mode_name(config->density_mode)) &&
+        writer->write_string(writer->context, "product", "speed", deepfield_speed_mode_name(config->speed_mode)) &&
+        writer->write_string(writer->context, "product", "camera", deepfield_camera_mode_name(config->camera_mode)) &&
+        writer->write_string(writer->context, "product", "pulse", deepfield_pulse_mode_name(config->pulse_mode));
+}
+
+int deepfield_config_import_settings_entry(
+    const screensave_saver_module *module,
+    screensave_common_config *common_config,
+    void *product_config,
+    unsigned int product_config_size,
+    screensave_settings_file_kind kind,
+    const char *section,
+    const char *key,
+    const char *value,
+    screensave_diag_context *diagnostics
+)
+{
+    deepfield_config *config;
+
+    (void)module;
+    (void)common_config;
+    (void)diagnostics;
+
+    config = deepfield_as_config(product_config, product_config_size);
+    if (kind != SCREENSAVE_SETTINGS_FILE_PRESET) {
+        return 1;
+    }
+    if (config == NULL || section == NULL || key == NULL || value == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(section, "product") != 0) {
+        return 1;
+    }
+    if (lstrcmpiA(key, "scene_mode") == 0 || lstrcmpiA(key, "scene") == 0) {
+        return deepfield_parse_scene_mode(value, &config->scene_mode);
+    }
+    if (lstrcmpiA(key, "density_mode") == 0 || lstrcmpiA(key, "density") == 0) {
+        return deepfield_parse_density_mode(value, &config->density_mode);
+    }
+    if (lstrcmpiA(key, "speed_mode") == 0 || lstrcmpiA(key, "speed") == 0) {
+        return deepfield_parse_speed_mode(value, &config->speed_mode);
+    }
+    if (lstrcmpiA(key, "camera_mode") == 0 || lstrcmpiA(key, "camera") == 0) {
+        return deepfield_parse_camera_mode(value, &config->camera_mode);
+    }
+    if (lstrcmpiA(key, "pulse_mode") == 0 || lstrcmpiA(key, "pulse") == 0) {
+        return deepfield_parse_pulse_mode(value, &config->pulse_mode);
+    }
+
+    return 1;
+}
+
+void deepfield_config_randomize_settings(
+    const screensave_saver_module *module,
+    screensave_common_config *common_config,
+    void *product_config,
+    unsigned int product_config_size,
+    const screensave_session_seed *seed,
+    screensave_diag_context *diagnostics
+)
+{
+    deepfield_config *config;
+    deepfield_rng_state rng;
+    unsigned long random_seed;
+    unsigned long roll;
+
+    (void)module;
+    (void)common_config;
+    (void)diagnostics;
+
+    config = deepfield_as_config(product_config, product_config_size);
+    if (config == NULL) {
+        return;
+    }
+
+    random_seed = seed != NULL ? seed->stream_seed : 0x44464644UL;
+    deepfield_rng_seed(&rng, random_seed ^ 0x44464644UL);
+
+    roll = deepfield_rng_range(&rng, 100UL);
+    config->scene_mode = roll < 62UL ? DEEPFIELD_SCENE_PARALLAX : DEEPFIELD_SCENE_FLYTHROUGH;
+
+    roll = deepfield_rng_range(&rng, 100UL);
+    if (roll < 24UL) {
+        config->density_mode = DEEPFIELD_DENSITY_SPARSE;
+    } else if (roll < 72UL) {
+        config->density_mode = DEEPFIELD_DENSITY_STANDARD;
+    } else {
+        config->density_mode = DEEPFIELD_DENSITY_RICH;
+    }
+
+    roll = deepfield_rng_range(&rng, 100UL);
+    if (roll < 44UL) {
+        config->speed_mode = DEEPFIELD_SPEED_CALM;
+    } else if (roll < 82UL) {
+        config->speed_mode = DEEPFIELD_SPEED_CRUISE;
+    } else {
+        config->speed_mode = DEEPFIELD_SPEED_SURGE;
+    }
+
+    roll = deepfield_rng_range(&rng, 100UL);
+    if (roll < 38UL) {
+        config->camera_mode = DEEPFIELD_CAMERA_OBSERVE;
+    } else if (roll < 72UL) {
+        config->camera_mode = DEEPFIELD_CAMERA_DRIFT;
+    } else {
+        config->camera_mode = DEEPFIELD_CAMERA_ARC;
+    }
+
+    roll = deepfield_rng_range(&rng, 100UL);
+    if (roll < 34UL) {
+        config->pulse_mode = DEEPFIELD_PULSE_NONE;
+    } else if (roll < 76UL) {
+        config->pulse_mode = DEEPFIELD_PULSE_SOFT;
+    } else {
+        config->pulse_mode = DEEPFIELD_PULSE_WARP;
+    }
 }

@@ -17,13 +17,13 @@ typedef struct phosphor_combo_item_tag {
 static const phosphor_combo_item g_phosphor_curve_items[] = {
     { PHOSPHOR_CURVE_LISSAJOUS, "Lissajous" },
     { PHOSPHOR_CURVE_HARMONOGRAPH, "Harmonograph" },
-    { PHOSPHOR_CURVE_DENSE, "Dense Trail" }
+    { PHOSPHOR_CURVE_DENSE, "Dense Trace" }
 };
 
 static const phosphor_combo_item g_phosphor_persistence_items[] = {
-    { PHOSPHOR_PERSISTENCE_SHORT, "Short" },
-    { PHOSPHOR_PERSISTENCE_STANDARD, "Standard" },
-    { PHOSPHOR_PERSISTENCE_LONG, "Long" }
+    { PHOSPHOR_PERSISTENCE_SHORT, "Short Persistence" },
+    { PHOSPHOR_PERSISTENCE_STANDARD, "Standard Persistence" },
+    { PHOSPHOR_PERSISTENCE_LONG, "Long Persistence" }
 };
 
 static const phosphor_combo_item g_phosphor_drift_items[] = {
@@ -740,7 +740,7 @@ static void phosphor_initialize_dialog(
     info[0] = '\0';
     lstrcpyA(info, "Phosphor\r\n");
     lstrcatA(info, version_info->version_text);
-    lstrcatA(info, "\r\nVector-style phosphor curves with restrained mirror and persistence controls.");
+    lstrcatA(info, "\r\nVector-style phosphor curves with restrained mirror controls, curated laboratory presets, and calmer long-run choreography.");
     SetDlgItemTextA(dialog, IDC_PHOSPHOR_INFO, info);
 
     phosphor_apply_settings_to_dialog(
@@ -869,4 +869,231 @@ INT_PTR phosphor_config_show_dialog(
     }
 
     return result;
+}
+
+static int phosphor_parse_curve_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "lissajous") == 0) {
+        *value_out = PHOSPHOR_CURVE_LISSAJOUS;
+        return 1;
+    }
+    if (lstrcmpiA(text, "harmonograph") == 0) {
+        *value_out = PHOSPHOR_CURVE_HARMONOGRAPH;
+        return 1;
+    }
+    if (lstrcmpiA(text, "dense") == 0) {
+        *value_out = PHOSPHOR_CURVE_DENSE;
+        return 1;
+    }
+    return 0;
+}
+
+static int phosphor_parse_persistence_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "short") == 0) {
+        *value_out = PHOSPHOR_PERSISTENCE_SHORT;
+        return 1;
+    }
+    if (lstrcmpiA(text, "standard") == 0) {
+        *value_out = PHOSPHOR_PERSISTENCE_STANDARD;
+        return 1;
+    }
+    if (lstrcmpiA(text, "long") == 0) {
+        *value_out = PHOSPHOR_PERSISTENCE_LONG;
+        return 1;
+    }
+    return 0;
+}
+
+static int phosphor_parse_drift_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "calm") == 0) {
+        *value_out = PHOSPHOR_DRIFT_CALM;
+        return 1;
+    }
+    if (lstrcmpiA(text, "standard") == 0) {
+        *value_out = PHOSPHOR_DRIFT_STANDARD;
+        return 1;
+    }
+    if (lstrcmpiA(text, "wide") == 0) {
+        *value_out = PHOSPHOR_DRIFT_WIDE;
+        return 1;
+    }
+    return 0;
+}
+
+static int phosphor_parse_mirror_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "none") == 0) {
+        *value_out = PHOSPHOR_MIRROR_NONE;
+        return 1;
+    }
+    if (lstrcmpiA(text, "horizontal") == 0) {
+        *value_out = PHOSPHOR_MIRROR_HORIZONTAL;
+        return 1;
+    }
+    if (lstrcmpiA(text, "quad") == 0) {
+        *value_out = PHOSPHOR_MIRROR_QUAD;
+        return 1;
+    }
+    return 0;
+}
+
+int phosphor_config_export_settings_entries(
+    const screensave_saver_module *module,
+    const screensave_common_config *common_config,
+    const void *product_config,
+    unsigned int product_config_size,
+    screensave_settings_file_kind kind,
+    screensave_settings_writer *writer,
+    screensave_diag_context *diagnostics
+)
+{
+    const phosphor_config *config;
+
+    (void)module;
+    (void)common_config;
+    (void)diagnostics;
+
+    config = phosphor_as_const_config(product_config, product_config_size);
+    if (kind != SCREENSAVE_SETTINGS_FILE_PRESET) {
+        return 1;
+    }
+    if (config == NULL || writer == NULL || writer->write_string == NULL) {
+        return 0;
+    }
+
+    return writer->write_string(writer->context, "product", "curve", phosphor_curve_mode_name(config->curve_mode)) &&
+        writer->write_string(
+            writer->context,
+            "product",
+            "trail",
+            phosphor_persistence_mode_name(config->persistence_mode)
+        ) &&
+        writer->write_string(writer->context, "product", "drift", phosphor_drift_mode_name(config->drift_mode)) &&
+        writer->write_string(writer->context, "product", "mirror", phosphor_mirror_mode_name(config->mirror_mode));
+}
+
+int phosphor_config_import_settings_entry(
+    const screensave_saver_module *module,
+    screensave_common_config *common_config,
+    void *product_config,
+    unsigned int product_config_size,
+    screensave_settings_file_kind kind,
+    const char *section,
+    const char *key,
+    const char *value,
+    screensave_diag_context *diagnostics
+)
+{
+    phosphor_config *config;
+
+    (void)module;
+    (void)common_config;
+    (void)diagnostics;
+
+    config = phosphor_as_config(product_config, product_config_size);
+    if (kind != SCREENSAVE_SETTINGS_FILE_PRESET) {
+        return 1;
+    }
+    if (config == NULL || section == NULL || key == NULL || value == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(section, "product") != 0) {
+        return 1;
+    }
+    if (lstrcmpiA(key, "curve") == 0 || lstrcmpiA(key, "curve_mode") == 0) {
+        return phosphor_parse_curve_mode(value, &config->curve_mode);
+    }
+    if (
+        lstrcmpiA(key, "trail") == 0 ||
+        lstrcmpiA(key, "trail_mode") == 0 ||
+        lstrcmpiA(key, "persistence") == 0 ||
+        lstrcmpiA(key, "persistence_mode") == 0
+    ) {
+        return phosphor_parse_persistence_mode(value, &config->persistence_mode);
+    }
+    if (lstrcmpiA(key, "drift") == 0 || lstrcmpiA(key, "drift_mode") == 0) {
+        return phosphor_parse_drift_mode(value, &config->drift_mode);
+    }
+    if (lstrcmpiA(key, "mirror") == 0 || lstrcmpiA(key, "mirror_mode") == 0) {
+        return phosphor_parse_mirror_mode(value, &config->mirror_mode);
+    }
+
+    return 1;
+}
+
+void phosphor_config_randomize_settings(
+    const screensave_saver_module *module,
+    screensave_common_config *common_config,
+    void *product_config,
+    unsigned int product_config_size,
+    const screensave_session_seed *seed,
+    screensave_diag_context *diagnostics
+)
+{
+    phosphor_config *config;
+    phosphor_rng_state rng;
+    unsigned long random_seed;
+    unsigned long roll;
+
+    (void)module;
+    (void)common_config;
+    (void)diagnostics;
+
+    config = phosphor_as_config(product_config, product_config_size);
+    if (config == NULL) {
+        return;
+    }
+
+    random_seed = seed != NULL ? seed->stream_seed : 0x50484F53UL;
+    phosphor_rng_seed(&rng, random_seed ^ 0x50484F53UL);
+
+    roll = phosphor_rng_range(&rng, 100UL);
+    if (roll < 36UL) {
+        config->curve_mode = PHOSPHOR_CURVE_LISSAJOUS;
+    } else if (roll < 72UL) {
+        config->curve_mode = PHOSPHOR_CURVE_HARMONOGRAPH;
+    } else {
+        config->curve_mode = PHOSPHOR_CURVE_DENSE;
+    }
+
+    roll = phosphor_rng_range(&rng, 100UL);
+    if (roll < 24UL) {
+        config->persistence_mode = PHOSPHOR_PERSISTENCE_SHORT;
+    } else if (roll < 68UL) {
+        config->persistence_mode = PHOSPHOR_PERSISTENCE_STANDARD;
+    } else {
+        config->persistence_mode = PHOSPHOR_PERSISTENCE_LONG;
+    }
+
+    roll = phosphor_rng_range(&rng, 100UL);
+    if (roll < 34UL) {
+        config->drift_mode = PHOSPHOR_DRIFT_CALM;
+    } else if (roll < 78UL) {
+        config->drift_mode = PHOSPHOR_DRIFT_STANDARD;
+    } else {
+        config->drift_mode = PHOSPHOR_DRIFT_WIDE;
+    }
+
+    roll = phosphor_rng_range(&rng, 100UL);
+    if (roll < 32UL) {
+        config->mirror_mode = PHOSPHOR_MIRROR_NONE;
+    } else if (roll < 68UL) {
+        config->mirror_mode = PHOSPHOR_MIRROR_HORIZONTAL;
+    } else {
+        config->mirror_mode = PHOSPHOR_MIRROR_QUAD;
+    }
 }

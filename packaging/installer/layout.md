@@ -1,6 +1,6 @@
 # C07 Installer Layout
 
-This note defines the `C07` installer architecture.
+This note defines the installer architecture as refreshed in `C14`.
 
 ## Source-Controlled Inputs
 
@@ -14,10 +14,10 @@ This note defines the `C07` installer architecture.
 
 ## Generated Outputs
 
-- Staged folder: `out/installer/screensave-installer-c07/`
-- Zip artifact: `out/installer/screensave-installer-c07.zip`
+- Staged folder: `out/installer/screensave-installer-c14-rc/`
+- Zip artifact: `out/installer/screensave-installer-c14-rc.zip`
 
-Generated outputs are derived from source-controlled installer inputs plus the real `C06` portable payload staged under `out/portable/screensave-portable-c06/`.
+Generated outputs are derived from source-controlled installer inputs plus the current staged portable payload under `out/portable/screensave-portable-c14-rc/`.
 
 ## Supported Install Mode
 
@@ -84,4 +84,5 @@ The installer copies the portable payload into the dedicated install root and ad
 
 - The installer payload is only as complete as the real staged portable bundle it consumes.
 - `C07` does not add machine-wide installation.
-- `C07` does not add suite-app, suite meta-saver, or installer-driven cross-saver browsing behavior.
+- The installer excludes the separate `suite` and `benchlab` app products.
+- `anthology` is treated as a normal saver product but is installed only when the current portable payload contains `anthology.scr`.

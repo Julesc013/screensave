@@ -37,6 +37,20 @@ const screensave_theme_descriptor g_signals_themes[] = {
         "Low-intensity slate console for subdued rooms.",
         { 90, 118, 150, 255 },
         { 174, 204, 230, 255 }
+    },
+    {
+        "telemetry_wall",
+        "Telemetry Wall",
+        "Cool telemetry blue with bright cyan board accents.",
+        { 76, 144, 214, 255 },
+        { 192, 244, 255, 255 }
+    },
+    {
+        "night_watch_console",
+        "Night Watch Console",
+        "Dark navy watch-console palette with restrained pale indicators.",
+        { 92, 124, 170, 255 },
+        { 196, 220, 244, 255 }
     }
 };
 

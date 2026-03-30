@@ -37,6 +37,20 @@ const screensave_theme_descriptor g_observatory_themes[] = {
         "Low-contrast slate astronomy exhibit for restrained long runs.",
         { 132, 142, 158, 255 },
         { 210, 220, 232, 255 }
+    },
+    {
+        "planetarium_blue",
+        "Planetarium Blue",
+        "Cool planetarium dome palette with pale blue star trails and gentle eclipse highlights.",
+        { 84, 120, 196, 255 },
+        { 220, 236, 255, 255 }
+    },
+    {
+        "brass_eclipse",
+        "Brass Eclipse",
+        "Warm brass exhibit tones with deeper eclipse-shadow contrast and pale chart highlights.",
+        { 188, 148, 88, 255 },
+        { 246, 224, 180, 255 }
     }
 };
 

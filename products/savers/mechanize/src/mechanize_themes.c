@@ -37,6 +37,20 @@ const screensave_theme_descriptor g_mechanize_themes[] = {
         "Soft museum display palette for patient scenes.",
         { 122, 116, 102, 255 },
         { 214, 204, 182, 255 }
+    },
+    {
+        "copper_foundry",
+        "Copper Foundry",
+        "Copper and smoked enamel tones for restrained counter assemblies.",
+        { 176, 112, 74, 255 },
+        { 246, 210, 166, 255 }
+    },
+    {
+        "ivory_gallery",
+        "Ivory Gallery",
+        "Ivory and slate exhibit palette for calmer museum scenes.",
+        { 176, 168, 146, 255 },
+        { 242, 236, 214, 255 }
     }
 };
 

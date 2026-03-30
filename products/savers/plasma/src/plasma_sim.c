@@ -241,6 +241,26 @@ static unsigned long plasma_speed_units(
     return speed;
 }
 
+static unsigned long plasma_variation_interval_millis(
+    const screensave_saver_session *session
+)
+{
+    if (session == NULL) {
+        return 12000UL;
+    }
+
+    if (session->preview_mode) {
+        return 7000UL;
+    }
+    if (session->config.effect_mode == PLASMA_EFFECT_INTERFERENCE) {
+        return 11000UL;
+    }
+    if (session->config.effect_mode == PLASMA_EFFECT_FIRE) {
+        return 15000UL;
+    }
+    return 13000UL;
+}
+
 static unsigned int plasma_fire_floor(
     const screensave_saver_session *session
 )
@@ -487,7 +507,12 @@ static void plasma_warm_start_effect(screensave_saver_session *session)
     }
 
     plasma_zero_fields(session);
-    warm_steps = session->config.effect_mode == PLASMA_EFFECT_FIRE ? 18 : 1;
+    warm_steps = 2;
+    if (session->config.effect_mode == PLASMA_EFFECT_FIRE) {
+        warm_steps = 18;
+    } else if (session->config.effect_mode == PLASMA_EFFECT_INTERFERENCE) {
+        warm_steps = 4;
+    }
     while (warm_steps-- > 0) {
         if (session->config.effect_mode == PLASMA_EFFECT_FIRE) {
             unsigned char *swap_buffer;
@@ -507,6 +532,26 @@ static void plasma_warm_start_effect(screensave_saver_session *session)
         session->source_phase_a += 5UL;
         session->source_phase_b += 3UL;
         session->source_phase_c += 7UL;
+    }
+}
+
+static void plasma_refresh_composition(screensave_saver_session *session)
+{
+    if (session == NULL) {
+        return;
+    }
+
+    session->phase_millis += 96UL + plasma_rng_range(&session->rng, 320UL);
+    session->palette_phase = (session->palette_phase + 32UL + plasma_rng_range(&session->rng, 96UL)) & 255UL;
+    session->source_phase_a += 32UL + plasma_rng_range(&session->rng, 128UL);
+    session->source_phase_b += 24UL + plasma_rng_range(&session->rng, 112UL);
+    session->source_phase_c += 40UL + plasma_rng_range(&session->rng, 144UL);
+
+    if (session->config.effect_mode == PLASMA_EFFECT_INTERFERENCE) {
+        session->source_phase_a += 32UL;
+        session->source_phase_b += 48UL;
+    } else if (session->config.effect_mode == PLASMA_EFFECT_FIRE) {
+        session->palette_phase = (session->palette_phase + 18UL) & 255UL;
     }
 }
 
@@ -562,6 +607,7 @@ int plasma_create_session(
     session->source_phase_a = environment->seed.stream_seed & 255UL;
     session->source_phase_b = (environment->seed.stream_seed >> 7) & 255UL;
     session->source_phase_c = (environment->seed.stream_seed >> 13) & 255UL;
+    session->variation_elapsed_millis = 0UL;
 
     if (!plasma_resize_visual_state(session)) {
         plasma_destroy_session(session);
@@ -619,6 +665,7 @@ void plasma_step_session(
     }
 
     speed_units = plasma_speed_units(session);
+    session->variation_elapsed_millis += delta_millis;
     session->phase_millis += delta_millis * speed_units;
     session->palette_phase = (session->palette_phase + ((delta_millis * speed_units) / 10UL) + 1UL) & 255UL;
     session->source_phase_a += (delta_millis * (speed_units + 1UL)) / 11UL + 1UL;
@@ -639,4 +686,9 @@ void plasma_step_session(
     }
 
     plasma_apply_smoothing(session);
+
+    if (session->variation_elapsed_millis >= plasma_variation_interval_millis(session)) {
+        session->variation_elapsed_millis = 0UL;
+        plasma_refresh_composition(session);
+    }
 }

@@ -2,6 +2,97 @@
 
 All notable repository changes are recorded here in prompt history order.
 
+## C14 - 2026-03-30
+
+### Added
+
+- `packaging/release_notes/release-candidate-notes.md` as the final release-candidate summary for the converged saver line, the separate app products, current local output reality, and the canonical checkpoint tag.
+- `validation/notes/c14-portable-bundle-matrix.md`, `validation/notes/c14-installer-matrix.md`, `validation/notes/c14-release-readiness-matrix.md`, `validation/notes/c14-config-integrity.md`, and `validation/notes/c14-known-issues.md` as the explicit release-readiness, integrity, distribution, and limitation record for the final rerelease pass.
+- `tools/scripts/check_release_candidate_surface.py` as the final static validator for the C14 release-candidate notes, manifest-version alignment, refreshed staged outputs, and closed continuation-status surface.
+
+### Changed
+
+- Refreshed the portable bundle definition under `packaging/portable/` to the `screensave-portable-c14-rc` release-candidate surface, including the new release-readiness, known-issues, integrity, and release-candidate notes staged beside the saver payload.
+- Refreshed the installer definition under `packaging/installer/` to the `screensave-installer-c14-rc` release-candidate surface, aligned the staged docs with the current portable payload, and kept the installer truthful about its current-user-only and payload-partial limits.
+- Normalized the current real saver and app manifests to `version=0.15.0`, updated the shared version-series identity to `C14 Final Rerelease Hardening Release Candidate`, and synchronized root, roadmap, backlog, architecture, packaging, and tooling docs so the continuation line now closes cleanly at `C14`.
+- Updated the release scaffold and stage-specific validators so the final RC checks audit the current package names, the final note set, the closed continuation line, and the current separation between saver-only distribution and the separate `suite` / `benchlab` app products.
+
+### Validation
+
+- Confirmed before editing that the continuation reset, rename normalization, migration checkpoint, saver productization matrix, shared settings architecture, Windows integration baseline, portable bundle, installer baseline, suite meta-saver, suite app, SDK surface, backlog-routing surface, cross-cutting polish baseline, and all three `C13` saver-polish waves already existed in the repo.
+- Kept `C14` bounded to release-hardening work only: this pass did not add new saver families, new renderer tiers, new packaging modes, or fresh architecture work beyond what was necessary to make the current release surface coherent and auditable.
+- Final `C14` evidence remains truthful and environment-bounded; a fresh full-suite native rebuild was not available here, so release readiness is recorded as static plus packaging plus local-output discovery evidence rather than fabricated runtime success.
+
+## C13 Wave C - 2026-03-30
+
+### Added
+
+- `validation/notes/c13-wave-c-polish.md` as the explicit Wave C scope, product-outcome, shared-surface, validation-level, and next-step note for the final saver-specific polish pass.
+- `tools/scripts/check_wave_c_surface.py` as the small static validator for the Wave C saver surface, the anthology long-run safeguards, and the updated continuation-status docs.
+
+### Changed
+
+- Polished `stormglass` with calmer dark-room weather pacing, stronger winter and monochrome cold-pane variants, preview-aware scene refresh, and more deliberate light, condensation, and droplet choreography without turning it into a weather engine.
+- Polished `transit` with calmer cinematic reseed cadence, stronger motorway-fog and harbor-midnight variants, preview-safe route sway, and better long-run light refresh without widening it into a driving or map system.
+- Polished `observatory` with calmer exhibit pacing, stronger planetarium-blue and brass-eclipse variants, preview-safe scene refresh, and more deliberate body and star reseeding without turning it into an astronomy package.
+- Polished `vector` with stronger amber-wire and terrain-glide curation, preview-aware scene reseeding, calmer long-run compositional refresh, and better renderer-sensitive pacing without widening it into a general 3D engine.
+- Polished `explorer` with calmer deterministic route refresh, stronger eerie-corridor and amber-service variants, better preview pacing, and less repetitive traversal loops without turning it into an FPS or map framework.
+- Polished `city` with stronger harbor and rooftop variants, calmer long-run light and fog choreography, preview-aware scenic reset behavior, and more deliberate night-world composition without widening it into a city simulator.
+- Polished `atlas` with stronger nebula-voyage and mathematics-plate curation, calmer preview hold timing, more deliberate route progression, and steadier anthology-style long-run presentation without turning it into a fractal laboratory.
+- Polished `gallery` with stronger amber-compatibility and GL21-prism-hall curation, tier-change-aware scenic refresh, and clearer long-run renderer-showcase pacing without turning it into the suite browser.
+- Polished `anthology` with calmer preview-safe interval defaults, stronger compatibility and scenic preset coverage, and anti-repeat selection damping that reduces awkward loopbacks while keeping the meta-saver bounded.
+- Completed the Wave C saver-only polish pass without broadening `suite`, packaging, installer behavior, renderer tiers, or out-of-wave products, and updated roadmap, backlog, architecture, tooling, validation, and root status docs so `C13` Wave C is recorded as complete and `C14` final rerelease hardening is now next.
+
+### Validation
+
+- Confirmed before editing that the continuation reset, rename normalization, migration checkpoint, saver productization matrix, shared settings architecture, Windows integration baseline, portable bundle, installer baseline, suite meta-saver, suite app, SDK surface, backlog-routing surface, `C12` quality-bar baseline, and `C13` Wave A and Wave B results already existed in the repo.
+- Kept `C13` Wave C bounded to `stormglass`, `transit`, `observatory`, `vector`, `explorer`, `city`, `atlas`, `gallery`, and `anthology` plus narrow validation, docs, and settings-hook parity work only; this prompt did not add new renderer tiers, packaging changes, installer changes, suite-app expansion, or out-of-wave saver work.
+- Final verification for `C13` Wave C is static and source-level in this environment; no supported MSVC or MinGW toolchain was available for a fresh native build or runtime capture pass.
+
+## C13 Wave B - 2026-03-30
+
+### Added
+
+- `validation/notes/c13-wave-b-polish.md` as the explicit Wave B scope, product-outcome, shared-surface, validation-level, and next-step note for the second saver-specific polish pass.
+- `tools/scripts/check_wave_b_surface.py` as the small static validator for the Wave B saver surface, the updated wave-routing docs, and the active continuation-status docs.
+
+### Changed
+
+- Polished `pipeworks` with staged pulse-spawn timing, stronger rebuild cadence, more varied restart origins, calmer preview behavior, clearer density wording, and curated amber/blueprint preset and theme families without turning it into a general tile or flow engine.
+- Polished `lifeforms` with calmer preview pacing, richer long-run seed choreography, clearer garden versus archive theme separation, better reseed variety, and real preset/theme/randomization import-export hooks where the product had previously advertised but not implemented them.
+- Polished `signals` with stronger panel-family cadence, quieter preview-safe defaults, clearer telemetry versus watch-console preset families, more deliberate pseudo-data rhythm, and real preset/theme/randomization import-export hooks where the product had previously advertised but not implemented them.
+- Polished `mechanize` with calmer exhibit pacing, stronger scene-family distinction, periodic layout reconfiguration for long unattended runs, curated copper and ivory material variants, and real preset/theme/randomization import-export hooks where the product had previously advertised but not implemented them.
+- Polished `ecosystems` with stronger regroup choreography, calmer preview population sizing, clearer reef and marsh habitat families, better long-run event pacing, and weighted randomization that now favors calmer room-safe defaults.
+- Updated roadmap, backlog, architecture, tooling, validation, and root status docs so `C13` Wave B is recorded as complete for the second five polished savers and `C13` Wave C is now the next continuation step instead of leaving the repo anchored on the earlier Wave A baseline.
+
+### Validation
+
+- Confirmed before editing that the continuation reset, rename normalization, migration checkpoint, saver productization matrix, shared settings architecture, Windows integration baseline, portable bundle, installer baseline, suite meta-saver, suite app, SDK surface, backlog-routing surface, `C12` quality-bar baseline, and `C13` Wave A results already existed in the repo.
+- Kept `C13` Wave B bounded to `pipeworks`, `lifeforms`, `signals`, `mechanize`, and `ecosystems` plus narrow docs and validation updates only; this prompt did not add new renderer tiers, packaging changes, installer changes, out-of-wave saver work, or suite-app/meta-saver expansion.
+- Final verification for `C13` Wave B is static and source-level in this environment; no supported MSVC or MinGW toolchain was available for a fresh native build or runtime capture pass.
+
+## C13 Wave A - 2026-03-30
+
+### Added
+
+- `validation/notes/c13-wave-a-polish.md` as the explicit Wave A scope, product-outcome, shared-surface, validation-level, and next-step note for the first saver-specific polish pass.
+- `tools/scripts/check_wave_a_surface.py` as the small static validator for the Wave A saver surface, the updated wave-routing docs, and the active continuation-status docs.
+
+### Changed
+
+- Polished `nocturne` with stronger near-black presets and themes, subtler ghost motion, calmer long-run drift refresh, and better dark-room pacing without widening the product beyond its restrained identity.
+- Polished `ricochet` with cleaner deterministic starts, calmer rhythm refresh, stronger trail taper, curated amber and corporate variants, and real preset/theme/randomization import-export parity with its product-owned settings surface.
+- Polished `deepfield` with animated twinkle, calmer preview travel, periodic scene refresh for long unattended runs, new deep-space preset and theme coverage, and real preset/theme/randomization import-export hooks where the product had previously advertised but not implemented them.
+- Polished `plasma` with clearer effect-family palette behavior, curated midnight and amber dark-room variants, softer long-run composition refresh, and preset import-export wording that now matches the checked-in product preset files more closely.
+- Polished `phosphor` with stronger amber and white laboratory variants, calmer long-run ratio refresh, improved preview-safe pacing, more deliberate instrument overlay presentation, and real preset/theme/randomization import-export hooks where the product had previously advertised but not implemented them.
+- Updated roadmap, backlog, architecture, tooling, and root status docs so `C13` is now the active saver-polish phase, Wave A is recorded as complete for the first five products, and `C13` Wave B is the next continuation step instead of prematurely advancing to `C14`.
+
+### Validation
+
+- Confirmed before editing that the continuation reset, rename normalization, migration checkpoint, saver productization matrix, shared settings architecture, Windows integration baseline, portable bundle, installer baseline, suite meta-saver, suite app, SDK surface, backlog-routing surface, and `C12` quality-bar baseline already existed in the repo.
+- Kept `C13` Wave A bounded to `nocturne`, `ricochet`, `deepfield`, `plasma`, and `phosphor` plus narrow docs and validation updates only; this prompt did not add new renderer tiers, packaging changes, installer changes, out-of-wave saver work, or suite-app/meta-saver expansion.
+- Final verification for `C13` Wave A is static and source-level in this environment; no supported MSVC or MinGW toolchain was available for a fresh native build or runtime capture pass.
+
 ## C12 - 2026-03-30
 
 ### Added

@@ -107,7 +107,8 @@ def main() -> int:
         "`Defaults`",
         "`Selection path`",
         "`Fallback cause`",
-        "The next continuation step is `C13`",
+        "`C13` Wave C and `C14` final rerelease hardening completed the continuation line without reopening the quality-bar vocabulary.",
+        "Later post-release work should continue to preserve this quality bar.",
     ):
         require(snippet in quality_bar, f"c12-suite-quality-bar.md is missing {snippet!r}.", errors)
 
@@ -190,38 +191,38 @@ def main() -> int:
     changelog = read_text(ROOT / "CHANGELOG.md")
 
     require(
-        "Implementation currently exists through `S15` plus continuation `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, and `C12`." in readme,
-        "README.md must record C12 as complete.",
+        "Implementation currently exists through `S15` plus continuation `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, `C13` Wave A, Wave B, and Wave C, and `C14`." in readme,
+        "README.md must record C13 Wave C as complete.",
         errors,
     )
     require(
-        "The next continuation phase is `C13` for the first saver-specific polish wave." in readme,
-        "README.md must point to C13.",
+        "The current continuation line is complete through `C14` final rerelease hardening." in readme,
+        "README.md must point to C14.",
         errors,
     )
     require(
-        "Post-`S15` work now follows committed `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, and `C12` work plus later continuation prompts." in prompt_program,
-        "prompt-program.md must record C12 as complete.",
+        "Post-`S15` work now follows committed `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, the completed `C13` family-polish work, and the completed `C14` release-hardening pass." in prompt_program,
+        "prompt-program.md must record completed C13 family-polish work.",
         errors,
     )
     require(
-        "C13 is the next planned implementation prompt after the cross-cutting polish baseline." in prompt_program,
-        "prompt-program.md must point to C13.",
+        "`C13` Wave A, Wave B, and Wave C are complete, and `C14` final rerelease hardening has closed the current continuation line with the release-candidate pass." in prompt_program,
+        "prompt-program.md must point to C14.",
         errors,
     )
     require(
-        "`C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, and `C12` are complete." in prompt_program,
-        "prompt-program.md must mark C12 complete.",
+        "- `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, and `C14` are complete." in prompt_program,
+        "prompt-program.md must record the closed C00-C12 and C14 continuation line.",
         errors,
     )
     require(
-        "`C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, and `C12` are complete." in series_map,
-        "series-map.md must mark C12 complete.",
+        "`C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, `C13` Wave A, Wave B, and Wave C, and `C14` are complete." in series_map,
+        "series-map.md must record C13 Wave C as complete.",
         errors,
     )
     require(
-        "The next planned implementation prompt is `C13` for the first saver-specific polish wave." in series_map,
-        "series-map.md must point to C13.",
+        "The current continuation line is complete through `C14` final rerelease hardening." in series_map,
+        "series-map.md must point to C14.",
         errors,
     )
     require(
@@ -230,8 +231,13 @@ def main() -> int:
         errors,
     )
     require(
-        "The next continuation prompt should be `C13` for the first saver-specific polish wave." in post_s15,
-        "post-s15-plan.md must point to C13.",
+        "15. `C13` Wave B completed the second saver-specific polish pass for `pipeworks`, `lifeforms`, `signals`, `mechanize`, and `ecosystems`." in post_s15,
+        "post-s15-plan.md must record C13 Wave B as complete.",
+        errors,
+    )
+    require(
+        "No further continuation prompt is scheduled on the current line after `C14` final rerelease hardening." in post_s15,
+        "post-s15-plan.md must point to C14.",
         errors,
     )
     require("## C12 - 2026-03-30" in changelog, "CHANGELOG.md must record C12.", errors)

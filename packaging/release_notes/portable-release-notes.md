@@ -1,6 +1,6 @@
 # ScreenSave Portable Bundle Release Notes
 
-This note is the user-facing release-support source for the `C06` portable bundle.
+This note is the user-facing release-support source for the final `C14` portable bundle refresh.
 
 ## What This Bundle Is
 
@@ -12,13 +12,13 @@ This note is the user-facing release-support source for the `C06` portable bundl
 
 - Not an installer.
 - Not a registration or uninstall workflow.
-- Not the future `suite` app.
-- Not the future suite meta-saver.
+- Not the separate `suite` app.
 - Not a developer-tools bundle; BenchLab remains excluded from the end-user payload.
 
 ## Included Content Policy
 
 - Include only canonical saver `.scr` outputs that actually exist in configured output roots.
+- Treat `anthology` as a normal saver product and include it when its binary exists in configured output roots.
 - Include per-saver manifests for staged savers.
 - Include file-backed pack content only when the owning saver binary is staged.
 - Include user-facing bundle notes, current compatibility guidance, and known limitations.
@@ -29,10 +29,11 @@ This note is the user-facing release-support source for the `C06` portable bundl
 - GDI remains the guaranteed renderer floor.
 - GL11 remains optional and capability-gated.
 - GL21 remains optional and only matters for savers and systems that support it.
-- GL33 and GL46 are not treated as real user-facing portable-bundle requirements in `C06`.
+- GL33 and GL46 are not treated as real user-facing portable-bundle requirements in `C14`.
 
 ## Current Known Limits
 
-- The `C06` portable stage may be partial when some canonical saver outputs are unavailable in the local output roots.
+- The `C14` portable stage may still be partial when some canonical saver outputs are unavailable in the local output roots.
 - The bundle assembly may rely on pre-existing binaries when a supported toolchain is unavailable.
-- Installed distribution now exists separately through the `C07` installer path.
+- `suite` and `benchlab` remain separate app products and are not part of the end-user saver bundle.
+- Installed distribution exists separately through the refreshed current-user installer path.

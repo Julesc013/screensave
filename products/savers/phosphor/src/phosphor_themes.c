@@ -37,6 +37,20 @@ const screensave_theme_descriptor g_phosphor_themes[] = {
         "Restrained low-contrast trace palette for long quiet runs.",
         { 172, 188, 200, 255 },
         { 244, 248, 250, 255 }
+    },
+    {
+        "amber_harmonics",
+        "Amber Harmonics",
+        "Warm amber phosphor with quieter laboratory-black contrast.",
+        { 212, 146, 68, 255 },
+        { 255, 214, 136, 255 }
+    },
+    {
+        "white_instrument",
+        "White Instrument",
+        "Pale instrument-white trace for restrained laboratory and drafting-room runs.",
+        { 220, 232, 236, 255 },
+        { 255, 255, 255, 255 }
     }
 };
 

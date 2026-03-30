@@ -24,9 +24,9 @@ static const screensave_saver_config_hooks g_stormglass_config_hooks = {
     stormglass_config_save,
     stormglass_config_show_dialog,
     stormglass_apply_shared_preset,
-    NULL,
-    NULL,
-    NULL,
+    stormglass_config_export_settings_entries,
+    stormglass_config_import_settings_entry,
+    stormglass_config_randomize_settings,
     SCREENSAVE_CONFIG_SCHEMA_VERSION,
     SCREENSAVE_SETTINGS_CAP_PRESET_FILES |
         SCREENSAVE_SETTINGS_CAP_THEME_FILES |

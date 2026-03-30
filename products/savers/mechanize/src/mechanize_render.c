@@ -26,6 +26,14 @@ static screensave_color mechanize_background_color(const screensave_saver_sessio
         color.red = 16;
         color.green = 20;
         color.blue = 24;
+    } else if (lstrcmpiA(session->theme->theme_key, "copper_foundry") == 0) {
+        color.red = 24;
+        color.green = 16;
+        color.blue = 12;
+    } else if (lstrcmpiA(session->theme->theme_key, "ivory_gallery") == 0) {
+        color.red = 30;
+        color.green = 28;
+        color.blue = 24;
     } else if (lstrcmpiA(session->theme->theme_key, "black_enamel_instrument") == 0) {
         color.red = 10;
         color.green = 10;

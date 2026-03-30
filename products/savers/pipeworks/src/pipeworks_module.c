@@ -24,9 +24,9 @@ static const screensave_saver_config_hooks g_pipeworks_config_hooks = {
     pipeworks_config_save,
     pipeworks_config_show_dialog,
     pipeworks_apply_shared_preset,
-    NULL,
-    NULL,
-    NULL,
+    pipeworks_config_export_settings_entries,
+    pipeworks_config_import_settings_entry,
+    pipeworks_config_randomize_settings,
     SCREENSAVE_CONFIG_SCHEMA_VERSION,
     SCREENSAVE_SETTINGS_CAP_PRESET_FILES |
         SCREENSAVE_SETTINGS_CAP_THEME_FILES |
@@ -46,7 +46,7 @@ static const screensave_saver_module g_pipeworks_module = {
     {
         "pipeworks",
         "Pipeworks",
-        "Grid-grown network saver with branching build cycles, restrained pulse flow, and staged rebuilds."
+        "Grid-grown network saver with branching build cycles, curated flow pulses, and staged rebuild choreography."
     },
     SCREENSAVE_SAVER_CAP_GDI | SCREENSAVE_SAVER_CAP_GL11 | SCREENSAVE_SAVER_CAP_LONG_RUN_STABLE,
     g_pipeworks_presets,

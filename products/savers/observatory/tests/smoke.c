@@ -24,9 +24,24 @@ int main(void)
     if (observatory_find_preset_values("brass_orrery") == NULL) {
         return 3;
     }
+    if (observatory_find_preset_values("planetarium_blue") == NULL) {
+        return 4;
+    }
 
     if (observatory_find_theme_descriptor("deep_blue_dome") == NULL) {
-        return 4;
+        return 5;
+    }
+    if (observatory_find_theme_descriptor("brass_eclipse") == NULL) {
+        return 6;
+    }
+
+    if (
+        module->callbacks == NULL ||
+        module->callbacks->export_settings_entries == NULL ||
+        module->callbacks->import_settings_entry == NULL ||
+        module->callbacks->randomize_settings == NULL
+    ) {
+        return 7;
     }
 
     screensave_config_binding_init(&binding, &common_config, &product_config, sizeof(product_config));
@@ -40,18 +55,18 @@ int main(void)
 
     session = NULL;
     if (!observatory_create_session(module, &session, &environment) || session == NULL) {
-        return 5;
+        return 8;
     }
 
     environment.clock.delta_millis = 96UL;
     observatory_step_session(session, &environment);
     if (session->theme == NULL) {
         observatory_destroy_session(session);
-        return 6;
+        return 9;
     }
     if (session->body_count == 0U || session->star_count == 0U) {
         observatory_destroy_session(session);
-        return 7;
+        return 10;
     }
 
     observatory_destroy_session(session);

@@ -80,6 +80,31 @@ static unsigned long nocturne_cycle_duration_millis(
     }
 }
 
+static unsigned long nocturne_refresh_interval_millis(
+    const screensave_saver_session *session
+)
+{
+    if (session == NULL) {
+        return 10000UL;
+    }
+
+    if (session->preview_mode) {
+        return 7000UL;
+    }
+
+    switch (session->detail_level) {
+    case SCREENSAVE_DETAIL_LEVEL_LOW:
+        return 16000UL;
+
+    case SCREENSAVE_DETAIL_LEVEL_HIGH:
+        return 9000UL;
+
+    case SCREENSAVE_DETAIL_LEVEL_STANDARD:
+    default:
+        return 12000UL;
+    }
+}
+
 static unsigned long nocturne_fade_units_per_second(int fade_speed)
 {
     switch (fade_speed) {
@@ -137,6 +162,23 @@ static long nocturne_random_velocity(
     return -speed;
 }
 
+static long nocturne_blend_velocity(long current_velocity, long target_velocity)
+{
+    long blended_velocity;
+
+    blended_velocity = (current_velocity * 3L) / 4L;
+    blended_velocity += target_velocity / 4L;
+    if (blended_velocity > -96L && blended_velocity < 96L) {
+        if (blended_velocity < 0L) {
+            blended_velocity = -96L;
+        } else {
+            blended_velocity = 96L;
+        }
+    }
+
+    return blended_velocity;
+}
+
 static void nocturne_set_initial_positions(screensave_saver_session *session)
 {
     long width_fixed;
@@ -181,6 +223,7 @@ static void nocturne_reset_cycle(screensave_saver_session *session)
     session->cycle_index += 1UL;
     session->stage = NOCTURNE_STAGE_FADE_IN;
     session->stage_elapsed_millis = 0UL;
+    session->drift_refresh_millis = 0UL;
     session->fade_level = 0;
     session->cycle_duration_millis = nocturne_cycle_duration_millis(session->detail_level, session->preview_mode);
     session->primary_vx = nocturne_random_velocity(&session->rng, session->config.motion_strength, session->preview_mode);
@@ -189,7 +232,32 @@ static void nocturne_reset_cycle(screensave_saver_session *session)
     session->secondary_vy = nocturne_random_velocity(&session->rng, session->config.motion_strength, session->preview_mode);
     session->breath_direction = 1;
     session->breath_level = 48 + (int)nocturne_rng_range(&session->rng, 48UL);
+    session->ambient_level = 28 + (int)nocturne_rng_range(&session->rng, 28UL);
     nocturne_set_initial_positions(session);
+}
+
+static void nocturne_refresh_steady_motion(screensave_saver_session *session)
+{
+    long target_velocity;
+
+    if (session == NULL) {
+        return;
+    }
+
+    target_velocity = nocturne_random_velocity(&session->rng, session->config.motion_strength, session->preview_mode);
+    session->secondary_vx = nocturne_blend_velocity(session->secondary_vx, target_velocity);
+    target_velocity = nocturne_random_velocity(&session->rng, session->config.motion_strength, session->preview_mode);
+    session->secondary_vy = nocturne_blend_velocity(session->secondary_vy, target_velocity);
+
+    if (session->config.motion_mode != NOCTURNE_MOTION_NONE) {
+        target_velocity = nocturne_random_velocity(&session->rng, session->config.motion_strength, session->preview_mode);
+        session->primary_vx = nocturne_blend_velocity(session->primary_vx, target_velocity);
+        target_velocity = nocturne_random_velocity(&session->rng, session->config.motion_strength, session->preview_mode);
+        session->primary_vy = nocturne_blend_velocity(session->primary_vy, target_velocity);
+    }
+
+    session->ambient_level = 24 + (int)nocturne_rng_range(&session->rng, 40UL);
+    session->breath_level = 44 + (int)nocturne_rng_range(&session->rng, 52UL);
 }
 
 static void nocturne_advance_axis(long *position, long *velocity, int limit, unsigned long delta_millis)
@@ -402,4 +470,12 @@ void nocturne_step_session(
 
     nocturne_step_positions(session, delta_millis);
     nocturne_step_stage(session, delta_millis);
+
+    if (session->stage == NOCTURNE_STAGE_STEADY) {
+        session->drift_refresh_millis += delta_millis;
+        if (session->drift_refresh_millis >= nocturne_refresh_interval_millis(session)) {
+            session->drift_refresh_millis = 0UL;
+            nocturne_refresh_steady_motion(session);
+        }
+    }
 }

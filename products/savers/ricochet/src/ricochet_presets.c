@@ -31,6 +31,15 @@ const screensave_preset_descriptor g_ricochet_presets[] = {
         0UL
     },
     {
+        "amber_arc",
+        "Amber Arc",
+        "Single amber disc motion with a longer analog-style trail.",
+        "amber_arc",
+        SCREENSAVE_DETAIL_LEVEL_STANDARD,
+        1,
+        0x00000923UL
+    },
+    {
         "corner_watch",
         "Corner Watch",
         "Single faster block with no trail and rare corner celebration flashes.",
@@ -38,6 +47,15 @@ const screensave_preset_descriptor g_ricochet_presets[] = {
         SCREENSAVE_DETAIL_LEVEL_STANDARD,
         1,
         0x00000922UL
+    },
+    {
+        "quiet_corporate",
+        "Quiet Corporate",
+        "Three block bodies with calm rhythm and restrained neutral contrast.",
+        "minimal_slate",
+        SCREENSAVE_DETAIL_LEVEL_LOW,
+        0,
+        0UL
     },
     {
         "minimal_lobby",
@@ -54,7 +72,9 @@ static const ricochet_preset_values g_ricochet_preset_values[] = {
     { RICOCHET_OBJECT_BLOCK, 1, RICOCHET_SPEED_STANDARD, RICOCHET_TRAIL_SHORT },
     { RICOCHET_OBJECT_DISC, 3, RICOCHET_SPEED_STANDARD, RICOCHET_TRAIL_PHOSPHOR },
     { RICOCHET_OBJECT_EMBLEM, 3, RICOCHET_SPEED_CALM, RICOCHET_TRAIL_SHORT },
+    { RICOCHET_OBJECT_DISC, 1, RICOCHET_SPEED_CALM, RICOCHET_TRAIL_PHOSPHOR },
     { RICOCHET_OBJECT_BLOCK, 1, RICOCHET_SPEED_LIVELY, RICOCHET_TRAIL_NONE },
+    { RICOCHET_OBJECT_BLOCK, 3, RICOCHET_SPEED_CALM, RICOCHET_TRAIL_SHORT },
     { RICOCHET_OBJECT_EMBLEM, 5, RICOCHET_SPEED_STANDARD, RICOCHET_TRAIL_SHORT }
 };
 

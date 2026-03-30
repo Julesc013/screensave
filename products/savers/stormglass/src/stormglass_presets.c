@@ -47,6 +47,24 @@ const screensave_preset_descriptor g_stormglass_presets[] = {
         SCREENSAVE_DETAIL_LEVEL_LOW,
         0,
         0UL
+    },
+    {
+        "winter_streetlamp",
+        "Winter Streetlamp",
+        "Cold-pane streetlamp study with steadier snowfall drift and warmer distant light bleed.",
+        "winter_streetlamp",
+        SCREENSAVE_DETAIL_LEVEL_STANDARD,
+        1,
+        0x00000D34UL
+    },
+    {
+        "monochrome_cold_pane",
+        "Monochrome Cold Pane",
+        "Quiet near-monochrome condensation pass for dark-room-safe long unattended runs.",
+        "monochrome_cold_pane",
+        SCREENSAVE_DETAIL_LEVEL_LOW,
+        0,
+        0UL
     }
 };
 
@@ -55,7 +73,9 @@ static const stormglass_preset_values g_stormglass_preset_values[] = {
     { STORMGLASS_SCENE_RAIN, STORMGLASS_INTENSITY_STANDARD, STORMGLASS_PANE_CLEAR },
     { STORMGLASS_SCENE_RAIN, STORMGLASS_INTENSITY_HEAVY, STORMGLASS_PANE_CONDENSED },
     { STORMGLASS_SCENE_WINTER, STORMGLASS_INTENSITY_QUIET, STORMGLASS_PANE_CONDENSED },
-    { STORMGLASS_SCENE_FOGGED, STORMGLASS_INTENSITY_QUIET, STORMGLASS_PANE_CONDENSED }
+    { STORMGLASS_SCENE_FOGGED, STORMGLASS_INTENSITY_QUIET, STORMGLASS_PANE_CONDENSED },
+    { STORMGLASS_SCENE_WINTER, STORMGLASS_INTENSITY_STANDARD, STORMGLASS_PANE_CONDENSED },
+    { STORMGLASS_SCENE_FOGGED, STORMGLASS_INTENSITY_QUIET, STORMGLASS_PANE_MISTED }
 };
 
 const screensave_preset_descriptor *stormglass_get_presets(unsigned int *count_out)

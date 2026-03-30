@@ -104,6 +104,15 @@ static int explorer_clamp_int(int value, int min_value, int max_value)
     return value;
 }
 
+static unsigned long explorer_mix_seed(unsigned long value)
+{
+    value ^= value >> 16;
+    value *= 1664525UL;
+    value += 1013904223UL;
+    value ^= value >> 13;
+    return value;
+}
+
 static void explorer_seed_segment(
     screensave_saver_session *session,
     explorer_segment *segment,
@@ -224,7 +233,13 @@ static void explorer_advance_route(screensave_saver_session *session)
     }
 
     session->world_cycle += 1UL;
-    session->route_seed += 0x9E3779B9UL;
+    session->route_seed = explorer_mix_seed(
+        session->route_seed ^
+        (session->world_cycle * 0x9E3779B9UL) ^
+        ((unsigned long)(session->config.scene_mode + 1) << 8) ^
+        ((unsigned long)(session->config.speed_mode + 1) << 16) ^
+        (session->preview_mode ? 0x10001UL : 0xA5101UL)
+    );
     explorer_build_route(session, session->route_seed);
     session->portal_pulse = 12UL;
 }
@@ -324,11 +339,14 @@ void explorer_resize_session(
     }
 
     session->drawable_size = environment->drawable_size;
+    session->preview_mode = environment->mode == SCREENSAVE_SESSION_MODE_PREVIEW;
+    session->theme = explorer_resolve_theme(environment->config_binding);
     session->camera_offset = explorer_clamp_int(
         session->camera_offset,
         -(session->drawable_size.width / 4),
         session->drawable_size.width / 4
     );
+    explorer_build_route(session, session->route_seed ^ (unsigned long)session->drawable_size.width ^ ((unsigned long)session->drawable_size.height << 4));
 }
 
 void explorer_step_session(

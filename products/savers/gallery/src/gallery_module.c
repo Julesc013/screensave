@@ -24,9 +24,9 @@ static const screensave_saver_config_hooks g_gallery_config_hooks = {
     gallery_config_save,
     gallery_config_show_dialog,
     gallery_apply_shared_preset,
-    NULL,
-    NULL,
-    NULL,
+    gallery_config_export_settings_entries,
+    gallery_config_import_settings_entry,
+    gallery_config_randomize_settings,
     SCREENSAVE_CONFIG_SCHEMA_VERSION,
     SCREENSAVE_SETTINGS_CAP_PRESET_FILES |
         SCREENSAVE_SETTINGS_CAP_THEME_FILES |

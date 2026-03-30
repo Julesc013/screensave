@@ -5,9 +5,9 @@ Lifeforms is the Grid and Simulation Family cellular saver. It presents a curate
 Current Series 11 scope:
 - Conway Life and HighLife as the two curated rule families
 - deterministic session seeding when requested
-- double-buffered cellular state with modest age coloring
-- explicit reseed behavior for extinction, stagnation, and long low-activity runs
-- restrained themes and presets tuned for contemplative long runs
+- double-buffered cellular state with calmer preview pacing and clearer age coloring
+- explicit reseed behavior for extinction, stagnation, repetition, and long low-activity runs
+- restrained museum, laboratory, garden, archive, and phosphor presets tuned for contemplative long runs
 
 Out of scope in this series:
 - pattern editors or import/export

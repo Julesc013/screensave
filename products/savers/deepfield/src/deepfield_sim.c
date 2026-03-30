@@ -101,12 +101,12 @@ static unsigned int deepfield_star_count(
     }
 
     if (detail_level == SCREENSAVE_DETAIL_LEVEL_LOW) {
-        count = (count * 3U) / 4U;
+        count = (count * 2U) / 3U;
     } else if (detail_level == SCREENSAVE_DETAIL_LEVEL_HIGH) {
         count = (count * 5U) / 4U;
     }
-    if (preview_mode && count > 56U) {
-        count = 56U;
+    if (preview_mode && count > 48U) {
+        count = 48U;
     }
     if (count > DEEPFIELD_MAX_STARS) {
         count = DEEPFIELD_MAX_STARS;
@@ -156,7 +156,10 @@ static long deepfield_speed_units(const deepfield_config *config, int preview_mo
     }
 
     if (preview_mode) {
-        speed = (speed * 4L) / 5L;
+        speed = (speed * 3L) / 5L;
+        if (speed < 4L) {
+            speed = 4L;
+        }
     }
 
     return speed;
@@ -175,7 +178,7 @@ static void deepfield_reset_parallax_star(
     height_fixed = (long)session->drawable_size.height * DEEPFIELD_FIXED_ONE;
 
     star->layer = (unsigned char)(1U + deepfield_rng_range(&session->rng, 3UL));
-    star->twinkle = (unsigned char)deepfield_rng_range(&session->rng, 128UL);
+    star->twinkle = (unsigned char)deepfield_rng_range(&session->rng, 192UL);
     if (place_on_right) {
         star->x = width_fixed + ((long)deepfield_rng_range(&session->rng, 48UL) * DEEPFIELD_FIXED_ONE);
     } else {
@@ -206,7 +209,7 @@ static void deepfield_reset_flythrough_star(screensave_saver_session *session, d
     star->y = value - spread_y;
     star->z = 96L + (long)deepfield_rng_range(&session->rng, 720UL);
     star->layer = (unsigned char)(1U + deepfield_rng_range(&session->rng, 3UL));
-    star->twinkle = (unsigned char)deepfield_rng_range(&session->rng, 128UL);
+    star->twinkle = (unsigned char)deepfield_rng_range(&session->rng, 192UL);
 }
 
 static void deepfield_initialize_stars(screensave_saver_session *session)
@@ -227,8 +230,30 @@ static void deepfield_initialize_stars(screensave_saver_session *session)
     }
 
     session->camera_phase_millis = 0UL;
+    session->twinkle_elapsed_millis = 0UL;
+    session->variation_elapsed_millis = 0UL;
     session->pulse_elapsed_millis = 0UL;
     session->pulse_remaining_millis = 0UL;
+}
+
+static void deepfield_step_twinkle(
+    screensave_saver_session *session,
+    unsigned long delta_millis
+)
+{
+    unsigned int index;
+    unsigned long twinkle_step;
+
+    if (session == NULL) {
+        return;
+    }
+
+    twinkle_step = (delta_millis / 10UL) + 1UL;
+    for (index = 0U; index < session->star_count; ++index) {
+        session->stars[index].twinkle = (unsigned char)(
+            session->stars[index].twinkle + (unsigned char)(twinkle_step + (unsigned long)session->stars[index].layer)
+        );
+    }
 }
 
 static void deepfield_step_pulse(screensave_saver_session *session, unsigned long delta_millis)
@@ -260,6 +285,63 @@ static void deepfield_step_pulse(screensave_saver_session *session, unsigned lon
     if (session->pulse_elapsed_millis >= cycle_length) {
         session->pulse_elapsed_millis = 0UL;
         session->pulse_remaining_millis = pulse_length;
+    }
+}
+
+static unsigned long deepfield_variation_interval_millis(
+    const screensave_saver_session *session
+)
+{
+    if (session == NULL) {
+        return 12000UL;
+    }
+
+    if (session->preview_mode) {
+        return 7000UL;
+    }
+    if (session->config.scene_mode == DEEPFIELD_SCENE_FLYTHROUGH) {
+        return 12000UL;
+    }
+    return 15000UL;
+}
+
+static void deepfield_refresh_scene(screensave_saver_session *session)
+{
+    unsigned int refresh_count;
+    unsigned int refresh_index;
+
+    if (session == NULL || session->star_count == 0U) {
+        return;
+    }
+
+    refresh_count = session->star_count / 10U;
+    if (refresh_count < 3U) {
+        refresh_count = 3U;
+    }
+    if (refresh_count > 14U) {
+        refresh_count = 14U;
+    }
+
+    for (refresh_index = 0U; refresh_index < refresh_count; ++refresh_index) {
+        unsigned int star_index;
+
+        star_index = (unsigned int)deepfield_rng_range(&session->rng, (unsigned long)session->star_count);
+        if (session->config.scene_mode == DEEPFIELD_SCENE_FLYTHROUGH) {
+            deepfield_reset_flythrough_star(session, &session->stars[star_index]);
+        } else {
+            deepfield_reset_parallax_star(
+                session,
+                &session->stars[star_index],
+                deepfield_rng_range(&session->rng, 100UL) < 58UL
+            );
+        }
+    }
+
+    if (session->config.pulse_mode != DEEPFIELD_PULSE_NONE && session->pulse_remaining_millis == 0UL) {
+        session->pulse_remaining_millis = session->config.pulse_mode == DEEPFIELD_PULSE_WARP
+            ? (session->preview_mode ? 280UL : 520UL)
+            : (session->preview_mode ? 180UL : 360UL);
+        session->pulse_elapsed_millis = 0UL;
     }
 }
 
@@ -454,11 +536,19 @@ void deepfield_step_session(
     }
 
     session->camera_phase_millis += delta_millis;
+    session->twinkle_elapsed_millis += delta_millis;
+    session->variation_elapsed_millis += delta_millis;
+    deepfield_step_twinkle(session, delta_millis);
     deepfield_step_pulse(session, delta_millis);
 
     if (session->config.scene_mode == DEEPFIELD_SCENE_FLYTHROUGH) {
         deepfield_step_flythrough(session, delta_millis);
     } else {
         deepfield_step_parallax(session, delta_millis);
+    }
+
+    if (session->variation_elapsed_millis >= deepfield_variation_interval_millis(session)) {
+        session->variation_elapsed_millis = 0UL;
+        deepfield_refresh_scene(session);
     }
 }

@@ -64,19 +64,30 @@ static unsigned long atlas_step_interval(const screensave_saver_session *session
 
 static unsigned int atlas_hold_ticks(const screensave_saver_session *session)
 {
+    unsigned int hold_ticks;
+
     if (session == NULL) {
         return 80U;
     }
 
     switch (session->config.speed_mode) {
     case ATLAS_SPEED_STILL:
-        return session->config.mode == ATLAS_MODE_ATLAS ? 170U : 120U;
+        hold_ticks = session->config.mode == ATLAS_MODE_ATLAS ? 170U : 120U;
+        break;
     case ATLAS_SPEED_BRISK:
-        return 56U;
+        hold_ticks = 56U;
+        break;
     case ATLAS_SPEED_STANDARD:
     default:
-        return session->config.mode == ATLAS_MODE_ATLAS ? 110U : 78U;
+        hold_ticks = session->config.mode == ATLAS_MODE_ATLAS ? 110U : 78U;
+        break;
     }
+
+    if (session->preview_mode && hold_ticks > 44U) {
+        hold_ticks -= 24U;
+    }
+
+    return hold_ticks;
 }
 
 static unsigned int atlas_rows_per_step(const screensave_saver_session *session)
@@ -389,11 +400,20 @@ static void atlas_refine_rows(screensave_saver_session *session, unsigned int ro
 
 static void atlas_advance_route(screensave_saver_session *session)
 {
+    unsigned int step;
+
     if (session == NULL) {
         return;
     }
 
-    session->route_index = (session->route_index + 1U) % ATLAS_ROUTE_POINT_COUNT;
+    step = 1U;
+    if (session->config.mode == ATLAS_MODE_VOYAGE && !session->preview_mode) {
+        step += (unsigned int)atlas_rng_range(&session->rng, 2UL);
+    } else if (session->config.mode == ATLAS_MODE_ATLAS && (atlas_rng_next(&session->rng) & 3UL) == 0UL) {
+        step += 1U;
+    }
+
+    session->route_index = (session->route_index + step) % ATLAS_ROUTE_POINT_COUNT;
     session->route_phase = 0U;
     atlas_refresh_view(session);
     atlas_restart_refinement(session);
@@ -551,6 +571,8 @@ void atlas_resize_session(
     }
 
     session->drawable_size = environment->drawable_size;
+    session->preview_mode = environment->mode == SCREENSAVE_SESSION_MODE_PREVIEW;
+    session->theme = atlas_resolve_theme(environment->config_binding);
     if (!atlas_prepare_buffers(session)) {
         return;
     }

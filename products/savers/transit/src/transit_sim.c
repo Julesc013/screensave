@@ -37,6 +37,34 @@ static unsigned long transit_step_interval(const screensave_saver_session *sessi
     }
 }
 
+static unsigned long transit_event_interval(const screensave_saver_session *session)
+{
+    unsigned long interval;
+
+    if (session == NULL) {
+        return 3200UL;
+    }
+
+    switch (session->config.speed_mode) {
+    case TRANSIT_SPEED_GLIDE:
+        interval = 4200UL;
+        break;
+    case TRANSIT_SPEED_EXPRESS:
+        interval = 2200UL;
+        break;
+    case TRANSIT_SPEED_CRUISE:
+    default:
+        interval = 3200UL;
+        break;
+    }
+
+    if (session->preview_mode) {
+        interval += 800UL;
+    }
+
+    return interval;
+}
+
 static int transit_depth_step(const screensave_saver_session *session)
 {
     if (session == NULL) {
@@ -138,9 +166,9 @@ static void transit_initialize_scene(screensave_saver_session *session)
     }
 
     session->light_count = transit_light_target(session);
-    session->route_phase = 0U;
-    session->sway_phase = 0U;
-    session->event_pulse = 0U;
+    session->route_phase = (unsigned int)transit_rng_range(&session->rng, 256UL);
+    session->sway_phase = (unsigned int)transit_rng_range(&session->rng, 256UL);
+    session->event_pulse = (unsigned int)transit_rng_range(&session->rng, 3UL);
     for (index = 0U; index < session->light_count; ++index) {
         transit_seed_light(session, &session->lights[index]);
     }
@@ -294,6 +322,8 @@ void transit_resize_session(
     }
 
     session->drawable_size = environment->drawable_size;
+    session->preview_mode = environment->mode == SCREENSAVE_SESSION_MODE_PREVIEW;
+    session->theme = transit_resolve_theme(environment->config_binding);
     transit_initialize_scene(session);
 }
 
@@ -303,6 +333,9 @@ void transit_step_session(
 )
 {
     unsigned long interval;
+    unsigned long event_interval;
+    unsigned int refresh_count;
+    unsigned int refresh_index;
 
     if (session == NULL || environment == NULL) {
         return;
@@ -316,8 +349,21 @@ void transit_step_session(
         transit_run_step(session);
     }
 
-    if (session->event_accumulator >= 3200UL) {
-        session->event_accumulator = 0UL;
+    event_interval = transit_event_interval(session);
+    while (session->event_accumulator >= event_interval) {
+        session->event_accumulator -= event_interval;
         session->event_pulse = 4U + (unsigned int)transit_rng_range(&session->rng, 8UL);
+        refresh_count = session->preview_mode ? 1U : 2U;
+        for (refresh_index = 0U; refresh_index < refresh_count; ++refresh_index) {
+            if (session->light_count == 0U) {
+                break;
+            }
+            transit_seed_light(
+                session,
+                &session->lights[transit_rng_range(&session->rng, (unsigned long)session->light_count)]
+            );
+        }
+        session->route_phase = (session->route_phase + 17U + (unsigned int)transit_rng_range(&session->rng, 24UL)) & 255U;
+        session->sway_phase = (session->sway_phase + 9U + (unsigned int)transit_rng_range(&session->rng, 16UL)) & 255U;
     }
 }

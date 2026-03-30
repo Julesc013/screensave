@@ -37,6 +37,20 @@ const screensave_theme_descriptor g_transit_themes[] = {
         "Low-intensity industrial corridor with sparse sodium and slate lighting.",
         { 118, 136, 156, 255 },
         { 210, 188, 136, 255 }
+    },
+    {
+        "motorway_fog",
+        "Motorway Fog",
+        "Cool motorway mist with muted lane lights and softer white-blue reflections.",
+        { 104, 134, 164, 255 },
+        { 214, 226, 234, 255 }
+    },
+    {
+        "harbor_midnight",
+        "Harbor Midnight",
+        "Deeper marine midnight palette with restrained amber channel lights.",
+        { 78, 112, 150, 255 },
+        { 216, 184, 118, 255 }
     }
 };
 

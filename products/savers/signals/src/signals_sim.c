@@ -22,20 +22,87 @@ static const signals_config *signals_resolve_config(const screensave_config_bind
 
 static unsigned long signals_step_interval(const screensave_saver_session *session)
 {
+    unsigned long interval;
+
     if (session == NULL) {
         return 80UL;
     }
 
     switch (session->config.activity_mode) {
     case SIGNALS_ACTIVITY_QUIET:
-        return 95UL;
+        interval = 95UL;
+        break;
 
     case SIGNALS_ACTIVITY_BUSY:
-        return 40UL;
+        interval = 40UL;
+        break;
 
     case SIGNALS_ACTIVITY_STANDARD:
     default:
-        return 65UL;
+        interval = 65UL;
+        break;
+    }
+
+    if (session->preview_mode && interval < 86UL) {
+        interval = 86UL;
+    }
+
+    return interval;
+}
+
+static unsigned long signals_event_interval(const screensave_saver_session *session)
+{
+    unsigned long interval;
+
+    interval = 1800UL;
+    if (session == NULL) {
+        return interval;
+    }
+
+    switch (session->config.activity_mode) {
+    case SIGNALS_ACTIVITY_QUIET:
+        interval = 2600UL;
+        break;
+
+    case SIGNALS_ACTIVITY_BUSY:
+        interval = 1400UL;
+        break;
+
+    case SIGNALS_ACTIVITY_STANDARD:
+    default:
+        interval = 1800UL;
+        break;
+    }
+
+    if (session->preview_mode && interval < 2200UL) {
+        interval = 2200UL;
+    }
+
+    return interval;
+}
+
+static void signals_pick_focus_panel(screensave_saver_session *session)
+{
+    unsigned long roll;
+
+    if (session == NULL) {
+        return;
+    }
+
+    roll = signals_rng_range(&session->rng, 100UL);
+    switch (session->config.layout_mode) {
+    case SIGNALS_LAYOUT_SPECTRUM:
+        session->focus_panel = roll < 52UL ? 0U : (roll < 76UL ? 1U : 2U);
+        break;
+
+    case SIGNALS_LAYOUT_TELEMETRY:
+        session->focus_panel = roll < 30UL ? 0U : (roll < 66UL ? 1U : 2U);
+        break;
+
+    case SIGNALS_LAYOUT_OPERATIONS:
+    default:
+        session->focus_panel = roll < 40UL ? 0U : (roll < 70UL ? 1U : 2U);
+        break;
     }
 }
 
@@ -138,6 +205,8 @@ static void signals_initialize_session(
     session->sample_accumulator = 0UL;
     session->event_accumulator = 0UL;
     session->alert_millis = 0UL;
+    session->focus_panel = 0U;
+    session->cadence_phase = 0U;
     session->sweep_position = 0U;
     session->heartbeat_phase = 0U;
     for (index = 0U; index < 3U; ++index) {
@@ -147,6 +216,7 @@ static void signals_initialize_session(
     signals_seed_scope_history(session);
     signals_seed_meters(session);
     signals_seed_status(session);
+    signals_pick_focus_panel(session);
 }
 
 static void signals_update_scope_values(screensave_saver_session *session)
@@ -165,6 +235,9 @@ static void signals_update_scope_values(screensave_saver_session *session)
         delta = (int)signals_rng_range(&session->rng, 9UL) - 4;
         if (session->config.layout_mode == SIGNALS_LAYOUT_SPECTRUM && scope_index == 0U) {
             delta += 2;
+        }
+        if (session->focus_panel == scope_index) {
+            delta += 2 + (int)(session->cadence_phase & 1U);
         }
         if (session->alert_millis > 0UL && scope_index == (session->heartbeat_phase % SIGNALS_SCOPE_COUNT)) {
             delta += 5;
@@ -208,8 +281,12 @@ static void signals_update_meters(screensave_saver_session *session)
         if (delta <= 2) {
             session->meter_targets[index] = 18 + (int)signals_rng_range(&session->rng, 78UL);
         }
+        if ((unsigned int)(index / 2) == session->focus_panel) {
+            session->meter_targets[index] += 6;
+        }
 
         session->meter_levels[index] = signals_clamp_percent(session->meter_levels[index]);
+        session->meter_targets[index] = signals_clamp_percent(session->meter_targets[index]);
     }
 }
 
@@ -226,6 +303,10 @@ static void signals_update_status(screensave_saver_session *session)
             ((session->counters[index % 3U] / (index + 2U)) + session->heartbeat_phase + index) % 2U;
     }
 
+    session->status_flags[(session->focus_panel * 2U) % SIGNALS_STATUS_COUNT] = 1;
+    session->status_flags[(session->focus_panel * 2U + 1U) % SIGNALS_STATUS_COUNT] =
+        (session->cadence_phase & 1U) != 0U;
+
     if (session->alert_millis > 0UL) {
         session->status_flags[session->heartbeat_phase % SIGNALS_STATUS_COUNT] = 1;
     }
@@ -238,6 +319,7 @@ static void signals_run_step(screensave_saver_session *session)
     }
 
     session->heartbeat_phase += 1U;
+    session->cadence_phase = (session->cadence_phase + 1U) & 31U;
     session->sweep_position = (session->sweep_position + 3U + (unsigned int)session->config.activity_mode) % 100U;
     session->counters[0] = (session->counters[0] + 1U) % 10000U;
     session->counters[1] = (session->counters[1] + 3U) % 10000U;
@@ -346,6 +428,8 @@ void signals_resize_session(
     }
 
     session->drawable_size = environment->drawable_size;
+    session->preview_mode = environment->mode == SCREENSAVE_SESSION_MODE_PREVIEW;
+    session->theme = signals_resolve_theme(environment->config_binding);
 }
 
 void signals_step_session(
@@ -368,12 +452,17 @@ void signals_step_session(
         signals_run_step(session);
     }
 
-    if (session->event_accumulator >= 1800UL) {
+    if (session->event_accumulator >= signals_event_interval(session)) {
         session->event_accumulator = 0UL;
+        signals_pick_focus_panel(session);
         if (signals_rng_range(&session->rng, 4UL) == 0UL) {
             session->alert_millis = 600UL + signals_rng_range(&session->rng, 1200UL);
         }
-        session->meter_targets[signals_rng_range(&session->rng, SIGNALS_METER_COUNT)] =
-            16 + (int)signals_rng_range(&session->rng, 82UL);
+        session->meter_targets[(session->focus_panel * 2U) % SIGNALS_METER_COUNT] =
+            36 + (int)signals_rng_range(&session->rng, 56UL);
+        session->meter_targets[(session->focus_panel * 2U + 1U) % SIGNALS_METER_COUNT] =
+            26 + (int)signals_rng_range(&session->rng, 62UL);
+        session->counters[session->focus_panel % 3U] =
+            (session->counters[session->focus_panel % 3U] + 111U + (unsigned int)signals_rng_range(&session->rng, 777UL)) % 10000U;
     }
 }

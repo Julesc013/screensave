@@ -115,6 +115,13 @@ static unsigned long pipeworks_growth_limit(const screensave_saver_session *sess
     if (session->preview_mode && millis > 3500UL) {
         millis = (millis * 3UL) / 5UL;
     }
+    if (session != NULL) {
+        if ((session->rebuild_count % 3UL) == 1UL) {
+            millis += 1200UL;
+        } else if ((session->rebuild_count % 3UL) == 2UL && millis > 1500UL) {
+            millis -= 1500UL;
+        }
+    }
 
     return millis;
 }
@@ -145,6 +152,50 @@ static unsigned long pipeworks_flow_limit(const screensave_saver_session *sessio
 
     if (session->preview_mode && millis > 2600UL) {
         millis = (millis * 3UL) / 5UL;
+    }
+    if (session != NULL) {
+        if ((session->rebuild_count & 1UL) != 0UL) {
+            millis += 600UL;
+        } else if ((session->rebuild_count % 3UL) == 2UL && millis > 700UL) {
+            millis -= 700UL;
+        }
+    }
+
+    return millis;
+}
+
+static unsigned long pipeworks_pulse_spawn_interval(const screensave_saver_session *session)
+{
+    unsigned long millis;
+
+    millis = 220UL;
+    if (session == NULL) {
+        return millis;
+    }
+
+    switch (session->config.speed_mode) {
+    case PIPEWORKS_SPEED_PATIENT:
+        millis = 280UL;
+        break;
+
+    case PIPEWORKS_SPEED_BRISK:
+        millis = 150UL;
+        break;
+
+    case PIPEWORKS_SPEED_STANDARD:
+    default:
+        millis = 220UL;
+        break;
+    }
+
+    if ((session->rebuild_count % 3UL) == 1UL && millis > 30UL) {
+        millis -= 30UL;
+    } else if ((session->rebuild_count % 3UL) == 2UL) {
+        millis += 35UL;
+    }
+
+    if (session->preview_mode && millis < 220UL) {
+        millis = 220UL;
     }
 
     return millis;
@@ -189,6 +240,11 @@ static unsigned int pipeworks_target_fill_percent(const screensave_saver_session
 
     if (session->preview_mode) {
         percent -= 8;
+    }
+    if ((session->rebuild_count % 3UL) == 1UL) {
+        percent += 4;
+    } else if ((session->rebuild_count % 3UL) == 2UL) {
+        percent -= 6;
     }
     if (percent < 28) {
         percent = 28;
@@ -433,6 +489,7 @@ static void pipeworks_clear_all_state(screensave_saver_session *session)
     session->occupied_cells = 0U;
     session->stage_millis = 0UL;
     session->step_accumulator = 0UL;
+    session->pulse_spawn_accumulator = 0UL;
     session->clear_scan_start = 0U;
     session->clear_stall_ticks = 0U;
     session->stage = PIPEWORKS_STAGE_GROW;
@@ -498,10 +555,16 @@ static void pipeworks_seed_heads(screensave_saver_session *session)
 
     origin_x = session->grid_size.width / 2;
     origin_y = session->grid_size.height / 2;
-    if (session->grid_size.width > 2) {
+    if ((session->rebuild_count & 1UL) != 0UL && session->grid_size.width > 4) {
+        origin_x = session->grid_size.width / 4 +
+            (int)pipeworks_rng_range(&session->rng, (unsigned long)(session->grid_size.width / 2));
+    } else if (session->grid_size.width > 2) {
         origin_x += (int)pipeworks_rng_range(&session->rng, 3UL) - 1;
     }
-    if (session->grid_size.height > 2) {
+    if ((session->rebuild_count % 3UL) == 2UL && session->grid_size.height > 4) {
+        origin_y = session->grid_size.height / 4 +
+            (int)pipeworks_rng_range(&session->rng, (unsigned long)(session->grid_size.height / 2));
+    } else if (session->grid_size.height > 2) {
         origin_y += (int)pipeworks_rng_range(&session->rng, 3UL) - 1;
     }
     if (origin_x < 0) {
@@ -520,6 +583,9 @@ static void pipeworks_seed_heads(screensave_saver_session *session)
         desired_heads = 1U;
     } else if (session->config.branch_mode == PIPEWORKS_BRANCH_WILD) {
         desired_heads = 3U;
+    }
+    if ((session->rebuild_count % 4UL) == 1UL && desired_heads < 4U) {
+        desired_heads += 1U;
     }
     if (session->preview_mode && desired_heads > 2U) {
         desired_heads = 2U;
@@ -556,6 +622,7 @@ static void pipeworks_reset_world(screensave_saver_session *session)
         return;
     }
 
+    session->rebuild_count += 1UL;
     pipeworks_clear_all_state(session);
     pipeworks_seed_heads(session);
 }
@@ -776,6 +843,7 @@ static void pipeworks_step_growth(screensave_saver_session *session)
         session->stage = PIPEWORKS_STAGE_FLOW;
         session->stage_millis = 0UL;
         session->pulse_count = 0U;
+        session->pulse_spawn_accumulator = pipeworks_pulse_spawn_interval(session);
         session->clear_stall_ticks = 0U;
     }
 }
@@ -882,6 +950,12 @@ static unsigned int pipeworks_target_pulses(const screensave_saver_session *sess
     } else if (session->detail_level == SCREENSAVE_DETAIL_LEVEL_HIGH) {
         count = 6U;
     }
+    if ((session->rebuild_count & 1UL) != 0UL) {
+        count += 1U;
+    }
+    if ((session->rebuild_count % 3UL) == 2UL && count > 1U) {
+        count -= 1U;
+    }
 
     if (session->preview_mode && count > 3U) {
         count = 3U;
@@ -943,6 +1017,7 @@ static void pipeworks_step_flow(screensave_saver_session *session)
     unsigned int index;
     unsigned int active_count;
     unsigned int target_pulses;
+    unsigned long spawn_interval;
 
     if (session == NULL) {
         return;
@@ -963,7 +1038,13 @@ static void pipeworks_step_flow(screensave_saver_session *session)
         }
     }
 
-    while (active_count < target_pulses && pipeworks_spawn_random_pulse(session)) {
+    spawn_interval = pipeworks_pulse_spawn_interval(session);
+    session->pulse_spawn_accumulator += pipeworks_step_interval(session);
+    while (session->pulse_spawn_accumulator >= spawn_interval && active_count < target_pulses) {
+        if (!pipeworks_spawn_random_pulse(session)) {
+            break;
+        }
+        session->pulse_spawn_accumulator -= spawn_interval;
         active_count += 1U;
     }
 

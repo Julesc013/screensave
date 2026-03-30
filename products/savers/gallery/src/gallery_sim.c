@@ -180,11 +180,20 @@ void gallery_resize_session(
     const screensave_saver_environment *environment
 )
 {
+    const screensave_common_config *common_config;
+
     if (session == NULL || environment == NULL) {
         return;
     }
 
     session->drawable_size = environment->drawable_size;
+    session->preview_mode = gallery_is_preview_mode(environment->mode);
+    session->theme = gallery_resolve_theme(environment->config_binding);
+    session->tier = gallery_resolve_tier(environment->renderer);
+    common_config = environment->config_binding != NULL ? environment->config_binding->common_config : NULL;
+    if (common_config != NULL) {
+        session->detail_level = common_config->detail_level;
+    }
     gallery_seed_markers(session);
 }
 
@@ -193,6 +202,7 @@ void gallery_step_session(
     const screensave_saver_environment *environment
 )
 {
+    gallery_renderer_tier previous_tier;
     unsigned long step;
     unsigned int marker_count;
     unsigned int index;
@@ -202,7 +212,12 @@ void gallery_step_session(
     }
 
     session->phase_counter += 1UL;
+    previous_tier = session->tier;
     session->tier = gallery_resolve_tier(environment->renderer);
+    if (session->tier != previous_tier) {
+        session->tier_pulse = 0UL;
+        gallery_seed_markers(session);
+    }
     step = gallery_motion_step(session);
     session->tier_pulse += step;
     session->scene_phase = (unsigned int)((session->phase_counter / (step / 4UL + 1UL)) % 3UL);
@@ -223,5 +238,9 @@ void gallery_step_session(
                 session->markers[index].radius = 18;
             }
         }
+    }
+
+    if ((session->phase_counter % (session->preview_mode ? 140UL : 220UL)) == 0UL) {
+        gallery_seed_markers(session);
     }
 }

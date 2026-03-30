@@ -37,6 +37,20 @@ const screensave_theme_descriptor g_pipeworks_themes[] = {
         "Muted dark-room blues with soft restrained highlights.",
         { 70, 94, 124, 255 },
         { 168, 194, 220, 255 }
+    },
+    {
+        "amber_backplane",
+        "Amber Backplane",
+        "Dark amber circuit-board tones with warm signal highlights.",
+        { 146, 108, 54, 255 },
+        { 255, 210, 134, 255 }
+    },
+    {
+        "midnight_blueprint",
+        "Midnight Blueprint",
+        "Cool blueprint blues with pale drafting-line accents.",
+        { 96, 132, 174, 255 },
+        { 208, 228, 248, 255 }
     }
 };
 

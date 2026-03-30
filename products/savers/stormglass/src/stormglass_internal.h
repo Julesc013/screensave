@@ -10,8 +10,8 @@
 #define STORMGLASS_PRODUCT_REGISTRY_ROOTA "Software\\Julesc013\\ScreenSave\\Products\\stormglass"
 #define STORMGLASS_DEFAULT_PRESET_KEY "quiet_midnight_rain"
 #define STORMGLASS_DEFAULT_THEME_KEY "quiet_midnight_rain"
-#define STORMGLASS_PRESET_COUNT 5U
-#define STORMGLASS_THEME_COUNT 5U
+#define STORMGLASS_PRESET_COUNT 7U
+#define STORMGLASS_THEME_COUNT 7U
 #define STORMGLASS_MAX_DROPLETS 72U
 #define STORMGLASS_MAX_LIGHTS 12U
 #define STORMGLASS_MAX_BANDS 6U
@@ -137,6 +137,34 @@ INT_PTR stormglass_config_show_dialog(
     screensave_common_config *common_config,
     void *product_config,
     unsigned int product_config_size,
+    screensave_diag_context *diagnostics
+);
+int stormglass_config_export_settings_entries(
+    const screensave_saver_module *module,
+    const screensave_common_config *common_config,
+    const void *product_config,
+    unsigned int product_config_size,
+    screensave_settings_file_kind kind,
+    screensave_settings_writer *writer,
+    screensave_diag_context *diagnostics
+);
+int stormglass_config_import_settings_entry(
+    const screensave_saver_module *module,
+    screensave_common_config *common_config,
+    void *product_config,
+    unsigned int product_config_size,
+    screensave_settings_file_kind kind,
+    const char *section,
+    const char *key,
+    const char *value,
+    screensave_diag_context *diagnostics
+);
+void stormglass_config_randomize_settings(
+    const screensave_saver_module *module,
+    screensave_common_config *common_config,
+    void *product_config,
+    unsigned int product_config_size,
+    const screensave_session_seed *seed,
     screensave_diag_context *diagnostics
 );
 

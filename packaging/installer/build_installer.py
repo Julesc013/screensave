@@ -1,4 +1,4 @@
-"""Stage the C07 current-user installer package from the real C06 portable payload."""
+"""Stage the C14 current-user installer refresh from the real portable payload."""
 
 from __future__ import annotations
 
@@ -56,8 +56,8 @@ def write_readme(staging_root: Path, savers: list[str], manifest: configparser.C
     lines = [
         display_name,
         "",
-        "This is the C07 scripted current-user installer package for the ScreenSave saver line.",
-        "It complements the C06 portable bundle and does not replace portable distribution.",
+        "This is the C14 scripted current-user installer refresh for the ScreenSave saver line.",
+        "It complements the current portable bundle and does not replace portable distribution.",
         "",
         "How to use this package:",
         "1. Extract this package to a writable directory.",
@@ -74,7 +74,8 @@ def write_readme(staging_root: Path, savers: list[str], manifest: configparser.C
         "Important limits:",
         "- This installer package is only as complete as the real portable payload it consumes.",
         "- Machine-wide install is deferred after C07.",
-        "- The future suite app and suite meta-saver are not part of this package.",
+        "- BenchLab and Suite are separate app products and are not part of this package.",
+        "- Anthology is treated as a normal saver product and is included only when its binary exists in the current payload.",
     ]
     (staging_root / "README.txt").write_text("\n".join(lines) + "\n", encoding="ascii")
 
@@ -88,7 +89,7 @@ def write_status_note(
     lines = [
         "# Installer Status",
         "",
-        "This note describes the staged C07 installer package.",
+        "This note describes the staged C14 installer package.",
         "",
         "## Package Source",
         "",
@@ -99,7 +100,8 @@ def write_status_note(
         "",
         f"- Included saver binaries: {', '.join(savers) if savers else 'none'}",
         "- BenchLab is excluded from the installed end-user package.",
-        "- The future suite app and suite meta-saver are excluded from this package.",
+        "- Suite is a separate app product and is excluded from the installed end-user package.",
+        "- Anthology is included only when it exists in the current portable payload.",
         "",
         "## Policy Summary",
         "",
@@ -115,7 +117,7 @@ def write_status_note(
         "- Machine-wide install remains deferred after C07.",
     ]
     if missing_payload:
-        lines.append("- The current payload is partial because some canonical saver outputs are still missing upstream.")
+        lines.append("- The current payload is partial because some canonical saver outputs are still missing from the local output roots.")
     (staging_root / "DOCS" / "INSTALLER-STATUS.md").write_text("\n".join(lines) + "\n", encoding="ascii")
 
 
@@ -172,6 +174,10 @@ def main() -> None:
     copy_file(ROOT / docs["release_notes"], staging_root / "DOCS" / "INSTALLER-RELEASE-NOTES.md")
     copy_file(ROOT / docs["installer_matrix"], staging_root / "DOCS" / "INSTALL-UNINSTALL-MATRIX.md")
     copy_file(ROOT / docs["portable_matrix"], staging_root / "DOCS" / "PORTABLE-BUNDLE-MATRIX.md")
+    copy_file(ROOT / docs["release_candidate_notes"], staging_root / "DOCS" / "RELEASE-CANDIDATE.md")
+    copy_file(ROOT / docs["release_readiness"], staging_root / "DOCS" / "RELEASE-READINESS.md")
+    copy_file(ROOT / docs["known_issues"], staging_root / "DOCS" / "KNOWN-ISSUES.md")
+    copy_file(ROOT / docs["integrity_note"], staging_root / "DOCS" / "CONFIG-INTEGRITY.md")
     copy_file(ROOT / docs["windows_validation"], staging_root / "DOCS" / "WINDOWS-INTEGRATION.md")
     copy_file(ROOT / docs["project_changelog"], staging_root / "DOCS" / "CHANGELOG.md")
     copy_file(ROOT / docs["assets_license"], staging_root / "DOCS" / "ASSETS-LICENSES.md")
@@ -179,7 +185,7 @@ def main() -> None:
     copy_file(MANIFEST_PATH, staging_root / "DOCS" / "SOURCE-INSTALLER-MANIFEST.ini")
 
     savers = discover_payload_savers(staging_root / "PAYLOAD")
-    missing_payload = len(savers) < 18
+    missing_payload = len(savers) < 19
     write_readme(staging_root, savers, manifest)
     write_status_note(staging_root, savers, missing_payload, manifest)
     write_file_list(staging_root)

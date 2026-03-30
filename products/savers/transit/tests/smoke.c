@@ -24,9 +24,15 @@ int main(void)
     if (transit_find_preset_values("wet_motorway") == NULL) {
         return 3;
     }
+    if (transit_find_preset_values("motorway_fog") == NULL) {
+        return 4;
+    }
 
     if (transit_find_theme_descriptor("harbor_lights") == NULL) {
-        return 4;
+        return 5;
+    }
+    if (transit_find_theme_descriptor("harbor_midnight") == NULL) {
+        return 6;
     }
 
     screensave_config_binding_init(&binding, &common_config, &product_config, sizeof(product_config));
@@ -40,18 +46,18 @@ int main(void)
 
     session = NULL;
     if (!transit_create_session(module, &session, &environment) || session == NULL) {
-        return 5;
+        return 7;
     }
 
     environment.clock.delta_millis = 96UL;
     transit_step_session(session, &environment);
     if (session->theme == NULL) {
         transit_destroy_session(session);
-        return 6;
+        return 8;
     }
     if (session->light_count == 0U) {
         transit_destroy_session(session);
-        return 7;
+        return 9;
     }
 
     transit_destroy_session(session);

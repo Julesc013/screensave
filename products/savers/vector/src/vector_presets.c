@@ -47,6 +47,24 @@ const screensave_preset_descriptor g_vector_presets[] = {
         SCREENSAVE_DETAIL_LEVEL_LOW,
         0,
         0UL
+    },
+    {
+        "amber_wire_tunnel",
+        "Amber Wire Tunnel",
+        "Slower tunnel progression with amber drafting tones and steadier depth cues.",
+        "amber_wire_tunnel",
+        SCREENSAVE_DETAIL_LEVEL_STANDARD,
+        1,
+        0x00001404UL
+    },
+    {
+        "terrain_museum_glide",
+        "Terrain Museum Glide",
+        "Lower-detail terrain flyover with subdued exhibit pacing and quieter structure spacing.",
+        "terrain_museum_glide",
+        SCREENSAVE_DETAIL_LEVEL_LOW,
+        0,
+        0UL
     }
 };
 
@@ -55,7 +73,9 @@ static const vector_preset_values g_vector_preset_values[] = {
     { VECTOR_SCENE_FIELD, VECTOR_SPEED_CALM, VECTOR_DETAIL_LOW },
     { VECTOR_SCENE_TUNNEL, VECTOR_SPEED_STANDARD, VECTOR_DETAIL_STANDARD },
     { VECTOR_SCENE_TERRAIN, VECTOR_SPEED_STANDARD, VECTOR_DETAIL_HIGH },
-    { VECTOR_SCENE_FIELD, VECTOR_SPEED_CALM, VECTOR_DETAIL_LOW }
+    { VECTOR_SCENE_FIELD, VECTOR_SPEED_CALM, VECTOR_DETAIL_LOW },
+    { VECTOR_SCENE_TUNNEL, VECTOR_SPEED_CALM, VECTOR_DETAIL_STANDARD },
+    { VECTOR_SCENE_TERRAIN, VECTOR_SPEED_CALM, VECTOR_DETAIL_LOW }
 };
 
 const screensave_preset_descriptor *vector_get_presets(unsigned int *count_out)

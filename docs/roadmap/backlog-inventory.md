@@ -20,19 +20,19 @@ It turns the remaining idea space into explicit, routed work instead of leaving 
 
 | ID | Product | Focus | Category | Priority | Effort | Risk | Depends On | Target Bucket | Owner Area | Notes |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| `SAV-NOC-01` | `nocturne` | Dark-room preset curation, preview calmness, and default wording cleanup | saver-local polish | `P1` | `S` | low | `X-01` | `Wave-A` | `saver:nocturne` | Keep Nocturne the low-distraction reference product |
-| `SAV-RIC-01` | `ricochet` | Trail balance, object pacing, and theme contrast pass | saver-local polish | `P1` | `M` | low | `X-01` | `Wave-A` | `saver:ricochet` | Tune the motion family anchor without shared churn |
-| `SAV-DEP-01` | `deepfield` | Density, camera comfort, and preview-safe defaults | saver-local polish | `P1` | `M` | medium | `X-01`, `X-06` | `Wave-A` | `saver:deepfield` | Keep atmospheric motion calm over long runs |
-| `SAV-PIP-01` | `pipeworks` | Rebuild cadence, low-detail readability, and config wording pass | saver-local polish | `P1` | `M` | low | `X-01` | `Wave-A` | `saver:pipeworks` | Product-local grid polish only |
-| `SAV-LIF-01` | `lifeforms` | Reseed policy, ruleset defaults, and theme clarity | saver-local polish | `P1` | `M` | medium | `X-01`, `X-06` | `Wave-A` | `saver:lifeforms` | Improve contemplative long-run behavior |
-| `SAV-SIG-01` | `signals` | Panel density, detail-level readability, and preset naming cleanup | saver-local polish | `P2` | `M` | low | `X-01` | `Wave-A` | `saver:signals` | Keep system-interface polish product-local |
-| `SAV-PLA-01` | `plasma` | Effect preset curation, pack example growth, and export/import parity | saver-local polish | `P2` | `M` | medium | `X-03` | `Wave-B` | `saver:plasma` | Preserve `plasma` as the framebuffer anchor |
-| `SAV-PHO-01` | `phosphor` | GDI/GL presentation parity and preset-description cleanup | saver-local polish | `P2` | `M` | medium | `X-05` | `Wave-B` | `saver:phosphor` | Keep capability claims honest per tier |
-| `SAV-MEC-01` | `mechanize` | Motion restraint, config labels, and default pacing pass | saver-local polish | `P2` | `M` | low | `X-01` | `Wave-B` | `saver:mechanize` | Avoid promoting machine-specific logic to shared code |
-| `SAV-ECO-01` | `ecosystems` | Habitat balance, sample pack growth, and long-run tuning | saver-local polish | `P2` | `M` | medium | `X-03`, `X-06` | `Wave-B` | `saver:ecosystems` | Keep habitat behavior product-owned |
-| `SAV-STO-01` | `stormglass` | Precipitation readability, winter/rain balance, and preview safety | saver-local polish | `P2` | `M` | medium | `X-06` | `Wave-B` | `saver:stormglass` | Scenic polish only, no new framework |
-| `SAV-TRA-01` | `transit` | Scene pacing, light balance, and route-pack curation | saver-local polish | `P2` | `M` | medium | `X-03` | `Wave-B` | `saver:transit` | Keep route-specific content inside Transit |
-| `SAV-OBS-01` | `observatory` | Exhibit pacing, low-detail fallback clarity, and config wording | saver-local polish | `P2` | `M` | low | `X-05` | `Wave-B` | `saver:observatory` | Preserve celestial exhibit identity |
+| `SAV-NOC-01` | `nocturne` | Dark-room preset curation, preview calmness, and default wording cleanup | saver-local polish | `P1` | `S` | low | `X-01` | `Wave-A` | `saver:nocturne` | `C13` Wave A lands the first premium pass while keeping Nocturne the low-distraction reference product |
+| `SAV-RIC-01` | `ricochet` | Trail balance, object pacing, and theme contrast pass | saver-local polish | `P1` | `M` | low | `X-01` | `Wave-A` | `saver:ricochet` | `C13` Wave A tunes the motion-family anchor without shared churn |
+| `SAV-DEP-01` | `deepfield` | Density, camera comfort, and preview-safe defaults | saver-local polish | `P1` | `M` | medium | `X-01`, `X-06` | `Wave-A` | `saver:deepfield` | `C13` Wave A keeps atmospheric motion calm over long runs |
+| `SAV-PIP-01` | `pipeworks` | Rebuild cadence, low-detail readability, and config wording pass | saver-local polish | `P1` | `M` | low | `X-01` | `Wave-B` | `saver:pipeworks` | `C13` Wave B keeps grid-growth polish product-local while strengthening curated pulse and rebuild behavior |
+| `SAV-LIF-01` | `lifeforms` | Reseed policy, ruleset defaults, and theme clarity | saver-local polish | `P1` | `M` | medium | `X-01`, `X-06` | `Wave-B` | `saver:lifeforms` | `C13` Wave B improves contemplative long-run behavior through calmer reseed choreography and theme curation |
+| `SAV-SIG-01` | `signals` | Panel density, detail-level readability, and preset naming cleanup | saver-local polish | `P2` | `M` | low | `X-01` | `Wave-B` | `saver:signals` | `C13` Wave B keeps system-interface polish product-local while strengthening panel cadence and preset identity |
+| `SAV-PLA-01` | `plasma` | Effect preset curation, pack example growth, and export/import parity | saver-local polish | `P2` | `M` | medium | `X-03` | `Wave-A` | `saver:plasma` | `C13` Wave A preserves `plasma` as the framebuffer anchor while strengthening its curated presets |
+| `SAV-PHO-01` | `phosphor` | GDI/GL presentation parity and preset-description cleanup | saver-local polish | `P2` | `M` | medium | `X-05` | `Wave-A` | `saver:phosphor` | `C13` Wave A keeps capability claims honest while polishing phosphor identity |
+| `SAV-MEC-01` | `mechanize` | Motion restraint, config labels, and default pacing pass | saver-local polish | `P2` | `M` | low | `X-01` | `Wave-B` | `saver:mechanize` | `C13` Wave B avoids promoting machine-specific logic to shared code while improving exhibit pacing and scene variants |
+| `SAV-ECO-01` | `ecosystems` | Habitat balance, sample pack growth, and long-run tuning | saver-local polish | `P2` | `M` | medium | `X-03`, `X-06` | `Wave-B` | `saver:ecosystems` | `C13` Wave B keeps habitat behavior product-owned while improving regroup choreography and calmer room-safe defaults |
+| `SAV-STO-01` | `stormglass` | Precipitation readability, winter/rain balance, and preview safety | saver-local polish | `P2` | `M` | medium | `X-06` | `Wave-C` | `saver:stormglass` | Scenic polish only, no new framework |
+| `SAV-TRA-01` | `transit` | Scene pacing, light balance, and route-pack curation | saver-local polish | `P2` | `M` | medium | `X-03` | `Wave-C` | `saver:transit` | Keep route-specific content inside Transit |
+| `SAV-OBS-01` | `observatory` | Exhibit pacing, low-detail fallback clarity, and config wording | saver-local polish | `P2` | `M` | low | `X-05` | `Wave-C` | `saver:observatory` | Preserve celestial exhibit identity |
 | `SAV-VEC-01` | `vector` | Detail scaling, performance tuning, and renderer-tier evidence pass | saver-local polish | `P1` | `L` | high | `X-05`, `X-06` | `Wave-C` | `saver:vector` | Heavyweight product with renderer-sensitive tuning |
 | `SAV-EXP-01` | `explorer` | Traversal comfort, config disclosure, and deterministic replay polish | saver-local polish | `P2` | `L` | medium | `X-01` | `Wave-C` | `saver:explorer` | Keep traversal-specific behavior product-local |
 | `SAV-CIT-01` | `city` | Night-scene contrast, skyline curation, and preset balance | saver-local polish | `P2` | `M` | medium | `X-01` | `Wave-C` | `saver:city` | Urban presentation polish only |
@@ -44,8 +44,8 @@ It turns the remaining idea space into explicit, routed work instead of leaving 
 
 | ID | Product | Focus | Category | Priority | Effort | Risk | Depends On | Target Bucket | Owner Area | Notes |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| `APP-SUI-01` | `suite` | Discovery polish, launch/config clarity, and local artifact truthfulness | suite/meta layer | `P1` | `M` | low | `X-02`, `X-07` | `Wave-C` | `suite` | Keep Suite as browser/launcher/config surface only |
-| `APP-BEN-01` | `benchlab` | Diagnostics overlay cleanup, comparison ergonomics, and evidence capture notes | validation/hardening | `P2` | `M` | low | `X-06`, `X-07` | `Wave-C` | `benchlab` | BenchLab remains diagnostics-only |
+| `APP-SUI-01` | `suite` | Discovery polish, launch/config clarity, and local artifact truthfulness | suite/meta layer | `P1` | `M` | low | `X-02`, `X-07` | `REL-R` | `suite` | Keep Suite as browser/launcher/config surface only; saver-polish waves do not absorb it |
+| `APP-BEN-01` | `benchlab` | Diagnostics overlay cleanup, comparison ergonomics, and evidence capture notes | validation/hardening | `P2` | `M` | low | `X-06`, `X-07` | `REL-R` | `benchlab` | BenchLab remains diagnostics-only and only gets narrow release-hardening support |
 | `SDK-01` | `sdk` | Template copy-forward docs, examples refresh, and validator polish | docs/SDK/tooling | `P2` | `S` | low | `X-03`, `X-08` | `C12-X2` | `sdk` | Keep contributor guidance aligned with the live tree |
 
 ## Distribution And Release Follow-On
@@ -80,8 +80,9 @@ They exist so future idea work has a home without interrupting `C12` through `C1
 ## Wave Summary
 
 - `C12-X1` and `C12-X2` are the shared cleanup buckets that should run before saver-local wave work.
-- `Wave-A` covers `nocturne`, `ricochet`, `deepfield`, `pipeworks`, `lifeforms`, and `signals`.
-- `Wave-B` covers `plasma`, `phosphor`, `mechanize`, `ecosystems`, `stormglass`, `transit`, and `observatory`.
-- `Wave-C` covers `vector`, `explorer`, `city`, `atlas`, `gallery`, `anthology`, `suite`, and `benchlab`.
+- `Wave-A` covers `nocturne`, `ricochet`, `deepfield`, `plasma`, and `phosphor`.
+- `Wave-B` covers `pipeworks`, `lifeforms`, `signals`, `mechanize`, and `ecosystems`.
+- `Wave-C` landed for `stormglass`, `transit`, `observatory`, `vector`, `explorer`, `city`, `atlas`, `gallery`, and `anthology` while keeping `suite` and `benchlab` limited to narrow validation support.
+- `C14` final rerelease hardening is complete; later work is post-release follow-on rather than another scheduled continuation prompt.
 - `REL-R` stays after the active polish line unless a release blocker forces it forward.
 - `PARKED` and `RND-R` are intentionally out of the current continuation line.

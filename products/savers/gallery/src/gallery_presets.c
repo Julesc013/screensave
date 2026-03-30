@@ -56,6 +56,24 @@ const screensave_preset_descriptor g_gallery_presets[] = {
         SCREENSAVE_DETAIL_LEVEL_LOW,
         0,
         0UL
+    },
+    {
+        "amber_compatibility",
+        "Amber Compatibility",
+        "Baseline-safe amber exhibit tuned for calmer renderer comparisons and dark-room viewing.",
+        "amber_compatibility",
+        SCREENSAVE_DETAIL_LEVEL_LOW,
+        1,
+        0x00001506UL
+    },
+    {
+        "gl21_prism_hall",
+        "GL21 Prism Hall",
+        "Higher-tier showcase pass with steadier motion and cleaner technical-exhibit layering.",
+        "gl21_prism_hall",
+        SCREENSAVE_DETAIL_LEVEL_HIGH,
+        1,
+        0x00001507UL
     }
 };
 
@@ -65,7 +83,9 @@ static const gallery_preset_values g_gallery_preset_values[] = {
     { GALLERY_SCENE_SHOWCASE, GALLERY_MOTION_BRISK },
     { GALLERY_SCENE_NEON, GALLERY_MOTION_BRISK },
     { GALLERY_SCENE_SHOWCASE, GALLERY_MOTION_STANDARD },
-    { GALLERY_SCENE_COMPATIBILITY, GALLERY_MOTION_CALM }
+    { GALLERY_SCENE_COMPATIBILITY, GALLERY_MOTION_CALM },
+    { GALLERY_SCENE_COMPATIBILITY, GALLERY_MOTION_CALM },
+    { GALLERY_SCENE_SHOWCASE, GALLERY_MOTION_STANDARD }
 };
 
 const screensave_preset_descriptor *gallery_get_presets(unsigned int *count_out)

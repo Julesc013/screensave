@@ -24,9 +24,9 @@ static const screensave_saver_config_hooks g_signals_config_hooks = {
     signals_config_save,
     signals_config_show_dialog,
     signals_apply_shared_preset,
-    NULL,
-    NULL,
-    NULL,
+    signals_config_export_settings_entries,
+    signals_config_import_settings_entry,
+    signals_config_randomize_settings,
     SCREENSAVE_CONFIG_SCHEMA_VERSION,
     SCREENSAVE_SETTINGS_CAP_PRESET_FILES |
         SCREENSAVE_SETTINGS_CAP_THEME_FILES |
@@ -46,7 +46,7 @@ static const screensave_saver_module g_signals_module = {
     {
         "signals",
         "Signals",
-        "Synthetic instrument saver with scopes, meters, counters, and restrained console activity."
+        "Synthetic instrument saver with scopes, meters, counters, and restrained console choreography."
     },
     SCREENSAVE_SAVER_CAP_GDI | SCREENSAVE_SAVER_CAP_GL11 | SCREENSAVE_SAVER_CAP_LONG_RUN_STABLE,
     g_signals_presets,

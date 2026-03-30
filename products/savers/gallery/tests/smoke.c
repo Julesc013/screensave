@@ -32,13 +32,28 @@ int main(void)
     if (gallery_find_preset_values("compatibility_gallery") == NULL) {
         return 6;
     }
-
-    if (gallery_find_theme_descriptor("advanced_showcase") == NULL) {
+    if (gallery_find_preset_values("amber_compatibility") == NULL) {
         return 7;
     }
 
-    if (gallery_find_theme_descriptor(common_config.theme_key) == NULL) {
+    if (gallery_find_theme_descriptor("advanced_showcase") == NULL) {
         return 8;
+    }
+    if (gallery_find_theme_descriptor("gl21_prism_hall") == NULL) {
+        return 9;
+    }
+
+    if (gallery_find_theme_descriptor(common_config.theme_key) == NULL) {
+        return 10;
+    }
+
+    if (
+        module->callbacks == NULL ||
+        module->callbacks->export_settings_entries == NULL ||
+        module->callbacks->import_settings_entry == NULL ||
+        module->callbacks->randomize_settings == NULL
+    ) {
+        return 11;
     }
 
     return 0;

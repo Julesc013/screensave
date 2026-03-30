@@ -24,9 +24,9 @@ static const screensave_saver_config_hooks g_phosphor_config_hooks = {
     phosphor_config_save,
     phosphor_config_show_dialog,
     phosphor_apply_shared_preset,
-    NULL,
-    NULL,
-    NULL,
+    phosphor_config_export_settings_entries,
+    phosphor_config_import_settings_entry,
+    phosphor_config_randomize_settings,
     SCREENSAVE_CONFIG_SCHEMA_VERSION,
     SCREENSAVE_SETTINGS_CAP_PRESET_FILES |
         SCREENSAVE_SETTINGS_CAP_THEME_FILES |
@@ -46,7 +46,7 @@ static const screensave_saver_module g_phosphor_module = {
     {
         "phosphor",
         "Phosphor",
-        "Vector-style phosphor saver with curated curve families and persistent trails."
+        "Vector-style phosphor saver with curated curve families, persistent trails, and calmer long-run laboratory choreography."
     },
     SCREENSAVE_SAVER_CAP_GDI | SCREENSAVE_SAVER_CAP_GL11 | SCREENSAVE_SAVER_CAP_LONG_RUN_STABLE,
     g_phosphor_presets,

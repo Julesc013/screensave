@@ -32,6 +32,31 @@ static screensave_color plasma_palette_color(
     palette_index = (value + (unsigned int)(session->palette_phase & 255UL)) & 255U;
     if (session->config.effect_mode == PLASMA_EFFECT_FIRE) {
         palette_index = (value + (unsigned int)((session->palette_phase / 2UL) & 255UL)) & 255U;
+        if (palette_index < 64U) {
+            amount = (palette_index * 255U) / 64U;
+            return screensave_color_lerp(base_color, session->theme->primary_color, amount);
+        }
+        if (palette_index < 176U) {
+            amount = ((palette_index - 64U) * 255U) / 112U;
+            return screensave_color_lerp(session->theme->primary_color, session->theme->accent_color, amount);
+        }
+
+        amount = ((palette_index - 176U) * 255U) / 79U;
+        return screensave_color_lerp(session->theme->accent_color, highlight_color, amount);
+    }
+
+    if (session->config.effect_mode == PLASMA_EFFECT_INTERFERENCE) {
+        if (palette_index < 112U) {
+            amount = (palette_index * 255U) / 112U;
+            return screensave_color_lerp(base_color, session->theme->accent_color, amount);
+        }
+        if (palette_index < 208U) {
+            amount = ((palette_index - 112U) * 255U) / 96U;
+            return screensave_color_lerp(session->theme->accent_color, session->theme->primary_color, amount);
+        }
+
+        amount = ((palette_index - 208U) * 255U) / 47U;
+        return screensave_color_lerp(session->theme->primary_color, highlight_color, amount);
     }
 
     if (palette_index < 96U) {

@@ -17,7 +17,7 @@ typedef struct plasma_combo_item_tag {
 static const plasma_combo_item g_plasma_effect_items[] = {
     { PLASMA_EFFECT_PLASMA, "Plasma" },
     { PLASMA_EFFECT_FIRE, "Fire" },
-    { PLASMA_EFFECT_INTERFERENCE, "Interference" }
+    { PLASMA_EFFECT_INTERFERENCE, "Interference Field" }
 };
 
 static const plasma_combo_item g_plasma_speed_items[] = {
@@ -34,8 +34,8 @@ static const plasma_combo_item g_plasma_resolution_items[] = {
 
 static const plasma_combo_item g_plasma_smoothing_items[] = {
     { PLASMA_SMOOTHING_OFF, "Off" },
-    { PLASMA_SMOOTHING_SOFT, "Soft" },
-    { PLASMA_SMOOTHING_GLOW, "Glow" }
+    { PLASMA_SMOOTHING_SOFT, "Soft Diffusion" },
+    { PLASMA_SMOOTHING_GLOW, "Glow Diffusion" }
 };
 
 static void plasma_emit_config_diag(
@@ -630,7 +630,7 @@ static void plasma_initialize_dialog(HWND dialog, plasma_dialog_state *dialog_st
     info[0] = '\0';
     lstrcpyA(info, "Plasma\r\n");
     lstrcatA(info, version_info->version_text);
-    lstrcatA(info, "\r\nPalette-driven plasma, fire, and interference motion.");
+    lstrcatA(info, "\r\nPalette-driven plasma, fire, and interference motion with curated dark-room presets and calmer long-run composition refresh.");
     SetDlgItemTextA(dialog, IDC_PLASMA_INFO, info);
 
     plasma_apply_settings_to_dialog(
@@ -860,18 +860,18 @@ int plasma_config_export_settings_entries(
         return 0;
     }
 
-    return writer->write_string(writer->context, "product", "effect_mode", plasma_effect_mode_name(config->effect_mode)) &&
-        writer->write_string(writer->context, "product", "speed_mode", plasma_speed_mode_name(config->speed_mode)) &&
+    return writer->write_string(writer->context, "product", "effect", plasma_effect_mode_name(config->effect_mode)) &&
+        writer->write_string(writer->context, "product", "speed", plasma_speed_mode_name(config->speed_mode)) &&
         writer->write_string(
             writer->context,
             "product",
-            "resolution_mode",
+            "resolution",
             plasma_resolution_mode_name(config->resolution_mode)
         ) &&
         writer->write_string(
             writer->context,
             "product",
-            "smoothing_mode",
+            "smoothing",
             plasma_smoothing_mode_name(config->smoothing_mode)
         );
 }
@@ -904,16 +904,16 @@ int plasma_config_import_settings_entry(
     if (lstrcmpiA(section, "product") != 0) {
         return 1;
     }
-    if (lstrcmpiA(key, "effect_mode") == 0) {
+    if (lstrcmpiA(key, "effect_mode") == 0 || lstrcmpiA(key, "effect") == 0) {
         return plasma_parse_effect_mode(value, &config->effect_mode);
     }
-    if (lstrcmpiA(key, "speed_mode") == 0) {
+    if (lstrcmpiA(key, "speed_mode") == 0 || lstrcmpiA(key, "speed") == 0) {
         return plasma_parse_speed_mode(value, &config->speed_mode);
     }
-    if (lstrcmpiA(key, "resolution_mode") == 0) {
+    if (lstrcmpiA(key, "resolution_mode") == 0 || lstrcmpiA(key, "resolution") == 0) {
         return plasma_parse_resolution_mode(value, &config->resolution_mode);
     }
-    if (lstrcmpiA(key, "smoothing_mode") == 0) {
+    if (lstrcmpiA(key, "smoothing_mode") == 0 || lstrcmpiA(key, "smoothing") == 0) {
         return plasma_parse_smoothing_mode(value, &config->smoothing_mode);
     }
 
@@ -932,6 +932,7 @@ void plasma_config_randomize_settings(
     plasma_config *config;
     plasma_rng_state rng;
     unsigned long random_seed;
+    unsigned long roll;
 
     (void)module;
     (void)common_config;
@@ -944,8 +945,39 @@ void plasma_config_randomize_settings(
 
     random_seed = seed != NULL ? seed->stream_seed : 0x504C4153UL;
     plasma_rng_seed(&rng, random_seed ^ 0x504C4153UL);
-    config->effect_mode = (int)plasma_rng_range(&rng, 3UL);
-    config->speed_mode = (int)plasma_rng_range(&rng, 3UL);
-    config->resolution_mode = (int)plasma_rng_range(&rng, 3UL);
-    config->smoothing_mode = (int)plasma_rng_range(&rng, 3UL);
+    roll = plasma_rng_range(&rng, 100UL);
+    if (roll < 36UL) {
+        config->effect_mode = PLASMA_EFFECT_PLASMA;
+    } else if (roll < 68UL) {
+        config->effect_mode = PLASMA_EFFECT_FIRE;
+    } else {
+        config->effect_mode = PLASMA_EFFECT_INTERFERENCE;
+    }
+
+    roll = plasma_rng_range(&rng, 100UL);
+    if (roll < 42UL) {
+        config->speed_mode = PLASMA_SPEED_GENTLE;
+    } else if (roll < 82UL) {
+        config->speed_mode = PLASMA_SPEED_STANDARD;
+    } else {
+        config->speed_mode = PLASMA_SPEED_LIVELY;
+    }
+
+    roll = plasma_rng_range(&rng, 100UL);
+    if (roll < 28UL) {
+        config->resolution_mode = PLASMA_RESOLUTION_COARSE;
+    } else if (roll < 72UL) {
+        config->resolution_mode = PLASMA_RESOLUTION_STANDARD;
+    } else {
+        config->resolution_mode = PLASMA_RESOLUTION_FINE;
+    }
+
+    roll = plasma_rng_range(&rng, 100UL);
+    if (roll < 20UL) {
+        config->smoothing_mode = PLASMA_SMOOTHING_OFF;
+    } else if (roll < 70UL) {
+        config->smoothing_mode = PLASMA_SMOOTHING_SOFT;
+    } else {
+        config->smoothing_mode = PLASMA_SMOOTHING_GLOW;
+    }
 }

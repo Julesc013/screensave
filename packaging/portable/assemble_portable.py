@@ -1,4 +1,4 @@
-"""Assemble the C06 portable saver bundle from real discovered outputs."""
+"""Assemble the C14 portable saver bundle refresh from real discovered outputs."""
 
 from __future__ import annotations
 
@@ -130,7 +130,7 @@ def build_root_readme(
     lines = [
         f"ScreenSave Portable Saver Bundle ({bundle_name})",
         "",
-        "This is the C06 portable bundle stage for the current ScreenSave saver line.",
+        "This is the C14 release-candidate portable bundle stage for the current ScreenSave saver line.",
         "",
         "Included saver binaries:",
         f"- {format_list(included_savers)}",
@@ -145,8 +145,9 @@ def build_root_readme(
         "4. Use the saver's own Settings dialog for configuration.",
         "",
         "This portable bundle does not include installer, registration, or uninstall automation.",
-        "Installed distribution is now available separately through the C07 installer package.",
-        "BenchLab and the future suite app are intentionally excluded from the end-user payload.",
+        "Installed distribution is available separately through the refreshed current-user installer package.",
+        "BenchLab and Suite are separate app products and are intentionally excluded from the end-user saver payload.",
+        "Anthology is treated as a normal saver product and is staged only when its real binary exists in the configured output roots.",
         "",
         "Renderer notes:",
         "- GDI remains the guaranteed floor.",
@@ -154,7 +155,7 @@ def build_root_readme(
         "- GL21 is available only where the saver and the system support it.",
         "- GL33 and GL46 are not shipped as real user-facing requirements in this bundle.",
         "",
-        "See DOCS\\BUNDLE-STATUS.md, DOCS\\INCLUSION-MATRIX.md, and DOCS\\PORTABLE-RELEASE-NOTES.md for details.",
+        "See DOCS\\BUNDLE-STATUS.md, DOCS\\INCLUSION-MATRIX.md, DOCS\\RELEASE-READINESS.md, and DOCS\\KNOWN-ISSUES.md for details.",
     ]
 
     if legacy_outputs:
@@ -176,6 +177,7 @@ def build_status_note(
     missing: list[dict[str, object]],
     legacy_outputs: list[str],
     benchlab_path: pathlib.Path | None,
+    suite_path: pathlib.Path | None,
 ) -> str:
     lines = [
         f"# {bundle_name} Bundle Status",
@@ -238,12 +240,13 @@ def build_status_note(
             "",
             "## Bundle Policy",
             "",
+            "- Anthology is part of the canonical saver line and is staged when its real binary exists.",
             "- BenchLab is excluded from the end-user portable bundle.",
-            "- The future suite app is excluded from this stage.",
+            "- Suite is a separate app product and is excluded from the end-user portable bundle.",
             "- File-backed packs are staged only when the owning saver binary is present.",
             "- Missing binaries are recorded explicitly instead of replaced with placeholders.",
             "",
-            "## BenchLab Discovery",
+            "## App Output Discovery",
             "",
         ]
     )
@@ -255,14 +258,21 @@ def build_status_note(
     else:
         lines.append("- No BenchLab output was discovered in the configured roots.")
 
+    if suite_path is not None:
+        lines.append(
+            f"- Suite app artifact detected at `{suite_path.relative_to(ROOT)}` and excluded from the saver-only portable bundle by policy."
+        )
+    else:
+        lines.append("- No Suite app output was discovered in the configured roots.")
+
     lines.extend(
         [
             "",
             "## Known Limitations",
             "",
-            "- This portable stage is partial when canonical saver outputs are missing.",
-            "- The included binaries were not rebuilt during C06 because no supported toolchain was available here.",
-            "- Installed distribution is now available separately through the C07 installer package.",
+            "- This portable release-candidate stage remains partial when canonical saver outputs are missing from the local output roots.",
+            "- The included binaries were not rebuilt during C14 because no supported toolchain was available here.",
+            "- BenchLab and Suite remain separate app products and are not part of the end-user saver bundle.",
         ]
     )
 
@@ -293,12 +303,12 @@ def write_file_inventory(staging_root: pathlib.Path) -> None:
 def write_placeholder_notes(staging_root: pathlib.Path, included_pack_count: int) -> None:
     write_text(
         staging_root / "PRESETS" / "README.txt",
-        "Standalone portable preset-export files are not staged separately in the C06 baseline.\n"
+        "Standalone portable preset-export files are not staged separately in the C14 release-candidate baseline.\n"
         "File-backed preset examples ship inside PACKS only when the owning saver binary is present.\n",
     )
     write_text(
         staging_root / "THEMES" / "README.txt",
-        "Standalone portable theme-export files are not staged separately in the C06 baseline.\n"
+        "Standalone portable theme-export files are not staged separately in the C14 release-candidate baseline.\n"
         "File-backed theme examples ship inside PACKS only when the owning saver binary is present.\n",
     )
 
@@ -316,8 +326,8 @@ def write_placeholder_notes(staging_root: pathlib.Path, included_pack_count: int
 
     write_text(
         staging_root / "OPTIONAL" / "README.txt",
-        "No optional developer extras are included in the C06 end-user portable bundle.\n"
-        "BenchLab remains a separate diagnostics tool and is intentionally excluded here.\n",
+        "No optional developer extras are included in the C14 end-user portable bundle.\n"
+        "BenchLab and Suite remain separate app products and are intentionally excluded here.\n",
     )
 
 
@@ -389,12 +399,17 @@ def main() -> int:
 
     legacy_outputs = discover_legacy_outputs(output_roots, canonical_keys)
     benchlab_path = discover_binary(output_roots, "benchlab/benchlab.exe")
+    suite_path = discover_binary(output_roots, "suite/suite.exe")
 
     docs = manifest["docs"]
     copy_file(ROOT / docs["portable_readme"], staging_root / "DOCS" / "PORTABLE-BUNDLE.md")
     copy_file(ROOT / docs["portable_layout"], staging_root / "DOCS" / "PORTABLE-LAYOUT.md")
     copy_file(ROOT / docs["release_notes"], staging_root / "DOCS" / "PORTABLE-RELEASE-NOTES.md")
     copy_file(ROOT / docs["bundle_matrix"], staging_root / "DOCS" / "INCLUSION-MATRIX.md")
+    copy_file(ROOT / docs["release_candidate_notes"], staging_root / "DOCS" / "RELEASE-CANDIDATE.md")
+    copy_file(ROOT / docs["release_readiness"], staging_root / "DOCS" / "RELEASE-READINESS.md")
+    copy_file(ROOT / docs["known_issues"], staging_root / "DOCS" / "KNOWN-ISSUES.md")
+    copy_file(ROOT / docs["integrity_note"], staging_root / "DOCS" / "CONFIG-INTEGRITY.md")
     copy_file(ROOT / docs["windows_validation"], staging_root / "DOCS" / "WINDOWS-INTEGRATION.md")
     copy_file(ROOT / docs["project_changelog"], staging_root / "DOCS" / "CHANGELOG.md")
     copy_file(ROOT / docs["assets_license"], staging_root / "LICENSES" / "ASSETS-LICENSES.md")
@@ -412,7 +427,7 @@ def main() -> int:
     )
     write_text(
         staging_root / "DOCS" / "BUNDLE-STATUS.md",
-        build_status_note(bundle_name, output_roots, included, missing, legacy_outputs, benchlab_path),
+        build_status_note(bundle_name, output_roots, included, missing, legacy_outputs, benchlab_path, suite_path),
     )
     write_placeholder_notes(staging_root, included_pack_count)
     write_file_inventory(staging_root)

@@ -37,6 +37,20 @@ const screensave_theme_descriptor g_stormglass_themes[] = {
         "Monochrome weather study with subdued pane and silhouette treatment.",
         { 152, 156, 162, 255 },
         { 228, 232, 236, 255 }
+    },
+    {
+        "winter_streetlamp",
+        "Winter Streetlamp",
+        "Cold slate pane with warmer sodium streetlamp bleed behind the frost.",
+        { 170, 184, 210, 255 },
+        { 244, 206, 148, 255 }
+    },
+    {
+        "monochrome_cold_pane",
+        "Monochrome Cold Pane",
+        "Near-black pane tones with pale graphite highlights and low-contrast weather motion.",
+        { 134, 140, 148, 255 },
+        { 214, 220, 228, 255 }
     }
 };
 

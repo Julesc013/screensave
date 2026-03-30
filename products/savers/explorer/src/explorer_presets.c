@@ -47,6 +47,24 @@ const screensave_preset_descriptor g_explorer_presets[] = {
         SCREENSAVE_DETAIL_LEVEL_STANDARD,
         1,
         0x00000E15UL
+    },
+    {
+        "eerie_corridor_watch",
+        "Eerie Corridor Watch",
+        "Slower corridor traversal with restrained lighting and a quieter instrument-room mood.",
+        "eerie_corridor_watch",
+        SCREENSAVE_DETAIL_LEVEL_LOW,
+        1,
+        0x00000E16UL
+    },
+    {
+        "amber_service_drift",
+        "Amber Service Drift",
+        "Measured industrial passage with warmer service lighting and calmer turn cadence.",
+        "amber_service_drift",
+        SCREENSAVE_DETAIL_LEVEL_STANDARD,
+        1,
+        0x00000E17UL
     }
 };
 
@@ -55,7 +73,9 @@ static const explorer_preset_values g_explorer_preset_values[] = {
     { EXPLORER_SCENE_CORRIDOR, EXPLORER_SPEED_CALM },
     { EXPLORER_SCENE_INDUSTRIAL, EXPLORER_SPEED_STANDARD },
     { EXPLORER_SCENE_INDUSTRIAL, EXPLORER_SPEED_BRISK },
-    { EXPLORER_SCENE_CANYON, EXPLORER_SPEED_STANDARD }
+    { EXPLORER_SCENE_CANYON, EXPLORER_SPEED_STANDARD },
+    { EXPLORER_SCENE_CORRIDOR, EXPLORER_SPEED_CALM },
+    { EXPLORER_SCENE_INDUSTRIAL, EXPLORER_SPEED_CALM }
 };
 
 const screensave_preset_descriptor *explorer_get_presets(unsigned int *count_out)

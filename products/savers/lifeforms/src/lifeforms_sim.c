@@ -70,7 +70,7 @@ static unsigned long lifeforms_step_interval(const screensave_saver_session *ses
     }
 
     if (session->preview_mode && interval < 120UL) {
-        interval = 120UL;
+        interval = 136UL;
     }
 
     return interval;
@@ -260,6 +260,7 @@ static void lifeforms_seed_field(screensave_saver_session *session)
 {
     unsigned int cluster_count;
     unsigned int cluster_index;
+    unsigned int pattern_index;
     int radius;
     unsigned int base_chance;
     unsigned int total_cells;
@@ -305,6 +306,62 @@ static void lifeforms_seed_field(screensave_saver_session *session)
         center_x = (int)lifeforms_rng_range(&session->rng, (unsigned long)session->grid_size.width);
         center_y = (int)lifeforms_rng_range(&session->rng, (unsigned long)session->grid_size.height);
         lifeforms_seed_cluster(session, center_x, center_y, radius, base_chance);
+    }
+
+    pattern_index = session->reseed_count % 4U;
+    if (pattern_index == 0U) {
+        lifeforms_seed_cluster(
+            session,
+            session->grid_size.width / 2,
+            session->grid_size.height / 2,
+            radius + 1,
+            base_chance + 8U
+        );
+    } else if (pattern_index == 1U) {
+        lifeforms_seed_cluster(
+            session,
+            session->grid_size.width / 3,
+            session->grid_size.height / 3,
+            radius,
+            base_chance
+        );
+        lifeforms_seed_cluster(
+            session,
+            (session->grid_size.width * 2) / 3,
+            (session->grid_size.height * 2) / 3,
+            radius,
+            base_chance
+        );
+    } else if (pattern_index == 2U) {
+        lifeforms_seed_cluster(
+            session,
+            session->grid_size.width / 4,
+            (session->grid_size.height * 3) / 4,
+            radius,
+            base_chance
+        );
+        lifeforms_seed_cluster(
+            session,
+            (session->grid_size.width * 3) / 4,
+            session->grid_size.height / 4,
+            radius,
+            base_chance
+        );
+    } else {
+        lifeforms_seed_cluster(
+            session,
+            session->grid_size.width / 2,
+            session->grid_size.height / 3,
+            radius,
+            base_chance + 4U
+        );
+        lifeforms_seed_cluster(
+            session,
+            session->grid_size.width / 2,
+            (session->grid_size.height * 2) / 3,
+            radius,
+            base_chance + 4U
+        );
     }
 
     total_cells = lifeforms_total_cells(session);
@@ -443,6 +500,7 @@ static void lifeforms_reseed_session(screensave_saver_session *session)
     session->step_accumulator = 0UL;
     lifeforms_clear_history(session);
     lifeforms_seed_field(session);
+    session->reseed_count += 1U;
 }
 
 static void lifeforms_evaluate_reseed(

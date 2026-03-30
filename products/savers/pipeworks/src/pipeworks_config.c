@@ -661,7 +661,7 @@ static void pipeworks_initialize_dialog(HWND dialog, pipeworks_dialog_state *dia
     info[0] = '\0';
     lstrcpyA(info, "Pipeworks\r\n");
     lstrcatA(info, version_info->version_text);
-    lstrcatA(info, "\r\nGrid-grown network construction with restrained flow and rebuild cycles.");
+    lstrcatA(info, "\r\nGrid-grown network construction with curated pulse travel, rebuild cadence, and calmer preview pacing.");
     SetDlgItemTextA(dialog, IDC_PIPEWORKS_INFO, info);
 
     pipeworks_apply_settings_to_dialog(
@@ -785,4 +785,221 @@ INT_PTR pipeworks_config_show_dialog(
     }
 
     return result;
+}
+
+static int pipeworks_parse_density_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "tight") == 0) {
+        *value_out = PIPEWORKS_DENSITY_TIGHT;
+        return 1;
+    }
+    if (lstrcmpiA(text, "standard") == 0) {
+        *value_out = PIPEWORKS_DENSITY_STANDARD;
+        return 1;
+    }
+    if (lstrcmpiA(text, "open") == 0) {
+        *value_out = PIPEWORKS_DENSITY_OPEN;
+        return 1;
+    }
+    return 0;
+}
+
+static int pipeworks_parse_speed_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "patient") == 0) {
+        *value_out = PIPEWORKS_SPEED_PATIENT;
+        return 1;
+    }
+    if (lstrcmpiA(text, "standard") == 0) {
+        *value_out = PIPEWORKS_SPEED_STANDARD;
+        return 1;
+    }
+    if (lstrcmpiA(text, "brisk") == 0) {
+        *value_out = PIPEWORKS_SPEED_BRISK;
+        return 1;
+    }
+    return 0;
+}
+
+static int pipeworks_parse_branch_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "orderly") == 0) {
+        *value_out = PIPEWORKS_BRANCH_ORDERLY;
+        return 1;
+    }
+    if (lstrcmpiA(text, "balanced") == 0) {
+        *value_out = PIPEWORKS_BRANCH_BALANCED;
+        return 1;
+    }
+    if (lstrcmpiA(text, "wild") == 0) {
+        *value_out = PIPEWORKS_BRANCH_WILD;
+        return 1;
+    }
+    return 0;
+}
+
+static int pipeworks_parse_rebuild_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "patient") == 0) {
+        *value_out = PIPEWORKS_REBUILD_PATIENT;
+        return 1;
+    }
+    if (lstrcmpiA(text, "cycle") == 0) {
+        *value_out = PIPEWORKS_REBUILD_CYCLE;
+        return 1;
+    }
+    if (lstrcmpiA(text, "frequent") == 0) {
+        *value_out = PIPEWORKS_REBUILD_FREQUENT;
+        return 1;
+    }
+    return 0;
+}
+
+int pipeworks_config_export_settings_entries(
+    const screensave_saver_module *module,
+    const screensave_common_config *common_config,
+    const void *product_config,
+    unsigned int product_config_size,
+    screensave_settings_file_kind kind,
+    screensave_settings_writer *writer,
+    screensave_diag_context *diagnostics
+)
+{
+    const pipeworks_config *config;
+
+    (void)module;
+    (void)common_config;
+    (void)diagnostics;
+
+    config = pipeworks_as_const_config(product_config, product_config_size);
+    if (kind != SCREENSAVE_SETTINGS_FILE_PRESET) {
+        return 1;
+    }
+    if (config == NULL || writer == NULL || writer->write_string == NULL) {
+        return 0;
+    }
+
+    return writer->write_string(writer->context, "product", "density", pipeworks_density_mode_name(config->density_mode)) &&
+        writer->write_string(writer->context, "product", "speed", pipeworks_speed_mode_name(config->speed_mode)) &&
+        writer->write_string(writer->context, "product", "branch", pipeworks_branch_mode_name(config->branch_mode)) &&
+        writer->write_string(writer->context, "product", "rebuild", pipeworks_rebuild_mode_name(config->rebuild_mode));
+}
+
+int pipeworks_config_import_settings_entry(
+    const screensave_saver_module *module,
+    screensave_common_config *common_config,
+    void *product_config,
+    unsigned int product_config_size,
+    screensave_settings_file_kind kind,
+    const char *section,
+    const char *key,
+    const char *value,
+    screensave_diag_context *diagnostics
+)
+{
+    pipeworks_config *config;
+
+    (void)module;
+    (void)common_config;
+    (void)diagnostics;
+
+    config = pipeworks_as_config(product_config, product_config_size);
+    if (kind != SCREENSAVE_SETTINGS_FILE_PRESET) {
+        return 1;
+    }
+    if (config == NULL || section == NULL || key == NULL || value == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(section, "product") != 0) {
+        return 1;
+    }
+    if (lstrcmpiA(key, "density") == 0 || lstrcmpiA(key, "density_mode") == 0) {
+        return pipeworks_parse_density_mode(value, &config->density_mode);
+    }
+    if (lstrcmpiA(key, "speed") == 0 || lstrcmpiA(key, "speed_mode") == 0) {
+        return pipeworks_parse_speed_mode(value, &config->speed_mode);
+    }
+    if (lstrcmpiA(key, "branch") == 0 || lstrcmpiA(key, "branch_mode") == 0) {
+        return pipeworks_parse_branch_mode(value, &config->branch_mode);
+    }
+    if (lstrcmpiA(key, "rebuild") == 0 || lstrcmpiA(key, "rebuild_mode") == 0) {
+        return pipeworks_parse_rebuild_mode(value, &config->rebuild_mode);
+    }
+
+    return 1;
+}
+
+void pipeworks_config_randomize_settings(
+    const screensave_saver_module *module,
+    screensave_common_config *common_config,
+    void *product_config,
+    unsigned int product_config_size,
+    const screensave_session_seed *seed,
+    screensave_diag_context *diagnostics
+)
+{
+    pipeworks_config *config;
+    pipeworks_rng_state rng;
+    unsigned long random_seed;
+    unsigned long roll;
+
+    (void)module;
+    (void)common_config;
+    (void)diagnostics;
+
+    config = pipeworks_as_config(product_config, product_config_size);
+    if (config == NULL) {
+        return;
+    }
+
+    random_seed = seed != NULL ? seed->stream_seed : 0x50775042UL;
+    pipeworks_rng_seed(&rng, random_seed ^ 0x50775042UL);
+
+    roll = pipeworks_rng_range(&rng, 100UL);
+    if (roll < 30UL) {
+        config->density_mode = PIPEWORKS_DENSITY_TIGHT;
+    } else if (roll < 74UL) {
+        config->density_mode = PIPEWORKS_DENSITY_STANDARD;
+    } else {
+        config->density_mode = PIPEWORKS_DENSITY_OPEN;
+    }
+
+    roll = pipeworks_rng_range(&rng, 100UL);
+    if (roll < 34UL) {
+        config->speed_mode = PIPEWORKS_SPEED_PATIENT;
+    } else if (roll < 80UL) {
+        config->speed_mode = PIPEWORKS_SPEED_STANDARD;
+    } else {
+        config->speed_mode = PIPEWORKS_SPEED_BRISK;
+    }
+
+    roll = pipeworks_rng_range(&rng, 100UL);
+    if (roll < 24UL) {
+        config->branch_mode = PIPEWORKS_BRANCH_ORDERLY;
+    } else if (roll < 76UL) {
+        config->branch_mode = PIPEWORKS_BRANCH_BALANCED;
+    } else {
+        config->branch_mode = PIPEWORKS_BRANCH_WILD;
+    }
+
+    roll = pipeworks_rng_range(&rng, 100UL);
+    if (roll < 28UL) {
+        config->rebuild_mode = PIPEWORKS_REBUILD_PATIENT;
+    } else if (roll < 78UL) {
+        config->rebuild_mode = PIPEWORKS_REBUILD_CYCLE;
+    } else {
+        config->rebuild_mode = PIPEWORKS_REBUILD_FREQUENT;
+    }
 }

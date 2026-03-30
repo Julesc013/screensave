@@ -47,6 +47,24 @@ const screensave_preset_descriptor g_lifeforms_presets[] = {
         SCREENSAVE_DETAIL_LEVEL_LOW,
         0,
         0UL
+    },
+    {
+        "garden_bloom",
+        "Garden Bloom",
+        "Balanced Conway field with garden-like bloom seeding and calm reseed timing.",
+        "garden_green",
+        SCREENSAVE_DETAIL_LEVEL_STANDARD,
+        1,
+        0x00000C24UL
+    },
+    {
+        "blue_archive",
+        "Blue Archive",
+        "Cool archive study with sparse seeds, patient reseeds, and calmer long runs.",
+        "blue_archive",
+        SCREENSAVE_DETAIL_LEVEL_LOW,
+        1,
+        0x00000C25UL
     }
 };
 
@@ -55,7 +73,9 @@ static const lifeforms_preset_values g_lifeforms_preset_values[] = {
     { LIFEFORMS_RULE_CONWAY, LIFEFORMS_DENSITY_DENSE, LIFEFORMS_SEED_BLOOM, LIFEFORMS_RESEED_STANDARD },
     { LIFEFORMS_RULE_CONWAY, LIFEFORMS_DENSITY_SPARSE, LIFEFORMS_SEED_BALANCED, LIFEFORMS_RESEED_PATIENT },
     { LIFEFORMS_RULE_HIGHLIFE, LIFEFORMS_DENSITY_DENSE, LIFEFORMS_SEED_BLOOM, LIFEFORMS_RESEED_ALERT },
-    { LIFEFORMS_RULE_CONWAY, LIFEFORMS_DENSITY_SPARSE, LIFEFORMS_SEED_SPARSE, LIFEFORMS_RESEED_PATIENT }
+    { LIFEFORMS_RULE_CONWAY, LIFEFORMS_DENSITY_SPARSE, LIFEFORMS_SEED_SPARSE, LIFEFORMS_RESEED_PATIENT },
+    { LIFEFORMS_RULE_CONWAY, LIFEFORMS_DENSITY_STANDARD, LIFEFORMS_SEED_BLOOM, LIFEFORMS_RESEED_STANDARD },
+    { LIFEFORMS_RULE_CONWAY, LIFEFORMS_DENSITY_SPARSE, LIFEFORMS_SEED_BALANCED, LIFEFORMS_RESEED_PATIENT }
 };
 
 const screensave_preset_descriptor *lifeforms_get_presets(unsigned int *count_out)

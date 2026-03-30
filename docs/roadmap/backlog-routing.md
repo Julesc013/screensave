@@ -40,9 +40,9 @@ Do not add percentages, point scores, or issue-tracker ceremony unless a later r
 | --- | --- | --- |
 | `C12-X1` | Cross-cutting polish for config, metadata, suite visibility, docs truth, and validation wording | Shared rough edges are reduced before saver-local wave work fans out |
 | `C12-X2` | Cross-cutting lifecycle, renderer, and release-evidence cleanup | Validation and release-facing truth are coherent before broader rerelease work |
-| `Wave-A` | Foundation saver refinement | Quiet, motion, and grid/system products with lower cross-product risk |
-| `Wave-B` | Mid-line saver refinement | Systems, ambient, scenic, and palette-focused products with moderate cross-product coupling |
-| `Wave-C` | Heavyweight, showcase, and suite-adjacent refinement | Renderer-showcase, heavyweight, meta-saver, and control-surface polish with higher coordination cost |
+| `Wave-A` | First saver-specific polish wave | `nocturne`, `ricochet`, `deepfield`, `plasma`, and `phosphor` as the first bounded premium-polish set after `C12` |
+| `Wave-B` | Second saver-specific polish wave | Implemented for `pipeworks`, `lifeforms`, `signals`, `mechanize`, and `ecosystems` after `C13` Wave A |
+| `Wave-C` | Heavyweight, showcase, and meta-saver refinement | The final bounded saver-polish pass for the remaining scenic, renderer-showcase, and anthology products with higher coordination cost |
 | `RND-R` | Later renderer or platform research | Work that should stay deferred until the polish line is stable |
 | `REL-R` | Later release/distribution follow-on | Delivery work that belongs after the active polish waves |
 | `PARKED` | Idea pool only | Not on the current execution line |
@@ -59,9 +59,10 @@ Do not add percentages, point scores, or issue-tracker ceremony unless a later r
 ## Wave Assignment Rules
 
 - `C12-X1` and `C12-X2` happen before any saver-local wave enters active implementation.
-- `Wave-A` starts with lower-risk products that should not force platform renegotiation.
-- `Wave-B` handles mid-line products that benefit from the cross-cutting cleanup already landing.
-- `Wave-C` is reserved for heavyweight, showcase, meta-saver, and suite-adjacent work that needs the most coordination.
+- `Wave-A` starts with lower-risk products that should not force platform renegotiation; the first real `C13` pass covers `nocturne`, `ricochet`, `deepfield`, `plasma`, and `phosphor`.
+- `Wave-B` handled `pipeworks`, `lifeforms`, `signals`, `mechanize`, and `ecosystems` after `C13` Wave A and did not reopen suite-wide vocabulary or platform law.
+- `Wave-C` handled `stormglass`, `transit`, `observatory`, `vector`, `explorer`, `city`, `atlas`, `gallery`, and `anthology` without reopening suite-wide vocabulary or the shared platform contract.
+- `C14` final rerelease hardening is complete; later work is post-release follow-on rather than another scheduled continuation prompt.
 - `RND-R` and `REL-R` stay deferred unless the active polish line proves they are unblockers.
 
 ## Canonical Ownership Summary

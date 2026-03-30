@@ -47,6 +47,24 @@ const screensave_preset_descriptor g_ecosystems_presets[] = {
         SCREENSAVE_DETAIL_LEVEL_LOW,
         0,
         0UL
+    },
+    {
+        "reef_current",
+        "Reef Current",
+        "Lusher aquarium current with layered schooling and brighter reef highlights.",
+        "reef_current",
+        SCREENSAVE_DETAIL_LEVEL_HIGH,
+        1,
+        0x00000C64UL
+    },
+    {
+        "night_marsh",
+        "Night Marsh",
+        "Calm wetland night study with sparse fireflies and subdued regrouping.",
+        "night_marsh",
+        SCREENSAVE_DETAIL_LEVEL_LOW,
+        1,
+        0x00000C65UL
     }
 };
 
@@ -55,7 +73,9 @@ static const ecosystems_preset_values g_ecosystems_preset_values[] = {
     { ECOSYSTEMS_HABITAT_AVIARY, ECOSYSTEMS_DENSITY_STANDARD, ECOSYSTEMS_ACTIVITY_CALM },
     { ECOSYSTEMS_HABITAT_FIREFLIES, ECOSYSTEMS_DENSITY_LUSH, ECOSYSTEMS_ACTIVITY_STANDARD },
     { ECOSYSTEMS_HABITAT_FIREFLIES, ECOSYSTEMS_DENSITY_STANDARD, ECOSYSTEMS_ACTIVITY_CALM },
-    { ECOSYSTEMS_HABITAT_AQUARIUM, ECOSYSTEMS_DENSITY_SPARSE, ECOSYSTEMS_ACTIVITY_CALM }
+    { ECOSYSTEMS_HABITAT_AQUARIUM, ECOSYSTEMS_DENSITY_SPARSE, ECOSYSTEMS_ACTIVITY_CALM },
+    { ECOSYSTEMS_HABITAT_AQUARIUM, ECOSYSTEMS_DENSITY_LUSH, ECOSYSTEMS_ACTIVITY_STANDARD },
+    { ECOSYSTEMS_HABITAT_FIREFLIES, ECOSYSTEMS_DENSITY_SPARSE, ECOSYSTEMS_ACTIVITY_CALM }
 };
 
 const screensave_preset_descriptor *ecosystems_get_presets(unsigned int *count_out)

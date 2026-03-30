@@ -35,8 +35,11 @@ That endpoint is retired for future planning.
 11. `C10` completed the real SDK and contributor surface before `C11` backlog ingestion begins.
 12. `C11` completed structured backlog ingestion and routing before `C12` cross-cutting polish begins.
 13. `C12` completed the cross-cutting polish and quality-bar pass before the first `C13` saver-specific polish wave begins.
-14. `C13` per-family polish waves follow the `C12` quality bar rather than reopening shared suite vocabulary.
-15. `C14` final rerelease hardening closes the continuation line.
+14. `C13` Wave A completed the first saver-specific polish pass for `nocturne`, `ricochet`, `deepfield`, `plasma`, and `phosphor`.
+15. `C13` Wave B completed the second saver-specific polish pass for `pipeworks`, `lifeforms`, `signals`, `mechanize`, and `ecosystems`.
+16. `C13` Wave C completed the final saver-specific polish pass for `stormglass`, `transit`, `observatory`, `vector`, `explorer`, `city`, `atlas`, `gallery`, and `anthology`.
+17. `C13` family-polish work followed the `C12` quality bar rather than reopening shared suite vocabulary.
+18. `C14` final rerelease hardening closes the continuation line.
 
 ## Renderer Tier Taxonomy Note
 
@@ -79,8 +82,8 @@ Interpretation rules:
 | `C13` | Run per-family polish waves | Family-specific polish happens after the shared surface is stable |
 | `C14` | Harden for rerelease | Final compatibility, validation, and release-readiness checks are complete |
 
-## Immediate Next Step
+## Immediate State
 
-The rename, renderer-taxonomy, checkpoint, saver productization, shared settings, Windows integration, portable distribution, installer, suite meta-saver, suite-app, SDK, backlog-routing, and cross-cutting polish work from `C01` through `C12` is complete.
-The next continuation prompt should be `C13` for the first saver-specific polish wave.
+The rename, renderer-taxonomy, checkpoint, saver productization, shared settings, Windows integration, portable distribution, installer, suite meta-saver, suite-app, SDK, backlog-routing, cross-cutting polish work from `C01` through `C12`, the full `C13` saver-polish line, and `C14` final rerelease hardening are complete.
+No further continuation prompt is scheduled on the current line after `C14` final rerelease hardening.
 Further continuation work should not need to renegotiate saver/app ownership, migration aliases, renderer-tier terminology, per-saver `.scr` product identity, the shared settings/preset/theme/pack contract, the bounded Win32 `.scr` lifecycle behavior validated in `C05`, the portable bundle layout and inclusion rules defined in `C06`, the current-user installer and uninstall rules defined in `C07`, the bounded in-process cross-saver orchestration baseline defined by `anthology` in `C08`, the role boundaries and launch/config surface established by the real `suite` app in `C09`, the contributor-facing templates and validation surface established in `C10`, the backlog routing and wave-planning baseline established in `C11`, or the shared suite vocabulary and quality bar established in `C12`.

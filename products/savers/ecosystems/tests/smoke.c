@@ -21,11 +21,11 @@ int main(void)
         return 2;
     }
 
-    if (ecosystems_find_preset_values("aquarium_current") == NULL) {
+    if (ecosystems_find_preset_values("reef_current") == NULL) {
         return 3;
     }
 
-    if (ecosystems_find_theme_descriptor("aquarium_current") == NULL) {
+    if (ecosystems_find_theme_descriptor("night_marsh") == NULL) {
         return 4;
     }
 

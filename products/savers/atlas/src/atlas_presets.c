@@ -47,6 +47,24 @@ const screensave_preset_descriptor g_atlas_presets[] = {
         SCREENSAVE_DETAIL_LEVEL_LOW,
         0,
         0UL
+    },
+    {
+        "nebula_voyage",
+        "Nebula Voyage",
+        "Curated deep-space fractal route with slower holds and richer palette travel.",
+        "nebula_voyage",
+        SCREENSAVE_DETAIL_LEVEL_HIGH,
+        1,
+        0x00000E64UL
+    },
+    {
+        "mathematics_plate",
+        "Mathematics Plate",
+        "Still mathematical plate study with restrained refinement and museum-print pacing.",
+        "mathematics_plate",
+        SCREENSAVE_DETAIL_LEVEL_STANDARD,
+        1,
+        0x00000E65UL
     }
 };
 
@@ -55,7 +73,9 @@ static const atlas_preset_values g_atlas_preset_values[] = {
     { ATLAS_MODE_VOYAGE, ATLAS_SPEED_STANDARD, ATLAS_REFINEMENT_FINE },
     { ATLAS_MODE_JULIA, ATLAS_SPEED_STANDARD, ATLAS_REFINEMENT_STANDARD },
     { ATLAS_MODE_VOYAGE, ATLAS_SPEED_BRISK, ATLAS_REFINEMENT_FINE },
-    { ATLAS_MODE_ATLAS, ATLAS_SPEED_STILL, ATLAS_REFINEMENT_DRAFT }
+    { ATLAS_MODE_ATLAS, ATLAS_SPEED_STILL, ATLAS_REFINEMENT_DRAFT },
+    { ATLAS_MODE_VOYAGE, ATLAS_SPEED_STANDARD, ATLAS_REFINEMENT_FINE },
+    { ATLAS_MODE_JULIA, ATLAS_SPEED_STILL, ATLAS_REFINEMENT_DRAFT }
 };
 
 const screensave_preset_descriptor *atlas_get_presets(unsigned int *count_out)

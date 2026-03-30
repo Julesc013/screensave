@@ -44,6 +44,20 @@ const screensave_theme_descriptor g_gallery_themes[] = {
         "Muted museum neutrals for restrained motion and low-distraction viewing.",
         { 174, 162, 142, 255 },
         { 238, 232, 220, 255 }
+    },
+    {
+        "amber_compatibility",
+        "Amber Compatibility",
+        "Warm amber-and-charcoal compatibility palette for calmer baseline renderer tours.",
+        { 188, 148, 92, 255 },
+        { 236, 220, 176, 255 }
+    },
+    {
+        "gl21_prism_hall",
+        "GL21 Prism Hall",
+        "Cool prism-hall palette with brighter cyan-violet edges and cleaner technical layering.",
+        { 124, 148, 238, 255 },
+        { 244, 236, 255, 255 }
     }
 };
 

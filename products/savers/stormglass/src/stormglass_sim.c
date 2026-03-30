@@ -37,6 +37,34 @@ static unsigned long stormglass_step_interval(const screensave_saver_session *se
     }
 }
 
+static unsigned long stormglass_event_interval(const screensave_saver_session *session)
+{
+    unsigned long interval;
+
+    if (session == NULL) {
+        return 3000UL;
+    }
+
+    switch (session->config.intensity_mode) {
+    case STORMGLASS_INTENSITY_QUIET:
+        interval = 4200UL;
+        break;
+    case STORMGLASS_INTENSITY_HEAVY:
+        interval = 2200UL;
+        break;
+    case STORMGLASS_INTENSITY_STANDARD:
+    default:
+        interval = 3000UL;
+        break;
+    }
+
+    if (session->preview_mode) {
+        interval += 900UL;
+    }
+
+    return interval;
+}
+
 static unsigned int stormglass_droplet_target(const screensave_saver_session *session)
 {
     unsigned int count;
@@ -237,9 +265,9 @@ static void stormglass_initialize_scene(screensave_saver_session *session)
     session->droplet_count = stormglass_droplet_target(session);
     session->light_count = stormglass_light_target(session);
     session->band_count = stormglass_band_target(session);
-    session->ambient_phase = 0U;
-    session->event_pulse = 0U;
-    session->light_shift = 0;
+    session->ambient_phase = (unsigned int)stormglass_rng_range(&session->rng, 256UL);
+    session->event_pulse = (unsigned int)stormglass_rng_range(&session->rng, 3UL);
+    session->light_shift = (int)stormglass_rng_range(&session->rng, 3UL) - 1;
 
     for (index = 0U; index < session->light_count; ++index) {
         stormglass_seed_light(session, &session->lights[index]);
@@ -470,6 +498,8 @@ void stormglass_resize_session(screensave_saver_session *session, const screensa
     }
 
     session->drawable_size = environment->drawable_size;
+    session->preview_mode = environment->mode == SCREENSAVE_SESSION_MODE_PREVIEW;
+    session->theme = stormglass_resolve_theme(environment->config_binding);
     stormglass_initialize_scene(session);
 }
 
@@ -479,6 +509,7 @@ void stormglass_step_session(
 )
 {
     unsigned long interval;
+    unsigned long event_interval;
 
     if (session == NULL || environment == NULL) {
         return;
@@ -492,13 +523,35 @@ void stormglass_step_session(
         stormglass_run_step(session);
     }
 
-    if (session->event_accumulator >= 2800UL) {
-        session->event_accumulator = 0UL;
-        session->light_shift = (int)stormglass_rng_range(&session->rng, 5UL) - 2;
+    event_interval = stormglass_event_interval(session);
+    while (session->event_accumulator >= event_interval) {
+        session->event_accumulator -= event_interval;
+        session->light_shift = session->preview_mode
+            ? (int)stormglass_rng_range(&session->rng, 3UL) - 1
+            : (int)stormglass_rng_range(&session->rng, 5UL) - 2;
         if (session->config.scene_mode == STORMGLASS_SCENE_RAIN && session->config.intensity_mode == STORMGLASS_INTENSITY_HEAVY) {
             session->event_pulse = 8U + (unsigned int)stormglass_rng_range(&session->rng, 6UL);
         } else {
             session->event_pulse = 2U + (unsigned int)stormglass_rng_range(&session->rng, 5UL);
+        }
+        if (session->light_count > 0U) {
+            stormglass_seed_light(
+                session,
+                &session->lights[stormglass_rng_range(&session->rng, (unsigned long)session->light_count)]
+            );
+        }
+        if (session->band_count > 0U) {
+            stormglass_seed_band(
+                session,
+                &session->bands[stormglass_rng_range(&session->rng, (unsigned long)session->band_count)]
+            );
+        }
+        if (session->droplet_count > 0U) {
+            stormglass_seed_droplet(
+                session,
+                &session->droplets[stormglass_rng_range(&session->rng, (unsigned long)session->droplet_count)],
+                1
+            );
         }
     }
 }

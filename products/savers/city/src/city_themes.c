@@ -37,6 +37,20 @@ const screensave_theme_descriptor g_city_themes[] = {
         "Muted industrial night palette with steel gray structures and warm dock lights.",
         { 114, 124, 138, 255 },
         { 226, 192, 110, 255 }
+    },
+    {
+        "blue_harbor_watch",
+        "Blue Harbor Watch",
+        "Cool harbor-watch palette with dim blue water and pale sodium reflections.",
+        { 84, 112, 164, 255 },
+        { 210, 200, 156, 255 }
+    },
+    {
+        "neon_rooftop_drift",
+        "Neon Rooftop Drift",
+        "Cool neon rooftop palette with cyan-magenta window accents and deeper night fog.",
+        { 82, 118, 184, 255 },
+        { 220, 122, 236, 255 }
     }
 };
 

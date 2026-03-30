@@ -22,21 +22,32 @@ static const ecosystems_config *ecosystems_resolve_config(const screensave_confi
 
 static unsigned long ecosystems_step_interval(const screensave_saver_session *session)
 {
+    unsigned long interval;
+
     if (session == NULL) {
         return 65UL;
     }
 
     switch (session->config.activity_mode) {
     case ECOSYSTEMS_ACTIVITY_CALM:
-        return 90UL;
+        interval = 90UL;
+        break;
 
     case ECOSYSTEMS_ACTIVITY_LIVELY:
-        return 34UL;
+        interval = 34UL;
+        break;
 
     case ECOSYSTEMS_ACTIVITY_STANDARD:
     default:
-        return 58UL;
+        interval = 58UL;
+        break;
     }
+
+    if (session->preview_mode && interval < 70UL) {
+        interval = 70UL;
+    }
+
+    return interval;
 }
 
 static unsigned int ecosystems_population_target(const screensave_saver_session *session)
@@ -65,6 +76,9 @@ static unsigned int ecosystems_population_target(const screensave_saver_session 
     if (session->preview_mode && count > 18U) {
         count = 18U;
     }
+    if (session->preview_mode && count > 14U) {
+        count = 14U;
+    }
 
     return count;
 }
@@ -83,6 +97,8 @@ static void ecosystems_pick_regroup_target(screensave_saver_session *session)
         &session->rng,
         (unsigned long)(session->drawable_size.height > 48 ? session->drawable_size.height - 48 : 1)
     );
+    session->drift_bias_x = (int)ecosystems_rng_range(&session->rng, 7UL) - 3;
+    session->drift_bias_y = (int)ecosystems_rng_range(&session->rng, 7UL) - 3;
 }
 
 static void ecosystems_seed_agent(
@@ -172,6 +188,7 @@ static void ecosystems_initialize_session(
     session->step_accumulator = 0UL;
     session->event_accumulator = 0UL;
     session->ambient_phase = 0U;
+    session->event_pulse = 0U;
     ecosystems_initialize_population(session);
 }
 
@@ -223,10 +240,13 @@ static void ecosystems_step_aquarium_agent(
     int drift;
 
     drift = (session->regroup_y * 16 - agent->y_fixed) / 64;
-    agent->x_fixed += agent->vx_fixed;
-    agent->y_fixed += agent->vy_fixed + drift;
+    agent->x_fixed += agent->vx_fixed + session->drift_bias_x;
+    agent->y_fixed += agent->vy_fixed + drift + session->drift_bias_y;
     agent->phase = (agent->phase + 5U) & 255U;
     agent->brightness = 120 + (int)(ecosystems_triangle_wave(agent->phase) / 3U);
+    if (session->event_pulse > 0U) {
+        agent->brightness += 18;
+    }
 
     if ((ecosystems_rng_next(&session->rng) & 15UL) == 0UL) {
         agent->vy_fixed += (int)ecosystems_rng_range(&session->rng, 3UL) - 1;
@@ -249,8 +269,8 @@ static void ecosystems_step_aviary_agent(
 
     drift_x = (session->regroup_x * 16 - agent->x_fixed) / 120;
     drift_y = (session->regroup_y * 16 - agent->y_fixed) / 96;
-    agent->x_fixed += agent->vx_fixed + drift_x;
-    agent->y_fixed += agent->vy_fixed + drift_y;
+    agent->x_fixed += agent->vx_fixed + drift_x + session->drift_bias_x;
+    agent->y_fixed += agent->vy_fixed + drift_y + session->drift_bias_y;
     agent->phase = (agent->phase + 7U) & 255U;
     agent->brightness = 132 + (int)(ecosystems_triangle_wave(agent->phase) / 4U);
 
@@ -267,8 +287,8 @@ static void ecosystems_step_firefly_agent(
     int drift_x;
     int drift_y;
 
-    drift_x = (session->regroup_x * 16 - agent->x_fixed) / 160;
-    drift_y = (session->regroup_y * 16 - agent->y_fixed) / 160;
+    drift_x = (session->regroup_x * 16 - agent->x_fixed) / 160 + session->drift_bias_x;
+    drift_y = (session->regroup_y * 16 - agent->y_fixed) / 160 + session->drift_bias_y;
     agent->vx_fixed += (int)ecosystems_rng_range(&session->rng, 5UL) - 2 + drift_x;
     agent->vy_fixed += (int)ecosystems_rng_range(&session->rng, 5UL) - 2 + drift_y;
     if (agent->vx_fixed < -12) {
@@ -285,6 +305,9 @@ static void ecosystems_step_firefly_agent(
     agent->y_fixed += agent->vy_fixed;
     agent->phase = (agent->phase + 9U + agent->group) & 255U;
     agent->brightness = 72 + (int)(ecosystems_triangle_wave(agent->phase) / 2U);
+    if (session->event_pulse > 0U) {
+        agent->brightness += 20;
+    }
 }
 
 static void ecosystems_run_step(screensave_saver_session *session)
@@ -296,7 +319,11 @@ static void ecosystems_run_step(screensave_saver_session *session)
         return;
     }
 
-    session->ambient_phase = (session->ambient_phase + 1U + (unsigned int)session->config.activity_mode) & 255U;
+    session->ambient_phase =
+        (session->ambient_phase + 1U + (unsigned int)session->config.activity_mode + (session->event_pulse > 0U ? 1U : 0U)) & 255U;
+    if (session->event_pulse > 0U) {
+        session->event_pulse -= 1U;
+    }
     for (index = 0U; index < session->agent_count; ++index) {
         agent = &session->agents[index];
         if (!agent->active) {
@@ -411,6 +438,8 @@ void ecosystems_resize_session(
     }
 
     session->drawable_size = environment->drawable_size;
+    session->preview_mode = environment->mode == SCREENSAVE_SESSION_MODE_PREVIEW;
+    session->theme = ecosystems_resolve_theme(environment->config_binding);
     ecosystems_initialize_population(session);
 }
 
@@ -434,8 +463,9 @@ void ecosystems_step_session(
         ecosystems_run_step(session);
     }
 
-    if (session->event_accumulator >= 2400UL) {
+    if (session->event_accumulator >= (session->preview_mode ? 2800UL : 2400UL)) {
         session->event_accumulator = 0UL;
         ecosystems_pick_regroup_target(session);
+        session->event_pulse = 18U + (unsigned int)ecosystems_rng_range(&session->rng, 16UL);
     }
 }

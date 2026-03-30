@@ -24,9 +24,9 @@ static const screensave_saver_config_hooks g_ricochet_config_hooks = {
     ricochet_config_save,
     ricochet_config_show_dialog,
     ricochet_apply_shared_preset,
-    NULL,
-    NULL,
-    NULL,
+    ricochet_config_export_settings_entries,
+    ricochet_config_import_settings_entry,
+    ricochet_config_randomize_settings,
     SCREENSAVE_CONFIG_SCHEMA_VERSION,
     SCREENSAVE_SETTINGS_CAP_PRESET_FILES |
         SCREENSAVE_SETTINGS_CAP_THEME_FILES |
@@ -46,7 +46,7 @@ static const screensave_saver_module g_ricochet_module = {
     {
         "ricochet",
         "Ricochet",
-        "Polished bounce-motion saver with restrained trails and curated motion presets."
+        "Polished bounce-motion saver with restrained trails, crisp starts, and curated motion presets."
     },
     SCREENSAVE_SAVER_CAP_GDI | SCREENSAVE_SAVER_CAP_GL11 | SCREENSAVE_SAVER_CAP_LONG_RUN_STABLE,
     g_ricochet_presets,

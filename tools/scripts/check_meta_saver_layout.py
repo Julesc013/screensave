@@ -121,7 +121,7 @@ def main() -> int:
     require("predate `anthology`" in note, "C08 meta-saver note must record the packaging limitation honestly.", errors)
 
     root_readme = read_text(ROOT / "README.md")
-    require("The next continuation phase is `C13` for the first saver-specific polish wave." in root_readme, "README.md must point to C13.", errors)
+    require("The current continuation line is complete through `C14` final rerelease hardening." in root_readme, "README.md must point to C14.", errors)
     require("`anthology` is the real suite meta-saver `.scr`" in root_readme, "README.md must describe anthology explicitly.", errors)
 
     if errors:

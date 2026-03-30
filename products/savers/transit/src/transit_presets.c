@@ -47,6 +47,24 @@ const screensave_preset_descriptor g_transit_presets[] = {
         SCREENSAVE_DETAIL_LEVEL_LOW,
         0,
         0UL
+    },
+    {
+        "motorway_fog",
+        "Motorway Fog",
+        "Calmer motorway pass with reduced light density and heavier fog-window atmosphere.",
+        "motorway_fog",
+        SCREENSAVE_DETAIL_LEVEL_STANDARD,
+        1,
+        0x00000D44UL
+    },
+    {
+        "harbor_midnight",
+        "Harbor Midnight",
+        "Sparse harbor-route glide with darker water, slower cadence, and quieter docklight rhythm.",
+        "harbor_midnight",
+        SCREENSAVE_DETAIL_LEVEL_LOW,
+        0,
+        0UL
     }
 };
 
@@ -55,7 +73,9 @@ static const transit_preset_values g_transit_preset_values[] = {
     { TRANSIT_SCENE_RAIL, TRANSIT_SPEED_GLIDE, TRANSIT_LIGHTS_STANDARD },
     { TRANSIT_SCENE_MOTORWAY, TRANSIT_SPEED_EXPRESS, TRANSIT_LIGHTS_DENSE },
     { TRANSIT_SCENE_HARBOR, TRANSIT_SPEED_GLIDE, TRANSIT_LIGHTS_STANDARD },
-    { TRANSIT_SCENE_RAIL, TRANSIT_SPEED_GLIDE, TRANSIT_LIGHTS_SPARSE }
+    { TRANSIT_SCENE_RAIL, TRANSIT_SPEED_GLIDE, TRANSIT_LIGHTS_SPARSE },
+    { TRANSIT_SCENE_MOTORWAY, TRANSIT_SPEED_GLIDE, TRANSIT_LIGHTS_STANDARD },
+    { TRANSIT_SCENE_HARBOR, TRANSIT_SPEED_GLIDE, TRANSIT_LIGHTS_SPARSE }
 };
 
 const screensave_preset_descriptor *transit_get_presets(unsigned int *count_out)

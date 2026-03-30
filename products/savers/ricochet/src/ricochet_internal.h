@@ -10,10 +10,10 @@
 #define RICOCHET_PRODUCT_REGISTRY_ROOTA "Software\\Julesc013\\ScreenSave\\Products\\ricochet"
 #define RICOCHET_DEFAULT_PRESET_KEY "classic_clean"
 #define RICOCHET_DEFAULT_THEME_KEY "classic_clean"
-#define RICOCHET_PRESET_COUNT 5U
-#define RICOCHET_THEME_COUNT 4U
+#define RICOCHET_PRESET_COUNT 7U
+#define RICOCHET_THEME_COUNT 5U
 #define RICOCHET_MAX_OBJECTS 5U
-#define RICOCHET_MAX_TRAIL_POINTS 10U
+#define RICOCHET_MAX_TRAIL_POINTS 14U
 
 typedef enum ricochet_object_mode_tag {
     RICOCHET_OBJECT_BLOCK = 0,
@@ -62,6 +62,7 @@ typedef struct ricochet_body_tag {
     long trail_x[RICOCHET_MAX_TRAIL_POINTS];
     long trail_y[RICOCHET_MAX_TRAIL_POINTS];
     int trail_size[RICOCHET_MAX_TRAIL_POINTS];
+    int flash_timer;
 } ricochet_body;
 
 extern const screensave_preset_descriptor g_ricochet_presets[];
@@ -77,6 +78,8 @@ struct screensave_saver_session_tag {
     unsigned int object_count;
     ricochet_body bodies[RICOCHET_MAX_OBJECTS];
     int celebration_timer;
+    unsigned long elapsed_millis;
+    unsigned long variation_elapsed_millis;
 };
 
 const screensave_saver_module *ricochet_get_module(void);
@@ -117,6 +120,34 @@ INT_PTR ricochet_config_show_dialog(
     screensave_common_config *common_config,
     void *product_config,
     unsigned int product_config_size,
+    screensave_diag_context *diagnostics
+);
+int ricochet_config_export_settings_entries(
+    const screensave_saver_module *module,
+    const screensave_common_config *common_config,
+    const void *product_config,
+    unsigned int product_config_size,
+    screensave_settings_file_kind kind,
+    screensave_settings_writer *writer,
+    screensave_diag_context *diagnostics
+);
+int ricochet_config_import_settings_entry(
+    const screensave_saver_module *module,
+    screensave_common_config *common_config,
+    void *product_config,
+    unsigned int product_config_size,
+    screensave_settings_file_kind kind,
+    const char *section,
+    const char *key,
+    const char *value,
+    screensave_diag_context *diagnostics
+);
+void ricochet_config_randomize_settings(
+    const screensave_saver_module *module,
+    screensave_common_config *common_config,
+    void *product_config,
+    unsigned int product_config_size,
+    const screensave_session_seed *seed,
     screensave_diag_context *diagnostics
 );
 

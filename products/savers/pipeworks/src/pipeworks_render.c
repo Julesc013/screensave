@@ -47,6 +47,14 @@ static screensave_color pipeworks_background_color(
         color.red = 232;
         color.green = 236;
         color.blue = 240;
+    } else if (lstrcmpiA(session->theme->theme_key, "amber_backplane") == 0) {
+        color.red = 18;
+        color.green = 10;
+        color.blue = 6;
+    } else if (lstrcmpiA(session->theme->theme_key, "midnight_blueprint") == 0) {
+        color.red = 8;
+        color.green = 14;
+        color.blue = 26;
     } else if (lstrcmpiA(session->theme->theme_key, "industrial_pipes") == 0) {
         color.red = 20;
         color.green = 22;

@@ -10,8 +10,8 @@
 #define ECOSYSTEMS_PRODUCT_REGISTRY_ROOTA "Software\\Julesc013\\ScreenSave\\Products\\ecosystems"
 #define ECOSYSTEMS_DEFAULT_PRESET_KEY "aquarium_current"
 #define ECOSYSTEMS_DEFAULT_THEME_KEY "aquarium_current"
-#define ECOSYSTEMS_PRESET_COUNT 5U
-#define ECOSYSTEMS_THEME_COUNT 5U
+#define ECOSYSTEMS_PRESET_COUNT 7U
+#define ECOSYSTEMS_THEME_COUNT 7U
 #define ECOSYSTEMS_MAX_AGENTS 64U
 
 typedef enum ecosystems_habitat_mode_tag {
@@ -71,8 +71,11 @@ struct screensave_saver_session_tag {
     unsigned long step_accumulator;
     unsigned long event_accumulator;
     unsigned int ambient_phase;
+    unsigned int event_pulse;
     int regroup_x;
     int regroup_y;
+    int drift_bias_x;
+    int drift_bias_y;
     ecosystems_agent agents[ECOSYSTEMS_MAX_AGENTS];
     unsigned int agent_count;
 };

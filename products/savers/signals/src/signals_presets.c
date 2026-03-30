@@ -47,6 +47,24 @@ const screensave_preset_descriptor g_signals_presets[] = {
         SCREENSAVE_DETAIL_LEVEL_LOW,
         0,
         0UL
+    },
+    {
+        "telemetry_wall",
+        "Telemetry Wall",
+        "Multi-panel telemetry board with disciplined cadences and cooler lab framing.",
+        "telemetry_wall",
+        SCREENSAVE_DETAIL_LEVEL_HIGH,
+        1,
+        0x00000C24UL
+    },
+    {
+        "night_watch",
+        "Night Watch",
+        "Low-activity watch console with quiet sweep motion and restrained alerts.",
+        "night_watch_console",
+        SCREENSAVE_DETAIL_LEVEL_LOW,
+        1,
+        0x00000C25UL
     }
 };
 
@@ -55,7 +73,9 @@ static const signals_preset_values g_signals_preset_values[] = {
     { SIGNALS_LAYOUT_SPECTRUM, SIGNALS_ACTIVITY_BUSY, SIGNALS_OVERLAY_SCAN },
     { SIGNALS_LAYOUT_TELEMETRY, SIGNALS_ACTIVITY_STANDARD, SIGNALS_OVERLAY_GRID },
     { SIGNALS_LAYOUT_TELEMETRY, SIGNALS_ACTIVITY_QUIET, SIGNALS_OVERLAY_GRID },
-    { SIGNALS_LAYOUT_OPERATIONS, SIGNALS_ACTIVITY_QUIET, SIGNALS_OVERLAY_OFF }
+    { SIGNALS_LAYOUT_OPERATIONS, SIGNALS_ACTIVITY_QUIET, SIGNALS_OVERLAY_OFF },
+    { SIGNALS_LAYOUT_TELEMETRY, SIGNALS_ACTIVITY_BUSY, SIGNALS_OVERLAY_GRID },
+    { SIGNALS_LAYOUT_OPERATIONS, SIGNALS_ACTIVITY_QUIET, SIGNALS_OVERLAY_SCAN }
 };
 
 const screensave_preset_descriptor *signals_get_presets(unsigned int *count_out)

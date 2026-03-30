@@ -24,9 +24,24 @@ int main(void)
     if (city_find_preset_values("skyline_vista") == NULL) {
         return 3;
     }
+    if (city_find_preset_values("blue_harbor_watch") == NULL) {
+        return 4;
+    }
 
     if (city_find_theme_descriptor("quiet_city_sleep") == NULL) {
-        return 4;
+        return 5;
+    }
+    if (city_find_theme_descriptor("neon_rooftop_drift") == NULL) {
+        return 6;
+    }
+
+    if (
+        module->callbacks == NULL ||
+        module->callbacks->export_settings_entries == NULL ||
+        module->callbacks->import_settings_entry == NULL ||
+        module->callbacks->randomize_settings == NULL
+    ) {
+        return 7;
     }
 
     screensave_config_binding_init(&binding, &common_config, &product_config, sizeof(product_config));
@@ -40,18 +55,18 @@ int main(void)
 
     session = NULL;
     if (!city_create_session(module, &session, &environment) || session == NULL) {
-        return 5;
+        return 8;
     }
 
     environment.clock.delta_millis = 96UL;
     city_step_session(session, &environment);
     if (session->theme == NULL) {
         city_destroy_session(session);
-        return 6;
+        return 9;
     }
     if (session->structure_count == 0U || session->light_count == 0U || session->fog_count == 0U) {
         city_destroy_session(session);
-        return 7;
+        return 10;
     }
 
     city_destroy_session(session);

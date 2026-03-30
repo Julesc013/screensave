@@ -6,7 +6,7 @@ It provides:
 
 - composed scope, meter, counter, and status-panel scenes with a believable synthetic "system alive" cadence
 - restrained layout, activity, and overlay controls instead of a broad dashboard toolkit
-- curated terminal, amber, blue, technical-board, and quiet-console presets and themes
+- curated terminal, amber, telemetry-wall, blue-lab, technical-board, and quiet-console presets and themes
 - deterministic startup when requested and preview-safe long-run behavior through the shared saver and renderer contracts
 
 Signals stays intentionally bounded.

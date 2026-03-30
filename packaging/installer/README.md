@@ -5,7 +5,7 @@ Belongs here: installer manifests, install and uninstall scripts, layout notes, 
 Does not belong here: runtime platform code, suite-app work, or fabricated install success claims.
 Type: release support.
 
-## C07 Baseline
+## Historical Baseline
 
 `C07` adds the first real installer path for the current ScreenSave saver line.
 
@@ -21,6 +21,16 @@ Source-controlled installer inputs now live here:
 Generated installer staging and zip artifacts do not belong here.
 The assembly script writes generated staging and zip artifacts under `out/installer/`.
 
+## C14 Refresh
+
+`C14` refreshes the installed-distribution surface for the final release-candidate pass:
+
+- installer staging now points at the refreshed `C14` portable payload
+- staged output now moves to the current `C14` installer root under `out/installer/`
+- installer docs now include final release-readiness, known-issues, and config-integrity notes
+- `suite` and `benchlab` remain separate app products outside the end-user saver installer payload
+- `anthology` is treated as part of the canonical saver line and is installed when it exists in the current portable payload
+
 ## Current Installer Policy
 
 - Current-user install mode is supported in `C07`.
@@ -34,4 +44,4 @@ The assembly script writes generated staging and zip artifacts under `out/instal
 
 This directory defines installed delivery only.
 Portable bundle behavior remains under `packaging/portable/`.
-The future `suite` app and suite meta-saver remain out of scope here.
+`suite` and `benchlab` remain separate app products and stay outside the saver-only installer payload.

@@ -21,12 +21,20 @@ int main(void)
         return 2;
     }
 
-    if (pipeworks_find_preset_values("industrial_pipes") == NULL) {
+    if (pipeworks_find_preset_values("amber_backplane") == NULL) {
         return 3;
     }
 
-    if (pipeworks_find_theme_descriptor("phosphor_grid") == NULL) {
+    if (pipeworks_find_theme_descriptor("midnight_blueprint") == NULL) {
         return 4;
+    }
+    if (
+        module->config_hooks == NULL ||
+        module->config_hooks->export_settings_entries == NULL ||
+        module->config_hooks->import_settings_entry == NULL ||
+        module->config_hooks->randomize_settings == NULL
+    ) {
+        return 5;
     }
 
     screensave_config_binding_init(&binding, &common_config, &product_config, sizeof(product_config));
@@ -40,7 +48,7 @@ int main(void)
 
     session = NULL;
     if (!pipeworks_create_session(module, &session, &environment) || session == NULL) {
-        return 5;
+        return 6;
     }
 
     environment.clock.delta_millis = 48UL;
@@ -48,11 +56,11 @@ int main(void)
     pipeworks_step_session(session, &environment);
     if (session->cells.cells == NULL || session->glow.cells == NULL) {
         pipeworks_destroy_session(session);
-        return 6;
+        return 7;
     }
     if (session->occupied_cells == 0U) {
         pipeworks_destroy_session(session);
-        return 7;
+        return 8;
     }
 
     pipeworks_destroy_session(session);

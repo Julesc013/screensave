@@ -663,3 +663,162 @@ INT_PTR stormglass_config_show_dialog(
 
     return result;
 }
+
+static int stormglass_parse_scene_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "rain") == 0 || lstrcmpiA(text, "rain_on_glass") == 0) {
+        *value_out = STORMGLASS_SCENE_RAIN;
+        return 1;
+    }
+    if (lstrcmpiA(text, "fogged") == 0 || lstrcmpiA(text, "fogged_pane") == 0) {
+        *value_out = STORMGLASS_SCENE_FOGGED;
+        return 1;
+    }
+    if (lstrcmpiA(text, "winter") == 0 || lstrcmpiA(text, "winter_pane") == 0) {
+        *value_out = STORMGLASS_SCENE_WINTER;
+        return 1;
+    }
+    return 0;
+}
+
+static int stormglass_parse_intensity_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "quiet") == 0) {
+        *value_out = STORMGLASS_INTENSITY_QUIET;
+        return 1;
+    }
+    if (lstrcmpiA(text, "standard") == 0) {
+        *value_out = STORMGLASS_INTENSITY_STANDARD;
+        return 1;
+    }
+    if (lstrcmpiA(text, "heavy") == 0) {
+        *value_out = STORMGLASS_INTENSITY_HEAVY;
+        return 1;
+    }
+    return 0;
+}
+
+static int stormglass_parse_pane_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "clear") == 0) {
+        *value_out = STORMGLASS_PANE_CLEAR;
+        return 1;
+    }
+    if (lstrcmpiA(text, "misted") == 0 || lstrcmpiA(text, "misted_pane") == 0) {
+        *value_out = STORMGLASS_PANE_MISTED;
+        return 1;
+    }
+    if (lstrcmpiA(text, "condensed") == 0 || lstrcmpiA(text, "condensed_pane") == 0) {
+        *value_out = STORMGLASS_PANE_CONDENSED;
+        return 1;
+    }
+    return 0;
+}
+
+int stormglass_config_export_settings_entries(
+    const screensave_saver_module *module,
+    const screensave_common_config *common_config,
+    const void *product_config,
+    unsigned int product_config_size,
+    screensave_settings_file_kind kind,
+    screensave_settings_writer *writer,
+    screensave_diag_context *diagnostics
+)
+{
+    const stormglass_config *config;
+
+    (void)module;
+    (void)common_config;
+    (void)diagnostics;
+
+    config = stormglass_as_const_config(product_config, product_config_size);
+    if (kind != SCREENSAVE_SETTINGS_FILE_PRESET) {
+        return 1;
+    }
+    if (config == NULL || writer == NULL || writer->write_string == NULL) {
+        return 0;
+    }
+
+    return writer->write_string(writer->context, "product", "scene", stormglass_scene_mode_name(config->scene_mode)) &&
+        writer->write_string(writer->context, "product", "intensity", stormglass_intensity_mode_name(config->intensity_mode)) &&
+        writer->write_string(writer->context, "product", "pane", stormglass_pane_mode_name(config->pane_mode));
+}
+
+int stormglass_config_import_settings_entry(
+    const screensave_saver_module *module,
+    screensave_common_config *common_config,
+    void *product_config,
+    unsigned int product_config_size,
+    screensave_settings_file_kind kind,
+    const char *section,
+    const char *key,
+    const char *value,
+    screensave_diag_context *diagnostics
+)
+{
+    stormglass_config *config;
+
+    (void)module;
+    (void)common_config;
+    (void)diagnostics;
+
+    config = stormglass_as_config(product_config, product_config_size);
+    if (kind != SCREENSAVE_SETTINGS_FILE_PRESET) {
+        return 1;
+    }
+    if (config == NULL || section == NULL || key == NULL || value == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(section, "product") != 0) {
+        return 1;
+    }
+    if (lstrcmpiA(key, "scene") == 0 || lstrcmpiA(key, "scene_mode") == 0) {
+        return stormglass_parse_scene_mode(value, &config->scene_mode);
+    }
+    if (lstrcmpiA(key, "intensity") == 0 || lstrcmpiA(key, "intensity_mode") == 0) {
+        return stormglass_parse_intensity_mode(value, &config->intensity_mode);
+    }
+    if (lstrcmpiA(key, "pane") == 0 || lstrcmpiA(key, "pane_mode") == 0) {
+        return stormglass_parse_pane_mode(value, &config->pane_mode);
+    }
+
+    return 1;
+}
+
+void stormglass_config_randomize_settings(
+    const screensave_saver_module *module,
+    screensave_common_config *common_config,
+    void *product_config,
+    unsigned int product_config_size,
+    const screensave_session_seed *seed,
+    screensave_diag_context *diagnostics
+)
+{
+    stormglass_config *config;
+    stormglass_rng_state rng;
+    unsigned long random_seed;
+
+    (void)module;
+    (void)common_config;
+    (void)diagnostics;
+
+    config = stormglass_as_config(product_config, product_config_size);
+    if (config == NULL) {
+        return;
+    }
+
+    random_seed = seed != NULL ? seed->stream_seed : 0x53746731UL;
+    stormglass_rng_seed(&rng, random_seed ^ 0x53746731UL);
+    config->scene_mode = (int)stormglass_rng_range(&rng, 3UL);
+    config->intensity_mode = (int)stormglass_rng_range(&rng, 3UL);
+    config->pane_mode = (int)stormglass_rng_range(&rng, 3UL);
+}

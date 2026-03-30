@@ -37,6 +37,20 @@ const screensave_theme_descriptor g_atlas_themes[] = {
         "Muted print-room palette for restrained long runs.",
         { 120, 94, 78, 255 },
         { 222, 208, 190, 255 }
+    },
+    {
+        "nebula_voyage",
+        "Nebula Voyage",
+        "Blue-violet voyage palette with warmer nebula highlights and slower tonal progression.",
+        { 84, 90, 204, 255 },
+        { 246, 134, 210, 255 }
+    },
+    {
+        "mathematics_plate",
+        "Mathematics Plate",
+        "Graphite-and-paper mathematics palette with restrained instrument-green accents.",
+        { 112, 120, 132, 255 },
+        { 214, 232, 202, 255 }
     }
 };
 

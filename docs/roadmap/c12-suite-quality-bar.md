@@ -117,4 +117,6 @@ Later saver-specific waves must preserve:
 ## Next Step
 
 `C12` establishes the suite-consistency baseline.
-The next continuation step is `C13`, the first saver-specific polish wave.
+`C13` Wave A and Wave B have already applied that baseline to the first ten polished savers.
+`C13` Wave C and `C14` final rerelease hardening completed the continuation line without reopening the quality-bar vocabulary.
+Later post-release work should continue to preserve this quality bar.

@@ -40,5 +40,5 @@ This is the short operational view of the implemented baseline and the active po
 - `C14`: final rerelease hardening.
 
 The earlier `S16` and `S17` endpoint is superseded.
-`C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, and `C12` are complete.
-The next planned implementation prompt is `C13` for the first saver-specific polish wave.
+`C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, `C13` Wave A, Wave B, and Wave C, and `C14` are complete.
+The current continuation line is complete through `C14` final rerelease hardening.

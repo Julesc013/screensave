@@ -46,7 +46,7 @@ static const screensave_saver_module g_plasma_module = {
     {
         "plasma",
         "Plasma",
-        "Palette-driven framebuffer saver with restrained plasma, fire, and interference studies."
+        "Palette-driven framebuffer saver with curated dark-room palettes, clearer effect families, and calmer long-run composition refresh."
     },
     SCREENSAVE_SAVER_CAP_GDI | SCREENSAVE_SAVER_CAP_GL11 | SCREENSAVE_SAVER_CAP_LONG_RUN_STABLE,
     g_plasma_presets,

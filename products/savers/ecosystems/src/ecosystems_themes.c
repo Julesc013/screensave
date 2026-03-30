@@ -37,6 +37,20 @@ const screensave_theme_descriptor g_ecosystems_themes[] = {
         "Low-light oceanic palette for subdued aquarium presentation.",
         { 72, 120, 162, 255 },
         { 170, 212, 242, 255 }
+    },
+    {
+        "reef_current",
+        "Reef Current",
+        "Reef blues with brighter coral-like schooling highlights.",
+        { 74, 172, 190, 255 },
+        { 255, 220, 170, 255 }
+    },
+    {
+        "night_marsh",
+        "Night Marsh",
+        "Dark marsh greens with pale firefly and reed highlights.",
+        { 98, 126, 86, 255 },
+        { 222, 234, 168, 255 }
     }
 };
 

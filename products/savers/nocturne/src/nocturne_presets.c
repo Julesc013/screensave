@@ -31,6 +31,15 @@ const screensave_preset_descriptor g_nocturne_presets[] = {
         0x00000607UL
     },
     {
+        "phosphor_night",
+        "Phosphor Night",
+        "Green-blue line motion with a dim observatory floor and slow drift refresh.",
+        "phosphor_night",
+        SCREENSAVE_DETAIL_LEVEL_STANDARD,
+        1,
+        0x00000609UL
+    },
+    {
         "blue_quiet",
         "Blue Quiet",
         "Cool blue motion with a wide, calm cycle.",
@@ -47,6 +56,15 @@ const screensave_preset_descriptor g_nocturne_presets[] = {
         SCREENSAVE_DETAIL_LEVEL_LOW,
         1,
         0x00000608UL
+    },
+    {
+        "museum_amber",
+        "Museum Amber",
+        "Near-black amber monolith motion tuned for exhibit and lobby darkness.",
+        "museum_amber",
+        SCREENSAVE_DETAIL_LEVEL_LOW,
+        1,
+        0x0000060AUL
     },
     {
         "deep_sleep",
@@ -72,10 +90,12 @@ static const nocturne_preset_values g_nocturne_preset_values[] = {
     { NOCTURNE_MOTION_NONE, NOCTURNE_FADE_GENTLE, NOCTURNE_STRENGTH_STILL },
     { NOCTURNE_MOTION_QUIET_LINE, NOCTURNE_FADE_STANDARD, NOCTURNE_STRENGTH_SUBTLE },
     { NOCTURNE_MOTION_QUIET_LINE, NOCTURNE_FADE_GENTLE, NOCTURNE_STRENGTH_SUBTLE },
+    { NOCTURNE_MOTION_QUIET_LINE, NOCTURNE_FADE_GENTLE, NOCTURNE_STRENGTH_SOFT },
     { NOCTURNE_MOTION_DRIFT_MARK, NOCTURNE_FADE_GENTLE, NOCTURNE_STRENGTH_SUBTLE },
-    { NOCTURNE_MOTION_MONOLITH, NOCTURNE_FADE_STANDARD, NOCTURNE_STRENGTH_STILL },
+    { NOCTURNE_MOTION_MONOLITH, NOCTURNE_FADE_SLOW, NOCTURNE_STRENGTH_STILL },
+    { NOCTURNE_MOTION_MONOLITH, NOCTURNE_FADE_SLOW, NOCTURNE_STRENGTH_SUBTLE },
     { NOCTURNE_MOTION_BREATH, NOCTURNE_FADE_GENTLE, NOCTURNE_STRENGTH_STILL },
-    { NOCTURNE_MOTION_MONOLITH, NOCTURNE_FADE_STANDARD, NOCTURNE_STRENGTH_SUBTLE }
+    { NOCTURNE_MOTION_MONOLITH, NOCTURNE_FADE_GENTLE, NOCTURNE_STRENGTH_SUBTLE }
 };
 
 const screensave_preset_descriptor *nocturne_get_presets(unsigned int *count_out)

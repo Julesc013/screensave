@@ -30,21 +30,32 @@ static const mechanize_config *mechanize_resolve_config(
 
 static unsigned long mechanize_step_interval(const screensave_saver_session *session)
 {
+    unsigned long interval;
+
     if (session == NULL) {
         return 70UL;
     }
 
     switch (session->config.speed_mode) {
     case MECHANIZE_SPEED_PATIENT:
-        return 95UL;
+        interval = 95UL;
+        break;
 
     case MECHANIZE_SPEED_BRISK:
-        return 36UL;
+        interval = 36UL;
+        break;
 
     case MECHANIZE_SPEED_STANDARD:
     default:
-        return 62UL;
+        interval = 62UL;
+        break;
     }
+
+    if (session->preview_mode && interval < 72UL) {
+        interval = 72UL;
+    }
+
+    return interval;
 }
 
 static unsigned int mechanize_density_count(
@@ -119,12 +130,17 @@ static void mechanize_build_gear_train(screensave_saver_session *session)
 
     spacing = (session->drawable_size.width - (radius * 2)) / (int)(count + 1U);
     baseline = session->drawable_size.height / 2;
+    if ((session->layout_variant & 1U) != 0U) {
+        baseline -= radius / 3;
+    } else if ((session->layout_variant % 3U) == 2U) {
+        baseline += radius / 4;
+    }
 
     for (index = 0U; index < count; ++index) {
         session->gears[index].active = 1;
         session->gears[index].x = spacing * (int)(index + 1U);
         session->gears[index].y = baseline + ((index & 1U) ? radius / 3 : -(radius / 3));
-        session->gears[index].radius = radius - ((int)index % 2);
+        session->gears[index].radius = radius - ((int)index % 2) - (int)(session->layout_variant % 2U);
         session->gears[index].direction = (index & 1U) ? -1 : 1;
         session->gears[index].phase = (unsigned int)mechanize_rng_range(&session->rng, 256UL);
     }
@@ -153,6 +169,11 @@ static void mechanize_build_cam_bank(screensave_saver_session *session)
     }
     spacing = session->drawable_size.width / (int)(count + 1U);
     y = (session->drawable_size.height * 2) / 3;
+    if ((session->layout_variant % 3U) == 1U) {
+        y -= radius / 3;
+    } else if ((session->layout_variant % 3U) == 2U) {
+        y += radius / 4;
+    }
 
     for (index = 0U; index < count; ++index) {
         session->gears[index].active = 1;
@@ -161,8 +182,8 @@ static void mechanize_build_cam_bank(screensave_saver_session *session)
         session->gears[index].radius = radius;
         session->gears[index].direction = 1;
         session->gears[index].phase = (unsigned int)mechanize_rng_range(&session->rng, 256UL);
-        session->follower_heights[index] = radius;
-        session->follower_targets[index] = radius;
+        session->follower_heights[index] = radius + (int)((session->layout_variant + index) % 3U);
+        session->follower_targets[index] = radius + (int)((session->layout_variant + index) % 4U);
     }
 }
 
@@ -193,6 +214,9 @@ static void mechanize_build_dial_assembly(screensave_saver_session *session)
     }
     spacing_x = session->drawable_size.width / 3;
     spacing_y = session->drawable_size.height / 3;
+    if ((session->layout_variant & 1U) != 0U) {
+        spacing_y -= radius / 5;
+    }
 
     for (index = 0U; index < count; ++index) {
         session->dials[index].active = 1;
@@ -200,7 +224,8 @@ static void mechanize_build_dial_assembly(screensave_saver_session *session)
         session->dials[index].y = spacing_y * (int)((index / columns) + 1U);
         session->dials[index].radius = radius;
         session->dials[index].angle = (unsigned int)mechanize_rng_range(&session->rng, 256UL);
-        session->dials[index].target_angle = (unsigned int)mechanize_rng_range(&session->rng, 256UL);
+        session->dials[index].target_angle =
+            (unsigned int)((mechanize_rng_range(&session->rng, 256UL) + session->layout_variant * 24U) & 255U);
     }
 
     for (index = 0U; index < count; ++index) {
@@ -258,6 +283,8 @@ static void mechanize_initialize_session(
     session->event_accumulator = 0UL;
     session->master_phase = 0U;
     session->event_pulse = 0U;
+    session->event_cycle = 0U;
+    session->layout_variant = (unsigned int)mechanize_rng_range(&session->rng, 3UL);
     session->counter_window = 0U;
     mechanize_configure_layout(session);
 }
@@ -460,6 +487,8 @@ void mechanize_resize_session(
     }
 
     session->drawable_size = environment->drawable_size;
+    session->preview_mode = environment->mode == SCREENSAVE_SESSION_MODE_PREVIEW;
+    session->theme = mechanize_resolve_theme(environment->config_binding);
     mechanize_configure_layout(session);
 }
 
@@ -483,9 +512,14 @@ void mechanize_step_session(
         mechanize_run_step(session);
     }
 
-    if (session->event_accumulator >= 2200UL) {
+    if (session->event_accumulator >= (session->preview_mode ? 2600UL : 2200UL)) {
         session->event_accumulator = 0UL;
         session->event_pulse = 18U;
+        session->event_cycle += 1U;
+        if ((session->event_cycle % 2U) == 0U) {
+            session->layout_variant = (session->layout_variant + 1U) % 3U;
+            mechanize_configure_layout(session);
+        }
         if (session->config.scene_mode == MECHANIZE_SCENE_DIAL_ASSEMBLY) {
             unsigned int index;
 
@@ -493,6 +527,12 @@ void mechanize_step_session(
                 if (session->dials[index].active) {
                     session->dials[index].target_angle = (unsigned int)mechanize_rng_range(&session->rng, 256UL);
                 }
+            }
+        } else if (session->config.scene_mode == MECHANIZE_SCENE_CAM_BANK) {
+            unsigned int index;
+
+            for (index = 0U; index < MECHANIZE_MAX_FOLLOWERS; ++index) {
+                session->follower_targets[index] = 10 + (int)mechanize_rng_range(&session->rng, 28UL);
             }
         }
     }

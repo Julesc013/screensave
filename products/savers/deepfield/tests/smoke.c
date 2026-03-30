@@ -30,5 +30,17 @@ int main(void)
         return 5;
     }
 
+    if (deepfield_find_preset_values("deep_midnight") == NULL) {
+        return 6;
+    }
+
+    if (deepfield_find_theme_descriptor("deep_midnight") == NULL) {
+        return 7;
+    }
+
+    if (module->config_hooks == NULL || module->config_hooks->randomize_settings == NULL) {
+        return 8;
+    }
+
     return 0;
 }

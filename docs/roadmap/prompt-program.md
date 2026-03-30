@@ -5,8 +5,8 @@ Earlier docs described an intended Series 00 through 17 program; that shorter en
 
 Implementation currently exists through `S15`.
 The older public endpoint that treated `S16` and `S17` as the whole remaining plan is superseded.
-Post-`S15` work now follows committed `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, and `C12` work plus later continuation prompts.
-C13 is the next planned implementation prompt after the cross-cutting polish baseline.
+Post-`S15` work now follows committed `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, the completed `C13` family-polish work, and the completed `C14` release-hardening pass.
+`C13` Wave A, Wave B, and Wave C are complete, and `C14` final rerelease hardening has closed the current continuation line with the release-candidate pass.
 
 ## Implemented Baseline
 
@@ -60,8 +60,13 @@ Do not schedule new continuation work under `S16` or `S17`.
 
 ## Continuation Rules
 
-- `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, and `C12` are complete.
-- `C13` is the next implementation prompt after the cross-cutting polish baseline.
+- `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, and `C14` are complete.
+- `C13` was the saver-polish phase rather than a single one-pass prompt.
+- `C13` Wave A is complete for `nocturne`, `ricochet`, `deepfield`, `plasma`, and `phosphor`.
+- `C13` Wave B is complete for `pipeworks`, `lifeforms`, `signals`, `mechanize`, and `ecosystems`.
+- `C13` Wave C is complete for `stormglass`, `transit`, `observatory`, `vector`, `explorer`, `city`, `atlas`, `gallery`, and `anthology`.
+- `C14` final rerelease hardening is complete and closes the current continuation line.
+- No further continuation prompt is scheduled on the current line.
 - Rename and renderer-taxonomy normalization land before any productization or suite/meta work.
 - All-saver `.scr` productization lands before suite/meta products, backlog ingestion, or polish waves.
 - Shared settings, presets, randomization, and pack architecture land before distribution work.

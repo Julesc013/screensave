@@ -15,7 +15,9 @@ REQUIRED_PATHS = [
     ROOT / "specs" / "release_contract.md",
     ROOT / "packaging" / "README.md",
     ROOT / "packaging" / "release_notes" / "README.md",
+    ROOT / "packaging" / "release_notes" / "release-candidate-notes.md",
     ROOT / "validation" / "README.md",
+    ROOT / "validation" / "notes" / "c14-release-readiness-matrix.md",
     ROOT / ".github" / "workflows" / "release.yml",
 ]
 
@@ -43,7 +45,7 @@ def build_report(version_label: str, track: str, missing: list[pathlib.Path], ch
             "## Current deferrals",
             "- This workflow does not build binaries.",
             "- This workflow does not publish releases.",
-            "- Packaging implementation remains deferred to later series.",
+            "- Portable and installer packaging are implemented, but output completeness still depends on locally available saver binaries.",
         ]
     )
 

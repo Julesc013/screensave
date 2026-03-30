@@ -47,6 +47,24 @@ const screensave_preset_descriptor g_mechanize_presets[] = {
         SCREENSAVE_DETAIL_LEVEL_LOW,
         0,
         0UL
+    },
+    {
+        "copper_counterworks",
+        "Copper Counterworks",
+        "Copper-toned counter assembly with slower exhibit pacing and cleaner event moments.",
+        "copper_foundry",
+        SCREENSAVE_DETAIL_LEVEL_STANDARD,
+        1,
+        0x00000C44UL
+    },
+    {
+        "ivory_gallery",
+        "Ivory Gallery",
+        "Ivory exhibit assembly tuned for patient museum-like mechanical motion.",
+        "ivory_gallery",
+        SCREENSAVE_DETAIL_LEVEL_LOW,
+        1,
+        0x00000C45UL
     }
 };
 
@@ -55,6 +73,8 @@ static const mechanize_preset_values g_mechanize_preset_values[] = {
     { MECHANIZE_SCENE_CAM_BANK, MECHANIZE_SPEED_STANDARD, MECHANIZE_DENSITY_DENSE },
     { MECHANIZE_SCENE_DIAL_ASSEMBLY, MECHANIZE_SPEED_PATIENT, MECHANIZE_DENSITY_STANDARD },
     { MECHANIZE_SCENE_GEAR_TRAIN, MECHANIZE_SPEED_BRISK, MECHANIZE_DENSITY_DENSE },
+    { MECHANIZE_SCENE_DIAL_ASSEMBLY, MECHANIZE_SPEED_PATIENT, MECHANIZE_DENSITY_SPARSE },
+    { MECHANIZE_SCENE_CAM_BANK, MECHANIZE_SPEED_STANDARD, MECHANIZE_DENSITY_STANDARD },
     { MECHANIZE_SCENE_DIAL_ASSEMBLY, MECHANIZE_SPEED_PATIENT, MECHANIZE_DENSITY_SPARSE }
 };
 

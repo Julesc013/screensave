@@ -10,8 +10,8 @@
 #define EXPLORER_PRODUCT_REGISTRY_ROOTA "Software\\Julesc013\\ScreenSave\\Products\\explorer"
 #define EXPLORER_DEFAULT_PRESET_KEY "quiet_night_run"
 #define EXPLORER_DEFAULT_THEME_KEY "quiet_night_run"
-#define EXPLORER_PRESET_COUNT 5U
-#define EXPLORER_THEME_COUNT 5U
+#define EXPLORER_PRESET_COUNT 7U
+#define EXPLORER_THEME_COUNT 7U
 #define EXPLORER_MAX_SEGMENTS 16U
 
 typedef enum explorer_scene_mode_tag {
@@ -109,6 +109,34 @@ INT_PTR explorer_config_show_dialog(
     screensave_common_config *common_config,
     void *product_config,
     unsigned int product_config_size,
+    screensave_diag_context *diagnostics
+);
+int explorer_config_export_settings_entries(
+    const screensave_saver_module *module,
+    const screensave_common_config *common_config,
+    const void *product_config,
+    unsigned int product_config_size,
+    screensave_settings_file_kind kind,
+    screensave_settings_writer *writer,
+    screensave_diag_context *diagnostics
+);
+int explorer_config_import_settings_entry(
+    const screensave_saver_module *module,
+    screensave_common_config *common_config,
+    void *product_config,
+    unsigned int product_config_size,
+    screensave_settings_file_kind kind,
+    const char *section,
+    const char *key,
+    const char *value,
+    screensave_diag_context *diagnostics
+);
+void explorer_config_randomize_settings(
+    const screensave_saver_module *module,
+    screensave_common_config *common_config,
+    void *product_config,
+    unsigned int product_config_size,
+    const screensave_session_seed *seed,
     screensave_diag_context *diagnostics
 );
 

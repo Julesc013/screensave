@@ -651,7 +651,7 @@ static void lifeforms_initialize_dialog(HWND dialog, lifeforms_dialog_state *dia
     info[0] = '\0';
     lstrcpyA(info, "Lifeforms\r\n");
     lstrcatA(info, version_info->version_text);
-    lstrcatA(info, "\r\nCurated cellular automata with restrained reseed discipline and age coloring.");
+    lstrcatA(info, "\r\nCurated cellular automata with calmer preview pacing, staged reseeds, and clearer garden-versus-laboratory studies.");
     SetDlgItemTextA(dialog, IDC_LIFEFORMS_INFO, info);
 
     lifeforms_apply_settings_to_dialog(
@@ -775,4 +775,211 @@ INT_PTR lifeforms_config_show_dialog(
     }
 
     return result;
+}
+
+static int lifeforms_parse_rule_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "conway") == 0) {
+        *value_out = LIFEFORMS_RULE_CONWAY;
+        return 1;
+    }
+    if (lstrcmpiA(text, "highlife") == 0) {
+        *value_out = LIFEFORMS_RULE_HIGHLIFE;
+        return 1;
+    }
+    return 0;
+}
+
+static int lifeforms_parse_density_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "sparse") == 0) {
+        *value_out = LIFEFORMS_DENSITY_SPARSE;
+        return 1;
+    }
+    if (lstrcmpiA(text, "standard") == 0) {
+        *value_out = LIFEFORMS_DENSITY_STANDARD;
+        return 1;
+    }
+    if (lstrcmpiA(text, "dense") == 0) {
+        *value_out = LIFEFORMS_DENSITY_DENSE;
+        return 1;
+    }
+    return 0;
+}
+
+static int lifeforms_parse_seed_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "sparse") == 0) {
+        *value_out = LIFEFORMS_SEED_SPARSE;
+        return 1;
+    }
+    if (lstrcmpiA(text, "balanced") == 0) {
+        *value_out = LIFEFORMS_SEED_BALANCED;
+        return 1;
+    }
+    if (lstrcmpiA(text, "bloom") == 0) {
+        *value_out = LIFEFORMS_SEED_BLOOM;
+        return 1;
+    }
+    return 0;
+}
+
+static int lifeforms_parse_reseed_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "patient") == 0) {
+        *value_out = LIFEFORMS_RESEED_PATIENT;
+        return 1;
+    }
+    if (lstrcmpiA(text, "standard") == 0) {
+        *value_out = LIFEFORMS_RESEED_STANDARD;
+        return 1;
+    }
+    if (lstrcmpiA(text, "alert") == 0) {
+        *value_out = LIFEFORMS_RESEED_ALERT;
+        return 1;
+    }
+    return 0;
+}
+
+int lifeforms_config_export_settings_entries(
+    const screensave_saver_module *module,
+    const screensave_common_config *common_config,
+    const void *product_config,
+    unsigned int product_config_size,
+    screensave_settings_file_kind kind,
+    screensave_settings_writer *writer,
+    screensave_diag_context *diagnostics
+)
+{
+    const lifeforms_config *config;
+
+    (void)module;
+    (void)common_config;
+    (void)diagnostics;
+
+    config = lifeforms_as_const_config(product_config, product_config_size);
+    if (kind != SCREENSAVE_SETTINGS_FILE_PRESET) {
+        return 1;
+    }
+    if (config == NULL || writer == NULL || writer->write_string == NULL) {
+        return 0;
+    }
+
+    return writer->write_string(writer->context, "product", "rule", lifeforms_rule_mode_name(config->rule_mode)) &&
+        writer->write_string(writer->context, "product", "density", lifeforms_density_mode_name(config->density_mode)) &&
+        writer->write_string(writer->context, "product", "seed", lifeforms_seed_mode_name(config->seed_mode)) &&
+        writer->write_string(writer->context, "product", "reseed", lifeforms_reseed_mode_name(config->reseed_mode));
+}
+
+int lifeforms_config_import_settings_entry(
+    const screensave_saver_module *module,
+    screensave_common_config *common_config,
+    void *product_config,
+    unsigned int product_config_size,
+    screensave_settings_file_kind kind,
+    const char *section,
+    const char *key,
+    const char *value,
+    screensave_diag_context *diagnostics
+)
+{
+    lifeforms_config *config;
+
+    (void)module;
+    (void)common_config;
+    (void)diagnostics;
+
+    config = lifeforms_as_config(product_config, product_config_size);
+    if (kind != SCREENSAVE_SETTINGS_FILE_PRESET) {
+        return 1;
+    }
+    if (config == NULL || section == NULL || key == NULL || value == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(section, "product") != 0) {
+        return 1;
+    }
+    if (lstrcmpiA(key, "rule") == 0 || lstrcmpiA(key, "rule_mode") == 0) {
+        return lifeforms_parse_rule_mode(value, &config->rule_mode);
+    }
+    if (lstrcmpiA(key, "density") == 0 || lstrcmpiA(key, "density_mode") == 0) {
+        return lifeforms_parse_density_mode(value, &config->density_mode);
+    }
+    if (lstrcmpiA(key, "seed") == 0 || lstrcmpiA(key, "seed_mode") == 0) {
+        return lifeforms_parse_seed_mode(value, &config->seed_mode);
+    }
+    if (lstrcmpiA(key, "reseed") == 0 || lstrcmpiA(key, "reseed_mode") == 0) {
+        return lifeforms_parse_reseed_mode(value, &config->reseed_mode);
+    }
+
+    return 1;
+}
+
+void lifeforms_config_randomize_settings(
+    const screensave_saver_module *module,
+    screensave_common_config *common_config,
+    void *product_config,
+    unsigned int product_config_size,
+    const screensave_session_seed *seed,
+    screensave_diag_context *diagnostics
+)
+{
+    lifeforms_config *config;
+    lifeforms_rng_state rng;
+    unsigned long random_seed;
+    unsigned long roll;
+
+    (void)module;
+    (void)common_config;
+    (void)diagnostics;
+
+    config = lifeforms_as_config(product_config, product_config_size);
+    if (config == NULL) {
+        return;
+    }
+
+    random_seed = seed != NULL ? seed->stream_seed : 0x4C465742UL;
+    lifeforms_rng_seed(&rng, random_seed ^ 0x4C465742UL);
+
+    roll = lifeforms_rng_range(&rng, 100UL);
+    config->rule_mode = roll < 74UL ? LIFEFORMS_RULE_CONWAY : LIFEFORMS_RULE_HIGHLIFE;
+
+    roll = lifeforms_rng_range(&rng, 100UL);
+    if (roll < 28UL) {
+        config->density_mode = LIFEFORMS_DENSITY_SPARSE;
+    } else if (roll < 72UL) {
+        config->density_mode = LIFEFORMS_DENSITY_STANDARD;
+    } else {
+        config->density_mode = LIFEFORMS_DENSITY_DENSE;
+    }
+
+    roll = lifeforms_rng_range(&rng, 100UL);
+    if (roll < 24UL) {
+        config->seed_mode = LIFEFORMS_SEED_SPARSE;
+    } else if (roll < 66UL) {
+        config->seed_mode = LIFEFORMS_SEED_BALANCED;
+    } else {
+        config->seed_mode = LIFEFORMS_SEED_BLOOM;
+    }
+
+    roll = lifeforms_rng_range(&rng, 100UL);
+    if (roll < 32UL) {
+        config->reseed_mode = LIFEFORMS_RESEED_PATIENT;
+    } else if (roll < 80UL) {
+        config->reseed_mode = LIFEFORMS_RESEED_STANDARD;
+    } else {
+        config->reseed_mode = LIFEFORMS_RESEED_ALERT;
+    }
 }

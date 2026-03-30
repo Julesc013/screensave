@@ -11,8 +11,8 @@
 #define LIFEFORMS_PRODUCT_REGISTRY_ROOTA "Software\\Julesc013\\ScreenSave\\Products\\lifeforms"
 #define LIFEFORMS_DEFAULT_PRESET_KEY "classic_life"
 #define LIFEFORMS_DEFAULT_THEME_KEY "classic_mono"
-#define LIFEFORMS_PRESET_COUNT 5U
-#define LIFEFORMS_THEME_COUNT 5U
+#define LIFEFORMS_PRESET_COUNT 7U
+#define LIFEFORMS_THEME_COUNT 7U
 
 typedef enum lifeforms_rule_mode_tag {
     LIFEFORMS_RULE_CONWAY = 0,
@@ -76,6 +76,7 @@ struct screensave_saver_session_tag {
     unsigned long step_accumulator;
     unsigned int stagnant_ticks;
     unsigned int low_activity_ticks;
+    unsigned int reseed_count;
     unsigned long recent_checksums[4];
     unsigned int recent_populations[4];
     unsigned int history_count;
@@ -120,6 +121,34 @@ INT_PTR lifeforms_config_show_dialog(
     screensave_common_config *common_config,
     void *product_config,
     unsigned int product_config_size,
+    screensave_diag_context *diagnostics
+);
+int lifeforms_config_export_settings_entries(
+    const screensave_saver_module *module,
+    const screensave_common_config *common_config,
+    const void *product_config,
+    unsigned int product_config_size,
+    screensave_settings_file_kind kind,
+    screensave_settings_writer *writer,
+    screensave_diag_context *diagnostics
+);
+int lifeforms_config_import_settings_entry(
+    const screensave_saver_module *module,
+    screensave_common_config *common_config,
+    void *product_config,
+    unsigned int product_config_size,
+    screensave_settings_file_kind kind,
+    const char *section,
+    const char *key,
+    const char *value,
+    screensave_diag_context *diagnostics
+);
+void lifeforms_config_randomize_settings(
+    const screensave_saver_module *module,
+    screensave_common_config *common_config,
+    void *product_config,
+    unsigned int product_config_size,
+    const screensave_session_seed *seed,
     screensave_diag_context *diagnostics
 );
 

@@ -5,9 +5,9 @@ Pipeworks is the grid-and-growth product in the Grid and Simulation Family.
 It provides:
 
 - a readable grid-based network growth model with branching, turning, fill, flow, and rebuild phases
-- restrained pulse travel and staged clearing so long runs stay alive without turning into noise
+- curated pulse travel, staged clearing, and rebuild variation so long runs stay alive without turning into noise
 - modest density, growth, branch, and rebuild controls instead of a broad procedural editor
-- curated industrial, circuit, workstation, phosphor, and quiet-night presets and themes
+- curated industrial, circuit, workstation, amber-backplane, blueprint, phosphor, and quiet-night presets and themes
 - preview-safe and long-run-stable behavior through the shared saver and renderer contracts
 
 Pipeworks stays intentionally bounded.

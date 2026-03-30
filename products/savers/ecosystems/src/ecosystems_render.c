@@ -35,6 +35,14 @@ static screensave_color ecosystems_background_color(const screensave_saver_sessi
         color.red = 42;
         color.green = 54;
         color.blue = 68;
+    } else if (lstrcmpiA(session->theme->theme_key, "reef_current") == 0) {
+        color.red = 6;
+        color.green = 26;
+        color.blue = 30;
+    } else if (lstrcmpiA(session->theme->theme_key, "night_marsh") == 0) {
+        color.red = 10;
+        color.green = 18;
+        color.blue = 12;
     } else if (lstrcmpiA(session->theme->theme_key, "dusk_fireflies") == 0) {
         color.red = 26;
         color.green = 18;

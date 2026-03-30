@@ -16,6 +16,14 @@ static screensave_color signals_background_color(const screensave_saver_session 
         color.red = 18;
         color.green = 10;
         color.blue = 4;
+    } else if (lstrcmpiA(session->theme->theme_key, "telemetry_wall") == 0) {
+        color.red = 4;
+        color.green = 12;
+        color.blue = 26;
+    } else if (lstrcmpiA(session->theme->theme_key, "night_watch_console") == 0) {
+        color.red = 8;
+        color.green = 12;
+        color.blue = 20;
     } else if (lstrcmpiA(session->theme->theme_key, "blue_lab") == 0) {
         color.red = 4;
         color.green = 10;

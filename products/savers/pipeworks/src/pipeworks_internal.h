@@ -11,8 +11,8 @@
 #define PIPEWORKS_PRODUCT_REGISTRY_ROOTA "Software\\Julesc013\\ScreenSave\\Products\\pipeworks"
 #define PIPEWORKS_DEFAULT_PRESET_KEY "industrial_pipes"
 #define PIPEWORKS_DEFAULT_THEME_KEY "industrial_pipes"
-#define PIPEWORKS_PRESET_COUNT 5U
-#define PIPEWORKS_THEME_COUNT 5U
+#define PIPEWORKS_PRESET_COUNT 7U
+#define PIPEWORKS_THEME_COUNT 7U
 #define PIPEWORKS_MAX_HEADS 40U
 #define PIPEWORKS_MAX_PULSES 20U
 
@@ -102,6 +102,8 @@ struct screensave_saver_session_tag {
     unsigned int occupied_cells;
     unsigned long stage_millis;
     unsigned long step_accumulator;
+    unsigned long pulse_spawn_accumulator;
+    unsigned long rebuild_count;
     unsigned int clear_scan_start;
     unsigned int clear_stall_ticks;
     int stage;
@@ -149,6 +151,34 @@ INT_PTR pipeworks_config_show_dialog(
     screensave_common_config *common_config,
     void *product_config,
     unsigned int product_config_size,
+    screensave_diag_context *diagnostics
+);
+int pipeworks_config_export_settings_entries(
+    const screensave_saver_module *module,
+    const screensave_common_config *common_config,
+    const void *product_config,
+    unsigned int product_config_size,
+    screensave_settings_file_kind kind,
+    screensave_settings_writer *writer,
+    screensave_diag_context *diagnostics
+);
+int pipeworks_config_import_settings_entry(
+    const screensave_saver_module *module,
+    screensave_common_config *common_config,
+    void *product_config,
+    unsigned int product_config_size,
+    screensave_settings_file_kind kind,
+    const char *section,
+    const char *key,
+    const char *value,
+    screensave_diag_context *diagnostics
+);
+void pipeworks_config_randomize_settings(
+    const screensave_saver_module *module,
+    screensave_common_config *common_config,
+    void *product_config,
+    unsigned int product_config_size,
+    const screensave_session_seed *seed,
     screensave_diag_context *diagnostics
 );
 

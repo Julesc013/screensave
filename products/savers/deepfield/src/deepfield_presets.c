@@ -56,6 +56,24 @@ const screensave_preset_descriptor g_deepfield_presets[] = {
         SCREENSAVE_DETAIL_LEVEL_LOW,
         1,
         0x00000944UL
+    },
+    {
+        "deep_midnight",
+        "Deep Midnight",
+        "Rich deep-blue observatory drift with a slower camera arc and soft twinkle pulses.",
+        "deep_midnight",
+        SCREENSAVE_DETAIL_LEVEL_STANDARD,
+        1,
+        0x00000945UL
+    },
+    {
+        "observatory_cruise",
+        "Observatory Cruise",
+        "Calmer fly-through travel with lower density and gentler depth pacing.",
+        "quiet_observatory",
+        SCREENSAVE_DETAIL_LEVEL_STANDARD,
+        1,
+        0x00000946UL
     }
 };
 
@@ -65,7 +83,9 @@ static const deepfield_preset_values g_deepfield_preset_values[] = {
     { DEEPFIELD_SCENE_PARALLAX, DEEPFIELD_DENSITY_RICH, DEEPFIELD_SPEED_CALM, DEEPFIELD_CAMERA_DRIFT, DEEPFIELD_PULSE_SOFT },
     { DEEPFIELD_SCENE_FLYTHROUGH, DEEPFIELD_DENSITY_STANDARD, DEEPFIELD_SPEED_CALM, DEEPFIELD_CAMERA_OBSERVE, DEEPFIELD_PULSE_SOFT },
     { DEEPFIELD_SCENE_PARALLAX, DEEPFIELD_DENSITY_SPARSE, DEEPFIELD_SPEED_CALM, DEEPFIELD_CAMERA_OBSERVE, DEEPFIELD_PULSE_NONE },
-    { DEEPFIELD_SCENE_PARALLAX, DEEPFIELD_DENSITY_SPARSE, DEEPFIELD_SPEED_CALM, DEEPFIELD_CAMERA_DRIFT, DEEPFIELD_PULSE_NONE }
+    { DEEPFIELD_SCENE_PARALLAX, DEEPFIELD_DENSITY_SPARSE, DEEPFIELD_SPEED_CALM, DEEPFIELD_CAMERA_DRIFT, DEEPFIELD_PULSE_NONE },
+    { DEEPFIELD_SCENE_PARALLAX, DEEPFIELD_DENSITY_RICH, DEEPFIELD_SPEED_CALM, DEEPFIELD_CAMERA_ARC, DEEPFIELD_PULSE_SOFT },
+    { DEEPFIELD_SCENE_FLYTHROUGH, DEEPFIELD_DENSITY_SPARSE, DEEPFIELD_SPEED_CALM, DEEPFIELD_CAMERA_DRIFT, DEEPFIELD_PULSE_SOFT }
 };
 
 const screensave_preset_descriptor *deepfield_get_presets(unsigned int *count_out)

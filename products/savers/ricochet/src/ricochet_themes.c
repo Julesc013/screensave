@@ -23,6 +23,13 @@ const screensave_theme_descriptor g_ricochet_themes[] = {
         { 56, 108, 168, 255 }
     },
     {
+        "amber_arc",
+        "Amber Arc",
+        "Warm amber motion with a darker laboratory floor and bright arc highlights.",
+        { 212, 156, 84, 255 },
+        { 255, 220, 136, 255 }
+    },
+    {
         "minimal_slate",
         "Minimal Slate",
         "Low-contrast neutral presentation for lobby or office use.",

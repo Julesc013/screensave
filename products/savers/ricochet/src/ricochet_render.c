@@ -1,4 +1,5 @@
 #include "ricochet_internal.h"
+#include "screensave/visual_buffer_api.h"
 
 #define RICOCHET_FIXED_ONE 256L
 
@@ -170,15 +171,15 @@ static void ricochet_render_trails(
         }
 
         index = (body->trail_head + body->trail_count - age - 1U) % body->trail_count;
-        scale = 168U;
+        scale = 144U;
         if (trail_limit > 1) {
-            scale = 40U + (((unsigned int)(trail_limit - age) * 128U) / (unsigned int)trail_limit);
+            scale = 28U + (((unsigned int)(trail_limit - age) * 164U) / (unsigned int)trail_limit);
         }
         if (session->config.trail_mode == RICOCHET_TRAIL_PHOSPHOR) {
-            scale += 32U;
+            scale += 24U;
         }
-        if (scale > 220U) {
-            scale = 220U;
+        if (scale > 232U) {
+            scale = 232U;
         }
 
         fill_color = ricochet_scale_color(session->theme->primary_color, scale);
@@ -195,6 +196,66 @@ static void ricochet_render_trails(
             outline_color
         );
     }
+}
+
+static void ricochet_render_corner_celebration(
+    screensave_saver_session *session,
+    screensave_renderer *renderer,
+    screensave_color accent_color
+)
+{
+    screensave_pointi start_point;
+    screensave_pointi end_point;
+    int inset;
+    int arm;
+
+    if (
+        session == NULL ||
+        renderer == NULL ||
+        session->celebration_timer <= 0 ||
+        session->preview_mode
+    ) {
+        return;
+    }
+
+    inset = 10;
+    arm = 16;
+
+    start_point.x = inset;
+    start_point.y = inset + arm;
+    end_point.x = inset;
+    end_point.y = inset;
+    screensave_renderer_draw_line(renderer, &start_point, &end_point, accent_color);
+    end_point.x = inset + arm;
+    end_point.y = inset;
+    screensave_renderer_draw_line(renderer, &start_point, &end_point, accent_color);
+
+    start_point.x = session->drawable_size.width - inset - 1;
+    start_point.y = inset + arm;
+    end_point.x = session->drawable_size.width - inset - 1;
+    end_point.y = inset;
+    screensave_renderer_draw_line(renderer, &start_point, &end_point, accent_color);
+    end_point.x = session->drawable_size.width - inset - arm - 1;
+    end_point.y = inset;
+    screensave_renderer_draw_line(renderer, &start_point, &end_point, accent_color);
+
+    start_point.x = inset;
+    start_point.y = session->drawable_size.height - inset - arm - 1;
+    end_point.x = inset;
+    end_point.y = session->drawable_size.height - inset - 1;
+    screensave_renderer_draw_line(renderer, &start_point, &end_point, accent_color);
+    end_point.x = inset + arm;
+    end_point.y = session->drawable_size.height - inset - 1;
+    screensave_renderer_draw_line(renderer, &start_point, &end_point, accent_color);
+
+    start_point.x = session->drawable_size.width - inset - 1;
+    start_point.y = session->drawable_size.height - inset - arm - 1;
+    end_point.x = session->drawable_size.width - inset - 1;
+    end_point.y = session->drawable_size.height - inset - 1;
+    screensave_renderer_draw_line(renderer, &start_point, &end_point, accent_color);
+    end_point.x = session->drawable_size.width - inset - arm - 1;
+    end_point.y = session->drawable_size.height - inset - 1;
+    screensave_renderer_draw_line(renderer, &start_point, &end_point, accent_color);
 }
 
 void ricochet_render_session(
@@ -235,6 +296,14 @@ void ricochet_render_session(
         center_x = ricochet_fixed_to_int(session->bodies[index].x);
         center_y = ricochet_fixed_to_int(session->bodies[index].y);
 
+        if (session->bodies[index].flash_timer > 0) {
+            fill_color = screensave_color_lerp(session->theme->primary_color, outline_color, 92U);
+            outline_color = screensave_color_lerp(session->theme->accent_color, fill_color, 128U);
+        } else {
+            fill_color = session->theme->primary_color;
+            outline_color = session->theme->accent_color;
+        }
+
         if (!session->preview_mode) {
             ricochet_draw_shape(
                 session,
@@ -267,8 +336,13 @@ void ricochet_render_session(
             screensave_renderer_draw_frame_rect(
                 environment->renderer,
                 &frame_rect,
-                ricochet_scale_color(outline_color, 180U)
+                ricochet_scale_color(session->theme->accent_color, 104U)
             );
         }
+        ricochet_render_corner_celebration(
+            session,
+            environment->renderer,
+            ricochet_scale_color(session->theme->accent_color, 188U)
+        );
     }
 }

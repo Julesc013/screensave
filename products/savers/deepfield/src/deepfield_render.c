@@ -10,6 +10,25 @@ static screensave_color deepfield_scale_color(screensave_color color, unsigned i
     return color;
 }
 
+static unsigned int deepfield_twinkle_scale(
+    const screensave_saver_session *session,
+    const deepfield_star *star
+)
+{
+    unsigned int twinkle_scale;
+
+    (void)session;
+    if (star == NULL) {
+        return 0U;
+    }
+
+    twinkle_scale = 24U + ((unsigned int)(star->twinkle & 63U) * 2U);
+    if (twinkle_scale > 124U) {
+        twinkle_scale = 124U;
+    }
+    return twinkle_scale;
+}
+
 static void deepfield_camera_offset(
     const screensave_saver_session *session,
     int *offset_x,
@@ -85,6 +104,7 @@ static void deepfield_render_parallax(
         }
 
         scale = 88U + ((unsigned int)star->layer * 48U) + (unsigned int)(star->twinkle & 31U);
+        scale += deepfield_twinkle_scale(session, star);
         if (session->pulse_remaining_millis > 0UL) {
             scale += session->config.pulse_mode == DEEPFIELD_PULSE_WARP ? 48U : 20U;
         }
@@ -101,6 +121,30 @@ static void deepfield_render_parallax(
             size = 2;
         }
         deepfield_render_star_point(environment->renderer, x, y, size, color);
+
+        if (!session->preview_mode && star->layer >= 3U && (star->twinkle & 96U) >= 64U) {
+            start_point.x = x - 2;
+            start_point.y = y;
+            end_point.x = x + 2;
+            end_point.y = y;
+            screensave_renderer_draw_line(
+                environment->renderer,
+                &start_point,
+                &end_point,
+                deepfield_scale_color(session->theme->accent_color, 96U)
+            );
+
+            start_point.x = x;
+            start_point.y = y - 2;
+            end_point.x = x;
+            end_point.y = y + 2;
+            screensave_renderer_draw_line(
+                environment->renderer,
+                &start_point,
+                &end_point,
+                deepfield_scale_color(session->theme->accent_color, 96U)
+            );
+        }
 
         if (
             session->pulse_remaining_millis > 0UL &&
@@ -176,6 +220,7 @@ static void deepfield_render_flythrough(
         }
 
         scale = 72U + (unsigned int)((720L - (star->z > 720L ? 720L : star->z)) / 4L);
+        scale += deepfield_twinkle_scale(session, star);
         if (session->pulse_remaining_millis > 0UL) {
             scale += session->config.pulse_mode == DEEPFIELD_PULSE_WARP ? 52U : 20U;
         }
@@ -187,9 +232,9 @@ static void deepfield_render_flythrough(
         deepfield_render_star_point(environment->renderer, screen_x, screen_y, size, color);
 
         if (
-            session->pulse_remaining_millis > 0UL &&
             session->detail_level != SCREENSAVE_DETAIL_LEVEL_LOW &&
-            star->z < 220L
+            star->z < 220L &&
+            (session->pulse_remaining_millis > 0UL || (!session->preview_mode && star->z < 144L))
         ) {
             start_point.x = screen_x - ((screen_x - center_x) / 10);
             start_point.y = screen_y - ((screen_y - center_y) / 10);

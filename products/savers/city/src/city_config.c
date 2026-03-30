@@ -677,3 +677,162 @@ INT_PTR city_config_show_dialog(
 
     return result;
 }
+
+static int city_parse_scene_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "skyline") == 0) {
+        *value_out = CITY_SCENE_SKYLINE;
+        return 1;
+    }
+    if (lstrcmpiA(text, "harbor") == 0 || lstrcmpiA(text, "harbor_edge") == 0) {
+        *value_out = CITY_SCENE_HARBOR;
+        return 1;
+    }
+    if (lstrcmpiA(text, "window_river") == 0 || lstrcmpiA(text, "rooftop") == 0) {
+        *value_out = CITY_SCENE_WINDOW_RIVER;
+        return 1;
+    }
+    return 0;
+}
+
+static int city_parse_speed_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "still") == 0) {
+        *value_out = CITY_SPEED_STILL;
+        return 1;
+    }
+    if (lstrcmpiA(text, "standard") == 0) {
+        *value_out = CITY_SPEED_STANDARD;
+        return 1;
+    }
+    if (lstrcmpiA(text, "brisk") == 0) {
+        *value_out = CITY_SPEED_BRISK;
+        return 1;
+    }
+    return 0;
+}
+
+static int city_parse_density_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "sparse") == 0) {
+        *value_out = CITY_DENSITY_SPARSE;
+        return 1;
+    }
+    if (lstrcmpiA(text, "standard") == 0) {
+        *value_out = CITY_DENSITY_STANDARD;
+        return 1;
+    }
+    if (lstrcmpiA(text, "dense") == 0) {
+        *value_out = CITY_DENSITY_DENSE;
+        return 1;
+    }
+    return 0;
+}
+
+int city_config_export_settings_entries(
+    const screensave_saver_module *module,
+    const screensave_common_config *common_config,
+    const void *product_config,
+    unsigned int product_config_size,
+    screensave_settings_file_kind kind,
+    screensave_settings_writer *writer,
+    screensave_diag_context *diagnostics
+)
+{
+    const city_config *config;
+
+    (void)module;
+    (void)common_config;
+    (void)diagnostics;
+
+    config = city_as_const_config(product_config, product_config_size);
+    if (kind != SCREENSAVE_SETTINGS_FILE_PRESET) {
+        return 1;
+    }
+    if (config == NULL || writer == NULL || writer->write_string == NULL) {
+        return 0;
+    }
+
+    return writer->write_string(writer->context, "product", "scene", city_scene_mode_name(config->scene_mode)) &&
+        writer->write_string(writer->context, "product", "speed", city_speed_mode_name(config->speed_mode)) &&
+        writer->write_string(writer->context, "product", "density", city_density_mode_name(config->density_mode));
+}
+
+int city_config_import_settings_entry(
+    const screensave_saver_module *module,
+    screensave_common_config *common_config,
+    void *product_config,
+    unsigned int product_config_size,
+    screensave_settings_file_kind kind,
+    const char *section,
+    const char *key,
+    const char *value,
+    screensave_diag_context *diagnostics
+)
+{
+    city_config *config;
+
+    (void)module;
+    (void)common_config;
+    (void)diagnostics;
+
+    config = city_as_config(product_config, product_config_size);
+    if (kind != SCREENSAVE_SETTINGS_FILE_PRESET) {
+        return 1;
+    }
+    if (config == NULL || section == NULL || key == NULL || value == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(section, "product") != 0) {
+        return 1;
+    }
+    if (lstrcmpiA(key, "scene") == 0 || lstrcmpiA(key, "scene_mode") == 0) {
+        return city_parse_scene_mode(value, &config->scene_mode);
+    }
+    if (lstrcmpiA(key, "speed") == 0 || lstrcmpiA(key, "speed_mode") == 0) {
+        return city_parse_speed_mode(value, &config->speed_mode);
+    }
+    if (lstrcmpiA(key, "density") == 0 || lstrcmpiA(key, "density_mode") == 0) {
+        return city_parse_density_mode(value, &config->density_mode);
+    }
+
+    return 1;
+}
+
+void city_config_randomize_settings(
+    const screensave_saver_module *module,
+    screensave_common_config *common_config,
+    void *product_config,
+    unsigned int product_config_size,
+    const screensave_session_seed *seed,
+    screensave_diag_context *diagnostics
+)
+{
+    city_config *config;
+    city_rng_state rng;
+    unsigned long random_seed;
+
+    (void)module;
+    (void)common_config;
+    (void)diagnostics;
+
+    config = city_as_config(product_config, product_config_size);
+    if (config == NULL) {
+        return;
+    }
+
+    random_seed = seed != NULL ? seed->stream_seed : 0x43697479UL;
+    city_rng_seed(&rng, random_seed ^ 0x43697479UL);
+    config->scene_mode = (int)city_rng_range(&rng, 3UL);
+    config->speed_mode = (int)city_rng_range(&rng, 3UL);
+    config->density_mode = (int)city_rng_range(&rng, 3UL);
+}

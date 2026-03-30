@@ -24,9 +24,9 @@ static const screensave_saver_config_hooks g_lifeforms_config_hooks = {
     lifeforms_config_save,
     lifeforms_config_show_dialog,
     lifeforms_apply_shared_preset,
-    NULL,
-    NULL,
-    NULL,
+    lifeforms_config_export_settings_entries,
+    lifeforms_config_import_settings_entry,
+    lifeforms_config_randomize_settings,
     SCREENSAVE_CONFIG_SCHEMA_VERSION,
     SCREENSAVE_SETTINGS_CAP_PRESET_FILES |
         SCREENSAVE_SETTINGS_CAP_THEME_FILES |
@@ -46,7 +46,7 @@ static const screensave_saver_module g_lifeforms_module = {
     {
         "lifeforms",
         "Lifeforms",
-        "Contemplative cellular automata saver with curated rules, reseed discipline, and age-tinted population studies."
+        "Contemplative cellular automata saver with curated rules, reseed choreography, and age-tinted population studies."
     },
     SCREENSAVE_SAVER_CAP_GDI | SCREENSAVE_SAVER_CAP_GL11 | SCREENSAVE_SAVER_CAP_LONG_RUN_STABLE,
     g_lifeforms_presets,

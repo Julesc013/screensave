@@ -15,6 +15,11 @@ Series 06 makes Nocturne real:
 
 Series 08 keeps Nocturne renderer-agnostic while validating the same product through both the mandatory GDI backend and the optional GL11 backend.
 Series 09 keeps Nocturne as a first-class built-in saver while the host and BenchLab add narrow selection support for Nocturne, Ricochet, and Deepfield.
+Continuation `C13` deepens Nocturne without changing its role:
+
+- calmer but more obviously alive long-run motion through dim secondary ghosting and bounded steady-stage refresh
+- stronger near-black theme coverage through `Phosphor Night` and `Museum Amber`
+- more intentional dark-room preset curation without turning Nocturne into a flashy ambient product
 
 Nocturne stays intentionally narrow. It is a dark blanker-plus saver, not a general ambient effects engine.
 Type: product runtime space.

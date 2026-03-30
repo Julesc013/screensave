@@ -10,8 +10,8 @@
 #define GALLERY_PRODUCT_REGISTRY_ROOTA "Software\\Julesc013\\ScreenSave\\Products\\gallery"
 #define GALLERY_DEFAULT_PRESET_KEY "compatibility_gallery"
 #define GALLERY_DEFAULT_THEME_KEY "compatibility_gallery"
-#define GALLERY_PRESET_COUNT 6U
-#define GALLERY_THEME_COUNT 6U
+#define GALLERY_PRESET_COUNT 8U
+#define GALLERY_THEME_COUNT 8U
 
 typedef enum gallery_scene_mode_tag {
     GALLERY_SCENE_COMPATIBILITY = 0,
@@ -103,6 +103,34 @@ INT_PTR gallery_config_show_dialog(
     screensave_common_config *common_config,
     void *product_config,
     unsigned int product_config_size,
+    screensave_diag_context *diagnostics
+);
+int gallery_config_export_settings_entries(
+    const screensave_saver_module *module,
+    const screensave_common_config *common_config,
+    const void *product_config,
+    unsigned int product_config_size,
+    screensave_settings_file_kind kind,
+    screensave_settings_writer *writer,
+    screensave_diag_context *diagnostics
+);
+int gallery_config_import_settings_entry(
+    const screensave_saver_module *module,
+    screensave_common_config *common_config,
+    void *product_config,
+    unsigned int product_config_size,
+    screensave_settings_file_kind kind,
+    const char *section,
+    const char *key,
+    const char *value,
+    screensave_diag_context *diagnostics
+);
+void gallery_config_randomize_settings(
+    const screensave_saver_module *module,
+    screensave_common_config *common_config,
+    void *product_config,
+    unsigned int product_config_size,
+    const screensave_session_seed *seed,
     screensave_diag_context *diagnostics
 );
 

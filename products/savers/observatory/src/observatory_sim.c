@@ -37,6 +37,34 @@ static unsigned long observatory_step_interval(const screensave_saver_session *s
     }
 }
 
+static unsigned long observatory_event_interval(const screensave_saver_session *session)
+{
+    unsigned long interval;
+
+    if (session == NULL) {
+        return 3600UL;
+    }
+
+    switch (session->config.speed_mode) {
+    case OBSERVATORY_SPEED_STILL:
+        interval = 5200UL;
+        break;
+    case OBSERVATORY_SPEED_BRISK:
+        interval = 2600UL;
+        break;
+    case OBSERVATORY_SPEED_STANDARD:
+    default:
+        interval = 3600UL;
+        break;
+    }
+
+    if (session->preview_mode) {
+        interval += 1200UL;
+    }
+
+    return interval;
+}
+
 static unsigned int observatory_body_target(const screensave_saver_session *session)
 {
     unsigned int count;
@@ -139,9 +167,9 @@ static void observatory_initialize_scene(screensave_saver_session *session)
 
     session->body_count = observatory_body_target(session);
     session->star_count = observatory_star_target(session);
-    session->ambient_phase = 0U;
-    session->sweep_phase = 0U;
-    session->central_pulse = 0U;
+    session->ambient_phase = (unsigned int)observatory_rng_range(&session->rng, 256UL);
+    session->sweep_phase = (unsigned int)observatory_rng_range(&session->rng, 256UL);
+    session->central_pulse = (unsigned int)observatory_rng_range(&session->rng, 3UL);
 
     for (index = 0U; index < session->body_count; ++index) {
         observatory_seed_body(session, &session->bodies[index], index);
@@ -278,6 +306,8 @@ void observatory_resize_session(screensave_saver_session *session, const screens
     }
 
     session->drawable_size = environment->drawable_size;
+    session->preview_mode = environment->mode == SCREENSAVE_SESSION_MODE_PREVIEW;
+    session->theme = observatory_resolve_theme(environment->config_binding);
     observatory_initialize_scene(session);
 }
 
@@ -287,6 +317,11 @@ void observatory_step_session(
 )
 {
     unsigned long interval;
+    unsigned long event_interval;
+    unsigned int body_index;
+    unsigned int star_index;
+    unsigned int refresh_count;
+    unsigned int refresh_index;
 
     if (session == NULL || environment == NULL) {
         return;
@@ -300,8 +335,20 @@ void observatory_step_session(
         observatory_run_step(session);
     }
 
-    if (session->event_accumulator >= 3600UL) {
-        session->event_accumulator = 0UL;
+    event_interval = observatory_event_interval(session);
+    while (session->event_accumulator >= event_interval) {
+        session->event_accumulator -= event_interval;
         session->central_pulse = 8U + (unsigned int)observatory_rng_range(&session->rng, 6UL);
+        if (session->body_count > 0U) {
+            body_index = (unsigned int)observatory_rng_range(&session->rng, (unsigned long)session->body_count);
+            observatory_seed_body(session, &session->bodies[body_index], body_index);
+        }
+        if (session->star_count > 0U) {
+            refresh_count = session->preview_mode ? 1U : 2U;
+            for (refresh_index = 0U; refresh_index < refresh_count; ++refresh_index) {
+                star_index = (unsigned int)observatory_rng_range(&session->rng, (unsigned long)session->star_count);
+                observatory_seed_star(session, &session->stars[star_index]);
+            }
+        }
     }
 }

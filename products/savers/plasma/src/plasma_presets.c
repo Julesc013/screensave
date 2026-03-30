@@ -56,6 +56,24 @@ const screensave_preset_descriptor g_plasma_presets[] = {
         SCREENSAVE_DETAIL_LEVEL_STANDARD,
         0,
         0UL
+    },
+    {
+        "midnight_interference",
+        "Midnight Interference",
+        "Cool dark-room interference field with softer resolution and slower palette drift.",
+        "midnight_interference",
+        SCREENSAVE_DETAIL_LEVEL_STANDARD,
+        1,
+        0x00000A14UL
+    },
+    {
+        "amber_terminal",
+        "Amber Terminal",
+        "Warm monochrome plasma tuned for quieter museum-style presentation.",
+        "amber_terminal",
+        SCREENSAVE_DETAIL_LEVEL_LOW,
+        1,
+        0x00000A15UL
     }
 };
 
@@ -64,7 +82,9 @@ static const plasma_preset_values g_plasma_preset_values[] = {
     { PLASMA_EFFECT_PLASMA, PLASMA_SPEED_STANDARD, PLASMA_RESOLUTION_FINE, PLASMA_SMOOTHING_GLOW },
     { PLASMA_EFFECT_INTERFERENCE, PLASMA_SPEED_GENTLE, PLASMA_RESOLUTION_FINE, PLASMA_SMOOTHING_SOFT },
     { PLASMA_EFFECT_PLASMA, PLASMA_SPEED_GENTLE, PLASMA_RESOLUTION_COARSE, PLASMA_SMOOTHING_OFF },
-    { PLASMA_EFFECT_FIRE, PLASMA_SPEED_GENTLE, PLASMA_RESOLUTION_COARSE, PLASMA_SMOOTHING_SOFT }
+    { PLASMA_EFFECT_FIRE, PLASMA_SPEED_GENTLE, PLASMA_RESOLUTION_COARSE, PLASMA_SMOOTHING_SOFT },
+    { PLASMA_EFFECT_INTERFERENCE, PLASMA_SPEED_GENTLE, PLASMA_RESOLUTION_STANDARD, PLASMA_SMOOTHING_SOFT },
+    { PLASMA_EFFECT_PLASMA, PLASMA_SPEED_GENTLE, PLASMA_RESOLUTION_COARSE, PLASMA_SMOOTHING_SOFT }
 };
 
 const screensave_preset_descriptor *plasma_get_presets(unsigned int *count_out)

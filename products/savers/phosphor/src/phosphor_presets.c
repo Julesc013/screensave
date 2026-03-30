@@ -47,6 +47,24 @@ const screensave_preset_descriptor g_phosphor_presets[] = {
         SCREENSAVE_DETAIL_LEVEL_LOW,
         1,
         0x00000A23UL
+    },
+    {
+        "amber_harmonics",
+        "Amber Harmonics",
+        "Warm harmonograph presentation with longer amber persistence and restrained mirror symmetry.",
+        "amber_harmonics",
+        SCREENSAVE_DETAIL_LEVEL_STANDARD,
+        1,
+        0x00000A24UL
+    },
+    {
+        "white_instrument",
+        "White Instrument",
+        "Pale laboratory trace tuned for cleaner preview-safe rhythm and drafting-room clarity.",
+        "white_instrument",
+        SCREENSAVE_DETAIL_LEVEL_STANDARD,
+        1,
+        0x00000A25UL
     }
 };
 
@@ -55,7 +73,9 @@ static const phosphor_preset_values g_phosphor_preset_values[] = {
     { PHOSPHOR_CURVE_HARMONOGRAPH, PHOSPHOR_PERSISTENCE_LONG, PHOSPHOR_DRIFT_STANDARD, PHOSPHOR_MIRROR_HORIZONTAL },
     { PHOSPHOR_CURVE_DENSE, PHOSPHOR_PERSISTENCE_LONG, PHOSPHOR_DRIFT_STANDARD, PHOSPHOR_MIRROR_QUAD },
     { PHOSPHOR_CURVE_LISSAJOUS, PHOSPHOR_PERSISTENCE_SHORT, PHOSPHOR_DRIFT_CALM, PHOSPHOR_MIRROR_HORIZONTAL },
-    { PHOSPHOR_CURVE_HARMONOGRAPH, PHOSPHOR_PERSISTENCE_SHORT, PHOSPHOR_DRIFT_CALM, PHOSPHOR_MIRROR_NONE }
+    { PHOSPHOR_CURVE_HARMONOGRAPH, PHOSPHOR_PERSISTENCE_SHORT, PHOSPHOR_DRIFT_CALM, PHOSPHOR_MIRROR_NONE },
+    { PHOSPHOR_CURVE_HARMONOGRAPH, PHOSPHOR_PERSISTENCE_LONG, PHOSPHOR_DRIFT_CALM, PHOSPHOR_MIRROR_HORIZONTAL },
+    { PHOSPHOR_CURVE_LISSAJOUS, PHOSPHOR_PERSISTENCE_STANDARD, PHOSPHOR_DRIFT_CALM, PHOSPHOR_MIRROR_HORIZONTAL }
 };
 
 const screensave_preset_descriptor *phosphor_get_presets(unsigned int *count_out)

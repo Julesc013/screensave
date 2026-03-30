@@ -5,6 +5,11 @@
 #define RICOCHET_FIXED_ONE 256L
 #define RICOCHET_FIXED_HALF 128L
 
+static long ricochet_abs_long(long value)
+{
+    return value < 0L ? -value : value;
+}
+
 void ricochet_rng_seed(ricochet_rng_state *state, unsigned long seed)
 {
     if (state == NULL) {
@@ -100,20 +105,23 @@ static int ricochet_trail_length(
         return 0;
 
     case RICOCHET_TRAIL_PHOSPHOR:
-        length = 9;
+        length = 12;
         break;
 
     case RICOCHET_TRAIL_SHORT:
     default:
-        length = 4;
+        length = 5;
         break;
     }
 
-    if (detail_level == SCREENSAVE_DETAIL_LEVEL_LOW && length > 5) {
-        length = 5;
+    if (detail_level == SCREENSAVE_DETAIL_LEVEL_LOW && length > 7) {
+        length = 7;
     }
-    if (preview_mode && length > 4) {
-        length = 4;
+    if (detail_level == SCREENSAVE_DETAIL_LEVEL_HIGH && length < 10 && config->trail_mode == RICOCHET_TRAIL_PHOSPHOR) {
+        length = 10;
+    }
+    if (preview_mode && length > 5) {
+        length = 5;
     }
 
     if (length > (int)RICOCHET_MAX_TRAIL_POINTS) {
@@ -140,7 +148,7 @@ static int ricochet_body_size(
 
     size = minimum_dimension / 12;
     if (session->object_count > 1U) {
-        size = minimum_dimension / (14 + (int)index * 2);
+        size = minimum_dimension / (15 + (int)index * 2);
     }
     if (session->detail_level == SCREENSAVE_DETAIL_LEVEL_LOW) {
         size = (size * 4) / 5;
@@ -153,8 +161,8 @@ static int ricochet_body_size(
 
     if (size < 8) {
         size = 8;
-    } else if (size > 28) {
-        size = 28;
+    } else if (size > 30) {
+        size = 30;
     }
 
     return size;
@@ -166,16 +174,16 @@ static long ricochet_base_speed(int speed_mode, int preview_mode)
 
     switch (speed_mode) {
     case RICOCHET_SPEED_CALM:
-        speed = 120L;
+        speed = 116L;
         break;
 
     case RICOCHET_SPEED_LIVELY:
-        speed = 260L;
+        speed = 248L;
         break;
 
     case RICOCHET_SPEED_STANDARD:
     default:
-        speed = 180L;
+        speed = 174L;
         break;
     }
 
@@ -196,7 +204,7 @@ static long ricochet_random_speed_component(
     long variation;
 
     speed = ricochet_base_speed(speed_mode, preview_mode);
-    variation = (long)ricochet_rng_range(rng, 80UL);
+    variation = (long)ricochet_rng_range(rng, 72UL);
     if ((ricochet_rng_next(rng) & 1UL) == 0UL) {
         speed += variation;
     } else {
@@ -212,6 +220,43 @@ static long ricochet_random_speed_component(
     }
 
     return speed;
+}
+
+static long ricochet_blend_velocity(long current_velocity, long target_velocity)
+{
+    long blended_velocity;
+
+    blended_velocity = ((current_velocity * 3L) + target_velocity) / 4L;
+    if (blended_velocity > -92L && blended_velocity < 92L) {
+        if (blended_velocity < 0L) {
+            blended_velocity = -92L;
+        } else {
+            blended_velocity = 92L;
+        }
+    }
+
+    return blended_velocity;
+}
+
+static int ricochet_body_overlaps(
+    const ricochet_body *existing_body,
+    const ricochet_body *candidate_body
+)
+{
+    long distance_x;
+    long distance_y;
+    long minimum_spacing;
+
+    if (existing_body == NULL || candidate_body == NULL) {
+        return 0;
+    }
+
+    distance_x = ricochet_abs_long(existing_body->x - candidate_body->x);
+    distance_y = ricochet_abs_long(existing_body->y - candidate_body->y);
+    minimum_spacing = (long)(((existing_body->size + candidate_body->size) * RICOCHET_FIXED_ONE) / 2);
+    minimum_spacing += 3L * RICOCHET_FIXED_ONE;
+
+    return distance_x < minimum_spacing && distance_y < minimum_spacing;
 }
 
 static void ricochet_reset_body_trail(ricochet_body *body, int trail_length)
@@ -255,6 +300,9 @@ static void ricochet_initialize_body(
     long range_x;
     long range_y;
     int trail_length;
+    unsigned int attempt_index;
+    unsigned int body_index;
+    int overlap_found;
 
     body->size = ricochet_body_size(session, index);
     width_limit = session->drawable_size.width - body->size;
@@ -266,10 +314,24 @@ static void ricochet_initialize_body(
         height_limit = 1;
     }
 
-    range_x = (long)(ricochet_rng_range(&session->rng, (unsigned long)width_limit) + (unsigned long)(body->size / 2));
-    range_y = (long)(ricochet_rng_range(&session->rng, (unsigned long)height_limit) + (unsigned long)(body->size / 2));
-    body->x = (range_x * RICOCHET_FIXED_ONE) + RICOCHET_FIXED_HALF;
-    body->y = (range_y * RICOCHET_FIXED_ONE) + RICOCHET_FIXED_HALF;
+    for (attempt_index = 0U; attempt_index < 12U; ++attempt_index) {
+        range_x = (long)(ricochet_rng_range(&session->rng, (unsigned long)width_limit) + (unsigned long)(body->size / 2));
+        range_y = (long)(ricochet_rng_range(&session->rng, (unsigned long)height_limit) + (unsigned long)(body->size / 2));
+        body->x = (range_x * RICOCHET_FIXED_ONE) + RICOCHET_FIXED_HALF;
+        body->y = (range_y * RICOCHET_FIXED_ONE) + RICOCHET_FIXED_HALF;
+
+        overlap_found = 0;
+        for (body_index = 0U; body_index < index; ++body_index) {
+            if (ricochet_body_overlaps(&session->bodies[body_index], body)) {
+                overlap_found = 1;
+                break;
+            }
+        }
+        if (!overlap_found) {
+            break;
+        }
+    }
+
     body->vx = ricochet_random_speed_component(
         &session->rng,
         session->config.speed_mode,
@@ -280,6 +342,7 @@ static void ricochet_initialize_body(
         session->config.speed_mode,
         session->preview_mode
     );
+    body->flash_timer = 0;
 
     trail_length = ricochet_trail_length(&session->config, session->detail_level, session->preview_mode);
     ricochet_reset_body_trail(body, trail_length);
@@ -366,8 +429,56 @@ static void ricochet_step_body(
     if (hit_x && hit_y) {
         session->celebration_timer = session->preview_mode ? 4 : 7;
     }
+    if (hit_x || hit_y) {
+        long orthogonal_nudge;
+
+        body->flash_timer = session->preview_mode ? 3 : 6;
+        orthogonal_nudge = (long)ricochet_rng_range(&session->rng, 40UL) - 20L;
+        if (hit_x) {
+            body->vy = ricochet_blend_velocity(body->vy, body->vy + orthogonal_nudge);
+        }
+        if (hit_y) {
+            body->vx = ricochet_blend_velocity(body->vx, body->vx + orthogonal_nudge);
+        }
+    }
 
     ricochet_record_trail(body, trail_length);
+}
+
+static unsigned long ricochet_variation_interval_millis(
+    const screensave_saver_session *session
+)
+{
+    if (session == NULL) {
+        return 15000UL;
+    }
+
+    if (session->preview_mode) {
+        return 9000UL;
+    }
+    if (session->object_count <= 1U) {
+        return 14000UL;
+    }
+    return 18000UL;
+}
+
+static void ricochet_refresh_rhythm(screensave_saver_session *session)
+{
+    unsigned int body_index;
+    ricochet_body *body;
+    long target_velocity;
+
+    if (session == NULL || session->object_count == 0U) {
+        return;
+    }
+
+    body_index = (unsigned int)ricochet_rng_range(&session->rng, (unsigned long)session->object_count);
+    body = &session->bodies[body_index];
+    target_velocity = ricochet_random_speed_component(&session->rng, session->config.speed_mode, session->preview_mode);
+    body->vx = ricochet_blend_velocity(body->vx, target_velocity);
+    target_velocity = ricochet_random_speed_component(&session->rng, session->config.speed_mode, session->preview_mode);
+    body->vy = ricochet_blend_velocity(body->vy, target_velocity);
+    body->flash_timer = session->preview_mode ? 2 : 4;
 }
 
 int ricochet_create_session(
@@ -464,12 +575,21 @@ void ricochet_step_session(
         delta_millis = 200UL;
     }
 
+    session->elapsed_millis += delta_millis;
+    session->variation_elapsed_millis += delta_millis;
     trail_length = ricochet_trail_length(&session->config, session->detail_level, session->preview_mode);
     for (index = 0U; index < session->object_count; ++index) {
         ricochet_step_body(session, &session->bodies[index], delta_millis, trail_length);
+        if (session->bodies[index].flash_timer > 0) {
+            session->bodies[index].flash_timer -= 1;
+        }
     }
 
     if (session->celebration_timer > 0) {
         session->celebration_timer -= 1;
+    }
+    if (session->variation_elapsed_millis >= ricochet_variation_interval_millis(session)) {
+        session->variation_elapsed_millis = 0UL;
+        ricochet_refresh_rhythm(session);
     }
 }

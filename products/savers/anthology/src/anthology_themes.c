@@ -9,6 +9,20 @@ const screensave_theme_descriptor g_anthology_themes[] = {
         "Neutral anthology control theme that keeps cross-saver orchestration visually product-agnostic.",
         { 148, 156, 172, 255 },
         { 232, 236, 244, 255 }
+    },
+    {
+        "anthology_amber",
+        "Anthology Amber",
+        "Warm amber anthology palette tuned for compatibility-safe after-hours rotations.",
+        { 188, 154, 104, 255 },
+        { 240, 224, 188, 255 }
+    },
+    {
+        "anthology_midnight",
+        "Anthology Midnight",
+        "Cool midnight anthology palette for scenic and heavyweight grand-tour sessions.",
+        { 112, 132, 188, 255 },
+        { 226, 236, 252, 255 }
     }
 };
 
