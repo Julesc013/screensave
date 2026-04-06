@@ -7,13 +7,15 @@ Type: release support.
 
 ## Historical Baseline
 
-`C07` adds the first real installer path for the current ScreenSave saver line.
+`C07` added the first real installer path for the saver line.
+`C15` formalized Installer as a companion channel.
+`C16` refreshes the package against the frozen Core baseline.
 
-Source-controlled installer inputs now live here:
+Source-controlled installer inputs live here:
 
-- `installer_manifest.ini`: explicit installer package identity, install policy, portable-payload source, and doc inputs
+- `installer_manifest.ini`: explicit Installer package identity, install policy, Core-payload source, and doc inputs
 - `layout.md`: durable install layout, registration model, update rules, uninstall rules, and portable-versus-installed distinction
-- `build_installer.py`: stdlib-only assembly script that stages and zips an installer package from the current portable payload
+- `build_installer.py`: stdlib-only assembly script that stages and zips an Installer package from the current frozen Core payload
 - `installer_common.ps1`: bounded shared PowerShell helpers for manifest parsing, mock-state validation, registry writes, and uninstall-record handling
 - `install_screensave.ps1`: current-user installer entry point with optional active-saver selection assistance
 - `uninstall_screensave.ps1`: conservative uninstall entry point for removing the dedicated install root and uninstall record without deleting user config
@@ -21,36 +23,24 @@ Source-controlled installer inputs now live here:
 Generated installer staging and zip artifacts do not belong here.
 The assembly script writes generated staging and zip artifacts under `out/installer/`.
 
-## C15 Doctrine
+## C16 Frozen State
 
-`C15` defines this directory as the `ScreenSave Installer` channel.
-
-- Installer is a companion convenience layer, not the primary product.
-- Installer is built on top of the Core saver line.
-- Installer does not decide what belongs in Core.
-
-## C14 Refresh
-
-`C14` refreshes the installed-distribution surface for the final release-candidate pass:
-
-- installer staging now points at the refreshed `C14` portable payload
-- staged output now moves to the current `C14` installer root under `out/installer/`
-- installer docs now include final release-readiness, known-issues, and config-integrity notes
-- `suite` and `benchlab` remain separate app products outside the end-user saver installer payload
-- `anthology` is treated as part of the canonical saver line and is installed when it exists in the current portable payload
-- the refreshed `C14` stage is now interpreted by `C15` as the companion Installer candidate built from the Core candidate surface
+- Frozen Installer staging root: `out/installer/screensave-installer-c16-baseline/`
+- Frozen Installer zip: `out/installer/screensave-installer-c16-baseline.zip`
+- The Installer channel is built from the frozen Core payload.
+- `suite`, BenchLab, SDK material, and Extras remain outside the Installer payload.
 
 ## Current Installer Policy
 
-- Current-user install mode is supported in `C07`.
+- Current-user install mode is supported.
 - Machine-wide install mode remains deferred.
-- The installer consumes the current Core candidate payload instead of inventing a second saver-payload definition.
+- The Installer consumes the frozen Core payload instead of inventing a second saver definition.
 - Active saver selection assistance is opt-in and does not silently replace the current saver during a default install.
-- Uninstall removes the dedicated install root and current-user uninstall record, but preserves user configuration and any future user-pack roots outside the install tree.
+- Uninstall removes the dedicated install root and current-user uninstall record, but preserves user configuration and future user-pack roots outside the install tree.
 - Update and reinstall overlay existing managed files by default and do not prune payload-absent savers automatically.
 
 ## Current Prompt Boundary
 
 This directory defines the Installer channel only.
 Core ZIP behavior remains under `packaging/portable/`.
-`suite` and `benchlab` remain separate app products and stay outside the saver-only installer payload.
+`suite` and BenchLab remain separate companion app products outside the saver-only Installer payload.

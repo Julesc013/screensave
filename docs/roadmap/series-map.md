@@ -1,6 +1,6 @@
 # Series Map
 
-This is the short operational view of the implemented baseline and the active post-`S15` continuation line.
+This is the short operational view of the implemented baseline and the completed post-`S15` continuation bridge.
 
 ## Implemented Baseline
 
@@ -42,5 +42,5 @@ This is the short operational view of the implemented baseline and the active po
 - `C16`: Core release refresh and baseline freeze.
 
 The earlier `S16` and `S17` endpoint is superseded.
-`C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, `C13` Wave A, Wave B, and Wave C, `C14`, and `C15` are complete.
-The active continuation line now extends through `C15` release doctrine and channel split. `C16` Core release refresh and baseline freeze is next.
+`C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, `C13` Wave A, Wave B, and Wave C, `C14`, `C15`, and `C16` are complete.
+The continuation bridge now extends through the frozen `C16` Core baseline. Future work should start in a new post-release `S`-series program.

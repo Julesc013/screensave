@@ -1,6 +1,6 @@
 # Portable Bundle Layout
 
-This note defines the portable bundle architecture that currently stages the `ScreenSave Core` candidate as refreshed in `C14` and interpreted by `C15`.
+This note defines the frozen `C16` `ScreenSave Core` bundle layout.
 
 ## Source-Controlled Inputs
 
@@ -8,18 +8,18 @@ This note defines the portable bundle architecture that currently stages the `Sc
 - `packaging/portable/assemble_portable.py`
 - `packaging/portable/README.md`
 - `packaging/release_notes/portable-release-notes.md`
+- `packaging/release_notes/core-baseline-notes.md`
+- `packaging/release_notes/core-compatibility-notes.md`
 - validation notes and license notes copied into the staged bundle
 
 ## Generated Outputs
 
-- Staged folder: `out/portable/screensave-portable-c14-rc/`
-- Zip artifact: `out/portable/screensave-portable-c14-rc.zip`
+- Staged folder: `out/portable/screensave-core-c16-baseline/`
+- Zip artifact: `out/portable/screensave-core-c16-baseline.zip`
 
 Generated outputs are not committed source content.
 
 ## Staged Layout
-
-The staged bundle uses this layout:
 
 - `README.txt`
 - `SAVERS/`
@@ -33,16 +33,15 @@ The staged bundle uses this layout:
 
 ## Inclusion Policy
 
-- `SAVERS/` contains only canonical saver binaries discovered in configured output roots.
+- `SAVERS/` contains only canonical Core saver binaries discovered in configured output roots.
 - `MANIFESTS/` contains only the manifests for staged saver binaries.
 - `PACKS/` contains only file-backed packs whose owning saver binary is staged.
-- `PRESETS/` and `THEMES/` remain note-only in the `C06` baseline unless a staged saver ships standalone preset/theme export files outside pack directories.
-- `OPTIONAL/` is reserved for clearly labeled Extras material; BenchLab, Suite, SDK material, and installer assets are excluded from the Core bundle.
+- `PRESETS/` and `THEMES/` stay note-only unless a staged saver ships standalone export files outside pack directories.
+- `OPTIONAL/` remains reserved for Extras material; BenchLab, Suite, SDK material, and installer assets are excluded.
 
 ## Current Limits
 
-- The portable bundle may be partial when some current saver outputs are unavailable.
+- The bundle is only as complete as the real canonical saver outputs present in configured output roots.
 - The bundle does not perform installation, registration, or uninstall work.
-- Installed distribution now exists separately under `packaging/installer/` as the companion Installer channel.
-- The bundle excludes the separate `suite` and `benchlab` app products, SDK material, and any unfrozen Extras content.
-- `anthology` is a normal saver product, but it is staged only when its real binary is present.
+- Installed distribution exists separately under `packaging/installer/`.
+- The bundle excludes `suite`, BenchLab, SDK material, and unfrozen Extras content.

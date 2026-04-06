@@ -1,4 +1,4 @@
-"""Stage the ScreenSave Installer channel from the real Core candidate payload."""
+"""Stage the ScreenSave Installer channel from the frozen Core baseline payload."""
 
 from __future__ import annotations
 
@@ -56,7 +56,7 @@ def write_readme(staging_root: Path, savers: list[str], manifest: configparser.C
     lines = [
         display_name,
         "",
-        "This is the ScreenSave Installer companion channel for the current ScreenSave Core candidate.",
+        "This is the ScreenSave Installer companion channel for the frozen ScreenSave Core baseline.",
         "It complements the Core ZIP and does not replace it.",
         "",
         "How to use this package:",
@@ -72,8 +72,8 @@ def write_readme(staging_root: Path, savers: list[str], manifest: configparser.C
         f"- Included saver binaries: {', '.join(savers) if savers else 'none'}",
         "",
         "Important limits:",
-        "- This installer package is only as complete as the real Core candidate payload it consumes.",
-        "- Machine-wide install is deferred after C07.",
+        "- This installer package is only as complete as the real frozen Core payload it consumes.",
+        "- Machine-wide install remains deferred after C16.",
         "- BenchLab, Suite, SDK material, and Extras are separate channels and are not part of this package.",
         "- Anthology is treated as a normal saver product and is included only when its binary exists in the current payload.",
     ]
@@ -89,7 +89,7 @@ def write_status_note(
     lines = [
         "# Installer Status",
         "",
-        "This note describes the staged Installer companion package for the current Core candidate.",
+        "This note describes the staged Installer companion package for the frozen Core baseline.",
         "",
         "## Package Source",
         "",
@@ -113,8 +113,8 @@ def write_status_note(
         "",
         "## Known Limits",
         "",
-        "- The installer package depends on the current portable payload for saver coverage.",
-        "- Machine-wide install remains deferred after C07.",
+        "- The installer package depends on the current frozen Core payload for saver coverage.",
+        "- Machine-wide install remains deferred after C16.",
         "- The installer does not decide Core inclusion.",
     ]
     if missing_payload:
@@ -174,14 +174,16 @@ def main() -> None:
     copy_file(ROOT / docs["installer_layout"], staging_root / "DOCS" / "INSTALLER-LAYOUT.md")
     copy_file(ROOT / docs["release_notes"], staging_root / "DOCS" / "INSTALLER-RELEASE-NOTES.md")
     copy_file(ROOT / docs["installer_matrix"], staging_root / "DOCS" / "INSTALL-UNINSTALL-MATRIX.md")
-    copy_file(ROOT / docs["portable_matrix"], staging_root / "DOCS" / "PORTABLE-BUNDLE-MATRIX.md")
+    copy_file(ROOT / docs["portable_matrix"], staging_root / "DOCS" / "INCLUSION-MATRIX.md")
     copy_file(ROOT / docs["release_channels"], staging_root / "DOCS" / "RELEASE-CHANNELS.md")
     copy_file(ROOT / docs["core_doctrine"], staging_root / "DOCS" / "CORE-DOCTRINE.md")
     copy_file(ROOT / docs["channel_matrix"], staging_root / "DOCS" / "CHANNEL-MATRIX.md")
     copy_file(ROOT / docs["channel_manifest"], staging_root / "DOCS" / "CHANNEL-MANIFEST.ini")
-    copy_file(ROOT / docs["release_candidate_notes"], staging_root / "DOCS" / "RELEASE-CANDIDATE.md")
-    copy_file(ROOT / docs["release_readiness"], staging_root / "DOCS" / "RELEASE-READINESS.md")
+    copy_file(ROOT / docs["baseline_note"], staging_root / "DOCS" / "CORE-BASELINE.md")
+    copy_file(ROOT / docs["release_baseline"], staging_root / "DOCS" / "RELEASE-BASELINE.md")
+    copy_file(ROOT / docs["companion_matrix"], staging_root / "DOCS" / "COMPANION-CHANNELS.md")
     copy_file(ROOT / docs["known_issues"], staging_root / "DOCS" / "KNOWN-ISSUES.md")
+    copy_file(ROOT / docs["compatibility_note"], staging_root / "DOCS" / "COMPATIBILITY-NOTES.md")
     copy_file(ROOT / docs["integrity_note"], staging_root / "DOCS" / "CONFIG-INTEGRITY.md")
     copy_file(ROOT / docs["windows_validation"], staging_root / "DOCS" / "WINDOWS-INTEGRATION.md")
     copy_file(ROOT / docs["project_changelog"], staging_root / "DOCS" / "CHANGELOG.md")

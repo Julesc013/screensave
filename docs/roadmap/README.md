@@ -13,3 +13,6 @@ Does not belong here:
 - Runtime implementation details.
 
 Type: explanatory roadmap.
+
+The `C00` through `C16` continuation bridge is complete.
+Future planning should treat the frozen `C16` Core baseline as the handoff point into a new post-release `S`-series program.

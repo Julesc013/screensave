@@ -42,6 +42,7 @@ That endpoint is retired for future planning.
 18. `C14` final rerelease hardening closes the pre-doctrine release-candidate pass.
 19. `C15` defines the release doctrine and artifact-channel split before any refreshed Core baseline is frozen.
 20. `C16` refreshes and freezes the actual Core baseline against the `C15` doctrine.
+21. `C16` closes the continuation bridge and hands off to a new post-release `S`-series program.
 
 ## Renderer Tier Taxonomy Note
 
@@ -88,6 +89,6 @@ Interpretation rules:
 
 ## Immediate State
 
-The rename, renderer-taxonomy, checkpoint, saver productization, shared settings, Windows integration, portable distribution, installer, suite meta-saver, suite-app, SDK, backlog-routing, cross-cutting polish work from `C01` through `C12`, the full `C13` saver-polish line, `C14` final rerelease hardening, and `C15` release doctrine and channel split are complete.
-`C16` Core release refresh and baseline freeze is the next continuation prompt.
+The rename, renderer-taxonomy, checkpoint, saver productization, shared settings, Windows integration, portable distribution, installer, suite meta-saver, suite-app, SDK, backlog-routing, cross-cutting polish work from `C01` through `C12`, the full `C13` saver-polish line, `C14` final rerelease hardening, `C15` release doctrine and channel split, and `C16` Core release refresh and baseline freeze are complete.
+The continuation bridge is closed after `C16`, and future work should start from the frozen baseline in a new post-release `S`-series program.
 Further continuation work should not need to renegotiate saver/app ownership, migration aliases, renderer-tier terminology, per-saver `.scr` product identity, the shared settings/preset/theme/pack contract, the bounded Win32 `.scr` lifecycle behavior validated in `C05`, the portable bundle layout and inclusion rules defined in `C06`, the current-user installer and uninstall rules defined in `C07`, the bounded in-process cross-saver orchestration baseline defined by `anthology` in `C08`, the role boundaries and launch/config surface established by the real `suite` app in `C09`, the contributor-facing templates and validation surface established in `C10`, the backlog routing and wave-planning baseline established in `C11`, or the shared suite vocabulary and quality bar established in `C12`.

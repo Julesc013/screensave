@@ -61,8 +61,10 @@ Source presence is enough to keep a product in the repo.
 Source presence alone is not enough to claim that the product belongs in a frozen Core ZIP.
 Core claims must be backed by the release notes, validation notes, and artifact reality available at the time of the freeze.
 
-## C15 Handoff
+## C16 Outcome
 
-- `C15` defines the doctrine and the gate.
-- `C15` does not freeze the final per-saver Core lineup.
-- `C16` applies this gate to the current saver line, refreshes the Core candidate surface, and freezes the actual Core baseline.
+- `C15` defined the doctrine and the gate.
+- `C16` applied that gate to the current saver line.
+- The frozen per-saver decision lives in `validation/notes/c16-core-inclusion-matrix.md`.
+- The frozen baseline note lives in `validation/notes/c16-release-baseline.md`.
+- Future work should begin from the frozen Core baseline in a new post-release `S`-series program.

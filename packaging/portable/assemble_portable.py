@@ -1,4 +1,4 @@
-"""Assemble the current ScreenSave Core candidate from real discovered outputs."""
+"""Assemble the frozen ScreenSave Core baseline from real discovered outputs."""
 
 from __future__ import annotations
 
@@ -128,9 +128,9 @@ def build_root_readme(
     legacy_outputs: list[str],
 ) -> str:
     lines = [
-        f"ScreenSave Core Candidate ({bundle_name})",
+        f"ScreenSave Core ({bundle_name})",
         "",
-        "This is the current portable ZIP candidate for ScreenSave Core under the C15 release doctrine.",
+        "This is the frozen ScreenSave Core ZIP assembled for the C16 baseline.",
         "",
         "Included saver binaries:",
         f"- {format_list(included_savers)}",
@@ -144,7 +144,7 @@ def build_root_readme(
         "3. Use Windows screen saver settings or the file context menu to install it manually.",
         "4. Use the saver's own Settings dialog for configuration.",
         "",
-        "This Core candidate does not include installer, registration, or uninstall automation.",
+        "This Core baseline does not include installer, registration, or uninstall automation.",
         "Installed distribution is available separately through the optional ScreenSave Installer channel.",
         "BenchLab, Suite, SDK material, and Extras are separate channels and are intentionally excluded from Core by default.",
         "Anthology is treated as a normal saver product and is staged only when its real binary exists in the configured output roots.",
@@ -155,7 +155,7 @@ def build_root_readme(
         "- GL21 is available only where the saver and the system support it.",
         "- GL33 and GL46 are not shipped as real user-facing requirements in this bundle.",
         "",
-        "See DOCS\\BUNDLE-STATUS.md, DOCS\\INCLUSION-MATRIX.md, DOCS\\RELEASE-READINESS.md, and DOCS\\KNOWN-ISSUES.md for details.",
+        "See DOCS\\BUNDLE-STATUS.md, DOCS\\INCLUSION-MATRIX.md, DOCS\\RELEASE-BASELINE.md, DOCS\\KNOWN-ISSUES.md, and DOCS\\COMPATIBILITY-NOTES.md for details.",
     ]
 
     if legacy_outputs:
@@ -186,6 +186,7 @@ def build_status_note(
         "",
         "- Source-controlled manifest: `packaging/portable/bundle_manifest.ini`",
         "- Assembly script: `packaging/portable/assemble_portable.py`",
+        "- This assembly stages whatever canonical outputs are present in the configured output roots; it does not rebuild binaries on its own.",
         "- Output roots inspected:",
     ]
 
@@ -194,8 +195,6 @@ def build_status_note(
 
     lines.extend(
         [
-            "- Toolchains were not available in this environment, so the bundle was assembled from pre-existing output files only.",
-            "",
             "## Included Canonical Saver Binaries",
             "",
         ]
@@ -241,8 +240,8 @@ def build_status_note(
             "## Bundle Policy",
             "",
             "- Anthology is part of the canonical saver line and is staged when its real binary exists.",
-            "- BenchLab is excluded from the Core candidate payload.",
-            "- Suite, SDK material, and Extras are excluded from the Core candidate payload unless a later doctrine update says otherwise.",
+            "- BenchLab is excluded from the frozen Core payload.",
+            "- Suite, SDK material, and Extras are excluded from the frozen Core payload unless a later doctrine update says otherwise.",
             "- File-backed packs are staged only when the owning saver binary is present.",
             "- Missing binaries are recorded explicitly instead of replaced with placeholders.",
             "",
@@ -270,10 +269,10 @@ def build_status_note(
             "",
             "## Known Limitations",
             "",
-            "- This Core candidate stage remains partial when canonical saver outputs are missing from the local output roots.",
-            "- The included binaries were not rebuilt during C14 because no supported toolchain was available here.",
+            "- This Core baseline becomes partial only when canonical saver outputs are missing from the configured output roots.",
+            "- Bundle assembly does not perform runtime smoke or Windows shell validation on its own.",
             "- BenchLab, Suite, SDK material, and Extras remain separate channels and are not part of Core by default.",
-            "- C16 still has to apply the Core inclusion gate and freeze the actual Core baseline.",
+            "- Live compatibility and installer limits remain recorded in the bundled baseline and known-issues notes.",
         ]
     )
 
@@ -305,12 +304,12 @@ def write_file_inventory(staging_root: pathlib.Path) -> None:
 def write_placeholder_notes(staging_root: pathlib.Path, included_pack_count: int) -> None:
     write_text(
         staging_root / "PRESETS" / "README.txt",
-        "Standalone portable preset-export files are not staged separately in the current Core candidate baseline.\n"
+        "Standalone portable preset-export files are not staged separately in the current frozen Core baseline.\n"
         "File-backed preset examples ship inside PACKS only when the owning saver binary is present.\n",
     )
     write_text(
         staging_root / "THEMES" / "README.txt",
-        "Standalone portable theme-export files are not staged separately in the current Core candidate baseline.\n"
+        "Standalone portable theme-export files are not staged separately in the current frozen Core baseline.\n"
         "File-backed theme examples ship inside PACKS only when the owning saver binary is present.\n",
     )
 
@@ -328,7 +327,7 @@ def write_placeholder_notes(staging_root: pathlib.Path, included_pack_count: int
 
     write_text(
         staging_root / "OPTIONAL" / "README.txt",
-        "No optional Extras content is included in the current Core candidate bundle.\n"
+        "No optional Extras content is included in the frozen Core baseline.\n"
         "BenchLab, Suite, and SDK material remain separate channels and are intentionally excluded here.\n",
     )
 
@@ -406,15 +405,17 @@ def main() -> int:
     docs = manifest["docs"]
     copy_file(ROOT / docs["portable_readme"], staging_root / "DOCS" / "PORTABLE-BUNDLE.md")
     copy_file(ROOT / docs["portable_layout"], staging_root / "DOCS" / "PORTABLE-LAYOUT.md")
-    copy_file(ROOT / docs["release_notes"], staging_root / "DOCS" / "PORTABLE-RELEASE-NOTES.md")
+    copy_file(ROOT / docs["release_notes"], staging_root / "DOCS" / "CORE-RELEASE-NOTES.md")
     copy_file(ROOT / docs["bundle_matrix"], staging_root / "DOCS" / "INCLUSION-MATRIX.md")
     copy_file(ROOT / docs["release_channels"], staging_root / "DOCS" / "RELEASE-CHANNELS.md")
     copy_file(ROOT / docs["core_doctrine"], staging_root / "DOCS" / "CORE-DOCTRINE.md")
     copy_file(ROOT / docs["channel_matrix"], staging_root / "DOCS" / "CHANNEL-MATRIX.md")
     copy_file(ROOT / docs["channel_manifest"], staging_root / "DOCS" / "CHANNEL-MANIFEST.ini")
-    copy_file(ROOT / docs["release_candidate_notes"], staging_root / "DOCS" / "RELEASE-CANDIDATE.md")
-    copy_file(ROOT / docs["release_readiness"], staging_root / "DOCS" / "RELEASE-READINESS.md")
+    copy_file(ROOT / docs["baseline_note"], staging_root / "DOCS" / "CORE-BASELINE.md")
+    copy_file(ROOT / docs["release_baseline"], staging_root / "DOCS" / "RELEASE-BASELINE.md")
     copy_file(ROOT / docs["known_issues"], staging_root / "DOCS" / "KNOWN-ISSUES.md")
+    copy_file(ROOT / docs["compatibility_note"], staging_root / "DOCS" / "COMPATIBILITY-NOTES.md")
+    copy_file(ROOT / docs["companion_matrix"], staging_root / "DOCS" / "COMPANION-CHANNELS.md")
     copy_file(ROOT / docs["integrity_note"], staging_root / "DOCS" / "CONFIG-INTEGRITY.md")
     copy_file(ROOT / docs["windows_validation"], staging_root / "DOCS" / "WINDOWS-INTEGRATION.md")
     copy_file(ROOT / docs["project_changelog"], staging_root / "DOCS" / "CHANGELOG.md")

@@ -63,7 +63,8 @@ Do not add percentages, point scores, or issue-tracker ceremony unless a later r
 - `Wave-B` handled `pipeworks`, `lifeforms`, `signals`, `mechanize`, and `ecosystems` after `C13` Wave A and did not reopen suite-wide vocabulary or platform law.
 - `Wave-C` handled `stormglass`, `transit`, `observatory`, `vector`, `explorer`, `city`, `atlas`, `gallery`, and `anthology` without reopening suite-wide vocabulary or the shared platform contract.
 - `C14` final rerelease hardening is complete and preserved the release-candidate baseline.
-- `C15` release doctrine and channel split are complete, and `C16` Core release refresh and baseline freeze is the next scheduled continuation prompt.
+- `C15` release doctrine and channel split are complete.
+- `C16` Core release refresh and baseline freeze is complete, and future release/distribution follow-on work now starts from the frozen baseline in a new post-release `S`-series program.
 - `RND-R` and `REL-R` stay deferred unless the active polish line proves they are unblockers.
 
 ## Canonical Ownership Summary

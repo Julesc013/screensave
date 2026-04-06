@@ -52,8 +52,8 @@ It turns the remaining idea space into explicit, routed work instead of leaving 
 
 | ID | Focus | Category | Priority | Effort | Risk | Depends On | Target Bucket | Owner Area | Notes |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| `REL-01` | Refresh the Core candidate payload and freeze the actual Core baseline | release/distribution | `P1` | `M` | medium | `X-04` | `REL-R` | `distribution` | Apply the `C15` Core gate to the current saver line once fresh outputs exist |
-| `REL-02` | Refresh the Installer channel, registration notes, and uninstall evidence against the frozen Core baseline | release/distribution | `P1` | `M` | medium | `REL-01` | `REL-R` | `distribution` | Keep Installer as a companion channel derived from Core |
+| `REL-01` | Refresh the Core candidate payload and freeze the actual Core baseline | release/distribution | `P1` | `M` | medium | `X-04` | `REL-R` | `distribution` | Completed in `C16`; future release follow-on work now starts from the frozen Core baseline |
+| `REL-02` | Refresh the Installer channel, registration notes, and uninstall evidence against the frozen Core baseline | release/distribution | `P1` | `M` | medium | `REL-01` | `REL-R` | `distribution` | Completed in `C16` for the current-user Installer companion channel |
 | `REL-03` | Machine-wide install, repair, and prune policy evaluation | release/distribution | `P3` | `L` | high | `REL-02` | `REL-R` | `distribution` | Deferred until the active polish line is stable |
 
 ## Parked Concept Pool
@@ -85,6 +85,7 @@ They exist so future idea work has a home without interrupting `C12` through `C1
 - `Wave-C` landed for `stormglass`, `transit`, `observatory`, `vector`, `explorer`, `city`, `atlas`, `gallery`, and `anthology` while keeping `suite` and `benchlab` limited to narrow validation support.
 - `C14` final rerelease hardening preserved the release-candidate baseline.
 - `C15` release doctrine and channel split are complete.
-- `C16` Core release refresh and baseline freeze is the next scheduled continuation prompt.
+- `C16` Core release refresh and baseline freeze is complete.
+- Future release/distribution work begins from the frozen baseline in a new post-release `S`-series program.
 - `REL-R` stays after the active polish line unless a release blocker forces it forward.
 - `PARKED` and `RND-R` are intentionally out of the current continuation line.

@@ -36,10 +36,11 @@ This document defines the canonical ScreenSave release doctrine introduced in `C
 - SDK remains contributor-only.
 - Extras exists to hold back material that is interesting but not yet strong enough for Core.
 
-## Current C15 State
+## Current C16 State
 
-- The current `C14` portable bundle is the pre-freeze Core candidate surface.
-- The current `C14` installer package is the companion Installer candidate built from that surface.
-- `suite`, BenchLab, and the SDK remain separate source-controlled channels outside Core.
-- The Extras channel is defined now, but this prompt does not freeze specific Extras contents.
-- `C16` will refresh the current Core candidate surface and freeze the actual Core baseline against the Core inclusion gate.
+- `C16` froze `ScreenSave Core` at `out/portable/screensave-core-c16-baseline/` with a matching zip beside it.
+- `C16` froze the companion Installer package at `out/installer/screensave-installer-c16-baseline/` with a matching zip beside it.
+- `suite` and BenchLab remain separate companion app artifacts under `out/msvc/vs2022/Release/`.
+- The SDK remains source-only and outside Core.
+- Extras remains a separate empty holdback channel in `C16`.
+- The `C00` through `C16` continuation bridge is now closed; future work should start from the frozen baseline in a new post-release `S`-series program.

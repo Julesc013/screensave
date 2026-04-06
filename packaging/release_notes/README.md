@@ -1,12 +1,14 @@
 # Release Notes
 
-Purpose: structured release-note assembly and supporting prose for packaging work.
-Belongs here: source-controlled release-note inputs for portable bundles and later installer releases.
+Purpose: structured release-note assembly and supporting prose for the frozen release surfaces.
+Belongs here: source-controlled release-note inputs for Core, Installer, and baseline-support notes.
 Does not belong here: changelog history that belongs in `CHANGELOG.md`.
 Type: release support.
 
 ## Current State
 
-- `portable-release-notes.md` is the current Core-channel release note source for the portable ZIP candidate.
-- `installer-release-notes.md` is the current Installer-channel release note source.
-- `release-candidate-notes.md` is the final `C14` release-candidate summary, now interpreted through the `C15` channel doctrine.
+- `portable-release-notes.md` is the current Core-channel release-note source for the frozen `ScreenSave Core` ZIP.
+- `core-baseline-notes.md` records the frozen `C16` baseline and checkpoint.
+- `core-compatibility-notes.md` records the compatibility framing for frozen Core.
+- `installer-release-notes.md` is the current Installer-channel release-note source.
+- `release-candidate-notes.md` remains the historical `C14` release-candidate note and is no longer the current release surface.
