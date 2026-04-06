@@ -1,4 +1,4 @@
-"""Validate the final C14 release-candidate surface."""
+"""Validate the final C14 release-candidate surface plus the C15 doctrine handoff."""
 
 from __future__ import annotations
 
@@ -16,6 +16,10 @@ REQUIRED_NOTES = (
     ROOT / "validation" / "notes" / "c14-release-readiness-matrix.md",
     ROOT / "validation" / "notes" / "c14-known-issues.md",
     ROOT / "validation" / "notes" / "c14-config-integrity.md",
+    ROOT / "docs" / "roadmap" / "release-channels.md",
+    ROOT / "docs" / "roadmap" / "core-zip-doctrine.md",
+    ROOT / "validation" / "notes" / "c15-channel-matrix.md",
+    ROOT / "packaging" / "channel_manifest.ini",
 )
 
 
@@ -62,12 +66,14 @@ def main() -> int:
     require(bundle_manifest.get("bundle", "staging_name") == "screensave-portable-c14-rc", "Portable manifest must stage to screensave-portable-c14-rc.", errors)
     require(bundle_manifest.get("bundle", "zip_name") == "screensave-portable-c14-rc.zip", "Portable manifest must name the C14 RC zip.", errors)
     require(bundle_manifest.get("docs", "bundle_matrix") == "validation/notes/c14-portable-bundle-matrix.md", "Portable manifest must point at the C14 portable matrix.", errors)
+    require(bundle_manifest.get("docs", "core_doctrine") == "docs/roadmap/core-zip-doctrine.md", "Portable manifest must point at the Core doctrine doc.", errors)
     require(bundle_manifest.has_section("saver.anthology"), "Portable manifest must include anthology as a canonical saver section.", errors)
 
     require(installer_manifest.get("bundle", "staging_name") == "screensave-installer-c14-rc", "Installer manifest must stage to screensave-installer-c14-rc.", errors)
     require(installer_manifest.get("bundle", "zip_name") == "screensave-installer-c14-rc.zip", "Installer manifest must name the C14 RC zip.", errors)
     require(installer_manifest.get("portable_source", "staging_root") == "out/portable/screensave-portable-c14-rc", "Installer manifest must point at the C14 portable staging root.", errors)
     require(installer_manifest.get("docs", "installer_matrix") == "validation/notes/c14-installer-matrix.md", "Installer manifest must point at the C14 installer matrix.", errors)
+    require(installer_manifest.get("doctrine", "built_on") == "core", "Installer manifest must declare that Installer is built on Core.", errors)
 
     require('SCREENSAVE_VERSION_TEXT "0.15.0"' in version_header, "version.h must keep the 0.15.0 release text.", errors)
     require('SCREENSAVE_VERSION_SERIES "C14 Final Rerelease Hardening Release Candidate"' in version_header, "version.h must carry the C14 release-candidate series label.", errors)
@@ -75,8 +81,8 @@ def main() -> int:
     require("# ScreenSave Release Candidate Notes" in release_notes, "release-candidate-notes.md must use the expected title.", errors)
     require("`c14-release-candidate`" in release_notes, "release-candidate-notes.md must record the canonical tag name.", errors)
     require("## C14 - 2026-03-30" in changelog, "CHANGELOG.md must record the C14 release-candidate entry.", errors)
-    require("The current continuation line is complete through `C14` final rerelease hardening." in readme, "README.md must record the final C14 state.", errors)
-    require("No further continuation prompt is scheduled on the current line." in prompt_program, "prompt-program.md must state that no further continuation prompt is scheduled.", errors)
+    require("The active continuation line now extends through `C15` release doctrine and channel split. `C16` Core release refresh and baseline freeze is next." in readme, "README.md must record the C15/C16 status.", errors)
+    require("`C13` Wave A, Wave B, and Wave C are complete, `C14` final rerelease hardening is complete, and `C15` release doctrine and channel split are complete. `C16` Core release refresh and baseline freeze is next." in prompt_program, "prompt-program.md must point to C15 and C16.", errors)
 
     check_manifest_versions(errors)
 

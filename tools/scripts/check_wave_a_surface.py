@@ -110,28 +110,28 @@ def main() -> int:
     require("phosphor_config_randomize_settings" in phosphor_module, "Phosphor module must wire randomize_settings.", errors)
 
     require(
-        "Implementation currently exists through `S15` plus continuation `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, `C13` Wave A, Wave B, and Wave C, and `C14`." in readme,
+        "Implementation currently exists through `S15` plus continuation `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, `C13` Wave A, Wave B, and Wave C, `C14`, and `C15`." in readme,
         "README.md must record C13 Wave C as complete.",
         errors,
     )
     require(
-        "The current continuation line is complete through `C14` final rerelease hardening." in readme,
-        "README.md must point to C14.",
+        "The active continuation line now extends through `C15` release doctrine and channel split. `C16` Core release refresh and baseline freeze is next." in readme,
+        "README.md must point to C15 and C16.",
         errors,
     )
     require(
-        "`C13` Wave A, Wave B, and Wave C are complete, and `C14` final rerelease hardening has closed the current continuation line with the release-candidate pass." in prompt_program,
-        "prompt-program.md must record the current C14 next-step status.",
+        "`C13` Wave A, Wave B, and Wave C are complete, `C14` final rerelease hardening is complete, and `C15` release doctrine and channel split are complete. `C16` Core release refresh and baseline freeze is next." in prompt_program,
+        "prompt-program.md must record the current C15/C16 status.",
         errors,
     )
     require(
-        "The current continuation line is complete through `C14` final rerelease hardening." in series_map,
-        "series-map.md must point to C14.",
+        "The active continuation line now extends through `C15` release doctrine and channel split. `C16` Core release refresh and baseline freeze is next." in series_map,
+        "series-map.md must point to C15 and C16.",
         errors,
     )
     require(
-        "No further continuation prompt is scheduled on the current line after `C14` final rerelease hardening." in post_s15,
-        "post-s15-plan.md must point to C14.",
+        "`C16` Core release refresh and baseline freeze is the next continuation prompt." in post_s15,
+        "post-s15-plan.md must point to C16 as next.",
         errors,
     )
     require("## C13 Wave A - 2026-03-30" in changelog, "CHANGELOG.md must record C13 Wave A.", errors)

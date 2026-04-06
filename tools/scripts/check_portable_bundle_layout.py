@@ -59,7 +59,7 @@ def check_source_controlled_defs(manifest: configparser.ConfigParser, errors: li
 
     note = read_text(ROOT / "validation" / "notes" / "c14-portable-bundle-matrix.md")
     require("# C14 Portable Bundle Matrix" in note, "C14 portable note is missing its title.", errors)
-    require("`C14` closes the current continuation line" in note, "C14 portable note must record the release-candidate closeout.", errors)
+    require("pre-freeze Core candidate surface" in note, "C14 portable note must record the C15 doctrine interpretation.", errors)
 
 
 def check_staged_bundle(manifest: configparser.ConfigParser, errors: list[str]) -> None:
@@ -114,17 +114,17 @@ def check_staged_bundle(manifest: configparser.ConfigParser, errors: list[str]) 
 
 def check_status_docs(errors: list[str]) -> None:
     readme = read_text(ROOT / "README.md")
-    require("Implementation currently exists through `S15` plus continuation `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, `C13` Wave A, Wave B, and Wave C, and `C14`." in readme, "README.md must record C13 Wave C as complete.", errors)
-    require("The current continuation line is complete through `C14` final rerelease hardening." in readme, "README.md must point to C14.", errors)
+    require("Implementation currently exists through `S15` plus continuation `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, `C13` Wave A, Wave B, and Wave C, `C14`, and `C15`." in readme, "README.md must record C13 Wave C plus C15 as complete.", errors)
+    require("The active continuation line now extends through `C15` release doctrine and channel split. `C16` Core release refresh and baseline freeze is next." in readme, "README.md must point to C15 and C16.", errors)
 
     prompt_program = read_text(ROOT / "docs" / "roadmap" / "prompt-program.md")
-    require("Post-`S15` work now follows committed `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, the completed `C13` family-polish work, and the completed `C14` release-hardening pass." in prompt_program, "prompt-program.md must record completed C13 family-polish work.", errors)
-    require("`C13` Wave A, Wave B, and Wave C are complete, and `C14` final rerelease hardening has closed the current continuation line with the release-candidate pass." in prompt_program, "prompt-program.md must point to C14.", errors)
-    require("- `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, and `C14` are complete." in prompt_program, "prompt-program.md must keep the completed C00-C12 line.", errors)
+    require("Post-`S15` work now follows committed `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, the completed `C13` family-polish work, the completed `C14` release-hardening pass, and the completed `C15` release-doctrine and channel-split pass." in prompt_program, "prompt-program.md must record completed C13 family-polish work plus C15 doctrine.", errors)
+    require("`C13` Wave A, Wave B, and Wave C are complete, `C14` final rerelease hardening is complete, and `C15` release doctrine and channel split are complete. `C16` Core release refresh and baseline freeze is next." in prompt_program, "prompt-program.md must point to C15 and C16.", errors)
+    require("- `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, `C14`, and `C15` are complete." in prompt_program, "prompt-program.md must keep the completed C00-C12, C14, and C15 line.", errors)
 
     series_map = read_text(ROOT / "docs" / "roadmap" / "series-map.md")
-    require("`C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, `C13` Wave A, Wave B, and Wave C, and `C14` are complete." in series_map, "series-map.md must record C13 Wave C as complete.", errors)
-    require("The current continuation line is complete through `C14` final rerelease hardening." in series_map, "series-map.md must point to C14.", errors)
+    require("`C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, `C13` Wave A, Wave B, and Wave C, `C14`, and `C15` are complete." in series_map, "series-map.md must record C13 Wave C plus C15 as complete.", errors)
+    require("The active continuation line now extends through `C15` release doctrine and channel split. `C16` Core release refresh and baseline freeze is next." in series_map, "series-map.md must point to C15 and C16.", errors)
 
     post_s15 = read_text(ROOT / "docs" / "roadmap" / "post-s15-plan.md")
     require("10. `C09` completed the real `suite` browser, launcher, preview, and saver-settings surface before `C10` SDK stabilization." in post_s15, "post-s15-plan.md must record C09 as complete.", errors)
@@ -132,7 +132,7 @@ def check_status_docs(errors: list[str]) -> None:
     require("12. `C11` completed structured backlog ingestion and routing before `C12` cross-cutting polish begins." in post_s15, "post-s15-plan.md must record C11 as complete.", errors)
     require("13. `C12` completed the cross-cutting polish and quality-bar pass before the first `C13` saver-specific polish wave begins." in post_s15, "post-s15-plan.md must record C12 as complete.", errors)
     require("15. `C13` Wave B completed the second saver-specific polish pass for `pipeworks`, `lifeforms`, `signals`, `mechanize`, and `ecosystems`." in post_s15, "post-s15-plan.md must record C13 Wave B as complete.", errors)
-    require("No further continuation prompt is scheduled on the current line after `C14` final rerelease hardening." in post_s15, "post-s15-plan.md must point to C14.", errors)
+    require("`C16` Core release refresh and baseline freeze is the next continuation prompt." in post_s15, "post-s15-plan.md must point to C16 as next.", errors)
 
 
 def main() -> int:

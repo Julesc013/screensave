@@ -87,29 +87,29 @@ def validate_sdk_baseline(errors: list[str]) -> None:
         errors,
     )
     require(
-        "The current continuation line is complete through `C14` final rerelease hardening." in read_text(ROOT / "README.md"),
-        "README.md must point to C14.",
+        "The active continuation line now extends through `C15` release doctrine and channel split. `C16` Core release refresh and baseline freeze is next." in read_text(ROOT / "README.md"),
+        "README.md must point to C15 and C16.",
         errors,
     )
     require(
-        "`C13` Wave A, Wave B, and Wave C are complete, and `C14` final rerelease hardening has closed the current continuation line with the release-candidate pass." in read_text(
+        "`C13` Wave A, Wave B, and Wave C are complete, `C14` final rerelease hardening is complete, and `C15` release doctrine and channel split are complete. `C16` Core release refresh and baseline freeze is next." in read_text(
             ROOT / "docs" / "roadmap" / "prompt-program.md"
         ),
-        "prompt-program.md must point to C14.",
+        "prompt-program.md must point to C15 and C16.",
         errors,
     )
     require(
-        "The current continuation line is complete through `C14` final rerelease hardening." in read_text(
+        "The active continuation line now extends through `C15` release doctrine and channel split. `C16` Core release refresh and baseline freeze is next." in read_text(
             ROOT / "docs" / "roadmap" / "series-map.md"
         ),
-        "series-map.md must point to C14.",
+        "series-map.md must point to C15 and C16.",
         errors,
     )
     require(
-        "No further continuation prompt is scheduled on the current line after `C14` final rerelease hardening." in read_text(
+        "`C16` Core release refresh and baseline freeze is the next continuation prompt." in read_text(
             ROOT / "docs" / "roadmap" / "post-s15-plan.md"
         ),
-        "post-s15-plan.md must point to C14.",
+        "post-s15-plan.md must point to C16 as next.",
         errors,
     )
     require(

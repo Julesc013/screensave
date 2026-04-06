@@ -2,6 +2,26 @@
 
 All notable repository changes are recorded here in prompt history order.
 
+## C15 - 2026-04-06
+
+### Added
+
+- `docs/roadmap/release-channels.md` and `docs/roadmap/core-zip-doctrine.md` as the canonical `C15` release doctrine, channel split, and Core inclusion-gate docs.
+- `validation/notes/c15-channel-matrix.md` as the explicit precondition check, channel-confusion inventory, channel matrix, and `C16` handoff note for the doctrine pass.
+- `packaging/channel_manifest.ini` as the compact machine-readable record of the Core, Installer, Suite, BenchLab, SDK, and Extras channel model.
+
+### Changed
+
+- Updated `README.md`, roadmap status docs, backlog-routing docs, and refinement-thread notes so the repo now names `ScreenSave Core` as the primary product, keeps Installer, Suite, BenchLab, SDK, and Extras as companion channels, and records `C16` Core refresh and baseline freeze as the next continuation step.
+- Updated packaging docs, portable and installer manifests, release-note sources, and the portable and installer staging scripts so the current `C14` portable bundle is treated as the pre-freeze Core candidate surface and the current `C14` installer package is treated as the companion Installer candidate built on top of it.
+- Updated the `C14` release-readiness, portable, installer, and known-issues notes plus the affected static validators so the release-candidate evidence is now interpreted through the `C15` doctrine instead of the earlier `C14` closeout wording.
+
+### Validation
+
+- Confirmed before editing that the implemented continuation line through `C14`, the post-`S15` continuation docs, the current saver line, `anthology`, `suite`, BenchLab, the SDK, the portable-bundle architecture, the installer architecture, the release-candidate notes, and the `C14` validation notes already existed as the live baseline.
+- Kept `C15` bounded to release doctrine, artifact-channel split, docs, manifests, packaging-script wording, and validation-tooling updates only; this prompt did not add new saver features, new renderer work, suite-app expansion, installer-architecture rewrites, or SDK/runtime expansion.
+- Final verification for `C15` remains documentation and static-tooling based in this environment; no fresh native rebuild or Core payload refresh is claimed here, and `C16` remains the next step for the actual Core refresh and baseline freeze.
+
 ## C14 - 2026-03-30
 
 ### Added

@@ -182,14 +182,14 @@ def main() -> int:
     require("static only" in note.lower(), "C09 suite note must record static-only evidence honestly.", errors)
 
     root_readme = read_text(ROOT / "README.md")
-    require("The current continuation line is complete through `C14` final rerelease hardening." in root_readme, "README.md must point to C14.", errors)
+    require("The active continuation line now extends through `C15` release doctrine and channel split. `C16` Core release refresh and baseline freeze is next." in root_readme, "README.md must point to C15 and C16.", errors)
     require("`benchlab` and `suite` are now the real non-saver apps in the tree." in root_readme, "README.md must describe the real app pair.", errors)
 
     prompt_program = read_text(ROOT / "docs" / "roadmap" / "prompt-program.md")
-    require("`C13` Wave A, Wave B, and Wave C are complete, and `C14` final rerelease hardening has closed the current continuation line with the release-candidate pass." in prompt_program, "prompt-program.md must point to C14.", errors)
+    require("`C13` Wave A, Wave B, and Wave C are complete, `C14` final rerelease hardening is complete, and `C15` release doctrine and channel split are complete. `C16` Core release refresh and baseline freeze is next." in prompt_program, "prompt-program.md must point to C15 and C16.", errors)
 
     series_map = read_text(ROOT / "docs" / "roadmap" / "series-map.md")
-    require("The current continuation line is complete through `C14` final rerelease hardening." in series_map, "series-map.md must point to C14.", errors)
+    require("The active continuation line now extends through `C15` release doctrine and channel split. `C16` Core release refresh and baseline freeze is next." in series_map, "series-map.md must point to C15 and C16.", errors)
 
     if errors:
         for error in errors:

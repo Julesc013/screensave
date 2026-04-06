@@ -74,8 +74,8 @@ def main() -> int:
     require_text(
         ROOT / "README.md",
         (
-            "Implementation currently exists through `S15` plus continuation `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, `C13` Wave A, Wave B, and Wave C, and `C14`.",
-            "The current continuation line is complete through `C14` final rerelease hardening.",
+            "Implementation currently exists through `S15` plus continuation `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, `C13` Wave A, Wave B, and Wave C, `C14`, and `C15`.",
+            "The active continuation line now extends through `C15` release doctrine and channel split. `C16` Core release refresh and baseline freeze is next.",
             "`suite` is now the canonical suite-level browser, launcher, preview, and configuration app under `products/apps/suite/`.",
             "`anthology` is the real suite meta-saver `.scr`",
         ),
@@ -84,17 +84,17 @@ def main() -> int:
     require_text(
         ROOT / "docs" / "roadmap" / "prompt-program.md",
         (
-            "Post-`S15` work now follows committed `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, the completed `C13` family-polish work, and the completed `C14` release-hardening pass.",
-            "`C13` Wave A, Wave B, and Wave C are complete, and `C14` final rerelease hardening has closed the current continuation line with the release-candidate pass.",
-            "- `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, and `C14` are complete.",
+            "Post-`S15` work now follows committed `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, the completed `C13` family-polish work, the completed `C14` release-hardening pass, and the completed `C15` release-doctrine and channel-split pass.",
+            "`C13` Wave A, Wave B, and Wave C are complete, `C14` final rerelease hardening is complete, and `C15` release doctrine and channel split are complete. `C16` Core release refresh and baseline freeze is next.",
+            "- `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, `C14`, and `C15` are complete.",
         ),
         errors,
     )
     require_text(
         ROOT / "docs" / "roadmap" / "series-map.md",
         (
-            "`C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, `C13` Wave A, Wave B, and Wave C, and `C14` are complete.",
-            "The current continuation line is complete through `C14` final rerelease hardening.",
+            "`C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, `C13` Wave A, Wave B, and Wave C, `C14`, and `C15` are complete.",
+            "The active continuation line now extends through `C15` release doctrine and channel split. `C16` Core release refresh and baseline freeze is next.",
         ),
         errors,
     )
@@ -105,7 +105,7 @@ def main() -> int:
             "13. `C12` completed the cross-cutting polish and quality-bar pass before the first `C13` saver-specific polish wave begins.",
             "14. `C13` Wave A completed the first saver-specific polish pass for `nocturne`, `ricochet`, `deepfield`, `plasma`, and `phosphor`.",
             "15. `C13` Wave B completed the second saver-specific polish pass for `pipeworks`, `lifeforms`, `signals`, `mechanize`, and `ecosystems`.",
-            "No further continuation prompt is scheduled on the current line after `C14` final rerelease hardening.",
+            "`C16` Core release refresh and baseline freeze is the next continuation prompt.",
         ),
         errors,
     )

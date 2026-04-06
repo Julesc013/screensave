@@ -20,6 +20,6 @@ Current stage:
 - `check_wave_a_surface.py` validates the C13 Wave A saver-polish note, the in-wave saver preset/theme/config-hook surface, the updated wave routing docs, and the active continuation-status docs.
 - `check_wave_b_surface.py` validates the C13 Wave B saver-polish note, the in-wave saver preset/theme/config-hook surface, the updated wave routing docs, and the active continuation-status docs.
 - `check_wave_c_surface.py` validates the C13 Wave C saver-polish note, the in-wave saver preset/theme/config-hook surface, the anthology long-run safeguards, and the active continuation-status docs.
-- `check_release_candidate_surface.py` validates the final C14 release-candidate notes, manifest/version alignment, refreshed staged outputs, and the closed continuation-status docs.
+- `check_release_candidate_surface.py` validates the final C14 release-candidate notes, the C15 doctrine handoff, manifest/version alignment, and refreshed staged outputs.
 - `check_release_scaffold.py` generates a manual release-scaffold report without publishing anything.
 Type: tooling.
