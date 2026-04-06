@@ -11,6 +11,30 @@ typedef struct screensave_file_writer_context_tag {
     char current_section[64];
 } screensave_file_writer_context;
 
+static FILE *screensave_settings_open_file(const char *path, const char *mode)
+{
+#if defined(_MSC_VER)
+    FILE *file;
+
+    if (path == NULL || mode == NULL) {
+        return NULL;
+    }
+
+    file = NULL;
+    if (fopen_s(&file, path, mode) != 0) {
+        return NULL;
+    }
+
+    return file;
+#else
+    if (path == NULL || mode == NULL) {
+        return NULL;
+    }
+
+    return fopen(path, mode);
+#endif
+}
+
 static void screensave_settings_emit_diag(
     screensave_diag_context *diagnostics,
     screensave_diag_level level,
@@ -647,7 +671,7 @@ int screensave_settings_export_file(
         return 0;
     }
 
-    file = fopen(path, "w");
+    file = screensave_settings_open_file(path, "w");
     if (file == NULL) {
         screensave_settings_emit_diag(
             diagnostics,

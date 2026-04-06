@@ -76,7 +76,7 @@ static unsigned int vector_object_target(const screensave_saver_session *session
     return count;
 }
 
-static unsigned long vector_hash(unsigned long value)
+unsigned long vector_hash(unsigned long value)
 {
     value ^= value >> 16;
     value *= 1664525UL;
@@ -85,7 +85,7 @@ static unsigned long vector_hash(unsigned long value)
     return value;
 }
 
-static int vector_signed_range(unsigned long value, int magnitude)
+int vector_signed_range(unsigned long value, int magnitude)
 {
     unsigned long span;
 

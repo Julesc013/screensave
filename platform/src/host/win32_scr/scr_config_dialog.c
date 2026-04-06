@@ -22,6 +22,8 @@ typedef struct scr_single_dialog_state_tag {
     screensave_renderer_kind selected_renderer_kind;
 } scr_single_dialog_state;
 
+static void scr_selector_populate_renderer_combo(HWND dialog);
+
 static screensave_renderer_kind scr_selector_renderer_kind_from_index(LRESULT selection)
 {
     switch ((int)selection) {

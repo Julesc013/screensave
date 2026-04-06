@@ -72,7 +72,7 @@ static int screensave_display_text_copy(char *buffer, unsigned int buffer_size, 
         return 0;
     }
 
-    strcpy(buffer, text);
+    memcpy(buffer, text, text_length + 1U);
     return 1;
 }
 
@@ -91,7 +91,7 @@ static int screensave_display_append_text(char *buffer, unsigned int buffer_size
         return 0;
     }
 
-    strcpy(buffer + used, text);
+    memcpy(buffer + used, text, added + 1U);
     return 1;
 }
 
@@ -219,7 +219,7 @@ static int screensave_display_special_renderer_reason(
             ) {
                 memcpy(requested_token, suffix, requested_length);
                 requested_token[requested_length] = '\0';
-                strcpy(active_token, fallback + 10U);
+                memcpy(active_token, fallback + 10U, active_length + 1U);
                 requested_text = screensave_display_renderer_kind_token(requested_token);
                 active_text = screensave_display_renderer_kind_token(active_token);
                 if (

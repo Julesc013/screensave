@@ -22,8 +22,32 @@ static int screensave_ini_text_copy(char *buffer, unsigned int buffer_size, cons
         return 0;
     }
 
-    strcpy(buffer, text);
+    memcpy(buffer, text, text_length + 1U);
     return 1;
+}
+
+static FILE *screensave_ini_open_file(const char *path, const char *mode)
+{
+#if defined(_MSC_VER)
+    FILE *file;
+
+    if (path == NULL || mode == NULL) {
+        return NULL;
+    }
+
+    file = NULL;
+    if (fopen_s(&file, path, mode) != 0) {
+        return NULL;
+    }
+
+    return file;
+#else
+    if (path == NULL || mode == NULL) {
+        return NULL;
+    }
+
+    return fopen(path, mode);
+#endif
 }
 
 static char *screensave_ini_trim_text(char *text)
@@ -61,7 +85,7 @@ int screensave_ini_parse_file(
         return 0;
     }
 
-    file = fopen(path, "r");
+    file = screensave_ini_open_file(path, "r");
     if (file == NULL) {
         return 0;
     }

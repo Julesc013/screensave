@@ -172,6 +172,8 @@ void vector_render_session(
     const screensave_saver_environment *environment
 );
 
+unsigned long vector_hash(unsigned long value);
+int vector_signed_range(unsigned long value, int magnitude);
 void vector_rng_seed(vector_rng_state *state, unsigned long seed);
 unsigned long vector_rng_next(vector_rng_state *state);
 unsigned long vector_rng_range(vector_rng_state *state, unsigned long upper_bound);
