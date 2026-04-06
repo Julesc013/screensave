@@ -149,33 +149,33 @@ def main() -> int:
     require("previous_catalog_index" in anthology_sim and "/ 2UL" in anthology_sim, "Anthology sim must damp direct repeat loops.", errors)
 
     require(
-        "Implementation currently exists through `S15` plus continuation `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, `C13` Wave A, Wave B, and Wave C, `C14`, and `C15`." in readme,
-        "README.md must record C13 Wave C as complete.",
+        "Implementation currently exists through `S15` plus continuation `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, `C13` Wave A, Wave B, and Wave C, `C14`, `C15`, and `C16`." in readme,
+        "README.md must record C16 as complete.",
         errors,
     )
     require(
-        "The active continuation line now extends through `C15` release doctrine and channel split. `C16` Core release refresh and baseline freeze is next." in readme,
-        "README.md must point to C15 and C16.",
+        "The continuation bridge is now closed and future work should resume in a new post-release `S`-series program." in readme,
+        "README.md must record the post-C16 handoff.",
         errors,
     )
     require(
-        "`C13` Wave A, Wave B, and Wave C are complete, `C14` final rerelease hardening is complete, and `C15` release doctrine and channel split are complete. `C16` Core release refresh and baseline freeze is next." in prompt_program,
-        "prompt-program.md must point to C15 and C16.",
+        "`C13` Wave A, Wave B, and Wave C are complete, `C14` final rerelease hardening is complete, `C15` release doctrine and channel split are complete, and `C16` Core release refresh and baseline freeze is complete." in prompt_program,
+        "prompt-program.md must record the completed C16 freeze.",
         errors,
     )
     require(
-        "`C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, `C13` Wave A, Wave B, and Wave C, `C14`, and `C15` are complete." in series_map,
-        "series-map.md must record C13 Wave C plus C15 as complete.",
+        "`C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, `C13` Wave A, Wave B, and Wave C, `C14`, `C15`, and `C16` are complete." in series_map,
+        "series-map.md must record C16 as complete.",
         errors,
     )
     require(
-        "The active continuation line now extends through `C15` release doctrine and channel split. `C16` Core release refresh and baseline freeze is next." in series_map,
-        "series-map.md must point to C15 and C16.",
+        "The continuation bridge now extends through the frozen `C16` Core baseline. Future work should start in a new post-release `S`-series program." in series_map,
+        "series-map.md must point to the post-C16 handoff.",
         errors,
     )
     require(
-        "`C16` Core release refresh and baseline freeze is the next continuation prompt." in post_s15,
-        "post-s15-plan.md must point to C16 as next.",
+        "The continuation bridge is closed after `C16`, and future work should start from the frozen baseline in a new post-release `S`-series program." in post_s15,
+        "post-s15-plan.md must point to the post-C16 handoff.",
         errors,
     )
     require("## C13 Wave C - 2026-03-30" in changelog, "CHANGELOG.md must record C13 Wave C.", errors)
@@ -188,7 +188,7 @@ def main() -> int:
 
     for snippet in (
         "`Wave-C` handled `stormglass`, `transit`, `observatory`, `vector`, `explorer`, `city`, `atlas`, `gallery`, and `anthology` without reopening suite-wide vocabulary or the shared platform contract.",
-        "`C15` release doctrine and channel split are complete, and `C16` Core release refresh and baseline freeze is the next scheduled continuation prompt.",
+        "`C16` Core release refresh and baseline freeze is complete, and future release/distribution follow-on work now starts from the frozen baseline in a new post-release `S`-series program.",
     ):
         require(snippet in backlog_routing, f"backlog-routing.md is missing {snippet!r}.", errors)
 

@@ -2,6 +2,27 @@
 
 All notable repository changes are recorded here in prompt history order.
 
+## C16 - 2026-04-06
+
+### Added
+
+- `packaging/release_notes/core-baseline-notes.md` and `packaging/release_notes/core-compatibility-notes.md` as the frozen `C16` Core baseline note set for the primary `ScreenSave Core` ZIP.
+- `validation/notes/c16-core-inclusion-matrix.md`, `validation/notes/c16-installer-matrix.md`, `validation/notes/c16-companion-channel-matrix.md`, `validation/notes/c16-known-issues.md`, and `validation/notes/c16-release-baseline.md` as the explicit Core inclusion decision, companion-channel state, frozen known-issues surface, and baseline checkpoint record for `C16`.
+- `tools/scripts/check_release_baseline_surface.py` as the static validator for the frozen `C16` release baseline, manifest/version alignment, and refreshed staged artifact roots.
+
+### Changed
+
+- Restored a truthful `Release|Win32` baseline build for `build/msvc/vs2022/ScreenSave.sln` with narrow MSVC-safe fixes in shared file handling, display-text copying, selector-dialog declaration order, and `vector` helper linkage so the canonical saver line, `anthology.scr`, `benchlab.exe`, and `suite.exe` can be rebuilt and frozen without widening product scope.
+- Updated the shared version-series identity to `C16 Core Baseline Freeze` and synchronized root, roadmap, packaging, manifest, release-note, and validation docs so the repository now records the frozen Core baseline, the companion-channel separation, and the post-release handoff truthfully.
+- Refreshed the portable Core and companion Installer definitions to `screensave-core-c16-baseline` and `screensave-installer-c16-baseline`, aligned the staged doc set with the new baseline note structure, and kept `suite`, BenchLab, the SDK, and Extras separate from Core.
+- Updated the portable, installer, scaffold, and baseline validation scripts so the current release checks audit the frozen `C16` surface instead of the earlier `C14` release-candidate naming.
+
+### Validation
+
+- Confirmed before editing that the implemented continuation line through `C14`, the completed `C15` doctrine docs, the explicit Core inclusion gate, the standalone saver line, the portable bundle architecture, the installer architecture, and the separate companion roles for Suite, BenchLab, SDK, and Extras already existed as the live baseline.
+- Built `build/msvc/vs2022/ScreenSave.sln` for `Release|Win32` on April 6, 2026 and produced the full canonical saver line plus `anthology.scr`, `benchlab.exe`, and `suite.exe` under `out/msvc/vs2022/Release/`.
+- Kept `C16` bounded to release-freeze work only: this prompt did not add new saver features, new renderer work, suite-app expansion, BenchLab expansion, SDK expansion, or packaging-architecture rewrites.
+
 ## C15 - 2026-04-06
 
 ### Added

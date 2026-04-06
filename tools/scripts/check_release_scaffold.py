@@ -15,9 +15,9 @@ REQUIRED_PATHS = [
     ROOT / "specs" / "release_contract.md",
     ROOT / "packaging" / "README.md",
     ROOT / "packaging" / "release_notes" / "README.md",
-    ROOT / "packaging" / "release_notes" / "release-candidate-notes.md",
+    ROOT / "packaging" / "release_notes" / "core-baseline-notes.md",
     ROOT / "validation" / "README.md",
-    ROOT / "validation" / "notes" / "c14-release-readiness-matrix.md",
+    ROOT / "validation" / "notes" / "c16-release-baseline.md",
     ROOT / ".github" / "workflows" / "release.yml",
 ]
 
@@ -45,7 +45,7 @@ def build_report(version_label: str, track: str, missing: list[pathlib.Path], ch
             "## Current deferrals",
             "- This workflow does not build binaries.",
             "- This workflow does not publish releases.",
-            "- Portable and installer packaging are implemented, but output completeness still depends on locally available saver binaries.",
+            "- Frozen Core and Installer packaging depend on locally available release-build saver binaries.",
         ]
     )
 

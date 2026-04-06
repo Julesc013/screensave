@@ -1,4 +1,4 @@
-"""Validate the final C14 release-candidate surface plus the C15 doctrine handoff."""
+"""Validate the preserved C14 release-candidate surface plus the C15 doctrine handoff."""
 
 from __future__ import annotations
 
@@ -81,8 +81,8 @@ def main() -> int:
     require("# ScreenSave Release Candidate Notes" in release_notes, "release-candidate-notes.md must use the expected title.", errors)
     require("`c14-release-candidate`" in release_notes, "release-candidate-notes.md must record the canonical tag name.", errors)
     require("## C14 - 2026-03-30" in changelog, "CHANGELOG.md must record the C14 release-candidate entry.", errors)
-    require("The active continuation line now extends through `C15` release doctrine and channel split. `C16` Core release refresh and baseline freeze is next." in readme, "README.md must record the C15/C16 status.", errors)
-    require("`C13` Wave A, Wave B, and Wave C are complete, `C14` final rerelease hardening is complete, and `C15` release doctrine and channel split are complete. `C16` Core release refresh and baseline freeze is next." in prompt_program, "prompt-program.md must point to C15 and C16.", errors)
+    require("The continuation bridge is now closed and future work should resume in a new post-release `S`-series program." in readme, "README.md must record the post-C16 handoff.", errors)
+    require("`C13` Wave A, Wave B, and Wave C are complete, `C14` final rerelease hardening is complete, `C15` release doctrine and channel split are complete, and `C16` Core release refresh and baseline freeze is complete." in prompt_program, "prompt-program.md must record the completed C16 freeze.", errors)
 
     check_manifest_versions(errors)
 

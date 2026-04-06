@@ -87,29 +87,29 @@ def validate_sdk_baseline(errors: list[str]) -> None:
         errors,
     )
     require(
-        "The active continuation line now extends through `C15` release doctrine and channel split. `C16` Core release refresh and baseline freeze is next." in read_text(ROOT / "README.md"),
-        "README.md must point to C15 and C16.",
+        "The continuation bridge is now closed and future work should resume in a new post-release `S`-series program." in read_text(ROOT / "README.md"),
+        "README.md must record the post-C16 handoff.",
         errors,
     )
     require(
-        "`C13` Wave A, Wave B, and Wave C are complete, `C14` final rerelease hardening is complete, and `C15` release doctrine and channel split are complete. `C16` Core release refresh and baseline freeze is next." in read_text(
+        "`C13` Wave A, Wave B, and Wave C are complete, `C14` final rerelease hardening is complete, `C15` release doctrine and channel split are complete, and `C16` Core release refresh and baseline freeze is complete." in read_text(
             ROOT / "docs" / "roadmap" / "prompt-program.md"
         ),
-        "prompt-program.md must point to C15 and C16.",
+        "prompt-program.md must record the completed C16 freeze.",
         errors,
     )
     require(
-        "The active continuation line now extends through `C15` release doctrine and channel split. `C16` Core release refresh and baseline freeze is next." in read_text(
+        "The continuation bridge now extends through the frozen `C16` Core baseline. Future work should start in a new post-release `S`-series program." in read_text(
             ROOT / "docs" / "roadmap" / "series-map.md"
         ),
-        "series-map.md must point to C15 and C16.",
+        "series-map.md must point to the post-C16 handoff.",
         errors,
     )
     require(
-        "`C16` Core release refresh and baseline freeze is the next continuation prompt." in read_text(
+        "The continuation bridge is closed after `C16`, and future work should start from the frozen baseline in a new post-release `S`-series program." in read_text(
             ROOT / "docs" / "roadmap" / "post-s15-plan.md"
         ),
-        "post-s15-plan.md must point to C16 as next.",
+        "post-s15-plan.md must point to the post-C16 handoff.",
         errors,
     )
     require(

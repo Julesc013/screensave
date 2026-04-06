@@ -1,4 +1,4 @@
-"""Validate the refreshed C14 portable bundle definition and staged output."""
+"""Validate the frozen C16 Core bundle definition and staged output."""
 
 from __future__ import annotations
 
@@ -46,20 +46,24 @@ def discover_binary(output_roots: list[pathlib.Path], relative_path: str) -> pat
     return None
 
 
-def check_source_controlled_defs(manifest: configparser.ConfigParser, errors: list[str]) -> None:
+def check_source_controlled_defs(errors: list[str]) -> None:
     require(MANIFEST_PATH.exists(), "Missing packaging/portable/bundle_manifest.ini.", errors)
     require((ROOT / "packaging" / "portable" / "assemble_portable.py").exists(), "Missing packaging/portable/assemble_portable.py.", errors)
     require((ROOT / "packaging" / "portable" / "layout.md").exists(), "Missing packaging/portable/layout.md.", errors)
     require((ROOT / "packaging" / "release_notes" / "portable-release-notes.md").exists(), "Missing packaging/release_notes/portable-release-notes.md.", errors)
-    require((ROOT / "packaging" / "release_notes" / "release-candidate-notes.md").exists(), "Missing packaging/release_notes/release-candidate-notes.md.", errors)
-    require((ROOT / "validation" / "notes" / "c14-portable-bundle-matrix.md").exists(), "Missing validation/notes/c14-portable-bundle-matrix.md.", errors)
-    require((ROOT / "validation" / "notes" / "c14-release-readiness-matrix.md").exists(), "Missing validation/notes/c14-release-readiness-matrix.md.", errors)
-    require((ROOT / "validation" / "notes" / "c14-known-issues.md").exists(), "Missing validation/notes/c14-known-issues.md.", errors)
+    require((ROOT / "packaging" / "release_notes" / "core-baseline-notes.md").exists(), "Missing packaging/release_notes/core-baseline-notes.md.", errors)
+    require((ROOT / "packaging" / "release_notes" / "core-compatibility-notes.md").exists(), "Missing packaging/release_notes/core-compatibility-notes.md.", errors)
+    require((ROOT / "validation" / "notes" / "c16-core-inclusion-matrix.md").exists(), "Missing validation/notes/c16-core-inclusion-matrix.md.", errors)
+    require((ROOT / "validation" / "notes" / "c16-release-baseline.md").exists(), "Missing validation/notes/c16-release-baseline.md.", errors)
+    require((ROOT / "validation" / "notes" / "c16-known-issues.md").exists(), "Missing validation/notes/c16-known-issues.md.", errors)
+    require((ROOT / "validation" / "notes" / "c16-companion-channel-matrix.md").exists(), "Missing validation/notes/c16-companion-channel-matrix.md.", errors)
     require((ROOT / "validation" / "notes" / "c14-config-integrity.md").exists(), "Missing validation/notes/c14-config-integrity.md.", errors)
+    require((ROOT / "validation" / "notes" / "c05-windows-integration-matrix.md").exists(), "Missing validation/notes/c05-windows-integration-matrix.md.", errors)
 
-    note = read_text(ROOT / "validation" / "notes" / "c14-portable-bundle-matrix.md")
-    require("# C14 Portable Bundle Matrix" in note, "C14 portable note is missing its title.", errors)
-    require("pre-freeze Core candidate surface" in note, "C14 portable note must record the C15 doctrine interpretation.", errors)
+    note = read_text(ROOT / "validation" / "notes" / "c16-core-inclusion-matrix.md")
+    require("# C16 Core Inclusion Matrix" in note, "C16 inclusion note is missing its title.", errors)
+    require("| `anthology` | included |" in note, "C16 inclusion note must record anthology as included.", errors)
+    require("No current saver candidate was deferred to Extras in `C16`." in note, "C16 inclusion note must record the Extras deferral result.", errors)
 
 
 def check_staged_bundle(manifest: configparser.ConfigParser, errors: list[str]) -> None:
@@ -81,7 +85,8 @@ def check_staged_bundle(manifest: configparser.ConfigParser, errors: list[str]) 
     staged_savers = sorted(path.stem for path in (staging_root / "SAVERS").glob("*.scr"))
     require(staged_savers == expected_staged, "Staged SAVERS contents do not match the currently discovered canonical saver outputs.", errors)
     require(all(saver in canonical_savers for saver in staged_savers), "Staged SAVERS contains a non-canonical saver artifact.", errors)
-    require(not (staging_root / "OPTIONAL" / "benchlab.exe").exists(), "BenchLab must not be staged in the end-user portable bundle.", errors)
+    require(not (staging_root / "OPTIONAL" / "benchlab.exe").exists(), "BenchLab must not be staged in the end-user Core bundle.", errors)
+    require(not any(path.name.lower() == "suite.exe" for path in staging_root.rglob("*") if path.is_file()), "Suite must not be staged in the end-user Core bundle.", errors)
 
     staged_manifests = sorted(
         path.name.replace(".manifest.ini", "")
@@ -95,13 +100,22 @@ def check_staged_bundle(manifest: configparser.ConfigParser, errors: list[str]) 
         pathlib.Path("DOCS") / "FILE-LIST.txt",
         pathlib.Path("DOCS") / "SHA256.txt",
         pathlib.Path("DOCS") / "INCLUSION-MATRIX.md",
-        pathlib.Path("DOCS") / "RELEASE-CANDIDATE.md",
-        pathlib.Path("DOCS") / "RELEASE-READINESS.md",
+        pathlib.Path("DOCS") / "CORE-RELEASE-NOTES.md",
+        pathlib.Path("DOCS") / "CORE-BASELINE.md",
+        pathlib.Path("DOCS") / "RELEASE-BASELINE.md",
         pathlib.Path("DOCS") / "KNOWN-ISSUES.md",
+        pathlib.Path("DOCS") / "COMPATIBILITY-NOTES.md",
+        pathlib.Path("DOCS") / "COMPANION-CHANNELS.md",
         pathlib.Path("DOCS") / "CONFIG-INTEGRITY.md",
+        pathlib.Path("DOCS") / "WINDOWS-INTEGRATION.md",
         pathlib.Path("DOCS") / "PORTABLE-BUNDLE.md",
         pathlib.Path("DOCS") / "PORTABLE-LAYOUT.md",
-        pathlib.Path("DOCS") / "PORTABLE-RELEASE-NOTES.md",
+        pathlib.Path("DOCS") / "RELEASE-CHANNELS.md",
+        pathlib.Path("DOCS") / "CORE-DOCTRINE.md",
+        pathlib.Path("DOCS") / "CHANNEL-MATRIX.md",
+        pathlib.Path("DOCS") / "CHANNEL-MANIFEST.ini",
+        pathlib.Path("DOCS") / "CHANGELOG.md",
+        pathlib.Path("DOCS") / "SOURCE-BUNDLE-MANIFEST.ini",
         pathlib.Path("LICENSES") / "ASSETS-LICENSES.md",
         pathlib.Path("LICENSES") / "THIRD-PARTY-LICENSES.md",
         pathlib.Path("PRESETS") / "README.txt",
@@ -111,35 +125,39 @@ def check_staged_bundle(manifest: configparser.ConfigParser, errors: list[str]) 
     ):
         require((staging_root / relative_path).is_file(), f"Missing staged bundle file: {(staging_root / relative_path).relative_to(ROOT)}", errors)
 
+    require(not (staging_root / "DOCS" / "RELEASE-CANDIDATE.md").exists(), "Portable bundle must not stage the obsolete release-candidate note name.", errors)
+    require(not (staging_root / "DOCS" / "RELEASE-READINESS.md").exists(), "Portable bundle must not stage the obsolete release-readiness note name.", errors)
+
 
 def check_status_docs(errors: list[str]) -> None:
     readme = read_text(ROOT / "README.md")
-    require("Implementation currently exists through `S15` plus continuation `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, `C13` Wave A, Wave B, and Wave C, `C14`, and `C15`." in readme, "README.md must record C13 Wave C plus C15 as complete.", errors)
-    require("The active continuation line now extends through `C15` release doctrine and channel split. `C16` Core release refresh and baseline freeze is next." in readme, "README.md must point to C15 and C16.", errors)
+    require("Implementation currently exists through `S15` plus continuation `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, `C13` Wave A, Wave B, and Wave C, `C14`, `C15`, and `C16`." in readme, "README.md must record C16 as complete.", errors)
+    require("The continuation bridge is now closed and future work should resume in a new post-release `S`-series program." in readme, "README.md must record the post-C16 handoff.", errors)
 
     prompt_program = read_text(ROOT / "docs" / "roadmap" / "prompt-program.md")
-    require("Post-`S15` work now follows committed `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, the completed `C13` family-polish work, the completed `C14` release-hardening pass, and the completed `C15` release-doctrine and channel-split pass." in prompt_program, "prompt-program.md must record completed C13 family-polish work plus C15 doctrine.", errors)
-    require("`C13` Wave A, Wave B, and Wave C are complete, `C14` final rerelease hardening is complete, and `C15` release doctrine and channel split are complete. `C16` Core release refresh and baseline freeze is next." in prompt_program, "prompt-program.md must point to C15 and C16.", errors)
-    require("- `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, `C14`, and `C15` are complete." in prompt_program, "prompt-program.md must keep the completed C00-C12, C14, and C15 line.", errors)
+    require("Post-`S15` work now follows committed `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, the completed `C13` family-polish work, the completed `C14` release-hardening pass, the completed `C15` release-doctrine and channel-split pass, and the completed `C16` Core baseline freeze." in prompt_program, "prompt-program.md must record C16 as complete.", errors)
+    require("`C13` Wave A, Wave B, and Wave C are complete, `C14` final rerelease hardening is complete, `C15` release doctrine and channel split are complete, and `C16` Core release refresh and baseline freeze is complete." in prompt_program, "prompt-program.md must record the completed C16 freeze.", errors)
+    require("- `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, `C14`, `C15`, and `C16` are complete." in prompt_program, "prompt-program.md must keep the completed C00-C12, C14-C16 line.", errors)
 
     series_map = read_text(ROOT / "docs" / "roadmap" / "series-map.md")
-    require("`C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, `C13` Wave A, Wave B, and Wave C, `C14`, and `C15` are complete." in series_map, "series-map.md must record C13 Wave C plus C15 as complete.", errors)
-    require("The active continuation line now extends through `C15` release doctrine and channel split. `C16` Core release refresh and baseline freeze is next." in series_map, "series-map.md must point to C15 and C16.", errors)
+    require("`C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, `C13` Wave A, Wave B, and Wave C, `C14`, `C15`, and `C16` are complete." in series_map, "series-map.md must record C16 as complete.", errors)
+    require("The continuation bridge now extends through the frozen `C16` Core baseline. Future work should start in a new post-release `S`-series program." in series_map, "series-map.md must point to the post-C16 handoff.", errors)
 
     post_s15 = read_text(ROOT / "docs" / "roadmap" / "post-s15-plan.md")
-    require("10. `C09` completed the real `suite` browser, launcher, preview, and saver-settings surface before `C10` SDK stabilization." in post_s15, "post-s15-plan.md must record C09 as complete.", errors)
-    require("11. `C10` completed the real SDK and contributor surface before `C11` backlog ingestion begins." in post_s15, "post-s15-plan.md must record C10 as complete.", errors)
-    require("12. `C11` completed structured backlog ingestion and routing before `C12` cross-cutting polish begins." in post_s15, "post-s15-plan.md must record C11 as complete.", errors)
-    require("13. `C12` completed the cross-cutting polish and quality-bar pass before the first `C13` saver-specific polish wave begins." in post_s15, "post-s15-plan.md must record C12 as complete.", errors)
-    require("15. `C13` Wave B completed the second saver-specific polish pass for `pipeworks`, `lifeforms`, `signals`, `mechanize`, and `ecosystems`." in post_s15, "post-s15-plan.md must record C13 Wave B as complete.", errors)
-    require("`C16` Core release refresh and baseline freeze is the next continuation prompt." in post_s15, "post-s15-plan.md must point to C16 as next.", errors)
+    require("20. `C16` refreshes and freezes the actual Core baseline against the `C15` doctrine." in post_s15, "post-s15-plan.md must record the C16 freeze decision.", errors)
+    require("21. `C16` closes the continuation bridge and hands off to a new post-release `S`-series program." in post_s15, "post-s15-plan.md must record the C16 handoff decision.", errors)
+    require("The continuation bridge is closed after `C16`, and future work should start from the frozen baseline in a new post-release `S`-series program." in post_s15, "post-s15-plan.md must point to the post-C16 handoff.", errors)
+
+    release_channels = read_text(ROOT / "docs" / "roadmap" / "release-channels.md")
+    require("## Current C16 State" in release_channels, "release-channels.md must expose the current C16 state section.", errors)
+    require("`C16` froze `ScreenSave Core` at `out/portable/screensave-core-c16-baseline/` with a matching zip beside it." in release_channels, "release-channels.md must record the frozen C16 Core output.", errors)
 
 
 def main() -> int:
     errors: list[str] = []
     manifest = read_ini(MANIFEST_PATH)
 
-    check_source_controlled_defs(manifest, errors)
+    check_source_controlled_defs(errors)
     check_staged_bundle(manifest, errors)
     check_status_docs(errors)
 

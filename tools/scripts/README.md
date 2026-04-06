@@ -10,8 +10,8 @@ Current stage:
 - `check_build_layout.py` validates the checked-in build scaffold and target relationships.
 - `check_shared_settings_layout.py` validates the C04 shared settings, preset, randomization, and pack scaffold.
 - `check_windows_integration_layout.py` validates the C05 Win32 screen, preview, config, persistence, and metadata hardening scaffold.
-- `check_portable_bundle_layout.py` validates the C06 portable bundle definition, staged bundle, and continuation-status docs.
-- `check_installer_layout.py` validates the C07 installer definition, staged installer package, payload provenance, and continuation-status docs.
+- `check_portable_bundle_layout.py` validates the frozen C16 Core bundle definition, staged bundle, and frozen-status docs.
+- `check_installer_layout.py` validates the frozen C16 installer companion definition, staged package, payload provenance, and frozen-status docs.
 - `check_meta_saver_layout.py` validates the C08 anthology meta-saver product tree, orchestration hooks, BenchLab inspection hooks, and continuation-status docs.
 - `check_suite_app_layout.py` validates the C09 suite app product tree, build-lane integration, manifest-driven saver coverage, role boundaries, and continuation-status docs.
 - `check_sdk_surface.py` validates the C10 contributor-facing SDK surface, the real saver template, and contributor-authored saver or pack roots.
@@ -20,6 +20,7 @@ Current stage:
 - `check_wave_a_surface.py` validates the C13 Wave A saver-polish note, the in-wave saver preset/theme/config-hook surface, the updated wave routing docs, and the active continuation-status docs.
 - `check_wave_b_surface.py` validates the C13 Wave B saver-polish note, the in-wave saver preset/theme/config-hook surface, the updated wave routing docs, and the active continuation-status docs.
 - `check_wave_c_surface.py` validates the C13 Wave C saver-polish note, the in-wave saver preset/theme/config-hook surface, the anthology long-run safeguards, and the active continuation-status docs.
-- `check_release_candidate_surface.py` validates the final C14 release-candidate notes, the C15 doctrine handoff, manifest/version alignment, and refreshed staged outputs.
+- `check_release_candidate_surface.py` validates the preserved C14 release-candidate notes, the C15 doctrine handoff, manifest/version alignment, and historical staged outputs.
+- `check_release_baseline_surface.py` validates the frozen C16 Core baseline notes, manifest/version alignment, companion-artifact references, and refreshed staged outputs.
 - `check_release_scaffold.py` generates a manual release-scaffold report without publishing anything.
 Type: tooling.
