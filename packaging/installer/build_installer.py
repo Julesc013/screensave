@@ -1,4 +1,4 @@
-"""Stage the C14 current-user installer refresh from the real portable payload."""
+"""Stage the ScreenSave Installer channel from the real Core candidate payload."""
 
 from __future__ import annotations
 
@@ -56,8 +56,8 @@ def write_readme(staging_root: Path, savers: list[str], manifest: configparser.C
     lines = [
         display_name,
         "",
-        "This is the C14 scripted current-user installer refresh for the ScreenSave saver line.",
-        "It complements the current portable bundle and does not replace portable distribution.",
+        "This is the ScreenSave Installer companion channel for the current ScreenSave Core candidate.",
+        "It complements the Core ZIP and does not replace it.",
         "",
         "How to use this package:",
         "1. Extract this package to a writable directory.",
@@ -72,9 +72,9 @@ def write_readme(staging_root: Path, savers: list[str], manifest: configparser.C
         f"- Included saver binaries: {', '.join(savers) if savers else 'none'}",
         "",
         "Important limits:",
-        "- This installer package is only as complete as the real portable payload it consumes.",
+        "- This installer package is only as complete as the real Core candidate payload it consumes.",
         "- Machine-wide install is deferred after C07.",
-        "- BenchLab and Suite are separate app products and are not part of this package.",
+        "- BenchLab, Suite, SDK material, and Extras are separate channels and are not part of this package.",
         "- Anthology is treated as a normal saver product and is included only when its binary exists in the current payload.",
     ]
     (staging_root / "README.txt").write_text("\n".join(lines) + "\n", encoding="ascii")
@@ -89,7 +89,7 @@ def write_status_note(
     lines = [
         "# Installer Status",
         "",
-        "This note describes the staged C14 installer package.",
+        "This note describes the staged Installer companion package for the current Core candidate.",
         "",
         "## Package Source",
         "",
@@ -100,7 +100,7 @@ def write_status_note(
         "",
         f"- Included saver binaries: {', '.join(savers) if savers else 'none'}",
         "- BenchLab is excluded from the installed end-user package.",
-        "- Suite is a separate app product and is excluded from the installed end-user package.",
+        "- Suite, SDK material, and Extras are excluded from the installed end-user package.",
         "- Anthology is included only when it exists in the current portable payload.",
         "",
         "## Policy Summary",
@@ -115,6 +115,7 @@ def write_status_note(
         "",
         "- The installer package depends on the current portable payload for saver coverage.",
         "- Machine-wide install remains deferred after C07.",
+        "- The installer does not decide Core inclusion.",
     ]
     if missing_payload:
         lines.append("- The current payload is partial because some canonical saver outputs are still missing from the local output roots.")
@@ -174,6 +175,10 @@ def main() -> None:
     copy_file(ROOT / docs["release_notes"], staging_root / "DOCS" / "INSTALLER-RELEASE-NOTES.md")
     copy_file(ROOT / docs["installer_matrix"], staging_root / "DOCS" / "INSTALL-UNINSTALL-MATRIX.md")
     copy_file(ROOT / docs["portable_matrix"], staging_root / "DOCS" / "PORTABLE-BUNDLE-MATRIX.md")
+    copy_file(ROOT / docs["release_channels"], staging_root / "DOCS" / "RELEASE-CHANNELS.md")
+    copy_file(ROOT / docs["core_doctrine"], staging_root / "DOCS" / "CORE-DOCTRINE.md")
+    copy_file(ROOT / docs["channel_matrix"], staging_root / "DOCS" / "CHANNEL-MATRIX.md")
+    copy_file(ROOT / docs["channel_manifest"], staging_root / "DOCS" / "CHANNEL-MANIFEST.ini")
     copy_file(ROOT / docs["release_candidate_notes"], staging_root / "DOCS" / "RELEASE-CANDIDATE.md")
     copy_file(ROOT / docs["release_readiness"], staging_root / "DOCS" / "RELEASE-READINESS.md")
     copy_file(ROOT / docs["known_issues"], staging_root / "DOCS" / "KNOWN-ISSUES.md")

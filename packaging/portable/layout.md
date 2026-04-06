@@ -1,6 +1,6 @@
 # Portable Bundle Layout
 
-This note defines the portable bundle architecture as refreshed in `C14`.
+This note defines the portable bundle architecture that currently stages the `ScreenSave Core` candidate as refreshed in `C14` and interpreted by `C15`.
 
 ## Source-Controlled Inputs
 
@@ -37,12 +37,12 @@ The staged bundle uses this layout:
 - `MANIFESTS/` contains only the manifests for staged saver binaries.
 - `PACKS/` contains only file-backed packs whose owning saver binary is staged.
 - `PRESETS/` and `THEMES/` remain note-only in the `C06` baseline unless a staged saver ships standalone preset/theme export files outside pack directories.
-- `OPTIONAL/` is reserved for clearly labeled extras; BenchLab and Suite are excluded from the end-user saver bundle.
+- `OPTIONAL/` is reserved for clearly labeled Extras material; BenchLab, Suite, SDK material, and installer assets are excluded from the Core bundle.
 
 ## Current Limits
 
 - The portable bundle may be partial when some current saver outputs are unavailable.
 - The bundle does not perform installation, registration, or uninstall work.
-- Installed distribution now exists separately under `packaging/installer/`.
-- The bundle excludes the separate `suite` and `benchlab` app products.
+- Installed distribution now exists separately under `packaging/installer/` as the companion Installer channel.
+- The bundle excludes the separate `suite` and `benchlab` app products, SDK material, and any unfrozen Extras content.
 - `anthology` is a normal saver product, but it is staged only when its real binary is present.

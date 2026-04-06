@@ -8,6 +8,7 @@ This note records the final `C14` installer refresh for the current ScreenSave s
 - Generated staging output lives under `out/installer/screensave-installer-c14-rc/`.
 - Generated zip artifact lives under `out/installer/screensave-installer-c14-rc.zip`.
 - The installer consumes the real `C14` portable payload instead of redefining a second saver payload.
+- Under the `C15` doctrine that portable payload is the current Core candidate surface and this package is the companion Installer candidate.
 - Supported install mode remains current-user only.
 - Machine-wide install remains deferred.
 
@@ -70,4 +71,5 @@ The `C14` installer package is built from the currently staged `C14` portable pa
 - The current installer package is partial because the upstream portable payload is partial.
 - The current installer package does not claim machine-wide deployment.
 - Reinstall overlays existing managed files and intentionally avoids payload-absent pruning.
-- `C14` closes the current continuation line; later work, if any, is post-release follow-on rather than another scheduled continuation prompt.
+- `C14` recorded the installer candidate state before the `C15` doctrine split.
+- `C16` will revisit Installer only after the actual Core baseline is refreshed and frozen.

@@ -1,10 +1,10 @@
-# ScreenSave Portable Bundle Release Notes
+# ScreenSave Core Portable Release Notes
 
-This note is the user-facing release-support source for the final `C14` portable bundle refresh.
+This note is the user-facing release-support source for the current `ScreenSave Core` portable ZIP candidate refreshed in `C14` and named formally in `C15`.
 
 ## What This Bundle Is
 
-- A portable end-user bundle for the current ScreenSave saver line.
+- The current portable ZIP candidate for `ScreenSave Core`.
 - A manual-distribution layout for standalone `.scr` products.
 - A bundle assembled from real discovered saver outputs plus product metadata and supporting docs.
 
@@ -13,7 +13,7 @@ This note is the user-facing release-support source for the final `C14` portable
 - Not an installer.
 - Not a registration or uninstall workflow.
 - Not the separate `suite` app.
-- Not a developer-tools bundle; BenchLab remains excluded from the end-user payload.
+- Not the separate BenchLab diagnostics harness, the SDK, or unfrozen Extras content.
 
 ## Included Content Policy
 
@@ -22,6 +22,7 @@ This note is the user-facing release-support source for the final `C14` portable
 - Include per-saver manifests for staged savers.
 - Include file-backed pack content only when the owning saver binary is staged.
 - Include user-facing bundle notes, current compatibility guidance, and known limitations.
+- Use `OPTIONAL/` only for clearly labeled Extras material when later work chooses to stage it.
 
 ## Compatibility And Renderer Notes
 
@@ -35,5 +36,6 @@ This note is the user-facing release-support source for the final `C14` portable
 
 - The `C14` portable stage may still be partial when some canonical saver outputs are unavailable in the local output roots.
 - The bundle assembly may rely on pre-existing binaries when a supported toolchain is unavailable.
-- `suite` and `benchlab` remain separate app products and are not part of the end-user saver bundle.
-- Installed distribution exists separately through the refreshed current-user installer path.
+- `suite`, BenchLab, SDK material, and Extras remain separate companion channels and are not part of Core by default.
+- Installed distribution exists separately through the refreshed current-user Installer channel.
+- `C16` will decide the actual frozen Core lineup by applying the Core inclusion gate.

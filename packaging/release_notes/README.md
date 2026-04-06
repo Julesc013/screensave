@@ -7,6 +7,6 @@ Type: release support.
 
 ## Current State
 
-- `portable-release-notes.md` is the current portable-bundle release note source.
-- `installer-release-notes.md` is the current installed-distribution release note source.
-- `release-candidate-notes.md` is the final `C14` release-candidate summary that ties the saver line, app surfaces, bundle state, installer state, and known limitations together.
+- `portable-release-notes.md` is the current Core-channel release note source for the portable ZIP candidate.
+- `installer-release-notes.md` is the current Installer-channel release note source.
+- `release-candidate-notes.md` is the final `C14` release-candidate summary, now interpreted through the `C15` channel doctrine.

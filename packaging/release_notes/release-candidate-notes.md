@@ -1,6 +1,6 @@
 # ScreenSave Release Candidate Notes
 
-This note records the final `C14` release-candidate state for the current ScreenSave suite.
+This note records the final `C14` release-candidate state for the current ScreenSave product line.
 
 ## Included Product Surface
 
@@ -13,8 +13,9 @@ This note records the final `C14` release-candidate state for the current Screen
 
 - Portable saver bundle: refreshed under `out/portable/screensave-portable-c14-rc/`
 - Current-user installer package: refreshed under `out/installer/screensave-installer-c14-rc/`
-- End-user package policy: saver-only payloads
-- App policy: `benchlab` and `suite` stay outside the end-user saver bundle and installer payload
+- `C15` doctrine interpretation: the portable bundle is the current Core candidate surface
+- `C15` doctrine interpretation: the installer package is the optional companion Installer candidate built from that surface
+- App policy: `benchlab` and `suite` stay outside the primary Core bundle and the companion Installer payload
 
 ## Current Local Output Reality
 
@@ -40,3 +41,4 @@ This note records the final `C14` release-candidate state for the current Screen
 - Current local portable and installer payloads remain partial because the configured output roots do not currently contain the full canonical saver line.
 - Existing local output binaries were not rebuilt during `C14`; embedded version/about resources inside those binaries were not revalidated here.
 - Live installer verification remains mock-mode only in this environment.
+- `C16` still has to apply the Core inclusion gate and freeze the actual Core baseline.

@@ -1,6 +1,6 @@
 # C14 Release-Readiness Matrix
 
-This note records the final `C14` release-readiness picture for the current ScreenSave suite.
+This note records the final `C14` release-readiness picture for the current ScreenSave product line.
 
 ## Saver Line
 
@@ -43,6 +43,13 @@ This note records the final `C14` release-readiness picture for the current Scre
 | `gl21` | optional | static only in this environment | Capability-gated advanced tier; no fresh local runtime evidence in `C14` |
 | `gl33` / `gl46` | placeholders | static contract only | Not real backends and not release requirements |
 | Fallback wording | normalized | static validation | Shared renderer and diagnostics vocabulary stayed aligned through `C14` |
+
+## C15 Channel Interpretation
+
+- The current staged portable bundle is the pre-freeze `ScreenSave Core` candidate surface.
+- The current staged installer package is the optional companion Installer candidate built from that surface.
+- `suite`, BenchLab, and the SDK remain separate channels outside Core.
+- `C16` must still apply the Core inclusion gate before any frozen Core claim is made.
 
 ## Release Summary
 

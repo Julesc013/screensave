@@ -10,7 +10,7 @@ It turns the remaining idea space into explicit, routed work instead of leaving 
 | `X-01` | Config-dialog wording, default naming, and per-saver metadata consistency | shared-platform/runtime | `P1` | `M` | low | none | `C12-X1` | `platform` | Align labels and manifest-facing language without changing product ownership |
 | `X-02` | Suite and saver metadata parity across README, manifest summaries, and status notes | docs/SDK/tooling | `P1` | `S` | low | none | `C12-X1` | `docs` | Reduce drift between suite/browser surfaces and product docs |
 | `X-03` | Preset/theme/pack curation sweep plus authoring examples refresh | docs/SDK/tooling | `P2` | `M` | low | none | `C12-X1` | `sdk` | Keep the shared settings architecture discoverable and consistent |
-| `X-04` | Portable and installer payload refresh once complete local outputs are available | release/distribution | `P1` | `M` | medium | `X-02` | `REL-R` | `distribution` | Packaging truth should catch up to the post-`C08` and post-`C09` product line |
+| `X-04` | Core and installer payload refresh once complete local outputs are available | release/distribution | `P1` | `M` | medium | `X-02` | `REL-R` | `distribution` | Packaging truth should catch up to the post-`C15` doctrine and the real product line |
 | `X-05` | Renderer-tier messaging, fallback wording, and per-product capability evidence sweep | renderer-tier work | `P1` | `M` | medium | none | `C12-X2` | `renderer` | Keep `gdi`, `gl11`, and `gl21` claims honest across the suite |
 | `X-06` | Preview, fullscreen, persistence, and long-run smoke coverage sweep | validation/hardening | `P1` | `M` | medium | none | `C12-X2` | `validation` | Strengthen evidence before family polish waves fan out |
 | `X-07` | Suite, anthology, and BenchLab role-boundary polish | suite/meta layer | `P2` | `M` | low | `X-02` | `C12-X1` | `suite` | Keep browser, meta-saver, and diagnostics roles easy to understand |
@@ -52,14 +52,14 @@ It turns the remaining idea space into explicit, routed work instead of leaving 
 
 | ID | Focus | Category | Priority | Effort | Risk | Depends On | Target Bucket | Owner Area | Notes |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| `REL-01` | Refresh portable bundle payload to the full current saver line plus current app truth | release/distribution | `P1` | `M` | medium | `X-04` | `REL-R` | `distribution` | Packaging truth should catch up after fresh outputs exist |
-| `REL-02` | Refresh installer payload, registration notes, and uninstall evidence against the refreshed bundle | release/distribution | `P1` | `M` | medium | `REL-01` | `REL-R` | `distribution` | Still keep portable and installed modes distinct |
+| `REL-01` | Refresh the Core candidate payload and freeze the actual Core baseline | release/distribution | `P1` | `M` | medium | `X-04` | `REL-R` | `distribution` | Apply the `C15` Core gate to the current saver line once fresh outputs exist |
+| `REL-02` | Refresh the Installer channel, registration notes, and uninstall evidence against the frozen Core baseline | release/distribution | `P1` | `M` | medium | `REL-01` | `REL-R` | `distribution` | Keep Installer as a companion channel derived from Core |
 | `REL-03` | Machine-wide install, repair, and prune policy evaluation | release/distribution | `P3` | `L` | high | `REL-02` | `REL-R` | `distribution` | Deferred until the active polish line is stable |
 
 ## Parked Concept Pool
 
 These items are intentionally not on the active continuation line.
-They exist so future idea work has a home without interrupting `C12` through `C14`.
+They exist so future idea work has a home without interrupting `C12` through `C16`.
 
 | ID | Working Title | Likely Route | Priority | Effort | Risk | Target Bucket | Notes |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -83,6 +83,8 @@ They exist so future idea work has a home without interrupting `C12` through `C1
 - `Wave-A` covers `nocturne`, `ricochet`, `deepfield`, `plasma`, and `phosphor`.
 - `Wave-B` covers `pipeworks`, `lifeforms`, `signals`, `mechanize`, and `ecosystems`.
 - `Wave-C` landed for `stormglass`, `transit`, `observatory`, `vector`, `explorer`, `city`, `atlas`, `gallery`, and `anthology` while keeping `suite` and `benchlab` limited to narrow validation support.
-- `C14` final rerelease hardening is complete; later work is post-release follow-on rather than another scheduled continuation prompt.
+- `C14` final rerelease hardening preserved the release-candidate baseline.
+- `C15` release doctrine and channel split are complete.
+- `C16` Core release refresh and baseline freeze is the next scheduled continuation prompt.
 - `REL-R` stays after the active polish line unless a release blocker forces it forward.
 - `PARKED` and `RND-R` are intentionally out of the current continuation line.

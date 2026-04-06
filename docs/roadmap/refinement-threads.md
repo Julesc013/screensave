@@ -54,14 +54,16 @@ Rules:
 
 Owns:
 
-- portable bundle refresh
-- installer payload refresh
+- Core refresh and freeze work
+- installer channel refresh
+- extras gating and release-evidence follow-on work
 - uninstall / repair / release-evidence follow-on work
 
 Rules:
 
 - do not redefine runtime behavior
 - do not turn release work into silent product changes
+- keep Core, Installer, Suite, BenchLab, SDK, and Extras as distinct channels
 
 ### Suite / Meta Coordination Thread
 

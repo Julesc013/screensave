@@ -1,6 +1,6 @@
 # C07 Installer Layout
 
-This note defines the installer architecture as refreshed in `C14`.
+This note defines the Installer-channel architecture as refreshed in `C14` and interpreted by `C15`.
 
 ## Source-Controlled Inputs
 
@@ -18,6 +18,7 @@ This note defines the installer architecture as refreshed in `C14`.
 - Zip artifact: `out/installer/screensave-installer-c14-rc.zip`
 
 Generated outputs are derived from source-controlled installer inputs plus the current staged portable payload under `out/portable/screensave-portable-c14-rc/`.
+Under the `C15` doctrine that portable payload is the current Core candidate surface.
 
 ## Supported Install Mode
 
@@ -77,12 +78,13 @@ The installer copies the portable payload into the dedicated install root and ad
 
 ## Portable Versus Installed
 
-- Portable mode: manual distribution, manual selection, no uninstall record, no install root, no automated rollback.
-- Installed mode: dedicated current-user install root, uninstall record, optional current-user selection assistance, explicit uninstall behavior, and a package-level README for end users.
+- Core portable mode: the primary product candidate, manual distribution, manual selection, no uninstall record, no install root, no automated rollback.
+- Installed mode: the companion Installer channel, dedicated current-user install root, uninstall record, optional current-user selection assistance, explicit uninstall behavior, and a package-level README for end users.
 
 ## Current Known Limits
 
 - The installer payload is only as complete as the real staged portable bundle it consumes.
 - `C07` does not add machine-wide installation.
 - The installer excludes the separate `suite` and `benchlab` app products.
+- The installer remains a companion convenience layer and does not redefine Core inclusion.
 - `anthology` is treated as a normal saver product but is installed only when the current portable payload contains `anthology.scr`.

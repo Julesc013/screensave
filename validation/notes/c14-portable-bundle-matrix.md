@@ -8,6 +8,7 @@ This note records the final `C14` portable bundle refresh for the current Screen
 - Generated staging output lives under `out/portable/screensave-portable-c14-rc/`.
 - Generated zip artifact lives under `out/portable/screensave-portable-c14-rc.zip`.
 - The portable bundle remains saver-only by policy.
+- Under the `C15` doctrine this staged bundle is the pre-freeze Core candidate surface.
 - `anthology` is part of the canonical saver line and is staged when its real binary exists.
 - `benchlab` and `suite` remain separate app products and are excluded from the end-user saver payload.
 
@@ -48,4 +49,5 @@ This note records the final `C14` portable bundle refresh for the current Screen
 - The refreshed bundle is real but partial.
 - Missing canonical saver outputs are recorded explicitly in the staged bundle status note instead of being replaced with placeholders.
 - The staged zip is real and is generated from the staged folder with built-in tooling.
-- `C14` closes the current continuation line; later work, if any, is post-release follow-on rather than another scheduled continuation prompt.
+- `C14` recorded the candidate bundle state before the `C15` doctrine split.
+- `C16` will refresh this Core candidate surface and freeze the actual Core baseline.

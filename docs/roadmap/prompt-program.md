@@ -5,8 +5,8 @@ Earlier docs described an intended Series 00 through 17 program; that shorter en
 
 Implementation currently exists through `S15`.
 The older public endpoint that treated `S16` and `S17` as the whole remaining plan is superseded.
-Post-`S15` work now follows committed `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, the completed `C13` family-polish work, and the completed `C14` release-hardening pass.
-`C13` Wave A, Wave B, and Wave C are complete, and `C14` final rerelease hardening has closed the current continuation line with the release-candidate pass.
+Post-`S15` work now follows committed `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, the completed `C13` family-polish work, the completed `C14` release-hardening pass, and the completed `C15` release-doctrine and channel-split pass.
+`C13` Wave A, Wave B, and Wave C are complete, `C14` final rerelease hardening is complete, and `C15` release doctrine and channel split are complete. `C16` Core release refresh and baseline freeze is next.
 
 ## Implemented Baseline
 
@@ -48,25 +48,28 @@ Post-`S15` work now follows committed `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, 
 | C12 | Cross-cutting polish | Shared quality passes across naming, config UX, metadata, validation notes, and distribution details | C03-C11 | Compatibility-first behavior and recoverable change sets |
 | C13 | Per-family polish waves | Focused polish passes by saver family after the shared product and suite surfaces have stabilized | C03-C12 | Product-local ownership, no broad framework creep |
 | C14 | Final rerelease hardening | End-to-end release readiness, compatibility sweep, validation reconciliation, and rerelease notes | C03-C13 | Truthful release evidence, preserved baseline, no silent tier inflation |
+| C15 | Release doctrine and channel split | Canonical Core doctrine, companion-channel split, Core inclusion gate, and release-facing doc realignment | C14 | Truthful release framing, standalone `.scr` first-class status, and explicit channel boundaries |
+| C16 | Core release refresh and baseline freeze | Refreshed Core payload, final Core inclusion decision, updated release notes, and frozen Core baseline | C15 | The C15 doctrine, truthful evidence, and explicit separation from companion channels |
 
 ## Superseded Legacy Endpoint
 
 The older two-step post-`S15` endpoint is retired for future planning:
 
 - Former `S16` packaging work is redistributed across `C06` and `C07`.
-- Former `S17` release-hardening and suite-handoff work is redistributed across `C08` through `C14`.
+- Former `S17` release-hardening and suite-handoff work is redistributed across `C08` through `C16`.
 
 Do not schedule new continuation work under `S16` or `S17`.
 
 ## Continuation Rules
 
-- `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, and `C14` are complete.
+- `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, `C14`, and `C15` are complete.
 - `C13` was the saver-polish phase rather than a single one-pass prompt.
 - `C13` Wave A is complete for `nocturne`, `ricochet`, `deepfield`, `plasma`, and `phosphor`.
 - `C13` Wave B is complete for `pipeworks`, `lifeforms`, `signals`, `mechanize`, and `ecosystems`.
 - `C13` Wave C is complete for `stormglass`, `transit`, `observatory`, `vector`, `explorer`, `city`, `atlas`, `gallery`, and `anthology`.
-- `C14` final rerelease hardening is complete and closes the current continuation line.
-- No further continuation prompt is scheduled on the current line.
+- `C14` final rerelease hardening preserved the truthful release-candidate baseline.
+- `C15` formalized ScreenSave Core as the primary product and split the companion channels into Installer, Suite, BenchLab, SDK, and Extras.
+- `C16` is the next continuation prompt and will refresh and freeze the actual ScreenSave Core baseline.
 - Rename and renderer-taxonomy normalization land before any productization or suite/meta work.
 - All-saver `.scr` productization lands before suite/meta products, backlog ingestion, or polish waves.
 - Shared settings, presets, randomization, and pack architecture land before distribution work.
@@ -74,5 +77,6 @@ Do not schedule new continuation work under `S16` or `S17`.
 - Installer, registration, and uninstall flow land before suite meta-saver work.
 - The suite meta-saver lands before the `suite` app so cross-saver orchestration is real before browse-and-control UI work expands.
 - The `suite` app lands before SDK stabilization so contributor-facing templates and examples can target the real browse-and-control surface instead of a placeholder.
+- Release doctrine and channel split land before any refreshed Core baseline freeze.
 - Creative backlog ingestion waits until the renamed product surface, suite surface, and SDK surface are stable enough to absorb new ideas without immediate rework.
 - Cross-cutting polish starts only after the backlog, routing, and wave buckets are explicit enough to keep saver-local work from forking shared architecture.

@@ -1,11 +1,11 @@
 # ScreenSave Installer Release Notes
 
-This note is the user-facing release-support source for the final `C14` installed-distribution refresh.
+This note is the user-facing release-support source for the optional `ScreenSave Installer` channel refreshed in `C14` and named formally in `C15`.
 
 ## What This Installer Is
 
-- A scripted current-user installer package for the current ScreenSave saver line.
-- A complement to the current portable bundle, not a replacement for it.
+- A scripted current-user installer package for the current ScreenSave Core candidate surface.
+- A complement to the Core ZIP, not a replacement for it.
 - A package that installs the currently staged saver payload into a dedicated current-user install root and writes a current-user uninstall record.
 
 ## What This Installer Is Not
@@ -13,6 +13,7 @@ This note is the user-facing release-support source for the final `C14` installe
 - Not a machine-wide installer.
 - Not the separate `suite` app.
 - Not a broad deployment platform.
+- Not the authority that decides what belongs in Core.
 - Not a guarantee that every canonical saver is present when the upstream portable payload is partial.
 
 ## Install And Registration Policy
@@ -33,5 +34,5 @@ This note is the user-facing release-support source for the final `C14` installe
 
 - The installer package is only as complete as the real portable payload it consumes.
 - Machine-wide install, shell-wide registration helpers, and richer upgrade repair modes remain deferred after `C07`.
-- `suite` and `benchlab` remain separate app products and are not installed by this saver-only package.
+- `suite`, BenchLab, SDK material, and Extras remain separate companion channels and are not installed by this saver-only package.
 - Portable distribution remains available as a separate delivery mode.

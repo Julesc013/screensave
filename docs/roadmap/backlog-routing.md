@@ -2,7 +2,7 @@
 
 This document defines the `C11` backlog and routing model for work after the implemented `C10` SDK baseline.
 
-Use it to decide whether an idea belongs in one saver, a shared layer, a renderer discussion, a suite/release follow-on, or the parked future-ideas pool.
+Use it to decide whether an idea belongs in one saver, a shared layer, a renderer discussion, a release-channel follow-on, or the parked future-ideas pool.
 
 ## Routing Categories
 
@@ -12,7 +12,7 @@ Use it to decide whether an idea belongs in one saver, a shared layer, a rendere
 | Shared-platform/runtime | `platform/`, shared specs, and cross-cutting validation notes | Stable reusable contracts, shared host/runtime behavior, shared config behavior, shared diagnostics helpers | One product's private behavior or art direction |
 | Renderer-tier work | Renderer docs, renderer validation, later renderer R&D notes | `gdi` / `gl11` / `gl21` parity, fallback truth, tier-specific evidence, later `gl33` / `gl46` research | Product-local preset or pack tuning |
 | Suite/meta layer | `suite`, `anthology`, and related app/meta docs | Cross-saver browse, launch, orchestration, suite metadata visibility, meta-saver selection logic | BenchLab diagnostics-only work or installer behavior |
-| Release/distribution | Portable, installer, release notes, and delivery validation | Bundle refresh, installer follow-on, uninstall/repair policy, release readiness | Saver-local rendering or config UX |
+| Release/distribution | Core, installer, extras, release notes, and delivery validation | Core refresh, installer follow-on, extras gating, uninstall/repair policy, release readiness | Saver-local rendering or config UX |
 | Docs/SDK/tooling | `docs/`, `products/sdk/`, `tools/`, and validation helpers | Contributor docs, examples, backlog notes, static validators, truth-bearing repo status | Shipping runtime behavior |
 | Validation/hardening | `validation/`, smoke checks, and bounded diagnostics work | Lifecycle evidence, persistence checks, artifact truth, long-run verification, compatibility notes | Unbounded new feature work |
 | Deferred/parked ideas | Parked backlog entries and concept pool | Working-title future savers, speculative renderer R&D, later release goals not ready for active waves | Current implementation promises |
@@ -62,7 +62,8 @@ Do not add percentages, point scores, or issue-tracker ceremony unless a later r
 - `Wave-A` starts with lower-risk products that should not force platform renegotiation; the first real `C13` pass covers `nocturne`, `ricochet`, `deepfield`, `plasma`, and `phosphor`.
 - `Wave-B` handled `pipeworks`, `lifeforms`, `signals`, `mechanize`, and `ecosystems` after `C13` Wave A and did not reopen suite-wide vocabulary or platform law.
 - `Wave-C` handled `stormglass`, `transit`, `observatory`, `vector`, `explorer`, `city`, `atlas`, `gallery`, and `anthology` without reopening suite-wide vocabulary or the shared platform contract.
-- `C14` final rerelease hardening is complete; later work is post-release follow-on rather than another scheduled continuation prompt.
+- `C14` final rerelease hardening is complete and preserved the release-candidate baseline.
+- `C15` release doctrine and channel split are complete, and `C16` Core release refresh and baseline freeze is the next scheduled continuation prompt.
 - `RND-R` and `REL-R` stay deferred unless the active polish line proves they are unblockers.
 
 ## Canonical Ownership Summary

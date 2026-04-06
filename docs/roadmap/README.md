@@ -6,6 +6,7 @@ Belongs here:
 - Series planning.
 - Prompt-program sequencing.
 - Product grouping and future lineup notes.
+- Release-channel doctrine and Core-gate planning notes.
 
 Does not belong here:
 - Normative compatibility rules.

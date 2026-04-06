@@ -1,7 +1,7 @@
 # Installer Packaging
 
-Purpose: source-controlled definition and assembly logic for the end-user installed saver distribution.
-Belongs here: installer manifests, install and uninstall scripts, layout notes, and installer-specific release-support docs.
+Purpose: source-controlled definition and assembly logic for the optional installed-distribution companion to `ScreenSave Core`.
+Belongs here: installer manifests, install and uninstall scripts, layout notes, and Installer-channel release-support docs.
 Does not belong here: runtime platform code, suite-app work, or fabricated install success claims.
 Type: release support.
 
@@ -21,6 +21,14 @@ Source-controlled installer inputs now live here:
 Generated installer staging and zip artifacts do not belong here.
 The assembly script writes generated staging and zip artifacts under `out/installer/`.
 
+## C15 Doctrine
+
+`C15` defines this directory as the `ScreenSave Installer` channel.
+
+- Installer is a companion convenience layer, not the primary product.
+- Installer is built on top of the Core saver line.
+- Installer does not decide what belongs in Core.
+
 ## C14 Refresh
 
 `C14` refreshes the installed-distribution surface for the final release-candidate pass:
@@ -30,18 +38,19 @@ The assembly script writes generated staging and zip artifacts under `out/instal
 - installer docs now include final release-readiness, known-issues, and config-integrity notes
 - `suite` and `benchlab` remain separate app products outside the end-user saver installer payload
 - `anthology` is treated as part of the canonical saver line and is installed when it exists in the current portable payload
+- the refreshed `C14` stage is now interpreted by `C15` as the companion Installer candidate built from the Core candidate surface
 
 ## Current Installer Policy
 
 - Current-user install mode is supported in `C07`.
 - Machine-wide install mode remains deferred.
-- The installer consumes the current portable payload instead of inventing a second saver-payload definition.
+- The installer consumes the current Core candidate payload instead of inventing a second saver-payload definition.
 - Active saver selection assistance is opt-in and does not silently replace the current saver during a default install.
 - Uninstall removes the dedicated install root and current-user uninstall record, but preserves user configuration and any future user-pack roots outside the install tree.
 - Update and reinstall overlay existing managed files by default and do not prune payload-absent savers automatically.
 
 ## Current Prompt Boundary
 
-This directory defines installed delivery only.
-Portable bundle behavior remains under `packaging/portable/`.
+This directory defines the Installer channel only.
+Core ZIP behavior remains under `packaging/portable/`.
 `suite` and `benchlab` remain separate app products and stay outside the saver-only installer payload.

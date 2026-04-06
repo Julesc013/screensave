@@ -1,4 +1,4 @@
-"""Assemble the C14 portable saver bundle refresh from real discovered outputs."""
+"""Assemble the current ScreenSave Core candidate from real discovered outputs."""
 
 from __future__ import annotations
 
@@ -128,9 +128,9 @@ def build_root_readme(
     legacy_outputs: list[str],
 ) -> str:
     lines = [
-        f"ScreenSave Portable Saver Bundle ({bundle_name})",
+        f"ScreenSave Core Candidate ({bundle_name})",
         "",
-        "This is the C14 release-candidate portable bundle stage for the current ScreenSave saver line.",
+        "This is the current portable ZIP candidate for ScreenSave Core under the C15 release doctrine.",
         "",
         "Included saver binaries:",
         f"- {format_list(included_savers)}",
@@ -144,9 +144,9 @@ def build_root_readme(
         "3. Use Windows screen saver settings or the file context menu to install it manually.",
         "4. Use the saver's own Settings dialog for configuration.",
         "",
-        "This portable bundle does not include installer, registration, or uninstall automation.",
-        "Installed distribution is available separately through the refreshed current-user installer package.",
-        "BenchLab and Suite are separate app products and are intentionally excluded from the end-user saver payload.",
+        "This Core candidate does not include installer, registration, or uninstall automation.",
+        "Installed distribution is available separately through the optional ScreenSave Installer channel.",
+        "BenchLab, Suite, SDK material, and Extras are separate channels and are intentionally excluded from Core by default.",
         "Anthology is treated as a normal saver product and is staged only when its real binary exists in the configured output roots.",
         "",
         "Renderer notes:",
@@ -241,8 +241,8 @@ def build_status_note(
             "## Bundle Policy",
             "",
             "- Anthology is part of the canonical saver line and is staged when its real binary exists.",
-            "- BenchLab is excluded from the end-user portable bundle.",
-            "- Suite is a separate app product and is excluded from the end-user portable bundle.",
+            "- BenchLab is excluded from the Core candidate payload.",
+            "- Suite, SDK material, and Extras are excluded from the Core candidate payload unless a later doctrine update says otherwise.",
             "- File-backed packs are staged only when the owning saver binary is present.",
             "- Missing binaries are recorded explicitly instead of replaced with placeholders.",
             "",
@@ -270,9 +270,10 @@ def build_status_note(
             "",
             "## Known Limitations",
             "",
-            "- This portable release-candidate stage remains partial when canonical saver outputs are missing from the local output roots.",
+            "- This Core candidate stage remains partial when canonical saver outputs are missing from the local output roots.",
             "- The included binaries were not rebuilt during C14 because no supported toolchain was available here.",
-            "- BenchLab and Suite remain separate app products and are not part of the end-user saver bundle.",
+            "- BenchLab, Suite, SDK material, and Extras remain separate channels and are not part of Core by default.",
+            "- C16 still has to apply the Core inclusion gate and freeze the actual Core baseline.",
         ]
     )
 
@@ -294,8 +295,9 @@ def write_file_inventory(staging_root: pathlib.Path) -> None:
         if str(relative_path).replace("\\", "/") == "DOCS/SHA256.txt":
             continue
         absolute_path = staging_root / relative_path
+        relative_path_windows = str(relative_path).replace("/", "\\")
         hash_lines.append(
-            f"{sha256_for_file(absolute_path)}  {str(relative_path).replace('/', '\\')}"
+            f"{sha256_for_file(absolute_path)}  {relative_path_windows}"
         )
     write_text(staging_root / "DOCS" / "SHA256.txt", "\n".join(hash_lines) + "\n")
 
@@ -303,12 +305,12 @@ def write_file_inventory(staging_root: pathlib.Path) -> None:
 def write_placeholder_notes(staging_root: pathlib.Path, included_pack_count: int) -> None:
     write_text(
         staging_root / "PRESETS" / "README.txt",
-        "Standalone portable preset-export files are not staged separately in the C14 release-candidate baseline.\n"
+        "Standalone portable preset-export files are not staged separately in the current Core candidate baseline.\n"
         "File-backed preset examples ship inside PACKS only when the owning saver binary is present.\n",
     )
     write_text(
         staging_root / "THEMES" / "README.txt",
-        "Standalone portable theme-export files are not staged separately in the C14 release-candidate baseline.\n"
+        "Standalone portable theme-export files are not staged separately in the current Core candidate baseline.\n"
         "File-backed theme examples ship inside PACKS only when the owning saver binary is present.\n",
     )
 
@@ -326,8 +328,8 @@ def write_placeholder_notes(staging_root: pathlib.Path, included_pack_count: int
 
     write_text(
         staging_root / "OPTIONAL" / "README.txt",
-        "No optional developer extras are included in the C14 end-user portable bundle.\n"
-        "BenchLab and Suite remain separate app products and are intentionally excluded here.\n",
+        "No optional Extras content is included in the current Core candidate bundle.\n"
+        "BenchLab, Suite, and SDK material remain separate channels and are intentionally excluded here.\n",
     )
 
 
@@ -406,6 +408,10 @@ def main() -> int:
     copy_file(ROOT / docs["portable_layout"], staging_root / "DOCS" / "PORTABLE-LAYOUT.md")
     copy_file(ROOT / docs["release_notes"], staging_root / "DOCS" / "PORTABLE-RELEASE-NOTES.md")
     copy_file(ROOT / docs["bundle_matrix"], staging_root / "DOCS" / "INCLUSION-MATRIX.md")
+    copy_file(ROOT / docs["release_channels"], staging_root / "DOCS" / "RELEASE-CHANNELS.md")
+    copy_file(ROOT / docs["core_doctrine"], staging_root / "DOCS" / "CORE-DOCTRINE.md")
+    copy_file(ROOT / docs["channel_matrix"], staging_root / "DOCS" / "CHANNEL-MATRIX.md")
+    copy_file(ROOT / docs["channel_manifest"], staging_root / "DOCS" / "CHANNEL-MANIFEST.ini")
     copy_file(ROOT / docs["release_candidate_notes"], staging_root / "DOCS" / "RELEASE-CANDIDATE.md")
     copy_file(ROOT / docs["release_readiness"], staging_root / "DOCS" / "RELEASE-READINESS.md")
     copy_file(ROOT / docs["known_issues"], staging_root / "DOCS" / "KNOWN-ISSUES.md")

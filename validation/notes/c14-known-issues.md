@@ -21,3 +21,4 @@ This note records the explicit non-blocking limitations left in the final `C14` 
 
 - These issues do not block a truthful release-candidate checkpoint because they are explicitly documented and reflected in the refreshed staging outputs.
 - These issues do block any claim that the current local package payload represents the full canonical saver line.
+- These issues also block freezing a truthful `ScreenSave Core` baseline until `C16` refreshes the candidate surface against the Core gate.
