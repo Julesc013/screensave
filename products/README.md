@@ -7,6 +7,6 @@ Type: runtime and product-definition space.
 
 ## Current Product Roles
 
-- `products/savers/` contains real standalone saver products plus the real `_template` contributor starter saver.
-- `products/apps/` contains real app products such as `benchlab` and `suite`.
-- `products/sdk/` now contains the real contributor surface for saver authoring and data-pack authoring.
+- `products/savers/` contains the real standalone saver products plus the real `_template` contributor starter saver. This is the primary product line that feeds `ScreenSave Core`.
+- `products/apps/` contains real companion app products such as `benchlab` and `suite`. These remain separate from the primary saver ZIP.
+- `products/sdk/` now contains the real contributor surface for saver authoring and data-pack authoring. It is contributor-facing only and not part of the primary end-user product.

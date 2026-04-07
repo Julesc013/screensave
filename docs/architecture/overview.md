@@ -17,6 +17,10 @@ The product side exists to keep each saver or suite-level application separate:
 - `products/apps/suite/` is the canonical suite-app location, and `products/apps/player/` is only a superseded legacy stub
 - SDK material supports later contributors without becoming part of the runtime baseline
 
+Release doctrine now treats `ScreenSave Core` as the primary product for the standalone saver line.
+`suite`, BenchLab, the Installer, the SDK, and Extras remain separate companion channels.
+`anthology` remains a real saver product rather than collapsing into the `suite` app.
+
 The architecture is intentionally conservative.
 Baseline functionality must remain available on a GDI-only path and must not depend on modern-only Windows assumptions.
 
@@ -33,4 +37,5 @@ Series 12 proves the same contracts can also host layered system-interface, kine
 Series 13 proves the same contracts can also host layered weather, transit-infrastructure, and celestial exhibit products by adding Stormglass, Transit, and Observatory without promoting a broad weather, route, astronomy, or scenic framework into the platform.
 Series 14 proves the same contracts can also host heavyweight software-3D, traversal, urban night-world, and fractal-voyage products by adding Vector, Explorer, City, and Atlas without promoting a broad 3D, map, city, or fractal framework into the platform.
 Series 15 proves the same contracts can also host a versioned renderer ladder by adding the optional capability-gated GL21 backend, explicit GL33 and GL46 placeholders, the internal null safety fallback, and Gallery without weakening the GDI baseline, the conservative GL11 tier, or the product/local ownership boundaries.
-Post-`S15` continuation planning is tracked in `docs/roadmap/post-s15-plan.md`, and the continuation path is now complete through the rename, checkpoint, productization, shared-settings, Windows-integration, portable-bundle, installer, suite-meta-saver, suite-app, SDK, backlog-ingestion, cross-cutting polish, `C13` Wave A, Wave B, and Wave C, and the final `C14` rerelease-hardening pass.
+Post-`S15` continuation planning is tracked historically in `docs/roadmap/post-s15-plan.md`, and the continuation path is now complete through the rename, checkpoint, productization, shared-settings, Windows-integration, portable-bundle, installer, suite-meta-saver, suite-app, SDK, backlog-ingestion, cross-cutting polish, `C13` Wave A, Wave B, and Wave C, `C14` rerelease hardening, `C15` release doctrine, and the `C16` Core baseline freeze.
+Active post-`C16` sequencing now lives in `docs/roadmap/post-c16-program.md` and runs `SS` first, then `PL`.
