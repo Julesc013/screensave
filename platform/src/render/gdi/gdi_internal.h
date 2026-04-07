@@ -4,8 +4,8 @@
 #include <windows.h>
 
 #include "screensave/diagnostics_api.h"
+#include "screensave/private/renderer_runtime.h"
 #include "screensave/renderer_api.h"
-#include "../../core/base/renderer_private.h"
 
 #define SCREENSAVE_GDI_CAPABILITIES \
     (SCREENSAVE_RENDERER_CAP_CLEAR | \

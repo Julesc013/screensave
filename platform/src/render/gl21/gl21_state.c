@@ -33,7 +33,7 @@ void screensave_gl21_update_renderer_info(
     }
 
     renderer->info.active_kind = SCREENSAVE_RENDERER_KIND_GL21;
-    renderer->info.capability_flags = SCREENSAVE_GL21_CAPABILITIES | state->caps.private_flags;
+    renderer->info.capability_flags = SCREENSAVE_GL21_CAPABILITIES;
     renderer->info.backend_name = "gl21";
     renderer->info.status_text = status_text != NULL ? status_text : "ready";
     renderer->info.vendor_name = state->caps.vendor[0] != '\0' ? state->caps.vendor : NULL;

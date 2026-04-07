@@ -1,7 +1,10 @@
-#ifndef SCREENSAVE_RENDERER_PRIVATE_H
-#define SCREENSAVE_RENDERER_PRIVATE_H
+#ifndef SCREENSAVE_PRIVATE_RENDERER_RUNTIME_H
+#define SCREENSAVE_PRIVATE_RENDERER_RUNTIME_H
 
 #include "screensave/renderer_api.h"
+#include "screensave/private/backend_caps.h"
+#include "screensave/private/present_path.h"
+#include "screensave/private/service_seams.h"
 
 typedef struct screensave_renderer_vtable_tag {
     int (*begin_frame)(screensave_renderer *renderer, const screensave_frame_info *frame_info);
@@ -33,6 +36,11 @@ struct screensave_renderer_tag {
     const screensave_renderer_vtable *vtable;
     screensave_renderer_info info;
     void *backend_state;
+    screensave_backend_kind backend_kind;
+    screensave_render_band active_band;
+    screensave_backend_caps backend_caps;
+    screensave_present_path present_path;
+    screensave_service_seams service_seams;
 };
 
 void screensave_renderer_init_dispatch(
@@ -41,5 +49,23 @@ void screensave_renderer_init_dispatch(
     void *backend_state,
     const screensave_renderer_info *info
 );
+void screensave_renderer_reset_private_state(screensave_renderer *renderer);
+void screensave_renderer_set_backend_identity(
+    screensave_renderer *renderer,
+    screensave_backend_kind backend_kind,
+    screensave_render_band active_band
+);
+void screensave_renderer_set_backend_caps(
+    screensave_renderer *renderer,
+    const screensave_backend_caps *caps
+);
+void screensave_renderer_set_present_path(
+    screensave_renderer *renderer,
+    const screensave_present_path *present_path
+);
+void screensave_renderer_set_service_seams(
+    screensave_renderer *renderer,
+    const screensave_service_seams *service_seams
+);
 
-#endif /* SCREENSAVE_RENDERER_PRIVATE_H */
+#endif /* SCREENSAVE_PRIVATE_RENDERER_RUNTIME_H */

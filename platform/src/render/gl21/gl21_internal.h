@@ -8,8 +8,8 @@
 #include <gl/gl.h>
 
 #include "screensave/diagnostics_api.h"
+#include "screensave/private/renderer_runtime.h"
 #include "screensave/renderer_api.h"
-#include "../../core/base/renderer_private.h"
 
 #ifndef GL_MAJOR_VERSION
 #define GL_MAJOR_VERSION 0x821B

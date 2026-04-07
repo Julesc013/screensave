@@ -2,7 +2,7 @@
 #include <string.h>
 
 #include "null_internal.h"
-#include "../../core/base/renderer_private.h"
+#include "screensave/private/renderer_runtime.h"
 
 typedef struct screensave_null_state_tag {
     screensave_sizei drawable_size;

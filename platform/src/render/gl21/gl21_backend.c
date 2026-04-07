@@ -162,7 +162,7 @@ int screensave_gl21_renderer_create(
     ZeroMemory(&info, sizeof(info));
     info.requested_kind = SCREENSAVE_RENDERER_KIND_GL21;
     info.active_kind = SCREENSAVE_RENDERER_KIND_GL21;
-    info.capability_flags = SCREENSAVE_GL21_CAPABILITIES | state->caps.private_flags;
+    info.capability_flags = SCREENSAVE_GL21_CAPABILITIES;
     info.drawable_size = state->drawable_size;
     info.backend_name = "gl21";
     info.status_text = state->caps.double_buffered ? "advanced-context-double-buffered" : "advanced-context-single-buffered";
