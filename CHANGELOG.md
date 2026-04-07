@@ -2,6 +2,25 @@
 
 All notable repository changes are recorded here in prompt history order.
 
+## SX02 - 2026-04-08
+
+### Added
+
+- `platform/src/render/gdi/gdi_capture.c` as the private home for GDI backbuffer capture signatures and backend-detail text used by diagnostics surfaces.
+
+### Changed
+
+- Replaced the old destructive GDI surface reset path with a non-destructive prepare flow that preserves the last good backbuffer when resize allocation fails, centralizes shared DIB metadata rules, and makes GDI surface ownership easier to audit.
+- Reworked the GDI present path so target acquisition, `BitBlt` versus `StretchBlt` routing, and present-time capture refresh now live in one place, giving preview and fullscreen paths a cleaner landing on the universal floor without widening the public renderer API.
+- Propagated specific GDI creation failures through the backend registry, added an explicit loader-side diagnostic when renderer selection lands on the mandatory floor, and updated host and BenchLab overlays plus architecture docs so backend detail reporting is honest for both GDI and GL paths.
+- Wired the new GDI capture unit into the checked-in MinGW and VS2022 build lanes and updated the active roadmap surfaces so `SX02` now records as complete and `SX03` becomes the next optional modern-tier step.
+
+### Validation
+
+- Built `build/mingw/i686` with `PROFILE=debug` and `CC=gcc`, producing the shared platform library plus the checked-in saver, BenchLab, and Suite targets after the GDI floor hardening cut.
+- Confirmed the GDI floor changes stayed behind the private implementation boundary and did not widen the public renderer-facing contract.
+- Kept `SX02` bounded to GDI hardening, fallback visibility, diagnostics detail, build integration, and documentation; this prompt did not implement GL33 or GL46 behavior, adopt non-GL families, rewrite the public renderer API, or widen product scope.
+
 ## SX01 - 2026-04-08
 
 ### Added

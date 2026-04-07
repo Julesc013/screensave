@@ -54,6 +54,7 @@ Series 13 proves the same layering can also support atmospheric weather, transit
 Series 14 proves the same layering can also support heavyweight software-3D, traversal, urban-scenic, and fractal-voyage products while keeping projection, route, scene, and refinement behavior inside the owning products rather than promoting a broad engine.
 Series 15 proves the same layering can also support a capability-gated GL21 backend, explicit GL33 and GL46 placeholders, an internal null safety fallback, and a renderer-showcase product while keeping advanced context logic backend-private, renderer selection narrow in shared core code, and Gallery product behavior inside the owning product.
 `SX` now hardens the same layering model further by authorizing richer private substrate routing and service seams without promoting them into the public contract prematurely.
+`SX02` applies that rule to the renderer floor directly: `platform/src/core/substrate/` owns selection and routing policy, while `platform/src/render/gdi/` now owns the hardened universal floor for backbuffer lifetime, present behavior, and backend-private diagnostics detail.
 
 ## Product Boundary
 

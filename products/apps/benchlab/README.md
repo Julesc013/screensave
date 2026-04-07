@@ -16,7 +16,7 @@ Series 08 extends the same app into the renderer-selection harness:
 - explicit `auto`, `gdi`, and `gl11` selection controls
 - honest requested-versus-active renderer reporting
 - explicit fallback-reason reporting when GL11 cannot be used
-- GL vendor, renderer, and version reporting when the optional backend is active
+- backend vendor, renderer, and detail reporting through the shared renderer-info surface
 
 Series 09 extends the same app into the current multi-product harness:
 
@@ -58,7 +58,7 @@ Series 15 extends the same app into the current eighteen-product and versioned r
 
 - explicit saver selection for Nocturne, Ricochet, Deepfield, Plasma, Phosphor, Pipeworks, Lifeforms, Signals, Mechanize, Ecosystems, Stormglass, Transit, Observatory, Vector, Explorer, City, Atlas, and Gallery
 - explicit `auto`, `gdi`, `gl11`, `gl21`, `gl33`, and `gl46` request paths with honest requested-versus-active renderer reporting
-- explicit fallback-reason reporting plus GL vendor, renderer, and version reporting when accelerated tiers are active
+- explicit fallback-reason reporting plus backend vendor, renderer, and detail reporting when renderer introspection is available
 - continued use of the shared saver dialogs and shared renderer path without turning BenchLab into the real `suite` app or a suite-level meta-product
 
 Continuation `C04` extends the same app into the shared-settings inspection harness:
