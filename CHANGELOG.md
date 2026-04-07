@@ -2,6 +2,30 @@
 
 All notable repository changes are recorded here in prompt history order.
 
+## SS02 - 2026-04-08
+
+### Added
+
+- `validation/notes/ss02-release-validation-summary.md` as the durable summary of the fresh evidence gathered for the frozen `c16-core-baseline` release.
+- `validation/notes/ss02-support-matrix.md` as the explicit support matrix that separates tested pass, tested with limitations, inconclusive, carried-forward, target-only, unverified, and unsupported surfaces.
+- `validation/captures/ss02-c16-validation-log.md` as the durable repo-side capture log for the concrete fullscreen, settings, preview, renderer-probe, and installer-mock observations gathered in `SS02`.
+
+### Changed
+
+- Updated the active validator scripts so they now enforce the closed `C16` handoff and `SS`-then-`PL` doctrine instead of the retired generic future post-release `S` wording.
+- Refreshed the frozen baseline notes, known-issues notes, installer notes, companion-channel notes, and compatibility notes so they describe the actual `SS02` support picture instead of freeze-time placeholders.
+- Updated the root README, repo-facing release page, release-body source, and release manifests so the published Core baseline now surfaces the `SS02` validation summary, support matrix, and capture log directly.
+
+### Validation
+
+- Rehashed the published Core and Installer ZIP assets and confirmed their SHA-256 digests matched the release manifest.
+- Extracted and verified the frozen nineteen-saver Core and Installer payload lineups.
+- Passed fullscreen `/s` smoke with `gdi` forced on all nineteen included savers from the extracted Core ZIP.
+- Passed representative `Settings...` `/c` smoke on `nocturne`, `plasma`, `gallery`, and `anthology`.
+- Attempted preview `/p` smoke on `nocturne` and `anthology`; the processes ran and closed cleanly, but child-window parenting remained inconclusive and is recorded as unverified.
+- Passed representative same-build BenchLab probes for `gdi`, `gl11`, and `gl21`, and confirmed that `gl33` and `gl46` requests fall back rather than acting as release tiers.
+- Passed mock-mode current-user install and uninstall against the extracted Installer ZIP without inventing live registry or Control Panel claims.
+
 ## SS01 - 2026-04-08
 
 ### Added
