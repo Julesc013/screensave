@@ -2,6 +2,25 @@
 
 All notable repository changes are recorded here in prompt history order.
 
+## SS01 - 2026-04-08
+
+### Added
+
+- `docs/releases/README.md` and `docs/releases/c16-core-baseline.md` as the repo-facing release pages for the frozen `ScreenSave Core` baseline.
+- `releases/c16-core-baseline-body.md`, `releases/c16-core-baseline-manifest.ini`, and `releases/c16-core-baseline-sha256.txt` as the public release body, asset manifest, and zip checksum inventory for the frozen Core and Installer assets.
+
+### Changed
+
+- Updated the root README and release-support docs so the live `c16-core-baseline` GitHub release is now the obvious public download surface, with `screensave-core-c16-baseline.zip` presented as the primary asset and `screensave-installer-c16-baseline.zip` as the secondary convenience asset.
+- Updated packaging and baseline notes so the repo now records `SS01` as the public release-surfacing step for the frozen `C16` baseline and leaves `SS02` explicitly pending for refreshed release evidence and support-matrix work.
+- Published the `c16-core-baseline` tag and created the matching GitHub release with the frozen Core and Installer zip assets attached in Core-first order.
+
+### Validation
+
+- Verified the frozen asset paths, filenames, sizes, and SHA-256 digests for `out/portable/screensave-core-c16-baseline.zip` and `out/installer/screensave-installer-c16-baseline.zip` before publication.
+- Confirmed the release tag is `c16-core-baseline`, the release body matches the repo-side release package, and the attached assets report the expected sizes and SHA-256 digests through the GitHub release API.
+- Kept `SS01` bounded to release surfacing, docs, manifests, checksums, and publication only; this prompt did not add new saver features, renderer work, installer redesign, Suite work, BenchLab work, SDK work, or fabricated runtime validation.
+
 ## C16 - 2026-04-06
 
 ### Added
