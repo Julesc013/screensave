@@ -15,14 +15,22 @@ static int screensave_backend_registry_create_gdi(
     const char **failure_reason_out
 )
 {
-    if (screensave_gdi_renderer_create(target_window, drawable_size, diagnostics, renderer_out)) {
+    if (
+        screensave_gdi_renderer_create(
+            target_window,
+            drawable_size,
+            diagnostics,
+            renderer_out,
+            failure_reason_out
+        )
+    ) {
         if (failure_reason_out != NULL) {
             *failure_reason_out = NULL;
         }
         return 1;
     }
 
-    if (failure_reason_out != NULL) {
+    if (failure_reason_out != NULL && *failure_reason_out == NULL) {
         *failure_reason_out = "gdi-create-failed";
     }
     return 0;

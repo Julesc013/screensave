@@ -187,15 +187,15 @@ void scr_build_overlay_text(const scr_host_context *context, char *buffer, int b
             scr_append_text(buffer, buffer_size, reason_text);
         }
         if (renderer_info.vendor_name != NULL) {
-            scr_append_text(buffer, buffer_size, "\r\nGL vendor: ");
+            scr_append_text(buffer, buffer_size, "\r\nBackend vendor: ");
             scr_append_text(buffer, buffer_size, renderer_info.vendor_name);
         }
         if (renderer_info.renderer_name != NULL) {
-            scr_append_text(buffer, buffer_size, "\r\nGL renderer: ");
+            scr_append_text(buffer, buffer_size, "\r\nBackend renderer: ");
             scr_append_text(buffer, buffer_size, renderer_info.renderer_name);
         }
         if (renderer_info.version_name != NULL) {
-            scr_append_text(buffer, buffer_size, "\r\nGL version: ");
+            scr_append_text(buffer, buffer_size, "\r\nBackend detail: ");
             scr_append_text(buffer, buffer_size, renderer_info.version_name);
         }
         scr_append_text(buffer, buffer_size, "\r\nBackbuffer: ");

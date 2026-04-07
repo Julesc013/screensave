@@ -12,7 +12,8 @@ int screensave_gdi_blit_bitmap_impl(
     int destination_height;
     int destination_x;
     int destination_y;
-    int source_height;
+    int previous_stretch_mode;
+    int stretch_result;
 
     if (
         !screensave_gdi_state_from_renderer(renderer, &state) ||
@@ -52,31 +53,35 @@ int screensave_gdi_blit_bitmap_impl(
         return 0;
     }
 
-    ZeroMemory(&bitmap_info, sizeof(bitmap_info));
-    bitmap_info.bmiHeader.biSize = sizeof(bitmap_info.bmiHeader);
-    bitmap_info.bmiHeader.biWidth = bitmap->size.width;
-    source_height = bitmap->origin_top_left ? -bitmap->size.height : bitmap->size.height;
-    bitmap_info.bmiHeader.biHeight = source_height;
-    bitmap_info.bmiHeader.biPlanes = 1;
-    bitmap_info.bmiHeader.biBitCount = (WORD)bitmap->bits_per_pixel;
-    bitmap_info.bmiHeader.biCompression = BI_RGB;
+    screensave_gdi_bitmap_info_init(
+        &bitmap_info,
+        bitmap->size.width,
+        bitmap->size.height,
+        bitmap->bits_per_pixel,
+        bitmap->origin_top_left
+    );
 
-    SetStretchBltMode(state->surface.memory_dc, COLORONCOLOR);
-    if (StretchDIBits(
-            state->surface.memory_dc,
-            destination_x,
-            destination_y,
-            destination_width,
-            destination_height,
-            0,
-            0,
-            bitmap->size.width,
-            bitmap->size.height,
-            bitmap->pixels,
-            &bitmap_info,
-            DIB_RGB_COLORS,
-            SRCCOPY
-        ) == GDI_ERROR) {
+    previous_stretch_mode = SetStretchBltMode(state->surface.memory_dc, COLORONCOLOR);
+    stretch_result = StretchDIBits(
+        state->surface.memory_dc,
+        destination_x,
+        destination_y,
+        destination_width,
+        destination_height,
+        0,
+        0,
+        bitmap->size.width,
+        bitmap->size.height,
+        bitmap->pixels,
+        &bitmap_info,
+        DIB_RGB_COLORS,
+        SRCCOPY
+    );
+    if (previous_stretch_mode != 0) {
+        SetStretchBltMode(state->surface.memory_dc, previous_stretch_mode);
+    }
+
+    if (stretch_result == (int)GDI_ERROR) {
         screensave_gdi_emit_diag(
             state,
             SCREENSAVE_DIAG_LEVEL_WARNING,

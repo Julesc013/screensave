@@ -264,6 +264,19 @@ static void screensave_backend_loader_apply_selection(
     screensave_renderer_set_backend_caps(renderer, &captured_caps);
     screensave_renderer_set_present_path(renderer, &present_path);
     screensave_renderer_set_service_seams(renderer, &service_seams);
+
+    if (
+        request->diagnostics != NULL &&
+        descriptor->backend_kind == SCREENSAVE_BACKEND_KIND_GDI &&
+        request->requested_kind != SCREENSAVE_RENDERER_KIND_GDI
+    ) {
+        screensave_backend_loader_emit_create_diag(
+            request->diagnostics,
+            SCREENSAVE_DIAG_LEVEL_INFO,
+            4102UL,
+            "Renderer selection landed on the mandatory GDI floor."
+        );
+    }
 }
 
 int screensave_backend_loader_select_and_create(

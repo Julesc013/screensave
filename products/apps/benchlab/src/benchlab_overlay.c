@@ -97,15 +97,15 @@ static void benchlab_build_overlay_text(const benchlab_app *app, char *buffer, i
             benchlab_append_text(buffer, buffer_size, reason_text);
         }
         if (renderer_info.vendor_name != NULL) {
-            benchlab_append_text(buffer, buffer_size, "\r\nGL vendor: ");
+            benchlab_append_text(buffer, buffer_size, "\r\nBackend vendor: ");
             benchlab_append_text(buffer, buffer_size, renderer_info.vendor_name);
         }
         if (renderer_info.renderer_name != NULL) {
-            benchlab_append_text(buffer, buffer_size, "\r\nGL renderer: ");
+            benchlab_append_text(buffer, buffer_size, "\r\nBackend renderer: ");
             benchlab_append_text(buffer, buffer_size, renderer_info.renderer_name);
         }
         if (renderer_info.version_name != NULL) {
-            benchlab_append_text(buffer, buffer_size, "\r\nGL version: ");
+            benchlab_append_text(buffer, buffer_size, "\r\nBackend detail: ");
             benchlab_append_text(buffer, buffer_size, renderer_info.version_name);
         }
         benchlab_append_text(buffer, buffer_size, "\r\nDrawable: ");

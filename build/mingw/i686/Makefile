@@ -53,6 +53,7 @@ PLATFORM_OBJS := \
 	$(PLATFORM_DIR)/timing.o \
 	$(PLATFORM_DIR)/version.o \
 	$(PLATFORM_DIR)/visual_buffer.o \
+	$(PLATFORM_DIR)/gdi_capture.o \
 	$(PLATFORM_DIR)/gdi_backend.o \
 	$(PLATFORM_DIR)/gdi_bitmap.o \
 	$(PLATFORM_DIR)/gdi_present.o \

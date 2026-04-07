@@ -9,6 +9,16 @@ typedef struct screensave_display_mapping_tag {
 
 static const screensave_display_mapping g_renderer_reason_mappings[] = {
     { "gdi-create-failed", "GDI initialization failed" },
+    { "gdi-out-of-memory", "GDI backend ran out of memory" },
+    { "gdi-invalid-window", "GDI target window is invalid" },
+    { "gdi-getdc-failed", "GDI GetDC failed" },
+    { "gdi-create-memory-dc-failed", "GDI memory DC creation failed" },
+    { "gdi-create-dib-failed", "GDI DIB-section creation failed" },
+    { "gdi-select-bitmap-failed", "GDI backbuffer binding failed" },
+    { "gdi-no-surface", "GDI surface state is unavailable" },
+    { "gdi-present-dc-unavailable", "GDI present has no target device context" },
+    { "gdi-present-blit-failed", "GDI BitBlt present failed" },
+    { "gdi-present-stretch-failed", "GDI StretchBlt present failed" },
     { "renderer-kind-invalid", "Requested renderer is invalid" },
     { "null-out-of-memory", "Internal null backend ran out of memory" },
     { "gl11-out-of-memory", "OpenGL 1.1 backend ran out of memory" },
@@ -50,6 +60,11 @@ static const screensave_display_mapping g_renderer_status_mappings[] = {
     { "fallback-gl11", "Running on an OpenGL 1.1 fallback" },
     { "fallback-gdi", "Running on the GDI floor" },
     { "fallback-null", "Running on the internal null safety fallback" },
+    { "frame-open-recreated-surface", "Frame open on a recreated GDI surface" },
+    { "frame-open-retained-surface", "Frame open on the retained GDI surface" },
+    { "resized-recreated-surface", "Recreated the GDI surface for resize" },
+    { "resized-retained-surface", "Retained the previous GDI surface after resize" },
+    { "presented-stretched", "Presented with GDI stretch blit" },
     { "render-suppressed", "Internal null safety backend" },
     { "present-only", "Present only" }
 };

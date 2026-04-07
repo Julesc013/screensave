@@ -29,6 +29,11 @@ typedef struct screensave_gdi_state_tag {
     HDC present_dc;
     screensave_diag_context *diagnostics;
     screensave_gdi_surface surface;
+    unsigned long surface_generation;
+    unsigned long present_count;
+    unsigned long last_capture_signature;
+    char detail_text[96];
+    int surface_presented;
     int frame_open;
 } screensave_gdi_state;
 
@@ -36,7 +41,8 @@ int screensave_gdi_renderer_create(
     HWND target_window,
     const screensave_sizei *drawable_size,
     screensave_diag_context *diagnostics,
-    screensave_renderer **renderer_out
+    screensave_renderer **renderer_out,
+    const char **failure_reason_out
 );
 int screensave_gdi_renderer_resize(screensave_renderer *renderer, const screensave_sizei *drawable_size);
 void screensave_gdi_renderer_set_present_dc(screensave_renderer *renderer, HDC present_dc);
@@ -56,10 +62,23 @@ void screensave_gdi_emit_diag(
     const char *text
 );
 COLORREF screensave_gdi_colorref(screensave_color color);
+void screensave_gdi_bitmap_info_init(
+    BITMAPINFO *bitmap_info,
+    int width,
+    int height,
+    unsigned int bits_per_pixel,
+    int origin_top_left
+);
 
-int screensave_gdi_surface_reset(screensave_gdi_state *state, const screensave_sizei *drawable_size);
+int screensave_gdi_surface_prepare(
+    screensave_gdi_state *state,
+    const screensave_sizei *drawable_size,
+    int *recreated_out,
+    const char **failure_reason_out
+);
 void screensave_gdi_surface_release(screensave_gdi_surface *surface);
 int screensave_gdi_present(screensave_renderer *renderer);
+void screensave_gdi_capture_refresh(screensave_gdi_state *state);
 
 void screensave_gdi_clear_impl(screensave_renderer *renderer, screensave_color color);
 void screensave_gdi_fill_rect_impl(

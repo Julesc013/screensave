@@ -93,11 +93,21 @@ void screensave_gdi_draw_line_impl(
     }
 
     old_pen = (HPEN)SelectObject(state->surface.memory_dc, pen);
+    if (old_pen == NULL || old_pen == HGDI_ERROR) {
+        screensave_gdi_emit_diag(
+            state,
+            SCREENSAVE_DIAG_LEVEL_WARNING,
+            5501UL,
+            "gdi_primitives",
+            "SelectObject failed while binding the GDI line pen."
+        );
+        DeleteObject(pen);
+        return;
+    }
+
     MoveToEx(state->surface.memory_dc, start_point->x, start_point->y, NULL);
     LineTo(state->surface.memory_dc, end_point->x, end_point->y);
-    if (old_pen != NULL && old_pen != HGDI_ERROR) {
-        SelectObject(state->surface.memory_dc, old_pen);
-    }
+    SelectObject(state->surface.memory_dc, old_pen);
     DeleteObject(pen);
 }
 
@@ -127,9 +137,19 @@ void screensave_gdi_draw_polyline_impl(
     }
 
     old_pen = (HPEN)SelectObject(state->surface.memory_dc, pen);
-    Polyline(state->surface.memory_dc, (const POINT *)points, (int)point_count);
-    if (old_pen != NULL && old_pen != HGDI_ERROR) {
-        SelectObject(state->surface.memory_dc, old_pen);
+    if (old_pen == NULL || old_pen == HGDI_ERROR) {
+        screensave_gdi_emit_diag(
+            state,
+            SCREENSAVE_DIAG_LEVEL_WARNING,
+            5502UL,
+            "gdi_primitives",
+            "SelectObject failed while binding the GDI polyline pen."
+        );
+        DeleteObject(pen);
+        return;
     }
+
+    Polyline(state->surface.memory_dc, (const POINT *)points, (int)point_count);
+    SelectObject(state->surface.memory_dc, old_pen);
     DeleteObject(pen);
 }
