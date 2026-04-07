@@ -58,4 +58,5 @@ This note records the frozen `C16` ScreenSave baseline.
 ## Next Phase
 
 `C16` closes the post-`S15` continuation bridge.
-Future work should start as a new post-release `S`-series program rather than extending `C00` through `C16`.
+`SS01` now publishes this frozen baseline at `https://github.com/Julesc013/screensave/releases/tag/c16-core-baseline`.
+`SS02` remains pending for refreshed release evidence and support-matrix clarity.

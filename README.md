@@ -112,6 +112,16 @@ The active post-`C16` handoff now lives in `docs/roadmap/post-c16-program.md`.
 - `Installer`, `Suite`, `BenchLab`, `SDK`, and `Extras` are separate secondary companion channels with distinct roles.
 - The canonical doctrine lives in `docs/roadmap/release-channels.md`, `docs/roadmap/core-zip-doctrine.md`, and `docs/roadmap/post-c16-program.md`.
 
+## Downloads
+
+- Release page: `https://github.com/Julesc013/screensave/releases/tag/c16-core-baseline`
+- Main download: `https://github.com/Julesc013/screensave/releases/download/c16-core-baseline/screensave-core-c16-baseline.zip`
+- Secondary download: `https://github.com/Julesc013/screensave/releases/download/c16-core-baseline/screensave-installer-c16-baseline.zip`
+- Checksums and asset manifest: `releases/c16-core-baseline-sha256.txt` and `releases/c16-core-baseline-manifest.ini`
+- Repo-facing release page: `docs/releases/c16-core-baseline.md`
+- `Suite`, `BenchLab`, `SDK`, and `Extras` remain outside the primary Core release.
+- `SS02` still remains for refreshed release evidence and support-matrix clarity.
+
 ## Planned Product Shape
 
 ScreenSave is structured as one shared platform with many releasable products:

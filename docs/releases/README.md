@@ -8,5 +8,6 @@ Type: release-facing documentation.
 ## Current State
 
 - `c16-core-baseline.md` is the repo-facing release page for the frozen `ScreenSave Core` baseline anchored to `c16-core-baseline`.
+- Public release page: `https://github.com/Julesc013/screensave/releases/tag/c16-core-baseline`
 - Root-level release manifests and checksums for that baseline live under `releases/`.
 - `SS02` remains the later evidence-refresh and support-matrix step; these docs do not claim that work is already complete.

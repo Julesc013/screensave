@@ -7,6 +7,7 @@ This note is the user-facing release-support source for the frozen `C16` `Screen
 - A scripted current-user installer package for the frozen ScreenSave Core payload
 - A companion convenience layer, not the primary product
 - A package that installs the current Core saver payload into a dedicated current-user install root and writes a current-user uninstall record
+- The secondary asset on the public `c16-core-baseline` release page
 
 ## What This Installer Is Not
 

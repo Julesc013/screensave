@@ -47,3 +47,11 @@ These remain separate companion channels and are not bundled into the primary Co
 - baseline line: completed `C00` through `C16`
 - release step: `SS01`
 - next step: `SS02`
+
+## Notes
+
+- repo release page: `https://github.com/Julesc013/screensave/blob/main/docs/releases/c16-core-baseline.md`
+- known issues: `https://github.com/Julesc013/screensave/blob/main/validation/notes/c16-known-issues.md`
+- compatibility notes: `https://github.com/Julesc013/screensave/blob/main/packaging/release_notes/core-compatibility-notes.md`
+- inclusion matrix: `https://github.com/Julesc013/screensave/blob/main/validation/notes/c16-core-inclusion-matrix.md`
+- checksums: `https://github.com/Julesc013/screensave/blob/main/releases/c16-core-baseline-sha256.txt`

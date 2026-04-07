@@ -38,6 +38,6 @@ This note records the frozen `C16` ScreenSave release baseline.
 ## Next Phase
 
 The `C00` through `C16` continuation bridge is closed after this freeze.
-Post-`C16` work now begins with the short `SS` release-closure series documented in `docs/roadmap/post-c16-program.md`.
-This note does not claim that `SS01` release publication or `SS02` evidence refresh are already complete.
-`PL` follows only after the `SS` bridge closes.
+`SS01` now provides the public baseline release surface at `https://github.com/Julesc013/screensave/releases/tag/c16-core-baseline`.
+`SS02` remains pending for refreshed release evidence and support-matrix clarity and is not implied complete by this note.
+`PL` still follows only after the short `SS` bridge closes.

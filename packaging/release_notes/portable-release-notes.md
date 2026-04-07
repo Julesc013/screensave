@@ -7,6 +7,7 @@ This note is the user-facing release-support source for the frozen `C16` `Screen
 - The primary end-user ScreenSave product.
 - A manual-distribution ZIP of the standalone `.scr` saver line.
 - A bundle assembled from the current real x86 release outputs plus product metadata and release-support docs.
+- The primary asset on the public `c16-core-baseline` release page.
 
 ## What This Bundle Includes
 
@@ -35,3 +36,4 @@ This note is the user-facing release-support source for the frozen `C16` `Screen
 - Core is a standalone saver ZIP and does not provide installation, registration, or uninstall automation.
 - Fresh live Control Panel and `desk.cpl` runtime smoke were not rerun during `C16`.
 - Extras remains empty in `C16`; no bonus payload is bundled into Core.
+- `SS02` still remains for refreshed release evidence and support-matrix clarity.
