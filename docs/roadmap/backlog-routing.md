@@ -1,8 +1,10 @@
 # Backlog Routing
 
-This document defines the `C11` backlog and routing model for work after the implemented `C10` SDK baseline.
+This document records the `C11` backlog and routing model used during the completed `C11` through `C16` bridge.
+It is historical context rather than the active post-`C16` execution plan.
 
-Use it to decide whether an idea belongs in one saver, a shared layer, a renderer discussion, a release-channel follow-on, or the parked future-ideas pool.
+Use it to understand how earlier continuation work was routed across savers, shared layers, renderer discussions, release-channel follow-on work, and the parked future-ideas pool.
+Active post-`C16` sequencing now lives in `docs/roadmap/post-c16-program.md`.
 
 ## Routing Categories
 
@@ -34,7 +36,7 @@ Every active backlog item should stay compact and include these fields:
 Avoid pseudo-precision.
 Do not add percentages, point scores, or issue-tracker ceremony unless a later repo workflow genuinely needs it.
 
-## Execution Buckets
+## Historical Execution Buckets
 
 | Bucket | Scope | Exit Goal |
 | --- | --- | --- |
@@ -64,7 +66,8 @@ Do not add percentages, point scores, or issue-tracker ceremony unless a later r
 - `Wave-C` handled `stormglass`, `transit`, `observatory`, `vector`, `explorer`, `city`, `atlas`, `gallery`, and `anthology` without reopening suite-wide vocabulary or the shared platform contract.
 - `C14` final rerelease hardening is complete and preserved the release-candidate baseline.
 - `C15` release doctrine and channel split are complete.
-- `C16` Core release refresh and baseline freeze is complete, and future release/distribution follow-on work now starts from the frozen baseline in a new post-release `S`-series program.
+- `C16` Core release refresh and baseline freeze is complete.
+- Any post-`C16` release/distribution follow-on now routes through the short `SS` bridge first and only reaches `PL` after `SS` closes.
 - `RND-R` and `REL-R` stay deferred unless the active polish line proves they are unblockers.
 
 ## Canonical Ownership Summary

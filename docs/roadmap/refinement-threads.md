@@ -1,8 +1,10 @@
 # Refinement Thread Model
 
-This note defines how later refinement work should be organized after `C11`.
+This note records how refinement work was organized after `C11` during the completed continuation bridge.
+It is historical context rather than the active post-`C16` execution model.
 
 The goal is to let saver-local work proceed in parallel without letting repo truth fork.
+Active post-`C16` sequencing now lives in `docs/roadmap/post-c16-program.md`.
 
 ## Thread Types
 
@@ -116,6 +118,7 @@ Start a new refinement thread only when:
 - the expected write scope is narrow enough to review cleanly
 
 Do not open a saver-local refinement thread for parked concept work.
+Do not reuse the old `C12`, `C13`, or `REL-R` bucket names as active post-`C16` program labels without first mapping the work onto `SS` or `PL`.
 
 ## Thread Close Rules
 

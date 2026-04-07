@@ -2,6 +2,8 @@
 
 This is the `C11` backlog baseline.
 It turns the remaining idea space into explicit, routed work instead of leaving it as scattered working titles or ad hoc follow-up notes.
+It now remains as historical context for the completed `C11` through `C16` bridge rather than the active post-`C16` program.
+Active post-`C16` sequencing now lives in `docs/roadmap/post-c16-program.md`.
 
 ## Cross-Cutting And Shared Items
 
@@ -48,18 +50,18 @@ It turns the remaining idea space into explicit, routed work instead of leaving 
 | `APP-BEN-01` | `benchlab` | Diagnostics overlay cleanup, comparison ergonomics, and evidence capture notes | validation/hardening | `P2` | `M` | low | `X-06`, `X-07` | `REL-R` | `benchlab` | BenchLab remains diagnostics-only and only gets narrow release-hardening support |
 | `SDK-01` | `sdk` | Template copy-forward docs, examples refresh, and validator polish | docs/SDK/tooling | `P2` | `S` | low | `X-03`, `X-08` | `C12-X2` | `sdk` | Keep contributor guidance aligned with the live tree |
 
-## Distribution And Release Follow-On
+## Historical Distribution And Release Follow-On
 
 | ID | Focus | Category | Priority | Effort | Risk | Depends On | Target Bucket | Owner Area | Notes |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| `REL-01` | Refresh the Core candidate payload and freeze the actual Core baseline | release/distribution | `P1` | `M` | medium | `X-04` | `REL-R` | `distribution` | Completed in `C16`; future release follow-on work now starts from the frozen Core baseline |
+| `REL-01` | Refresh the Core candidate payload and freeze the actual Core baseline | release/distribution | `P1` | `M` | medium | `X-04` | `REL-R` | `distribution` | Completed in `C16`; later release-facing work now starts from the frozen Core baseline under the short `SS` bridge |
 | `REL-02` | Refresh the Installer channel, registration notes, and uninstall evidence against the frozen Core baseline | release/distribution | `P1` | `M` | medium | `REL-01` | `REL-R` | `distribution` | Completed in `C16` for the current-user Installer companion channel |
-| `REL-03` | Machine-wide install, repair, and prune policy evaluation | release/distribution | `P3` | `L` | high | `REL-02` | `REL-R` | `distribution` | Deferred until the active polish line is stable |
+| `REL-03` | Machine-wide install, repair, and prune policy evaluation | release/distribution | `P3` | `L` | high | `REL-02` | `REL-R` | `distribution` | Deferred after `C16`; not part of the initial `SS` bridge unless a later doctrine update promotes it explicitly |
 
 ## Parked Concept Pool
 
-These items are intentionally not on the active continuation line.
-They exist so future idea work has a home without interrupting `C12` through `C16`.
+These items are intentionally not on the active post-`C16` line.
+They remain parked historical ideas so future concept work has a home without silently overriding `SS` or `PL`.
 
 | ID | Working Title | Likely Route | Priority | Effort | Risk | Target Bucket | Notes |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -86,6 +88,6 @@ They exist so future idea work has a home without interrupting `C12` through `C1
 - `C14` final rerelease hardening preserved the release-candidate baseline.
 - `C15` release doctrine and channel split are complete.
 - `C16` Core release refresh and baseline freeze is complete.
-- Future release/distribution work begins from the frozen baseline in a new post-release `S`-series program.
+- Post-`C16` release-facing work now belongs to the short `SS` bridge first and only reaches `PL` after `SS` closes.
 - `REL-R` stays after the active polish line unless a release blocker forces it forward.
 - `PARKED` and `RND-R` are intentionally out of the current continuation line.
