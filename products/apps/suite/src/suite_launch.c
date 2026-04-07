@@ -446,7 +446,7 @@ void suite_preview_resize(suite_app *app, int width, int height)
 
 static suite_run_window *suite_get_run_window(HWND window)
 {
-    return (suite_run_window *)GetWindowLongA(window, GWL_USERDATA);
+    return (suite_run_window *)GetWindowLongPtrA(window, GWLP_USERDATA);
 }
 
 static void suite_attach_run_window(HWND window, LPARAM lParam)
@@ -456,7 +456,7 @@ static void suite_attach_run_window(HWND window, LPARAM lParam)
 
     create_struct = (CREATESTRUCTA *)lParam;
     run_window = (suite_run_window *)create_struct->lpCreateParams;
-    SetWindowLongA(window, GWL_USERDATA, (LONG)run_window);
+    SetWindowLongPtrA(window, GWLP_USERDATA, (LONG_PTR)run_window);
 }
 
 static void suite_run_build_environment(

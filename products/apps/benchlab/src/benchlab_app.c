@@ -15,7 +15,7 @@ static void benchlab_show_message(HWND owner, const char *text, UINT type)
 
 static benchlab_app *benchlab_get_window_app(HWND window)
 {
-    return (benchlab_app *)GetWindowLongA(window, GWL_USERDATA);
+    return (benchlab_app *)GetWindowLongPtrA(window, GWLP_USERDATA);
 }
 
 static const char *benchlab_renderer_request_label(screensave_renderer_kind requested_kind)
@@ -34,7 +34,7 @@ static void benchlab_attach_window_app(HWND window, LPARAM lParam)
 
     create_struct = (CREATESTRUCTA *)lParam;
     app = (benchlab_app *)create_struct->lpCreateParams;
-    SetWindowLongA(window, GWL_USERDATA, (LONG)app);
+    SetWindowLongPtrA(window, GWLP_USERDATA, (LONG_PTR)app);
 }
 
 static HMENU benchlab_create_menu(void)

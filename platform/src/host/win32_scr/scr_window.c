@@ -424,13 +424,13 @@ static LRESULT CALLBACK scr_window_proc(HWND window, UINT message, WPARAM wParam
     int dx;
     int dy;
 
-    context = (scr_host_context *)GetWindowLongA(window, GWL_USERDATA);
+    context = (scr_host_context *)GetWindowLongPtrA(window, GWLP_USERDATA);
 
     switch (message) {
     case WM_NCCREATE:
         create_struct = (CREATESTRUCTA *)lParam;
         context = (scr_host_context *)create_struct->lpCreateParams;
-        SetWindowLongA(window, GWL_USERDATA, (LONG)context);
+        SetWindowLongPtrA(window, GWLP_USERDATA, (LONG_PTR)context);
         context->main_window = window;
         return TRUE;
 

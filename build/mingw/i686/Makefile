@@ -38,6 +38,13 @@ PLATFORM_OBJS := \
 	$(PLATFORM_DIR)/renderer_dispatch.o \
 	$(PLATFORM_DIR)/saver_contract.o \
 	$(PLATFORM_DIR)/saver_registry.o \
+	$(PLATFORM_DIR)/backend_caps.o \
+	$(PLATFORM_DIR)/backend_kind.o \
+	$(PLATFORM_DIR)/backend_loader.o \
+	$(PLATFORM_DIR)/backend_registry.o \
+	$(PLATFORM_DIR)/present_path.o \
+	$(PLATFORM_DIR)/render_band.o \
+	$(PLATFORM_DIR)/service_seams.o \
 	$(PLATFORM_DIR)/config.o \
 	$(PLATFORM_DIR)/settings.o \
 	$(PLATFORM_DIR)/diagnostics.o \
@@ -92,6 +99,10 @@ $(PLATFORM_LIB): $(PLATFORM_OBJS)
 	$(AR) rcs $@ $(PLATFORM_OBJS)
 
 $(PLATFORM_DIR)/%.o: $(ROOT)/platform/src/core/base/%.c
+	mkdir -p $(PLATFORM_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(PLATFORM_DIR)/%.o: $(ROOT)/platform/src/core/substrate/%.c
 	mkdir -p $(PLATFORM_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 

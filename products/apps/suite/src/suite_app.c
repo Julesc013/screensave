@@ -15,7 +15,7 @@ static void suite_show_message(HWND owner_window, const char *text, UINT type)
 
 static suite_app *suite_get_window_app(HWND window)
 {
-    return (suite_app *)GetWindowLongA(window, GWL_USERDATA);
+    return (suite_app *)GetWindowLongPtrA(window, GWLP_USERDATA);
 }
 
 static void suite_attach_window_app(HWND window, LPARAM lParam)
@@ -25,7 +25,7 @@ static void suite_attach_window_app(HWND window, LPARAM lParam)
 
     create_struct = (CREATESTRUCTA *)lParam;
     app = (suite_app *)create_struct->lpCreateParams;
-    SetWindowLongA(window, GWL_USERDATA, (LONG)app);
+    SetWindowLongPtrA(window, GWLP_USERDATA, (LONG_PTR)app);
 }
 
 static void suite_apply_control_font(HWND window)

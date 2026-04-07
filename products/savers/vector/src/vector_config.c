@@ -578,12 +578,12 @@ static INT_PTR CALLBACK vector_config_dialog_proc(HWND dialog, UINT message, WPA
 {
     vector_dialog_state *dialog_state;
 
-    dialog_state = (vector_dialog_state *)GetWindowLongA(dialog, DWL_USER);
+    dialog_state = (vector_dialog_state *)GetWindowLongPtrA(dialog, DWLP_USER);
 
     switch (message) {
     case WM_INITDIALOG:
         dialog_state = (vector_dialog_state *)lParam;
-        SetWindowLongA(dialog, DWL_USER, (LONG)dialog_state);
+        SetWindowLongPtrA(dialog, DWLP_USER, (LONG_PTR)dialog_state);
         if (dialog_state != NULL) {
             vector_apply_settings_to_dialog(dialog, dialog_state->module, dialog_state->common_config, dialog_state->product_config);
         }

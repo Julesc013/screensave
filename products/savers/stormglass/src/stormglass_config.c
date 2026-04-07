@@ -568,11 +568,11 @@ static INT_PTR CALLBACK stormglass_config_dialog_proc(HWND dialog, UINT message,
 {
     stormglass_dialog_state *dialog_state;
 
-    dialog_state = (stormglass_dialog_state *)GetWindowLongA(dialog, DWL_USER);
+    dialog_state = (stormglass_dialog_state *)GetWindowLongPtrA(dialog, DWLP_USER);
     switch (message) {
     case WM_INITDIALOG:
         dialog_state = (stormglass_dialog_state *)lParam;
-        SetWindowLongA(dialog, DWL_USER, (LONG)dialog_state);
+        SetWindowLongPtrA(dialog, DWLP_USER, (LONG_PTR)dialog_state);
         if (dialog_state != NULL) {
             stormglass_initialize_dialog(dialog, dialog_state);
         }

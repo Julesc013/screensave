@@ -175,12 +175,12 @@ static INT_PTR CALLBACK scr_fallback_dialog_proc(HWND dialog, UINT message, WPAR
 {
     scr_fallback_dialog_state *dialog_state;
 
-    dialog_state = (scr_fallback_dialog_state *)GetWindowLongA(dialog, DWL_USER);
+    dialog_state = (scr_fallback_dialog_state *)GetWindowLongPtrA(dialog, DWLP_USER);
 
     switch (message) {
     case WM_INITDIALOG:
         dialog_state = (scr_fallback_dialog_state *)lParam;
-        SetWindowLongA(dialog, DWL_USER, (LONG)dialog_state);
+        SetWindowLongPtrA(dialog, DWLP_USER, (LONG_PTR)dialog_state);
         if (dialog_state != NULL) {
             scr_initialize_fallback_dialog(
                 dialog,
@@ -413,12 +413,12 @@ static INT_PTR CALLBACK scr_single_saver_dialog_proc(HWND dialog, UINT message, 
 {
     scr_single_dialog_state *dialog_state;
 
-    dialog_state = (scr_single_dialog_state *)GetWindowLongA(dialog, DWL_USER);
+    dialog_state = (scr_single_dialog_state *)GetWindowLongPtrA(dialog, DWLP_USER);
 
     switch (message) {
     case WM_INITDIALOG:
         dialog_state = (scr_single_dialog_state *)lParam;
-        SetWindowLongA(dialog, DWL_USER, (LONG)dialog_state);
+        SetWindowLongPtrA(dialog, DWLP_USER, (LONG_PTR)dialog_state);
         if (dialog_state != NULL) {
             char title[96];
 
@@ -703,12 +703,12 @@ static INT_PTR CALLBACK scr_selector_dialog_proc(HWND dialog, UINT message, WPAR
 {
     scr_selector_dialog_state *dialog_state;
 
-    dialog_state = (scr_selector_dialog_state *)GetWindowLongA(dialog, DWL_USER);
+    dialog_state = (scr_selector_dialog_state *)GetWindowLongPtrA(dialog, DWLP_USER);
 
     switch (message) {
     case WM_INITDIALOG:
         dialog_state = (scr_selector_dialog_state *)lParam;
-        SetWindowLongA(dialog, DWL_USER, (LONG)dialog_state);
+        SetWindowLongPtrA(dialog, DWLP_USER, (LONG_PTR)dialog_state);
         if (dialog_state != NULL) {
             scr_selector_initialize_dialog(dialog, dialog_state);
         }
