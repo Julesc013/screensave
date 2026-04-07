@@ -154,7 +154,7 @@ def main() -> int:
         errors,
     )
     require(
-        "Post-`C16` work now proceeds as a short `SS` release-closure series first:" in readme,
+        "Post-`SS` work now proceeds in the bounded `SX` substrate series." in readme,
         "README.md must record the post-C16 handoff.",
         errors,
     )
@@ -169,12 +169,12 @@ def main() -> int:
         errors,
     )
     require(
-        "`SS` runs first as the short release-closure bridge." in series_map,
+        "`SX` is now active as the bounded substrate-hardening and capability-expansion series." in series_map,
         "series-map.md must point to the post-C16 handoff.",
         errors,
     )
     require(
-        "This file remains as historical record for the completed bridge; active post-`C16` planning now runs `SS` first and `PL` second from the frozen Core baseline." in post_s15,
+        "This file remains as historical record for the completed bridge; active post-`C16` planning now treats `SS` as closed, `SX` as active, and `PL` as the later flagship program from the frozen Core baseline." in post_s15,
         "post-s15-plan.md must point to the post-C16 handoff.",
         errors,
     )
@@ -188,7 +188,7 @@ def main() -> int:
 
     for snippet in (
         "`Wave-C` handled `stormglass`, `transit`, `observatory`, `vector`, `explorer`, `city`, `atlas`, `gallery`, and `anthology` without reopening suite-wide vocabulary or the shared platform contract.",
-        "Any post-`C16` release/distribution follow-on now routes through the short `SS` bridge first and only reaches `PL` after `SS` closes.",
+        "Post-`C16` release/distribution follow-on first closed through `SS`; active substrate follow-on now belongs to `SX`, and only later flagship work reaches `PL`.",
     ):
         require(snippet in backlog_routing, f"backlog-routing.md is missing {snippet!r}.", errors)
 

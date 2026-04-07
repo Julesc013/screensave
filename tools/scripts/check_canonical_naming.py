@@ -75,7 +75,7 @@ def main() -> int:
         ROOT / "README.md",
         (
             "Implementation currently exists through `S15` plus continuation `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, `C13` Wave A, Wave B, and Wave C, `C14`, `C15`, and `C16`.",
-            "Post-`C16` work now proceeds as a short `SS` release-closure series first:",
+            "Post-`SS` work now proceeds in the bounded `SX` substrate series.",
             "`suite` is now the canonical suite-level browser, launcher, preview, and configuration app under `products/apps/suite/`.",
             "`anthology` is the real suite meta-saver `.scr`",
         ),
@@ -94,7 +94,7 @@ def main() -> int:
         ROOT / "docs" / "roadmap" / "series-map.md",
         (
             "`C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, `C13` Wave A, Wave B, and Wave C, `C14`, `C15`, and `C16` are complete.",
-            "`SS` runs first as the short release-closure bridge.",
+            "`SX` is now active as the bounded substrate-hardening and capability-expansion series.",
         ),
         errors,
     )
@@ -105,7 +105,7 @@ def main() -> int:
             "13. `C12` completed the cross-cutting polish and quality-bar pass before the first `C13` saver-specific polish wave begins.",
             "14. `C13` Wave A completed the first saver-specific polish pass for `nocturne`, `ricochet`, `deepfield`, `plasma`, and `phosphor`.",
             "15. `C13` Wave B completed the second saver-specific polish pass for `pipeworks`, `lifeforms`, `signals`, `mechanize`, and `ecosystems`.",
-            "This file remains as historical record for the completed bridge; active post-`C16` planning now runs `SS` first and `PL` second from the frozen Core baseline.",
+            "This file remains as historical record for the completed bridge; active post-`C16` planning now treats `SS` as closed, `SX` as active, and `PL` as the later flagship program from the frozen Core baseline.",
         ),
         errors,
     )

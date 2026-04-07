@@ -87,7 +87,7 @@ def validate_sdk_baseline(errors: list[str]) -> None:
         errors,
     )
     require(
-        "Post-`C16` work now proceeds as a short `SS` release-closure series first:" in read_text(ROOT / "README.md"),
+        "Post-`SS` work now proceeds in the bounded `SX` substrate series." in read_text(ROOT / "README.md"),
         "README.md must record the post-C16 handoff.",
         errors,
     )
@@ -99,14 +99,14 @@ def validate_sdk_baseline(errors: list[str]) -> None:
         errors,
     )
     require(
-        "`SS` runs first as the short release-closure bridge." in read_text(
+        "`SX` is now active as the bounded substrate-hardening and capability-expansion series." in read_text(
             ROOT / "docs" / "roadmap" / "series-map.md"
         ),
         "series-map.md must point to the post-C16 handoff.",
         errors,
     )
     require(
-        "This file remains as historical record for the completed bridge; active post-`C16` planning now runs `SS` first and `PL` second from the frozen Core baseline." in read_text(
+        "This file remains as historical record for the completed bridge; active post-`C16` planning now treats `SS` as closed, `SX` as active, and `PL` as the later flagship program from the frozen Core baseline." in read_text(
             ROOT / "docs" / "roadmap" / "post-s15-plan.md"
         ),
         "post-s15-plan.md must point to the post-C16 handoff.",

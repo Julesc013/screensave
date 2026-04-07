@@ -90,7 +90,7 @@ def main() -> int:
 
     require("## C16 - 2026-04-06" in changelog, "CHANGELOG.md must record the C16 release baseline entry.", errors)
     require("Implementation currently exists through `S15` plus continuation `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, `C13` Wave A, Wave B, and Wave C, `C14`, `C15`, and `C16`." in readme, "README.md must record C16 as complete.", errors)
-    require("Post-`C16` work now proceeds as a short `SS` release-closure series first:" in readme, "README.md must record the post-C16 handoff.", errors)
+    require("Post-`SS` work now proceeds in the bounded `SX` substrate series." in readme, "README.md must record the post-C16 handoff.", errors)
     require("`C13` Wave A, Wave B, and Wave C are complete, `C14` final rerelease hardening is complete, `C15` release doctrine and channel split are complete, and `C16` Core release refresh and baseline freeze is complete." in prompt_program, "prompt-program.md must record the completed C16 freeze.", errors)
 
     check_manifest_versions(errors)
