@@ -5,9 +5,10 @@ This document explains dependency direction and responsibility boundaries.
 ## Layers
 
 - `platform/src/host/` owns screensaver host behavior, mode dispatch, and Win32 integration.
-- `platform/src/core/` owns reusable runtime services that are not renderer-specific.
-- `platform/src/render/` owns backend implementations behind the renderer contract.
+- `platform/src/core/` owns reusable runtime services plus the private substrate routing layer under `platform/src/core/substrate/`.
+- `platform/src/render/` owns concrete backend implementations behind the renderer contract and beneath the substrate routing layer.
 - `platform/include/screensave/` is the future public platform header surface.
+- `platform/include/screensave/private/` owns private substrate headers that must not become a product dependency.
 - `products/` owns saver-specific and app-specific behavior.
 - `tests/` owns verification logic.
 - `validation/` owns evidence and notes.
@@ -18,6 +19,7 @@ This document explains dependency direction and responsibility boundaries.
 - Products may depend on the public platform surface.
 - Products may not depend on private platform internals unless a later spec explicitly permits it.
 - Platform internals must not depend on product code.
+- Private substrate headers may depend on public renderer and diagnostics contracts, but public headers and product code must not depend on private substrate types.
 - Tests may depend on platform and products as appropriate for verification.
 - Tools may assist platform, products, tests, validation, or packaging, but they are not baseline runtime dependencies.
 - Packaging may consume built artifacts and release metadata, but it must not define runtime behavior.
@@ -36,6 +38,7 @@ During `SX`, that rule becomes stricter for renderer and substrate work:
 - internal capability bands stay private
 - backend kinds, backend registries, and backend capability descriptors stay private
 - present-path internals and future service seams stay private first
+- backend-specific creation and capability capture now route through `platform/src/core/substrate/` rather than leaking through ad hoc public-facing glue
 - product code continues to depend on the public saver and renderer contracts rather than backend-private details
 
 Series 04 keeps the host implementation private while exposing only a narrow version/config/diagnostics/renderer/saver contract set.

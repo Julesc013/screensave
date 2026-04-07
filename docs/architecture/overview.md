@@ -42,4 +42,5 @@ Post-`S15` continuation planning is tracked historically in `docs/roadmap/post-s
 Active post-`C16` sequencing now lives in `docs/roadmap/post-c16-program.md` and `docs/roadmap/sx-series.md`.
 
 During `SX`, the architecture keeps the public renderer ladder and the current narrow saver-facing contracts intact while private substrate layers grow underneath them.
+`SX01` makes that split real in code by introducing private substrate headers under `platform/include/screensave/private/` and private routing helpers under `platform/src/core/substrate/`, while savers and companion apps continue to build against the same public `screensave/` headers.
 `gallery` is the likely renderer-proof surface during that work, BenchLab remains diagnostics-only, and `plasma` stays the first flagship `PL` track rather than becoming the scope of `SX00`.

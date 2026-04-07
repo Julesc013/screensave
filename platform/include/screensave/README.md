@@ -19,3 +19,4 @@ Current stage: the first narrow public header set remains real here, with Series
 
 Implementation details remain private under `platform/src/`.
 That includes the `SX`-era internal band model, backend kinds, routing logic, and future service seams unless a later explicit spec promotes them.
+The private header side of that split now lives under the neighboring `platform/include/screensave/private/` tree, which products must not include directly.
