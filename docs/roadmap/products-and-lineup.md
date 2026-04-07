@@ -23,7 +23,7 @@ Future concept entries that still read like working titles are descriptive ancho
 
 ## Framebuffer And Vector Family And Related Studies
 
-- `plasma`: warm low-motion abstract saver and a real Framebuffer and Vector Family product.
+- `plasma`: warm low-motion abstract saver and a real Framebuffer and Vector Family product. It remains the first flagship `PL` track after `SX`, not an `SX00` implementation promise.
 - `phosphor`: waveform and phosphor-inspired motion and a real Framebuffer and Vector Family product.
 - Working title `starfield`: classic depth and drift presentation.
 - Working title `ribbon_drift`: simple motion study built around lines and trails.
@@ -70,7 +70,7 @@ Future concept entries that still read like working titles are descriptive ancho
 
 ## Heavyweight And Showcase
 
-- `gallery`: renderer-showcase saver for validating the current tier ladder and honest fallback behavior.
+- `gallery`: renderer-showcase saver for validating the current tier ladder and honest fallback behavior. It is also the most likely proof surface for later bounded `SX` substrate work.
 
 ## Suite Meta Saver
 

@@ -4,7 +4,7 @@ This document records the `C11` backlog and routing model used during the comple
 It is historical context rather than the active post-`C16` execution plan.
 
 Use it to understand how earlier continuation work was routed across savers, shared layers, renderer discussions, release-channel follow-on work, and the parked future-ideas pool.
-Active post-`C16` sequencing now lives in `docs/roadmap/post-c16-program.md`.
+Active post-`C16` sequencing now lives in `docs/roadmap/post-c16-program.md` and `docs/roadmap/sx-series.md`.
 
 ## Routing Categories
 
@@ -67,7 +67,7 @@ Do not add percentages, point scores, or issue-tracker ceremony unless a later r
 - `C14` final rerelease hardening is complete and preserved the release-candidate baseline.
 - `C15` release doctrine and channel split are complete.
 - `C16` Core release refresh and baseline freeze is complete.
-- Any post-`C16` release/distribution follow-on now routes through the short `SS` bridge first and only reaches `PL` after `SS` closes.
+- Post-`C16` release/distribution follow-on first closed through `SS`; active substrate follow-on now belongs to `SX`, and only later flagship work reaches `PL`.
 - `RND-R` and `REL-R` stay deferred unless the active polish line proves they are unblockers.
 
 ## Canonical Ownership Summary

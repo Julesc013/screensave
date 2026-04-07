@@ -3,7 +3,7 @@
 This is the `C11` backlog baseline.
 It turns the remaining idea space into explicit, routed work instead of leaving it as scattered working titles or ad hoc follow-up notes.
 It now remains as historical context for the completed `C11` through `C16` bridge rather than the active post-`C16` program.
-Active post-`C16` sequencing now lives in `docs/roadmap/post-c16-program.md`.
+Active post-`C16` sequencing now lives in `docs/roadmap/post-c16-program.md` and `docs/roadmap/sx-series.md`.
 
 ## Cross-Cutting And Shared Items
 
@@ -61,7 +61,7 @@ Active post-`C16` sequencing now lives in `docs/roadmap/post-c16-program.md`.
 ## Parked Concept Pool
 
 These items are intentionally not on the active post-`C16` line.
-They remain parked historical ideas so future concept work has a home without silently overriding `SS` or `PL`.
+They remain parked historical ideas so future concept work has a home without silently overriding the closed `SS` bridge, the active `SX` substrate series, or the later `PL` flagship line.
 
 | ID | Working Title | Likely Route | Priority | Effort | Risk | Target Bucket | Notes |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -88,6 +88,6 @@ They remain parked historical ideas so future concept work has a home without si
 - `C14` final rerelease hardening preserved the release-candidate baseline.
 - `C15` release doctrine and channel split are complete.
 - `C16` Core release refresh and baseline freeze is complete.
-- Post-`C16` release-facing work now belongs to the short `SS` bridge first and only reaches `PL` after `SS` closes.
+- Post-`C16` release-facing work first closed through `SS`; active substrate-facing work now belongs to `SX`, and later flagship work reaches `PL`.
 - `REL-R` stays after the active polish line unless a release blocker forces it forward.
 - `PARKED` and `RND-R` are intentionally out of the current continuation line.

@@ -2,7 +2,7 @@
 
 This document records the continuation program that began after the implemented `S15` baseline and is now complete through `C16`.
 It is historical context for the closed continuation bridge.
-Active post-`C16` planning now lives in `docs/roadmap/post-c16-program.md`.
+Active post-`C16` planning now lives in `docs/roadmap/post-c16-program.md` and `docs/roadmap/sx-series.md`.
 
 ## Current Baseline
 
@@ -44,7 +44,7 @@ That endpoint is retired for future planning.
 18. `C14` final rerelease hardening closes the pre-doctrine release-candidate pass.
 19. `C15` defines the release doctrine and artifact-channel split before any refreshed Core baseline is frozen.
 20. `C16` refreshes and freezes the actual Core baseline against the `C15` doctrine.
-21. `C16` closes the continuation bridge and hands off to the short `SS` release-closure series, followed by the `PL` flagship program.
+21. `C16` closes the continuation bridge and hands off first to the short `SS` release-closure series, then to the bounded `SX` substrate series, and only later to the `PL` flagship program.
 
 ## Renderer Tier Taxonomy Note
 
@@ -93,5 +93,5 @@ Interpretation rules:
 
 The rename, renderer-taxonomy, checkpoint, saver productization, shared settings, Windows integration, portable distribution, installer, suite meta-saver, suite-app, SDK, backlog-routing, cross-cutting polish work from `C01` through `C12`, the full `C13` saver-polish line, `C14` final rerelease hardening, `C15` release doctrine and channel split, and `C16` Core release refresh and baseline freeze are complete.
 The continuation bridge is closed after `C16`.
-This file remains as historical record for the completed bridge; active post-`C16` planning now runs `SS` first and `PL` second from the frozen Core baseline.
+This file remains as historical record for the completed bridge; active post-`C16` planning now treats `SS` as closed, `SX` as active, and `PL` as the later flagship program from the frozen Core baseline.
 Further continuation work should not need to renegotiate saver/app ownership, migration aliases, renderer-tier terminology, per-saver `.scr` product identity, the shared settings/preset/theme/pack contract, the bounded Win32 `.scr` lifecycle behavior validated in `C05`, the portable bundle layout and inclusion rules defined in `C06`, the current-user installer and uninstall rules defined in `C07`, the bounded in-process cross-saver orchestration baseline defined by `anthology` in `C08`, the role boundaries and launch/config surface established by the real `suite` app in `C09`, the contributor-facing templates and validation surface established in `C10`, the backlog routing and wave-planning baseline established in `C11`, or the shared suite vocabulary and quality bar established in `C12`.

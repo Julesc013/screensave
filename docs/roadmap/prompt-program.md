@@ -3,7 +3,7 @@
 This document records the implemented `S00` through `S15` line and the completed post-`S15` continuation bridge.
 Earlier docs described an intended Series 00 through 17 program; that shorter endpoint is now superseded by the continuation work recorded here.
 This file is historical context for the completed `C00` through `C16` bridge.
-Active post-`C16` planning now lives in `docs/roadmap/post-c16-program.md`.
+Active post-`C16` planning now lives in `docs/roadmap/post-c16-program.md` and `docs/roadmap/sx-series.md`.
 
 Implementation currently exists through `S15`.
 The older public endpoint that treated `S16` and `S17` as the whole remaining plan is superseded.
@@ -73,7 +73,7 @@ Do not schedule new continuation work under `S16` or `S17`.
 - `C15` formalized ScreenSave Core as the primary product and split the companion channels into Installer, Suite, BenchLab, SDK, and Extras.
 - `C16` refreshed and froze the actual ScreenSave Core baseline.
 - The continuation bridge is closed after `C16`.
-- Post-`C16` work now runs `SS` first and `PL` second from the frozen Core baseline.
+- `SS` is closed, `SX` is active, and `PL` follows later from the frozen Core baseline.
 - Rename and renderer-taxonomy normalization land before any productization or suite/meta work.
 - All-saver `.scr` productization lands before suite/meta products, backlog ingestion, or polish waves.
 - Shared settings, presets, randomization, and pack architecture land before distribution work.
@@ -87,6 +87,7 @@ Do not schedule new continuation work under `S16` or `S17`.
 
 ## Post-C16 Handoff
 
-- `SS00` through `SS02`, with optional `SS03`, is the short release-closure bridge after `C16`.
-- `PL` follows after `SS` closes and is the first deeper flagship expansion program.
+- `SS00` through `SS02`, with optional `SS03`, is the short release-closure bridge after `C16` and is now effectively closed.
+- `SX` is the bounded substrate-hardening and capability-expansion series that now sits between `SS` and `PL`.
+- `PL` follows after `SX` closes and is the first deeper flagship expansion program.
 - `plasma` is the first flagship post-release expansion track in that `PL` line.

@@ -8,7 +8,7 @@ This document defines what `ScreenSave Core` means and how Core inclusion is dec
 - The primary product for normal users.
 - The best standalone saver experience the repo can honestly support at release time.
 - A saver-first artifact that may include `anthology` only when `anthology` meets the same bar as every other Core saver.
-- The durable release anchor that later `SS` and `PL` work must preserve rather than quietly redefine.
+- The durable release anchor that later `SS`, `SX`, and `PL` work must preserve rather than quietly redefine.
 
 ## What Core Is Not
 
@@ -69,4 +69,4 @@ Core claims must be backed by the release notes, validation notes, and artifact 
 - The frozen per-saver decision lives in `validation/notes/c16-core-inclusion-matrix.md`.
 - The frozen baseline note lives in `validation/notes/c16-release-baseline.md`.
 - The continuation bridge is closed after `C16`.
-- Post-`C16` work now proceeds as `SS` first and `PL` second from the frozen Core baseline; see `docs/roadmap/post-c16-program.md`.
+- `SS` is closed, `SX` is now active, and `PL` still follows later from the frozen Core baseline; see `docs/roadmap/post-c16-program.md` and `docs/roadmap/sx-series.md`.

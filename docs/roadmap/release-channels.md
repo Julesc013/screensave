@@ -46,4 +46,4 @@ This document defines the canonical ScreenSave release doctrine introduced in `C
 - The SDK remains source-only and outside Core.
 - Extras remains a separate empty holdback channel in `C16`.
 - The `C00` through `C16` continuation bridge is closed.
-- Post-`C16` work now runs `SS` first and `PL` second from the frozen Core baseline; see `docs/roadmap/post-c16-program.md`.
+- `SS` is closed, `SX` is now the active substrate series, and `PL` still follows later from the frozen Core baseline; see `docs/roadmap/post-c16-program.md` and `docs/roadmap/sx-series.md`.
