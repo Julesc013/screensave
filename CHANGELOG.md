@@ -2,6 +2,26 @@
 
 All notable repository changes are recorded here in prompt history order.
 
+## SX00 - 2026-04-08
+
+### Added
+
+- `docs/roadmap/sx-series.md` as the constitutional roadmap for the bounded post-`SS` pre-`PL` substrate-hardening and capability-expansion series.
+- `specs/render_bands.md` as the stable internal capability-band specification mapping `universal`, `compat`, `advanced`, `modern`, and `premium` onto the current renderer ladder without widening the public API.
+- `specs/backend_policy.md` as the private-substrate policy for backend kinds, capability descriptors, routing, present-path internals, and future service seams that must stay private during `SX`.
+
+### Changed
+
+- Updated the active roadmap, front-door, architecture, and platform-surface docs so the repo now records `SS` as closed, `SX` as active, and `PL` as the later flagship program while keeping `ScreenSave Core`, the standalone saver line, and the existing product/channel boundaries intact.
+- Updated the renderer, compatibility, saver, and release specs so the public renderer ladder remains `gdi -> gl11 -> gl21 -> gl33 -> gl46 -> null` while the new private substrate model, fallback walk, and band-to-backend mapping are defined explicitly for later `SX` implementation work.
+- Updated the C16 release/channel manifests and the active static validators so the machine-readable surfaces and repo checks now enforce the bounded `SX` handoff instead of the earlier direct `SS`-to-`PL` wording, while preserving optional `SS03` only as a reserved maintenance-policy sidecar.
+
+### Validation
+
+- Re-ran the active static validators for the release baseline, portable bundle, installer bundle, backlog surface, canonical naming surface, all three `C13` wave surfaces, suite consistency, suite app layout, SDK contributor surface, anthology/meta-saver surface, and the preserved historical release-candidate notes.
+- Ran `git diff --check` and a final stale-phrase sweep to confirm the repo no longer presents the superseded generic post-release `SS -> PL` handoff as active doctrine.
+- Kept `SX00` documentation-only and validator-only; this prompt did not change runtime behavior, renderer implementations, build outputs, packaging outputs, or product manifests.
+
 ## SS02 - 2026-04-08
 
 ### Added
