@@ -12,3 +12,8 @@ Does not belong here:
 - Product-specific implementation notes.
 
 Type: explanatory architecture.
+
+## Current Entry Points
+
+- [overview.md](./overview.md) explains the shared-platform versus product split and the current post-`C16` architectural posture.
+- [layering.md](./layering.md) explains the public-versus-private boundary, including the `SX` rule that the public renderer contract remains narrower than the private substrate.

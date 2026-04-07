@@ -18,3 +18,4 @@ Current stage: the first narrow public header set remains real here, with Series
 - `visual_buffer_api.h` for the narrow shared software-framebuffer helper promoted in Series 10 for Plasma and Phosphor
 
 Implementation details remain private under `platform/src/`.
+That includes the `SX`-era internal band model, backend kinds, routing logic, and future service seams unless a later explicit spec promotes them.

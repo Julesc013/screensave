@@ -30,6 +30,14 @@ Implementation detail lives under `platform/src/`.
 Code should move into the public surface only when it is stable, cross-product, and intended for reuse.
 Everything else should remain private until experience proves the abstraction is durable.
 
+During `SX`, that rule becomes stricter for renderer and substrate work:
+
+- the public ladder and public headers stay narrow
+- internal capability bands stay private
+- backend kinds, backend registries, and backend capability descriptors stay private
+- present-path internals and future service seams stay private first
+- product code continues to depend on the public saver and renderer contracts rather than backend-private details
+
 Series 04 keeps the host implementation private while exposing only a narrow version/config/diagnostics/renderer/saver contract set.
 Series 05 adds the first real backend under `platform/src/render/gdi/` and removes the need for a host-local placeholder draw path.
 Series 06 proves the public saver/config boundary with Nocturne while keeping product defaults, presets, themes, and config UI inside the product tree.
@@ -42,6 +50,7 @@ Series 12 proves the same layering can also support layered system-interface, ki
 Series 13 proves the same layering can also support atmospheric weather, transit-infrastructure, and celestial exhibit products without promoting a broad weather, route, astronomy, or scenic framework into shared code.
 Series 14 proves the same layering can also support heavyweight software-3D, traversal, urban-scenic, and fractal-voyage products while keeping projection, route, scene, and refinement behavior inside the owning products rather than promoting a broad engine.
 Series 15 proves the same layering can also support a capability-gated GL21 backend, explicit GL33 and GL46 placeholders, an internal null safety fallback, and a renderer-showcase product while keeping advanced context logic backend-private, renderer selection narrow in shared core code, and Gallery product behavior inside the owning product.
+`SX` now hardens the same layering model further by authorizing richer private substrate routing and service seams without promoting them into the public contract prematurely.
 
 ## Product Boundary
 

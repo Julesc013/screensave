@@ -38,4 +38,8 @@ Series 13 proves the same contracts can also host layered weather, transit-infra
 Series 14 proves the same contracts can also host heavyweight software-3D, traversal, urban night-world, and fractal-voyage products by adding Vector, Explorer, City, and Atlas without promoting a broad 3D, map, city, or fractal framework into the platform.
 Series 15 proves the same contracts can also host a versioned renderer ladder by adding the optional capability-gated GL21 backend, explicit GL33 and GL46 placeholders, the internal null safety fallback, and Gallery without weakening the GDI baseline, the conservative GL11 tier, or the product/local ownership boundaries.
 Post-`S15` continuation planning is tracked historically in `docs/roadmap/post-s15-plan.md`, and the continuation path is now complete through the rename, checkpoint, productization, shared-settings, Windows-integration, portable-bundle, installer, suite-meta-saver, suite-app, SDK, backlog-ingestion, cross-cutting polish, `C13` Wave A, Wave B, and Wave C, `C14` rerelease hardening, `C15` release doctrine, and the `C16` Core baseline freeze.
-Active post-`C16` sequencing now lives in `docs/roadmap/post-c16-program.md` and runs `SS` first, then `PL`.
+`SS` is now closed, `SX` is the active substrate series, and `PL` still follows later as the first flagship expansion program.
+Active post-`C16` sequencing now lives in `docs/roadmap/post-c16-program.md` and `docs/roadmap/sx-series.md`.
+
+During `SX`, the architecture keeps the public renderer ladder and the current narrow saver-facing contracts intact while private substrate layers grow underneath them.
+`gallery` is the likely renderer-proof surface during that work, BenchLab remains diagnostics-only, and `plasma` stays the first flagship `PL` track rather than becoming the scope of `SX00`.

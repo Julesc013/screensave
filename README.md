@@ -91,16 +91,13 @@ Series 15 adds the advanced GL capability path and Gallery:
 - explicit host and BenchLab wiring so the current saver set can be exercised honestly through the tiered renderer stack without turning the repo into the final meta-gallery
 
 The continuation bridge is closed at `C16`.
-Post-`C16` work now proceeds as a short `SS` release-closure series first:
-
-- `SS00`: release doctrine normalization and roadmap cleanup
-- `SS01`: Core release publication and public release surfacing
-- `SS02`: release evidence refresh and support matrix
-- optional `SS03`: maintenance/support policy and patch discipline
-
-After `SS` closes, the first deeper post-release program is `PL`.
-`plasma` is the first flagship expansion track in that `PL` line.
-The active post-`C16` handoff now lives in `docs/roadmap/post-c16-program.md`.
+`SS00`, `SS01`, and `SS02` are complete.
+Optional `SS03` remains reserved for later maintenance-policy work if it is needed, but it is not the active platform program.
+Post-`SS` work now proceeds in the bounded `SX` substrate series.
+`SX` hardens the private substrate and future capability-expansion model without replacing the public renderer ladder, the Core-first product doctrine, or the later `PL` flagship line.
+After `SX` closes, `PL` remains the first deeper post-release flagship program.
+`plasma` remains the first flagship expansion track in that `PL` line.
+The active post-`C16` handoff now lives in `docs/roadmap/post-c16-program.md` and `docs/roadmap/sx-series.md`.
 
 ## Release Doctrine
 
@@ -154,6 +151,8 @@ For normative project law, start with:
 - `specs/compatibility.md`
 - `specs/saver_api.md`
 - `specs/renderer_contract.md`
+- `specs/render_bands.md`
+- `specs/backend_policy.md`
 - `specs/build_targets.md`
 - `specs/release_contract.md`
 - `specs/config_schema.md`
@@ -164,6 +163,7 @@ For explanatory architecture and execution order, start with:
 - `docs/architecture/layering.md`
 - `docs/architecture/repo-structure.md`
 - `docs/roadmap/post-c16-program.md`
+- `docs/roadmap/sx-series.md`
 - `docs/roadmap/prompt-program.md`
 - `docs/roadmap/series-map.md`
 
