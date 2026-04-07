@@ -113,7 +113,7 @@ def main() -> int:
 
     readme = read_text(ROOT / "README.md")
     require("Implementation currently exists through `S15` plus continuation `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, `C13` Wave A, Wave B, and Wave C, `C14`, `C15`, and `C16`." in readme, "README.md must record C16 as complete.", errors)
-    require("The continuation bridge is now closed and future work should resume in a new post-release `S`-series program." in readme, "README.md must record the post-C16 handoff.", errors)
+    require("Post-`C16` work now proceeds as a short `SS` release-closure series first:" in readme, "README.md must record the post-C16 handoff.", errors)
 
     prompt_program = read_text(ROOT / "docs" / "roadmap" / "prompt-program.md")
     require("Post-`S15` work now follows committed `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, the completed `C13` family-polish work, the completed `C14` release-hardening pass, the completed `C15` release-doctrine and channel-split pass, and the completed `C16` Core baseline freeze." in prompt_program, "prompt-program.md must record C16 as complete.", errors)
@@ -122,12 +122,12 @@ def main() -> int:
 
     series_map = read_text(ROOT / "docs" / "roadmap" / "series-map.md")
     require("`C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, `C13` Wave A, Wave B, and Wave C, `C14`, `C15`, and `C16` are complete." in series_map, "series-map.md must record C16 as complete.", errors)
-    require("The continuation bridge now extends through the frozen `C16` Core baseline. Future work should start in a new post-release `S`-series program." in series_map, "series-map.md must point to the post-C16 handoff.", errors)
+    require("`SS` runs first as the short release-closure bridge." in series_map, "series-map.md must point to the post-C16 handoff.", errors)
 
     post_s15 = read_text(ROOT / "docs" / "roadmap" / "post-s15-plan.md")
     require("20. `C16` refreshes and freezes the actual Core baseline against the `C15` doctrine." in post_s15, "post-s15-plan.md must record the C16 freeze decision.", errors)
-    require("21. `C16` closes the continuation bridge and hands off to a new post-release `S`-series program." in post_s15, "post-s15-plan.md must record the C16 handoff decision.", errors)
-    require("The continuation bridge is closed after `C16`, and future work should start from the frozen baseline in a new post-release `S`-series program." in post_s15, "post-s15-plan.md must point to the post-C16 handoff.", errors)
+    require("21. `C16` closes the continuation bridge and hands off to the short `SS` release-closure series, followed by the `PL` flagship program." in post_s15, "post-s15-plan.md must record the C16 handoff decision.", errors)
+    require("This file remains as historical record for the completed bridge; active post-`C16` planning now runs `SS` first and `PL` second from the frozen Core baseline." in post_s15, "post-s15-plan.md must point to the post-C16 handoff.", errors)
 
     if errors:
         for message in errors:
@@ -140,3 +140,4 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+

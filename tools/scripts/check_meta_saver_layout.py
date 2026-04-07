@@ -121,7 +121,7 @@ def main() -> int:
     require("predate `anthology`" in note, "C08 meta-saver note must record the packaging limitation honestly.", errors)
 
     root_readme = read_text(ROOT / "README.md")
-    require("The continuation bridge is now closed and future work should resume in a new post-release `S`-series program." in root_readme, "README.md must record the post-C16 handoff.", errors)
+    require("Post-`C16` work now proceeds as a short `SS` release-closure series first:" in root_readme, "README.md must record the post-C16 handoff.", errors)
     require("`anthology` is the real suite meta-saver `.scr`" in root_readme, "README.md must describe anthology explicitly.", errors)
 
     if errors:
@@ -135,3 +135,4 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+

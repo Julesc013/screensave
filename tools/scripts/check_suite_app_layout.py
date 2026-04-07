@@ -182,14 +182,14 @@ def main() -> int:
     require("static only" in note.lower(), "C09 suite note must record static-only evidence honestly.", errors)
 
     root_readme = read_text(ROOT / "README.md")
-    require("The continuation bridge is now closed and future work should resume in a new post-release `S`-series program." in root_readme, "README.md must record the post-C16 handoff.", errors)
+    require("Post-`C16` work now proceeds as a short `SS` release-closure series first:" in root_readme, "README.md must record the post-C16 handoff.", errors)
     require("`benchlab` and `suite` are now the real non-saver apps in the tree." in root_readme, "README.md must describe the real app pair.", errors)
 
     prompt_program = read_text(ROOT / "docs" / "roadmap" / "prompt-program.md")
     require("`C13` Wave A, Wave B, and Wave C are complete, `C14` final rerelease hardening is complete, `C15` release doctrine and channel split are complete, and `C16` Core release refresh and baseline freeze is complete." in prompt_program, "prompt-program.md must record the completed C16 freeze.", errors)
 
     series_map = read_text(ROOT / "docs" / "roadmap" / "series-map.md")
-    require("The continuation bridge now extends through the frozen `C16` Core baseline. Future work should start in a new post-release `S`-series program." in series_map, "series-map.md must point to the post-C16 handoff.", errors)
+    require("`SS` runs first as the short release-closure bridge." in series_map, "series-map.md must point to the post-C16 handoff.", errors)
 
     if errors:
         for error in errors:
@@ -202,3 +202,4 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+

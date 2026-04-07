@@ -154,7 +154,7 @@ def main() -> int:
         errors,
     )
     require(
-        "The continuation bridge is now closed and future work should resume in a new post-release `S`-series program." in readme,
+        "Post-`C16` work now proceeds as a short `SS` release-closure series first:" in readme,
         "README.md must record the post-C16 handoff.",
         errors,
     )
@@ -169,12 +169,12 @@ def main() -> int:
         errors,
     )
     require(
-        "The continuation bridge now extends through the frozen `C16` Core baseline. Future work should start in a new post-release `S`-series program." in series_map,
+        "`SS` runs first as the short release-closure bridge." in series_map,
         "series-map.md must point to the post-C16 handoff.",
         errors,
     )
     require(
-        "The continuation bridge is closed after `C16`, and future work should start from the frozen baseline in a new post-release `S`-series program." in post_s15,
+        "This file remains as historical record for the completed bridge; active post-`C16` planning now runs `SS` first and `PL` second from the frozen Core baseline." in post_s15,
         "post-s15-plan.md must point to the post-C16 handoff.",
         errors,
     )
@@ -188,7 +188,7 @@ def main() -> int:
 
     for snippet in (
         "`Wave-C` handled `stormglass`, `transit`, `observatory`, `vector`, `explorer`, `city`, `atlas`, `gallery`, and `anthology` without reopening suite-wide vocabulary or the shared platform contract.",
-        "`C16` Core release refresh and baseline freeze is complete, and future release/distribution follow-on work now starts from the frozen baseline in a new post-release `S`-series program.",
+        "Any post-`C16` release/distribution follow-on now routes through the short `SS` bridge first and only reaches `PL` after `SS` closes.",
     ):
         require(snippet in backlog_routing, f"backlog-routing.md is missing {snippet!r}.", errors)
 
@@ -203,3 +203,4 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
