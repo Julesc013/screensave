@@ -14,7 +14,7 @@ The platform target is intentionally conservative:
 
 ## Current Status
 
-The repository is in Series 15.
+The implemented baseline is Series 15 plus the completed `C00` through `C16` continuation bridge.
 Implementation currently exists through `S15` plus continuation `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, `C13` Wave A, Wave B, and Wave C, `C14`, `C15`, and `C16`.
 C00 reset the post-`S15` continuation roadmap, C01 applied the canonical saver/app rename and renderer-taxonomy normalization pass, C02 locked the post-rename migration baseline and recovery checkpoint, C03 converted the eighteen current savers into first-class standalone `.scr` product targets, C04 established the shared settings taxonomy, versioned preset/theme import-export files, within-saver session randomization, pack manifest discovery/validation helpers, and modest host plus BenchLab inspection foundations, C05 hardened the real Win32 `.scr` lifecycle across screen, preview, config, persistence, renderer fallback, and Windows-facing identity paths, C06 added the first portable bundle assembly path under `packaging/portable/`, C07 added a current-user installer package under `packaging/installer/`, C08 added `anthology` as the real suite meta-saver with bounded in-process cross-saver rotation, weighted filtering, family/favorites selection, renderer-aware fallback, and BenchLab inspection support, C09 added `suite` as the real suite-level browser, launcher, embedded preview, detached run, and saver-settings control app with honest manifest-driven discovery and local artifact reporting, C10 added the real contributor-facing SDK surface under `products/sdk/` plus the canonical `products/savers/_template/` starter saver with pack examples, manifest guidance, and contributor validation helpers, C11 added the structured backlog, routing taxonomy, priority model, wave mapping, and refinement-thread operating notes under `docs/roadmap/`, C12 completed the cross-cutting polish pass by normalizing shared config, preset, theme, metadata, renderer, and diagnostics vocabulary while locking the suite-wide quality bar for later saver-specific waves, `C13` Wave A polished `nocturne`, `ricochet`, `deepfield`, `plasma`, and `phosphor`, `C13` Wave B polished `pipeworks`, `lifeforms`, `signals`, `mechanize`, and `ecosystems`, `C13` Wave C polished `stormglass`, `transit`, `observatory`, `vector`, `explorer`, `city`, `atlas`, `gallery`, and `anthology`, `C14` completed the final rerelease hardening pass by normalizing release identity, refreshing the portable and installer staging surfaces, recording final readiness, integrity, and known-issues notes, and leaving the repo in a tagged release-candidate state, `C15` defined the formal release doctrine by naming `ScreenSave Core` as the primary product and splitting the companion channels into Installer, Suite, BenchLab, SDK, and Extras, and `C16` refreshed the actual x86 release artifacts, applied the Core inclusion gate to the current saver line, froze the real Core baseline, and closed the continuation bridge.
 The older short `S16` / `S17` endpoint is superseded by `docs/roadmap/post-s15-plan.md`.
@@ -90,16 +90,27 @@ Series 15 adds the advanced GL capability path and Gallery:
 - Gallery as the renderer-showcase saver with deliberate GDI, GL11, and GL21-tier scene variants plus curated compatibility, classic, and advanced presets
 - explicit host and BenchLab wiring so the current saver set can be exercised honestly through the tiered renderer stack without turning the repo into the final meta-gallery
 
-The active continuation line now extends through `C16` Core release refresh and baseline freeze.
-The continuation bridge is now closed and future work should resume in a new post-release `S`-series program.
+The continuation bridge is closed at `C16`.
+Post-`C16` work now proceeds as a short `SS` release-closure series first:
+
+- `SS00`: release doctrine normalization and roadmap cleanup
+- `SS01`: Core release publication and public release surfacing
+- `SS02`: release evidence refresh and support matrix
+- optional `SS03`: maintenance/support policy and patch discipline
+
+After `SS` closes, the first deeper post-release program is `PL`.
+`plasma` is the first flagship expansion track in that `PL` line.
+The active post-`C16` handoff now lives in `docs/roadmap/post-c16-program.md`.
 
 ## Release Doctrine
 
 - `ScreenSave Core` is the primary product.
 - Core is a ZIP of the most complete and polished standalone `.scr` saver products.
+- The saver ZIP is the product, and standalone `.scr` savers remain the main line.
 - The frozen Core baseline is staged under `out/portable/screensave-core-c16-baseline/` with a matching zip beside it.
-- `Installer`, `Suite`, `BenchLab`, `SDK`, and `Extras` are companion channels with separate roles.
-- The canonical doctrine lives in `docs/roadmap/release-channels.md` and `docs/roadmap/core-zip-doctrine.md`.
+- `anthology` is a real saver product and belongs to Core only when it clears the same gate as every other saver.
+- `Installer`, `Suite`, `BenchLab`, `SDK`, and `Extras` are separate secondary companion channels with distinct roles.
+- The canonical doctrine lives in `docs/roadmap/release-channels.md`, `docs/roadmap/core-zip-doctrine.md`, and `docs/roadmap/post-c16-program.md`.
 
 ## Planned Product Shape
 
@@ -139,6 +150,7 @@ For explanatory architecture and execution order, start with:
 - `docs/architecture/overview.md`
 - `docs/architecture/layering.md`
 - `docs/architecture/repo-structure.md`
+- `docs/roadmap/post-c16-program.md`
 - `docs/roadmap/prompt-program.md`
 - `docs/roadmap/series-map.md`
 

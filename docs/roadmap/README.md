@@ -1,6 +1,6 @@
 # Roadmap Docs
 
-This directory explains the long-lived prompt program and planned product lineup.
+This directory explains both the completed continuation bridge and the active post-`C16` release program.
 
 Belongs here:
 - Series planning.
@@ -14,5 +14,17 @@ Does not belong here:
 
 Type: explanatory roadmap.
 
-The `C00` through `C16` continuation bridge is complete.
-Future planning should treat the frozen `C16` Core baseline as the handoff point into a new post-release `S`-series program.
+## Active Doctrine
+
+- [post-c16-program.md](./post-c16-program.md) defines the current `SS` then `PL` sequence after the closed `C16` baseline.
+- [release-channels.md](./release-channels.md) defines the durable Core-versus-companion channel doctrine.
+- [core-zip-doctrine.md](./core-zip-doctrine.md) defines what belongs in the primary Core saver ZIP.
+
+## Historical Completion Record
+
+- [post-s15-plan.md](./post-s15-plan.md) records the completed `C00` through `C16` continuation bridge.
+- [prompt-program.md](./prompt-program.md) and [series-map.md](./series-map.md) summarize the implemented baseline and completed bridge.
+- [backlog-routing.md](./backlog-routing.md), [backlog-inventory.md](./backlog-inventory.md), and [refinement-threads.md](./refinement-threads.md) retain the `C11` through `C16` planning context as historical material.
+
+The `C00` through `C16` continuation bridge is complete and closed.
+Active post-`C16` planning now runs `SS` first and `PL` second from the frozen Core baseline.
