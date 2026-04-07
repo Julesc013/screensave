@@ -29,7 +29,13 @@ This note is the user-facing release-support source for the frozen `C16` `Screen
 - `suite`, BenchLab, SDK material, and Extras remain separate channels and are not installed by this package
 - Reinstall overlays existing managed files and does not prune payload-absent savers automatically
 
+## Evidence Snapshot
+
+- `SS02` rehashed the published Installer ZIP and confirmed that its extracted payload still matches the frozen nineteen-saver Core lineup.
+- `SS02` passed mock-mode current-user install and uninstall against the extracted Installer ZIP, including current-user selection assistance for `anthology`.
+- `SS02` did not turn mock-mode evidence into a live registry or Control Panel claim.
+
 ## Current Known Limits
 
 - Machine-wide install, shell-wide registration helpers, and richer upgrade repair modes remain deferred
-- Fresh live installer registry smoke is not claimed here beyond the packaged current-user policy and staged payload evidence
+- Fresh live installer registry smoke is still not claimed here beyond the packaged current-user policy, staged payload evidence, and mock-mode validation

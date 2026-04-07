@@ -14,4 +14,5 @@ This note records the companion-channel artifact state frozen beside `ScreenSave
 
 - Core remains the primary end-user saver ZIP.
 - Companion channels remain separate by doctrine even when their binaries or sources exist beside the Core build.
+- `SS02` used BenchLab only as a same-build internal diagnostic companion for renderer probes; that did not make BenchLab part of the Core or Installer release surface.
 - Post-`C16` work still runs `SS` first and `PL` second; companion channels do not become the main line during that handoff.

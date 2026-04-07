@@ -21,6 +21,22 @@ This note records the frozen `C16` Installer companion package built from the fr
 | Uninstall record | Current-user uninstall entry | Live registry writes remain current-user only |
 | Uninstall cleanup | Remove managed install root and uninstall record | Preserve user configuration outside the managed tree |
 
+## SS02 Evidence Refresh
+
+`SS02` reran the frozen Installer package against the published `screensave-installer-c16-baseline.zip` asset in mock mode.
+
+| Check | Result | Notes |
+| --- | --- | --- |
+| Asset hash | pass | Matched the published release digest |
+| Extracted payload saver count | pass | `19` savers, matching frozen Core |
+| Install state write | pass | Mock backend wrote current-user install state |
+| Active saver selection | pass | `install_screensave.ps1 -SetActiveSaver anthology` selected `anthology.scr` |
+| Uninstall record | pass | Mock current-user uninstall entry was written |
+| Uninstall cleanup | pass | Managed install root was removed and mock desktop state was restored |
+
+This evidence confirms the scripted current-user install and uninstall flow in mock mode.
+It does not claim fresh live registry or Control Panel registration smoke.
+
 ## Payload Coverage
 
 The frozen `C16` Installer package carries the same saver lineup as frozen Core.
@@ -56,6 +72,6 @@ The frozen `C16` Installer package carries the same saver lineup as frozen Core.
 
 ## Limits
 
-- `C16` did not add machine-wide install support.
-- `C16` did not add payload pruning for reinstall.
-- Live installer smoke remains distinct from payload assembly; see `validation/notes/c16-known-issues.md` for the remaining validation limits.
+- The frozen Installer baseline remains current-user only; machine-wide install is unsupported.
+- Reinstall still overlays existing managed files and does not prune payload-absent savers automatically.
+- `SS02` verified mock-mode current-user install and uninstall, but live registry writes, live picker discovery, and real Control Panel registration remain unverified.

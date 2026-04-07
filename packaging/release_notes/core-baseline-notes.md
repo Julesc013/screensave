@@ -47,11 +47,15 @@ This note records the frozen `C16` ScreenSave baseline.
 - On April 6, 2026, `build/msvc/vs2022/ScreenSave.sln` built successfully for `Release|Win32`.
 - That build produced all nineteen canonical saver `.scr` targets plus `benchlab.exe` and `suite.exe` under `out/msvc/vs2022/Release/`.
 - Core and Installer staging in `C16` are refreshed from those real x86 release outputs.
+- `SS01` published the frozen Core and Installer ZIP assets at the `c16-core-baseline` release tag.
+- `SS02` refreshed the evidence with release-asset rehashing, nineteen-saver `gdi` fullscreen smoke from the extracted Core ZIP, representative `Settings...` smoke, representative renderer probes, and mock-mode current-user installer validation.
 
 ## Honest Limits
 
-- `C16` did not rerun live Control Panel or `desk.cpl` screen saver smoke.
-- `C16` did not add machine-wide install support.
+- Fresh Screen Saver Settings discovery and `desk.cpl` listing evidence is still not recorded in `SS02`.
+- Preview child-window confirmation remains unverified after representative `/p` attempts.
+- The Installer remains current-user only; live registry integration remains unverified and machine-wide install is unsupported.
+- `gl11` and `gl21` now have representative evidence, but the full accelerated-renderer matrix was not rerun across every saver.
 - `C16` did not freeze any Extras payload.
 - Known limitations remain tracked in `validation/notes/c16-known-issues.md`.
 
@@ -59,4 +63,5 @@ This note records the frozen `C16` ScreenSave baseline.
 
 `C16` closes the post-`S15` continuation bridge.
 `SS01` now publishes this frozen baseline at `https://github.com/Julesc013/screensave/releases/tag/c16-core-baseline`.
-`SS02` remains pending for refreshed release evidence and support-matrix clarity.
+`SS02` now supplies the refreshed validation summary, support matrix, and capture log for the published baseline.
+Optional `SS03` may still define maintenance/support policy and patch discipline before `PL`.
