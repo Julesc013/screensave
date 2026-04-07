@@ -2,7 +2,7 @@
 
 This is the short operational view of the implemented baseline and the completed post-`S15` continuation bridge.
 It remains a historical summary for the closed `C00` through `C16` line.
-Active post-`C16` planning now lives in `docs/roadmap/post-c16-program.md`.
+Active post-`C16` planning now lives in `docs/roadmap/post-c16-program.md` and `docs/roadmap/sx-series.md`.
 
 ## Implemented Baseline
 
@@ -49,6 +49,7 @@ The continuation bridge is closed at the frozen `C16` Core baseline.
 
 ## Post-C16 Handoff
 
-- `SS` runs first as the short release-closure bridge.
-- `PL` runs next as the first flagship expansion program.
-- `plasma` is the first flagship post-release expansion track.
+- `SS` is closed as the short release-closure bridge, with optional `SS03` reserved only if later maintenance-policy work is needed.
+- `SX` is now active as the bounded substrate-hardening and capability-expansion series.
+- `PL` runs next as the first flagship expansion program after `SX`.
+- `plasma` remains the first flagship post-release expansion track in `PL`, not in `SX`.

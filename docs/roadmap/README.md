@@ -16,7 +16,8 @@ Type: explanatory roadmap.
 
 ## Active Doctrine
 
-- [post-c16-program.md](./post-c16-program.md) defines the current `SS` then `PL` sequence after the closed `C16` baseline.
+- [post-c16-program.md](./post-c16-program.md) defines the current post-`C16` sequence with `SS` closed, `SX` active, and `PL` next.
+- [sx-series.md](./sx-series.md) defines the bounded substrate-hardening and capability-expansion constitution that now sits between `SS` and `PL`.
 - [release-channels.md](./release-channels.md) defines the durable Core-versus-companion channel doctrine.
 - [core-zip-doctrine.md](./core-zip-doctrine.md) defines what belongs in the primary Core saver ZIP.
 
@@ -27,4 +28,4 @@ Type: explanatory roadmap.
 - [backlog-routing.md](./backlog-routing.md), [backlog-inventory.md](./backlog-inventory.md), and [refinement-threads.md](./refinement-threads.md) retain the `C11` through `C16` planning context as historical material.
 
 The `C00` through `C16` continuation bridge is complete and closed.
-Active post-`C16` planning now runs `SS` first and `PL` second from the frozen Core baseline.
+`SS` is closed, `SX` is now active, and `PL` remains the later flagship program after the frozen Core baseline.
