@@ -2,6 +2,26 @@
 
 All notable repository changes are recorded here in prompt history order.
 
+## SX01 - 2026-04-08
+
+### Added
+
+- `platform/include/screensave/private/README.md` and `platform/src/core/substrate/README.md` as the source-tree guides for the new private substrate split beneath the stable public renderer contract.
+- `platform/include/screensave/private/` headers for backend identity, render bands, backend capabilities, registry and loader seams, present-path policy, service seams, and private renderer runtime ownership.
+- `platform/src/core/substrate/` source files for backend-kind mapping, band routing, capability capture, registry and loader scaffolding, present-path routing, and future private service seam defaults.
+
+### Changed
+
+- Reworked `platform/src/core/base/renderer_dispatch.c` so the public renderer-facing API remains intact while backend selection, capability capture, present-path ownership, and private service seam wiring now route through the new private substrate helpers.
+- Updated the GDI, GL11, GL21, and null backend internals to consume the new private runtime header, and stopped leaking GL21 private capability bits into the public renderer capability flags.
+- Wired the new substrate files into the MinGW and VS2022 platform build lanes, updated architecture and platform-surface docs to point at the private split explicitly, and applied narrow Win32 `GetWindowLongPtrA`/`SetWindowLongPtrA` compatibility fixes needed to keep the checked-in debug lane building in the available environment.
+
+### Validation
+
+- Built `build/mingw/i686` with `PROFILE=debug` and `CC=gcc`, producing the shared platform library plus the checked-in saver, BenchLab, and Suite targets after the substrate integration.
+- Confirmed the new substrate files are compile-integrated rather than orphaned, and confirmed product code still builds against the existing public `platform/include/screensave/` contract instead of the new private tree.
+- Kept `SX01` bounded to private structure, build integration, boundary cleanup, and documentation; this prompt did not implement GL33 or GL46 behavior, adopt non-GL families, rewrite the public renderer API, or widen product scope.
+
 ## SX00 - 2026-04-08
 
 ### Added
