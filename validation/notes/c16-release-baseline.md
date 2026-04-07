@@ -38,4 +38,6 @@ This note records the frozen `C16` ScreenSave release baseline.
 ## Next Phase
 
 The `C00` through `C16` continuation bridge is closed after this freeze.
-Future work should begin as a new post-release `S`-series program instead of another continuation bridge step.
+Post-`C16` work now begins with the short `SS` release-closure series documented in `docs/roadmap/post-c16-program.md`.
+This note does not claim that `SS01` release publication or `SS02` evidence refresh are already complete.
+`PL` follows only after the `SS` bridge closes.

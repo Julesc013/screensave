@@ -6,6 +6,7 @@ This document defines the canonical ScreenSave release doctrine introduced in `C
 
 - The primary product is `ScreenSave Core`.
 - `ScreenSave Core` is a ZIP of the most complete and polished standalone `.scr` saver products.
+- The saver ZIP is the product, and standalone `.scr` savers remain the main line.
 - Core is the main thing normal users should download.
 - Core is independent of the installer, the `suite` app, BenchLab, the SDK, and experimental extras.
 - All other deliverables are secondary companion channels: `Installer`, `Suite`, `BenchLab`, `SDK`, and `Extras`.
@@ -35,6 +36,7 @@ This document defines the canonical ScreenSave release doctrine introduced in `C
 - BenchLab remains diagnostics-only.
 - SDK remains contributor-only.
 - Extras exists to hold back material that is interesting but not yet strong enough for Core.
+- Companion channels remain secondary even when their binaries or sources exist beside the Core build outputs.
 
 ## Current C16 State
 
@@ -43,4 +45,5 @@ This document defines the canonical ScreenSave release doctrine introduced in `C
 - `suite` and BenchLab remain separate companion app artifacts under `out/msvc/vs2022/Release/`.
 - The SDK remains source-only and outside Core.
 - Extras remains a separate empty holdback channel in `C16`.
-- The `C00` through `C16` continuation bridge is now closed; future work should start from the frozen baseline in a new post-release `S`-series program.
+- The `C00` through `C16` continuation bridge is closed.
+- Post-`C16` work now runs `SS` first and `PL` second from the frozen Core baseline; see `docs/roadmap/post-c16-program.md`.
