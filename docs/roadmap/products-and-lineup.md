@@ -5,6 +5,12 @@ Implemented saver products now use the canonical post-`S15` names defined in [re
 That same document records the legacy-to-canonical migration aliases introduced during `C01`.
 Future concept entries that still read like working titles are descriptive anchors, not committed final slugs. `C11` parks and routes them through `backlog-inventory.md` rather than treating them as near-term implementation promises.
 
+## Release-Facing Reminder
+
+- `ScreenSave Core` is the primary product for the standalone saver line.
+- `anthology` remains a saver product and does not collapse into the `suite` app.
+- `suite`, `benchlab`, and `sdk` remain separate companion surfaces with different roles.
+
 ## Quiet, Utility, And Ambient
 
 - `nocturne`: low-distraction ambient saver and the first real product.

@@ -14,3 +14,4 @@ This note records the explicit non-blocking limitations left in the frozen `C16`
 
 - These limits do not block the frozen Core baseline because the full canonical saver line built successfully as x86 Win32 release artifacts and the channel boundaries are explicit.
 - These limits do block any claim that `C16` completed fresh end-to-end runtime validation on every supported Windows revision.
+- These limits feed later `SS02` evidence refresh work; this note does not claim that refresh is already complete.
