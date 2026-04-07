@@ -44,6 +44,9 @@ Optional `SS03` remains reserved, but it is not the active platform program gate
 `SX` is the bounded post-`SS` and pre-`PL` substrate series.
 It exists to make the private substrate more durable without replacing the public renderer ladder or reopening product doctrine.
 
+`SX00` and `SX01` are now complete.
+The next active substrate step is `SX02`.
+
 `SX` is not:
 
 - a release-doctrine reset

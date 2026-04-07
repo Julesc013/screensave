@@ -8,7 +8,8 @@ This document defines the active `SX` program that sits after the closed `SS` br
 
 - `SS00`, `SS01`, and `SS02` are complete.
 - Optional `SS03` remains a reserved maintenance-policy sidecar, not the active platform program.
-- `SX` is now the active post-`SS` and pre-`PL` series.
+- `SX00` and `SX01` are complete.
+- `SX02` is now the active post-`SS` and pre-`PL` substrate step.
 - `PL` begins only after `SX` hands off a proven substrate.
 
 ## What SX Is
@@ -37,7 +38,7 @@ The current intended `SX` order is:
 | Step | Role | Boundary |
 | --- | --- | --- |
 | `SX00` | substrate constitution and boundary freeze | define what remains public, what becomes private, and what later `SX` work may and may not assume |
-| `SX01` | private substrate scaffolding and routing cleanup | start private band, backend, and routing infrastructure without changing the public ladder |
+| `SX01` | private substrate scaffolding and routing cleanup | establish the first real private band, backend, capability, routing, and present-path structure without changing the public ladder |
 | `SX02` | current-tier hardening and proof-surface work | harden `gdi`, `gl11`, and `gl21` behavior plus substrate-facing proof surfaces without widening product scope |
 | `SX03` | later modern-tier bring-up if justified | make `gl33` real only if the lower tiers remain honest and stable |
 | `SX04` | later premium-tier bring-up if justified | make `gl46` real only after the earlier tiers and routing model are proven |

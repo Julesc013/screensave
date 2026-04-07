@@ -2,7 +2,10 @@
 
 ScreenSave is a retro-compatible Windows screensaver platform and product monorepo. Its primary public release is `ScreenSave Core`, a ZIP of standalone `.scr` savers built around a conservative baseline: C89, x86 Win32, the classic ANSI Win32 screensaver host path, mandatory `gdi`, and optional capability-gated OpenGL tiers.
 
-The frozen public baseline is `c16-core-baseline`. `SS00` through `SS02` are complete, active post-`C16` planning now lives under [`docs/roadmap/`](docs/roadmap/), and current release limits remain tracked in [`validation/notes/c16-known-issues.md`](validation/notes/c16-known-issues.md).
+The frozen public baseline is `c16-core-baseline`. `SS00` through `SS02` and `SX00` through `SX01` are complete, active post-`C16` planning now lives under [`docs/roadmap/`](docs/roadmap/), and current release limits remain tracked in [`validation/notes/c16-known-issues.md`](validation/notes/c16-known-issues.md).
+
+Implementation currently exists through `S15` plus continuation `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, `C13` Wave A, Wave B, and Wave C, `C14`, `C15`, and `C16`.
+Post-`SS` work now proceeds in the bounded `SX` substrate series.
 
 ## Download ScreenSave Core
 
@@ -31,6 +34,10 @@ Companion channels stay separate from Core:
 - `BenchLab`: diagnostics and validation harness for renderer and saver inspection
 - `SDK`: contributor-facing templates, examples, manifests, and authoring guidance
 - `Extras`: holdback channel for experimental or lower-confidence material; no frozen payload ships in `C16`
+
+`anthology` is the real suite meta-saver `.scr` and remains part of the standalone saver line rather than the suite app.
+`suite` is now the canonical suite-level browser, launcher, preview, and configuration app under `products/apps/suite/`.
+`benchlab` and `suite` are now the real non-saver apps in the tree.
 
 ## Compatibility Baseline
 
