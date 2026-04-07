@@ -28,7 +28,7 @@ At minimum, release readiness requires smoke validation for:
 
 - Startup in the intended mode.
 - Clean shutdown.
-- Basic rendering on the required capability class.
+- Basic rendering on the required compatibility band or public renderer tier.
 - Configuration handling where the product supports configuration.
 - Preview behavior where the product claims preview support.
 

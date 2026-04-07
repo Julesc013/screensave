@@ -11,6 +11,7 @@ The renderer contract must:
 - Preserve a universal path on machines that only have GDI available.
 - Permit optional acceleration through OpenGL 1.1 when available.
 - Allow later enhanced backends without forcing them into the universal baseline.
+- Remain a stable public contract even while richer substrate routing grows privately during `SX`.
 
 ## Renderer Tiers
 
@@ -24,6 +25,19 @@ The repository uses an explicit renderer tier ladder:
 - `null`: an emergency no-op fallback that keeps host lifecycles alive but does not redefine the product baseline.
 
 Products may advertise use of enhanced tiers, but baseline saver products must always define a valid `gdi` behavior.
+
+## Public Contract Boundary
+
+This ladder is the public compatibility-facing renderer vocabulary.
+
+During `SX`:
+
+- richer backend kinds, internal bands, registries, and service seams may grow privately
+- those private abstractions do not replace the public tier names
+- requested and active public tier reporting remains part of the stable renderer contract
+- `null` remains internal-only even when the private substrate beneath it evolves
+
+See [render_bands.md](./render_bands.md) and [backend_policy.md](./backend_policy.md) for the private substrate rules that sit beneath this public contract.
 
 ## Required GDI Backend
 
@@ -71,9 +85,10 @@ Later `gl33` and `gl46` tiers may add broader feature coverage, but only when al
 Fallback behavior is part of the contract:
 
 - If a requested higher tier is unavailable, the platform selects the highest available compatible lower tier.
-- Automatic selection may walk `gl46 -> gl33 -> gl21 -> gl11 -> gdi -> null`, but `null` remains an internal safety fallback rather than a normal product capability class.
+- Automatic selection may walk `gl46 -> gl33 -> gl21 -> gl11 -> gdi -> null`, but `null` remains an internal safety fallback rather than a normal product capability band or release tier.
 - Products must degrade behavior intentionally instead of failing unpredictably.
 - If a product cannot offer a valid universal path, it must be classified explicitly later as outside the universal saver set.
+- Private routing may use internal bands and backend descriptors, but that private machinery must not obscure the public fallback story.
 
 ## Feature Assumptions
 

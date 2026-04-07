@@ -52,6 +52,8 @@ Renderer support is tiered:
 - OpenGL 3.3 and 4.6 may be named explicitly as later optional tiers before they are implemented, but they remain placeholders until real backends exist.
 - An internal null safety fallback may exist beneath GDI for host stability, but it does not change the required product baseline.
 
+Later `SX` work may enrich private routing, backend, or service layers beneath this public tier ladder, but it must not replace the public ladder itself without a later explicit doctrine change.
+
 No product may rely on a renderer tier that is unavailable on the baseline machine unless that product is explicitly designated later as an enhanced-only product class.
 
 ## Capability Rules
@@ -62,6 +64,7 @@ The repository must follow these rules:
 - Enhancements layer on top of the universal path.
 - If an optional capability is absent, the product must either fall back cleanly or be classified as not part of the universal saver set.
 - Product releases must state when they depend on a capability above the universal floor.
+- Future private service seams must remain dynamically optional and must not become new mandatory baseline runtime requirements.
 
 ## Compatibility Philosophy
 
@@ -69,6 +72,9 @@ The project prioritizes the widest durable baseline first and visual enhancement
 
 A feature is not acceptable merely because it works well on modern systems.
 It must either preserve the baseline or be clearly isolated as optional.
+
+Private substrate growth is allowed.
+Compatibility-floor replacement is not.
 
 ## Early-Series Non-Goals
 
@@ -78,3 +84,4 @@ Early series are not trying to:
 - Standardize on Unicode-only UI paths.
 - Introduce mandatory middleware or third-party runtimes.
 - Replace the Win32 `.scr` model with a different application model.
+- Treat D3D, D2D, or DWrite as already-adopted public first-class tiers during `SX00`.

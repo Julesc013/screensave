@@ -37,7 +37,7 @@ The host layer is responsible for:
 
 A saver product is responsible for:
 
-- Declaring stable product metadata and supported capability class.
+- Declaring stable product metadata and supported capability band policy.
 - Defining product-local presets, themes, and content references.
 - Creating session-local state from the resolved config and supplied seed.
 - Updating that state over time without corrupting host-owned resources.
@@ -52,8 +52,9 @@ Products should target the abstract renderer contract, not a raw backend impleme
 This means:
 
 - Baseline savers should be able to run on the GDI contract alone.
-- Savers may describe optional enhanced behavior for higher capability classes.
+- Savers may describe optional enhanced behavior for higher capability bands or higher public renderer tiers.
 - Direct backend calls belong in the platform layer unless an explicit later spec introduces a tightly controlled exception.
+- Savers must not depend on backend-private kinds, backend-private registries, or private service seams directly.
 
 ## Config, Presets, And Themes
 
@@ -69,7 +70,7 @@ Product-local keys stay product-local unless they are reused enough to justify p
 ## Deterministic Seeds
 
 The host provides seed material to each saver session.
-Given the same product version, resolved preset, theme, mode, and seed, a saver should produce materially consistent behavior on the same capability class unless the release notes state otherwise.
+Given the same product version, resolved preset, theme, mode, and seed, a saver should produce materially consistent behavior on the same capability band unless the release notes state otherwise.
 
 Determinism is intended for repeatability, debugging, and validation evidence.
 It does not require every backend to produce bit-identical pixels across all machines.
