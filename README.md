@@ -119,8 +119,11 @@ The active post-`C16` handoff now lives in `docs/roadmap/post-c16-program.md`.
 - Secondary download: `https://github.com/Julesc013/screensave/releases/download/c16-core-baseline/screensave-installer-c16-baseline.zip`
 - Checksums and asset manifest: `releases/c16-core-baseline-sha256.txt` and `releases/c16-core-baseline-manifest.ini`
 - Repo-facing release page: `docs/releases/c16-core-baseline.md`
+- `SS02` validation summary: `validation/notes/ss02-release-validation-summary.md`
+- `SS02` support matrix: `validation/notes/ss02-support-matrix.md`
+- Detailed `SS02` capture log: `validation/captures/ss02-c16-validation-log.md`
+- Current known issues: `validation/notes/c16-known-issues.md`
 - `Suite`, `BenchLab`, `SDK`, and `Extras` remain outside the primary Core release.
-- `SS02` still remains for refreshed release evidence and support-matrix clarity.
 
 ## Planned Product Shape
 
