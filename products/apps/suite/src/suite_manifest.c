@@ -290,6 +290,7 @@ static void suite_manifest_set_defaults(
     manifest->supports_gdi = 1;
     manifest->supports_gl11 = (module->capability_flags & SCREENSAVE_SAVER_CAP_GL11) != 0UL;
     manifest->supports_gl21 = (module->capability_flags & SCREENSAVE_SAVER_CAP_GL21) != 0UL;
+    manifest->supports_gl33 = 0;
     manifest->long_run_stable = (module->capability_flags & SCREENSAVE_SAVER_CAP_LONG_RUN_STABLE) != 0UL;
     manifest->preview_safe = 1;
 }
@@ -349,6 +350,10 @@ static int suite_manifest_load_callback(
             manifest->supports_gl21 = lstrcmpiA(value, "0") != 0;
             return 1;
         }
+        if (lstrcmpiA(key, "gl33") == 0) {
+            manifest->supports_gl33 = lstrcmpiA(value, "0") != 0;
+            return 1;
+        }
         if (lstrcmpiA(key, "preview_safe") == 0) {
             manifest->preview_safe = lstrcmpiA(value, "0") != 0;
             return 1;
@@ -406,6 +411,12 @@ static void suite_build_renderer_string_from_manifest(suite_manifest_info *manif
             suite_append_text(manifest->renderer, sizeof(manifest->renderer), ", ");
         }
         suite_append_text(manifest->renderer, sizeof(manifest->renderer), "OpenGL 2.1 optional");
+    }
+    if (manifest->supports_gl33) {
+        if (manifest->renderer[0] != '\0') {
+            suite_append_text(manifest->renderer, sizeof(manifest->renderer), ", ");
+        }
+        suite_append_text(manifest->renderer, sizeof(manifest->renderer), "OpenGL 3.3 modern optional");
     }
 }
 

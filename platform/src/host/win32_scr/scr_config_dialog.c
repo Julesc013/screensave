@@ -637,7 +637,7 @@ static void scr_selector_populate_renderer_combo(HWND dialog)
     SendDlgItemMessageA(dialog, IDC_SCR_RENDERER, CB_ADDSTRING, 0U, (LPARAM)"GDI floor");
     SendDlgItemMessageA(dialog, IDC_SCR_RENDERER, CB_ADDSTRING, 0U, (LPARAM)"OpenGL 1.1");
     SendDlgItemMessageA(dialog, IDC_SCR_RENDERER, CB_ADDSTRING, 0U, (LPARAM)"OpenGL 2.1");
-    SendDlgItemMessageA(dialog, IDC_SCR_RENDERER, CB_ADDSTRING, 0U, (LPARAM)"OpenGL 3.3 (placeholder)");
+    SendDlgItemMessageA(dialog, IDC_SCR_RENDERER, CB_ADDSTRING, 0U, (LPARAM)"OpenGL 3.3 (modern optional)");
     SendDlgItemMessageA(dialog, IDC_SCR_RENDERER, CB_ADDSTRING, 0U, (LPARAM)"OpenGL 4.6 (placeholder)");
 }
 

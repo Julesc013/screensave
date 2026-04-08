@@ -70,7 +70,7 @@ Future concept entries that still read like working titles are descriptive ancho
 
 ## Heavyweight And Showcase
 
-- `gallery`: renderer-showcase saver for validating the current tier ladder and honest fallback behavior. It is also the most likely proof surface for later bounded `SX` substrate work.
+- `gallery`: renderer-showcase saver for validating the current tier ladder and honest fallback behavior. It is now the bounded `SX05` proof surface for the real optional `gl33` modern lane without turning that lane into a whole-line requirement.
 
 ## Suite Meta Saver
 
