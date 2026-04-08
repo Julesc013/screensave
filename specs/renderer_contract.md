@@ -20,7 +20,7 @@ The repository uses an explicit renderer tier ladder:
 - `gdi`: always required and always supported by baseline products.
 - `gl11`: available only when OpenGL 1.1 initialization succeeds at runtime.
 - `gl21`: the first real later-capability OpenGL tier and the current real advanced backend.
-- `gl33`: an explicit later-tier placeholder until a real backend exists.
+- `gl33`: the first real modern-capability OpenGL tier, still optional and capability-gated above `gl21`.
 - `gl46`: an explicit later-tier placeholder until a real backend exists.
 - `null`: an emergency no-op fallback that keeps host lifecycles alive but does not redefine the product baseline.
 
@@ -71,13 +71,14 @@ It may expose:
 It must remain optional.
 Failure to initialize GL11 must fall back to a supported lower tier without crashing the host.
 
-## Optional GL21 Backend And Later GL Placeholders
+## Optional GL21 And GL33 Backends Plus Later GL46 Placeholder
 
 `gl21` is the current real later-capability OpenGL tier.
-Later `gl33` and `gl46` tiers may add broader feature coverage, but only when all of the following are true:
+`gl33` is the current real modern-capability OpenGL tier.
+Later `gl46` may add broader feature coverage, but only when all of the following are true:
 
 - Runtime capability detection succeeds.
-- The product explicitly supports the higher tier.
+- The product explicitly supports the higher tier or bounded proof surface.
 - The product does not thereby weaken the universal baseline required for the same product class.
 
 ## Fallback Rules

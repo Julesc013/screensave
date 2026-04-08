@@ -44,8 +44,8 @@ Optional `SS03` remains reserved, but it is not the active platform program gate
 `SX` is the bounded post-`SS` and pre-`PL` substrate series.
 It exists to make the private substrate more durable without replacing the public renderer ladder or reopening product doctrine.
 
-`SX00`, `SX01`, `SX02`, `SX03`, and `SX04` are now complete.
-The next active substrate step is `SX05`, which may bring up the later `gl33` modern tier only after the hardened GL21 advanced lane has proved durable.
+`SX00`, `SX01`, `SX02`, `SX03`, `SX04`, and `SX05` are now complete.
+The next active substrate step is `SX06`, which may bring up the later `gl46` premium tier only after the hardened GL33 modern lane has proved durable.
 
 `SX` is not:
 
@@ -78,11 +78,12 @@ The supporting normative specs live in [../../specs/render_bands.md](../../specs
 - SDK stays contributor-facing only.
 - Extras stays the holdback channel for experimental or lower-confidence material.
 - Extensibility stays data-driven first, not plugin-first.
-- The renderer ladder stays `gdi`, `gl11`, `gl21`, later `gl33`, later `gl46`, and internal `null`.
+- The renderer ladder stays `gdi`, `gl11`, `gl21`, `gl33`, later `gl46`, and internal `null`.
 - `gdi` stays the guaranteed floor.
 - `gl11` stays the conservative accelerated tier.
 - `gl21` stays the first real advanced tier.
-- `gl33` and `gl46` stay future tiers unless they become real.
+- `gl33` is now the first real modern tier after `SX05`.
+- `gl46` stays a future premium tier unless it becomes real.
 - `null` stays internal only.
 - The public renderer contract stays in place while richer backend and service abstractions grow privately.
 - Products should eventually target stable internal capability bands rather than raw backend internals.

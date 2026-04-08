@@ -8,8 +8,8 @@ This document defines the active `SX` program that sits after the closed `SS` br
 
 - `SS00`, `SS01`, and `SS02` are complete.
 - Optional `SS03` remains a reserved maintenance-policy sidecar, not the active platform program.
-- `SX00`, `SX01`, `SX02`, `SX03`, and `SX04` are complete.
-- `SX05` is the next active substrate step once the hardened GL21 advanced lane has proved durable.
+- `SX00`, `SX01`, `SX02`, `SX03`, `SX04`, and `SX05` are complete.
+- `SX06` is the next active substrate step once the hardened GL33 modern lane has proved durable.
 - `PL` begins only after `SX` hands off a proven substrate.
 
 ## What SX Is
@@ -42,7 +42,7 @@ The current intended `SX` order is:
 | `SX02` | GDI floor hardening plus current-tier proof-surface cleanup | harden the universal `gdi` floor first, tighten fallback landing and diagnostics, and keep current-tier proof surfaces honest without widening product scope |
 | `SX03` | GL11 parity lane | harden the conservative accelerated compat lane, tighten GL11 setup, teardown, present, and fallback behavior, and keep it parity-first over the GDI floor |
 | `SX04` | GL21 advanced-lane hardening | harden the first real advanced tier around an explicit private capability bundle and disciplined degradation to `gl11` and `gdi` |
-| `SX05` | later modern-tier bring-up if justified | make `gl33` real only if the lower tiers remain honest and stable |
+| `SX05` | GL33 modern-lane bring-up | make `gl33` real as the first bounded modern tier without weakening lower-tier discipline |
 | `SX06` | later premium-tier bring-up if justified | make `gl46` real only after the earlier tiers and routing model are proven |
 | optional `SX07` | substrate handoff checkpoint | record that the substrate is stable enough to support `PL` without reopening its constitution |
 
@@ -62,7 +62,8 @@ Later higher-capability work must not skip substrate hardening of the lower tier
 - `gdi` remains the guaranteed floor.
 - `gl11` remains the conservative accelerated tier.
 - `gl21` remains the first real advanced tier.
-- `gl33` and `gl46` remain future-capable tiers until later `SX` work makes them real.
+- `gl33` is now the first real modern tier after `SX05`.
+- `gl46` remains a future-capable premium tier until later `SX` work makes it real.
 - `null` remains internal only.
 - The classic Win32 `.scr` host model remains intact.
 - The public platform surface remains narrower and more stable than the private substrate.
@@ -84,7 +85,7 @@ The detailed rules live in:
 
 ## Proof Surfaces And Later Product Work
 
-- `gallery` is the most likely substrate proof and showcase saver during `SX` because it already exists to exercise the renderer ladder and honest fallback behavior.
+- `gallery` is the bounded substrate proof and showcase saver during `SX`; `SX05` uses it as the first honest `gl33` proof surface without turning it into a platform-wide migration requirement.
 - BenchLab remains the diagnostics-only surface for renderer and routing inspection during `SX`.
 - `plasma` is not an `SX00` deliverable and is not the lead product of `SX`.
 - `plasma` remains the first flagship `PL` track after `SX` closes.

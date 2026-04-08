@@ -25,7 +25,7 @@ The stable internal band set is:
 | `universal` | `gdi` | the guaranteed compatibility floor that must remain viable on the broad baseline |
 | `compat` | `gl11` | the conservative accelerated band that still preserves broad fallback discipline |
 | `advanced` | `gl21` | the first real advanced-capability band in the current public ladder |
-| `modern` | `gl33` | a later optional modern-capability band that remains placeholder-only until later `SX` work makes it real |
+| `modern` | `gl33` | the first real optional modern-capability band, kept capability-gated and bounded above the advanced tier |
 | `premium` | `gl46` | a later optional highest-capability band that remains placeholder-only until later `SX` work makes it real |
 
 `null` is not a normal band.
@@ -36,7 +36,8 @@ It remains an internal safety fallback beneath the normal compatibility walk.
 - `universal` must preserve the GDI floor and the broad compatibility-first posture.
 - `compat` may add conservative acceleration, but it must still behave like a fallback-friendly tier rather than a new minimum requirement.
 - `advanced` is the first band where richer later-capability behavior may exist in the current public ladder.
-- `modern` and `premium` authorize future later-capability work only after the lower bands are already stable and honest.
+- `modern` is now the first real bounded modern-capability band and must still degrade honestly through `advanced`, `compat`, and `universal`.
+- `premium` authorizes later highest-capability work only after the lower bands are already stable and honest.
 - No saver is required to support every band.
 - Products should target band semantics rather than backend-private implementation details.
 

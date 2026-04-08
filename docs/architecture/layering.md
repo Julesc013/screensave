@@ -57,6 +57,7 @@ Series 15 proves the same layering can also support a capability-gated GL21 back
 `SX02` applies that rule to the renderer floor directly: `platform/src/core/substrate/` owns selection and routing policy, while `platform/src/render/gdi/` now owns the hardened universal floor for backbuffer lifetime, present behavior, and backend-private diagnostics detail.
 `SX03` applies the same rule to the compat lane: `platform/src/render/gl11/` now owns the conservative WGL session, swap-or-flush present path, and parity-oriented backend detail without pushing GL11 internals into saver or product code.
 `SX04` applies the same rule to the first real advanced tier: `platform/src/render/gl21/` now owns explicit advanced-context setup, a formal private capability bundle, bounded optional feature capture, and disciplined degradation signals without turning `gl21` into a public modern-tier contract.
+`SX05` applies the same rule to the first real modern tier: `platform/src/render/gl33/` now owns bounded modern-context creation, dynamic function loading, private capability-bundle capture, and deliberate degradation down through `gl21`, `gl11`, and `gdi`, while `gallery` remains the bounded proof surface rather than a migration mandate.
 
 ## Product Boundary
 
