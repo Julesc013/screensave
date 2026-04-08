@@ -8,8 +8,8 @@ This document defines the active `SX` program that sits after the closed `SS` br
 
 - `SS00`, `SS01`, and `SS02` are complete.
 - Optional `SS03` remains a reserved maintenance-policy sidecar, not the active platform program.
-- `SX00`, `SX01`, and `SX02` are complete.
-- `SX03` is the next active substrate step only if later modern-tier bring-up remains justified after the hardened floor and current tiers hold.
+- `SX00`, `SX01`, `SX02`, and `SX03` are complete.
+- `SX04` is the next active substrate step once the hardened GDI floor and GL11 compat lane have held.
 - `PL` begins only after `SX` hands off a proven substrate.
 
 ## What SX Is
@@ -40,9 +40,11 @@ The current intended `SX` order is:
 | `SX00` | substrate constitution and boundary freeze | define what remains public, what becomes private, and what later `SX` work may and may not assume |
 | `SX01` | private substrate scaffolding and routing cleanup | establish the first real private band, backend, capability, routing, and present-path structure without changing the public ladder |
 | `SX02` | GDI floor hardening plus current-tier proof-surface cleanup | harden the universal `gdi` floor first, tighten fallback landing and diagnostics, and keep current-tier proof surfaces honest without widening product scope |
-| `SX03` | later modern-tier bring-up if justified | make `gl33` real only if the lower tiers remain honest and stable |
-| `SX04` | later premium-tier bring-up if justified | make `gl46` real only after the earlier tiers and routing model are proven |
-| optional `SX05` | substrate handoff checkpoint | record that the substrate is stable enough to support `PL` without reopening its constitution |
+| `SX03` | GL11 parity lane | harden the conservative accelerated compat lane, tighten GL11 setup, teardown, present, and fallback behavior, and keep it parity-first over the GDI floor |
+| `SX04` | GL21 advanced-lane hardening | harden the first real advanced tier only after the GDI floor and GL11 compat lane are trustworthy |
+| `SX05` | later modern-tier bring-up if justified | make `gl33` real only if the lower tiers remain honest and stable |
+| `SX06` | later premium-tier bring-up if justified | make `gl46` real only after the earlier tiers and routing model are proven |
+| optional `SX07` | substrate handoff checkpoint | record that the substrate is stable enough to support `PL` without reopening its constitution |
 
 These steps are ordered on purpose.
 Later higher-capability work must not skip substrate hardening of the lower tiers.
