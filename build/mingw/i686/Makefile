@@ -111,6 +111,24 @@ benchlab_resource_objs = $(foreach owner,$(SAVERS),$(BENCHLAB_DIR)/$(owner)_conf
 suite_saver_objs = $(foreach owner,$(SAVERS),$(foreach unit,$(SAVER_UNITS),$(SUITE_DIR)/$(owner)_$(unit).o))
 suite_resource_objs = $(foreach owner,$(SAVERS),$(SUITE_DIR)/$(owner)_config_res.o)
 suite_app_objs = $(foreach unit,$(SUITE_APP_UNITS),$(SUITE_DIR)/suite_$(unit).o)
+INNER_SAVER_OBJS := $(foreach saver,$(INNER_SAVERS),$(call saver_objs,$(saver)))
+BENCHLAB_APP_OBJS := \
+	$(BENCHLAB_DIR)/benchlab_app.o \
+	$(BENCHLAB_DIR)/benchlab_config.o \
+	$(BENCHLAB_DIR)/benchlab_diag.o \
+	$(BENCHLAB_DIR)/benchlab_main.o \
+	$(BENCHLAB_DIR)/benchlab_overlay.o \
+	$(BENCHLAB_DIR)/benchlab_report.o \
+	$(BENCHLAB_DIR)/benchlab_session.o
+C_DEP_FILES := \
+	$(PLATFORM_OBJS:.o=.d) \
+	$(INNER_SAVER_OBJS:.o=.d) \
+	$(ANTHOLOGY_OBJS:.o=.d) \
+	$(benchlab_saver_objs:.o=.d) \
+	$(BENCHLAB_APP_OBJS:.o=.d) \
+	$(suite_saver_objs:.o=.d) \
+	$(suite_app_objs:.o=.d)
+EXISTING_C_DEP_FILES := $(wildcard $(C_DEP_FILES))
 
 .PHONY: all clean
 all: $(SAVER_TARGETS) $(BENCHLAB_TARGET) $(SUITE_TARGET)
@@ -121,71 +139,71 @@ $(PLATFORM_LIB): $(PLATFORM_OBJS)
 
 $(PLATFORM_DIR)/%.o: $(ROOT)/platform/src/core/base/%.c
 	mkdir -p $(PLATFORM_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -MMD -MP -MF $(@:.o=.d) -c $< -o $@
 
 $(PLATFORM_DIR)/%.o: $(ROOT)/platform/src/core/substrate/%.c
 	mkdir -p $(PLATFORM_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -MMD -MP -MF $(@:.o=.d) -c $< -o $@
 
 $(PLATFORM_DIR)/config.o: $(ROOT)/platform/src/core/config/config.c
 	mkdir -p $(PLATFORM_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -MMD -MP -MF $(@:.o=.d) -c $< -o $@
 
 $(PLATFORM_DIR)/settings.o: $(ROOT)/platform/src/core/config/settings.c
 	mkdir -p $(PLATFORM_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -MMD -MP -MF $(@:.o=.d) -c $< -o $@
 
 $(PLATFORM_DIR)/diagnostics.o: $(ROOT)/platform/src/core/diagnostics/diagnostics.c
 	mkdir -p $(PLATFORM_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -MMD -MP -MF $(@:.o=.d) -c $< -o $@
 
 $(PLATFORM_DIR)/grid_buffer.o: $(ROOT)/platform/src/core/grid/grid_buffer.c
 	mkdir -p $(PLATFORM_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -MMD -MP -MF $(@:.o=.d) -c $< -o $@
 
 $(PLATFORM_DIR)/rng.o: $(ROOT)/platform/src/core/rng/rng.c
 	mkdir -p $(PLATFORM_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -MMD -MP -MF $(@:.o=.d) -c $< -o $@
 
 $(PLATFORM_DIR)/timing.o: $(ROOT)/platform/src/core/timing/timing.c
 	mkdir -p $(PLATFORM_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -MMD -MP -MF $(@:.o=.d) -c $< -o $@
 
 $(PLATFORM_DIR)/version.o: $(ROOT)/platform/src/core/version/version.c
 	mkdir -p $(PLATFORM_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -MMD -MP -MF $(@:.o=.d) -c $< -o $@
 
 $(PLATFORM_DIR)/visual_buffer.o: $(ROOT)/platform/src/core/visual/visual_buffer.c
 	mkdir -p $(PLATFORM_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -MMD -MP -MF $(@:.o=.d) -c $< -o $@
 
 $(PLATFORM_DIR)/gdi_%.o: $(ROOT)/platform/src/render/gdi/gdi_%.c
 	mkdir -p $(PLATFORM_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -MMD -MP -MF $(@:.o=.d) -c $< -o $@
 
 $(PLATFORM_DIR)/gl11_%.o: $(ROOT)/platform/src/render/gl11/gl11_%.c
 	mkdir -p $(PLATFORM_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -MMD -MP -MF $(@:.o=.d) -c $< -o $@
 
 $(PLATFORM_DIR)/gl21_%.o: $(ROOT)/platform/src/render/gl21/gl21_%.c
 	mkdir -p $(PLATFORM_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -MMD -MP -MF $(@:.o=.d) -c $< -o $@
 
 $(PLATFORM_DIR)/gl33_%.o: $(ROOT)/platform/src/render/gl33/gl33_%.c
 	mkdir -p $(PLATFORM_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -MMD -MP -MF $(@:.o=.d) -c $< -o $@
 
 $(PLATFORM_DIR)/gl46_%.o: $(ROOT)/platform/src/render/gl46/gl46_%.c
 	mkdir -p $(PLATFORM_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -MMD -MP -MF $(@:.o=.d) -c $< -o $@
 
 $(PLATFORM_DIR)/null_%.o: $(ROOT)/platform/src/render/null/null_%.c
 	mkdir -p $(PLATFORM_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -MMD -MP -MF $(@:.o=.d) -c $< -o $@
 
 $(PLATFORM_DIR)/scr_%.o: $(ROOT)/platform/src/host/win32_scr/scr_%.c
 	mkdir -p $(PLATFORM_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -MMD -MP -MF $(@:.o=.d) -c $< -o $@
 
 define SAVER_template
 $(OUTROOT)/mingw/i686/$(PROFILE)/$(1)/$(1).scr: $(PLATFORM_LIB) $(call saver_objs,$(1)) $(INT_ROOT)/$(1)/$(1)_entry.o $(call saver_resource_objs,$(1))
@@ -194,7 +212,7 @@ $(OUTROOT)/mingw/i686/$(PROFILE)/$(1)/$(1).scr: $(PLATFORM_LIB) $(call saver_obj
 
 $(INT_ROOT)/$(1)/$(1)_%.o: $(ROOT)/products/savers/$(1)/src/$(1)_%.c
 	mkdir -p $(INT_ROOT)/$(1)
-	$(CC) $(CFLAGS) -c $$< -o $$@
+	$(CC) $(CFLAGS) -MMD -MP -MF $$(@:.o=.d) -c $$< -o $$@
 
 $(INT_ROOT)/$(1)/$(1)_config_res.o: $(ROOT)/products/savers/$(1)/src/$(1)_config.rc
 	mkdir -p $(INT_ROOT)/$(1)
@@ -217,7 +235,7 @@ $(ANTHOLOGY_TARGET): $(PLATFORM_LIB) $(ANTHOLOGY_INNER_OBJS) $(ANTHOLOGY_OBJS) $
 
 $(INT_ROOT)/anthology/anthology_%.o: $(ROOT)/products/savers/anthology/src/anthology_%.c
 	mkdir -p $(INT_ROOT)/anthology
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -MMD -MP -MF $(@:.o=.d) -c $< -o $@
 
 $(INT_ROOT)/anthology/anthology_config_res.o: $(ROOT)/products/savers/anthology/src/anthology_config.rc
 	mkdir -p $(INT_ROOT)/anthology
@@ -231,38 +249,42 @@ $(INT_ROOT)/anthology/screensave_host_res.o: $(ROOT)/platform/src/host/win32_scr
 	mkdir -p $(INT_ROOT)/anthology
 	$(RC) $(RCFLAGS_COMMON) -i $< -o $@
 
-$(BENCHLAB_TARGET): $(PLATFORM_LIB) $(benchlab_saver_objs) $(benchlab_resource_objs) $(BENCHLAB_DIR)/benchlab_app.o $(BENCHLAB_DIR)/benchlab_config.o $(BENCHLAB_DIR)/benchlab_diag.o $(BENCHLAB_DIR)/benchlab_main.o $(BENCHLAB_DIR)/benchlab_overlay.o $(BENCHLAB_DIR)/benchlab_session.o
+$(BENCHLAB_TARGET): $(PLATFORM_LIB) $(benchlab_saver_objs) $(benchlab_resource_objs) $(BENCHLAB_DIR)/benchlab_app.o $(BENCHLAB_DIR)/benchlab_config.o $(BENCHLAB_DIR)/benchlab_diag.o $(BENCHLAB_DIR)/benchlab_main.o $(BENCHLAB_DIR)/benchlab_overlay.o $(BENCHLAB_DIR)/benchlab_report.o $(BENCHLAB_DIR)/benchlab_session.o
 	mkdir -p $(OUTROOT)/mingw/i686/$(PROFILE)/benchlab
-	$(CC) $(CFLAGS) -mwindows -o $@ $(benchlab_saver_objs) $(benchlab_resource_objs) $(BENCHLAB_DIR)/benchlab_app.o $(BENCHLAB_DIR)/benchlab_config.o $(BENCHLAB_DIR)/benchlab_diag.o $(BENCHLAB_DIR)/benchlab_main.o $(BENCHLAB_DIR)/benchlab_overlay.o $(BENCHLAB_DIR)/benchlab_session.o $(PLATFORM_LIB) $(LDLIBS_COMMON)
+	$(CC) $(CFLAGS) -mwindows -o $@ $(benchlab_saver_objs) $(benchlab_resource_objs) $(BENCHLAB_DIR)/benchlab_app.o $(BENCHLAB_DIR)/benchlab_config.o $(BENCHLAB_DIR)/benchlab_diag.o $(BENCHLAB_DIR)/benchlab_main.o $(BENCHLAB_DIR)/benchlab_overlay.o $(BENCHLAB_DIR)/benchlab_report.o $(BENCHLAB_DIR)/benchlab_session.o $(PLATFORM_LIB) $(LDLIBS_COMMON)
 
 $(BENCHLAB_DIR)/benchlab_app.o: $(ROOT)/products/apps/benchlab/src/benchlab_app.c
 	mkdir -p $(BENCHLAB_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -MMD -MP -MF $(@:.o=.d) -c $< -o $@
 
 $(BENCHLAB_DIR)/benchlab_config.o: $(ROOT)/products/apps/benchlab/src/benchlab_config.c
 	mkdir -p $(BENCHLAB_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -MMD -MP -MF $(@:.o=.d) -c $< -o $@
 
 $(BENCHLAB_DIR)/benchlab_diag.o: $(ROOT)/products/apps/benchlab/src/benchlab_diag.c
 	mkdir -p $(BENCHLAB_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -MMD -MP -MF $(@:.o=.d) -c $< -o $@
 
 $(BENCHLAB_DIR)/benchlab_main.o: $(ROOT)/products/apps/benchlab/src/benchlab_main.c
 	mkdir -p $(BENCHLAB_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -MMD -MP -MF $(@:.o=.d) -c $< -o $@
 
 $(BENCHLAB_DIR)/benchlab_overlay.o: $(ROOT)/products/apps/benchlab/src/benchlab_overlay.c
 	mkdir -p $(BENCHLAB_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -MMD -MP -MF $(@:.o=.d) -c $< -o $@
+
+$(BENCHLAB_DIR)/benchlab_report.o: $(ROOT)/products/apps/benchlab/src/benchlab_report.c
+	mkdir -p $(BENCHLAB_DIR)
+	$(CC) $(CFLAGS) -MMD -MP -MF $(@:.o=.d) -c $< -o $@
 
 $(BENCHLAB_DIR)/benchlab_session.o: $(ROOT)/products/apps/benchlab/src/benchlab_session.c
 	mkdir -p $(BENCHLAB_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -MMD -MP -MF $(@:.o=.d) -c $< -o $@
 
 define BENCHLAB_SAVER_template
 $(BENCHLAB_DIR)/$(1)_%.o: $(ROOT)/products/savers/$(1)/src/$(1)_%.c
 	mkdir -p $(BENCHLAB_DIR)
-	$(CC) $(CFLAGS) -c $$< -o $$@
+	$(CC) $(CFLAGS) -MMD -MP -MF $$(@:.o=.d) -c $$< -o $$@
 
 $(BENCHLAB_DIR)/$(1)_config_res.o: $(ROOT)/products/savers/$(1)/src/$(1)_config.rc
 	mkdir -p $(BENCHLAB_DIR)
@@ -277,36 +299,36 @@ $(SUITE_TARGET): $(PLATFORM_LIB) $(suite_saver_objs) $(suite_resource_objs) $(su
 
 $(SUITE_DIR)/suite_app.o: $(ROOT)/products/apps/suite/src/suite_app.c
 	mkdir -p $(SUITE_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -MMD -MP -MF $(@:.o=.d) -c $< -o $@
 
 $(SUITE_DIR)/suite_browser.o: $(ROOT)/products/apps/suite/src/suite_browser.c
 	mkdir -p $(SUITE_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -MMD -MP -MF $(@:.o=.d) -c $< -o $@
 
 $(SUITE_DIR)/suite_config.o: $(ROOT)/products/apps/suite/src/suite_config.c
 	mkdir -p $(SUITE_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -MMD -MP -MF $(@:.o=.d) -c $< -o $@
 
 $(SUITE_DIR)/suite_launch.o: $(ROOT)/products/apps/suite/src/suite_launch.c
 	mkdir -p $(SUITE_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -MMD -MP -MF $(@:.o=.d) -c $< -o $@
 
 $(SUITE_DIR)/suite_main.o: $(ROOT)/products/apps/suite/src/suite_main.c
 	mkdir -p $(SUITE_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -MMD -MP -MF $(@:.o=.d) -c $< -o $@
 
 $(SUITE_DIR)/suite_manifest.o: $(ROOT)/products/apps/suite/src/suite_manifest.c
 	mkdir -p $(SUITE_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -MMD -MP -MF $(@:.o=.d) -c $< -o $@
 
 $(SUITE_DIR)/suite_state.o: $(ROOT)/products/apps/suite/src/suite_state.c
 	mkdir -p $(SUITE_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -MMD -MP -MF $(@:.o=.d) -c $< -o $@
 
 define SUITE_SAVER_template
 $(SUITE_DIR)/$(1)_%.o: $(ROOT)/products/savers/$(1)/src/$(1)_%.c
 	mkdir -p $(SUITE_DIR)
-	$(CC) $(CFLAGS) -c $$< -o $$@
+	$(CC) $(CFLAGS) -MMD -MP -MF $$(@:.o=.d) -c $$< -o $$@
 
 $(SUITE_DIR)/$(1)_config_res.o: $(ROOT)/products/savers/$(1)/src/$(1)_config.rc
 	mkdir -p $(SUITE_DIR)
@@ -317,3 +339,5 @@ $(foreach saver,$(SAVERS),$(eval $(call SUITE_SAVER_template,$(saver))))
 
 clean:
 	rm -rf $(OUTROOT)/mingw/i686/$(PROFILE) $(INT_ROOT)
+
+-include $(EXISTING_C_DEP_FILES)
