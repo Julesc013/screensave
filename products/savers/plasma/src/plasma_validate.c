@@ -15,7 +15,8 @@ screensave_renderer_kind plasma_resolve_renderer_kind(
         renderer_info.active_kind == SCREENSAVE_RENDERER_KIND_GDI ||
         renderer_info.active_kind == SCREENSAVE_RENDERER_KIND_GL11 ||
         renderer_info.active_kind == SCREENSAVE_RENDERER_KIND_GL21 ||
-        renderer_info.active_kind == SCREENSAVE_RENDERER_KIND_GL33
+        renderer_info.active_kind == SCREENSAVE_RENDERER_KIND_GL33 ||
+        renderer_info.active_kind == SCREENSAVE_RENDERER_KIND_GL46
     ) {
         return renderer_info.active_kind;
     }
@@ -48,7 +49,15 @@ int plasma_is_advanced_runtime_kind(screensave_renderer_kind renderer_kind)
 {
     return
         renderer_kind == SCREENSAVE_RENDERER_KIND_GL21 ||
-        renderer_kind == SCREENSAVE_RENDERER_KIND_GL33;
+        renderer_kind == SCREENSAVE_RENDERER_KIND_GL33 ||
+        renderer_kind == SCREENSAVE_RENDERER_KIND_GL46;
+}
+
+int plasma_is_modern_runtime_kind(screensave_renderer_kind renderer_kind)
+{
+    return
+        renderer_kind == SCREENSAVE_RENDERER_KIND_GL33 ||
+        renderer_kind == SCREENSAVE_RENDERER_KIND_GL46;
 }
 
 int plasma_plan_is_lower_band_baseline(const struct plasma_plan_tag *plan)
@@ -60,6 +69,8 @@ int plasma_plan_is_lower_band_baseline(const struct plasma_plan_tag *plan)
         plan->advanced_components != 0UL ||
         plan->modern_enabled ||
         plan->modern_components != 0UL ||
+        plan->premium_enabled ||
+        plan->premium_components != 0UL ||
         plan->output_family != PLASMA_OUTPUT_FAMILY_RASTER ||
         plan->output_mode != PLASMA_OUTPUT_MODE_NATIVE_RASTER ||
         plan->sampling_treatment != PLASMA_SAMPLING_TREATMENT_NONE ||
@@ -104,14 +115,24 @@ int plasma_plan_validate_for_renderer_kind(
         return
             plan->active_renderer_kind == SCREENSAVE_RENDERER_KIND_GL21 &&
             plan->advanced_enabled &&
-            !plan->modern_enabled;
+            !plan->modern_enabled &&
+            !plan->premium_enabled;
     }
 
     if (renderer_kind == SCREENSAVE_RENDERER_KIND_GL33) {
         return
             plan->active_renderer_kind == SCREENSAVE_RENDERER_KIND_GL33 &&
             plan->advanced_enabled &&
-            plan->modern_enabled;
+            plan->modern_enabled &&
+            !plan->premium_enabled;
+    }
+
+    if (renderer_kind == SCREENSAVE_RENDERER_KIND_GL46) {
+        return
+            plan->active_renderer_kind == SCREENSAVE_RENDERER_KIND_GL46 &&
+            plan->advanced_enabled &&
+            plan->modern_enabled &&
+            plan->premium_enabled;
     }
 
     return 0;

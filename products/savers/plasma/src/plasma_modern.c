@@ -65,7 +65,7 @@ static unsigned char plasma_modern_clamp_channel(unsigned int value)
 
 int plasma_is_modern_kind(screensave_renderer_kind renderer_kind)
 {
-    return renderer_kind == SCREENSAVE_RENDERER_KIND_GL33;
+    return plasma_is_modern_runtime_kind(renderer_kind);
 }
 
 void plasma_modern_plan_init(struct plasma_plan_tag *plan)
@@ -111,7 +111,7 @@ void plasma_modern_bind_plan(
         plan->modern_capable &&
         plan->advanced_enabled &&
         plasma_is_modern_kind(active_kind) &&
-        screensave_saver_supports_renderer_kind(module, SCREENSAVE_RENDERER_KIND_GL33)
+        screensave_saver_supports_renderer_kind(module, active_kind)
     ) {
         plan->modern_enabled = 1;
         plan->modern_components =
@@ -160,7 +160,7 @@ int plasma_modern_validate_plan(
             plan->advanced_degraded ||
             !plasma_is_modern_kind(plan->active_renderer_kind) ||
             module == NULL ||
-            !screensave_saver_supports_renderer_kind(module, SCREENSAVE_RENDERER_KIND_GL33) ||
+            !screensave_saver_supports_renderer_kind(module, plan->active_renderer_kind) ||
             plan->modern_degraded ||
             plan->modern_components != (
                 PLASMA_MODERN_COMPONENT_REFINED_FIELD |
@@ -174,7 +174,8 @@ int plasma_modern_validate_plan(
             plan->filter_treatment != PLASMA_FILTER_TREATMENT_BLUR ||
             plan->emulation_treatment != PLASMA_EMULATION_TREATMENT_NONE ||
             plan->accent_treatment != PLASMA_ACCENT_TREATMENT_OVERLAY_PASS ||
-            plan->presentation_mode != PLASMA_PRESENTATION_MODE_FLAT
+            (!plan->premium_enabled &&
+                plan->presentation_mode != PLASMA_PRESENTATION_MODE_FLAT)
         ) {
             return 0;
         }

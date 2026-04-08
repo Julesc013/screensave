@@ -6,7 +6,13 @@ int plasma_presentation_validate_plan(const struct plasma_plan_tag *plan)
         return 0;
     }
 
-    return plan->presentation_mode == PLASMA_PRESENTATION_MODE_FLAT;
+    if (plan->presentation_mode == PLASMA_PRESENTATION_MODE_FLAT) {
+        return 1;
+    }
+
+    return
+        plan->presentation_mode == PLASMA_PRESENTATION_MODE_HEIGHTFIELD &&
+        plan->premium_enabled;
 }
 
 int plasma_presentation_prepare(
@@ -24,6 +30,15 @@ int plasma_presentation_prepare(
         !plasma_presentation_validate_plan(plan)
     ) {
         return 0;
+    }
+
+    if (plan->premium_enabled) {
+        return plasma_premium_prepare_presentation(
+            plan,
+            (struct plasma_execution_state_tag *)state,
+            treated_frame,
+            target_out
+        );
     }
 
     if (plan->modern_enabled) {

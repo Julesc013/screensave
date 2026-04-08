@@ -42,13 +42,13 @@ static const plasma_content_weighted_key g_dark_room_theme_members[] = {
 };
 
 static const plasma_content_preset_entry g_preset_entries[] = {
-    { "plasma_lava", &g_plasma_presets[0], PLASMA_CONTENT_SOURCE_BUILT_IN, PLASMA_CONTENT_CHANNEL_STABLE, 1, 1, NULL },
-    { "aurora_plasma", &g_plasma_presets[1], PLASMA_CONTENT_SOURCE_BUILT_IN, PLASMA_CONTENT_CHANNEL_STABLE, 1, 1, NULL },
-    { "ocean_interference", &g_plasma_presets[2], PLASMA_CONTENT_SOURCE_BUILT_IN, PLASMA_CONTENT_CHANNEL_STABLE, 1, 1, NULL },
-    { "museum_phosphor", &g_plasma_presets[3], PLASMA_CONTENT_SOURCE_BUILT_IN, PLASMA_CONTENT_CHANNEL_STABLE, 1, 1, NULL },
-    { "quiet_darkroom", &g_plasma_presets[4], PLASMA_CONTENT_SOURCE_BUILT_IN, PLASMA_CONTENT_CHANNEL_STABLE, 1, 1, NULL },
-    { "midnight_interference", &g_plasma_presets[5], PLASMA_CONTENT_SOURCE_BUILT_IN, PLASMA_CONTENT_CHANNEL_STABLE, 1, 1, NULL },
-    { "amber_terminal", &g_plasma_presets[6], PLASMA_CONTENT_SOURCE_BUILT_IN, PLASMA_CONTENT_CHANNEL_STABLE, 1, 1, NULL }
+    { "plasma_lava", &g_plasma_presets[0], PLASMA_CONTENT_SOURCE_BUILT_IN, PLASMA_CONTENT_CHANNEL_STABLE, 1, 1, 1, NULL },
+    { "aurora_plasma", &g_plasma_presets[1], PLASMA_CONTENT_SOURCE_BUILT_IN, PLASMA_CONTENT_CHANNEL_STABLE, 1, 1, 1, NULL },
+    { "ocean_interference", &g_plasma_presets[2], PLASMA_CONTENT_SOURCE_BUILT_IN, PLASMA_CONTENT_CHANNEL_STABLE, 1, 1, 1, NULL },
+    { "museum_phosphor", &g_plasma_presets[3], PLASMA_CONTENT_SOURCE_BUILT_IN, PLASMA_CONTENT_CHANNEL_STABLE, 1, 1, 1, NULL },
+    { "quiet_darkroom", &g_plasma_presets[4], PLASMA_CONTENT_SOURCE_BUILT_IN, PLASMA_CONTENT_CHANNEL_STABLE, 1, 1, 1, NULL },
+    { "midnight_interference", &g_plasma_presets[5], PLASMA_CONTENT_SOURCE_BUILT_IN, PLASMA_CONTENT_CHANNEL_STABLE, 1, 1, 1, NULL },
+    { "amber_terminal", &g_plasma_presets[6], PLASMA_CONTENT_SOURCE_BUILT_IN, PLASMA_CONTENT_CHANNEL_STABLE, 1, 1, 1, NULL }
 };
 
 static const plasma_content_theme_entry g_theme_entries[] = {
@@ -185,6 +185,8 @@ int plasma_content_registry_validate(void)
                 registry->preset_entries[index].advanced_capable != 1) ||
             (registry->preset_entries[index].modern_capable != 0 &&
                 registry->preset_entries[index].modern_capable != 1) ||
+            (registry->preset_entries[index].premium_capable != 0 &&
+                registry->preset_entries[index].premium_capable != 1) ||
             strcmp(
                 registry->preset_entries[index].preset_key,
                 registry->preset_entries[index].descriptor->preset_key

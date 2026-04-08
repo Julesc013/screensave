@@ -249,6 +249,9 @@ int plasma_treatment_apply(
     if (!plasma_apply_accent_treatment(plan, (struct plasma_execution_state_tag *)state, visual_buffer)) {
         return 0;
     }
+    if (!plasma_premium_apply_post_refinement(plan, (struct plasma_execution_state_tag *)state, visual_buffer)) {
+        return 0;
+    }
 
     frame_out->family = output->family;
     frame_out->mode = output->mode;

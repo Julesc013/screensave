@@ -26,6 +26,7 @@ typedef struct plasma_content_preset_entry_tag {
     plasma_content_channel channel;
     int advanced_capable;
     int modern_capable;
+    int premium_capable;
     const char *owner_pack_key;
 } plasma_content_preset_entry;
 

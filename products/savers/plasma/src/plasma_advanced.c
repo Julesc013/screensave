@@ -178,7 +178,8 @@ int plasma_advanced_validate_plan(
             plan->accent_treatment != PLASMA_ACCENT_TREATMENT_OVERLAY_PASS ||
             plan->output_family != PLASMA_OUTPUT_FAMILY_RASTER ||
             plan->output_mode != PLASMA_OUTPUT_MODE_NATIVE_RASTER ||
-            plan->presentation_mode != PLASMA_PRESENTATION_MODE_FLAT
+            (!plan->premium_enabled &&
+                plan->presentation_mode != PLASMA_PRESENTATION_MODE_FLAT)
         ) {
             return 0;
         }

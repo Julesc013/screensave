@@ -93,6 +93,9 @@ static int plasma_resolution_divisor(
     if (plan->modern_enabled && divisor > 2) {
         divisor -= 1;
     }
+    if (plan->premium_enabled && divisor > 2) {
+        divisor -= 1;
+    }
     if (divisor < 2) {
         divisor = 2;
     }
@@ -157,6 +160,7 @@ static int plasma_resize_visual_state(
     int size_matches;
     int need_advanced_buffers;
     int need_modern_buffers;
+    int need_premium_buffers;
 
     if (plan == NULL || state == NULL) {
         return 0;
@@ -170,6 +174,7 @@ static int plasma_resize_visual_state(
         state->field_size.height == desired_size.height;
     need_advanced_buffers = plan->advanced_enabled;
     need_modern_buffers = plan->modern_enabled;
+    need_premium_buffers = plan->premium_enabled;
     if (
         size_matches &&
         (
@@ -177,7 +182,9 @@ static int plasma_resize_visual_state(
                 state->field_history == NULL &&
                 state->advanced_treatment_buffer.pixels == NULL &&
                 state->modern_treatment_buffer.pixels == NULL &&
-                state->modern_presentation_buffer.pixels == NULL) ||
+                state->modern_presentation_buffer.pixels == NULL &&
+                state->premium_treatment_buffer.pixels == NULL &&
+                state->premium_presentation_buffer.pixels == NULL) ||
             (need_advanced_buffers &&
                 state->field_history != NULL &&
                 state->advanced_treatment_buffer.pixels != NULL &&
@@ -189,10 +196,22 @@ static int plasma_resize_visual_state(
                         state->modern_treatment_buffer.size.height == desired_size.height &&
                         state->modern_presentation_buffer.pixels != NULL &&
                         state->modern_presentation_buffer.size.width == desired_size.width &&
-                        state->modern_presentation_buffer.size.height == desired_size.height)) &&
+                        state->modern_presentation_buffer.size.height == desired_size.height &&
+                        (!need_premium_buffers ||
+                            (state->premium_treatment_buffer.pixels != NULL &&
+                                state->premium_treatment_buffer.size.width == desired_size.width &&
+                                state->premium_treatment_buffer.size.height == desired_size.height &&
+                                state->premium_presentation_buffer.pixels != NULL &&
+                                state->premium_presentation_buffer.size.width == desired_size.width &&
+                                state->premium_presentation_buffer.size.height == desired_size.height)) &&
+                        (need_premium_buffers ||
+                            (state->premium_treatment_buffer.pixels == NULL &&
+                                state->premium_presentation_buffer.pixels == NULL)))) &&
                 (need_modern_buffers ||
                     (state->modern_treatment_buffer.pixels == NULL &&
-                        state->modern_presentation_buffer.pixels == NULL)))
+                        state->modern_presentation_buffer.pixels == NULL &&
+                        state->premium_treatment_buffer.pixels == NULL &&
+                        state->premium_presentation_buffer.pixels == NULL)))
         )
     ) {
         return 1;
@@ -293,6 +312,38 @@ static int plasma_resize_visual_state(
     } else {
         screensave_visual_buffer_dispose(&state->modern_treatment_buffer);
         screensave_visual_buffer_dispose(&state->modern_presentation_buffer);
+    }
+
+    if (need_premium_buffers) {
+        if (state->premium_treatment_buffer.pixels == NULL) {
+            if (!screensave_visual_buffer_init(&state->premium_treatment_buffer, &desired_size)) {
+                free(new_primary);
+                free(new_secondary);
+                free(new_history);
+                return 0;
+            }
+        } else if (!screensave_visual_buffer_resize(&state->premium_treatment_buffer, &desired_size)) {
+            free(new_primary);
+            free(new_secondary);
+            free(new_history);
+            return 0;
+        }
+        if (state->premium_presentation_buffer.pixels == NULL) {
+            if (!screensave_visual_buffer_init(&state->premium_presentation_buffer, &desired_size)) {
+                free(new_primary);
+                free(new_secondary);
+                free(new_history);
+                return 0;
+            }
+        } else if (!screensave_visual_buffer_resize(&state->premium_presentation_buffer, &desired_size)) {
+            free(new_primary);
+            free(new_secondary);
+            free(new_history);
+            return 0;
+        }
+    } else {
+        screensave_visual_buffer_dispose(&state->premium_treatment_buffer);
+        screensave_visual_buffer_dispose(&state->premium_presentation_buffer);
     }
 
     if (new_primary != NULL) {
@@ -642,6 +693,9 @@ static void plasma_warm_start_effect(
         if (!plasma_modern_apply_field_refinement(plan, state)) {
             return;
         }
+        if (!plasma_premium_apply_field_refinement(plan, state)) {
+            return;
+        }
         state->phase_millis += 33UL;
         state->palette_phase = (state->palette_phase + 3UL) & 255UL;
         state->source_phase_a += 5UL;
@@ -742,6 +796,8 @@ void plasma_destroy_session(screensave_saver_session *session)
     screensave_visual_buffer_dispose(&session->state.advanced_treatment_buffer);
     screensave_visual_buffer_dispose(&session->state.modern_treatment_buffer);
     screensave_visual_buffer_dispose(&session->state.modern_presentation_buffer);
+    screensave_visual_buffer_dispose(&session->state.premium_treatment_buffer);
+    screensave_visual_buffer_dispose(&session->state.premium_presentation_buffer);
     screensave_visual_buffer_dispose(&session->state.visual_buffer);
     free(session);
 }
@@ -820,6 +876,9 @@ void plasma_step_session(
         return;
     }
     if (!plasma_modern_apply_field_refinement(&session->plan, state)) {
+        return;
+    }
+    if (!plasma_premium_apply_field_refinement(&session->plan, state)) {
         return;
     }
 

@@ -10,6 +10,7 @@
 #include "plasma_classic.h"
 #include "plasma_advanced.h"
 #include "plasma_modern.h"
+#include "plasma_premium.h"
 #include "plasma_content.h"
 #include "plasma_selection.h"
 #include "plasma_plan.h"
@@ -77,6 +78,8 @@ typedef struct plasma_execution_state_tag {
     screensave_visual_buffer advanced_treatment_buffer;
     screensave_visual_buffer modern_treatment_buffer;
     screensave_visual_buffer modern_presentation_buffer;
+    screensave_visual_buffer premium_treatment_buffer;
+    screensave_visual_buffer premium_presentation_buffer;
     unsigned char *field_primary;
     unsigned char *field_secondary;
     unsigned char *field_history;
