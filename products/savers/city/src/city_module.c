@@ -48,7 +48,11 @@ static const screensave_saver_module g_city_module = {
         "City",
         "Urban night-world saver with skyline, harbor, and rooftop/window-river studies."
     },
-    SCREENSAVE_SAVER_CAP_GDI | SCREENSAVE_SAVER_CAP_GL11 | SCREENSAVE_SAVER_CAP_LONG_RUN_STABLE,
+    SCREENSAVE_SAVER_CAP_GDI |
+        SCREENSAVE_SAVER_CAP_GL11 |
+        SCREENSAVE_SAVER_CAP_LONG_RUN_STABLE |
+        SCREENSAVE_SAVER_CAP_PREVIEW_SAFE,
+    { SCREENSAVE_RENDERER_KIND_GDI, SCREENSAVE_RENDERER_KIND_GL11, SCREENSAVE_CAPABILITY_QUALITY_SAFE },
     g_city_presets,
     CITY_PRESET_COUNT,
     g_city_themes,

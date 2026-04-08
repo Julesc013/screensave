@@ -48,7 +48,11 @@ static const screensave_saver_module g_lifeforms_module = {
         "Lifeforms",
         "Contemplative cellular automata saver with curated rules, reseed choreography, and age-tinted population studies."
     },
-    SCREENSAVE_SAVER_CAP_GDI | SCREENSAVE_SAVER_CAP_GL11 | SCREENSAVE_SAVER_CAP_LONG_RUN_STABLE,
+    SCREENSAVE_SAVER_CAP_GDI |
+        SCREENSAVE_SAVER_CAP_GL11 |
+        SCREENSAVE_SAVER_CAP_LONG_RUN_STABLE |
+        SCREENSAVE_SAVER_CAP_PREVIEW_SAFE,
+    { SCREENSAVE_RENDERER_KIND_GDI, SCREENSAVE_RENDERER_KIND_GL11, SCREENSAVE_CAPABILITY_QUALITY_SAFE },
     g_lifeforms_presets,
     LIFEFORMS_PRESET_COUNT,
     g_lifeforms_themes,

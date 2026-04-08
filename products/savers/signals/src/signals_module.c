@@ -48,7 +48,11 @@ static const screensave_saver_module g_signals_module = {
         "Signals",
         "Synthetic instrument saver with scopes, meters, counters, and restrained console choreography."
     },
-    SCREENSAVE_SAVER_CAP_GDI | SCREENSAVE_SAVER_CAP_GL11 | SCREENSAVE_SAVER_CAP_LONG_RUN_STABLE,
+    SCREENSAVE_SAVER_CAP_GDI |
+        SCREENSAVE_SAVER_CAP_GL11 |
+        SCREENSAVE_SAVER_CAP_LONG_RUN_STABLE |
+        SCREENSAVE_SAVER_CAP_PREVIEW_SAFE,
+    { SCREENSAVE_RENDERER_KIND_GDI, SCREENSAVE_RENDERER_KIND_GL11, SCREENSAVE_CAPABILITY_QUALITY_SAFE },
     g_signals_presets,
     SIGNALS_PRESET_COUNT,
     g_signals_themes,

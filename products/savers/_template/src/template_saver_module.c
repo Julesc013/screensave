@@ -56,7 +56,11 @@ static const screensave_saver_module g_template_saver_module = {
         "Template Saver",
         "Contributor starter saver with bounded config, presets, themes, and a conservative renderer path."
     },
-    SCREENSAVE_SAVER_CAP_GDI | SCREENSAVE_SAVER_CAP_GL11 | SCREENSAVE_SAVER_CAP_LONG_RUN_STABLE,
+    SCREENSAVE_SAVER_CAP_GDI |
+        SCREENSAVE_SAVER_CAP_GL11 |
+        SCREENSAVE_SAVER_CAP_LONG_RUN_STABLE |
+        SCREENSAVE_SAVER_CAP_PREVIEW_SAFE,
+    { SCREENSAVE_RENDERER_KIND_GDI, SCREENSAVE_RENDERER_KIND_GL11, SCREENSAVE_CAPABILITY_QUALITY_SAFE },
     g_template_saver_presets,
     TEMPLATE_SAVER_PRESET_COUNT,
     g_template_saver_themes,

@@ -4,6 +4,97 @@
 #include "screensave/saver_api.h"
 #include "../config/settings_internal.h"
 
+static int screensave_renderer_kind_rank(screensave_renderer_kind kind)
+{
+    switch (kind) {
+    case SCREENSAVE_RENDERER_KIND_GDI:
+        return 1;
+
+    case SCREENSAVE_RENDERER_KIND_GL11:
+        return 2;
+
+    case SCREENSAVE_RENDERER_KIND_GL21:
+        return 3;
+
+    case SCREENSAVE_RENDERER_KIND_GL33:
+        return 4;
+
+    case SCREENSAVE_RENDERER_KIND_GL46:
+        return 5;
+
+    case SCREENSAVE_RENDERER_KIND_NULL:
+    case SCREENSAVE_RENDERER_KIND_UNKNOWN:
+    default:
+        return 0;
+    }
+}
+
+int screensave_saver_supports_renderer_kind(
+    const screensave_saver_module *module,
+    screensave_renderer_kind kind
+)
+{
+    if (module == NULL) {
+        return 0;
+    }
+
+    switch (kind) {
+    case SCREENSAVE_RENDERER_KIND_GDI:
+        return (module->capability_flags & SCREENSAVE_SAVER_CAP_GDI) != 0UL;
+
+    case SCREENSAVE_RENDERER_KIND_GL11:
+        return (module->capability_flags & SCREENSAVE_SAVER_CAP_GL11) != 0UL;
+
+    case SCREENSAVE_RENDERER_KIND_GL21:
+        return (module->capability_flags & SCREENSAVE_SAVER_CAP_GL21) != 0UL;
+
+    case SCREENSAVE_RENDERER_KIND_GL33:
+        return (module->capability_flags & SCREENSAVE_SAVER_CAP_GL33) != 0UL;
+
+    case SCREENSAVE_RENDERER_KIND_GL46:
+        return (module->capability_flags & SCREENSAVE_SAVER_CAP_GL46) != 0UL;
+
+    case SCREENSAVE_RENDERER_KIND_NULL:
+    case SCREENSAVE_RENDERER_KIND_UNKNOWN:
+    default:
+        return 0;
+    }
+}
+
+static int screensave_saver_routing_policy_is_valid(const screensave_saver_module *module)
+{
+    if (
+        module == NULL ||
+        screensave_renderer_kind_rank(module->routing_policy.minimum_kind) == 0 ||
+        screensave_renderer_kind_rank(module->routing_policy.preferred_kind) == 0
+    ) {
+        return 0;
+    }
+
+    if (
+        !screensave_saver_supports_renderer_kind(module, module->routing_policy.minimum_kind) ||
+        !screensave_saver_supports_renderer_kind(module, module->routing_policy.preferred_kind)
+    ) {
+        return 0;
+    }
+
+    if (
+        screensave_renderer_kind_rank(module->routing_policy.minimum_kind) >
+        screensave_renderer_kind_rank(module->routing_policy.preferred_kind)
+    ) {
+        return 0;
+    }
+
+    if (
+        module->routing_policy.quality_class < SCREENSAVE_CAPABILITY_QUALITY_SAFE ||
+        module->routing_policy.quality_class > SCREENSAVE_CAPABILITY_QUALITY_PREMIUM
+    ) {
+        return 0;
+    }
+
+    return 1;
+}
+
 int screensave_saver_module_is_valid(const screensave_saver_module *module)
 {
     const screensave_saver_config_hooks *config_hooks;
@@ -22,6 +113,29 @@ int screensave_saver_module_is_valid(const screensave_saver_module *module)
     }
 
     if ((module->capability_flags & SCREENSAVE_SAVER_CAP_GDI) == 0UL) {
+        return 0;
+    }
+
+    if (
+        (module->capability_flags & SCREENSAVE_SAVER_CAP_GL46) != 0UL &&
+        (module->capability_flags & SCREENSAVE_SAVER_CAP_GL33) == 0UL
+    ) {
+        return 0;
+    }
+    if (
+        (module->capability_flags & SCREENSAVE_SAVER_CAP_GL33) != 0UL &&
+        (module->capability_flags & SCREENSAVE_SAVER_CAP_GL21) == 0UL
+    ) {
+        return 0;
+    }
+    if (
+        (module->capability_flags & SCREENSAVE_SAVER_CAP_GL21) != 0UL &&
+        (module->capability_flags & SCREENSAVE_SAVER_CAP_GL11) == 0UL
+    ) {
+        return 0;
+    }
+
+    if (!screensave_saver_routing_policy_is_valid(module)) {
         return 0;
     }
 
@@ -344,5 +458,23 @@ const char *screensave_session_mode_name(screensave_session_mode mode)
     case SCREENSAVE_SESSION_MODE_CONFIG:
     default:
         return "config";
+    }
+}
+
+const char *screensave_capability_quality_name(screensave_capability_quality_class quality_class)
+{
+    switch (quality_class) {
+    case SCREENSAVE_CAPABILITY_QUALITY_BALANCED:
+        return "balanced";
+
+    case SCREENSAVE_CAPABILITY_QUALITY_HIGH:
+        return "high";
+
+    case SCREENSAVE_CAPABILITY_QUALITY_PREMIUM:
+        return "premium";
+
+    case SCREENSAVE_CAPABILITY_QUALITY_SAFE:
+    default:
+        return "safe";
     }
 }

@@ -19,12 +19,28 @@ typedef enum screensave_session_mode_tag {
 #define SCREENSAVE_SAVER_CAP_GL11 0x00000002UL
 #define SCREENSAVE_SAVER_CAP_LONG_RUN_STABLE 0x00000004UL
 #define SCREENSAVE_SAVER_CAP_GL21 0x00000008UL
+#define SCREENSAVE_SAVER_CAP_PREVIEW_SAFE 0x00000010UL
+#define SCREENSAVE_SAVER_CAP_GL33 0x00000020UL
+#define SCREENSAVE_SAVER_CAP_GL46 0x00000040UL
+
+typedef enum screensave_capability_quality_class_tag {
+    SCREENSAVE_CAPABILITY_QUALITY_SAFE = 0,
+    SCREENSAVE_CAPABILITY_QUALITY_BALANCED = 1,
+    SCREENSAVE_CAPABILITY_QUALITY_HIGH = 2,
+    SCREENSAVE_CAPABILITY_QUALITY_PREMIUM = 3
+} screensave_capability_quality_class;
 
 typedef struct screensave_saver_identity_tag {
     const char *product_key;
     const char *display_name;
     const char *description;
 } screensave_saver_identity;
+
+typedef struct screensave_saver_routing_policy_tag {
+    screensave_renderer_kind minimum_kind;
+    screensave_renderer_kind preferred_kind;
+    screensave_capability_quality_class quality_class;
+} screensave_saver_routing_policy;
 
 typedef struct screensave_runtime_clock_tag {
     unsigned long session_start_millis;
@@ -147,6 +163,7 @@ typedef struct screensave_saver_callbacks_tag {
 typedef struct screensave_saver_module_tag {
     screensave_saver_identity identity;
     unsigned long capability_flags;
+    screensave_saver_routing_policy routing_policy;
     const screensave_preset_descriptor *presets;
     unsigned int preset_count;
     const screensave_theme_descriptor *themes;
@@ -156,6 +173,10 @@ typedef struct screensave_saver_module_tag {
 } screensave_saver_module;
 
 int screensave_saver_module_is_valid(const screensave_saver_module *module);
+int screensave_saver_supports_renderer_kind(
+    const screensave_saver_module *module,
+    screensave_renderer_kind kind
+);
 int screensave_saver_config_state_init(
     const screensave_saver_module *module,
     screensave_saver_config_state *config_state
@@ -192,6 +213,7 @@ int screensave_saver_config_state_resolve_for_session(
     screensave_diag_context *diagnostics
 );
 const char *screensave_session_mode_name(screensave_session_mode mode);
+const char *screensave_capability_quality_name(screensave_capability_quality_class quality_class);
 int screensave_scr_main(
     HINSTANCE instance,
     HINSTANCE previous_instance,

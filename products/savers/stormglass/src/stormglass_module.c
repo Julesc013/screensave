@@ -48,7 +48,11 @@ static const screensave_saver_module g_stormglass_module = {
         "Stormglass",
         "Weather-on-glass saver with restrained pane, droplet, fog, and distant-light atmosphere."
     },
-    SCREENSAVE_SAVER_CAP_GDI | SCREENSAVE_SAVER_CAP_GL11 | SCREENSAVE_SAVER_CAP_LONG_RUN_STABLE,
+    SCREENSAVE_SAVER_CAP_GDI |
+        SCREENSAVE_SAVER_CAP_GL11 |
+        SCREENSAVE_SAVER_CAP_LONG_RUN_STABLE |
+        SCREENSAVE_SAVER_CAP_PREVIEW_SAFE,
+    { SCREENSAVE_RENDERER_KIND_GDI, SCREENSAVE_RENDERER_KIND_GL11, SCREENSAVE_CAPABILITY_QUALITY_SAFE },
     g_stormglass_presets,
     STORMGLASS_PRESET_COUNT,
     g_stormglass_themes,

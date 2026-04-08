@@ -48,7 +48,11 @@ static const screensave_saver_module g_phosphor_module = {
         "Phosphor",
         "Vector-style phosphor saver with curated curve families, persistent trails, and calmer long-run laboratory choreography."
     },
-    SCREENSAVE_SAVER_CAP_GDI | SCREENSAVE_SAVER_CAP_GL11 | SCREENSAVE_SAVER_CAP_LONG_RUN_STABLE,
+    SCREENSAVE_SAVER_CAP_GDI |
+        SCREENSAVE_SAVER_CAP_GL11 |
+        SCREENSAVE_SAVER_CAP_LONG_RUN_STABLE |
+        SCREENSAVE_SAVER_CAP_PREVIEW_SAFE,
+    { SCREENSAVE_RENDERER_KIND_GDI, SCREENSAVE_RENDERER_KIND_GL11, SCREENSAVE_CAPABILITY_QUALITY_SAFE },
     g_phosphor_presets,
     PHOSPHOR_PRESET_COUNT,
     g_phosphor_themes,
