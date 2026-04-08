@@ -67,5 +67,9 @@ void screensave_renderer_set_service_seams(
     screensave_renderer *renderer,
     const screensave_service_seams *service_seams
 );
+int screensave_renderer_get_private_service_seams(
+    const screensave_renderer *renderer,
+    screensave_service_seams *service_seams_out
+);
 
 #endif /* SCREENSAVE_PRIVATE_RENDERER_RUNTIME_H */

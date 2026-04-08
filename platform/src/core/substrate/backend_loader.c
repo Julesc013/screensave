@@ -243,7 +243,13 @@ static void screensave_backend_loader_apply_selection(
         descriptor->descriptor_flags,
         &captured_caps
     );
-    screensave_service_seams_bind_private_defaults(&service_seams, descriptor->band);
+    screensave_service_seams_bind_private_defaults(
+        &service_seams,
+        descriptor->backend_kind,
+        descriptor->band,
+        &captured_caps,
+        &present_path
+    );
 
     selection->caps = captured_caps;
     selection->present_path = present_path;

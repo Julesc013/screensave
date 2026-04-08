@@ -104,6 +104,19 @@ void screensave_renderer_set_service_seams(
     renderer->service_seams = *service_seams;
 }
 
+int screensave_renderer_get_private_service_seams(
+    const screensave_renderer *renderer,
+    screensave_service_seams *service_seams_out
+)
+{
+    if (renderer == NULL || service_seams_out == NULL) {
+        return 0;
+    }
+
+    *service_seams_out = renderer->service_seams;
+    return 1;
+}
+
 const char *screensave_renderer_kind_name(screensave_renderer_kind kind)
 {
     switch (kind) {
