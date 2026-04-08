@@ -21,7 +21,7 @@ Active post-`C16` planning now lives in `docs/roadmap/post-c16-program.md` and `
 - `S12`: Systems and ambient family with `signals`, `mechanize`, and `ecosystems`.
 - `S13`: Places and atmosphere family.
 - `S14`: Heavyweight worlds family.
-- `S15`: optional `gl21`, explicit `gl33` and `gl46` placeholders, internal `null`, and `gallery`.
+- `S15`: optional `gl21`, explicit `gl33` and `gl46` ladder entries, internal `null`, and `gallery`.
 
 ## Completed Post-S15 Continuation
 
