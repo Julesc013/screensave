@@ -42,9 +42,14 @@ PLATFORM_OBJS := \
 	$(PLATFORM_DIR)/backend_kind.o \
 	$(PLATFORM_DIR)/backend_loader.o \
 	$(PLATFORM_DIR)/backend_registry.o \
+	$(PLATFORM_DIR)/backend_family_service.o \
+	$(PLATFORM_DIR)/image_service.o \
 	$(PLATFORM_DIR)/present_path.o \
+	$(PLATFORM_DIR)/present_service.o \
 	$(PLATFORM_DIR)/render_band.o \
+	$(PLATFORM_DIR)/service_registry.o \
 	$(PLATFORM_DIR)/service_seams.o \
+	$(PLATFORM_DIR)/text_service.o \
 	$(PLATFORM_DIR)/config.o \
 	$(PLATFORM_DIR)/settings.o \
 	$(PLATFORM_DIR)/diagnostics.o \

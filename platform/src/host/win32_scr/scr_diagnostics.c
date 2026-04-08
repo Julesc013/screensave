@@ -1,4 +1,5 @@
 #include "scr_internal.h"
+#include "screensave/private/renderer_runtime.h"
 #include "screensave/version.h"
 
 int scr_append_text(char *buffer, int buffer_size, const char *text)
@@ -100,7 +101,9 @@ void scr_build_version_text(const scr_host_context *context, char *buffer, int b
 void scr_build_overlay_text(const scr_host_context *context, char *buffer, int buffer_size)
 {
     screensave_renderer_info renderer_info;
+    screensave_service_seams service_seams;
     char reason_text[128];
+    char seam_text[192];
     char status_text[128];
 
     if (buffer == NULL || buffer_size <= 0) {
@@ -210,6 +213,17 @@ void scr_build_overlay_text(const scr_host_context *context, char *buffer, int b
             );
             scr_append_text(buffer, buffer_size, "\r\nRenderer status: ");
             scr_append_text(buffer, buffer_size, status_text);
+        }
+        if (
+            screensave_renderer_get_private_service_seams(context->renderer, &service_seams) &&
+            screensave_service_seams_build_summary(
+                &service_seams,
+                seam_text,
+                sizeof(seam_text)
+            )
+        ) {
+            scr_append_text(buffer, buffer_size, "\r\nService seams: ");
+            scr_append_text(buffer, buffer_size, seam_text);
         }
     }
     if (context->session == NULL) {
