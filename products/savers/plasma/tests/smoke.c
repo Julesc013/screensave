@@ -445,6 +445,8 @@ int main(void)
     const screensave_saver_module *module;
     const screensave_preset_descriptor *preset_descriptor;
     const screensave_theme_descriptor *theme_descriptor;
+    const plasma_settings_descriptor *settings_descriptor;
+    const plasma_settings_descriptor *settings_catalog;
     plasma_plan plan;
     plasma_output_frame output_frame;
     plasma_treated_frame treated_frame;
@@ -452,6 +454,8 @@ int main(void)
     const plasma_content_registry *registry;
     const plasma_content_pack_entry *pack_entry;
     screensave_pack_manifest pack_manifest;
+    plasma_settings_context settings_context;
+    plasma_settings_resolution settings_resolution;
     plasma_selection_preferences selection_preferences;
     plasma_transition_preferences transition_preferences;
     plasma_smoke_capture settings_capture;
@@ -469,6 +473,7 @@ int main(void)
     unsigned int smoothing_blend;
     unsigned int transition_progress;
     unsigned long mid_speed_units;
+    unsigned int settings_count;
     unsigned int index;
 
     module = plasma_get_module();
@@ -554,6 +559,150 @@ int main(void)
     if (module->config_hooks == NULL || module->config_hooks->randomize_settings == NULL) {
         return 14;
     }
+
+    settings_catalog = plasma_settings_get_catalog(&settings_count);
+    if (
+        !plasma_settings_catalog_validate() ||
+        settings_catalog == NULL ||
+        settings_count < 20U
+    ) {
+        return 172;
+    }
+    if (product_config.settings_surface != PLASMA_SETTINGS_SURFACE_BASIC) {
+        return 173;
+    }
+    if (
+        plasma_settings_find_descriptor("preset_key") == NULL ||
+        plasma_settings_find_descriptor("transition_policy") == NULL ||
+        plasma_settings_find_descriptor("journey_key") == NULL ||
+        plasma_settings_find_descriptor("diagnostics_overlay_enabled") == NULL
+    ) {
+        return 174;
+    }
+
+    plasma_settings_context_init(
+        &settings_context,
+        module,
+        &common_config,
+        &product_config,
+        SCREENSAVE_RENDERER_KIND_UNKNOWN,
+        SCREENSAVE_RENDERER_KIND_GL11
+    );
+    if (!plasma_settings_resolve(&settings_resolution, &settings_context)) {
+        return 175;
+    }
+    if (
+        settings_resolution.surface != PLASMA_SETTINGS_SURFACE_BASIC ||
+        settings_resolution.detail_level != common_config.detail_level ||
+        settings_resolution.effect_mode != product_config.effect_mode ||
+        settings_resolution.speed_mode != product_config.speed_mode ||
+        settings_resolution.resolution_mode != product_config.resolution_mode ||
+        settings_resolution.smoothing_mode != product_config.smoothing_mode ||
+        settings_resolution.transitions_enabled ||
+        settings_resolution.transition_policy != PLASMA_TRANSITION_POLICY_DISABLED ||
+        settings_resolution.content_filter != PLASMA_CONTENT_FILTER_STABLE_ONLY ||
+        settings_resolution.favorites_only ||
+        strcmp(settings_resolution.preset_set_key, "") != 0 ||
+        strcmp(settings_resolution.theme_set_key, "") != 0 ||
+        strcmp(settings_resolution.journey_key, "") != 0
+    ) {
+        return 176;
+    }
+
+    settings_descriptor = plasma_settings_find_descriptor("content_filter");
+    if (
+        settings_descriptor == NULL ||
+        plasma_settings_is_available(settings_descriptor, &settings_context)
+    ) {
+        return 177;
+    }
+    settings_descriptor = plasma_settings_find_descriptor("preset_set_key");
+    if (
+        settings_descriptor == NULL ||
+        !plasma_settings_is_available(settings_descriptor, &settings_context)
+    ) {
+        return 178;
+    }
+    settings_descriptor = plasma_settings_find_descriptor("theme_set_key");
+    if (
+        settings_descriptor == NULL ||
+        !plasma_settings_is_available(settings_descriptor, &settings_context)
+    ) {
+        return 179;
+    }
+    settings_descriptor = plasma_settings_find_descriptor("favorites_only");
+    if (
+        settings_descriptor == NULL ||
+        plasma_settings_is_available(settings_descriptor, &settings_context)
+    ) {
+        return 180;
+    }
+    lstrcpyA(product_config.selection.favorite_preset_keys, "plasma_lava");
+    plasma_settings_context_init(
+        &settings_context,
+        module,
+        &common_config,
+        &product_config,
+        SCREENSAVE_RENDERER_KIND_UNKNOWN,
+        SCREENSAVE_RENDERER_KIND_GL11
+    );
+    if (!plasma_settings_is_available(settings_descriptor, &settings_context)) {
+        return 181;
+    }
+    lstrcpyA(product_config.selection.favorite_preset_keys, "");
+
+    settings_descriptor = plasma_settings_find_descriptor("deterministic_seed");
+    if (
+        settings_descriptor == NULL ||
+        plasma_settings_is_available(settings_descriptor, &settings_context)
+    ) {
+        return 182;
+    }
+    common_config.use_deterministic_seed = 1;
+    common_config.deterministic_seed = 424242UL;
+    plasma_settings_context_init(
+        &settings_context,
+        module,
+        &common_config,
+        &product_config,
+        SCREENSAVE_RENDERER_KIND_UNKNOWN,
+        SCREENSAVE_RENDERER_KIND_GL11
+    );
+    if (
+        !plasma_settings_is_available(settings_descriptor, &settings_context) ||
+        !plasma_settings_resolve(&settings_resolution, &settings_context) ||
+        !settings_resolution.use_deterministic_seed ||
+        settings_resolution.deterministic_seed != 424242UL
+    ) {
+        return 183;
+    }
+
+    plasma_transition_preferences_set_defaults(&product_config.transition);
+    product_config.transition.enabled = 1;
+    product_config.transition.policy = PLASMA_TRANSITION_POLICY_JOURNEY;
+    lstrcpyA(product_config.transition.journey_key, "classic_cycle");
+    settings_descriptor = plasma_settings_find_descriptor("journey_key");
+    plasma_settings_context_init(
+        &settings_context,
+        module,
+        &common_config,
+        &product_config,
+        SCREENSAVE_RENDERER_KIND_UNKNOWN,
+        SCREENSAVE_RENDERER_KIND_GL11
+    );
+    if (
+        settings_descriptor == NULL ||
+        !plasma_settings_is_available(settings_descriptor, &settings_context) ||
+        !plasma_settings_resolve(&settings_resolution, &settings_context) ||
+        !settings_resolution.transitions_enabled ||
+        settings_resolution.transition_policy != PLASMA_TRANSITION_POLICY_JOURNEY ||
+        strcmp(settings_resolution.journey_key, "classic_cycle") != 0
+    ) {
+        return 184;
+    }
+
+    plasma_config_set_defaults(&common_config, &product_config, sizeof(product_config));
+    plasma_config_clamp(&common_config, &product_config, sizeof(product_config));
 
     if (!plasma_compile_classic_plan(module, PLASMA_DEFAULT_PRESET_KEY, NULL, &plan)) {
         return 15;

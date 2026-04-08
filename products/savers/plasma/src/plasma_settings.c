@@ -280,7 +280,7 @@ static const plasma_settings_descriptor g_plasma_settings_catalog[] = {
 
 static int plasma_has_non_empty_text(const char *text)
 {
-    return text != NULL && text[0] != '\0';
+    return text != NULL && text[0] != '\0' && lstrcmpiA(text, "none") != 0;
 }
 
 static int plasma_setting_is_transition_driven(const char *setting_key)
@@ -694,4 +694,3 @@ int plasma_settings_resolve(
 
     return 1;
 }
-
