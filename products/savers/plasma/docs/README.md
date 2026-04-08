@@ -16,8 +16,9 @@ They live with the product so later `PL` work can extend them without rewriting 
 - [PL06 Content System](./pl06-content-system.md): makes presets, themes, packs, and product-local sets real registry-backed Plasma content instead of scattered assumptions
 - [PL06 Selection And Sets](./pl06-selection-and-sets.md): defines the persisted selection state, favorites, exclusions, and stable/experimental filtering used by the new content layer
 - [PL07 Advanced Lane](./pl07-advanced-lane.md): makes `advanced -> gl21` a bounded richer execution lane without changing Plasma's lower-band default center of gravity
+- [PL08 Modern Lane](./pl08-modern-lane.md): makes `modern -> gl33` a bounded refined execution lane layered on top of the advanced path without changing Plasma's lower-band or GL21 reference posture
 
 ## Intended Follow-On
 
 Later `PL` phases should add their own product-local docs here as they land.
-At `PL07`, no later implementation phase is claimed as implemented.
+At `PL08`, no later implementation phase is claimed as implemented.
