@@ -27,8 +27,12 @@ They live with the product so later `PL` work can extend them without rewriting 
 - [PL13 Validation Matrix](./pl13-validation-matrix.md): records the current Plasma proof matrix across lower lanes, richer lanes, transitions, settings, and BenchLab surfaces with explicit evidence-backed status labels
 - [PL13 Performance Envelopes](./pl13-performance-envelopes.md): records the bounded startup, runtime, transition, and soak envelopes that are honestly supportable for the implemented subset
 - [PL13 Known Limits](./pl13-known-limits.md): records the current unsupported, partially validated, and blocked areas that PL14 must treat as factual constraints
+- [PL14 Release Cut](./pl14-release-cut.md): defines the stable Core, experimental, and deferred Plasma ship scope for the current repo state
+- [PL14 Stable Vs Experimental](./pl14-stable-vs-experimental.md): defines the actual stable-versus-experimental split and how the current repo enforces it
+- [PL14 Ship Readiness](./pl14-ship-readiness.md): records the explicit PL14 flagship ship decision and the evidence and caveats behind it
+- [PL14 Release Notes Draft](./pl14-release-notes-draft.md): provides a truthful release-note-grade summary of what this Plasma cut does and does not ship
 
 ## Intended Follow-On
 
 Later `PL` phases should add their own product-local docs here as they land.
-At `PL13`, no later release-cut phase is claimed as implemented.
+At `PL14`, no later implementation phase is claimed as implemented.
