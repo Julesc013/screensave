@@ -2,6 +2,26 @@
 
 All notable repository changes are recorded here in prompt history order.
 
+## SX06 - 2026-04-08
+
+### Added
+
+- `platform/src/render/gl46/gl46_caps.c`, `gl46_capture.c`, `gl46_context.c`, `gl46_present.c`, `gl46_primitives.c`, and `gl46_state.c` as the real private homes for GL46 premium-lane capability capture, 4.6 compatibility-context lifecycle, shader-backed drawing, present detail, and proof-oriented backend text.
+
+### Changed
+
+- Brought the optional `gl46` tier to life as the real bounded premium lane by replacing the old placeholder backend with a compatibility-profile OpenGL 4.6 backend that owns dynamic function loading, a formal private premium capability bundle, premium-only texture-storage and sampler-object handling, shader-backed primitive and bitmap rendering, and auditable teardown.
+- Tightened private substrate routing so GL46 now participates honestly as the premium band above `gl33`, with explicit backend-caps capture, real resize and present-path hooks, clearer loader diagnostics, and deliberate degradation down through `gl33`, `gl21`, `gl11`, and `gdi` instead of placeholder failure.
+- Added a bounded premium proof surface on `gallery` by introducing an internal GL46 renderer tier, modest premium-lane scene-density and composition differences, manifest-level GL46 support reporting, and honest host and Suite selector text without widening the public saver capability contract or forcing broad saver-line migration.
+- Updated active README, spec, roadmap, architecture, renderer-layer, host-selector, suite-selector, build-lane, and product-lineup docs so GL46 now reads as a real optional premium tier while preserving the frozen public renderer ladder and the compatibility-first ScreenSave doctrine.
+
+### Validation
+
+- Built `build/mingw/i686` with `PROFILE=debug` and `CC=gcc`, producing the shared platform library plus the checked-in saver, BenchLab, and Suite targets after the GL46 premium-lane bring-up.
+- Ran `python tools/scripts/check_release_baseline_surface.py`, `check_portable_bundle_layout.py`, `check_installer_layout.py`, `check_backlog_surface.py`, `check_canonical_naming.py`, `check_meta_saver_layout.py`, `check_suite_consistency_surface.py`, `check_suite_app_layout.py`, and `check_sdk_surface.py`; all passed.
+- Confirmed `git diff --check` was clean, product code still does not include `screensave/private/`, and active stale-phrase sweeps no longer describe GL46 as a live placeholder tier.
+- Kept `SX06` bounded to GL46 lifecycle, function-loading, capability modeling, degradation, bounded proof-surface integration, build integration, and doctrine normalization only; this prompt did not adopt non-GL families, rewrite the public renderer API, or widen product scope.
+
 ## SX05 - 2026-04-08
 
 ### Added
