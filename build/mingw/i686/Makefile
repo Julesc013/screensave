@@ -104,7 +104,7 @@ PLATFORM_OBJS := \
 	$(PLATFORM_DIR)/scr_validation_scene.o \
 	$(PLATFORM_DIR)/scr_window.o
 
-saver_extra_units = $(if $(filter $(1),plasma),output plan presentation treatment validate,)
+saver_extra_units = $(if $(filter $(1),plasma),content output plan presentation selection treatment validate,)
 saver_all_units = $(SAVER_UNITS) $(call saver_extra_units,$(1))
 saver_objs = $(foreach unit,$(call saver_all_units,$(1)),$(INT_ROOT)/$(1)/$(1)_$(unit).o)
 saver_resource_objs = $(INT_ROOT)/$(1)/$(1)_config_res.o $(INT_ROOT)/$(1)/$(1)_version_res.o $(INT_ROOT)/$(1)/screensave_host_res.o

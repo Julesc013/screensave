@@ -8,6 +8,8 @@
 #include "screensave/saver_api.h"
 #include "screensave/visual_buffer_api.h"
 #include "plasma_classic.h"
+#include "plasma_content.h"
+#include "plasma_selection.h"
 #include "plasma_plan.h"
 #include "plasma_validate.h"
 
@@ -46,14 +48,15 @@ typedef struct plasma_config_tag {
     int speed_mode;
     int resolution_mode;
     int smoothing_mode;
+    plasma_selection_preferences selection;
 } plasma_config;
 
-typedef struct plasma_preset_values_tag {
+struct plasma_preset_values_tag {
     int effect_mode;
     int speed_mode;
     int resolution_mode;
     int smoothing_mode;
-} plasma_preset_values;
+};
 
 typedef struct plasma_rng_state_tag {
     unsigned long state;

@@ -37,8 +37,6 @@ int plasma_plan_compile(
     screensave_common_config common_config;
     plasma_config product_config;
     const screensave_config_binding *binding;
-    const screensave_preset_descriptor *preset;
-    const screensave_theme_descriptor *theme;
 
     if (plan == NULL || environment == NULL) {
         return 0;
@@ -61,27 +59,14 @@ int plasma_plan_compile(
     }
 
     plasma_config_clamp(&common_config, &product_config, sizeof(product_config));
-
-    preset = plasma_find_preset_descriptor(common_config.preset_key);
-    if (preset == NULL) {
-        preset = plasma_find_preset_descriptor(PLASMA_DEFAULT_PRESET_KEY);
-    }
-
-    theme = plasma_find_theme_descriptor(common_config.theme_key);
-    if (theme == NULL && preset != NULL) {
-        theme = plasma_find_theme_descriptor(preset->theme_key);
-    }
-    if (theme == NULL) {
-        theme = plasma_find_theme_descriptor(PLASMA_DEFAULT_THEME_KEY);
-    }
-    if (preset == NULL || theme == NULL) {
+    if (!plasma_selection_resolve(&plan->selection, &common_config, &product_config.selection)) {
         return 0;
     }
 
-    plan->preset_key = preset->preset_key;
-    plan->preset = preset;
-    plan->theme_key = theme->theme_key;
-    plan->theme = theme;
+    plan->preset_key = plan->selection.selected_preset->preset_key;
+    plan->preset = plan->selection.selected_preset->descriptor;
+    plan->theme_key = plan->selection.selected_theme->theme_key;
+    plan->theme = plan->selection.selected_theme->descriptor;
     plan->effect_mode = product_config.effect_mode;
     plan->speed_mode = product_config.speed_mode;
     plan->resolution_mode = product_config.resolution_mode;
@@ -112,11 +97,22 @@ int plasma_plan_validate(
 {
     if (
         plan == NULL ||
+        !plasma_content_registry_validate() ||
         !plan->classic_execution ||
         plan->preset_key == NULL ||
         plan->theme_key == NULL ||
         plan->preset == NULL ||
         plan->theme == NULL
+    ) {
+        return 0;
+    }
+
+    if (
+        !plasma_selection_state_validate(&plan->selection) ||
+        plan->selection.selected_preset == NULL ||
+        plan->selection.selected_theme == NULL ||
+        plan->selection.selected_preset->descriptor != plan->preset ||
+        plan->selection.selected_theme->descriptor != plan->theme
     ) {
         return 0;
     }

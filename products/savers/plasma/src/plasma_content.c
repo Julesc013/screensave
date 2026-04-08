@@ -1,0 +1,485 @@
+#include <string.h>
+
+#include "plasma_internal.h"
+
+static const plasma_content_pack_asset g_lava_remix_assets[] = {
+    { SCREENSAVE_SETTINGS_FILE_PRESET, "presets/lava_remix.preset.ini", "plasma_lava" },
+    { SCREENSAVE_SETTINGS_FILE_THEME, "themes/lava_remix.theme.ini", "plasma_lava" }
+};
+
+static const plasma_content_weighted_key g_classic_core_preset_members[] = {
+    { "plasma_lava", 1U },
+    { "aurora_plasma", 1U },
+    { "ocean_interference", 1U },
+    { "museum_phosphor", 1U },
+    { "quiet_darkroom", 1U },
+    { "midnight_interference", 1U },
+    { "amber_terminal", 1U }
+};
+
+static const plasma_content_weighted_key g_dark_room_preset_members[] = {
+    { "quiet_darkroom", 1U },
+    { "museum_phosphor", 1U },
+    { "midnight_interference", 1U },
+    { "amber_terminal", 1U }
+};
+
+static const plasma_content_weighted_key g_classic_core_theme_members[] = {
+    { "plasma_lava", 1U },
+    { "aurora_cool", 1U },
+    { "oceanic_blue", 1U },
+    { "museum_phosphor", 1U },
+    { "quiet_darkroom", 1U },
+    { "midnight_interference", 1U },
+    { "amber_terminal", 1U }
+};
+
+static const plasma_content_weighted_key g_dark_room_theme_members[] = {
+    { "museum_phosphor", 1U },
+    { "quiet_darkroom", 1U },
+    { "midnight_interference", 1U },
+    { "amber_terminal", 1U }
+};
+
+static const plasma_content_preset_entry g_preset_entries[] = {
+    { "plasma_lava", &g_plasma_presets[0], PLASMA_CONTENT_SOURCE_BUILT_IN, PLASMA_CONTENT_CHANNEL_STABLE, NULL },
+    { "aurora_plasma", &g_plasma_presets[1], PLASMA_CONTENT_SOURCE_BUILT_IN, PLASMA_CONTENT_CHANNEL_STABLE, NULL },
+    { "ocean_interference", &g_plasma_presets[2], PLASMA_CONTENT_SOURCE_BUILT_IN, PLASMA_CONTENT_CHANNEL_STABLE, NULL },
+    { "museum_phosphor", &g_plasma_presets[3], PLASMA_CONTENT_SOURCE_BUILT_IN, PLASMA_CONTENT_CHANNEL_STABLE, NULL },
+    { "quiet_darkroom", &g_plasma_presets[4], PLASMA_CONTENT_SOURCE_BUILT_IN, PLASMA_CONTENT_CHANNEL_STABLE, NULL },
+    { "midnight_interference", &g_plasma_presets[5], PLASMA_CONTENT_SOURCE_BUILT_IN, PLASMA_CONTENT_CHANNEL_STABLE, NULL },
+    { "amber_terminal", &g_plasma_presets[6], PLASMA_CONTENT_SOURCE_BUILT_IN, PLASMA_CONTENT_CHANNEL_STABLE, NULL }
+};
+
+static const plasma_content_theme_entry g_theme_entries[] = {
+    { "plasma_lava", &g_plasma_themes[0], PLASMA_CONTENT_SOURCE_BUILT_IN, PLASMA_CONTENT_CHANNEL_STABLE, NULL },
+    { "aurora_cool", &g_plasma_themes[1], PLASMA_CONTENT_SOURCE_BUILT_IN, PLASMA_CONTENT_CHANNEL_STABLE, NULL },
+    { "oceanic_blue", &g_plasma_themes[2], PLASMA_CONTENT_SOURCE_BUILT_IN, PLASMA_CONTENT_CHANNEL_STABLE, NULL },
+    { "museum_phosphor", &g_plasma_themes[3], PLASMA_CONTENT_SOURCE_BUILT_IN, PLASMA_CONTENT_CHANNEL_STABLE, NULL },
+    { "quiet_darkroom", &g_plasma_themes[4], PLASMA_CONTENT_SOURCE_BUILT_IN, PLASMA_CONTENT_CHANNEL_STABLE, NULL },
+    { "midnight_interference", &g_plasma_themes[5], PLASMA_CONTENT_SOURCE_BUILT_IN, PLASMA_CONTENT_CHANNEL_STABLE, NULL },
+    { "amber_terminal", &g_plasma_themes[6], PLASMA_CONTENT_SOURCE_BUILT_IN, PLASMA_CONTENT_CHANNEL_STABLE, NULL }
+};
+
+static const plasma_content_pack_entry g_pack_entries[] = {
+    {
+        "lava_remix",
+        "Lava Remix",
+        "Alternate plasma studies with brighter lava tones and faster palette travel.",
+        PLASMA_CONTENT_SOURCE_PACK,
+        PLASMA_CONTENT_CHANNEL_STABLE,
+        SCREENSAVE_RENDERER_KIND_GDI,
+        SCREENSAVE_RENDERER_KIND_GL11,
+        SCREENSAVE_CAPABILITY_QUALITY_BALANCED,
+        "Retains the lava studies on lower lanes with coarser motion and composition updates.",
+        g_lava_remix_assets,
+        (unsigned int)(sizeof(g_lava_remix_assets) / sizeof(g_lava_remix_assets[0]))
+    }
+};
+
+static const plasma_content_preset_set_entry g_preset_sets[] = {
+    {
+        "classic_core",
+        "Classic Core",
+        "All preserved built-in Plasma Classic presets.",
+        PLASMA_CONTENT_CHANNEL_STABLE,
+        g_classic_core_preset_members,
+        (unsigned int)(sizeof(g_classic_core_preset_members) / sizeof(g_classic_core_preset_members[0]))
+    },
+    {
+        "dark_room_classics",
+        "Dark-Room Classics",
+        "Quiet long-run preset subset for subdued rooms and museum-style sessions.",
+        PLASMA_CONTENT_CHANNEL_STABLE,
+        g_dark_room_preset_members,
+        (unsigned int)(sizeof(g_dark_room_preset_members) / sizeof(g_dark_room_preset_members[0]))
+    }
+};
+
+static const plasma_content_theme_set_entry g_theme_sets[] = {
+    {
+        "classic_core",
+        "Classic Core",
+        "All preserved built-in Plasma Classic themes.",
+        PLASMA_CONTENT_CHANNEL_STABLE,
+        g_classic_core_theme_members,
+        (unsigned int)(sizeof(g_classic_core_theme_members) / sizeof(g_classic_core_theme_members[0]))
+    },
+    {
+        "dark_room_classics",
+        "Dark-Room Classics",
+        "Quiet theme subset for dark-room-safe classic presentation.",
+        PLASMA_CONTENT_CHANNEL_STABLE,
+        g_dark_room_theme_members,
+        (unsigned int)(sizeof(g_dark_room_theme_members) / sizeof(g_dark_room_theme_members[0]))
+    }
+};
+
+static const plasma_content_registry g_registry = {
+    g_preset_entries,
+    (unsigned int)(sizeof(g_preset_entries) / sizeof(g_preset_entries[0])),
+    g_theme_entries,
+    (unsigned int)(sizeof(g_theme_entries) / sizeof(g_theme_entries[0])),
+    g_pack_entries,
+    (unsigned int)(sizeof(g_pack_entries) / sizeof(g_pack_entries[0])),
+    g_preset_sets,
+    (unsigned int)(sizeof(g_preset_sets) / sizeof(g_preset_sets[0])),
+    g_theme_sets,
+    (unsigned int)(sizeof(g_theme_sets) / sizeof(g_theme_sets[0]))
+};
+
+static int plasma_content_weighted_key_list_is_valid(
+    const plasma_content_weighted_key *members,
+    unsigned int member_count
+)
+{
+    unsigned int index;
+
+    if (members == NULL || member_count == 0U) {
+        return 0;
+    }
+
+    for (index = 0U; index < member_count; ++index) {
+        if (
+            members[index].content_key == NULL ||
+            members[index].content_key[0] == '\0' ||
+            members[index].weight == 0U
+        ) {
+            return 0;
+        }
+    }
+
+    return 1;
+}
+
+const plasma_content_registry *plasma_content_get_registry(void)
+{
+    return &g_registry;
+}
+
+int plasma_content_registry_validate(void)
+{
+    const plasma_content_registry *registry;
+    unsigned int index;
+
+    registry = plasma_content_get_registry();
+    if (
+        registry == NULL ||
+        registry->preset_entries == NULL ||
+        registry->theme_entries == NULL ||
+        registry->pack_entries == NULL ||
+        registry->preset_sets == NULL ||
+        registry->theme_sets == NULL ||
+        registry->preset_count != PLASMA_PRESET_COUNT ||
+        registry->theme_count != PLASMA_THEME_COUNT
+    ) {
+        return 0;
+    }
+
+    for (index = 0U; index < registry->preset_count; ++index) {
+        if (
+            registry->preset_entries[index].preset_key == NULL ||
+            registry->preset_entries[index].descriptor == NULL ||
+            registry->preset_entries[index].descriptor->theme_key == NULL ||
+            strcmp(
+                registry->preset_entries[index].preset_key,
+                registry->preset_entries[index].descriptor->preset_key
+            ) != 0 ||
+            plasma_find_preset_values(registry->preset_entries[index].preset_key) == NULL ||
+            plasma_find_theme_descriptor(registry->preset_entries[index].descriptor->theme_key) == NULL
+        ) {
+            return 0;
+        }
+    }
+
+    for (index = 0U; index < registry->theme_count; ++index) {
+        if (
+            registry->theme_entries[index].theme_key == NULL ||
+            registry->theme_entries[index].descriptor == NULL ||
+            strcmp(
+                registry->theme_entries[index].theme_key,
+                registry->theme_entries[index].descriptor->theme_key
+            ) != 0
+        ) {
+            return 0;
+        }
+    }
+
+    for (index = 0U; index < registry->pack_count; ++index) {
+        unsigned int asset_index;
+
+        if (
+            registry->pack_entries[index].pack_key == NULL ||
+            registry->pack_entries[index].display_name == NULL ||
+            registry->pack_entries[index].assets == NULL ||
+            registry->pack_entries[index].asset_count == 0U
+        ) {
+            return 0;
+        }
+
+        for (asset_index = 0U; asset_index < registry->pack_entries[index].asset_count; ++asset_index) {
+            const plasma_content_pack_asset *asset;
+
+            asset = &registry->pack_entries[index].assets[asset_index];
+            if (
+                asset->relative_path == NULL ||
+                asset->relative_path[0] == '\0' ||
+                asset->canonical_key == NULL ||
+                asset->canonical_key[0] == '\0'
+            ) {
+                return 0;
+            }
+
+            if (asset->file_kind == SCREENSAVE_SETTINGS_FILE_PRESET) {
+                if (plasma_content_find_preset_entry(asset->canonical_key) == NULL) {
+                    return 0;
+                }
+            } else if (asset->file_kind == SCREENSAVE_SETTINGS_FILE_THEME) {
+                if (plasma_content_find_theme_entry(asset->canonical_key) == NULL) {
+                    return 0;
+                }
+            } else {
+                return 0;
+            }
+        }
+    }
+
+    for (index = 0U; index < registry->preset_set_count; ++index) {
+        unsigned int member_index;
+
+        if (
+            registry->preset_sets[index].set_key == NULL ||
+            registry->preset_sets[index].display_name == NULL ||
+            !plasma_content_weighted_key_list_is_valid(
+                registry->preset_sets[index].members,
+                registry->preset_sets[index].member_count
+            )
+        ) {
+            return 0;
+        }
+
+        for (member_index = 0U; member_index < registry->preset_sets[index].member_count; ++member_index) {
+            if (plasma_content_find_preset_entry(registry->preset_sets[index].members[member_index].content_key) == NULL) {
+                return 0;
+            }
+        }
+    }
+
+    for (index = 0U; index < registry->theme_set_count; ++index) {
+        unsigned int member_index;
+
+        if (
+            registry->theme_sets[index].set_key == NULL ||
+            registry->theme_sets[index].display_name == NULL ||
+            !plasma_content_weighted_key_list_is_valid(
+                registry->theme_sets[index].members,
+                registry->theme_sets[index].member_count
+            )
+        ) {
+            return 0;
+        }
+
+        for (member_index = 0U; member_index < registry->theme_sets[index].member_count; ++member_index) {
+            if (plasma_content_find_theme_entry(registry->theme_sets[index].members[member_index].content_key) == NULL) {
+                return 0;
+            }
+        }
+    }
+
+    return 1;
+}
+
+const plasma_content_preset_entry *plasma_content_find_preset_entry(const char *preset_key)
+{
+    const plasma_content_registry *registry;
+    unsigned int index;
+
+    registry = plasma_content_get_registry();
+    preset_key = plasma_classic_canonical_key(preset_key);
+    if (preset_key == NULL || preset_key[0] == '\0') {
+        return NULL;
+    }
+
+    for (index = 0U; index < registry->preset_count; ++index) {
+        if (strcmp(registry->preset_entries[index].preset_key, preset_key) == 0) {
+            return &registry->preset_entries[index];
+        }
+    }
+
+    return NULL;
+}
+
+const plasma_content_theme_entry *plasma_content_find_theme_entry(const char *theme_key)
+{
+    const plasma_content_registry *registry;
+    unsigned int index;
+
+    registry = plasma_content_get_registry();
+    theme_key = plasma_classic_canonical_key(theme_key);
+    if (theme_key == NULL || theme_key[0] == '\0') {
+        return NULL;
+    }
+
+    for (index = 0U; index < registry->theme_count; ++index) {
+        if (strcmp(registry->theme_entries[index].theme_key, theme_key) == 0) {
+            return &registry->theme_entries[index];
+        }
+    }
+
+    return NULL;
+}
+
+const plasma_content_pack_entry *plasma_content_find_pack_entry(const char *pack_key)
+{
+    const plasma_content_registry *registry;
+    unsigned int index;
+
+    registry = plasma_content_get_registry();
+    if (pack_key == NULL || pack_key[0] == '\0') {
+        return NULL;
+    }
+
+    for (index = 0U; index < registry->pack_count; ++index) {
+        if (strcmp(registry->pack_entries[index].pack_key, pack_key) == 0) {
+            return &registry->pack_entries[index];
+        }
+    }
+
+    return NULL;
+}
+
+const plasma_content_preset_set_entry *plasma_content_find_preset_set(const char *set_key)
+{
+    const plasma_content_registry *registry;
+    unsigned int index;
+
+    registry = plasma_content_get_registry();
+    if (set_key == NULL || set_key[0] == '\0') {
+        return NULL;
+    }
+
+    for (index = 0U; index < registry->preset_set_count; ++index) {
+        if (strcmp(registry->preset_sets[index].set_key, set_key) == 0) {
+            return &registry->preset_sets[index];
+        }
+    }
+
+    return NULL;
+}
+
+const plasma_content_theme_set_entry *plasma_content_find_theme_set(const char *set_key)
+{
+    const plasma_content_registry *registry;
+    unsigned int index;
+
+    registry = plasma_content_get_registry();
+    if (set_key == NULL || set_key[0] == '\0') {
+        return NULL;
+    }
+
+    for (index = 0U; index < registry->theme_set_count; ++index) {
+        if (strcmp(registry->theme_sets[index].set_key, set_key) == 0) {
+            return &registry->theme_sets[index];
+        }
+    }
+
+    return NULL;
+}
+
+int plasma_content_preset_index(const plasma_content_preset_entry *entry)
+{
+    const plasma_content_registry *registry;
+    unsigned int index;
+
+    registry = plasma_content_get_registry();
+    if (entry == NULL) {
+        return -1;
+    }
+
+    for (index = 0U; index < registry->preset_count; ++index) {
+        if (&registry->preset_entries[index] == entry) {
+            return (int)index;
+        }
+    }
+
+    return -1;
+}
+
+int plasma_content_theme_index(const plasma_content_theme_entry *entry)
+{
+    const plasma_content_registry *registry;
+    unsigned int index;
+
+    registry = plasma_content_get_registry();
+    if (entry == NULL) {
+        return -1;
+    }
+
+    for (index = 0U; index < registry->theme_count; ++index) {
+        if (&registry->theme_entries[index] == entry) {
+            return (int)index;
+        }
+    }
+
+    return -1;
+}
+
+int plasma_content_preset_in_set(
+    const plasma_content_preset_set_entry *set_entry,
+    const plasma_content_preset_entry *entry
+)
+{
+    unsigned int index;
+
+    if (set_entry == NULL || entry == NULL) {
+        return 0;
+    }
+
+    for (index = 0U; index < set_entry->member_count; ++index) {
+        if (strcmp(set_entry->members[index].content_key, entry->preset_key) == 0) {
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+int plasma_content_theme_in_set(
+    const plasma_content_theme_set_entry *set_entry,
+    const plasma_content_theme_entry *entry
+)
+{
+    unsigned int index;
+
+    if (set_entry == NULL || entry == NULL) {
+        return 0;
+    }
+
+    for (index = 0U; index < set_entry->member_count; ++index) {
+        if (strcmp(set_entry->members[index].content_key, entry->theme_key) == 0) {
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+int plasma_content_registry_has_channel(plasma_content_channel channel)
+{
+    const plasma_content_registry *registry;
+    unsigned int index;
+
+    registry = plasma_content_get_registry();
+    for (index = 0U; index < registry->preset_count; ++index) {
+        if (registry->preset_entries[index].channel == channel) {
+            return 1;
+        }
+    }
+    for (index = 0U; index < registry->theme_count; ++index) {
+        if (registry->theme_entries[index].channel == channel) {
+            return 1;
+        }
+    }
+
+    return 0;
+}

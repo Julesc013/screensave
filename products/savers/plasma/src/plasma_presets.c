@@ -103,16 +103,10 @@ unsigned int plasma_classic_preset_count(void)
 
 const screensave_preset_descriptor *plasma_find_preset_descriptor(const char *preset_key)
 {
-    unsigned int preset_count;
-    const screensave_preset_descriptor *presets;
+    const plasma_content_preset_entry *entry;
 
-    presets = plasma_get_presets(&preset_count);
-    preset_key = plasma_classic_canonical_key(preset_key);
-    if (preset_key == NULL || preset_key[0] == '\0') {
-        return NULL;
-    }
-
-    return screensave_find_preset(presets, preset_count, preset_key);
+    entry = plasma_content_find_preset_entry(preset_key);
+    return entry != NULL ? entry->descriptor : NULL;
 }
 
 int plasma_classic_is_known_preset_key(const char *preset_key)

@@ -1,5 +1,3 @@
-#include <string.h>
-
 #include "plasma_internal.h"
 
 const screensave_theme_descriptor g_plasma_themes[] = {
@@ -75,24 +73,8 @@ int plasma_classic_is_known_theme_key(const char *theme_key)
 
 const screensave_theme_descriptor *plasma_find_theme_descriptor(const char *theme_key)
 {
-    unsigned int theme_count;
-    const screensave_theme_descriptor *themes;
-    unsigned int index;
+    const plasma_content_theme_entry *entry;
 
-    themes = plasma_get_themes(&theme_count);
-    theme_key = plasma_classic_canonical_key(theme_key);
-    if (theme_key == NULL || theme_key[0] == '\0') {
-        return NULL;
-    }
-
-    for (index = 0U; index < theme_count; ++index) {
-        if (
-            themes[index].theme_key != NULL &&
-            strcmp(themes[index].theme_key, theme_key) == 0
-        ) {
-            return &themes[index];
-        }
-    }
-
-    return NULL;
+    entry = plasma_content_find_theme_entry(theme_key);
+    return entry != NULL ? entry->descriptor : NULL;
 }

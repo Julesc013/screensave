@@ -205,6 +205,7 @@ void plasma_config_set_defaults(
     config->speed_mode = PLASMA_SPEED_GENTLE;
     config->resolution_mode = PLASMA_RESOLUTION_STANDARD;
     config->smoothing_mode = PLASMA_SMOOTHING_SOFT;
+    plasma_selection_preferences_set_defaults(&config->selection);
     plasma_apply_preset_to_config(PLASMA_DEFAULT_PRESET_KEY, common_config, config);
 }
 
@@ -215,6 +216,7 @@ void plasma_config_clamp(
 )
 {
     plasma_config *config;
+    plasma_selection_state selection_state;
 
     config = plasma_as_config(product_config, product_config_size);
     if (common_config == NULL || config == NULL) {
@@ -264,6 +266,14 @@ void plasma_config_clamp(
     if (config->smoothing_mode < PLASMA_SMOOTHING_OFF || config->smoothing_mode > PLASMA_SMOOTHING_GLOW) {
         config->smoothing_mode = PLASMA_SMOOTHING_SOFT;
     }
+
+    plasma_selection_preferences_clamp(&config->selection);
+    if (!plasma_selection_resolve(&selection_state, common_config, &config->selection)) {
+        plasma_selection_preferences_set_defaults(&config->selection);
+        common_config->preset_key = PLASMA_DEFAULT_PRESET_KEY;
+        common_config->theme_key = PLASMA_DEFAULT_THEME_KEY;
+        (void)plasma_selection_resolve(&selection_state, common_config, &config->selection);
+    }
 }
 
 int plasma_config_load(
@@ -280,6 +290,9 @@ int plasma_config_load(
     unsigned long value_dword;
     char preset_key[64];
     char theme_key[64];
+    char selection_key[PLASMA_CONTENT_KEY_TEXT_LENGTH];
+    char key_list[PLASMA_CONTENT_KEY_LIST_LENGTH];
+    int selection_flag;
 
     (void)diagnostics;
 
@@ -347,6 +360,63 @@ int plasma_config_load(
     value_dword = (unsigned long)config->smoothing_mode;
     if (plasma_read_dword(key, "SmoothingMode", &value_dword)) {
         config->smoothing_mode = (int)value_dword;
+    }
+
+    value_dword = (unsigned long)config->selection.content_filter;
+    if (plasma_read_dword(key, "ContentFilter", &value_dword)) {
+        config->selection.content_filter = (plasma_content_filter)value_dword;
+    }
+    selection_flag = config->selection.favorites_only;
+    if (plasma_read_flag(key, "FavoritesOnly", &selection_flag)) {
+        config->selection.favorites_only = selection_flag;
+    }
+    selection_key[0] = '\0';
+    if (plasma_read_string(key, "PresetSetKey", selection_key, sizeof(selection_key))) {
+        lstrcpynA(
+            config->selection.preset_set_key,
+            selection_key,
+            (int)sizeof(config->selection.preset_set_key)
+        );
+    }
+    selection_key[0] = '\0';
+    if (plasma_read_string(key, "ThemeSetKey", selection_key, sizeof(selection_key))) {
+        lstrcpynA(
+            config->selection.theme_set_key,
+            selection_key,
+            (int)sizeof(config->selection.theme_set_key)
+        );
+    }
+    key_list[0] = '\0';
+    if (plasma_read_string(key, "FavoritePresetKeys", key_list, sizeof(key_list))) {
+        lstrcpynA(
+            config->selection.favorite_preset_keys,
+            key_list,
+            (int)sizeof(config->selection.favorite_preset_keys)
+        );
+    }
+    key_list[0] = '\0';
+    if (plasma_read_string(key, "ExcludedPresetKeys", key_list, sizeof(key_list))) {
+        lstrcpynA(
+            config->selection.excluded_preset_keys,
+            key_list,
+            (int)sizeof(config->selection.excluded_preset_keys)
+        );
+    }
+    key_list[0] = '\0';
+    if (plasma_read_string(key, "FavoriteThemeKeys", key_list, sizeof(key_list))) {
+        lstrcpynA(
+            config->selection.favorite_theme_keys,
+            key_list,
+            (int)sizeof(config->selection.favorite_theme_keys)
+        );
+    }
+    key_list[0] = '\0';
+    if (plasma_read_string(key, "ExcludedThemeKeys", key_list, sizeof(key_list))) {
+        lstrcpynA(
+            config->selection.excluded_theme_keys,
+            key_list,
+            (int)sizeof(config->selection.excluded_theme_keys)
+        );
     }
 
     RegCloseKey(key);
@@ -433,6 +503,50 @@ int plasma_config_save(
     }
     if (result == ERROR_SUCCESS) {
         result = plasma_write_dword(key, "SmoothingMode", (unsigned long)safe_product_config.smoothing_mode);
+    }
+    if (result == ERROR_SUCCESS) {
+        result = plasma_write_dword(
+            key,
+            "ContentFilter",
+            (unsigned long)safe_product_config.selection.content_filter
+        );
+    }
+    if (result == ERROR_SUCCESS) {
+        result = plasma_write_flag(key, "FavoritesOnly", safe_product_config.selection.favorites_only);
+    }
+    if (result == ERROR_SUCCESS) {
+        result = plasma_write_string(key, "PresetSetKey", safe_product_config.selection.preset_set_key);
+    }
+    if (result == ERROR_SUCCESS) {
+        result = plasma_write_string(key, "ThemeSetKey", safe_product_config.selection.theme_set_key);
+    }
+    if (result == ERROR_SUCCESS) {
+        result = plasma_write_string(
+            key,
+            "FavoritePresetKeys",
+            safe_product_config.selection.favorite_preset_keys
+        );
+    }
+    if (result == ERROR_SUCCESS) {
+        result = plasma_write_string(
+            key,
+            "ExcludedPresetKeys",
+            safe_product_config.selection.excluded_preset_keys
+        );
+    }
+    if (result == ERROR_SUCCESS) {
+        result = plasma_write_string(
+            key,
+            "FavoriteThemeKeys",
+            safe_product_config.selection.favorite_theme_keys
+        );
+    }
+    if (result == ERROR_SUCCESS) {
+        result = plasma_write_string(
+            key,
+            "ExcludedThemeKeys",
+            safe_product_config.selection.excluded_theme_keys
+        );
     }
 
     RegCloseKey(key);
@@ -596,8 +710,11 @@ static void plasma_read_dialog_settings(
 {
     LRESULT preset_index;
     LRESULT theme_index;
+    plasma_selection_preferences saved_selection;
 
+    saved_selection = product_config->selection;
     plasma_config_set_defaults(common_config, product_config, sizeof(*product_config));
+    product_config->selection = saved_selection;
 
     preset_index = SendDlgItemMessageA(dialog, IDC_PLASMA_PRESET, CB_GETCURSEL, 0U, 0L);
     if (preset_index != CB_ERR && (unsigned int)preset_index < module->preset_count) {
@@ -667,11 +784,15 @@ static INT_PTR CALLBACK plasma_config_dialog_proc(HWND dialog, UINT message, WPA
         }
 
         if (LOWORD(wParam) == IDC_PLASMA_DEFAULTS) {
+            plasma_selection_preferences saved_selection;
+
+            saved_selection = dialog_state->product_config->selection;
             plasma_config_set_defaults(
                 dialog_state->common_config,
                 dialog_state->product_config,
                 sizeof(*dialog_state->product_config)
             );
+            dialog_state->product_config->selection = saved_selection;
             plasma_apply_settings_to_dialog(
                 dialog,
                 dialog_state->module,
@@ -836,6 +957,38 @@ static int plasma_parse_smoothing_mode(const char *text, int *value_out)
     return 0;
 }
 
+static int plasma_parse_content_filter_mode(const char *text, int *value_out)
+{
+    plasma_content_filter filter;
+
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (!plasma_selection_parse_content_filter(text, &filter)) {
+        return 0;
+    }
+
+    *value_out = (int)filter;
+    return 1;
+}
+
+static int plasma_parse_bool_text(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "1") == 0 || lstrcmpiA(text, "true") == 0 || lstrcmpiA(text, "yes") == 0) {
+        *value_out = 1;
+        return 1;
+    }
+    if (lstrcmpiA(text, "0") == 0 || lstrcmpiA(text, "false") == 0 || lstrcmpiA(text, "no") == 0) {
+        *value_out = 0;
+        return 1;
+    }
+
+    return 0;
+}
+
 int plasma_config_export_settings_entries(
     const screensave_saver_module *module,
     const screensave_common_config *common_config,
@@ -873,6 +1026,54 @@ int plasma_config_export_settings_entries(
             "product",
             "smoothing",
             plasma_smoothing_mode_name(config->smoothing_mode)
+        ) &&
+        writer->write_string(
+            writer->context,
+            "content",
+            "content_filter",
+            plasma_selection_content_filter_name(config->selection.content_filter)
+        ) &&
+        writer->write_string(
+            writer->context,
+            "content",
+            "favorites_only",
+            config->selection.favorites_only ? "true" : "false"
+        ) &&
+        writer->write_string(
+            writer->context,
+            "content",
+            "preset_set_key",
+            config->selection.preset_set_key
+        ) &&
+        writer->write_string(
+            writer->context,
+            "content",
+            "theme_set_key",
+            config->selection.theme_set_key
+        ) &&
+        writer->write_string(
+            writer->context,
+            "content",
+            "favorite_preset_keys",
+            config->selection.favorite_preset_keys
+        ) &&
+        writer->write_string(
+            writer->context,
+            "content",
+            "excluded_preset_keys",
+            config->selection.excluded_preset_keys
+        ) &&
+        writer->write_string(
+            writer->context,
+            "content",
+            "favorite_theme_keys",
+            config->selection.favorite_theme_keys
+        ) &&
+        writer->write_string(
+            writer->context,
+            "content",
+            "excluded_theme_keys",
+            config->selection.excluded_theme_keys
         );
 }
 
@@ -901,20 +1102,70 @@ int plasma_config_import_settings_entry(
     if (config == NULL || section == NULL || key == NULL || value == NULL) {
         return 0;
     }
-    if (lstrcmpiA(section, "product") != 0) {
+    if (lstrcmpiA(section, "product") == 0) {
+        if (lstrcmpiA(key, "effect_mode") == 0 || lstrcmpiA(key, "effect") == 0) {
+            return plasma_parse_effect_mode(value, &config->effect_mode);
+        }
+        if (lstrcmpiA(key, "speed_mode") == 0 || lstrcmpiA(key, "speed") == 0) {
+            return plasma_parse_speed_mode(value, &config->speed_mode);
+        }
+        if (lstrcmpiA(key, "resolution_mode") == 0 || lstrcmpiA(key, "resolution") == 0) {
+            return plasma_parse_resolution_mode(value, &config->resolution_mode);
+        }
+        if (lstrcmpiA(key, "smoothing_mode") == 0 || lstrcmpiA(key, "smoothing") == 0) {
+            return plasma_parse_smoothing_mode(value, &config->smoothing_mode);
+        }
         return 1;
     }
-    if (lstrcmpiA(key, "effect_mode") == 0 || lstrcmpiA(key, "effect") == 0) {
-        return plasma_parse_effect_mode(value, &config->effect_mode);
-    }
-    if (lstrcmpiA(key, "speed_mode") == 0 || lstrcmpiA(key, "speed") == 0) {
-        return plasma_parse_speed_mode(value, &config->speed_mode);
-    }
-    if (lstrcmpiA(key, "resolution_mode") == 0 || lstrcmpiA(key, "resolution") == 0) {
-        return plasma_parse_resolution_mode(value, &config->resolution_mode);
-    }
-    if (lstrcmpiA(key, "smoothing_mode") == 0 || lstrcmpiA(key, "smoothing") == 0) {
-        return plasma_parse_smoothing_mode(value, &config->smoothing_mode);
+
+    if (lstrcmpiA(section, "content") == 0) {
+        if (lstrcmpiA(key, "content_filter") == 0) {
+            return plasma_parse_content_filter_mode(value, (int *)&config->selection.content_filter);
+        }
+        if (lstrcmpiA(key, "favorites_only") == 0) {
+            return plasma_parse_bool_text(value, &config->selection.favorites_only);
+        }
+        if (lstrcmpiA(key, "preset_set_key") == 0) {
+            lstrcpynA(config->selection.preset_set_key, value, (int)sizeof(config->selection.preset_set_key));
+            return 1;
+        }
+        if (lstrcmpiA(key, "theme_set_key") == 0) {
+            lstrcpynA(config->selection.theme_set_key, value, (int)sizeof(config->selection.theme_set_key));
+            return 1;
+        }
+        if (lstrcmpiA(key, "favorite_preset_keys") == 0) {
+            lstrcpynA(
+                config->selection.favorite_preset_keys,
+                value,
+                (int)sizeof(config->selection.favorite_preset_keys)
+            );
+            return 1;
+        }
+        if (lstrcmpiA(key, "excluded_preset_keys") == 0) {
+            lstrcpynA(
+                config->selection.excluded_preset_keys,
+                value,
+                (int)sizeof(config->selection.excluded_preset_keys)
+            );
+            return 1;
+        }
+        if (lstrcmpiA(key, "favorite_theme_keys") == 0) {
+            lstrcpynA(
+                config->selection.favorite_theme_keys,
+                value,
+                (int)sizeof(config->selection.favorite_theme_keys)
+            );
+            return 1;
+        }
+        if (lstrcmpiA(key, "excluded_theme_keys") == 0) {
+            lstrcpynA(
+                config->selection.excluded_theme_keys,
+                value,
+                (int)sizeof(config->selection.excluded_theme_keys)
+            );
+            return 1;
+        }
+        return 1;
     }
 
     return 1;

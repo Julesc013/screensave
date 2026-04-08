@@ -2,7 +2,9 @@
 #define PLASMA_PLAN_H
 
 #include "screensave/saver_api.h"
+#include "plasma_content.h"
 #include "plasma_output.h"
+#include "plasma_selection.h"
 #include "plasma_treatment.h"
 #include "plasma_presentation.h"
 
@@ -27,6 +29,7 @@ typedef struct plasma_plan_tag {
     unsigned long stream_seed;
     unsigned long resolved_rng_seed;
     int deterministic;
+    plasma_selection_state selection;
     screensave_renderer_kind minimum_kind;
     screensave_renderer_kind preferred_kind;
     screensave_capability_quality_class quality_class;
