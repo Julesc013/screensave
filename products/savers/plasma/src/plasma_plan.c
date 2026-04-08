@@ -29,6 +29,7 @@ void plasma_plan_init(plasma_plan *plan)
     plasma_advanced_plan_init(plan);
     plasma_modern_plan_init(plan);
     plasma_premium_plan_init(plan);
+    plasma_transition_plan_init(plan);
 }
 
 void plasma_plan_bind_renderer_kind(
@@ -41,6 +42,7 @@ void plasma_plan_bind_renderer_kind(
     plasma_advanced_bind_plan(plan, module, requested_kind, active_kind);
     plasma_modern_bind_plan(plan, module, requested_kind, active_kind);
     plasma_premium_bind_plan(plan, module, requested_kind, active_kind);
+    plasma_transition_bind_plan(plan, module);
 }
 
 int plasma_plan_compile(
@@ -95,6 +97,13 @@ int plasma_plan_compile(
     plan->stream_seed = environment->seed.stream_seed;
     plan->resolved_rng_seed = environment->seed.base_seed ^ environment->seed.stream_seed;
     plan->deterministic = environment->seed.deterministic;
+    plan->transition_requested = product_config.transition.enabled ? 1 : 0;
+    plan->transition_policy = product_config.transition.policy;
+    plan->transition_fallback_policy = product_config.transition.fallback_policy;
+    plan->transition_seed_policy = product_config.transition.seed_policy;
+    plan->transition_interval_millis = product_config.transition.interval_millis;
+    plan->transition_duration_millis = product_config.transition.duration_millis;
+    plan->journey = plasma_transition_find_journey(product_config.transition.journey_key);
 
     if (module != NULL) {
         plan->minimum_kind = module->routing_policy.minimum_kind;
@@ -167,7 +176,8 @@ int plasma_plan_validate(
         !plasma_presentation_validate_plan(plan) ||
         !plasma_advanced_validate_plan(plan, module) ||
         !plasma_modern_validate_plan(plan, module) ||
-        !plasma_premium_validate_plan(plan, module)
+        !plasma_premium_validate_plan(plan, module) ||
+        !plasma_transition_validate_plan(plan, module)
     ) {
         return 0;
     }

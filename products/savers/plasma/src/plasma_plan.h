@@ -5,6 +5,7 @@
 #include "plasma_content.h"
 #include "plasma_output.h"
 #include "plasma_selection.h"
+#include "plasma_transition.h"
 #include "plasma_treatment.h"
 #include "plasma_presentation.h"
 
@@ -50,6 +51,15 @@ typedef struct plasma_plan_tag {
     int premium_degraded;
     unsigned long premium_components;
     unsigned long premium_degrade_policy;
+    int transition_requested;
+    int transition_enabled;
+    plasma_transition_policy transition_policy;
+    plasma_transition_fallback_policy transition_fallback_policy;
+    plasma_transition_seed_continuity_policy transition_seed_policy;
+    unsigned long transition_supported_types;
+    unsigned long transition_interval_millis;
+    unsigned long transition_duration_millis;
+    const plasma_content_journey_entry *journey;
     screensave_renderer_kind minimum_kind;
     screensave_renderer_kind preferred_kind;
     screensave_capability_quality_class quality_class;

@@ -20,6 +20,8 @@ static screensave_color plasma_treatment_palette_color(
     screensave_color base_color;
     screensave_color white_color;
     screensave_color highlight_color;
+    screensave_color primary_color;
+    screensave_color accent_color;
     unsigned int palette_index;
     unsigned int amount;
 
@@ -28,49 +30,50 @@ static screensave_color plasma_treatment_palette_color(
     white_color.green = 255;
     white_color.blue = 255;
     white_color.alpha = 255;
-    highlight_color = screensave_color_lerp(plan->theme->accent_color, white_color, 112U);
+    plasma_transition_resolve_theme_colors(plan, state, &primary_color, &accent_color);
+    highlight_color = screensave_color_lerp(accent_color, white_color, 112U);
 
     palette_index = (value + (unsigned int)(state->palette_phase & 255UL)) & 255U;
     if (plan->effect_mode == PLASMA_EFFECT_FIRE) {
         palette_index = (value + (unsigned int)((state->palette_phase / 2UL) & 255UL)) & 255U;
         if (palette_index < 64U) {
             amount = (palette_index * 255U) / 64U;
-            return screensave_color_lerp(base_color, plan->theme->primary_color, amount);
+            return screensave_color_lerp(base_color, primary_color, amount);
         }
         if (palette_index < 176U) {
             amount = ((palette_index - 64U) * 255U) / 112U;
-            return screensave_color_lerp(plan->theme->primary_color, plan->theme->accent_color, amount);
+            return screensave_color_lerp(primary_color, accent_color, amount);
         }
 
         amount = ((palette_index - 176U) * 255U) / 79U;
-        return screensave_color_lerp(plan->theme->accent_color, highlight_color, amount);
+        return screensave_color_lerp(accent_color, highlight_color, amount);
     }
 
     if (plan->effect_mode == PLASMA_EFFECT_INTERFERENCE) {
         if (palette_index < 112U) {
             amount = (palette_index * 255U) / 112U;
-            return screensave_color_lerp(base_color, plan->theme->accent_color, amount);
+            return screensave_color_lerp(base_color, accent_color, amount);
         }
         if (palette_index < 208U) {
             amount = ((palette_index - 112U) * 255U) / 96U;
-            return screensave_color_lerp(plan->theme->accent_color, plan->theme->primary_color, amount);
+            return screensave_color_lerp(accent_color, primary_color, amount);
         }
 
         amount = ((palette_index - 208U) * 255U) / 47U;
-        return screensave_color_lerp(plan->theme->primary_color, highlight_color, amount);
+        return screensave_color_lerp(primary_color, highlight_color, amount);
     }
 
     if (palette_index < 96U) {
         amount = (palette_index * 255U) / 96U;
-        return screensave_color_lerp(base_color, plan->theme->primary_color, amount);
+        return screensave_color_lerp(base_color, primary_color, amount);
     }
     if (palette_index < 192U) {
         amount = ((palette_index - 96U) * 255U) / 96U;
-        return screensave_color_lerp(plan->theme->primary_color, plan->theme->accent_color, amount);
+        return screensave_color_lerp(primary_color, accent_color, amount);
     }
 
     amount = ((palette_index - 192U) * 255U) / 63U;
-    return screensave_color_lerp(plan->theme->accent_color, highlight_color, amount);
+    return screensave_color_lerp(accent_color, highlight_color, amount);
 }
 
 static int plasma_theme_map_raster_output(

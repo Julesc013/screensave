@@ -387,7 +387,7 @@ static unsigned long plasma_speed_units(
         speed -= 1UL;
     }
 
-    return speed;
+    return plasma_transition_effective_speed_units(plan, state, speed);
 }
 
 static unsigned long plasma_variation_interval_millis(
@@ -586,14 +586,13 @@ static void plasma_apply_smoothing(
     int x;
     int y;
     unsigned int blend_amount;
+    int smoothing_enabled;
 
-    if (plan->smoothing_mode == PLASMA_SMOOTHING_OFF) {
+    if (!plasma_transition_resolve_smoothing(plan, state, &smoothing_enabled, &blend_amount)) {
         return;
     }
-
-    blend_amount = 72U;
-    if (plan->smoothing_mode == PLASMA_SMOOTHING_GLOW) {
-        blend_amount = 128U;
+    if (!smoothing_enabled) {
+        return;
     }
     if (state->preview_mode && blend_amount > 64U) {
         blend_amount = 64U;
@@ -766,6 +765,7 @@ int plasma_create_session(
         free(session);
         return 0;
     }
+    plasma_transition_runtime_bind(&state->transition, &session->plan);
 
     plasma_rng_seed(&state->rng, session->plan.resolved_rng_seed);
     state->palette_phase = session->plan.base_seed & 255UL;
@@ -826,6 +826,7 @@ void plasma_resize_session(
     if (!plasma_plan_validate_for_renderer_kind(&session->plan, plasma_get_module(), state->active_renderer_kind)) {
         return;
     }
+    plasma_transition_runtime_bind(&state->transition, &session->plan);
     if (plasma_resize_visual_state(&session->plan, state)) {
         plasma_warm_start_effect(&session->plan, state);
     }
@@ -839,6 +840,7 @@ void plasma_step_session(
     plasma_execution_state *state;
     unsigned long delta_millis;
     unsigned long speed_units;
+    unsigned long transition_flags;
 
     if (session == NULL || environment == NULL) {
         return;
@@ -848,6 +850,16 @@ void plasma_step_session(
     delta_millis = environment->clock.delta_millis;
     if (delta_millis > 200UL) {
         delta_millis = 200UL;
+    }
+
+    transition_flags = plasma_transition_step(&session->plan, state, plasma_get_module(), environment);
+    if ((transition_flags & PLASMA_TRANSITION_RUNTIME_REQUIRE_RESIZE) != 0UL) {
+        if (!plasma_resize_visual_state(&session->plan, state)) {
+            return;
+        }
+    }
+    if ((transition_flags & PLASMA_TRANSITION_RUNTIME_REQUIRE_WARM_START) != 0UL) {
+        plasma_warm_start_effect(&session->plan, state);
     }
 
     speed_units = plasma_speed_units(&session->plan, state);

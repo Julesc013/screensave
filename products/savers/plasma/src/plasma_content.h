@@ -4,6 +4,7 @@
 #include "screensave/config_api.h"
 #include "screensave/saver_api.h"
 #include "screensave/settings_api.h"
+#include "plasma_transition.h"
 
 typedef struct plasma_preset_values_tag plasma_preset_values;
 
@@ -24,6 +25,8 @@ typedef struct plasma_content_preset_entry_tag {
     const screensave_preset_descriptor *descriptor;
     plasma_content_source source;
     plasma_content_channel channel;
+    plasma_preset_morph_class morph_class;
+    plasma_transition_bridge_class bridge_class;
     int advanced_capable;
     int modern_capable;
     int premium_capable;
@@ -35,6 +38,7 @@ typedef struct plasma_content_theme_entry_tag {
     const screensave_theme_descriptor *descriptor;
     plasma_content_source source;
     plasma_content_channel channel;
+    plasma_theme_morph_class morph_class;
     const char *owner_pack_key;
 } plasma_content_theme_entry;
 

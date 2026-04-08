@@ -60,6 +60,11 @@ int plasma_is_modern_runtime_kind(screensave_renderer_kind renderer_kind)
         renderer_kind == SCREENSAVE_RENDERER_KIND_GL46;
 }
 
+int plasma_is_premium_runtime_kind(screensave_renderer_kind renderer_kind)
+{
+    return renderer_kind == SCREENSAVE_RENDERER_KIND_GL46;
+}
+
 int plasma_plan_is_lower_band_baseline(const struct plasma_plan_tag *plan)
 {
     if (
@@ -71,6 +76,8 @@ int plasma_plan_is_lower_band_baseline(const struct plasma_plan_tag *plan)
         plan->modern_components != 0UL ||
         plan->premium_enabled ||
         plan->premium_components != 0UL ||
+        plan->transition_requested ||
+        plan->transition_enabled ||
         plan->output_family != PLASMA_OUTPUT_FAMILY_RASTER ||
         plan->output_mode != PLASMA_OUTPUT_MODE_NATIVE_RASTER ||
         plan->sampling_treatment != PLASMA_SAMPLING_TREATMENT_NONE ||
@@ -108,7 +115,11 @@ int plasma_plan_validate_for_renderer_kind(
     }
 
     if (plasma_is_lower_band_kind(renderer_kind)) {
-        return plasma_plan_is_lower_band_baseline(plan);
+        return
+            plan->active_renderer_kind == renderer_kind &&
+            !plan->advanced_enabled &&
+            !plan->modern_enabled &&
+            !plan->premium_enabled;
     }
 
     if (renderer_kind == SCREENSAVE_RENDERER_KIND_GL21) {

@@ -24,6 +24,22 @@ static const plasma_content_weighted_key g_dark_room_preset_members[] = {
     { "amber_terminal", 1U }
 };
 
+static const plasma_content_weighted_key g_fire_classics_preset_members[] = {
+    { "plasma_lava", 1U },
+    { "quiet_darkroom", 1U }
+};
+
+static const plasma_content_weighted_key g_plasma_classics_preset_members[] = {
+    { "aurora_plasma", 1U },
+    { "museum_phosphor", 1U },
+    { "amber_terminal", 1U }
+};
+
+static const plasma_content_weighted_key g_interference_classics_preset_members[] = {
+    { "ocean_interference", 1U },
+    { "midnight_interference", 1U }
+};
+
 static const plasma_content_weighted_key g_classic_core_theme_members[] = {
     { "plasma_lava", 1U },
     { "aurora_cool", 1U },
@@ -41,24 +57,162 @@ static const plasma_content_weighted_key g_dark_room_theme_members[] = {
     { "amber_terminal", 1U }
 };
 
+static const plasma_content_weighted_key g_warm_classics_theme_members[] = {
+    { "plasma_lava", 1U },
+    { "quiet_darkroom", 1U },
+    { "amber_terminal", 1U }
+};
+
+static const plasma_content_weighted_key g_cool_classics_theme_members[] = {
+    { "aurora_cool", 1U },
+    { "oceanic_blue", 1U },
+    { "midnight_interference", 1U }
+};
+
 static const plasma_content_preset_entry g_preset_entries[] = {
-    { "plasma_lava", &g_plasma_presets[0], PLASMA_CONTENT_SOURCE_BUILT_IN, PLASMA_CONTENT_CHANNEL_STABLE, 1, 1, 1, NULL },
-    { "aurora_plasma", &g_plasma_presets[1], PLASMA_CONTENT_SOURCE_BUILT_IN, PLASMA_CONTENT_CHANNEL_STABLE, 1, 1, 1, NULL },
-    { "ocean_interference", &g_plasma_presets[2], PLASMA_CONTENT_SOURCE_BUILT_IN, PLASMA_CONTENT_CHANNEL_STABLE, 1, 1, 1, NULL },
-    { "museum_phosphor", &g_plasma_presets[3], PLASMA_CONTENT_SOURCE_BUILT_IN, PLASMA_CONTENT_CHANNEL_STABLE, 1, 1, 1, NULL },
-    { "quiet_darkroom", &g_plasma_presets[4], PLASMA_CONTENT_SOURCE_BUILT_IN, PLASMA_CONTENT_CHANNEL_STABLE, 1, 1, 1, NULL },
-    { "midnight_interference", &g_plasma_presets[5], PLASMA_CONTENT_SOURCE_BUILT_IN, PLASMA_CONTENT_CHANNEL_STABLE, 1, 1, 1, NULL },
-    { "amber_terminal", &g_plasma_presets[6], PLASMA_CONTENT_SOURCE_BUILT_IN, PLASMA_CONTENT_CHANNEL_STABLE, 1, 1, 1, NULL }
+    {
+        "plasma_lava",
+        &g_plasma_presets[0],
+        PLASMA_CONTENT_SOURCE_BUILT_IN,
+        PLASMA_CONTENT_CHANNEL_STABLE,
+        PLASMA_PRESET_MORPH_CLASS_FIRE,
+        PLASMA_TRANSITION_BRIDGE_CLASS_WARM_CLASSIC,
+        1,
+        1,
+        1,
+        NULL
+    },
+    {
+        "aurora_plasma",
+        &g_plasma_presets[1],
+        PLASMA_CONTENT_SOURCE_BUILT_IN,
+        PLASMA_CONTENT_CHANNEL_STABLE,
+        PLASMA_PRESET_MORPH_CLASS_PLASMA,
+        PLASMA_TRANSITION_BRIDGE_CLASS_COOL_FIELD,
+        1,
+        1,
+        1,
+        NULL
+    },
+    {
+        "ocean_interference",
+        &g_plasma_presets[2],
+        PLASMA_CONTENT_SOURCE_BUILT_IN,
+        PLASMA_CONTENT_CHANNEL_STABLE,
+        PLASMA_PRESET_MORPH_CLASS_INTERFERENCE,
+        PLASMA_TRANSITION_BRIDGE_CLASS_COOL_FIELD,
+        1,
+        1,
+        1,
+        NULL
+    },
+    {
+        "museum_phosphor",
+        &g_plasma_presets[3],
+        PLASMA_CONTENT_SOURCE_BUILT_IN,
+        PLASMA_CONTENT_CHANNEL_STABLE,
+        PLASMA_PRESET_MORPH_CLASS_PLASMA,
+        PLASMA_TRANSITION_BRIDGE_CLASS_WARM_CLASSIC,
+        1,
+        1,
+        1,
+        NULL
+    },
+    {
+        "quiet_darkroom",
+        &g_plasma_presets[4],
+        PLASMA_CONTENT_SOURCE_BUILT_IN,
+        PLASMA_CONTENT_CHANNEL_STABLE,
+        PLASMA_PRESET_MORPH_CLASS_FIRE,
+        PLASMA_TRANSITION_BRIDGE_CLASS_WARM_CLASSIC,
+        1,
+        1,
+        1,
+        NULL
+    },
+    {
+        "midnight_interference",
+        &g_plasma_presets[5],
+        PLASMA_CONTENT_SOURCE_BUILT_IN,
+        PLASMA_CONTENT_CHANNEL_STABLE,
+        PLASMA_PRESET_MORPH_CLASS_INTERFERENCE,
+        PLASMA_TRANSITION_BRIDGE_CLASS_COOL_FIELD,
+        1,
+        1,
+        1,
+        NULL
+    },
+    {
+        "amber_terminal",
+        &g_plasma_presets[6],
+        PLASMA_CONTENT_SOURCE_BUILT_IN,
+        PLASMA_CONTENT_CHANNEL_STABLE,
+        PLASMA_PRESET_MORPH_CLASS_PLASMA,
+        PLASMA_TRANSITION_BRIDGE_CLASS_WARM_CLASSIC,
+        1,
+        1,
+        1,
+        NULL
+    }
 };
 
 static const plasma_content_theme_entry g_theme_entries[] = {
-    { "plasma_lava", &g_plasma_themes[0], PLASMA_CONTENT_SOURCE_BUILT_IN, PLASMA_CONTENT_CHANNEL_STABLE, NULL },
-    { "aurora_cool", &g_plasma_themes[1], PLASMA_CONTENT_SOURCE_BUILT_IN, PLASMA_CONTENT_CHANNEL_STABLE, NULL },
-    { "oceanic_blue", &g_plasma_themes[2], PLASMA_CONTENT_SOURCE_BUILT_IN, PLASMA_CONTENT_CHANNEL_STABLE, NULL },
-    { "museum_phosphor", &g_plasma_themes[3], PLASMA_CONTENT_SOURCE_BUILT_IN, PLASMA_CONTENT_CHANNEL_STABLE, NULL },
-    { "quiet_darkroom", &g_plasma_themes[4], PLASMA_CONTENT_SOURCE_BUILT_IN, PLASMA_CONTENT_CHANNEL_STABLE, NULL },
-    { "midnight_interference", &g_plasma_themes[5], PLASMA_CONTENT_SOURCE_BUILT_IN, PLASMA_CONTENT_CHANNEL_STABLE, NULL },
-    { "amber_terminal", &g_plasma_themes[6], PLASMA_CONTENT_SOURCE_BUILT_IN, PLASMA_CONTENT_CHANNEL_STABLE, NULL }
+    {
+        "plasma_lava",
+        &g_plasma_themes[0],
+        PLASMA_CONTENT_SOURCE_BUILT_IN,
+        PLASMA_CONTENT_CHANNEL_STABLE,
+        PLASMA_THEME_MORPH_CLASS_WARM,
+        NULL
+    },
+    {
+        "aurora_cool",
+        &g_plasma_themes[1],
+        PLASMA_CONTENT_SOURCE_BUILT_IN,
+        PLASMA_CONTENT_CHANNEL_STABLE,
+        PLASMA_THEME_MORPH_CLASS_COOL,
+        NULL
+    },
+    {
+        "oceanic_blue",
+        &g_plasma_themes[2],
+        PLASMA_CONTENT_SOURCE_BUILT_IN,
+        PLASMA_CONTENT_CHANNEL_STABLE,
+        PLASMA_THEME_MORPH_CLASS_COOL,
+        NULL
+    },
+    {
+        "museum_phosphor",
+        &g_plasma_themes[3],
+        PLASMA_CONTENT_SOURCE_BUILT_IN,
+        PLASMA_CONTENT_CHANNEL_STABLE,
+        PLASMA_THEME_MORPH_CLASS_PHOSPHOR,
+        NULL
+    },
+    {
+        "quiet_darkroom",
+        &g_plasma_themes[4],
+        PLASMA_CONTENT_SOURCE_BUILT_IN,
+        PLASMA_CONTENT_CHANNEL_STABLE,
+        PLASMA_THEME_MORPH_CLASS_WARM,
+        NULL
+    },
+    {
+        "midnight_interference",
+        &g_plasma_themes[5],
+        PLASMA_CONTENT_SOURCE_BUILT_IN,
+        PLASMA_CONTENT_CHANNEL_STABLE,
+        PLASMA_THEME_MORPH_CLASS_COOL,
+        NULL
+    },
+    {
+        "amber_terminal",
+        &g_plasma_themes[6],
+        PLASMA_CONTENT_SOURCE_BUILT_IN,
+        PLASMA_CONTENT_CHANNEL_STABLE,
+        PLASMA_THEME_MORPH_CLASS_WARM,
+        NULL
+    }
 };
 
 static const plasma_content_pack_entry g_pack_entries[] = {
@@ -93,6 +247,30 @@ static const plasma_content_preset_set_entry g_preset_sets[] = {
         PLASMA_CONTENT_CHANNEL_STABLE,
         g_dark_room_preset_members,
         (unsigned int)(sizeof(g_dark_room_preset_members) / sizeof(g_dark_room_preset_members[0]))
+    },
+    {
+        "fire_classics",
+        "Fire Classics",
+        "Compatible fire-family classic presets for direct preset morph coverage.",
+        PLASMA_CONTENT_CHANNEL_STABLE,
+        g_fire_classics_preset_members,
+        (unsigned int)(sizeof(g_fire_classics_preset_members) / sizeof(g_fire_classics_preset_members[0]))
+    },
+    {
+        "plasma_classics",
+        "Plasma Classics",
+        "Compatible plasma-family classic presets for direct preset morph coverage.",
+        PLASMA_CONTENT_CHANNEL_STABLE,
+        g_plasma_classics_preset_members,
+        (unsigned int)(sizeof(g_plasma_classics_preset_members) / sizeof(g_plasma_classics_preset_members[0]))
+    },
+    {
+        "interference_classics",
+        "Interference Classics",
+        "Compatible interference-family classic presets for direct preset morph coverage.",
+        PLASMA_CONTENT_CHANNEL_STABLE,
+        g_interference_classics_preset_members,
+        (unsigned int)(sizeof(g_interference_classics_preset_members) / sizeof(g_interference_classics_preset_members[0]))
     }
 };
 
@@ -112,6 +290,22 @@ static const plasma_content_theme_set_entry g_theme_sets[] = {
         PLASMA_CONTENT_CHANNEL_STABLE,
         g_dark_room_theme_members,
         (unsigned int)(sizeof(g_dark_room_theme_members) / sizeof(g_dark_room_theme_members[0]))
+    },
+    {
+        "warm_classics",
+        "Warm Classics",
+        "Compatible warm-family themes for direct theme morph coverage.",
+        PLASMA_CONTENT_CHANNEL_STABLE,
+        g_warm_classics_theme_members,
+        (unsigned int)(sizeof(g_warm_classics_theme_members) / sizeof(g_warm_classics_theme_members[0]))
+    },
+    {
+        "cool_classics",
+        "Cool Classics",
+        "Compatible cool-family themes for direct theme morph coverage.",
+        PLASMA_CONTENT_CHANNEL_STABLE,
+        g_cool_classics_theme_members,
+        (unsigned int)(sizeof(g_cool_classics_theme_members) / sizeof(g_cool_classics_theme_members[0]))
     }
 };
 
@@ -181,6 +375,10 @@ int plasma_content_registry_validate(void)
             registry->preset_entries[index].preset_key == NULL ||
             registry->preset_entries[index].descriptor == NULL ||
             registry->preset_entries[index].descriptor->theme_key == NULL ||
+            registry->preset_entries[index].morph_class < PLASMA_PRESET_MORPH_CLASS_NONE ||
+            registry->preset_entries[index].morph_class > PLASMA_PRESET_MORPH_CLASS_INTERFERENCE ||
+            registry->preset_entries[index].bridge_class < PLASMA_TRANSITION_BRIDGE_CLASS_NONE ||
+            registry->preset_entries[index].bridge_class > PLASMA_TRANSITION_BRIDGE_CLASS_COOL_FIELD ||
             (registry->preset_entries[index].advanced_capable != 0 &&
                 registry->preset_entries[index].advanced_capable != 1) ||
             (registry->preset_entries[index].modern_capable != 0 &&
@@ -202,6 +400,8 @@ int plasma_content_registry_validate(void)
         if (
             registry->theme_entries[index].theme_key == NULL ||
             registry->theme_entries[index].descriptor == NULL ||
+            registry->theme_entries[index].morph_class < PLASMA_THEME_MORPH_CLASS_NONE ||
+            registry->theme_entries[index].morph_class > PLASMA_THEME_MORPH_CLASS_PHOSPHOR ||
             strcmp(
                 registry->theme_entries[index].theme_key,
                 registry->theme_entries[index].descriptor->theme_key

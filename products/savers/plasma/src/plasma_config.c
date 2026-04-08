@@ -1,3 +1,5 @@
+#include <stdlib.h>
+
 #include "plasma_internal.h"
 #include "plasma_resource.h"
 #include "screensave/version.h"
@@ -206,6 +208,7 @@ void plasma_config_set_defaults(
     config->resolution_mode = PLASMA_RESOLUTION_STANDARD;
     config->smoothing_mode = PLASMA_SMOOTHING_SOFT;
     plasma_selection_preferences_set_defaults(&config->selection);
+    plasma_transition_preferences_set_defaults(&config->transition);
     plasma_apply_preset_to_config(PLASMA_DEFAULT_PRESET_KEY, common_config, config);
 }
 
@@ -268,8 +271,10 @@ void plasma_config_clamp(
     }
 
     plasma_selection_preferences_clamp(&config->selection);
+    plasma_transition_preferences_clamp(&config->transition);
     if (!plasma_selection_resolve(&selection_state, common_config, &config->selection)) {
         plasma_selection_preferences_set_defaults(&config->selection);
+        plasma_transition_preferences_set_defaults(&config->transition);
         common_config->preset_key = PLASMA_DEFAULT_PRESET_KEY;
         common_config->theme_key = PLASMA_DEFAULT_THEME_KEY;
         (void)plasma_selection_resolve(&selection_state, common_config, &config->selection);
@@ -292,6 +297,7 @@ int plasma_config_load(
     char theme_key[64];
     char selection_key[PLASMA_CONTENT_KEY_TEXT_LENGTH];
     char key_list[PLASMA_CONTENT_KEY_LIST_LENGTH];
+    char transition_key[PLASMA_TRANSITION_KEY_TEXT_LENGTH];
     int selection_flag;
 
     (void)diagnostics;
@@ -416,6 +422,38 @@ int plasma_config_load(
             config->selection.excluded_theme_keys,
             key_list,
             (int)sizeof(config->selection.excluded_theme_keys)
+        );
+    }
+    selection_flag = config->transition.enabled;
+    if (plasma_read_flag(key, "TransitionsEnabled", &selection_flag)) {
+        config->transition.enabled = selection_flag;
+    }
+    value_dword = (unsigned long)config->transition.policy;
+    if (plasma_read_dword(key, "TransitionPolicy", &value_dword)) {
+        config->transition.policy = (plasma_transition_policy)value_dword;
+    }
+    value_dword = (unsigned long)config->transition.fallback_policy;
+    if (plasma_read_dword(key, "TransitionFallbackPolicy", &value_dword)) {
+        config->transition.fallback_policy = (plasma_transition_fallback_policy)value_dword;
+    }
+    value_dword = (unsigned long)config->transition.seed_policy;
+    if (plasma_read_dword(key, "TransitionSeedPolicy", &value_dword)) {
+        config->transition.seed_policy = (plasma_transition_seed_continuity_policy)value_dword;
+    }
+    value_dword = config->transition.interval_millis;
+    if (plasma_read_dword(key, "TransitionIntervalMillis", &value_dword)) {
+        config->transition.interval_millis = value_dword;
+    }
+    value_dword = config->transition.duration_millis;
+    if (plasma_read_dword(key, "TransitionDurationMillis", &value_dword)) {
+        config->transition.duration_millis = value_dword;
+    }
+    transition_key[0] = '\0';
+    if (plasma_read_string(key, "JourneyKey", transition_key, sizeof(transition_key))) {
+        lstrcpynA(
+            config->transition.journey_key,
+            transition_key,
+            (int)sizeof(config->transition.journey_key)
         );
     }
 
@@ -546,6 +584,51 @@ int plasma_config_save(
             key,
             "ExcludedThemeKeys",
             safe_product_config.selection.excluded_theme_keys
+        );
+    }
+    if (result == ERROR_SUCCESS) {
+        result = plasma_write_flag(key, "TransitionsEnabled", safe_product_config.transition.enabled);
+    }
+    if (result == ERROR_SUCCESS) {
+        result = plasma_write_dword(
+            key,
+            "TransitionPolicy",
+            (unsigned long)safe_product_config.transition.policy
+        );
+    }
+    if (result == ERROR_SUCCESS) {
+        result = plasma_write_dword(
+            key,
+            "TransitionFallbackPolicy",
+            (unsigned long)safe_product_config.transition.fallback_policy
+        );
+    }
+    if (result == ERROR_SUCCESS) {
+        result = plasma_write_dword(
+            key,
+            "TransitionSeedPolicy",
+            (unsigned long)safe_product_config.transition.seed_policy
+        );
+    }
+    if (result == ERROR_SUCCESS) {
+        result = plasma_write_dword(
+            key,
+            "TransitionIntervalMillis",
+            safe_product_config.transition.interval_millis
+        );
+    }
+    if (result == ERROR_SUCCESS) {
+        result = plasma_write_dword(
+            key,
+            "TransitionDurationMillis",
+            safe_product_config.transition.duration_millis
+        );
+    }
+    if (result == ERROR_SUCCESS) {
+        result = plasma_write_string(
+            key,
+            "JourneyKey",
+            safe_product_config.transition.journey_key
         );
     }
 
@@ -691,11 +774,7 @@ static void plasma_apply_preset_selection(HWND dialog, const screensave_saver_mo
     }
 
     diagnostics_enabled = IsDlgButtonChecked(dialog, IDC_PLASMA_DIAGNOSTICS) == BST_CHECKED;
-    screensave_common_config_set_defaults(&common_config);
-    product_config.effect_mode = PLASMA_EFFECT_FIRE;
-    product_config.speed_mode = PLASMA_SPEED_GENTLE;
-    product_config.resolution_mode = PLASMA_RESOLUTION_STANDARD;
-    product_config.smoothing_mode = PLASMA_SMOOTHING_SOFT;
+    plasma_config_set_defaults(&common_config, &product_config, sizeof(product_config));
     plasma_apply_preset_to_config(module->presets[preset_index].preset_key, &common_config, &product_config);
     plasma_apply_settings_to_dialog(dialog, module, &common_config, &product_config);
     CheckDlgButton(dialog, IDC_PLASMA_DIAGNOSTICS, diagnostics_enabled ? BST_CHECKED : BST_UNCHECKED);
@@ -711,10 +790,13 @@ static void plasma_read_dialog_settings(
     LRESULT preset_index;
     LRESULT theme_index;
     plasma_selection_preferences saved_selection;
+    plasma_transition_preferences saved_transition;
 
     saved_selection = product_config->selection;
+    saved_transition = product_config->transition;
     plasma_config_set_defaults(common_config, product_config, sizeof(*product_config));
     product_config->selection = saved_selection;
+    product_config->transition = saved_transition;
 
     preset_index = SendDlgItemMessageA(dialog, IDC_PLASMA_PRESET, CB_GETCURSEL, 0U, 0L);
     if (preset_index != CB_ERR && (unsigned int)preset_index < module->preset_count) {
@@ -785,14 +867,17 @@ static INT_PTR CALLBACK plasma_config_dialog_proc(HWND dialog, UINT message, WPA
 
         if (LOWORD(wParam) == IDC_PLASMA_DEFAULTS) {
             plasma_selection_preferences saved_selection;
+            plasma_transition_preferences saved_transition;
 
             saved_selection = dialog_state->product_config->selection;
+            saved_transition = dialog_state->product_config->transition;
             plasma_config_set_defaults(
                 dialog_state->common_config,
                 dialog_state->product_config,
                 sizeof(*dialog_state->product_config)
             );
             dialog_state->product_config->selection = saved_selection;
+            dialog_state->product_config->transition = saved_transition;
             plasma_apply_settings_to_dialog(
                 dialog,
                 dialog_state->module,
@@ -989,6 +1074,35 @@ static int plasma_parse_bool_text(const char *text, int *value_out)
     return 0;
 }
 
+static int plasma_parse_ulong_text(const char *text, unsigned long *value_out)
+{
+    char *end;
+    unsigned long value;
+
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+
+    value = strtoul(text, &end, 10);
+    if (end == text || (end != NULL && *end != '\0')) {
+        return 0;
+    }
+
+    *value_out = value;
+    return 1;
+}
+
+static const char *plasma_format_ulong_text(unsigned long value, char *buffer, unsigned int buffer_size)
+{
+    if (buffer == NULL || buffer_size < 2U) {
+        return "";
+    }
+
+    wsprintfA(buffer, "%lu", value);
+    buffer[buffer_size - 1U] = '\0';
+    return buffer;
+}
+
 int plasma_config_export_settings_entries(
     const screensave_saver_module *module,
     const screensave_common_config *common_config,
@@ -1000,6 +1114,8 @@ int plasma_config_export_settings_entries(
 )
 {
     const plasma_config *config;
+    char interval_text[32];
+    char duration_text[32];
 
     (void)module;
     (void)common_config;
@@ -1074,6 +1190,56 @@ int plasma_config_export_settings_entries(
             "content",
             "excluded_theme_keys",
             config->selection.excluded_theme_keys
+        ) &&
+        writer->write_string(
+            writer->context,
+            "transition",
+            "enabled",
+            config->transition.enabled ? "true" : "false"
+        ) &&
+        writer->write_string(
+            writer->context,
+            "transition",
+            "policy",
+            plasma_transition_policy_name(config->transition.policy)
+        ) &&
+        writer->write_string(
+            writer->context,
+            "transition",
+            "fallback_policy",
+            plasma_transition_fallback_policy_name(config->transition.fallback_policy)
+        ) &&
+        writer->write_string(
+            writer->context,
+            "transition",
+            "seed_continuity_policy",
+            plasma_transition_seed_policy_name(config->transition.seed_policy)
+        ) &&
+        writer->write_string(
+            writer->context,
+            "transition",
+            "interval_millis",
+            plasma_format_ulong_text(
+                config->transition.interval_millis,
+                interval_text,
+                (unsigned int)sizeof(interval_text)
+            )
+        ) &&
+        writer->write_string(
+            writer->context,
+            "transition",
+            "duration_millis",
+            plasma_format_ulong_text(
+                config->transition.duration_millis,
+                duration_text,
+                (unsigned int)sizeof(duration_text)
+            )
+        ) &&
+        writer->write_string(
+            writer->context,
+            "transition",
+            "journey_key",
+            config->transition.journey_key
         );
 }
 
@@ -1163,6 +1329,32 @@ int plasma_config_import_settings_entry(
                 value,
                 (int)sizeof(config->selection.excluded_theme_keys)
             );
+            return 1;
+        }
+        return 1;
+    }
+
+    if (lstrcmpiA(section, "transition") == 0) {
+        if (lstrcmpiA(key, "enabled") == 0) {
+            return plasma_parse_bool_text(value, &config->transition.enabled);
+        }
+        if (lstrcmpiA(key, "policy") == 0) {
+            return plasma_transition_parse_policy(value, &config->transition.policy);
+        }
+        if (lstrcmpiA(key, "fallback_policy") == 0) {
+            return plasma_transition_parse_fallback_policy(value, &config->transition.fallback_policy);
+        }
+        if (lstrcmpiA(key, "seed_continuity_policy") == 0) {
+            return plasma_transition_parse_seed_policy(value, &config->transition.seed_policy);
+        }
+        if (lstrcmpiA(key, "interval_millis") == 0) {
+            return plasma_parse_ulong_text(value, &config->transition.interval_millis);
+        }
+        if (lstrcmpiA(key, "duration_millis") == 0) {
+            return plasma_parse_ulong_text(value, &config->transition.duration_millis);
+        }
+        if (lstrcmpiA(key, "journey_key") == 0) {
+            lstrcpynA(config->transition.journey_key, value, (int)sizeof(config->transition.journey_key));
             return 1;
         }
         return 1;
