@@ -54,6 +54,7 @@ Run:
 The helper checks:
 
 - required manifest fields
+- bounded optional `[routing]` fields when present
 - safe relative entry paths
 - presence of referenced preset/theme files
 - required preset/theme header sections
@@ -62,5 +63,5 @@ The helper checks:
 
 - do not add executable code to packs
 - do not use absolute paths or `..` path traversal
-- do not claim a pack changes renderer capabilities
+- do not claim a pack changes renderer capabilities beyond honest bounded routing notes
 - do not turn pack authoring into a plugin or marketplace workflow

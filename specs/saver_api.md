@@ -38,6 +38,7 @@ The host layer is responsible for:
 A saver product is responsible for:
 
 - Declaring stable product metadata and supported capability band policy.
+- Declaring stable compiled routing policy for the supported public renderer ladder.
 - Defining product-local presets, themes, and content references.
 - Creating session-local state from the resolved config and supplied seed.
 - Updating that state over time without corrupting host-owned resources.
@@ -53,6 +54,7 @@ This means:
 
 - Baseline savers should be able to run on the GDI contract alone.
 - Savers may describe optional enhanced behavior for higher capability bands or higher public renderer tiers.
+- Saver manifests and related preset or pack metadata may mirror routing intent, but live runtime routing must stay anchored to stable public types and compiled saver policy rather than private backend trivia.
 - Direct backend calls belong in the platform layer unless an explicit later spec introduces a tightly controlled exception.
 - Savers must not depend on backend-private kinds, backend-private registries, or private service seams directly.
 

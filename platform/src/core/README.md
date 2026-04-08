@@ -24,4 +24,5 @@ Series 15 adds only narrow tiered renderer-selection and fallback-reporting glue
 SX01 keeps the public renderer contract intact while moving backend kinds, band routing, capability capture, present-path policy, and future image/text service seams into the new private `substrate/` layer.
 SX05 and SX06 then make the `modern` and `premium` bands real without widening the public renderer contract, so this core layer continues to own selection, fallback, and private caps reporting while backend-private lifecycle stays in `platform/src/render/`.
 SX07 keeps those lanes primary while expanding the same private core layer with typed image, text, present-policy, and backend-family seams plus a small private registry that can host later optional adapters without dragging products onto private headers.
+SX08 keeps the same layering while adding an explicit routing-policy unit beneath the public renderer contract so compiled saver policy, manifest mirrors, and observed backend availability can meet in one central selection path.
 Type: runtime implementation.

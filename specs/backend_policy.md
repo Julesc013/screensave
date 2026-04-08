@@ -15,6 +15,7 @@ The following remain public doctrine during `SX`:
 - the renderer ladder `gdi`, `gl11`, `gl21`, `gl33`, `gl46`, `null`
 - the current narrow renderer contract under `platform/include/screensave/renderer_api.h`
 - the current saver-facing contract under `specs/saver_api.md`
+- the saver-declared routing intent and manifest mirror rules under `specs/routing_policy.md`
 - the compatibility-first posture under `specs/compatibility.md`
 - the classic Win32 `.scr` host model
 - the rule that `gdi` is the guaranteed floor and `null` is internal only

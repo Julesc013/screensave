@@ -35,6 +35,7 @@ During `SX`:
 - richer backend kinds, internal bands, registries, and service seams may grow privately
 - those private abstractions do not replace the public tier names
 - requested and active public tier reporting remains part of the stable renderer contract
+- the public contract may carry saver-aware renderer creation helpers that use public saver and config types while keeping private routing machinery out of product code
 - `null` remains internal-only even when the private substrate beneath it evolves
 
 See [render_bands.md](./render_bands.md) and [backend_policy.md](./backend_policy.md) for the private substrate rules that sit beneath this public contract.
@@ -88,6 +89,7 @@ It may add broader feature coverage only when all of the following are true:
 Fallback behavior is part of the contract:
 
 - If a requested higher tier is unavailable, the platform selects the highest available compatible lower tier.
+- If saver policy declares a preferred or minimum lane, the platform may apply that public-ladder policy before the backend fallback walk begins.
 - Automatic selection may walk `gl46 -> gl33 -> gl21 -> gl11 -> gdi -> null`, but `null` remains an internal safety fallback rather than a normal product capability band or release tier.
 - Products must degrade behavior intentionally instead of failing unpredictably.
 - If a product cannot offer a valid universal path, it must be classified explicitly later as outside the universal saver set.

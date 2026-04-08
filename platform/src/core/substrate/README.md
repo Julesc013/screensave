@@ -12,6 +12,7 @@ Current contents:
 - backend identity and band mapping helpers
 - backend capability capture and failure bookkeeping
 - backend registry and selection scaffolding
+- routing-policy evaluation that turns requested, minimum, preferred, selected, and degraded outcomes into one central flow
 - present-path routing helpers
 - typed private image, text, present-policy, and backend-family seam helpers
 - a private service registry that binds those seams beside the active backend substrate

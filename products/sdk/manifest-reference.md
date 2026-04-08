@@ -17,6 +17,7 @@ Required sections:
 Recommended section:
 
 - `[notes]`
+- `[routing]`
 
 Minimum fields:
 
@@ -38,9 +39,15 @@ gl11=0
 gl21=0
 preview_safe=1
 long_run_stable=1
+
+[routing]
+minimum_kind=gdi
+preferred_kind=gl11
+quality_class=safe
 ```
 
 Keep capability claims honest.
+Keep `[routing]` aligned with the compiled saver module policy used at runtime.
 
 ## Built-In Saver Preset Catalog Files
 
@@ -100,6 +107,16 @@ theme_key=<theme_key>
 ```
 
 Add saver-owned keys under `[product]`.
+Optional routing intent may be recorded under:
+
+```ini
+[routing]
+minimum_kind=gdi
+preferred_kind=gl11
+quality_class=safe
+```
+
+This metadata is advisory unless the importing runtime surface treats the preset file itself as the active routing input.
 
 ## Theme Export / Import File
 
@@ -162,3 +179,13 @@ theme_1=themes/<theme>.theme.ini
 
 Use only safe relative paths.
 Do not use absolute paths or `..`.
+Optional routing intent may be recorded under:
+
+```ini
+[routing]
+minimum_kind=gdi
+preferred_kind=gl11
+quality_class=safe
+```
+
+This metadata is advisory unless the consuming runtime surface actively routes through that pack artifact.

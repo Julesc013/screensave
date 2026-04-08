@@ -46,7 +46,7 @@ It remains an internal safety fallback beneath the normal compatibility walk.
 The internal routing model is:
 
 1. A request enters through the existing public tier selection path, including `auto`.
-2. The substrate derives a requested band ceiling and product allowance from that public request and the product's declared support.
+2. The substrate derives a requested band ceiling and product allowance from that public request plus the saver's declared routing policy and supported ladder under `specs/routing_policy.md`.
 3. The substrate selects the highest available compatible band at or below that ceiling.
 4. The substrate then chooses a private backend kind that satisfies that selected band.
 5. The public renderer contract still reports the requested and active public tier plus the selection and fallback reasons.

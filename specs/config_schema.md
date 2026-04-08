@@ -59,6 +59,7 @@ The baseline shared preset format is a human-readable `.preset.ini` file with th
 - `[format]` with `kind=preset` and `version=1`
 - `[product]` with the canonical saver `key` and a `schema_version`
 - `[common]` for shared settings such as detail level, seed mode, preset key, theme key, and randomization settings
+- optional `[routing]` for bounded capability intent such as `minimum_kind`, `preferred_kind`, `quality_class`, and honest degraded or unsupported-path notes
 - optional `[product]` keys consumed by the owning saver's import/export hooks
 
 ## Themes
@@ -99,6 +100,7 @@ Packs are shareable data bundles, not code extensions.
 The baseline pack manifest is a human-readable `pack.ini` file with:
 
 - `[pack]` containing `format=screensave-pack`, `version=1`, `schema_version`, canonical `product_key`, `pack_key`, `display_name`, and optional description text
+- optional `[routing]` containing bounded capability intent such as `minimum_kind`, `preferred_kind`, `quality_class`, and honest degraded or unsupported-path notes
 - `[files]` containing relative `preset_*`, `theme_*`, and `scene_*` entries
 
 Pack entries must be safe relative paths.
@@ -166,6 +168,7 @@ Readers may translate legacy saver keys through the canonical rename map when th
 Imported settings must be clamped through the owning saver contract before they are treated as valid runtime state.
 
 Unsupported or invalid preset/theme/pack data must be rejected safely with diagnostics rather than partially applied silently.
+Missing optional routing metadata must inherit the owning saver policy conservatively rather than making older content invalid.
 
 ## Storage Commitments
 

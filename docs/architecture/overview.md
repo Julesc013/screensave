@@ -47,4 +47,5 @@ During `SX`, the architecture keeps the public renderer ladder and the current n
 `SX05` makes `gl33` the first real modern tier by adding a bounded modern backend under the private substrate and proving it on `gallery` without turning that proof into a suite-wide migration.
 `SX06` then makes `gl46` the real premium tier with the same bounded-proof discipline and the same explicit degradation path back through `gl33`, `gl21`, `gl11`, and `gdi`.
 `SX07` keeps that GL ladder primary while adding private image, text, present-policy, and future-backend-family seams beside it so later optional adapter work can land without another public-contract reset.
+`SX08` then makes saver capability intent and routing policy explicit through compiled module metadata plus durable manifest mirrors so renderer selection can stay centralized, truthful, and future-proof without reopening the public ladder.
 `gallery` is the bounded renderer-proof surface during the renderer-tier work, BenchLab remains diagnostics-only, and `plasma` stays the first flagship `PL` track rather than becoming the scope of `SX`.

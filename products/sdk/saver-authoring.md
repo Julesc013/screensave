@@ -71,6 +71,7 @@ Product-local:
 - Treat `gl11` and `gl21` as optional.
 - Do not claim `gl33` or `gl46` support unless a real backend path exists for the product.
 - Do not assume the meta-saver, suite app, or packaging flow will hide unsupported renderer choices.
+- Keep the manifest `[routing]` section aligned with the compiled saver module routing policy because runtime selection uses the compiled module as the live source of truth.
 
 ## Validation Before Build Wiring
 
