@@ -8,8 +8,8 @@ This document defines the active `SX` program that sits after the closed `SS` br
 
 - `SS00`, `SS01`, and `SS02` are complete.
 - Optional `SS03` remains a reserved maintenance-policy sidecar, not the active platform program.
-- `SX00`, `SX01`, `SX02`, `SX03`, `SX04`, `SX05`, `SX06`, `SX07`, and `SX08` are complete.
-- Optional `SX09` is the next substrate checkpoint if we want an explicit `PL` handoff and adapter-proof gate after the capability-routing pass.
+- `SX00`, `SX01`, `SX02`, `SX03`, `SX04`, `SX05`, `SX06`, `SX07`, `SX08`, and `SX09` are complete.
+- `SX09` closed the series with a bounded proof matrix, deterministic BenchLab capture support, and an explicit `PL00` substrate handoff.
 - `PL` begins only after `SX` hands off a proven substrate.
 
 ## What SX Is
@@ -46,7 +46,7 @@ The current intended `SX` order is:
 | `SX06` | GL46 premium-lane bring-up | make `gl46` real as the bounded premium tier without weakening the lower-tier degradation model |
 | `SX07` | future-service seams | add private image, text, present-policy, and future-backend-family seams without turning them into public doctrine or adopted non-GL families |
 | `SX08` | capability manifests and routing policy | make saver intent, representative preset and pack metadata, and central routing outcomes explicit and diagnosable without rewriting the public renderer doctrine |
-| optional `SX09` | substrate handoff checkpoint | record that the hardened GL ladder, private seam layer, and capability-routing policy are stable enough for later optional adapter work and `PL` without reopening the constitution |
+| `SX09` | substrate handoff checkpoint | prove the finished ladder, strengthen BenchLab routing observability and deterministic reports, and hand `PL00` a bounded evidence-backed substrate contract |
 
 These steps are ordered on purpose.
 Later higher-capability work must not skip substrate hardening of the lower tiers.

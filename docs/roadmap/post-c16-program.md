@@ -44,8 +44,8 @@ Optional `SS03` remains reserved, but it is not the active platform program gate
 `SX` is the bounded post-`SS` and pre-`PL` substrate series.
 It exists to make the private substrate more durable without replacing the public renderer ladder or reopening product doctrine.
 
-`SX00`, `SX01`, `SX02`, `SX03`, `SX04`, `SX05`, `SX06`, `SX07`, and `SX08` are now complete.
-The next substrate step is optional `SX09`, which may record the explicit adapter-proof and `PL` handoff checkpoint if that gate is still useful after the capability-routing pass.
+`SX00`, `SX01`, `SX02`, `SX03`, `SX04`, `SX05`, `SX06`, `SX07`, `SX08`, and `SX09` are now complete.
+The substrate closes with the explicit validation and handoff gate recorded in [../../validation/notes/sx09-substrate-validation-summary.md](../../validation/notes/sx09-substrate-validation-summary.md) and [pl00-substrate-handoff.md](./pl00-substrate-handoff.md).
 
 `SX` is not:
 
@@ -62,6 +62,7 @@ The supporting normative specs live in [../../specs/render_bands.md](../../specs
 
 `PL` begins only after `SS` is closed and `SX` is complete.
 `PL` is the first bounded flagship expansion program, with `plasma` as its lead product family.
+`PL00` should begin from [pl00-substrate-handoff.md](./pl00-substrate-handoff.md) rather than reopening substrate architecture.
 
 `SX` does not replace `PL`.
 `PL` is still where deeper product-facing flagship expansion begins.
