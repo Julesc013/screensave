@@ -119,6 +119,12 @@
     <ClCompile Include="..\..\..\platform\src\render\gl33\gl33_primitives.c" />
     <ClCompile Include="..\..\..\platform\src\render\gl33\gl33_state.c" />
     <ClCompile Include="..\..\..\platform\src\render\gl46\gl46_backend.c" />
+    <ClCompile Include="..\..\..\platform\src\render\gl46\gl46_caps.c" />
+    <ClCompile Include="..\..\..\platform\src\render\gl46\gl46_capture.c" />
+    <ClCompile Include="..\..\..\platform\src\render\gl46\gl46_context.c" />
+    <ClCompile Include="..\..\..\platform\src\render\gl46\gl46_present.c" />
+    <ClCompile Include="..\..\..\platform\src\render\gl46\gl46_primitives.c" />
+    <ClCompile Include="..\..\..\platform\src\render\gl46\gl46_state.c" />
     <ClCompile Include="..\..\..\platform\src\render\null\null_backend.c" />
     <ClCompile Include="..\..\..\platform\src\host\win32_scr\scr_args.c" />
     <ClCompile Include="..\..\..\platform\src\host\win32_scr\scr_config_dialog.c" />

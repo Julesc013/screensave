@@ -83,6 +83,12 @@ PLATFORM_OBJS := \
 	$(PLATFORM_DIR)/gl33_primitives.o \
 	$(PLATFORM_DIR)/gl33_state.o \
 	$(PLATFORM_DIR)/gl46_backend.o \
+	$(PLATFORM_DIR)/gl46_caps.o \
+	$(PLATFORM_DIR)/gl46_capture.o \
+	$(PLATFORM_DIR)/gl46_context.o \
+	$(PLATFORM_DIR)/gl46_present.o \
+	$(PLATFORM_DIR)/gl46_primitives.o \
+	$(PLATFORM_DIR)/gl46_state.o \
 	$(PLATFORM_DIR)/null_backend.o \
 	$(PLATFORM_DIR)/scr_args.o \
 	$(PLATFORM_DIR)/scr_config_dialog.o \

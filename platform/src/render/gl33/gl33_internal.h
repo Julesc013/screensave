@@ -79,6 +79,8 @@ typedef ptrdiff_t screensave_gl33_sizeiptr;
 typedef HGLRC (WINAPI *PFNWGLCREATECONTEXTATTRIBSARBPROC)(HDC, HGLRC, const int *);
 #endif
 
+#ifndef SCREENSAVE_GL_SHARED_PIPELINE_PROC_TYPES_DEFINED
+#define SCREENSAVE_GL_SHARED_PIPELINE_PROC_TYPES_DEFINED
 typedef void (APIENTRY *PFNGLACTIVETEXTUREPROC)(GLenum texture);
 typedef void (APIENTRY *PFNGLGENBUFFERSPROC)(GLsizei count, GLuint *buffers);
 typedef void (APIENTRY *PFNGLBINDBUFFERPROC)(GLenum target, GLuint buffer);
@@ -137,6 +139,7 @@ typedef void (APIENTRY *PFNGLGENFRAMEBUFFERSPROC)(GLsizei count, GLuint *framebu
 typedef void (APIENTRY *PFNGLBINDFRAMEBUFFERPROC)(GLenum target, GLuint framebuffer);
 typedef void (APIENTRY *PFNGLDELETEFRAMEBUFFERSPROC)(GLsizei count, const GLuint *framebuffers);
 typedef GLenum (APIENTRY *PFNGLCHECKFRAMEBUFFERSTATUSPROC)(GLenum target);
+#endif
 
 #define SCREENSAVE_GL33_CAPABILITIES \
     (SCREENSAVE_RENDERER_CAP_CLEAR | \

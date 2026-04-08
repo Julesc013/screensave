@@ -65,7 +65,24 @@ static const screensave_display_mapping g_renderer_reason_mappings[] = {
     { "gl33-modern-context-incomplete", "OpenGL 3.3 modern context creation is incomplete for the modern lane" },
     { "gl33-required-functions-missing", "OpenGL 3.3 required functions are missing for the modern lane" },
     { "gl33-pipeline-create-failed", "OpenGL 3.3 shader pipeline creation failed" },
-    { "gl46-placeholder-unavailable", "OpenGL 4.6 is a placeholder in this build" }
+    { "gl46-out-of-memory", "OpenGL 4.6 backend ran out of memory" },
+    { "gl46-make-current-failed", "OpenGL 4.6 MakeCurrent failed" },
+    { "gl46-capture-invalid-state", "OpenGL 4.6 capability capture has no valid state" },
+    { "gl46-capture-string-failed", "OpenGL 4.6 capability strings could not be read" },
+    { "gl46-choose-pixel-format-failed", "OpenGL 4.6 pixel-format selection failed" },
+    { "gl46-set-pixel-format-failed", "OpenGL 4.6 SetPixelFormat failed" },
+    { "gl46-describe-pixel-format-failed", "OpenGL 4.6 pixel-format inspection failed" },
+    { "gl46-pixel-format-without-opengl", "OpenGL 4.6 pixel format does not expose OpenGL" },
+    { "gl46-invalid-window", "OpenGL 4.6 target window is invalid" },
+    { "gl46-getdc-failed", "OpenGL 4.6 GetDC failed" },
+    { "gl46-bootstrap-context-failed", "OpenGL 4.6 bootstrap context creation failed" },
+    { "gl46-bootstrap-make-current-failed", "OpenGL 4.6 bootstrap MakeCurrent failed" },
+    { "gl46-create-context-attribs-unavailable", "OpenGL 4.6 context attributes are unavailable" },
+    { "gl46-create-context-attribs-failed", "OpenGL 4.6 context attribute creation failed" },
+    { "gl46-version-too-old", "OpenGL 4.6 capability bundle is incomplete for the premium lane" },
+    { "gl46-premium-context-incomplete", "OpenGL 4.6 premium context creation is incomplete for the premium lane" },
+    { "gl46-required-functions-missing", "OpenGL 4.6 required functions are missing for the premium lane" },
+    { "gl46-pipeline-create-failed", "OpenGL 4.6 shader pipeline creation failed" }
 };
 
 static const screensave_display_mapping g_renderer_status_mappings[] = {
@@ -84,6 +101,8 @@ static const screensave_display_mapping g_renderer_status_mappings[] = {
     { "advanced-context-single-buffered", "Advanced context, single-buffered" },
     { "modern-context-double-buffered", "Modern context, double-buffered" },
     { "modern-context-single-buffered", "Modern context, single-buffered" },
+    { "premium-context-double-buffered", "Premium context, double-buffered" },
+    { "premium-context-single-buffered", "Premium context, single-buffered" },
     { "fallback-gl33", "Running on an OpenGL 3.3 fallback" },
     { "fallback-gl21", "Running on an OpenGL 2.1 fallback" },
     { "fallback-gl11", "Running on an OpenGL 1.1 fallback" },

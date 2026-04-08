@@ -214,6 +214,59 @@ static int screensave_backend_registry_capture_caps_gl33(
     return 1;
 }
 
+static int screensave_backend_registry_capture_caps_gl46(
+    const screensave_renderer *renderer,
+    screensave_backend_caps *caps_out
+)
+{
+    screensave_gl46_state *state;
+
+    screensave_backend_caps_init(
+        caps_out,
+        SCREENSAVE_BACKEND_KIND_GL46,
+        SCREENSAVE_RENDER_BAND_PREMIUM
+    );
+    screensave_backend_caps_apply_renderer_info(caps_out, &renderer->info);
+
+    if (!screensave_gl46_state_from_renderer((screensave_renderer *)renderer, &state)) {
+        return 0;
+    }
+
+    if (state->caps.double_buffered) {
+        caps_out->state_flags |= SCREENSAVE_BACKEND_CAPS_STATE_DOUBLE_BUFFERED;
+    }
+    if (state->caps.support_gdi) {
+        caps_out->state_flags |= SCREENSAVE_BACKEND_CAPS_STATE_SUPPORT_GDI;
+    }
+    if (state->caps.generic_format) {
+        caps_out->state_flags |= SCREENSAVE_BACKEND_CAPS_STATE_GENERIC_FORMAT;
+    }
+    if (state->caps.premium_context) {
+        caps_out->state_flags |= SCREENSAVE_BACKEND_CAPS_STATE_PREMIUM_CONTEXT;
+    }
+    if (state->caps.compatibility_profile) {
+        caps_out->state_flags |= SCREENSAVE_BACKEND_CAPS_STATE_COMPAT_PROFILE;
+    }
+    caps_out->private_capability_flags = state->caps.private_flags;
+    caps_out->required_private_capability_flags = state->caps.bundle.required_flags;
+    caps_out->preferred_private_capability_flags = state->caps.bundle.preferred_flags;
+    caps_out->missing_private_capability_flags = state->caps.bundle.missing_required_flags;
+    caps_out->rgba_bits = state->caps.rgba_bits;
+    caps_out->depth_bits = state->caps.depth_bits;
+    caps_out->major_version = state->caps.major_version;
+    caps_out->minor_version = state->caps.minor_version;
+    if (state->caps.vendor[0] != '\0') {
+        lstrcpynA(caps_out->vendor, state->caps.vendor, (int)sizeof(caps_out->vendor));
+    }
+    if (state->caps.renderer[0] != '\0') {
+        lstrcpynA(caps_out->renderer, state->caps.renderer, (int)sizeof(caps_out->renderer));
+    }
+    if (state->caps.version[0] != '\0') {
+        lstrcpynA(caps_out->version, state->caps.version, (int)sizeof(caps_out->version));
+    }
+    return 1;
+}
+
 static int screensave_backend_registry_resize_gl11(
     screensave_renderer *renderer,
     const screensave_sizei *drawable_size
@@ -275,6 +328,27 @@ static void screensave_backend_registry_set_present_dc_gl33(
 static void screensave_backend_registry_clear_present_dc_gl33(screensave_renderer *renderer)
 {
     screensave_gl33_renderer_clear_present_dc(renderer);
+}
+
+static int screensave_backend_registry_resize_gl46(
+    screensave_renderer *renderer,
+    const screensave_sizei *drawable_size
+)
+{
+    return screensave_gl46_renderer_resize(renderer, drawable_size);
+}
+
+static void screensave_backend_registry_set_present_dc_gl46(
+    screensave_renderer *renderer,
+    HDC present_dc
+)
+{
+    screensave_gl46_renderer_set_present_dc(renderer, present_dc);
+}
+
+static void screensave_backend_registry_clear_present_dc_gl46(screensave_renderer *renderer)
+{
+    screensave_gl46_renderer_clear_present_dc(renderer);
 }
 
 static int screensave_backend_registry_resize_null(
@@ -384,13 +458,12 @@ static const screensave_backend_descriptor g_screensave_backend_descriptors[] = 
         SCREENSAVE_RENDERER_KIND_GL46,
         SCREENSAVE_RENDER_BAND_PREMIUM,
         "gl46",
-        SCREENSAVE_BACKEND_DESCRIPTOR_FLAG_PLACEHOLDER |
         SCREENSAVE_BACKEND_DESCRIPTOR_FLAG_USES_WINDOW_DC,
         screensave_gl46_renderer_create,
-        NULL,
-        NULL,
-        NULL,
-        NULL
+        screensave_backend_registry_resize_gl46,
+        screensave_backend_registry_set_present_dc_gl46,
+        screensave_backend_registry_clear_present_dc_gl46,
+        screensave_backend_registry_capture_caps_gl46
     },
     {
         SCREENSAVE_BACKEND_KIND_NULL,
