@@ -9,12 +9,22 @@ typedef struct plasma_dialog_state_tag {
     const screensave_saver_module *module;
     screensave_common_config *common_config;
     plasma_config *product_config;
+    screensave_common_config working_common_config;
+    plasma_config working_product_config;
 } plasma_dialog_state;
 
 typedef struct plasma_combo_item_tag {
     int value;
     const char *display_name;
 } plasma_combo_item;
+
+typedef struct plasma_dialog_binding_tag {
+    int label_id;
+    int control_id;
+    const char *setting_key;
+} plasma_dialog_binding;
+
+static const char g_plasma_empty_key[] = "";
 
 static const plasma_combo_item g_plasma_effect_items[] = {
     { PLASMA_EFFECT_PLASMA, "Plasma" },
@@ -39,6 +49,70 @@ static const plasma_combo_item g_plasma_smoothing_items[] = {
     { PLASMA_SMOOTHING_SOFT, "Soft Diffusion" },
     { PLASMA_SMOOTHING_GLOW, "Glow Diffusion" }
 };
+
+static const plasma_combo_item g_plasma_surface_items[] = {
+    { PLASMA_SETTINGS_SURFACE_BASIC, "Basic" },
+    { PLASMA_SETTINGS_SURFACE_ADVANCED, "Advanced" },
+    { PLASMA_SETTINGS_SURFACE_AUTHOR_LAB, "Author/Lab" }
+};
+
+static const plasma_combo_item g_plasma_detail_level_items[] = {
+    { SCREENSAVE_DETAIL_LEVEL_LOW, "Low" },
+    { SCREENSAVE_DETAIL_LEVEL_STANDARD, "Standard" },
+    { SCREENSAVE_DETAIL_LEVEL_HIGH, "High" }
+};
+
+static const plasma_combo_item g_plasma_content_filter_items[] = {
+    { PLASMA_CONTENT_FILTER_STABLE_ONLY, "Stable Only" },
+    { PLASMA_CONTENT_FILTER_STABLE_AND_EXPERIMENTAL, "Stable + Experimental" },
+    { PLASMA_CONTENT_FILTER_EXPERIMENTAL_ONLY, "Experimental Only" }
+};
+
+static const plasma_combo_item g_plasma_transition_policy_items[] = {
+    { PLASMA_TRANSITION_POLICY_DISABLED, "Disabled" },
+    { PLASMA_TRANSITION_POLICY_AUTO, "Auto" },
+    { PLASMA_TRANSITION_POLICY_THEME_SET, "Theme Set" },
+    { PLASMA_TRANSITION_POLICY_PRESET_SET, "Preset Set" },
+    { PLASMA_TRANSITION_POLICY_JOURNEY, "Journey" }
+};
+
+static const plasma_combo_item g_plasma_transition_fallback_items[] = {
+    { PLASMA_TRANSITION_FALLBACK_HARD_CUT, "Hard Cut" },
+    { PLASMA_TRANSITION_FALLBACK_THEME_MORPH, "Theme Morph" },
+    { PLASMA_TRANSITION_FALLBACK_REJECT, "Reject" }
+};
+
+static const plasma_combo_item g_plasma_transition_seed_items[] = {
+    { PLASMA_TRANSITION_SEED_CONTINUITY_KEEP_STREAM, "Keep Stream" },
+    { PLASMA_TRANSITION_SEED_CONTINUITY_RESEED_TARGET, "Reseed Target" }
+};
+
+static const plasma_dialog_binding g_plasma_dialog_bindings[] = {
+    { IDC_PLASMA_LABEL_PRESET, IDC_PLASMA_PRESET, "preset_key" },
+    { IDC_PLASMA_LABEL_THEME, IDC_PLASMA_THEME, "theme_key" },
+    { IDC_PLASMA_LABEL_SPEED, IDC_PLASMA_SPEED, "speed_mode" },
+    { IDC_PLASMA_LABEL_DETAIL_LEVEL, IDC_PLASMA_DETAIL_LEVEL, "detail_level" },
+    { IDC_PLASMA_LABEL_EFFECT, IDC_PLASMA_EFFECT, "effect_mode" },
+    { IDC_PLASMA_LABEL_RESOLUTION, IDC_PLASMA_RESOLUTION, "resolution_mode" },
+    { IDC_PLASMA_LABEL_SMOOTHING, IDC_PLASMA_SMOOTHING, "smoothing_mode" },
+    { IDC_PLASMA_LABEL_CONTENT_FILTER, IDC_PLASMA_CONTENT_FILTER, "content_filter" },
+    { 0, IDC_PLASMA_FAVORITES_ONLY, "favorites_only" },
+    { IDC_PLASMA_LABEL_PRESET_SET, IDC_PLASMA_PRESET_SET, "preset_set_key" },
+    { IDC_PLASMA_LABEL_THEME_SET, IDC_PLASMA_THEME_SET, "theme_set_key" },
+    { 0, IDC_PLASMA_TRANSITIONS_ENABLED, "transitions_enabled" },
+    { IDC_PLASMA_LABEL_TRANSITION_POLICY, IDC_PLASMA_TRANSITION_POLICY, "transition_policy" },
+    { IDC_PLASMA_LABEL_JOURNEY, IDC_PLASMA_JOURNEY, "journey_key" },
+    { IDC_PLASMA_LABEL_TRANSITION_FALLBACK, IDC_PLASMA_TRANSITION_FALLBACK, "transition_fallback_policy" },
+    { IDC_PLASMA_LABEL_TRANSITION_SEED_POLICY, IDC_PLASMA_TRANSITION_SEED_POLICY, "transition_seed_policy" },
+    { IDC_PLASMA_LABEL_TRANSITION_INTERVAL, IDC_PLASMA_TRANSITION_INTERVAL, "transition_interval_millis" },
+    { IDC_PLASMA_LABEL_TRANSITION_DURATION, IDC_PLASMA_TRANSITION_DURATION, "transition_duration_millis" },
+    { 0, IDC_PLASMA_DETERMINISTIC, "use_deterministic_seed" },
+    { IDC_PLASMA_LABEL_DETERMINISTIC_SEED, IDC_PLASMA_DETERMINISTIC_SEED_VALUE, "deterministic_seed" },
+    { 0, IDC_PLASMA_DIAGNOSTICS, "diagnostics_overlay_enabled" }
+};
+
+static int plasma_parse_ulong_text(const char *text, unsigned long *value_out);
+static const char *plasma_format_ulong_text(unsigned long value, char *buffer, unsigned int buffer_size);
 
 static void plasma_emit_config_diag(
     screensave_diag_context *diagnostics,
@@ -203,6 +277,7 @@ void plasma_config_set_defaults(
     }
 
     screensave_common_config_set_defaults(common_config);
+    plasma_settings_config_set_defaults(config);
     config->effect_mode = PLASMA_EFFECT_FIRE;
     config->speed_mode = PLASMA_SPEED_GENTLE;
     config->resolution_mode = PLASMA_RESOLUTION_STANDARD;
@@ -227,6 +302,7 @@ void plasma_config_clamp(
     }
 
     screensave_common_config_clamp(common_config);
+    plasma_settings_config_clamp(config);
 
     if (
         common_config->preset_key != NULL &&
@@ -342,6 +418,10 @@ int plasma_config_load(
     value_dword = (unsigned long)common_config->detail_level;
     if (plasma_read_dword(key, "DetailLevel", &value_dword)) {
         common_config->detail_level = (screensave_detail_level)value_dword;
+    }
+    value_dword = (unsigned long)config->settings_surface;
+    if (plasma_read_dword(key, "SettingsSurface", &value_dword)) {
+        config->settings_surface = (int)value_dword;
     }
 
     value_dword = common_config->deterministic_seed;
@@ -516,6 +596,9 @@ int plasma_config_save(
 
     result = plasma_write_dword(key, "DetailLevel", (unsigned long)safe_common_config.detail_level);
     if (result == ERROR_SUCCESS) {
+        result = plasma_write_dword(key, "SettingsSurface", (unsigned long)safe_product_config.settings_surface);
+    }
+    if (result == ERROR_SUCCESS) {
         result = plasma_write_flag(key, "DiagnosticsOverlayEnabled", safe_common_config.diagnostics_overlay_enabled);
     }
     if (result == ERROR_SUCCESS) {
@@ -658,6 +741,24 @@ static LRESULT plasma_add_combo_item(HWND dialog, int control_id, const char *te
     return index;
 }
 
+static const char *plasma_get_combo_string_value(HWND dialog, int control_id, const char *default_value)
+{
+    LRESULT index;
+    LRESULT item_data;
+
+    index = SendDlgItemMessageA(dialog, control_id, CB_GETCURSEL, 0U, 0L);
+    if (index == CB_ERR) {
+        return default_value;
+    }
+
+    item_data = SendDlgItemMessageA(dialog, control_id, CB_GETITEMDATA, (WPARAM)index, 0L);
+    if (item_data == CB_ERR) {
+        return default_value;
+    }
+
+    return (const char *)item_data;
+}
+
 static void plasma_select_combo_value(HWND dialog, int control_id, LPARAM item_data)
 {
     LRESULT count;
@@ -669,6 +770,31 @@ static void plasma_select_combo_value(HWND dialog, int control_id, LPARAM item_d
             SendDlgItemMessageA(dialog, control_id, CB_SETCURSEL, (WPARAM)index, 0L);
             return;
         }
+    }
+}
+
+static void plasma_select_combo_string(HWND dialog, int control_id, const char *selected_key)
+{
+    LRESULT count;
+    LRESULT index;
+
+    count = SendDlgItemMessageA(dialog, control_id, CB_GETCOUNT, 0U, 0L);
+    for (index = 0L; index < count; ++index) {
+        const char *item_key;
+
+        item_key = (const char *)SendDlgItemMessageA(dialog, control_id, CB_GETITEMDATA, (WPARAM)index, 0L);
+        if (
+            item_key != NULL &&
+            selected_key != NULL &&
+            strcmp(item_key, selected_key) == 0
+        ) {
+            SendDlgItemMessageA(dialog, control_id, CB_SETCURSEL, (WPARAM)index, 0L);
+            return;
+        }
+    }
+
+    if (count > 0L) {
+        SendDlgItemMessageA(dialog, control_id, CB_SETCURSEL, 0U, 0L);
     }
 }
 
@@ -690,9 +816,86 @@ static int plasma_get_combo_value(HWND dialog, int control_id, int default_value
     return (int)item_data;
 }
 
-static void plasma_populate_dialog_lists(HWND dialog, const screensave_saver_module *module)
+static void plasma_copy_key_text(char *buffer, unsigned int buffer_size, const char *value)
+{
+    if (buffer == NULL || buffer_size == 0U) {
+        return;
+    }
+
+    buffer[0] = '\0';
+    if (value == NULL) {
+        return;
+    }
+
+    lstrcpynA(buffer, value, (int)buffer_size);
+}
+
+static unsigned long plasma_get_edit_ulong(HWND dialog, int control_id, unsigned long default_value)
+{
+    char text[32];
+    unsigned long parsed_value;
+
+    text[0] = '\0';
+    GetDlgItemTextA(dialog, control_id, text, (int)sizeof(text));
+    if (!plasma_parse_ulong_text(text, &parsed_value)) {
+        return default_value;
+    }
+
+    return parsed_value;
+}
+
+static void plasma_set_edit_ulong(HWND dialog, int control_id, unsigned long value)
+{
+    char text[32];
+
+    SetDlgItemTextA(
+        dialog,
+        control_id,
+        plasma_format_ulong_text(value, text, (unsigned int)sizeof(text))
+    );
+}
+
+static void plasma_set_control_visibility(HWND dialog, int control_id, int visible)
+{
+    HWND control;
+
+    control = GetDlgItem(dialog, control_id);
+    if (control != NULL) {
+        ShowWindow(control, visible ? SW_SHOW : SW_HIDE);
+    }
+}
+
+static void plasma_populate_named_combo(
+    HWND dialog,
+    int control_id,
+    const plasma_combo_item *items,
+    unsigned int item_count
+)
 {
     unsigned int index;
+
+    SendDlgItemMessageA(dialog, control_id, CB_RESETCONTENT, 0U, 0L);
+    for (index = 0U; index < item_count; ++index) {
+        plasma_add_combo_item(dialog, control_id, items[index].display_name, (LPARAM)items[index].value);
+    }
+}
+
+static void plasma_populate_dialog_lists(HWND dialog, const screensave_saver_module *module)
+{
+    const plasma_content_registry *registry;
+    const plasma_content_journey_entry *journeys;
+    unsigned int journey_count;
+    unsigned int index;
+
+    registry = plasma_content_get_registry();
+    journeys = plasma_transition_get_journeys(&journey_count);
+
+    plasma_populate_named_combo(
+        dialog,
+        IDC_PLASMA_SURFACE,
+        g_plasma_surface_items,
+        (unsigned int)(sizeof(g_plasma_surface_items) / sizeof(g_plasma_surface_items[0]))
+    );
 
     SendDlgItemMessageA(dialog, IDC_PLASMA_PRESET, CB_RESETCONTENT, 0U, 0L);
     for (index = 0U; index < module->preset_count; ++index) {
@@ -704,35 +907,342 @@ static void plasma_populate_dialog_lists(HWND dialog, const screensave_saver_mod
         plasma_add_combo_item(dialog, IDC_PLASMA_THEME, module->themes[index].display_name, (LPARAM)index);
     }
 
-    SendDlgItemMessageA(dialog, IDC_PLASMA_EFFECT, CB_RESETCONTENT, 0U, 0L);
-    for (index = 0U; index < (unsigned int)(sizeof(g_plasma_effect_items) / sizeof(g_plasma_effect_items[0])); ++index) {
-        plasma_add_combo_item(dialog, IDC_PLASMA_EFFECT, g_plasma_effect_items[index].display_name, (LPARAM)g_plasma_effect_items[index].value);
+    plasma_populate_named_combo(
+        dialog,
+        IDC_PLASMA_SPEED,
+        g_plasma_speed_items,
+        (unsigned int)(sizeof(g_plasma_speed_items) / sizeof(g_plasma_speed_items[0]))
+    );
+    plasma_populate_named_combo(
+        dialog,
+        IDC_PLASMA_DETAIL_LEVEL,
+        g_plasma_detail_level_items,
+        (unsigned int)(sizeof(g_plasma_detail_level_items) / sizeof(g_plasma_detail_level_items[0]))
+    );
+    plasma_populate_named_combo(
+        dialog,
+        IDC_PLASMA_EFFECT,
+        g_plasma_effect_items,
+        (unsigned int)(sizeof(g_plasma_effect_items) / sizeof(g_plasma_effect_items[0]))
+    );
+    plasma_populate_named_combo(
+        dialog,
+        IDC_PLASMA_RESOLUTION,
+        g_plasma_resolution_items,
+        (unsigned int)(sizeof(g_plasma_resolution_items) / sizeof(g_plasma_resolution_items[0]))
+    );
+    plasma_populate_named_combo(
+        dialog,
+        IDC_PLASMA_SMOOTHING,
+        g_plasma_smoothing_items,
+        (unsigned int)(sizeof(g_plasma_smoothing_items) / sizeof(g_plasma_smoothing_items[0]))
+    );
+    plasma_populate_named_combo(
+        dialog,
+        IDC_PLASMA_CONTENT_FILTER,
+        g_plasma_content_filter_items,
+        (unsigned int)(sizeof(g_plasma_content_filter_items) / sizeof(g_plasma_content_filter_items[0]))
+    );
+    plasma_populate_named_combo(
+        dialog,
+        IDC_PLASMA_TRANSITION_POLICY,
+        g_plasma_transition_policy_items,
+        (unsigned int)(sizeof(g_plasma_transition_policy_items) / sizeof(g_plasma_transition_policy_items[0]))
+    );
+    plasma_populate_named_combo(
+        dialog,
+        IDC_PLASMA_TRANSITION_FALLBACK,
+        g_plasma_transition_fallback_items,
+        (unsigned int)(sizeof(g_plasma_transition_fallback_items) / sizeof(g_plasma_transition_fallback_items[0]))
+    );
+    plasma_populate_named_combo(
+        dialog,
+        IDC_PLASMA_TRANSITION_SEED_POLICY,
+        g_plasma_transition_seed_items,
+        (unsigned int)(sizeof(g_plasma_transition_seed_items) / sizeof(g_plasma_transition_seed_items[0]))
+    );
+
+    SendDlgItemMessageA(dialog, IDC_PLASMA_PRESET_SET, CB_RESETCONTENT, 0U, 0L);
+    plasma_add_combo_item(dialog, IDC_PLASMA_PRESET_SET, "(No Preset Set)", (LPARAM)g_plasma_empty_key);
+    if (registry != NULL) {
+        for (index = 0U; index < registry->preset_set_count; ++index) {
+            plasma_add_combo_item(
+                dialog,
+                IDC_PLASMA_PRESET_SET,
+                registry->preset_sets[index].display_name,
+                (LPARAM)registry->preset_sets[index].set_key
+            );
+        }
     }
 
-    SendDlgItemMessageA(dialog, IDC_PLASMA_SPEED, CB_RESETCONTENT, 0U, 0L);
-    for (index = 0U; index < (unsigned int)(sizeof(g_plasma_speed_items) / sizeof(g_plasma_speed_items[0])); ++index) {
-        plasma_add_combo_item(dialog, IDC_PLASMA_SPEED, g_plasma_speed_items[index].display_name, (LPARAM)g_plasma_speed_items[index].value);
+    SendDlgItemMessageA(dialog, IDC_PLASMA_THEME_SET, CB_RESETCONTENT, 0U, 0L);
+    plasma_add_combo_item(dialog, IDC_PLASMA_THEME_SET, "(No Theme Set)", (LPARAM)g_plasma_empty_key);
+    if (registry != NULL) {
+        for (index = 0U; index < registry->theme_set_count; ++index) {
+            plasma_add_combo_item(
+                dialog,
+                IDC_PLASMA_THEME_SET,
+                registry->theme_sets[index].display_name,
+                (LPARAM)registry->theme_sets[index].set_key
+            );
+        }
     }
 
-    SendDlgItemMessageA(dialog, IDC_PLASMA_RESOLUTION, CB_RESETCONTENT, 0U, 0L);
-    for (index = 0U; index < (unsigned int)(sizeof(g_plasma_resolution_items) / sizeof(g_plasma_resolution_items[0])); ++index) {
-        plasma_add_combo_item(dialog, IDC_PLASMA_RESOLUTION, g_plasma_resolution_items[index].display_name, (LPARAM)g_plasma_resolution_items[index].value);
-    }
-
-    SendDlgItemMessageA(dialog, IDC_PLASMA_SMOOTHING, CB_RESETCONTENT, 0U, 0L);
-    for (index = 0U; index < (unsigned int)(sizeof(g_plasma_smoothing_items) / sizeof(g_plasma_smoothing_items[0])); ++index) {
-        plasma_add_combo_item(dialog, IDC_PLASMA_SMOOTHING, g_plasma_smoothing_items[index].display_name, (LPARAM)g_plasma_smoothing_items[index].value);
+    SendDlgItemMessageA(dialog, IDC_PLASMA_JOURNEY, CB_RESETCONTENT, 0U, 0L);
+    plasma_add_combo_item(dialog, IDC_PLASMA_JOURNEY, "(No Journey)", (LPARAM)g_plasma_empty_key);
+    if (journeys != NULL) {
+        for (index = 0U; index < journey_count; ++index) {
+            plasma_add_combo_item(
+                dialog,
+                IDC_PLASMA_JOURNEY,
+                journeys[index].display_name,
+                (LPARAM)journeys[index].journey_key
+            );
+        }
     }
 }
 
-static void plasma_apply_settings_to_dialog(
+static void plasma_update_dialog_info(
     HWND dialog,
-    const screensave_saver_module *module,
-    const screensave_common_config *common_config,
-    const plasma_config *product_config
+    plasma_settings_surface surface,
+    const plasma_settings_context *settings_context
 )
 {
+    char info[640];
+    const screensave_version_info *version_info;
+
+    version_info = screensave_version_get_info();
+    info[0] = '\0';
+    lstrcpyA(info, "Plasma\r\n");
+    lstrcatA(info, version_info->version_text);
+    lstrcatA(info, "\r\n");
+    if (surface == PLASMA_SETTINGS_SURFACE_BASIC) {
+        lstrcatA(
+            info,
+            "Basic keeps the stable Plasma Classic baseline simple: preset, theme, safe motion, and bounded transition toggles."
+        );
+    } else if (surface == PLASMA_SETTINGS_SURFACE_ADVANCED) {
+        lstrcatA(
+            info,
+            "Advanced adds stable power-user control over field detail, curated sets, deterministic seed mode, and bounded transition policy."
+        );
+    } else {
+        lstrcatA(
+            info,
+            "Author/Lab exposes the deeper product-local selection and transition controls without claiming full BenchLab forcing or inspection."
+        );
+    }
+
+    if (settings_context != NULL) {
+        if (!settings_context->experimental_content_available) {
+            lstrcatA(info, "\r\nExperimental pool controls stay disabled because the shipped Plasma registry is currently stable-only.");
+        }
+        if (!settings_context->favorites_configured) {
+            lstrcatA(info, "\r\nFavorites-only selection stays disabled until favorite keys are configured through product-local settings import/export.");
+        }
+        if (!settings_context->journeys_available) {
+            lstrcatA(info, "\r\nJourney controls stay unavailable until a product-local journey surface exists.");
+        }
+    }
+
+    SetDlgItemTextA(dialog, IDC_PLASMA_INFO, info);
+}
+
+static void plasma_update_dialog_surface(HWND dialog, plasma_dialog_state *dialog_state)
+{
+    plasma_settings_context settings_context;
+    plasma_settings_surface surface;
     unsigned int index;
+
+    if (dialog_state == NULL) {
+        return;
+    }
+
+    surface = (plasma_settings_surface)dialog_state->working_product_config.settings_surface;
+    plasma_settings_context_init(
+        &settings_context,
+        dialog_state->module,
+        &dialog_state->working_common_config,
+        &dialog_state->working_product_config,
+        SCREENSAVE_RENDERER_KIND_UNKNOWN,
+        dialog_state->module != NULL
+            ? dialog_state->module->routing_policy.preferred_kind
+            : SCREENSAVE_RENDERER_KIND_UNKNOWN
+    );
+
+    for (index = 0U; index < (unsigned int)(sizeof(g_plasma_dialog_bindings) / sizeof(g_plasma_dialog_bindings[0])); ++index) {
+        const plasma_dialog_binding *binding;
+        const plasma_settings_descriptor *descriptor;
+        int visible;
+        int enabled;
+
+        binding = &g_plasma_dialog_bindings[index];
+        descriptor = plasma_settings_find_descriptor(binding->setting_key);
+        visible = descriptor != NULL && descriptor->surface <= surface;
+        enabled = visible && plasma_settings_is_available(descriptor, &settings_context);
+
+        if (binding->label_id != 0) {
+            plasma_set_control_visibility(dialog, binding->label_id, visible);
+        }
+        plasma_set_control_visibility(dialog, binding->control_id, visible);
+        EnableWindow(GetDlgItem(dialog, binding->control_id), enabled ? TRUE : FALSE);
+    }
+
+    plasma_update_dialog_info(dialog, surface, &settings_context);
+}
+
+static void plasma_read_dialog_settings(
+    HWND dialog,
+    const screensave_saver_module *module,
+    screensave_common_config *common_config,
+    plasma_config *product_config
+)
+{
+    LRESULT preset_index;
+    LRESULT theme_index;
+    screensave_common_config saved_common_config;
+    plasma_config saved_product_config;
+    const char *selected_key;
+
+    saved_common_config = *common_config;
+    saved_product_config = *product_config;
+
+    plasma_config_set_defaults(common_config, product_config, sizeof(*product_config));
+    product_config->selection = saved_product_config.selection;
+    product_config->transition = saved_product_config.transition;
+    product_config->settings_surface = plasma_get_combo_value(
+        dialog,
+        IDC_PLASMA_SURFACE,
+        saved_product_config.settings_surface
+    );
+    common_config->randomization_mode = saved_common_config.randomization_mode;
+    common_config->randomization_scope = saved_common_config.randomization_scope;
+
+    preset_index = SendDlgItemMessageA(dialog, IDC_PLASMA_PRESET, CB_GETCURSEL, 0U, 0L);
+    if (preset_index != CB_ERR && (unsigned int)preset_index < module->preset_count) {
+        plasma_apply_preset_to_config(module->presets[preset_index].preset_key, common_config, product_config);
+    } else {
+        common_config->preset_key = saved_common_config.preset_key;
+        common_config->theme_key = saved_common_config.theme_key;
+    }
+
+    theme_index = SendDlgItemMessageA(dialog, IDC_PLASMA_THEME, CB_GETCURSEL, 0U, 0L);
+    if (theme_index != CB_ERR && (unsigned int)theme_index < module->theme_count) {
+        common_config->theme_key = module->themes[theme_index].theme_key;
+    }
+
+    common_config->detail_level = (screensave_detail_level)plasma_get_combo_value(
+        dialog,
+        IDC_PLASMA_DETAIL_LEVEL,
+        common_config->detail_level
+    );
+    product_config->speed_mode = plasma_get_combo_value(dialog, IDC_PLASMA_SPEED, product_config->speed_mode);
+    product_config->effect_mode = plasma_get_combo_value(dialog, IDC_PLASMA_EFFECT, product_config->effect_mode);
+    product_config->resolution_mode = plasma_get_combo_value(
+        dialog,
+        IDC_PLASMA_RESOLUTION,
+        product_config->resolution_mode
+    );
+    product_config->smoothing_mode = plasma_get_combo_value(
+        dialog,
+        IDC_PLASMA_SMOOTHING,
+        product_config->smoothing_mode
+    );
+    product_config->selection.content_filter = (plasma_content_filter)plasma_get_combo_value(
+        dialog,
+        IDC_PLASMA_CONTENT_FILTER,
+        product_config->selection.content_filter
+    );
+    product_config->selection.favorites_only =
+        IsDlgButtonChecked(dialog, IDC_PLASMA_FAVORITES_ONLY) == BST_CHECKED;
+    selected_key = plasma_get_combo_string_value(
+        dialog,
+        IDC_PLASMA_PRESET_SET,
+        saved_product_config.selection.preset_set_key
+    );
+    plasma_copy_key_text(
+        product_config->selection.preset_set_key,
+        (unsigned int)sizeof(product_config->selection.preset_set_key),
+        selected_key
+    );
+    selected_key = plasma_get_combo_string_value(
+        dialog,
+        IDC_PLASMA_THEME_SET,
+        saved_product_config.selection.theme_set_key
+    );
+    plasma_copy_key_text(
+        product_config->selection.theme_set_key,
+        (unsigned int)sizeof(product_config->selection.theme_set_key),
+        selected_key
+    );
+    product_config->transition.enabled =
+        IsDlgButtonChecked(dialog, IDC_PLASMA_TRANSITIONS_ENABLED) == BST_CHECKED;
+    product_config->transition.policy = (plasma_transition_policy)plasma_get_combo_value(
+        dialog,
+        IDC_PLASMA_TRANSITION_POLICY,
+        product_config->transition.policy
+    );
+    product_config->transition.fallback_policy =
+        (plasma_transition_fallback_policy)plasma_get_combo_value(
+            dialog,
+            IDC_PLASMA_TRANSITION_FALLBACK,
+            product_config->transition.fallback_policy
+        );
+    product_config->transition.seed_policy =
+        (plasma_transition_seed_continuity_policy)plasma_get_combo_value(
+            dialog,
+            IDC_PLASMA_TRANSITION_SEED_POLICY,
+            product_config->transition.seed_policy
+        );
+    product_config->transition.interval_millis = plasma_get_edit_ulong(
+        dialog,
+        IDC_PLASMA_TRANSITION_INTERVAL,
+        product_config->transition.interval_millis
+    );
+    product_config->transition.duration_millis = plasma_get_edit_ulong(
+        dialog,
+        IDC_PLASMA_TRANSITION_DURATION,
+        product_config->transition.duration_millis
+    );
+    selected_key = plasma_get_combo_string_value(
+        dialog,
+        IDC_PLASMA_JOURNEY,
+        saved_product_config.transition.journey_key
+    );
+    plasma_copy_key_text(
+        product_config->transition.journey_key,
+        (unsigned int)sizeof(product_config->transition.journey_key),
+        selected_key
+    );
+    common_config->use_deterministic_seed = IsDlgButtonChecked(dialog, IDC_PLASMA_DETERMINISTIC) == BST_CHECKED;
+    common_config->deterministic_seed = plasma_get_edit_ulong(
+        dialog,
+        IDC_PLASMA_DETERMINISTIC_SEED_VALUE,
+        saved_common_config.deterministic_seed
+    );
+    common_config->diagnostics_overlay_enabled = IsDlgButtonChecked(dialog, IDC_PLASMA_DIAGNOSTICS) == BST_CHECKED;
+
+    plasma_settings_config_clamp(product_config);
+    plasma_selection_preferences_clamp(&product_config->selection);
+    plasma_transition_preferences_clamp(&product_config->transition);
+}
+
+static void plasma_apply_settings_to_dialog(HWND dialog, plasma_dialog_state *dialog_state)
+{
+    unsigned int index;
+    const screensave_saver_module *module;
+    const screensave_common_config *common_config;
+    const plasma_config *product_config;
+
+    if (dialog_state == NULL) {
+        return;
+    }
+
+    module = dialog_state->module;
+    common_config = &dialog_state->working_common_config;
+    product_config = &dialog_state->working_product_config;
+
+    plasma_select_combo_value(dialog, IDC_PLASMA_SURFACE, (LPARAM)product_config->settings_surface);
 
     if (common_config->preset_key != NULL) {
         for (index = 0U; index < module->preset_count; ++index) {
@@ -752,92 +1262,131 @@ static void plasma_apply_settings_to_dialog(
         }
     }
 
-    plasma_select_combo_value(dialog, IDC_PLASMA_EFFECT, (LPARAM)product_config->effect_mode);
     plasma_select_combo_value(dialog, IDC_PLASMA_SPEED, (LPARAM)product_config->speed_mode);
+    plasma_select_combo_value(dialog, IDC_PLASMA_DETAIL_LEVEL, (LPARAM)common_config->detail_level);
+    plasma_select_combo_value(dialog, IDC_PLASMA_EFFECT, (LPARAM)product_config->effect_mode);
     plasma_select_combo_value(dialog, IDC_PLASMA_RESOLUTION, (LPARAM)product_config->resolution_mode);
     plasma_select_combo_value(dialog, IDC_PLASMA_SMOOTHING, (LPARAM)product_config->smoothing_mode);
+    plasma_select_combo_value(dialog, IDC_PLASMA_CONTENT_FILTER, (LPARAM)product_config->selection.content_filter);
+    plasma_select_combo_string(dialog, IDC_PLASMA_PRESET_SET, product_config->selection.preset_set_key);
+    plasma_select_combo_string(dialog, IDC_PLASMA_THEME_SET, product_config->selection.theme_set_key);
+    plasma_select_combo_value(dialog, IDC_PLASMA_TRANSITION_POLICY, (LPARAM)product_config->transition.policy);
+    plasma_select_combo_string(dialog, IDC_PLASMA_JOURNEY, product_config->transition.journey_key);
+    plasma_select_combo_value(
+        dialog,
+        IDC_PLASMA_TRANSITION_FALLBACK,
+        (LPARAM)product_config->transition.fallback_policy
+    );
+    plasma_select_combo_value(
+        dialog,
+        IDC_PLASMA_TRANSITION_SEED_POLICY,
+        (LPARAM)product_config->transition.seed_policy
+    );
+    plasma_set_edit_ulong(dialog, IDC_PLASMA_TRANSITION_INTERVAL, product_config->transition.interval_millis);
+    plasma_set_edit_ulong(dialog, IDC_PLASMA_TRANSITION_DURATION, product_config->transition.duration_millis);
+    plasma_set_edit_ulong(dialog, IDC_PLASMA_DETERMINISTIC_SEED_VALUE, common_config->deterministic_seed);
 
-    CheckDlgButton(dialog, IDC_PLASMA_DETERMINISTIC, common_config->use_deterministic_seed ? BST_CHECKED : BST_UNCHECKED);
-    CheckDlgButton(dialog, IDC_PLASMA_DIAGNOSTICS, common_config->diagnostics_overlay_enabled ? BST_CHECKED : BST_UNCHECKED);
+    CheckDlgButton(
+        dialog,
+        IDC_PLASMA_FAVORITES_ONLY,
+        product_config->selection.favorites_only ? BST_CHECKED : BST_UNCHECKED
+    );
+    CheckDlgButton(
+        dialog,
+        IDC_PLASMA_TRANSITIONS_ENABLED,
+        product_config->transition.enabled ? BST_CHECKED : BST_UNCHECKED
+    );
+    CheckDlgButton(
+        dialog,
+        IDC_PLASMA_DETERMINISTIC,
+        common_config->use_deterministic_seed ? BST_CHECKED : BST_UNCHECKED
+    );
+    CheckDlgButton(
+        dialog,
+        IDC_PLASMA_DIAGNOSTICS,
+        common_config->diagnostics_overlay_enabled ? BST_CHECKED : BST_UNCHECKED
+    );
+
+    plasma_update_dialog_surface(dialog, dialog_state);
 }
 
-static void plasma_apply_preset_selection(HWND dialog, const screensave_saver_module *module)
+static void plasma_apply_preset_selection(HWND dialog, plasma_dialog_state *dialog_state)
 {
     LRESULT preset_index;
-    plasma_config product_config;
-    screensave_common_config common_config;
-    int diagnostics_enabled;
+    screensave_common_config saved_common_config;
+    plasma_selection_preferences saved_selection;
+    plasma_transition_preferences saved_transition;
+    int saved_surface;
 
-    preset_index = SendDlgItemMessageA(dialog, IDC_PLASMA_PRESET, CB_GETCURSEL, 0U, 0L);
-    if (preset_index == CB_ERR || (unsigned int)preset_index >= module->preset_count) {
+    if (dialog_state == NULL || dialog_state->module == NULL) {
         return;
     }
 
-    diagnostics_enabled = IsDlgButtonChecked(dialog, IDC_PLASMA_DIAGNOSTICS) == BST_CHECKED;
-    plasma_config_set_defaults(&common_config, &product_config, sizeof(product_config));
-    plasma_apply_preset_to_config(module->presets[preset_index].preset_key, &common_config, &product_config);
-    plasma_apply_settings_to_dialog(dialog, module, &common_config, &product_config);
-    CheckDlgButton(dialog, IDC_PLASMA_DIAGNOSTICS, diagnostics_enabled ? BST_CHECKED : BST_UNCHECKED);
-}
-
-static void plasma_read_dialog_settings(
-    HWND dialog,
-    const screensave_saver_module *module,
-    screensave_common_config *common_config,
-    plasma_config *product_config
-)
-{
-    LRESULT preset_index;
-    LRESULT theme_index;
-    plasma_selection_preferences saved_selection;
-    plasma_transition_preferences saved_transition;
-
-    saved_selection = product_config->selection;
-    saved_transition = product_config->transition;
-    plasma_config_set_defaults(common_config, product_config, sizeof(*product_config));
-    product_config->selection = saved_selection;
-    product_config->transition = saved_transition;
+    plasma_read_dialog_settings(
+        dialog,
+        dialog_state->module,
+        &dialog_state->working_common_config,
+        &dialog_state->working_product_config
+    );
 
     preset_index = SendDlgItemMessageA(dialog, IDC_PLASMA_PRESET, CB_GETCURSEL, 0U, 0L);
-    if (preset_index != CB_ERR && (unsigned int)preset_index < module->preset_count) {
-        plasma_apply_preset_to_config(module->presets[preset_index].preset_key, common_config, product_config);
-    } else {
-        common_config->preset_key = NULL;
+    if (preset_index == CB_ERR || (unsigned int)preset_index >= dialog_state->module->preset_count) {
+        return;
     }
 
-    theme_index = SendDlgItemMessageA(dialog, IDC_PLASMA_THEME, CB_GETCURSEL, 0U, 0L);
-    if (theme_index != CB_ERR && (unsigned int)theme_index < module->theme_count) {
-        common_config->theme_key = module->themes[theme_index].theme_key;
+    saved_common_config = dialog_state->working_common_config;
+    saved_selection = dialog_state->working_product_config.selection;
+    saved_transition = dialog_state->working_product_config.transition;
+    saved_surface = dialog_state->working_product_config.settings_surface;
+
+    plasma_config_set_defaults(
+        &dialog_state->working_common_config,
+        &dialog_state->working_product_config,
+        sizeof(dialog_state->working_product_config)
+    );
+    plasma_apply_preset_to_config(
+        dialog_state->module->presets[preset_index].preset_key,
+        &dialog_state->working_common_config,
+        &dialog_state->working_product_config
+    );
+    dialog_state->working_product_config.settings_surface = saved_surface;
+    dialog_state->working_product_config.selection = saved_selection;
+    dialog_state->working_product_config.transition = saved_transition;
+    dialog_state->working_common_config.use_deterministic_seed = saved_common_config.use_deterministic_seed;
+    dialog_state->working_common_config.deterministic_seed = saved_common_config.deterministic_seed;
+    dialog_state->working_common_config.diagnostics_overlay_enabled =
+        saved_common_config.diagnostics_overlay_enabled;
+    dialog_state->working_common_config.randomization_mode = saved_common_config.randomization_mode;
+    dialog_state->working_common_config.randomization_scope = saved_common_config.randomization_scope;
+
+    plasma_apply_settings_to_dialog(dialog, dialog_state);
+}
+
+static void plasma_refresh_dialog_from_controls(HWND dialog, plasma_dialog_state *dialog_state)
+{
+    if (dialog_state == NULL) {
+        return;
     }
 
-    product_config->effect_mode = plasma_get_combo_value(dialog, IDC_PLASMA_EFFECT, product_config->effect_mode);
-    product_config->speed_mode = plasma_get_combo_value(dialog, IDC_PLASMA_SPEED, product_config->speed_mode);
-    product_config->resolution_mode = plasma_get_combo_value(dialog, IDC_PLASMA_RESOLUTION, product_config->resolution_mode);
-    product_config->smoothing_mode = plasma_get_combo_value(dialog, IDC_PLASMA_SMOOTHING, product_config->smoothing_mode);
-    common_config->use_deterministic_seed = IsDlgButtonChecked(dialog, IDC_PLASMA_DETERMINISTIC) == BST_CHECKED;
-    common_config->diagnostics_overlay_enabled = IsDlgButtonChecked(dialog, IDC_PLASMA_DIAGNOSTICS) == BST_CHECKED;
+    plasma_read_dialog_settings(
+        dialog,
+        dialog_state->module,
+        &dialog_state->working_common_config,
+        &dialog_state->working_product_config
+    );
+    plasma_apply_settings_to_dialog(dialog, dialog_state);
 }
 
 static void plasma_initialize_dialog(HWND dialog, plasma_dialog_state *dialog_state)
 {
-    char info[256];
-    const screensave_version_info *version_info;
+    if (dialog_state == NULL) {
+        return;
+    }
 
-    version_info = screensave_version_get_info();
+    dialog_state->working_common_config = *dialog_state->common_config;
+    dialog_state->working_product_config = *dialog_state->product_config;
     plasma_populate_dialog_lists(dialog, dialog_state->module);
-
-    info[0] = '\0';
-    lstrcpyA(info, "Plasma\r\n");
-    lstrcatA(info, version_info->version_text);
-    lstrcatA(info, "\r\nPalette-driven plasma, fire, and interference motion with curated dark-room presets and calmer long-run composition refresh.");
-    SetDlgItemTextA(dialog, IDC_PLASMA_INFO, info);
-
-    plasma_apply_settings_to_dialog(
-        dialog,
-        dialog_state->module,
-        dialog_state->common_config,
-        dialog_state->product_config
-    );
+    plasma_apply_settings_to_dialog(dialog, dialog_state);
 }
 
 static INT_PTR CALLBACK plasma_config_dialog_proc(HWND dialog, UINT message, WPARAM wParam, LPARAM lParam)
@@ -861,29 +1410,49 @@ static INT_PTR CALLBACK plasma_config_dialog_proc(HWND dialog, UINT message, WPA
         }
 
         if (LOWORD(wParam) == IDC_PLASMA_PRESET && HIWORD(wParam) == CBN_SELCHANGE) {
-            plasma_apply_preset_selection(dialog, dialog_state->module);
+            plasma_apply_preset_selection(dialog, dialog_state);
+            return TRUE;
+        }
+
+        if (
+            (LOWORD(wParam) == IDC_PLASMA_SURFACE && HIWORD(wParam) == CBN_SELCHANGE) ||
+            (LOWORD(wParam) == IDC_PLASMA_THEME && HIWORD(wParam) == CBN_SELCHANGE) ||
+            (LOWORD(wParam) == IDC_PLASMA_SPEED && HIWORD(wParam) == CBN_SELCHANGE) ||
+            (LOWORD(wParam) == IDC_PLASMA_DETAIL_LEVEL && HIWORD(wParam) == CBN_SELCHANGE) ||
+            (LOWORD(wParam) == IDC_PLASMA_EFFECT && HIWORD(wParam) == CBN_SELCHANGE) ||
+            (LOWORD(wParam) == IDC_PLASMA_RESOLUTION && HIWORD(wParam) == CBN_SELCHANGE) ||
+            (LOWORD(wParam) == IDC_PLASMA_SMOOTHING && HIWORD(wParam) == CBN_SELCHANGE) ||
+            (LOWORD(wParam) == IDC_PLASMA_CONTENT_FILTER && HIWORD(wParam) == CBN_SELCHANGE) ||
+            (LOWORD(wParam) == IDC_PLASMA_PRESET_SET && HIWORD(wParam) == CBN_SELCHANGE) ||
+            (LOWORD(wParam) == IDC_PLASMA_THEME_SET && HIWORD(wParam) == CBN_SELCHANGE) ||
+            (LOWORD(wParam) == IDC_PLASMA_TRANSITION_POLICY && HIWORD(wParam) == CBN_SELCHANGE) ||
+            (LOWORD(wParam) == IDC_PLASMA_JOURNEY && HIWORD(wParam) == CBN_SELCHANGE) ||
+            (LOWORD(wParam) == IDC_PLASMA_TRANSITION_FALLBACK && HIWORD(wParam) == CBN_SELCHANGE) ||
+            (LOWORD(wParam) == IDC_PLASMA_TRANSITION_SEED_POLICY && HIWORD(wParam) == CBN_SELCHANGE) ||
+            (LOWORD(wParam) == IDC_PLASMA_FAVORITES_ONLY && HIWORD(wParam) == BN_CLICKED) ||
+            (LOWORD(wParam) == IDC_PLASMA_TRANSITIONS_ENABLED && HIWORD(wParam) == BN_CLICKED) ||
+            (LOWORD(wParam) == IDC_PLASMA_DETERMINISTIC && HIWORD(wParam) == BN_CLICKED) ||
+            (LOWORD(wParam) == IDC_PLASMA_DIAGNOSTICS && HIWORD(wParam) == BN_CLICKED)
+        ) {
+            plasma_refresh_dialog_from_controls(dialog, dialog_state);
             return TRUE;
         }
 
         if (LOWORD(wParam) == IDC_PLASMA_DEFAULTS) {
-            plasma_selection_preferences saved_selection;
-            plasma_transition_preferences saved_transition;
+            int saved_surface;
 
-            saved_selection = dialog_state->product_config->selection;
-            saved_transition = dialog_state->product_config->transition;
-            plasma_config_set_defaults(
-                dialog_state->common_config,
-                dialog_state->product_config,
-                sizeof(*dialog_state->product_config)
-            );
-            dialog_state->product_config->selection = saved_selection;
-            dialog_state->product_config->transition = saved_transition;
-            plasma_apply_settings_to_dialog(
+            saved_surface = plasma_get_combo_value(
                 dialog,
-                dialog_state->module,
-                dialog_state->common_config,
-                dialog_state->product_config
+                IDC_PLASMA_SURFACE,
+                dialog_state->working_product_config.settings_surface
             );
+            plasma_config_set_defaults(
+                &dialog_state->working_common_config,
+                &dialog_state->working_product_config,
+                sizeof(dialog_state->working_product_config)
+            );
+            dialog_state->working_product_config.settings_surface = saved_surface;
+            plasma_apply_settings_to_dialog(dialog, dialog_state);
             return TRUE;
         }
 
@@ -891,14 +1460,16 @@ static INT_PTR CALLBACK plasma_config_dialog_proc(HWND dialog, UINT message, WPA
             plasma_read_dialog_settings(
                 dialog,
                 dialog_state->module,
-                dialog_state->common_config,
-                dialog_state->product_config
+                &dialog_state->working_common_config,
+                &dialog_state->working_product_config
             );
             plasma_config_clamp(
-                dialog_state->common_config,
-                dialog_state->product_config,
-                sizeof(*dialog_state->product_config)
+                &dialog_state->working_common_config,
+                &dialog_state->working_product_config,
+                sizeof(dialog_state->working_product_config)
             );
+            *dialog_state->common_config = dialog_state->working_common_config;
+            *dialog_state->product_config = dialog_state->working_product_config;
             EndDialog(dialog, IDOK);
             return TRUE;
         }
@@ -941,6 +1512,8 @@ INT_PTR plasma_config_show_dialog(
     dialog_state.module = module;
     dialog_state.common_config = common_config;
     dialog_state.product_config = config;
+    ZeroMemory(&dialog_state.working_common_config, sizeof(dialog_state.working_common_config));
+    ZeroMemory(&dialog_state.working_product_config, sizeof(dialog_state.working_product_config));
 
     result = DialogBoxParamA(
         instance,

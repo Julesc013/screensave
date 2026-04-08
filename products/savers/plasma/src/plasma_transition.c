@@ -849,6 +849,15 @@ void plasma_transition_preferences_clamp(plasma_transition_preferences *preferen
     }
 }
 
+const plasma_content_journey_entry *plasma_transition_get_journeys(unsigned int *count_out)
+{
+    if (count_out != NULL) {
+        *count_out = (unsigned int)(sizeof(g_transition_journeys) / sizeof(g_transition_journeys[0]));
+    }
+
+    return g_transition_journeys;
+}
+
 const plasma_content_journey_entry *plasma_transition_find_journey(const char *journey_key)
 {
     unsigned int index;

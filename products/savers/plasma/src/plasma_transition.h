@@ -131,6 +131,7 @@ int plasma_transition_parse_seed_policy(
 );
 void plasma_transition_preferences_set_defaults(plasma_transition_preferences *preferences);
 void plasma_transition_preferences_clamp(plasma_transition_preferences *preferences);
+const plasma_content_journey_entry *plasma_transition_get_journeys(unsigned int *count_out);
 const plasma_content_journey_entry *plasma_transition_find_journey(const char *journey_key);
 
 void plasma_transition_plan_init(struct plasma_plan_tag *plan);

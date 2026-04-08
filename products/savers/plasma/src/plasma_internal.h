@@ -14,6 +14,7 @@
 #include "plasma_transition.h"
 #include "plasma_content.h"
 #include "plasma_selection.h"
+#include "plasma_settings.h"
 #include "plasma_plan.h"
 #include "plasma_validate.h"
 
@@ -48,6 +49,7 @@ typedef enum plasma_smoothing_mode_tag {
 } plasma_smoothing_mode;
 
 typedef struct plasma_config_tag {
+    int settings_surface;
     int effect_mode;
     int speed_mode;
     int resolution_mode;

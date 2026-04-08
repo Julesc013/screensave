@@ -53,7 +53,11 @@ int plasma_plan_compile(
 {
     screensave_common_config common_config;
     plasma_config product_config;
+    plasma_settings_context settings_context;
+    plasma_settings_resolution settings_resolution;
     const screensave_config_binding *binding;
+    screensave_renderer_kind requested_kind;
+    screensave_renderer_kind active_kind;
 
     if (plan == NULL || environment == NULL) {
         return 0;
@@ -80,30 +84,45 @@ int plasma_plan_compile(
         return 0;
     }
 
+    requested_kind = plasma_resolve_requested_renderer_kind(environment);
+    active_kind = plasma_resolve_renderer_kind(environment);
+
+    plasma_settings_context_init(
+        &settings_context,
+        module,
+        &common_config,
+        &product_config,
+        requested_kind,
+        active_kind
+    );
+    if (!plasma_settings_resolve(&settings_resolution, &settings_context)) {
+        return 0;
+    }
+
     plan->preset_key = plan->selection.selected_preset->preset_key;
     plan->preset = plan->selection.selected_preset->descriptor;
     plan->theme_key = plan->selection.selected_theme->theme_key;
     plan->theme = plan->selection.selected_theme->descriptor;
-    plan->effect_mode = product_config.effect_mode;
-    plan->speed_mode = product_config.speed_mode;
-    plan->resolution_mode = product_config.resolution_mode;
-    plan->smoothing_mode = product_config.smoothing_mode;
-    plan->detail_level = common_config.detail_level;
-    plan->seed_policy = common_config.use_deterministic_seed
+    plan->effect_mode = settings_resolution.effect_mode;
+    plan->speed_mode = settings_resolution.speed_mode;
+    plan->resolution_mode = settings_resolution.resolution_mode;
+    plan->smoothing_mode = settings_resolution.smoothing_mode;
+    plan->detail_level = settings_resolution.detail_level;
+    plan->seed_policy = settings_resolution.use_deterministic_seed
         ? PLASMA_PLAN_SEED_POLICY_FIXED
         : PLASMA_PLAN_SEED_POLICY_INHERIT;
-    plan->configured_seed = common_config.deterministic_seed;
+    plan->configured_seed = settings_resolution.deterministic_seed;
     plan->base_seed = environment->seed.base_seed;
     plan->stream_seed = environment->seed.stream_seed;
     plan->resolved_rng_seed = environment->seed.base_seed ^ environment->seed.stream_seed;
     plan->deterministic = environment->seed.deterministic;
-    plan->transition_requested = product_config.transition.enabled ? 1 : 0;
-    plan->transition_policy = product_config.transition.policy;
-    plan->transition_fallback_policy = product_config.transition.fallback_policy;
-    plan->transition_seed_policy = product_config.transition.seed_policy;
-    plan->transition_interval_millis = product_config.transition.interval_millis;
-    plan->transition_duration_millis = product_config.transition.duration_millis;
-    plan->journey = plasma_transition_find_journey(product_config.transition.journey_key);
+    plan->transition_requested = settings_resolution.transitions_enabled;
+    plan->transition_policy = settings_resolution.transition_policy;
+    plan->transition_fallback_policy = settings_resolution.transition_fallback_policy;
+    plan->transition_seed_policy = settings_resolution.transition_seed_policy;
+    plan->transition_interval_millis = settings_resolution.transition_interval_millis;
+    plan->transition_duration_millis = settings_resolution.transition_duration_millis;
+    plan->journey = plasma_transition_find_journey(settings_resolution.journey_key);
 
     if (module != NULL) {
         plan->minimum_kind = module->routing_policy.minimum_kind;
@@ -114,8 +133,8 @@ int plasma_plan_compile(
     plasma_plan_bind_renderer_kind(
         plan,
         module,
-        plasma_resolve_requested_renderer_kind(environment),
-        plasma_resolve_renderer_kind(environment)
+        requested_kind,
+        active_kind
     );
 
     return plasma_plan_validate(plan, module);
