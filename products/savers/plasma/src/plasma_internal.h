@@ -8,6 +8,7 @@
 #include "screensave/saver_api.h"
 #include "screensave/visual_buffer_api.h"
 #include "plasma_classic.h"
+#include "plasma_advanced.h"
 #include "plasma_content.h"
 #include "plasma_selection.h"
 #include "plasma_plan.h"
@@ -72,8 +73,10 @@ typedef struct plasma_execution_state_tag {
     int preview_mode;
     plasma_rng_state rng;
     screensave_visual_buffer visual_buffer;
+    screensave_visual_buffer advanced_treatment_buffer;
     unsigned char *field_primary;
     unsigned char *field_secondary;
+    unsigned char *field_history;
     unsigned long phase_millis;
     unsigned long palette_phase;
     unsigned long source_phase_a;

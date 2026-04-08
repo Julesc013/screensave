@@ -30,6 +30,14 @@ typedef struct plasma_plan_tag {
     unsigned long resolved_rng_seed;
     int deterministic;
     plasma_selection_state selection;
+    screensave_renderer_kind requested_renderer_kind;
+    screensave_renderer_kind active_renderer_kind;
+    int advanced_capable;
+    int advanced_requested;
+    int advanced_enabled;
+    int advanced_degraded;
+    unsigned long advanced_components;
+    unsigned long advanced_degrade_policy;
     screensave_renderer_kind minimum_kind;
     screensave_renderer_kind preferred_kind;
     screensave_capability_quality_class quality_class;
@@ -44,6 +52,12 @@ typedef struct plasma_plan_tag {
 } plasma_plan;
 
 void plasma_plan_init(plasma_plan *plan);
+void plasma_plan_bind_renderer_kind(
+    plasma_plan *plan,
+    const screensave_saver_module *module,
+    screensave_renderer_kind requested_kind,
+    screensave_renderer_kind active_kind
+);
 int plasma_plan_compile(
     plasma_plan *plan,
     const screensave_saver_module *module,

@@ -26,6 +26,17 @@ void plasma_plan_init(plasma_plan *plan)
     plan->accent_treatment = PLASMA_ACCENT_TREATMENT_NONE;
     plan->presentation_mode = PLASMA_PRESENTATION_MODE_FLAT;
     plan->classic_execution = 1;
+    plasma_advanced_plan_init(plan);
+}
+
+void plasma_plan_bind_renderer_kind(
+    plasma_plan *plan,
+    const screensave_saver_module *module,
+    screensave_renderer_kind requested_kind,
+    screensave_renderer_kind active_kind
+)
+{
+    plasma_advanced_bind_plan(plan, module, requested_kind, active_kind);
 }
 
 int plasma_plan_compile(
@@ -87,6 +98,13 @@ int plasma_plan_compile(
         plan->quality_class = module->routing_policy.quality_class;
     }
 
+    plasma_plan_bind_renderer_kind(
+        plan,
+        module,
+        plasma_resolve_requested_renderer_kind(environment),
+        plasma_resolve_renderer_kind(environment)
+    );
+
     return plasma_plan_validate(plan, module);
 }
 
@@ -142,7 +160,8 @@ int plasma_plan_validate(
     if (
         !plasma_output_validate_plan(plan) ||
         !plasma_treatment_validate_plan(plan) ||
-        !plasma_presentation_validate_plan(plan)
+        !plasma_presentation_validate_plan(plan) ||
+        !plasma_advanced_validate_plan(plan, module)
     ) {
         return 0;
     }

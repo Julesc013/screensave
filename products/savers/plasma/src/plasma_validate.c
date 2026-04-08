@@ -13,12 +13,27 @@ screensave_renderer_kind plasma_resolve_renderer_kind(
     screensave_renderer_get_info(environment->renderer, &renderer_info);
     if (
         renderer_info.active_kind == SCREENSAVE_RENDERER_KIND_GDI ||
-        renderer_info.active_kind == SCREENSAVE_RENDERER_KIND_GL11
+        renderer_info.active_kind == SCREENSAVE_RENDERER_KIND_GL11 ||
+        renderer_info.active_kind == SCREENSAVE_RENDERER_KIND_GL21
     ) {
         return renderer_info.active_kind;
     }
 
     return SCREENSAVE_RENDERER_KIND_UNKNOWN;
+}
+
+screensave_renderer_kind plasma_resolve_requested_renderer_kind(
+    const screensave_saver_environment *environment
+)
+{
+    screensave_renderer_info renderer_info;
+
+    if (environment == NULL || environment->renderer == NULL) {
+        return SCREENSAVE_RENDERER_KIND_UNKNOWN;
+    }
+
+    screensave_renderer_get_info(environment->renderer, &renderer_info);
+    return renderer_info.requested_kind;
 }
 
 int plasma_is_lower_band_kind(screensave_renderer_kind renderer_kind)
@@ -33,6 +48,8 @@ int plasma_plan_is_lower_band_baseline(const struct plasma_plan_tag *plan)
     if (
         plan == NULL ||
         !plan->classic_execution ||
+        plan->advanced_enabled ||
+        plan->advanced_components != 0UL ||
         plan->output_family != PLASMA_OUTPUT_FAMILY_RASTER ||
         plan->output_mode != PLASMA_OUTPUT_MODE_NATIVE_RASTER ||
         plan->sampling_treatment != PLASMA_SAMPLING_TREATMENT_NONE ||
@@ -63,14 +80,23 @@ int plasma_plan_validate_for_renderer_kind(
 {
     if (
         module == NULL ||
-        !plasma_is_lower_band_kind(renderer_kind) ||
         !plasma_plan_validate(plan, module) ||
-        !plasma_plan_is_lower_band_baseline(plan)
+        !screensave_saver_supports_renderer_kind(module, renderer_kind)
     ) {
         return 0;
     }
 
-    return screensave_saver_supports_renderer_kind(module, renderer_kind);
+    if (plasma_is_lower_band_kind(renderer_kind)) {
+        return plasma_plan_is_lower_band_baseline(plan);
+    }
+
+    if (renderer_kind == SCREENSAVE_RENDERER_KIND_GL21) {
+        return
+            plan->active_renderer_kind == SCREENSAVE_RENDERER_KIND_GL21 &&
+            plan->advanced_enabled;
+    }
+
+    return 0;
 }
 
 int plasma_plan_validate_lower_band_baseline(

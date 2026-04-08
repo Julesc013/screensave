@@ -87,6 +87,9 @@ static int plasma_resolution_divisor(
     if (state->preview_mode) {
         divisor += 2;
     }
+    if (plan->advanced_enabled && divisor > 2) {
+        divisor -= 1;
+    }
     if (divisor < 2) {
         divisor = 2;
     }
@@ -133,6 +136,9 @@ static void plasma_zero_fields(plasma_execution_state *state)
     cell_count = plasma_field_cell_count(&state->field_size);
     ZeroMemory(state->field_primary, (size_t)cell_count);
     ZeroMemory(state->field_secondary, (size_t)cell_count);
+    if (state->field_history != NULL) {
+        ZeroMemory(state->field_history, (size_t)cell_count);
+    }
 }
 
 static int plasma_resize_visual_state(
@@ -144,49 +150,112 @@ static int plasma_resize_visual_state(
     int cell_count;
     unsigned char *new_primary;
     unsigned char *new_secondary;
+    unsigned char *new_history;
+    int size_matches;
+    int need_advanced_buffers;
 
     if (plan == NULL || state == NULL) {
         return 0;
     }
 
     plasma_compute_field_size(plan, state, &desired_size);
-    if (
+    size_matches =
         state->field_primary != NULL &&
         state->field_secondary != NULL &&
         state->field_size.width == desired_size.width &&
-        state->field_size.height == desired_size.height
+        state->field_size.height == desired_size.height;
+    need_advanced_buffers = plan->advanced_enabled;
+    if (
+        size_matches &&
+        (
+            (!need_advanced_buffers &&
+                state->field_history == NULL &&
+                state->advanced_treatment_buffer.pixels == NULL) ||
+            (need_advanced_buffers &&
+                state->field_history != NULL &&
+                state->advanced_treatment_buffer.pixels != NULL &&
+                state->advanced_treatment_buffer.size.width == desired_size.width &&
+                state->advanced_treatment_buffer.size.height == desired_size.height)
+        )
     ) {
         return 1;
     }
 
     cell_count = plasma_field_cell_count(&desired_size);
-    new_primary = (unsigned char *)malloc((size_t)cell_count);
-    new_secondary = (unsigned char *)malloc((size_t)cell_count);
-    if (new_primary == NULL || new_secondary == NULL) {
+    new_primary = NULL;
+    new_secondary = NULL;
+    new_history = NULL;
+    if (!size_matches) {
+        new_primary = (unsigned char *)malloc((size_t)cell_count);
+        new_secondary = (unsigned char *)malloc((size_t)cell_count);
+    }
+    if (need_advanced_buffers && (state->field_history == NULL || !size_matches)) {
+        new_history = (unsigned char *)malloc((size_t)cell_count);
+    }
+    if (
+        (!size_matches && (new_primary == NULL || new_secondary == NULL)) ||
+        (need_advanced_buffers && (state->field_history == NULL || !size_matches) && new_history == NULL)
+    ) {
         free(new_primary);
         free(new_secondary);
+        free(new_history);
         return 0;
     }
 
-    ZeroMemory(new_primary, (size_t)cell_count);
-    ZeroMemory(new_secondary, (size_t)cell_count);
+    if (new_primary != NULL) {
+        ZeroMemory(new_primary, (size_t)cell_count);
+    }
+    if (new_secondary != NULL) {
+        ZeroMemory(new_secondary, (size_t)cell_count);
+    }
+    if (new_history != NULL) {
+        ZeroMemory(new_history, (size_t)cell_count);
+    }
 
     if (state->visual_buffer.pixels == NULL) {
         if (!screensave_visual_buffer_init(&state->visual_buffer, &desired_size)) {
             free(new_primary);
             free(new_secondary);
+            free(new_history);
             return 0;
         }
     } else if (!screensave_visual_buffer_resize(&state->visual_buffer, &desired_size)) {
         free(new_primary);
         free(new_secondary);
+        free(new_history);
         return 0;
     }
 
-    free(state->field_primary);
-    free(state->field_secondary);
-    state->field_primary = new_primary;
-    state->field_secondary = new_secondary;
+    if (need_advanced_buffers) {
+        if (state->advanced_treatment_buffer.pixels == NULL) {
+            if (!screensave_visual_buffer_init(&state->advanced_treatment_buffer, &desired_size)) {
+                free(new_primary);
+                free(new_secondary);
+                free(new_history);
+                return 0;
+            }
+        } else if (!screensave_visual_buffer_resize(&state->advanced_treatment_buffer, &desired_size)) {
+            free(new_primary);
+            free(new_secondary);
+            free(new_history);
+            return 0;
+        }
+    } else {
+        screensave_visual_buffer_dispose(&state->advanced_treatment_buffer);
+        free(state->field_history);
+        state->field_history = NULL;
+    }
+
+    if (new_primary != NULL) {
+        free(state->field_primary);
+        free(state->field_secondary);
+        state->field_primary = new_primary;
+        state->field_secondary = new_secondary;
+    }
+    if (new_history != NULL) {
+        free(state->field_history);
+        state->field_history = new_history;
+    }
     state->field_size = desired_size;
     return 1;
 }
@@ -518,6 +587,9 @@ static void plasma_warm_start_effect(
             plasma_update_plasma(state);
         }
         plasma_apply_smoothing(plan, state);
+        if (!plasma_advanced_apply_field_effects(plan, state)) {
+            return;
+        }
         state->phase_millis += 33UL;
         state->palette_phase = (state->palette_phase + 3UL) & 255UL;
         state->source_phase_a += 5UL;
@@ -578,6 +650,12 @@ int plasma_create_session(
     state->drawable_size = environment->drawable_size;
     state->active_renderer_kind = plasma_resolve_renderer_kind(environment);
     state->preview_mode = environment->mode == SCREENSAVE_SESSION_MODE_PREVIEW;
+    plasma_plan_bind_renderer_kind(
+        &session->plan,
+        module,
+        plasma_resolve_requested_renderer_kind(environment),
+        state->active_renderer_kind
+    );
     if (!plasma_plan_validate_for_renderer_kind(&session->plan, module, state->active_renderer_kind)) {
         free(session);
         return 0;
@@ -608,6 +686,8 @@ void plasma_destroy_session(screensave_saver_session *session)
 
     free(session->state.field_primary);
     free(session->state.field_secondary);
+    free(session->state.field_history);
+    screensave_visual_buffer_dispose(&session->state.advanced_treatment_buffer);
     screensave_visual_buffer_dispose(&session->state.visual_buffer);
     free(session);
 }
@@ -627,6 +707,12 @@ void plasma_resize_session(
     state->drawable_size = environment->drawable_size;
     state->active_renderer_kind = plasma_resolve_renderer_kind(environment);
     state->preview_mode = environment->mode == SCREENSAVE_SESSION_MODE_PREVIEW;
+    plasma_plan_bind_renderer_kind(
+        &session->plan,
+        plasma_get_module(),
+        plasma_resolve_requested_renderer_kind(environment),
+        state->active_renderer_kind
+    );
     if (!plasma_plan_validate_for_renderer_kind(&session->plan, plasma_get_module(), state->active_renderer_kind)) {
         return;
     }
@@ -676,6 +762,9 @@ void plasma_step_session(
     }
 
     plasma_apply_smoothing(&session->plan, state);
+    if (!plasma_advanced_apply_field_effects(&session->plan, state)) {
+        return;
+    }
 
     if (state->variation_elapsed_millis >= plasma_variation_interval_millis(&session->plan, state)) {
         state->variation_elapsed_millis = 0UL;

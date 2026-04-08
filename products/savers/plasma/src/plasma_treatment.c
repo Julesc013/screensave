@@ -124,9 +124,11 @@ static int plasma_theme_map_raster_output(
 
 static int plasma_apply_sampling_treatment(
     const struct plasma_plan_tag *plan,
+    const struct plasma_execution_state_tag *state,
     screensave_visual_buffer *visual_buffer
 )
 {
+    (void)state;
     (void)visual_buffer;
 
     if (plan == NULL) {
@@ -138,23 +140,28 @@ static int plasma_apply_sampling_treatment(
 
 static int plasma_apply_filter_treatment(
     const struct plasma_plan_tag *plan,
+    struct plasma_execution_state_tag *state,
     screensave_visual_buffer *visual_buffer
 )
 {
-    (void)visual_buffer;
-
     if (plan == NULL) {
         return 0;
     }
 
-    return plan->filter_treatment == PLASMA_FILTER_TREATMENT_NONE;
+    if (plan->filter_treatment == PLASMA_FILTER_TREATMENT_NONE) {
+        return 1;
+    }
+
+    return plasma_advanced_apply_blur_filter(plan, state, visual_buffer);
 }
 
 static int plasma_apply_emulation_treatment(
     const struct plasma_plan_tag *plan,
+    const struct plasma_execution_state_tag *state,
     screensave_visual_buffer *visual_buffer
 )
 {
+    (void)state;
     (void)visual_buffer;
 
     if (plan == NULL) {
@@ -166,16 +173,19 @@ static int plasma_apply_emulation_treatment(
 
 static int plasma_apply_accent_treatment(
     const struct plasma_plan_tag *plan,
+    struct plasma_execution_state_tag *state,
     screensave_visual_buffer *visual_buffer
 )
 {
-    (void)visual_buffer;
-
     if (plan == NULL) {
         return 0;
     }
 
-    return plan->accent_treatment == PLASMA_ACCENT_TREATMENT_NONE;
+    if (plan->accent_treatment == PLASMA_ACCENT_TREATMENT_NONE) {
+        return 1;
+    }
+
+    return plasma_advanced_apply_overlay_accent(plan, state, visual_buffer);
 }
 
 int plasma_treatment_validate_plan(const struct plasma_plan_tag *plan)
@@ -187,14 +197,19 @@ int plasma_treatment_validate_plan(const struct plasma_plan_tag *plan)
     if (plan->sampling_treatment != PLASMA_SAMPLING_TREATMENT_NONE) {
         return 0;
     }
-    if (plan->filter_treatment != PLASMA_FILTER_TREATMENT_NONE) {
+    if (
+        plan->filter_treatment != PLASMA_FILTER_TREATMENT_NONE &&
+        !(plan->advanced_enabled && plan->filter_treatment == PLASMA_FILTER_TREATMENT_BLUR)
+    ) {
         return 0;
     }
     if (plan->emulation_treatment != PLASMA_EMULATION_TREATMENT_NONE) {
         return 0;
     }
 
-    return plan->accent_treatment == PLASMA_ACCENT_TREATMENT_NONE;
+    return
+        plan->accent_treatment == PLASMA_ACCENT_TREATMENT_NONE ||
+        (plan->advanced_enabled && plan->accent_treatment == PLASMA_ACCENT_TREATMENT_OVERLAY_PASS);
 }
 
 int plasma_treatment_apply(
@@ -209,6 +224,7 @@ int plasma_treatment_apply(
         frame_out == NULL ||
         output == NULL ||
         visual_buffer == NULL ||
+        state == NULL ||
         !plasma_treatment_validate_plan(plan)
     ) {
         return 0;
@@ -217,16 +233,16 @@ int plasma_treatment_apply(
     if (!plasma_theme_map_raster_output(plan, state, output, visual_buffer)) {
         return 0;
     }
-    if (!plasma_apply_sampling_treatment(plan, visual_buffer)) {
+    if (!plasma_apply_sampling_treatment(plan, state, visual_buffer)) {
         return 0;
     }
-    if (!plasma_apply_filter_treatment(plan, visual_buffer)) {
+    if (!plasma_apply_filter_treatment(plan, (struct plasma_execution_state_tag *)state, visual_buffer)) {
         return 0;
     }
-    if (!plasma_apply_emulation_treatment(plan, visual_buffer)) {
+    if (!plasma_apply_emulation_treatment(plan, state, visual_buffer)) {
         return 0;
     }
-    if (!plasma_apply_accent_treatment(plan, visual_buffer)) {
+    if (!plasma_apply_accent_treatment(plan, (struct plasma_execution_state_tag *)state, visual_buffer)) {
         return 0;
     }
 

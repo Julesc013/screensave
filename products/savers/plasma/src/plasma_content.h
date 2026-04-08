@@ -24,6 +24,7 @@ typedef struct plasma_content_preset_entry_tag {
     const screensave_preset_descriptor *descriptor;
     plasma_content_source source;
     plasma_content_channel channel;
+    int advanced_capable;
     const char *owner_pack_key;
 } plasma_content_preset_entry;
 
