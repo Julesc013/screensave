@@ -1,5 +1,6 @@
 #include <string.h>
 
+#include "screensave/private/renderer_runtime.h"
 #include "../src/plasma_internal.h"
 
 #define PLASMA_SMOKE_CAPTURE_LIMIT 32U
@@ -14,6 +15,105 @@ typedef struct plasma_smoke_capture_tag {
     plasma_smoke_capture_entry entries[PLASMA_SMOKE_CAPTURE_LIMIT];
     unsigned int count;
 } plasma_smoke_capture;
+
+static int plasma_smoke_renderer_begin_frame(
+    screensave_renderer *renderer,
+    const screensave_frame_info *frame_info
+)
+{
+    (void)renderer;
+    (void)frame_info;
+    return 1;
+}
+
+static void plasma_smoke_renderer_clear(screensave_renderer *renderer, screensave_color color)
+{
+    (void)renderer;
+    (void)color;
+}
+
+static void plasma_smoke_renderer_fill_rect(
+    screensave_renderer *renderer,
+    const screensave_recti *rect,
+    screensave_color color
+)
+{
+    (void)renderer;
+    (void)rect;
+    (void)color;
+}
+
+static void plasma_smoke_renderer_draw_frame_rect(
+    screensave_renderer *renderer,
+    const screensave_recti *rect,
+    screensave_color color
+)
+{
+    (void)renderer;
+    (void)rect;
+    (void)color;
+}
+
+static void plasma_smoke_renderer_draw_line(
+    screensave_renderer *renderer,
+    const screensave_pointi *start_point,
+    const screensave_pointi *end_point,
+    screensave_color color
+)
+{
+    (void)renderer;
+    (void)start_point;
+    (void)end_point;
+    (void)color;
+}
+
+static void plasma_smoke_renderer_draw_polyline(
+    screensave_renderer *renderer,
+    const screensave_pointi *points,
+    unsigned int point_count,
+    screensave_color color
+)
+{
+    (void)renderer;
+    (void)points;
+    (void)point_count;
+    (void)color;
+}
+
+static int plasma_smoke_renderer_blit_bitmap(
+    screensave_renderer *renderer,
+    const screensave_bitmap_view *bitmap,
+    const screensave_recti *destination_rect
+)
+{
+    (void)renderer;
+    (void)bitmap;
+    (void)destination_rect;
+    return 1;
+}
+
+static int plasma_smoke_renderer_end_frame(screensave_renderer *renderer)
+{
+    (void)renderer;
+    return 1;
+}
+
+static void plasma_smoke_renderer_shutdown(screensave_renderer *renderer)
+{
+    (void)renderer;
+}
+
+static const screensave_renderer_vtable g_plasma_smoke_renderer_vtable = {
+    plasma_smoke_renderer_begin_frame,
+    plasma_smoke_renderer_clear,
+    plasma_smoke_renderer_fill_rect,
+    plasma_smoke_renderer_draw_frame_rect,
+    plasma_smoke_renderer_draw_line,
+    plasma_smoke_renderer_draw_polyline,
+    plasma_smoke_renderer_blit_bitmap,
+    plasma_smoke_renderer_end_frame,
+    plasma_smoke_renderer_shutdown
+};
 
 static void plasma_smoke_copy_text(char *buffer, unsigned int buffer_size, const char *text)
 {
@@ -158,6 +258,82 @@ static int plasma_compile_selection_plan(
     return plasma_plan_compile(plan_out, module, &environment);
 }
 
+static void plasma_smoke_init_fake_renderer(
+    screensave_renderer *renderer,
+    screensave_renderer_kind requested_kind,
+    screensave_renderer_kind active_kind,
+    const screensave_sizei *drawable_size
+)
+{
+    screensave_renderer_info renderer_info;
+
+    ZeroMemory(&renderer_info, sizeof(renderer_info));
+    renderer_info.requested_kind = requested_kind;
+    renderer_info.active_kind = active_kind;
+    renderer_info.capability_flags = SCREENSAVE_RENDERER_CAP_CLEAR | SCREENSAVE_RENDERER_CAP_BITMAP;
+    if (drawable_size != NULL) {
+        renderer_info.drawable_size = *drawable_size;
+    } else {
+        renderer_info.drawable_size.width = 320;
+        renderer_info.drawable_size.height = 240;
+    }
+    renderer_info.backend_name = "smoke-fake";
+    renderer_info.status_text = "smoke-active";
+    renderer_info.selection_reason = "smoke-forced";
+
+    ZeroMemory(renderer, sizeof(*renderer));
+    screensave_renderer_init_dispatch(renderer, &g_plasma_smoke_renderer_vtable, NULL, &renderer_info);
+}
+
+static int plasma_compile_plan_for_renderer(
+    const screensave_saver_module *module,
+    const char *preset_key,
+    const char *theme_key,
+    const plasma_selection_preferences *selection_preferences,
+    screensave_renderer_kind requested_kind,
+    screensave_renderer_kind active_kind,
+    plasma_plan *plan_out
+)
+{
+    screensave_common_config common_config;
+    plasma_config product_config;
+    screensave_config_binding binding;
+    screensave_saver_environment environment;
+    screensave_renderer renderer;
+    screensave_sizei drawable_size;
+
+    if (module == NULL || plan_out == NULL) {
+        return 0;
+    }
+
+    plasma_config_set_defaults(&common_config, &product_config, sizeof(product_config));
+    if (preset_key != NULL) {
+        plasma_apply_preset_to_config(preset_key, &common_config, &product_config);
+        common_config.preset_key = preset_key;
+    }
+    if (theme_key != NULL) {
+        common_config.theme_key = theme_key;
+    }
+    if (selection_preferences != NULL) {
+        product_config.selection = *selection_preferences;
+    }
+
+    screensave_config_binding_init(&binding, &common_config, &product_config, sizeof(product_config));
+    ZeroMemory(&environment, sizeof(environment));
+    drawable_size.width = 320;
+    drawable_size.height = 240;
+    plasma_smoke_init_fake_renderer(&renderer, requested_kind, active_kind, &drawable_size);
+    environment.mode = SCREENSAVE_SESSION_MODE_WINDOWED;
+    environment.drawable_size = drawable_size;
+    environment.seed.base_seed = 0x00000A55UL;
+    environment.seed.stream_seed = 0x00000A77UL;
+    environment.seed.deterministic = common_config.use_deterministic_seed;
+    environment.config_binding = &binding;
+    environment.renderer = &renderer;
+
+    return plasma_plan_compile(plan_out, module, &environment);
+}
+
 int main(void)
 {
     static const char *const g_required_preset_keys[] = {
@@ -198,6 +374,8 @@ int main(void)
     plasma_smoke_capture settings_capture;
     screensave_settings_writer settings_writer;
     screensave_session_seed random_seed;
+    screensave_renderer fake_renderer;
+    screensave_sizei fake_size;
     unsigned int index;
 
     module = plasma_get_module();
@@ -222,6 +400,7 @@ int main(void)
     if (
         !(module->capability_flags & SCREENSAVE_SAVER_CAP_GDI) ||
         !(module->capability_flags & SCREENSAVE_SAVER_CAP_GL11) ||
+        !(module->capability_flags & SCREENSAVE_SAVER_CAP_GL21) ||
         !(module->capability_flags & SCREENSAVE_SAVER_CAP_LONG_RUN_STABLE) ||
         !(module->capability_flags & SCREENSAVE_SAVER_CAP_PREVIEW_SAFE)
     ) {
@@ -303,6 +482,14 @@ int main(void)
         plan.minimum_kind != SCREENSAVE_RENDERER_KIND_GDI ||
         plan.preferred_kind != SCREENSAVE_RENDERER_KIND_GL11 ||
         plan.quality_class != SCREENSAVE_CAPABILITY_QUALITY_SAFE ||
+        plan.requested_renderer_kind != SCREENSAVE_RENDERER_KIND_UNKNOWN ||
+        plan.active_renderer_kind != SCREENSAVE_RENDERER_KIND_GDI ||
+        !plan.advanced_capable ||
+        plan.advanced_requested ||
+        plan.advanced_enabled ||
+        plan.advanced_degraded ||
+        plan.advanced_components != 0UL ||
+        plan.advanced_degrade_policy == 0UL ||
         !plasma_output_validate_plan(&plan) ||
         !plasma_treatment_validate_plan(&plan) ||
         !plasma_presentation_validate_plan(&plan) ||
@@ -332,6 +519,75 @@ int main(void)
         strcmp(plan.theme_key, "plasma_lava") != 0
     ) {
         return 20;
+    }
+
+    if (
+        !plasma_compile_plan_for_renderer(
+            module,
+            PLASMA_DEFAULT_PRESET_KEY,
+            NULL,
+            NULL,
+            SCREENSAVE_RENDERER_KIND_GL21,
+            SCREENSAVE_RENDERER_KIND_GL21,
+            &plan
+        )
+    ) {
+        return 32;
+    }
+    if (
+        !plasma_plan_validate(&plan, module) ||
+        plan.requested_renderer_kind != SCREENSAVE_RENDERER_KIND_GL21 ||
+        plan.active_renderer_kind != SCREENSAVE_RENDERER_KIND_GL21 ||
+        !plan.advanced_capable ||
+        !plan.advanced_requested ||
+        !plan.advanced_enabled ||
+        plan.advanced_degraded ||
+        plan.advanced_components != (
+            PLASMA_ADVANCED_COMPONENT_HISTORY_FEEDBACK |
+            PLASMA_ADVANCED_COMPONENT_DOMAIN_WARP |
+            PLASMA_ADVANCED_COMPONENT_FLOW_TURBULENCE |
+            PLASMA_ADVANCED_COMPONENT_GLOW_POST
+        ) ||
+        plan.filter_treatment != PLASMA_FILTER_TREATMENT_BLUR ||
+        plan.accent_treatment != PLASMA_ACCENT_TREATMENT_OVERLAY_PASS ||
+        plasma_plan_is_lower_band_baseline(&plan) ||
+        !plasma_plan_validate_for_renderer_kind(&plan, module, SCREENSAVE_RENDERER_KIND_GL21) ||
+        plasma_plan_validate_for_renderer_kind(&plan, module, SCREENSAVE_RENDERER_KIND_GDI) ||
+        plasma_plan_validate_for_renderer_kind(&plan, module, SCREENSAVE_RENDERER_KIND_GL11)
+    ) {
+        return 33;
+    }
+
+    if (
+        !plasma_compile_plan_for_renderer(
+            module,
+            PLASMA_DEFAULT_PRESET_KEY,
+            NULL,
+            NULL,
+            SCREENSAVE_RENDERER_KIND_GL21,
+            SCREENSAVE_RENDERER_KIND_GL11,
+            &plan
+        )
+    ) {
+        return 34;
+    }
+    if (
+        !plasma_plan_validate(&plan, module) ||
+        plan.requested_renderer_kind != SCREENSAVE_RENDERER_KIND_GL21 ||
+        plan.active_renderer_kind != SCREENSAVE_RENDERER_KIND_GL11 ||
+        !plan.advanced_capable ||
+        !plan.advanced_requested ||
+        plan.advanced_enabled ||
+        !plan.advanced_degraded ||
+        plan.advanced_components != 0UL ||
+        plan.filter_treatment != PLASMA_FILTER_TREATMENT_NONE ||
+        plan.accent_treatment != PLASMA_ACCENT_TREATMENT_NONE ||
+        !plasma_plan_is_lower_band_baseline(&plan) ||
+        !plasma_plan_validate_for_renderer_kind(&plan, module, SCREENSAVE_RENDERER_KIND_GDI) ||
+        !plasma_plan_validate_for_renderer_kind(&plan, module, SCREENSAVE_RENDERER_KIND_GL11) ||
+        plasma_plan_validate_for_renderer_kind(&plan, module, SCREENSAVE_RENDERER_KIND_GL21)
+    ) {
+        return 35;
     }
 
     for (index = 0U; index < (unsigned int)(sizeof(g_required_preset_keys) / sizeof(g_required_preset_keys[0])); ++index) {
@@ -378,7 +634,9 @@ int main(void)
         pack_entry->quality_class != SCREENSAVE_CAPABILITY_QUALITY_BALANCED ||
         pack_entry->asset_count != 2U ||
         strcmp(pack_entry->assets[0].canonical_key, "plasma_lava") != 0 ||
-        strcmp(pack_entry->assets[1].canonical_key, "plasma_lava") != 0
+        strcmp(pack_entry->assets[1].canonical_key, "plasma_lava") != 0 ||
+        plasma_content_find_preset_entry("plasma_lava") == NULL ||
+        !plasma_content_find_preset_entry("plasma_lava")->advanced_capable
     ) {
         return 102;
     }
@@ -748,6 +1006,93 @@ int main(void)
     ) {
         plasma_destroy_session(session);
         return 31;
+    }
+
+    plasma_destroy_session(session);
+
+    screensave_config_binding_init(&binding, &common_config, &product_config, sizeof(product_config));
+    ZeroMemory(&environment, sizeof(environment));
+    fake_size.width = 320;
+    fake_size.height = 240;
+    plasma_smoke_init_fake_renderer(
+        &fake_renderer,
+        SCREENSAVE_RENDERER_KIND_GL21,
+        SCREENSAVE_RENDERER_KIND_GL21,
+        &fake_size
+    );
+    environment.mode = SCREENSAVE_SESSION_MODE_WINDOWED;
+    environment.drawable_size = fake_size;
+    environment.seed.base_seed = 0x01020304UL;
+    environment.seed.stream_seed = 0x05060708UL;
+    environment.seed.deterministic = common_config.use_deterministic_seed;
+    environment.config_binding = &binding;
+    environment.renderer = &fake_renderer;
+
+    session = NULL;
+    if (!plasma_create_session(module, &session, &environment) || session == NULL) {
+        return 114;
+    }
+    if (
+        session->state.active_renderer_kind != SCREENSAVE_RENDERER_KIND_GL21 ||
+        session->plan.active_renderer_kind != SCREENSAVE_RENDERER_KIND_GL21 ||
+        !session->plan.advanced_enabled ||
+        session->plan.advanced_degraded ||
+        session->state.field_history == NULL ||
+        session->state.advanced_treatment_buffer.pixels == NULL ||
+        !plasma_plan_validate_for_renderer_kind(&session->plan, module, SCREENSAVE_RENDERER_KIND_GL21) ||
+        plasma_plan_validate_lower_band_baseline(&session->plan, module)
+    ) {
+        plasma_destroy_session(session);
+        return 115;
+    }
+
+    environment.clock.delta_millis = 33UL;
+    plasma_step_session(session, &environment);
+    if (!plasma_output_build(&session->plan, &session->state, &output_frame)) {
+        plasma_destroy_session(session);
+        return 116;
+    }
+    if (
+        !plasma_treatment_apply(
+            &session->plan,
+            &session->state,
+            &output_frame,
+            &session->state.visual_buffer,
+            &treated_frame
+        )
+    ) {
+        plasma_destroy_session(session);
+        return 117;
+    }
+    if (
+        !plasma_presentation_prepare(
+            &session->plan,
+            &session->state,
+            &treated_frame,
+            &presentation_target
+        )
+    ) {
+        plasma_destroy_session(session);
+        return 118;
+    }
+    plasma_render_session(session, &environment);
+    if (
+        session->state.visual_buffer.pixels == NULL ||
+        session->state.advanced_treatment_buffer.pixels == NULL ||
+        session->state.field_history == NULL
+    ) {
+        plasma_destroy_session(session);
+        return 119;
+    }
+
+    plan = session->plan;
+    plan.active_renderer_kind = SCREENSAVE_RENDERER_KIND_GL11;
+    if (
+        plasma_plan_validate_for_renderer_kind(&plan, module, SCREENSAVE_RENDERER_KIND_GL21) ||
+        plasma_plan_validate(&plan, module)
+    ) {
+        plasma_destroy_session(session);
+        return 120;
     }
 
     plasma_destroy_session(session);
