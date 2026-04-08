@@ -1,0 +1,63 @@
+BenchLab SX09 report
+Product key: gallery
+Display name: Gallery
+Requested renderer: GDI
+Policy target: GDI
+Active renderer: GDI
+Selected band: universal
+Degraded path: None
+Selection path: Requested GDI within saver policy
+Fallback cause: None
+Renderer backend: gdi
+Renderer status: Presented
+Backend vendor: Win32
+Backend renderer: GDI DIB32 floor
+Backend detail: surface=1 presents=4 sig=5ED302A4
+Deterministic mode: yes
+Base seed: 0x000002E7
+Stream seed: 0x8626231A
+Frames exercised: 4
+Final frame: 4
+Command line: /deterministic /seed:743 /saver:gallery /frames:4 /report:D:\Projects\ScreenSave\screensave\validation\captures\sx09\benchlab-gallery-gdi.txt /renderer:gdi
+
+Overlay snapshot
+----------------
+BenchLab
+Saver: Gallery
+Runtime: 0.15.0
+Renderer preference: GDI
+Routing profile: min GDI pref OpenGL 3.3 quality high
+Active renderer: GDI
+Policy target: GDI
+Selected band: universal
+Degraded path: None
+Renderer backend: gdi
+Selection path: Requested GDI within saver policy
+Fallback cause: None
+Backend vendor: Win32
+Backend renderer: GDI DIB32 floor
+Backend detail: surface=1 presents=4 sig=5ED302A4
+Drawable: 640x480
+Renderer status: Presented
+Run mode: deterministic running
+Seed: 0x000002E7
+Stream seed: 0x8626231A
+Frame: 4 elapsed=132ms delta=33ms
+Detail level: Low
+Preset key: compatibility_gallery
+Theme key: compatibility_gallery
+Randomization mode: Off
+Diag: emitted=7 dropped=0
+debug/renderer 5401 surface=1 presents=4 sig=5ED302A4
+debug/renderer 5401 surface=1 presents=3 sig=69AB3194
+debug/renderer 5401 surface=1 presents=2 sig=01195E58
+Keys: F5 restart F6 reseed F7 deterministic F8 pause F9 step
+
+Recent diagnostics
+------------------
+- debug/renderer 5401 surface=1 presents=4 sig=5ED302A4
+- debug/renderer 5401 surface=1 presents=3 sig=69AB3194
+- debug/renderer 5401 surface=1 presents=2 sig=01195E58
+- debug/renderer 5401 surface=1 presents=1 sig=F10D61EC
+- info/app 7205 BenchLab attached the active saver module to the windowed harness.
+- info/renderer 5001 The mandatory GDI renderer backend is active.
