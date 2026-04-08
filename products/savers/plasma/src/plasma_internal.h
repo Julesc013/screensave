@@ -15,6 +15,7 @@
 #include "plasma_content.h"
 #include "plasma_selection.h"
 #include "plasma_settings.h"
+#include "plasma_benchlab.h"
 #include "plasma_plan.h"
 #include "plasma_validate.h"
 
@@ -56,6 +57,7 @@ typedef struct plasma_config_tag {
     int smoothing_mode;
     plasma_selection_preferences selection;
     plasma_transition_preferences transition;
+    plasma_benchlab_forcing benchlab;
 } plasma_config;
 
 struct plasma_preset_values_tag {

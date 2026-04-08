@@ -1,4 +1,5 @@
 #include "../../../../platform/src/core/base/saver_registry.h"
+#include "../../../savers/plasma/src/plasma_internal.h"
 #include "benchlab_internal.h"
 
 const screensave_saver_module *nocturne_get_module(void);
@@ -254,6 +255,54 @@ static int benchlab_copy_config_state(
     return screensave_saver_config_state_copy(module, target, source);
 }
 
+static int benchlab_apply_plasma_benchlab_overrides(benchlab_app *app)
+{
+    plasma_benchlab_forcing forcing;
+    plasma_config *product_config;
+
+    if (app == NULL || app->module == NULL) {
+        return 0;
+    }
+
+    if (
+        app->module->identity.product_key == NULL ||
+        lstrcmpiA(app->module->identity.product_key, "plasma") != 0
+    ) {
+        return 1;
+    }
+
+    if (
+        app->resolved_config.product_config == NULL ||
+        app->resolved_config.product_config_size != sizeof(plasma_config)
+    ) {
+        benchlab_emit_app_diag(
+            app,
+            SCREENSAVE_DIAG_LEVEL_ERROR,
+            7217UL,
+            "BenchLab could not apply Plasma overrides because the resolved product config size was invalid."
+        );
+        return 0;
+    }
+
+    plasma_benchlab_forcing_set_defaults(&forcing);
+    if (!plasma_benchlab_parse_command_line(app->command_line, &forcing, &app->diagnostics)) {
+        return 0;
+    }
+
+    product_config = (plasma_config *)app->resolved_config.product_config;
+    product_config->benchlab = forcing;
+    if (product_config->benchlab.active) {
+        plasma_benchlab_apply_forcing_to_config(
+            &product_config->benchlab,
+            &app->resolved_config.common,
+            product_config
+        );
+    }
+
+    screensave_saver_config_state_clamp(app->module, &app->resolved_config);
+    return 1;
+}
+
 static int benchlab_resolve_runtime_config(benchlab_app *app)
 {
     if (app == NULL || app->module == NULL) {
@@ -280,6 +329,9 @@ static int benchlab_resolve_runtime_config(benchlab_app *app)
         );
     }
 
+    if (!benchlab_apply_plasma_benchlab_overrides(app)) {
+        return 0;
+    }
     benchlab_update_config_binding(app);
     return 1;
 }

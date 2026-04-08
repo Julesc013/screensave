@@ -1,3 +1,4 @@
+#include "../../../savers/plasma/src/plasma_benchlab.h"
 #include "benchlab_internal.h"
 
 typedef struct benchlab_report_target_tag {
@@ -275,11 +276,12 @@ int benchlab_write_report(benchlab_app *app)
     unsigned long frame_index;
     const char *report_path;
     char degraded_path[128];
-    char overlay[2048];
+    char overlay[4096];
     char policy_target[64];
+    char plasma_report[4096];
     char reason_text[128];
     char status_text[128];
-    char report_text[8192];
+    char report_text[16384];
     char default_path[MAX_PATH];
     unsigned int diag_index;
 
@@ -470,6 +472,23 @@ int benchlab_write_report(benchlab_app *app)
     }
 
     benchlab_report_append_text(report_text, sizeof(report_text), "\r\n");
+
+    if (
+        app->session != NULL &&
+        app->module != NULL &&
+        app->module->identity.product_key != NULL &&
+        lstrcmpiA(app->module->identity.product_key, "plasma") == 0 &&
+        plasma_benchlab_build_report_section(
+            app->session,
+            &app->resolved_config,
+            app->requested_renderer_kind,
+            plasma_report,
+            (unsigned int)sizeof(plasma_report)
+        )
+    ) {
+        benchlab_report_append_text(report_text, sizeof(report_text), plasma_report);
+        benchlab_report_append_text(report_text, sizeof(report_text), "\r\n");
+    }
 
     if (!benchlab_report_write_text_file(report_path, report_text)) {
         benchlab_emit_app_diag(

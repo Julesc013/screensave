@@ -79,6 +79,11 @@ int plasma_plan_compile(
         }
     }
 
+    plasma_benchlab_apply_forcing_to_config(
+        &product_config.benchlab,
+        &common_config,
+        &product_config
+    );
     plasma_config_clamp(&common_config, &product_config, sizeof(product_config));
     if (!plasma_selection_resolve(&plan->selection, &common_config, &product_config.selection)) {
         return 0;
@@ -136,6 +141,7 @@ int plasma_plan_compile(
         requested_kind,
         active_kind
     );
+    plasma_benchlab_apply_plan_forcing(plan, module, &product_config.benchlab);
 
     return plasma_plan_validate(plan, module);
 }

@@ -284,6 +284,7 @@ void plasma_config_set_defaults(
     config->smoothing_mode = PLASMA_SMOOTHING_SOFT;
     plasma_selection_preferences_set_defaults(&config->selection);
     plasma_transition_preferences_set_defaults(&config->transition);
+    plasma_benchlab_forcing_set_defaults(&config->benchlab);
     plasma_apply_preset_to_config(PLASMA_DEFAULT_PRESET_KEY, common_config, config);
 }
 
@@ -348,9 +349,11 @@ void plasma_config_clamp(
 
     plasma_selection_preferences_clamp(&config->selection);
     plasma_transition_preferences_clamp(&config->transition);
+    plasma_benchlab_forcing_clamp(&config->benchlab);
     if (!plasma_selection_resolve(&selection_state, common_config, &config->selection)) {
         plasma_selection_preferences_set_defaults(&config->selection);
         plasma_transition_preferences_set_defaults(&config->transition);
+        plasma_benchlab_forcing_set_defaults(&config->benchlab);
         common_config->preset_key = PLASMA_DEFAULT_PRESET_KEY;
         common_config->theme_key = PLASMA_DEFAULT_THEME_KEY;
         (void)plasma_selection_resolve(&selection_state, common_config, &config->selection);

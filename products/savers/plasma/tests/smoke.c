@@ -458,6 +458,9 @@ int main(void)
     plasma_settings_resolution settings_resolution;
     plasma_selection_preferences selection_preferences;
     plasma_transition_preferences transition_preferences;
+    plasma_benchlab_forcing benchlab_forcing;
+    plasma_benchlab_snapshot benchlab_snapshot;
+    screensave_saver_config_state benchlab_config_state;
     plasma_smoke_capture settings_capture;
     screensave_settings_writer settings_writer;
     screensave_session_seed random_seed;
@@ -473,6 +476,8 @@ int main(void)
     unsigned int smoothing_blend;
     unsigned int transition_progress;
     unsigned long mid_speed_units;
+    char benchlab_overlay[2048];
+    char benchlab_report[4096];
     unsigned int settings_count;
     unsigned int index;
 
@@ -2485,5 +2490,255 @@ int main(void)
     }
 
     plasma_destroy_session(session);
+
+    plasma_benchlab_forcing_set_defaults(&benchlab_forcing);
+    if (
+        benchlab_forcing.active ||
+        benchlab_forcing.clamp_flags != 0UL ||
+        benchlab_forcing.content_filter_override != -1 ||
+        benchlab_forcing.favorites_only_override != -1 ||
+        benchlab_forcing.transitions_enabled_override != -1 ||
+        benchlab_forcing.transition_policy_override != -1 ||
+        benchlab_forcing.transition_fallback_override != -1 ||
+        benchlab_forcing.transition_seed_policy_override != -1 ||
+        benchlab_forcing.presentation_request != PLASMA_BENCHLAB_PRESENTATION_AUTO
+    ) {
+        return 135;
+    }
+
+    if (
+        !plasma_benchlab_parse_command_line(
+            "/plasma-preset:ember_lava /plasma-theme:plasma_lava /plasma-preset-set:classic_core "
+            "/plasma-theme-set:warm_classics /plasma-journey:classic_cycle "
+            "/plasma-content-filter:stable_only /plasma-favorites-only:true "
+            "/plasma-transitions:true /plasma-transition-policy:journey "
+            "/plasma-transition-fallback:theme_morph /plasma-transition-seed:reseed_target "
+            "/plasma-transition-interval:9000 /plasma-transition-duration:1800 "
+            "/plasma-presentation:heightfield",
+            &benchlab_forcing,
+            NULL
+        ) ||
+        !benchlab_forcing.active ||
+        strcmp(benchlab_forcing.preset_key, "plasma_lava") != 0 ||
+        strcmp(benchlab_forcing.theme_key, "plasma_lava") != 0 ||
+        strcmp(benchlab_forcing.preset_set_key, "classic_core") != 0 ||
+        strcmp(benchlab_forcing.theme_set_key, "warm_classics") != 0 ||
+        strcmp(benchlab_forcing.journey_key, "classic_cycle") != 0 ||
+        benchlab_forcing.content_filter_override != (int)PLASMA_CONTENT_FILTER_STABLE_ONLY ||
+        !benchlab_forcing.favorites_only_override ||
+        !benchlab_forcing.transitions_enabled_override ||
+        benchlab_forcing.transition_policy_override != (int)PLASMA_TRANSITION_POLICY_JOURNEY ||
+        benchlab_forcing.transition_fallback_override != (int)PLASMA_TRANSITION_FALLBACK_THEME_MORPH ||
+        benchlab_forcing.transition_seed_policy_override != (int)PLASMA_TRANSITION_SEED_CONTINUITY_RESEED_TARGET ||
+        !benchlab_forcing.transition_interval_override_enabled ||
+        benchlab_forcing.transition_interval_millis != 9000UL ||
+        !benchlab_forcing.transition_duration_override_enabled ||
+        benchlab_forcing.transition_duration_millis != 1800UL ||
+        benchlab_forcing.presentation_request != PLASMA_BENCHLAB_PRESENTATION_HEIGHTFIELD
+    ) {
+        return 136;
+    }
+
+    if (
+        !plasma_benchlab_parse_command_line(
+            "/plasma-theme:not_real /plasma-transition-duration:5 /plasma-presentation:ribbon",
+            &benchlab_forcing,
+            NULL
+        ) ||
+        !benchlab_forcing.active ||
+        benchlab_forcing.theme_key[0] != '\0' ||
+        !benchlab_forcing.transition_duration_override_enabled ||
+        benchlab_forcing.transition_duration_millis != 400UL ||
+        benchlab_forcing.presentation_request != PLASMA_BENCHLAB_PRESENTATION_AUTO ||
+        (benchlab_forcing.clamp_flags & PLASMA_BENCHLAB_CLAMP_THEME_KEY) == 0UL ||
+        (benchlab_forcing.clamp_flags & PLASMA_BENCHLAB_CLAMP_TRANSITION_DURATION) == 0UL ||
+        (benchlab_forcing.clamp_flags & PLASMA_BENCHLAB_CLAMP_PRESENTATION) == 0UL
+    ) {
+        return 137;
+    }
+
+    plasma_config_set_defaults(&common_config, &product_config, sizeof(product_config));
+    plasma_benchlab_forcing_set_defaults(&product_config.benchlab);
+    if (!plasma_compile_classic_plan(module, NULL, NULL, &plan) || !plasma_plan_is_lower_band_baseline(&plan)) {
+        return 138;
+    }
+
+    if (
+        !plasma_benchlab_parse_command_line(
+            "/plasma-preset:ember_lava /plasma-theme:plasma_lava /plasma-preset-set:classic_core "
+            "/plasma-theme-set:warm_classics /plasma-journey:classic_cycle "
+            "/plasma-content-filter:stable_only /plasma-favorites-only:true "
+            "/plasma-transitions:true /plasma-transition-policy:journey "
+            "/plasma-transition-fallback:theme_morph /plasma-transition-seed:reseed_target "
+            "/plasma-transition-interval:9000 /plasma-transition-duration:1800 "
+            "/plasma-presentation:heightfield",
+            &benchlab_forcing,
+            NULL
+        )
+    ) {
+        return 139;
+    }
+
+    plasma_config_set_defaults(&common_config, &product_config, sizeof(product_config));
+    product_config.benchlab = benchlab_forcing;
+    plasma_benchlab_apply_forcing_to_config(&product_config.benchlab, &common_config, &product_config);
+    plasma_config_clamp(&common_config, &product_config, sizeof(product_config));
+    if (
+        common_config.preset_key == NULL ||
+        strcmp(common_config.preset_key, "plasma_lava") != 0 ||
+        common_config.theme_key == NULL ||
+        strcmp(common_config.theme_key, "plasma_lava") != 0 ||
+        strcmp(product_config.selection.preset_set_key, "classic_core") != 0 ||
+        strcmp(product_config.selection.theme_set_key, "warm_classics") != 0 ||
+        !product_config.selection.favorites_only ||
+        !product_config.transition.enabled ||
+        product_config.transition.policy != PLASMA_TRANSITION_POLICY_JOURNEY ||
+        product_config.transition.fallback_policy != PLASMA_TRANSITION_FALLBACK_THEME_MORPH ||
+        product_config.transition.seed_policy != PLASMA_TRANSITION_SEED_CONTINUITY_RESEED_TARGET ||
+        product_config.transition.interval_millis != 9000UL ||
+        product_config.transition.duration_millis != 1800UL ||
+        strcmp(product_config.transition.journey_key, "classic_cycle") != 0
+    ) {
+        return 140;
+    }
+
+    screensave_config_binding_init(&binding, &common_config, &product_config, sizeof(product_config));
+    ZeroMemory(&environment, sizeof(environment));
+    fake_size.width = 320;
+    fake_size.height = 240;
+    plasma_smoke_init_fake_renderer(
+        &fake_renderer,
+        SCREENSAVE_RENDERER_KIND_GL46,
+        SCREENSAVE_RENDERER_KIND_GL46,
+        &fake_size
+    );
+    environment.mode = SCREENSAVE_SESSION_MODE_WINDOWED;
+    environment.drawable_size = fake_size;
+    environment.seed.base_seed = 0x31323334UL;
+    environment.seed.stream_seed = 0x35363738UL;
+    environment.seed.deterministic = common_config.use_deterministic_seed;
+    environment.config_binding = &binding;
+    environment.renderer = &fake_renderer;
+
+    session = NULL;
+    if (!plasma_create_session(module, &session, &environment) || session == NULL) {
+        return 141;
+    }
+    if (
+        !session->plan.premium_enabled ||
+        session->plan.presentation_mode != PLASMA_PRESENTATION_MODE_HEIGHTFIELD ||
+        !session->plan.transition_requested ||
+        !session->plan.transition_enabled ||
+        session->plan.transition_policy != PLASMA_TRANSITION_POLICY_JOURNEY
+    ) {
+        plasma_destroy_session(session);
+        return 142;
+    }
+
+    benchlab_config_state.common = common_config;
+    benchlab_config_state.product_config = &product_config;
+    benchlab_config_state.product_config_size = sizeof(product_config);
+    if (
+        !plasma_benchlab_build_snapshot(
+            session,
+            &benchlab_config_state,
+            SCREENSAVE_RENDERER_KIND_GL46,
+            &benchlab_snapshot
+        ) ||
+        strcmp(benchlab_snapshot.requested_lane, "premium") != 0 ||
+        strcmp(benchlab_snapshot.resolved_lane, "premium") != 0 ||
+        strcmp(benchlab_snapshot.degraded_from_lane, "none") != 0 ||
+        strcmp(benchlab_snapshot.preset_key, "plasma_lava") != 0 ||
+        strcmp(benchlab_snapshot.presentation_mode, "heightfield") != 0 ||
+        !benchlab_snapshot.transition_requested ||
+        !benchlab_snapshot.transition_enabled ||
+        !benchlab_snapshot.forcing_active ||
+        (benchlab_snapshot.clamp_flags & PLASMA_BENCHLAB_CLAMP_FAVORITES_ONLY) == 0UL
+    ) {
+        plasma_destroy_session(session);
+        return 143;
+    }
+    if (
+        !plasma_benchlab_build_overlay_summary(
+            session,
+            &benchlab_config_state,
+            SCREENSAVE_RENDERER_KIND_GL46,
+            benchlab_overlay,
+            (unsigned int)sizeof(benchlab_overlay)
+        ) ||
+        strstr(benchlab_overlay, "Plasma BenchLab") == NULL ||
+        strstr(benchlab_overlay, "Presentation: heightfield") == NULL ||
+        strstr(benchlab_overlay, "Clamps: favorites_only") == NULL
+    ) {
+        plasma_destroy_session(session);
+        return 144;
+    }
+    if (
+        !plasma_benchlab_build_report_section(
+            session,
+            &benchlab_config_state,
+            SCREENSAVE_RENDERER_KIND_GL46,
+            benchlab_report,
+            (unsigned int)sizeof(benchlab_report)
+        ) ||
+        strstr(benchlab_report, "Plasma BenchLab") == NULL ||
+        strstr(benchlab_report, "Requested lane: premium") == NULL ||
+        strstr(benchlab_report, "Presentation mode: heightfield") == NULL ||
+        strstr(benchlab_report, "BenchLab forcing active: yes") == NULL
+    ) {
+        plasma_destroy_session(session);
+        return 145;
+    }
+    plasma_destroy_session(session);
+
+    plasma_config_set_defaults(&common_config, &product_config, sizeof(product_config));
+    product_config.benchlab = benchlab_forcing;
+    plasma_benchlab_apply_forcing_to_config(&product_config.benchlab, &common_config, &product_config);
+    plasma_config_clamp(&common_config, &product_config, sizeof(product_config));
+    screensave_config_binding_init(&binding, &common_config, &product_config, sizeof(product_config));
+    ZeroMemory(&environment, sizeof(environment));
+    fake_size.width = 320;
+    fake_size.height = 240;
+    plasma_smoke_init_fake_renderer(
+        &fake_renderer,
+        SCREENSAVE_RENDERER_KIND_GL46,
+        SCREENSAVE_RENDERER_KIND_GL11,
+        &fake_size
+    );
+    environment.mode = SCREENSAVE_SESSION_MODE_WINDOWED;
+    environment.drawable_size = fake_size;
+    environment.seed.base_seed = 0x41424344UL;
+    environment.seed.stream_seed = 0x45464748UL;
+    environment.seed.deterministic = common_config.use_deterministic_seed;
+    environment.config_binding = &binding;
+    environment.renderer = &fake_renderer;
+
+    session = NULL;
+    if (!plasma_create_session(module, &session, &environment) || session == NULL) {
+        return 146;
+    }
+    benchlab_config_state.common = common_config;
+    benchlab_config_state.product_config = &product_config;
+    benchlab_config_state.product_config_size = sizeof(product_config);
+    if (
+        session->plan.premium_enabled ||
+        session->plan.presentation_mode != PLASMA_PRESENTATION_MODE_FLAT ||
+        !plasma_benchlab_build_snapshot(
+            session,
+            &benchlab_config_state,
+            SCREENSAVE_RENDERER_KIND_GL46,
+            &benchlab_snapshot
+        ) ||
+        strcmp(benchlab_snapshot.requested_lane, "premium") != 0 ||
+        strcmp(benchlab_snapshot.resolved_lane, "compat") != 0 ||
+        strcmp(benchlab_snapshot.degraded_from_lane, "premium") != 0 ||
+        strcmp(benchlab_snapshot.degraded_to_lane, "compat") != 0 ||
+        (benchlab_snapshot.clamp_flags & PLASMA_BENCHLAB_CLAMP_PRESENTATION) == 0UL
+    ) {
+        plasma_destroy_session(session);
+        return 147;
+    }
+    plasma_destroy_session(session);
+
     return 0;
 }

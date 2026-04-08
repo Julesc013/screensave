@@ -1,3 +1,4 @@
+#include "../../../savers/plasma/src/plasma_benchlab.h"
 #include "benchlab_internal.h"
 
 int anthology_session_build_summary(
@@ -47,6 +48,7 @@ void benchlab_build_overlay_text(const benchlab_app *app, char *buffer, int buff
     screensave_renderer_kind policy_target_kind;
     unsigned int index;
     char anthology_summary[512];
+    char plasma_summary[1024];
     char degraded_path[128];
     char policy_target[64];
     char reason_text[128];
@@ -238,6 +240,23 @@ void benchlab_build_overlay_text(const benchlab_app *app, char *buffer, int buff
         benchlab_append_text(buffer, buffer_size, anthology_summary);
     }
 
+    if (
+        app->session != NULL &&
+        app->module != NULL &&
+        app->module->identity.product_key != NULL &&
+        lstrcmpiA(app->module->identity.product_key, "plasma") == 0 &&
+        plasma_benchlab_build_overlay_summary(
+            app->session,
+            &app->resolved_config,
+            app->requested_renderer_kind,
+            plasma_summary,
+            (unsigned int)sizeof(plasma_summary)
+        )
+    ) {
+        benchlab_append_text(buffer, buffer_size, "\r\n");
+        benchlab_append_text(buffer, buffer_size, plasma_summary);
+    }
+
     benchlab_append_text(buffer, buffer_size, "\r\nDiag: emitted=");
     benchlab_append_number(buffer, buffer_size, app->diagnostics.emitted_count);
     benchlab_append_text(buffer, buffer_size, " dropped=");
@@ -261,7 +280,7 @@ void benchlab_build_overlay_text(const benchlab_app *app, char *buffer, int buff
 void benchlab_draw_overlay(HDC dc, const RECT *client_rect, const benchlab_app *app)
 {
     RECT text_rect;
-    char overlay[2048];
+    char overlay[4096];
 
     if (dc == NULL || client_rect == NULL || app == NULL) {
         return;
