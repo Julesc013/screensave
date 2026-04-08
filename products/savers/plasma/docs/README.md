@@ -18,8 +18,10 @@ They live with the product so later `PL` work can extend them without rewriting 
 - [PL07 Advanced Lane](./pl07-advanced-lane.md): makes `advanced -> gl21` a bounded richer execution lane without changing Plasma's lower-band default center of gravity
 - [PL08 Modern Lane](./pl08-modern-lane.md): makes `modern -> gl33` a bounded refined execution lane layered on top of the advanced path without changing Plasma's lower-band or GL21 reference posture
 - [PL09 Premium Lane](./pl09-premium-lane.md): makes `premium -> gl46` a bounded showcase lane layered on top of the modern path and lands the first real bounded dimensional presentation mode without changing Plasma's lower-band default center of gravity
+- [PL10 Transition Engine](./pl10-transition-engine.md): makes bounded real theme morphs, preset morphs, bridge morphs, fallback policy, and runtime transition state real without changing Plasma's default stable baseline
+- [PL10 Journeys And Compatibility](./pl10-journeys-and-compatibility.md): freezes the implemented compatibility classes, bridge classes, companion set rules, journey model, and seed continuity rules used by the transition engine
 
 ## Intended Follow-On
 
 Later `PL` phases should add their own product-local docs here as they land.
-At `PL09`, no later implementation phase is claimed as implemented.
+At `PL10`, no later implementation phase is claimed as implemented.
