@@ -23,6 +23,7 @@
 #define BENCHLAB_DEFAULT_FIXED_SEED 0x00000707UL
 #define BENCHLAB_DEFAULT_PRODUCT_KEY "nocturne"
 #define BENCHLAB_STEP_DELTA_MS 33UL
+#define BENCHLAB_DEFAULT_REPORT_FRAMES 6UL
 #define BENCHLAB_DIAG_LINE_COUNT 6U
 #define BENCHLAB_DIAG_LINE_LENGTH 160
 
@@ -83,7 +84,10 @@ typedef struct benchlab_app_tag {
     unsigned long clock_start_tick;
     unsigned long last_tick;
     unsigned long random_seed_counter;
+    unsigned long report_frame_count;
     int paused;
+    int report_mode;
+    char report_path[MAX_PATH];
 } benchlab_app;
 
 unsigned int benchlab_get_available_module_count(void);
@@ -119,7 +123,9 @@ void benchlab_session_render(benchlab_app *app, HDC dc);
 void benchlab_session_resume_clock(benchlab_app *app);
 INT_PTR benchlab_session_show_saver_dialog(benchlab_app *app);
 
+void benchlab_build_overlay_text(const benchlab_app *app, char *buffer, int buffer_size);
 void benchlab_draw_overlay(HDC dc, const RECT *client_rect, const benchlab_app *app);
+int benchlab_write_report(benchlab_app *app);
 
 int benchlab_app_run(HINSTANCE instance, LPSTR command_line, int show_code);
 

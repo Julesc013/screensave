@@ -138,6 +138,19 @@ static int benchlab_command_starts_with(const char *token, const char *prefix)
     return 1;
 }
 
+static const char *benchlab_command_payload(const char *token)
+{
+    if (token == NULL) {
+        return NULL;
+    }
+
+    if (token[0] == '/' || token[0] == '-') {
+        return token + 1;
+    }
+
+    return token;
+}
+
 static int benchlab_is_valid_renderer_request(int renderer_request)
 {
     return renderer_request == (int)SCREENSAVE_RENDERER_KIND_UNKNOWN ||
@@ -347,6 +360,10 @@ void benchlab_app_config_apply_command_line(benchlab_app *app, LPSTR command_lin
             app->app_config.overlay_enabled = 0;
             continue;
         }
+        if (benchlab_command_equals(token, "report")) {
+            app->report_mode = 1;
+            continue;
+        }
         if (benchlab_command_equals(token, "auto")) {
             app->app_config.renderer_request = (int)SCREENSAVE_RENDERER_KIND_UNKNOWN;
             continue;
@@ -379,7 +396,7 @@ void benchlab_app_config_apply_command_line(benchlab_app *app, LPSTR command_lin
         if (benchlab_command_starts_with(token, "renderer:")) {
             const char *renderer_name;
 
-            renderer_name = token + 9;
+            renderer_name = benchlab_command_payload(token) + 9;
             if (lstrcmpiA(renderer_name, "auto") == 0) {
                 app->app_config.renderer_request = (int)SCREENSAVE_RENDERER_KIND_UNKNOWN;
             } else if (lstrcmpiA(renderer_name, "gdi") == 0) {
@@ -408,7 +425,7 @@ void benchlab_app_config_apply_command_line(benchlab_app *app, LPSTR command_lin
             continue;
         }
         if (benchlab_command_starts_with(token, "seed:")) {
-            if (benchlab_parse_unsigned_long(token + 6, &value)) {
+            if (benchlab_parse_unsigned_long(benchlab_command_payload(token) + 5, &value)) {
                 app->app_config.fixed_seed = value;
                 app->app_config.deterministic_mode = 1;
             } else {
@@ -421,10 +438,42 @@ void benchlab_app_config_apply_command_line(benchlab_app *app, LPSTR command_lin
             }
             continue;
         }
+        if (benchlab_command_starts_with(token, "frames:")) {
+            if (benchlab_parse_unsigned_long(benchlab_command_payload(token) + 7, &value) && value > 0UL) {
+                app->report_frame_count = value;
+            } else {
+                benchlab_emit_app_diag(
+                    app,
+                    SCREENSAVE_DIAG_LEVEL_WARNING,
+                    7104UL,
+                    "BenchLab ignored an invalid /frames: command-line argument."
+                );
+            }
+            continue;
+        }
+        if (benchlab_command_starts_with(token, "report:")) {
+            const char *report_path;
+
+            report_path = benchlab_command_payload(token) + 7;
+            if (report_path[0] != '\0') {
+                app->report_mode = 1;
+                lstrcpynA(app->report_path, report_path, sizeof(app->report_path));
+            } else {
+                benchlab_emit_app_diag(
+                    app,
+                    SCREENSAVE_DIAG_LEVEL_WARNING,
+                    7105UL,
+                    "BenchLab ignored an empty /report: command-line argument."
+                );
+            }
+            continue;
+        }
         if (benchlab_command_starts_with(token, "saver:") || benchlab_command_starts_with(token, "product:")) {
             const char *product_key;
+            const char *payload;
 
-            product_key = token + (benchlab_command_starts_with(token, "saver:") ? 6 : 8);
+            payload = benchlab_command_payload(token);
+            product_key = payload + (benchlab_command_starts_with(token, "saver:") ? 6 : 8);
             if (benchlab_find_target_module(product_key) != NULL) {
                 lstrcpynA(app->app_config.product_key, product_key, sizeof(app->app_config.product_key));
             } else {

@@ -207,6 +207,43 @@ static const char *screensave_display_renderer_kind_token(const char *token)
     return NULL;
 }
 
+static int screensave_display_parse_renderer_kind_token(
+    const char *token,
+    screensave_renderer_kind *kind_out
+)
+{
+    if (token == NULL || token[0] == '\0' || kind_out == NULL) {
+        return 0;
+    }
+
+    if (strcmp(token, "gdi") == 0) {
+        *kind_out = SCREENSAVE_RENDERER_KIND_GDI;
+        return 1;
+    }
+    if (strcmp(token, "gl11") == 0) {
+        *kind_out = SCREENSAVE_RENDERER_KIND_GL11;
+        return 1;
+    }
+    if (strcmp(token, "gl21") == 0) {
+        *kind_out = SCREENSAVE_RENDERER_KIND_GL21;
+        return 1;
+    }
+    if (strcmp(token, "gl33") == 0) {
+        *kind_out = SCREENSAVE_RENDERER_KIND_GL33;
+        return 1;
+    }
+    if (strcmp(token, "gl46") == 0) {
+        *kind_out = SCREENSAVE_RENDERER_KIND_GL46;
+        return 1;
+    }
+    if (strcmp(token, "null") == 0) {
+        *kind_out = SCREENSAVE_RENDERER_KIND_NULL;
+        return 1;
+    }
+
+    return 0;
+}
+
 static const char *screensave_display_token_text(const char *token)
 {
     const char *renderer_kind_text;
@@ -527,6 +564,105 @@ const char *screensave_display_renderer_kind(screensave_renderer_kind kind)
     }
 }
 
+const char *screensave_display_render_band(screensave_renderer_kind kind)
+{
+    switch (kind) {
+    case SCREENSAVE_RENDERER_KIND_GDI:
+        return "universal";
+
+    case SCREENSAVE_RENDERER_KIND_GL11:
+        return "compat";
+
+    case SCREENSAVE_RENDERER_KIND_GL21:
+        return "advanced";
+
+    case SCREENSAVE_RENDERER_KIND_GL33:
+        return "modern";
+
+    case SCREENSAVE_RENDERER_KIND_GL46:
+        return "premium";
+
+    case SCREENSAVE_RENDERER_KIND_NULL:
+        return "null safety";
+
+    case SCREENSAVE_RENDERER_KIND_UNKNOWN:
+    default:
+        return "auto";
+    }
+}
+
+int screensave_display_renderer_effective_kind(
+    screensave_renderer_kind requested_kind,
+    const char *selection_reason_code,
+    screensave_renderer_kind *effective_kind_out
+)
+{
+    const char *policy_suffix;
+    const char *action_marker;
+    const char *requested_suffix;
+    char token[16];
+    unsigned int token_length;
+
+    if (effective_kind_out == NULL) {
+        return 0;
+    }
+
+    *effective_kind_out = requested_kind;
+    if (selection_reason_code == NULL || selection_reason_code[0] == '\0') {
+        return requested_kind != SCREENSAVE_RENDERER_KIND_UNKNOWN;
+    }
+
+    if (strncmp(selection_reason_code, "policy-auto-prefer-", 19U) == 0) {
+        return screensave_display_parse_renderer_kind_token(
+            selection_reason_code + 19U,
+            effective_kind_out
+        );
+    }
+
+    if (strncmp(selection_reason_code, "auto-prefer-", 12U) == 0) {
+        return screensave_display_parse_renderer_kind_token(
+            selection_reason_code + 12U,
+            effective_kind_out
+        );
+    }
+
+    if (strncmp(selection_reason_code, "policy-request-", 15U) == 0) {
+        policy_suffix = selection_reason_code + 15U;
+        action_marker = strstr(policy_suffix, "-clamp-");
+        if (action_marker == NULL) {
+            action_marker = strstr(policy_suffix, "-raise-");
+        }
+        if (action_marker != NULL) {
+            requested_suffix = action_marker + 7U;
+            return screensave_display_parse_renderer_kind_token(
+                requested_suffix,
+                effective_kind_out
+            );
+        }
+
+        return screensave_display_parse_renderer_kind_token(policy_suffix, effective_kind_out);
+    }
+
+    if (strncmp(selection_reason_code, "force-", 6U) == 0) {
+        policy_suffix = selection_reason_code + 6U;
+        action_marker = strstr(policy_suffix, "-fallback-");
+        if (action_marker == NULL) {
+            return screensave_display_parse_renderer_kind_token(policy_suffix, effective_kind_out);
+        }
+
+        token_length = (unsigned int)(action_marker - policy_suffix);
+        if (token_length == 0U || token_length >= sizeof(token)) {
+            return 0;
+        }
+
+        memcpy(token, policy_suffix, token_length);
+        token[token_length] = '\0';
+        return screensave_display_parse_renderer_kind_token(token, effective_kind_out);
+    }
+
+    return requested_kind != SCREENSAVE_RENDERER_KIND_UNKNOWN;
+}
+
 void screensave_display_renderer_reason(
     const char *reason_code,
     char *buffer,
@@ -560,6 +696,56 @@ void screensave_display_renderer_reason(
     }
 
     screensave_display_humanize_code(reason_code, buffer, buffer_size);
+}
+
+void screensave_display_renderer_degraded_path(
+    screensave_renderer_kind requested_kind,
+    const char *selection_reason_code,
+    screensave_renderer_kind active_kind,
+    char *buffer,
+    unsigned int buffer_size
+)
+{
+    screensave_renderer_kind effective_kind;
+
+    if (buffer == NULL || buffer_size == 0U) {
+        return;
+    }
+
+    buffer[0] = '\0';
+    if (
+        !screensave_display_renderer_effective_kind(
+            requested_kind,
+            selection_reason_code,
+            &effective_kind
+        ) ||
+        effective_kind == SCREENSAVE_RENDERER_KIND_UNKNOWN ||
+        active_kind == SCREENSAVE_RENDERER_KIND_UNKNOWN
+    ) {
+        (void)screensave_display_text_copy(buffer, buffer_size, "None");
+        return;
+    }
+
+    if (effective_kind == active_kind) {
+        (void)screensave_display_text_copy(buffer, buffer_size, "None");
+        return;
+    }
+
+    if (
+        !screensave_display_text_copy(
+            buffer,
+            buffer_size,
+            screensave_display_renderer_kind(effective_kind)
+        ) ||
+        !screensave_display_append_text(buffer, buffer_size, " -> ") ||
+        !screensave_display_append_text(
+            buffer,
+            buffer_size,
+            screensave_display_renderer_kind(active_kind)
+        )
+    ) {
+        (void)screensave_display_text_copy(buffer, buffer_size, "Degraded");
+    }
 }
 
 void screensave_display_renderer_status(

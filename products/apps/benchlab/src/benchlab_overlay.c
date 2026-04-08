@@ -41,11 +41,14 @@ static int benchlab_append_hex(char *buffer, int buffer_size, unsigned long valu
     return benchlab_append_text(buffer, buffer_size, text);
 }
 
-static void benchlab_build_overlay_text(const benchlab_app *app, char *buffer, int buffer_size)
+void benchlab_build_overlay_text(const benchlab_app *app, char *buffer, int buffer_size)
 {
     screensave_renderer_info renderer_info;
+    screensave_renderer_kind policy_target_kind;
     unsigned int index;
     char anthology_summary[512];
+    char degraded_path[128];
+    char policy_target[64];
     char reason_text[128];
     char status_text[128];
 
@@ -98,24 +101,60 @@ static void benchlab_build_overlay_text(const benchlab_app *app, char *buffer, i
             buffer_size,
             screensave_display_renderer_kind(renderer_info.active_kind)
         );
-        if (renderer_info.selection_reason != NULL) {
-            screensave_display_renderer_reason(
+        if (
+            screensave_display_renderer_effective_kind(
+                renderer_info.requested_kind,
                 renderer_info.selection_reason,
-                reason_text,
-                sizeof(reason_text)
+                &policy_target_kind
+            )
+        ) {
+            lstrcpynA(
+                policy_target,
+                screensave_display_renderer_kind(policy_target_kind),
+                sizeof(policy_target)
             );
-            benchlab_append_text(buffer, buffer_size, "\r\nSelection path: ");
-            benchlab_append_text(buffer, buffer_size, reason_text);
-        }
-        if (renderer_info.fallback_reason != NULL) {
-            screensave_display_renderer_reason(
-                renderer_info.fallback_reason,
-                reason_text,
-                sizeof(reason_text)
+        } else {
+            lstrcpynA(
+                policy_target,
+                screensave_display_renderer_kind(renderer_info.requested_kind),
+                sizeof(policy_target)
             );
-            benchlab_append_text(buffer, buffer_size, "\r\nFallback cause: ");
-            benchlab_append_text(buffer, buffer_size, reason_text);
         }
+        benchlab_append_text(buffer, buffer_size, "\r\nPolicy target: ");
+        benchlab_append_text(buffer, buffer_size, policy_target);
+        benchlab_append_text(buffer, buffer_size, "\r\nSelected band: ");
+        benchlab_append_text(
+            buffer,
+            buffer_size,
+            screensave_display_render_band(renderer_info.active_kind)
+        );
+        screensave_display_renderer_degraded_path(
+            renderer_info.requested_kind,
+            renderer_info.selection_reason,
+            renderer_info.active_kind,
+            degraded_path,
+            sizeof(degraded_path)
+        );
+        benchlab_append_text(buffer, buffer_size, "\r\nDegraded path: ");
+        benchlab_append_text(buffer, buffer_size, degraded_path);
+        if (renderer_info.backend_name != NULL) {
+            benchlab_append_text(buffer, buffer_size, "\r\nRenderer backend: ");
+            benchlab_append_text(buffer, buffer_size, renderer_info.backend_name);
+        }
+        screensave_display_renderer_reason(
+            renderer_info.selection_reason,
+            reason_text,
+            sizeof(reason_text)
+        );
+        benchlab_append_text(buffer, buffer_size, "\r\nSelection path: ");
+        benchlab_append_text(buffer, buffer_size, reason_text);
+        screensave_display_renderer_reason(
+            renderer_info.fallback_reason,
+            reason_text,
+            sizeof(reason_text)
+        );
+        benchlab_append_text(buffer, buffer_size, "\r\nFallback cause: ");
+        benchlab_append_text(buffer, buffer_size, reason_text);
         if (renderer_info.vendor_name != NULL) {
             benchlab_append_text(buffer, buffer_size, "\r\nBackend vendor: ");
             benchlab_append_text(buffer, buffer_size, renderer_info.vendor_name);
@@ -157,6 +196,8 @@ static void benchlab_build_overlay_text(const benchlab_app *app, char *buffer, i
 
     benchlab_append_text(buffer, buffer_size, "\r\nSeed: ");
     benchlab_append_hex(buffer, buffer_size, app->current_base_seed);
+    benchlab_append_text(buffer, buffer_size, "\r\nStream seed: ");
+    benchlab_append_hex(buffer, buffer_size, app->session_seed.stream_seed);
     benchlab_append_text(buffer, buffer_size, "\r\nFrame: ");
     benchlab_append_number(buffer, buffer_size, app->clock.frame_index);
     benchlab_append_text(buffer, buffer_size, " elapsed=");
@@ -220,7 +261,7 @@ static void benchlab_build_overlay_text(const benchlab_app *app, char *buffer, i
 void benchlab_draw_overlay(HDC dc, const RECT *client_rect, const benchlab_app *app)
 {
     RECT text_rect;
-    char overlay[1536];
+    char overlay[2048];
 
     if (dc == NULL || client_rect == NULL || app == NULL) {
         return;

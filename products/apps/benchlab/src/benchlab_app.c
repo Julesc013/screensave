@@ -282,7 +282,7 @@ static HWND benchlab_create_window(benchlab_app *app)
         0,
         BENCHLAB_WINDOW_CLASSA,
         BENCHLAB_APP_TITLEA,
-        WS_OVERLAPPEDWINDOW | WS_VISIBLE | WS_CLIPCHILDREN,
+        WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN,
         CW_USEDEFAULT,
         CW_USEDEFAULT,
         rect.right - rect.left,
@@ -869,6 +869,7 @@ int benchlab_app_run(HINSTANCE instance, LPSTR command_line, int show_code)
     app.instance = instance;
     app.command_line = command_line;
     app.show_code = show_code;
+    app.report_frame_count = BENCHLAB_DEFAULT_REPORT_FRAMES;
 
     screensave_diag_context_init(&app.diagnostics, SCREENSAVE_DIAG_LEVEL_DEBUG);
     benchlab_diag_attach(&app);
@@ -921,6 +922,24 @@ int benchlab_app_run(HINSTANCE instance, LPSTR command_line, int show_code)
             MB_OK | MB_ICONERROR
         );
         return 1;
+    }
+
+    if (app.report_mode) {
+        ShowWindow(app.main_window, SW_HIDE);
+        UpdateWindow(app.main_window);
+        result = benchlab_write_report(&app) ? 0 : 1;
+        if (app.main_window != NULL) {
+            SendMessageA(app.main_window, WM_CLOSE, 0U, 0L);
+            while ((get_message_result = GetMessageA(&message, NULL, 0, 0)) > 0) {
+                TranslateMessage(&message);
+                DispatchMessageA(&message);
+            }
+            if (get_message_result < 0) {
+                result = 1;
+            }
+        }
+        benchlab_session_dispose_config(&app);
+        return result;
     }
 
     ShowWindow(app.main_window, show_code == 0 ? SW_SHOW : show_code);

@@ -101,7 +101,10 @@ void scr_build_version_text(const scr_host_context *context, char *buffer, int b
 void scr_build_overlay_text(const scr_host_context *context, char *buffer, int buffer_size)
 {
     screensave_renderer_info renderer_info;
+    screensave_renderer_kind policy_target_kind;
     screensave_service_seams service_seams;
+    char degraded_path[128];
+    char policy_target[64];
     char reason_text[128];
     char seam_text[192];
     char status_text[128];
@@ -187,28 +190,60 @@ void scr_build_overlay_text(const scr_host_context *context, char *buffer, int b
             buffer_size,
             screensave_display_renderer_kind(renderer_info.active_kind)
         );
+        if (
+            screensave_display_renderer_effective_kind(
+                renderer_info.requested_kind,
+                renderer_info.selection_reason,
+                &policy_target_kind
+            )
+        ) {
+            lstrcpynA(
+                policy_target,
+                screensave_display_renderer_kind(policy_target_kind),
+                sizeof(policy_target)
+            );
+        } else {
+            lstrcpynA(
+                policy_target,
+                screensave_display_renderer_kind(renderer_info.requested_kind),
+                sizeof(policy_target)
+            );
+        }
+        scr_append_text(buffer, buffer_size, "\r\nPolicy target: ");
+        scr_append_text(buffer, buffer_size, policy_target);
+        scr_append_text(buffer, buffer_size, "\r\nSelected band: ");
+        scr_append_text(
+            buffer,
+            buffer_size,
+            screensave_display_render_band(renderer_info.active_kind)
+        );
+        screensave_display_renderer_degraded_path(
+            renderer_info.requested_kind,
+            renderer_info.selection_reason,
+            renderer_info.active_kind,
+            degraded_path,
+            sizeof(degraded_path)
+        );
+        scr_append_text(buffer, buffer_size, "\r\nDegraded path: ");
+        scr_append_text(buffer, buffer_size, degraded_path);
         if (renderer_info.backend_name != NULL) {
             scr_append_text(buffer, buffer_size, "\r\nRenderer backend: ");
             scr_append_text(buffer, buffer_size, renderer_info.backend_name);
         }
-        if (renderer_info.selection_reason != NULL) {
-            screensave_display_renderer_reason(
-                renderer_info.selection_reason,
-                reason_text,
-                sizeof(reason_text)
-            );
-            scr_append_text(buffer, buffer_size, "\r\nSelection path: ");
-            scr_append_text(buffer, buffer_size, reason_text);
-        }
-        if (renderer_info.fallback_reason != NULL) {
-            screensave_display_renderer_reason(
-                renderer_info.fallback_reason,
-                reason_text,
-                sizeof(reason_text)
-            );
-            scr_append_text(buffer, buffer_size, "\r\nFallback cause: ");
-            scr_append_text(buffer, buffer_size, reason_text);
-        }
+        screensave_display_renderer_reason(
+            renderer_info.selection_reason,
+            reason_text,
+            sizeof(reason_text)
+        );
+        scr_append_text(buffer, buffer_size, "\r\nSelection path: ");
+        scr_append_text(buffer, buffer_size, reason_text);
+        screensave_display_renderer_reason(
+            renderer_info.fallback_reason,
+            reason_text,
+            sizeof(reason_text)
+        );
+        scr_append_text(buffer, buffer_size, "\r\nFallback cause: ");
+        scr_append_text(buffer, buffer_size, reason_text);
         if (renderer_info.vendor_name != NULL) {
             scr_append_text(buffer, buffer_size, "\r\nBackend vendor: ");
             scr_append_text(buffer, buffer_size, renderer_info.vendor_name);

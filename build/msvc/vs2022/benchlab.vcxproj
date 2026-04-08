@@ -90,6 +90,7 @@
     <ClCompile Include="..\..\..\products\apps\benchlab\src\benchlab_diag.c" />
     <ClCompile Include="..\..\..\products\apps\benchlab\src\benchlab_main.c" />
     <ClCompile Include="..\..\..\products\apps\benchlab\src\benchlab_overlay.c" />
+    <ClCompile Include="..\..\..\products\apps\benchlab\src\benchlab_report.c" />
     <ClCompile Include="..\..\..\products\apps\benchlab\src\benchlab_session.c" />
     <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_config.c" />
     <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_module.c" />
