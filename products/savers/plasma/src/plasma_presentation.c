@@ -26,6 +26,15 @@ int plasma_presentation_prepare(
         return 0;
     }
 
+    if (plan->modern_enabled) {
+        return plasma_modern_prepare_presentation(
+            plan,
+            (struct plasma_execution_state_tag *)state,
+            treated_frame,
+            target_out
+        );
+    }
+
     screensave_visual_buffer_get_bitmap_view(treated_frame->visual_buffer, &target_out->bitmap_view);
     target_out->destination_rect.x = 0;
     target_out->destination_rect.y = 0;

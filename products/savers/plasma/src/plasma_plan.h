@@ -38,6 +38,12 @@ typedef struct plasma_plan_tag {
     int advanced_degraded;
     unsigned long advanced_components;
     unsigned long advanced_degrade_policy;
+    int modern_capable;
+    int modern_requested;
+    int modern_enabled;
+    int modern_degraded;
+    unsigned long modern_components;
+    unsigned long modern_degrade_policy;
     screensave_renderer_kind minimum_kind;
     screensave_renderer_kind preferred_kind;
     screensave_capability_quality_class quality_class;

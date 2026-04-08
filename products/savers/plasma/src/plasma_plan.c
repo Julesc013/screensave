@@ -27,6 +27,7 @@ void plasma_plan_init(plasma_plan *plan)
     plan->presentation_mode = PLASMA_PRESENTATION_MODE_FLAT;
     plan->classic_execution = 1;
     plasma_advanced_plan_init(plan);
+    plasma_modern_plan_init(plan);
 }
 
 void plasma_plan_bind_renderer_kind(
@@ -37,6 +38,7 @@ void plasma_plan_bind_renderer_kind(
 )
 {
     plasma_advanced_bind_plan(plan, module, requested_kind, active_kind);
+    plasma_modern_bind_plan(plan, module, requested_kind, active_kind);
 }
 
 int plasma_plan_compile(
@@ -161,7 +163,8 @@ int plasma_plan_validate(
         !plasma_output_validate_plan(plan) ||
         !plasma_treatment_validate_plan(plan) ||
         !plasma_presentation_validate_plan(plan) ||
-        !plasma_advanced_validate_plan(plan, module)
+        !plasma_advanced_validate_plan(plan, module) ||
+        !plasma_modern_validate_plan(plan, module)
     ) {
         return 0;
     }

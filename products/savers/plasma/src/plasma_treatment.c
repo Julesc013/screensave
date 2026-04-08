@@ -152,7 +152,11 @@ static int plasma_apply_filter_treatment(
         return 1;
     }
 
-    return plasma_advanced_apply_blur_filter(plan, state, visual_buffer);
+    if (!plasma_advanced_apply_blur_filter(plan, state, visual_buffer)) {
+        return 0;
+    }
+
+    return plasma_modern_apply_filter_refinement(plan, state, visual_buffer);
 }
 
 static int plasma_apply_emulation_treatment(

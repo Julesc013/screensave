@@ -50,7 +50,7 @@ static unsigned char plasma_advanced_clamp_channel(unsigned int value)
 
 int plasma_is_advanced_kind(screensave_renderer_kind renderer_kind)
 {
-    return renderer_kind == SCREENSAVE_RENDERER_KIND_GL21;
+    return plasma_is_advanced_runtime_kind(renderer_kind);
 }
 
 void plasma_advanced_plan_init(struct plasma_plan_tag *plan)
@@ -107,7 +107,7 @@ void plasma_advanced_bind_plan(
         module != NULL &&
         plan->advanced_capable &&
         plasma_is_advanced_kind(active_kind) &&
-        screensave_saver_supports_renderer_kind(module, SCREENSAVE_RENDERER_KIND_GL21)
+        screensave_saver_supports_renderer_kind(module, active_kind)
     ) {
         plan->advanced_enabled = 1;
         plan->advanced_components =
@@ -163,7 +163,7 @@ int plasma_advanced_validate_plan(
             !plan->advanced_requested ||
             !plasma_is_advanced_kind(plan->active_renderer_kind) ||
             module == NULL ||
-            !screensave_saver_supports_renderer_kind(module, SCREENSAVE_RENDERER_KIND_GL21) ||
+            !screensave_saver_supports_renderer_kind(module, plan->active_renderer_kind) ||
             plan->advanced_degraded ||
             plan->advanced_components != (
                 PLASMA_ADVANCED_COMPONENT_HISTORY_FEEDBACK |

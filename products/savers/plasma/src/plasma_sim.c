@@ -90,6 +90,9 @@ static int plasma_resolution_divisor(
     if (plan->advanced_enabled && divisor > 2) {
         divisor -= 1;
     }
+    if (plan->modern_enabled && divisor > 2) {
+        divisor -= 1;
+    }
     if (divisor < 2) {
         divisor = 2;
     }
@@ -153,6 +156,7 @@ static int plasma_resize_visual_state(
     unsigned char *new_history;
     int size_matches;
     int need_advanced_buffers;
+    int need_modern_buffers;
 
     if (plan == NULL || state == NULL) {
         return 0;
@@ -165,17 +169,30 @@ static int plasma_resize_visual_state(
         state->field_size.width == desired_size.width &&
         state->field_size.height == desired_size.height;
     need_advanced_buffers = plan->advanced_enabled;
+    need_modern_buffers = plan->modern_enabled;
     if (
         size_matches &&
         (
             (!need_advanced_buffers &&
                 state->field_history == NULL &&
-                state->advanced_treatment_buffer.pixels == NULL) ||
+                state->advanced_treatment_buffer.pixels == NULL &&
+                state->modern_treatment_buffer.pixels == NULL &&
+                state->modern_presentation_buffer.pixels == NULL) ||
             (need_advanced_buffers &&
                 state->field_history != NULL &&
                 state->advanced_treatment_buffer.pixels != NULL &&
                 state->advanced_treatment_buffer.size.width == desired_size.width &&
-                state->advanced_treatment_buffer.size.height == desired_size.height)
+                state->advanced_treatment_buffer.size.height == desired_size.height &&
+                (!need_modern_buffers ||
+                    (state->modern_treatment_buffer.pixels != NULL &&
+                        state->modern_treatment_buffer.size.width == desired_size.width &&
+                        state->modern_treatment_buffer.size.height == desired_size.height &&
+                        state->modern_presentation_buffer.pixels != NULL &&
+                        state->modern_presentation_buffer.size.width == desired_size.width &&
+                        state->modern_presentation_buffer.size.height == desired_size.height)) &&
+                (need_modern_buffers ||
+                    (state->modern_treatment_buffer.pixels == NULL &&
+                        state->modern_presentation_buffer.pixels == NULL)))
         )
     ) {
         return 1;
@@ -244,6 +261,38 @@ static int plasma_resize_visual_state(
         screensave_visual_buffer_dispose(&state->advanced_treatment_buffer);
         free(state->field_history);
         state->field_history = NULL;
+    }
+
+    if (need_modern_buffers) {
+        if (state->modern_treatment_buffer.pixels == NULL) {
+            if (!screensave_visual_buffer_init(&state->modern_treatment_buffer, &desired_size)) {
+                free(new_primary);
+                free(new_secondary);
+                free(new_history);
+                return 0;
+            }
+        } else if (!screensave_visual_buffer_resize(&state->modern_treatment_buffer, &desired_size)) {
+            free(new_primary);
+            free(new_secondary);
+            free(new_history);
+            return 0;
+        }
+        if (state->modern_presentation_buffer.pixels == NULL) {
+            if (!screensave_visual_buffer_init(&state->modern_presentation_buffer, &desired_size)) {
+                free(new_primary);
+                free(new_secondary);
+                free(new_history);
+                return 0;
+            }
+        } else if (!screensave_visual_buffer_resize(&state->modern_presentation_buffer, &desired_size)) {
+            free(new_primary);
+            free(new_secondary);
+            free(new_history);
+            return 0;
+        }
+    } else {
+        screensave_visual_buffer_dispose(&state->modern_treatment_buffer);
+        screensave_visual_buffer_dispose(&state->modern_presentation_buffer);
     }
 
     if (new_primary != NULL) {
@@ -590,6 +639,9 @@ static void plasma_warm_start_effect(
         if (!plasma_advanced_apply_field_effects(plan, state)) {
             return;
         }
+        if (!plasma_modern_apply_field_refinement(plan, state)) {
+            return;
+        }
         state->phase_millis += 33UL;
         state->palette_phase = (state->palette_phase + 3UL) & 255UL;
         state->source_phase_a += 5UL;
@@ -688,6 +740,8 @@ void plasma_destroy_session(screensave_saver_session *session)
     free(session->state.field_secondary);
     free(session->state.field_history);
     screensave_visual_buffer_dispose(&session->state.advanced_treatment_buffer);
+    screensave_visual_buffer_dispose(&session->state.modern_treatment_buffer);
+    screensave_visual_buffer_dispose(&session->state.modern_presentation_buffer);
     screensave_visual_buffer_dispose(&session->state.visual_buffer);
     free(session);
 }
@@ -763,6 +817,9 @@ void plasma_step_session(
 
     plasma_apply_smoothing(&session->plan, state);
     if (!plasma_advanced_apply_field_effects(&session->plan, state)) {
+        return;
+    }
+    if (!plasma_modern_apply_field_refinement(&session->plan, state)) {
         return;
     }
 
