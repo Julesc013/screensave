@@ -24,8 +24,11 @@ They live with the product so later `PL` work can extend them without rewriting 
 - [PL11 Settings Catalog](./pl11-settings-catalog.md): freezes the implemented Plasma settings descriptor model, category rules, persistence scopes, and current shipped catalog subset
 - [PL12 BenchLab Integration](./pl12-benchlab.md): makes Plasma's product-local BenchLab reporting, bounded forcing, and requested-versus-resolved-versus-degraded truth export real without changing the normal saver path
 - [PL12 BenchLab Fields And Forcing](./pl12-benchlab-fields-and-forcing.md): freezes the implemented Plasma-specific BenchLab field catalog, forcing subset, clamp rules, and reporting semantics
+- [PL13 Validation Matrix](./pl13-validation-matrix.md): records the current Plasma proof matrix across lower lanes, richer lanes, transitions, settings, and BenchLab surfaces with explicit evidence-backed status labels
+- [PL13 Performance Envelopes](./pl13-performance-envelopes.md): records the bounded startup, runtime, transition, and soak envelopes that are honestly supportable for the implemented subset
+- [PL13 Known Limits](./pl13-known-limits.md): records the current unsupported, partially validated, and blocked areas that PL14 must treat as factual constraints
 
 ## Intended Follow-On
 
 Later `PL` phases should add their own product-local docs here as they land.
-At `PL12`, no later implementation phase is claimed as implemented.
+At `PL13`, no later release-cut phase is claimed as implemented.

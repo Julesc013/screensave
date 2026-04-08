@@ -1,0 +1,136 @@
+BenchLab SX09 report
+Product key: plasma
+Display name: Plasma
+Requested renderer: OpenGL 1.1
+Policy target: OpenGL 1.1
+Active renderer: OpenGL 1.1
+Selected band: compat
+Degraded path: None
+Selection path: Requested OpenGL 1.1 within saver policy
+Fallback cause: None
+Renderer backend: gl11
+Renderer status: Presented with OpenGL buffer swap
+Backend vendor: NVIDIA Corporation
+Backend renderer: NVIDIA GeForce RTX 2070/PCIe/SSE2
+Backend detail: gl=4.6.0 NVIDIA 591.86 pf=10 dbl=1 gdi=0 gen=0 p=320 s=320 f=0
+Deterministic mode: yes
+Base seed: 0x000002E7
+Stream seed: 0x8626231A
+Frames exercised: 320
+Final frame: 320
+Command line: /deterministic /seed:743 /saver:plasma /frames:320 /report:validation\captures\pl13\benchlab-plasma-journey-gl11.txt /renderer:gl11 /plasma-preset-set:classic_core /plasma-theme-set:warm_classics /plasma-journey:classic_cycle /plasma-transitions:on /plasma-transition-policy:journey /plasma-transition-duration:1800 /plasma-transition-interval:9000
+
+Overlay snapshot
+----------------
+BenchLab
+Saver: Plasma
+Runtime: 0.15.0
+Renderer preference: OpenGL 1.1
+Routing profile: min GDI pref OpenGL 1.1 quality safe
+Active renderer: OpenGL 1.1
+Policy target: OpenGL 1.1
+Selected band: compat
+Degraded path: None
+Renderer backend: gl11
+Selection path: Requested OpenGL 1.1 within saver policy
+Fallback cause: None
+Backend vendor: NVIDIA Corporation
+Backend renderer: NVIDIA GeForce RTX 2070/PCIe/SSE2
+Backend detail: gl=4.6.0 NVIDIA 591.86 pf=10 dbl=1 gdi=0 gen=0 p=320 s=320 f=0
+Drawable: 640x480
+Renderer status: Presented with OpenGL buffer swap
+Run mode: deterministic running
+Seed: 0x000002E7
+Stream seed: 0x8626231A
+Frame: 320 elapsed=10560ms delta=33ms
+Detail level: Standard
+Preset key: plasma_lava
+Theme key: plasma_lava
+Randomization mode: Off
+Plasma BenchLab
+Requested lane: compat
+Resolved lane: compat
+Degrade: none
+Preset: plasma_lava
+Theme: plasma_lava
+Preset set: classic_core
+Theme set: warm_classics
+Journey: classic_cycle
+Profile: stable / safe
+Output: raster / native_raster
+Treatments: none | none | none | none
+Presentation: flat
+Transition: enabled / preset_morph
+Settings surface: basic
+Content filter: stable_only
+Forcing active: yes
+Clamps: none
+
+Diag: emitted=323 dropped=0
+debug/renderer 6304 gl=4.6.0 NVIDIA 591.86 pf=10 dbl=1 gdi=0 gen=0 p=320 s=320 f=0
+debug/renderer 6304 gl=4.6.0 NVIDIA 591.86 pf=10 dbl=1 gdi=0 gen=0 p=319 s=319 f=0
+debug/renderer 6304 gl=4.6.0 NVIDIA 591.86 pf=10 dbl=1 gdi=0 gen=0 p=318 s=318 f=0
+Keys: F5 restart F6 reseed F7 deterministic F8 pause F9 step
+
+Recent diagnostics
+------------------
+- debug/renderer 6304 gl=4.6.0 NVIDIA 591.86 pf=10 dbl=1 gdi=0 gen=0 p=320 s=320 f=0
+- debug/renderer 6304 gl=4.6.0 NVIDIA 591.86 pf=10 dbl=1 gdi=0 gen=0 p=319 s=319 f=0
+- debug/renderer 6304 gl=4.6.0 NVIDIA 591.86 pf=10 dbl=1 gdi=0 gen=0 p=318 s=318 f=0
+- debug/renderer 6304 gl=4.6.0 NVIDIA 591.86 pf=10 dbl=1 gdi=0 gen=0 p=317 s=317 f=0
+- debug/renderer 6304 gl=4.6.0 NVIDIA 591.86 pf=10 dbl=1 gdi=0 gen=0 p=316 s=316 f=0
+- debug/renderer 6304 gl=4.6.0 NVIDIA 591.86 pf=10 dbl=1 gdi=0 gen=0 p=315 s=315 f=0
+
+
+Plasma BenchLab
+----------------
+Requested lane: compat
+Resolved lane: compat
+Degraded from: none
+Degraded to: none
+Preset key: plasma_lava
+Theme key: plasma_lava
+Preset set key: classic_core
+Theme set key: warm_classics
+Journey key: classic_cycle
+Profile class: stable
+Quality class: safe
+Preset source: built_in
+Preset channel: stable
+Theme source: built_in
+Theme channel: stable
+Generator family: fire
+Output family: raster
+Output mode: native_raster
+Sampling treatment: none
+Filter treatment: none
+Emulation treatment: none
+Accent treatment: none
+Presentation mode: flat
+Transition requested: yes
+Transition enabled: yes
+Transition policy: journey
+Transition type: preset_morph
+Transition fallback: theme_morph
+Transition seed policy: keep_stream
+Transition source preset: plasma_lava
+Transition target preset: quiet_darkroom
+Transition source theme: plasma_lava
+Transition target theme: quiet_darkroom
+Preset morph class: fire
+Theme morph class: warm
+Bridge class: warm_classic
+Seed policy: inherit
+Configured seed: 0x00000000
+Base seed: 0x000002E7
+Stream seed: 0x8626231A
+Resolved RNG seed: 0x862621FD
+Settings surface: basic
+Content filter: stable_only
+Favorites requested: no
+Favorites applied: no
+BenchLab forcing active: yes
+Clamp flags: 0x00000000
+Clamp summary: none
+Requested/resolved/degraded: compat / compat / none
+
