@@ -280,6 +280,19 @@ static void screensave_backend_loader_apply_selection(
 
     if (
         request->diagnostics != NULL &&
+        descriptor->backend_kind == SCREENSAVE_BACKEND_KIND_GL21 &&
+        request->requested_kind != SCREENSAVE_RENDERER_KIND_GL21
+    ) {
+        screensave_backend_loader_emit_create_diag(
+            request->diagnostics,
+            SCREENSAVE_DIAG_LEVEL_INFO,
+            4104UL,
+            "Renderer selection is using the GL21 advanced lane."
+        );
+    }
+
+    if (
+        request->diagnostics != NULL &&
         descriptor->backend_kind == SCREENSAVE_BACKEND_KIND_GDI &&
         request->requested_kind != SCREENSAVE_RENDERER_KIND_GDI
     ) {

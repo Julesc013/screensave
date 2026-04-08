@@ -42,7 +42,13 @@ static int screensave_gl21_begin_frame(screensave_renderer *renderer, const scre
     glLoadIdentity();
 
     state->frame_open = 1;
-    screensave_gl21_update_renderer_info(renderer, &state->drawable_size, "frame-open");
+    screensave_gl21_update_renderer_info(
+        renderer,
+        &state->drawable_size,
+        state->caps.double_buffered
+            ? "frame-open-double-buffered"
+            : "frame-open-single-buffered"
+    );
     return 1;
 }
 
@@ -158,6 +164,7 @@ int screensave_gl21_renderer_create(
     }
 
     screensave_gl21_context_release_current(state);
+    screensave_gl21_capture_refresh(state);
 
     ZeroMemory(&info, sizeof(info));
     info.requested_kind = SCREENSAVE_RENDERER_KIND_GL21;
@@ -197,7 +204,13 @@ int screensave_gl21_renderer_resize(screensave_renderer *renderer, const screens
     }
 
     state->drawable_size = *drawable_size;
-    screensave_gl21_update_renderer_info(renderer, drawable_size, "resized");
+    screensave_gl21_update_renderer_info(
+        renderer,
+        drawable_size,
+        state->caps.double_buffered
+            ? "resized-double-buffered"
+            : "resized-single-buffered"
+    );
     return 1;
 }
 

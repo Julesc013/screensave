@@ -19,6 +19,9 @@ typedef struct screensave_backend_caps_tag {
     unsigned long state_flags;
     unsigned long public_capability_flags;
     unsigned long private_capability_flags;
+    unsigned long required_private_capability_flags;
+    unsigned long preferred_private_capability_flags;
+    unsigned long missing_private_capability_flags;
     int rgba_bits;
     int depth_bits;
     int major_version;

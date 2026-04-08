@@ -62,6 +62,17 @@ typedef HGLRC (WINAPI *PFNWGLCREATECONTEXTATTRIBSARBPROC)(HDC, HGLRC, const int 
 #define SCREENSAVE_GL21_PRIVATE_CAP_VBO              0x04000000UL
 #define SCREENSAVE_GL21_PRIVATE_CAP_FBO              0x08000000UL
 #define SCREENSAVE_GL21_PRIVATE_CAP_TEXTURE_RECT     0x10000000UL
+#define SCREENSAVE_GL21_PRIVATE_CAP_CONTEXT_ATTRIBS  0x20000000UL
+#define SCREENSAVE_GL21_PRIVATE_CAP_CONTEXT_21_PLUS  0x40000000UL
+#define SCREENSAVE_GL21_PRIVATE_CAP_CONTEXT_32_PLUS  0x80000000UL
+
+typedef struct screensave_gl21_capability_bundle_tag {
+    unsigned long required_flags;
+    unsigned long preferred_flags;
+    unsigned long available_flags;
+    unsigned long missing_required_flags;
+    int satisfied;
+} screensave_gl21_capability_bundle;
 
 typedef struct screensave_gl21_caps_tag {
     unsigned long private_flags;
@@ -70,6 +81,8 @@ typedef struct screensave_gl21_caps_tag {
     int double_buffered;
     int support_gdi;
     int generic_format;
+    int rgba_bits;
+    int depth_bits;
     int has_vbo;
     int has_fbo;
     int has_texture_rectangle;
@@ -78,6 +91,7 @@ typedef struct screensave_gl21_caps_tag {
     char vendor[64];
     char renderer[96];
     char version[64];
+    screensave_gl21_capability_bundle bundle;
 } screensave_gl21_caps;
 
 typedef struct screensave_gl21_state_tag {
@@ -89,6 +103,10 @@ typedef struct screensave_gl21_state_tag {
     screensave_sizei drawable_size;
     int pixel_format;
     int frame_open;
+    unsigned long present_count;
+    unsigned long swap_count;
+    unsigned long flush_count;
+    char detail_text[128];
     PFNWGLCREATECONTEXTATTRIBSARBPROC create_context_attribs;
     screensave_gl21_caps caps;
 } screensave_gl21_state;
@@ -117,6 +135,7 @@ void screensave_gl21_emit_diag(
     const char *origin,
     const char *text
 );
+void screensave_gl21_capture_refresh(screensave_gl21_state *state);
 
 int screensave_gl21_context_create(
     screensave_gl21_state *state,

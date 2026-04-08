@@ -70,6 +70,7 @@ PLATFORM_OBJS := \
 	$(PLATFORM_DIR)/gl11_state.o \
 	$(PLATFORM_DIR)/gl21_backend.o \
 	$(PLATFORM_DIR)/gl21_caps.o \
+	$(PLATFORM_DIR)/gl21_capture.o \
 	$(PLATFORM_DIR)/gl21_context.o \
 	$(PLATFORM_DIR)/gl21_present.o \
 	$(PLATFORM_DIR)/gl21_primitives.o \

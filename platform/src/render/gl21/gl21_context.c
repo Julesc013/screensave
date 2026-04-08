@@ -15,12 +15,96 @@ static void screensave_gl21_normalize_size(const screensave_sizei *source, scree
     }
 }
 
-static int screensave_gl21_choose_pixel_format(
+static void screensave_gl21_context_reset_runtime(screensave_gl21_state *state)
+{
+    screensave_diag_context *diagnostics;
+    HWND target_window;
+
+    if (state == NULL) {
+        return;
+    }
+
+    diagnostics = state->diagnostics;
+    target_window = state->target_window;
+    ZeroMemory(state, sizeof(*state));
+    state->diagnostics = diagnostics;
+    state->target_window = target_window;
+}
+
+static void screensave_gl21_context_release_window_dc(screensave_gl21_state *state)
+{
+    if (state == NULL) {
+        return;
+    }
+
+    if (state->window_dc != NULL) {
+        ReleaseDC(state->target_window, state->window_dc);
+        state->window_dc = NULL;
+    }
+}
+
+static void screensave_gl21_context_release_bootstrap_context(screensave_gl21_state *state)
+{
+    if (state == NULL) {
+        return;
+    }
+
+    if (state->bootstrap_context != NULL) {
+        if (wglGetCurrentContext() == state->bootstrap_context) {
+            wglMakeCurrent(NULL, NULL);
+        }
+        wglDeleteContext(state->bootstrap_context);
+        state->bootstrap_context = NULL;
+    }
+}
+
+static void screensave_gl21_context_release_gl_context(screensave_gl21_state *state)
+{
+    if (state == NULL) {
+        return;
+    }
+
+    if (state->gl_context != NULL) {
+        if (wglGetCurrentContext() == state->gl_context) {
+            wglMakeCurrent(NULL, NULL);
+        }
+        wglDeleteContext(state->gl_context);
+        state->gl_context = NULL;
+    }
+}
+
+static void screensave_gl21_context_cleanup_failed_create(screensave_gl21_state *state)
+{
+    screensave_gl21_context_release_gl_context(state);
+    screensave_gl21_context_release_bootstrap_context(state);
+    screensave_gl21_context_release_window_dc(state);
+    if (state != NULL) {
+        state->pixel_format = 0;
+    }
+}
+
+static void screensave_gl21_context_capture_pixel_format_caps(
     screensave_gl21_state *state,
+    const PIXELFORMATDESCRIPTOR *actual_format
+)
+{
+    if (state == NULL || actual_format == NULL) {
+        return;
+    }
+
+    state->caps.double_buffered = (actual_format->dwFlags & PFD_DOUBLEBUFFER) != 0U;
+    state->caps.support_gdi = (actual_format->dwFlags & PFD_SUPPORT_GDI) != 0U;
+    state->caps.generic_format = (actual_format->dwFlags & PFD_GENERIC_FORMAT) != 0U;
+    state->caps.rgba_bits = (int)actual_format->cColorBits;
+    state->caps.depth_bits = (int)actual_format->cDepthBits;
+}
+
+static int screensave_gl21_choose_or_describe_pixel_format(
+    screensave_gl21_state *state,
+    PIXELFORMATDESCRIPTOR *actual_format,
     const char **failure_reason_out
 )
 {
-    PIXELFORMATDESCRIPTOR actual_format;
     PIXELFORMATDESCRIPTOR requested_format;
     int pixel_format;
 
@@ -28,65 +112,109 @@ static int screensave_gl21_choose_pixel_format(
         *failure_reason_out = NULL;
     }
 
-    ZeroMemory(&requested_format, sizeof(requested_format));
-    requested_format.nSize = sizeof(requested_format);
-    requested_format.nVersion = 1;
-    requested_format.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
-    requested_format.iPixelType = PFD_TYPE_RGBA;
-    requested_format.cColorBits = 24;
-    requested_format.cAlphaBits = 8;
-    requested_format.cDepthBits = 24;
-    requested_format.iLayerType = PFD_MAIN_PLANE;
-
-    pixel_format = ChoosePixelFormat(state->window_dc, &requested_format);
+    pixel_format = GetPixelFormat(state->window_dc);
     if (pixel_format == 0) {
-        requested_format.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL;
+        ZeroMemory(&requested_format, sizeof(requested_format));
+        requested_format.nSize = sizeof(requested_format);
+        requested_format.nVersion = 1;
+        requested_format.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
+        requested_format.iPixelType = PFD_TYPE_RGBA;
+        requested_format.cColorBits = 24;
+        requested_format.cAlphaBits = 8;
+        requested_format.cDepthBits = 24;
+        requested_format.iLayerType = PFD_MAIN_PLANE;
+
         pixel_format = ChoosePixelFormat(state->window_dc, &requested_format);
         if (pixel_format == 0) {
+            requested_format.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL;
+            pixel_format = ChoosePixelFormat(state->window_dc, &requested_format);
+            if (pixel_format == 0) {
+                if (failure_reason_out != NULL) {
+                    *failure_reason_out = "gl21-choose-pixel-format-failed";
+                }
+                screensave_gl21_emit_diag(
+                    state,
+                    SCREENSAVE_DIAG_LEVEL_ERROR,
+                    6703UL,
+                    "gl21_context",
+                    "ChoosePixelFormat failed for the advanced GL window."
+                );
+                return 0;
+            }
+
+            screensave_gl21_emit_diag(
+                state,
+                SCREENSAVE_DIAG_LEVEL_WARNING,
+                6704UL,
+                "gl21_context",
+                "The advanced GL path is using a single-buffered pixel format."
+            );
+        }
+
+        if (!SetPixelFormat(state->window_dc, pixel_format, &requested_format)) {
             if (failure_reason_out != NULL) {
-                *failure_reason_out = "gl21-choose-pixel-format-failed";
+                *failure_reason_out = "gl21-set-pixel-format-failed";
             }
             screensave_gl21_emit_diag(
                 state,
                 SCREENSAVE_DIAG_LEVEL_ERROR,
-                6703UL,
+                6705UL,
                 "gl21_context",
-                "ChoosePixelFormat failed for the advanced GL window."
+                "SetPixelFormat failed for the advanced GL window."
             );
             return 0;
         }
-
+    } else {
         screensave_gl21_emit_diag(
             state,
-            SCREENSAVE_DIAG_LEVEL_WARNING,
-            6704UL,
+            SCREENSAVE_DIAG_LEVEL_INFO,
+            6716UL,
             "gl21_context",
-            "The advanced GL path is using a single-buffered pixel format."
+            "GL21 is reusing the existing window pixel format."
         );
     }
 
-    if (!SetPixelFormat(state->window_dc, pixel_format, &requested_format)) {
+    state->pixel_format = pixel_format;
+    ZeroMemory(actual_format, sizeof(*actual_format));
+    actual_format->nSize = sizeof(*actual_format);
+    actual_format->nVersion = 1;
+    if (!DescribePixelFormat(state->window_dc, pixel_format, sizeof(*actual_format), actual_format)) {
         if (failure_reason_out != NULL) {
-            *failure_reason_out = "gl21-set-pixel-format-failed";
+            *failure_reason_out = "gl21-describe-pixel-format-failed";
         }
         screensave_gl21_emit_diag(
             state,
             SCREENSAVE_DIAG_LEVEL_ERROR,
-            6705UL,
+            6717UL,
             "gl21_context",
-            "SetPixelFormat failed for the advanced GL window."
+            "DescribePixelFormat failed for the advanced GL window."
         );
         return 0;
     }
 
-    state->pixel_format = pixel_format;
-    ZeroMemory(&actual_format, sizeof(actual_format));
-    actual_format.nSize = sizeof(actual_format);
-    actual_format.nVersion = 1;
-    if (DescribePixelFormat(state->window_dc, pixel_format, sizeof(actual_format), &actual_format)) {
-        state->caps.double_buffered = (actual_format.dwFlags & PFD_DOUBLEBUFFER) != 0U;
-        state->caps.support_gdi = (actual_format.dwFlags & PFD_SUPPORT_GDI) != 0U;
-        state->caps.generic_format = (actual_format.dwFlags & PFD_GENERIC_FORMAT) != 0U;
+    if ((actual_format->dwFlags & PFD_SUPPORT_OPENGL) == 0U) {
+        if (failure_reason_out != NULL) {
+            *failure_reason_out = "gl21-pixel-format-without-opengl";
+        }
+        screensave_gl21_emit_diag(
+            state,
+            SCREENSAVE_DIAG_LEVEL_ERROR,
+            6718UL,
+            "gl21_context",
+            "The window pixel format does not support OpenGL."
+        );
+        return 0;
+    }
+
+    screensave_gl21_context_capture_pixel_format_caps(state, actual_format);
+    if (state->caps.generic_format) {
+        screensave_gl21_emit_diag(
+            state,
+            SCREENSAVE_DIAG_LEVEL_WARNING,
+            6719UL,
+            "gl21_context",
+            "GL21 is running on a generic pixel format; advanced presentation acceleration may be limited."
+        );
     }
     return 1;
 }
@@ -140,16 +268,20 @@ int screensave_gl21_context_create(
     const char **failure_reason_out
 )
 {
+    PIXELFORMATDESCRIPTOR actual_format;
+
     if (failure_reason_out != NULL) {
         *failure_reason_out = NULL;
     }
 
-    if (state == NULL || state->target_window == NULL) {
+    if (state == NULL || state->target_window == NULL || !IsWindow(state->target_window)) {
         if (failure_reason_out != NULL) {
             *failure_reason_out = "gl21-invalid-window";
         }
         return 0;
     }
+
+    screensave_gl21_context_reset_runtime(state);
 
     state->window_dc = GetDC(state->target_window);
     if (state->window_dc == NULL) {
@@ -166,9 +298,14 @@ int screensave_gl21_context_create(
         return 0;
     }
 
-    if (!screensave_gl21_choose_pixel_format(state, failure_reason_out)) {
-        ReleaseDC(state->target_window, state->window_dc);
-        state->window_dc = NULL;
+    if (
+        !screensave_gl21_choose_or_describe_pixel_format(
+            state,
+            &actual_format,
+            failure_reason_out
+        )
+    ) {
+        screensave_gl21_context_cleanup_failed_create(state);
         return 0;
     }
 
@@ -182,10 +319,9 @@ int screensave_gl21_context_create(
             SCREENSAVE_DIAG_LEVEL_ERROR,
             6707UL,
             "gl21_context",
-            "wglCreateContext failed while bootstrapping the advanced GL path."
+                "wglCreateContext failed while bootstrapping the advanced GL path."
         );
-        ReleaseDC(state->target_window, state->window_dc);
-        state->window_dc = NULL;
+        screensave_gl21_context_cleanup_failed_create(state);
         return 0;
     }
 
@@ -198,9 +334,9 @@ int screensave_gl21_context_create(
             SCREENSAVE_DIAG_LEVEL_ERROR,
             6708UL,
             "gl21_context",
-            "wglMakeCurrent failed while bootstrapping the advanced GL path."
+                "wglMakeCurrent failed while bootstrapping the advanced GL path."
         );
-        screensave_gl21_context_destroy(state);
+        screensave_gl21_context_cleanup_failed_create(state);
         return 0;
     }
 
@@ -213,9 +349,9 @@ int screensave_gl21_context_create(
             SCREENSAVE_DIAG_LEVEL_WARNING,
             6709UL,
             "gl21_context",
-            "wglCreateContextAttribsARB is unavailable; the advanced GL path cannot proceed."
+                "wglCreateContextAttribsARB is unavailable; the advanced GL path cannot proceed."
         );
-        screensave_gl21_context_destroy(state);
+        screensave_gl21_context_cleanup_failed_create(state);
         return 0;
     }
 
@@ -228,9 +364,9 @@ int screensave_gl21_context_create(
             SCREENSAVE_DIAG_LEVEL_ERROR,
             6710UL,
             "gl21_context",
-            "wglCreateContextAttribsARB failed while creating the advanced GL context."
+                "wglCreateContextAttribsARB failed while creating the advanced GL context."
         );
-        screensave_gl21_context_destroy(state);
+        screensave_gl21_context_cleanup_failed_create(state);
         return 0;
     }
 
@@ -243,19 +379,17 @@ int screensave_gl21_context_create(
             SCREENSAVE_DIAG_LEVEL_ERROR,
             6711UL,
             "gl21_context",
-            "wglMakeCurrent failed for the advanced GL context."
+                "wglMakeCurrent failed for the advanced GL context."
         );
-        screensave_gl21_context_destroy(state);
+        screensave_gl21_context_cleanup_failed_create(state);
         return 0;
     }
 
-    wglMakeCurrent(NULL, NULL);
-    if (state->bootstrap_context != NULL) {
-        wglDeleteContext(state->bootstrap_context);
-        state->bootstrap_context = NULL;
-    }
+    screensave_gl21_context_release_current(state);
+    screensave_gl21_context_release_bootstrap_context(state);
 
     screensave_gl21_normalize_size(drawable_size, &state->drawable_size);
+    screensave_gl21_capture_refresh(state);
     return 1;
 }
 
@@ -265,27 +399,9 @@ void screensave_gl21_context_destroy(screensave_gl21_state *state)
         return;
     }
 
-    if (
-        wglGetCurrentContext() == state->gl_context ||
-        wglGetCurrentContext() == state->bootstrap_context
-    ) {
-        wglMakeCurrent(NULL, NULL);
-    }
-
-    if (state->gl_context != NULL) {
-        wglDeleteContext(state->gl_context);
-        state->gl_context = NULL;
-    }
-
-    if (state->bootstrap_context != NULL) {
-        wglDeleteContext(state->bootstrap_context);
-        state->bootstrap_context = NULL;
-    }
-
-    if (state->window_dc != NULL) {
-        ReleaseDC(state->target_window, state->window_dc);
-        state->window_dc = NULL;
-    }
+    screensave_gl21_context_release_gl_context(state);
+    screensave_gl21_context_release_bootstrap_context(state);
+    screensave_gl21_context_release_window_dc(state);
 }
 
 int screensave_gl21_context_make_current(
@@ -296,6 +412,10 @@ int screensave_gl21_context_make_current(
 {
     if (state == NULL || state->window_dc == NULL || state->gl_context == NULL) {
         return 0;
+    }
+
+    if (wglGetCurrentContext() == state->gl_context) {
+        return 1;
     }
 
     if (!wglMakeCurrent(state->window_dc, state->gl_context)) {
@@ -318,8 +438,14 @@ void screensave_gl21_context_release_current(screensave_gl21_state *state)
         return;
     }
 
-    if (wglGetCurrentContext() == state->gl_context) {
-        wglMakeCurrent(NULL, NULL);
+    if (wglGetCurrentContext() == state->gl_context && !wglMakeCurrent(NULL, NULL)) {
+        screensave_gl21_emit_diag(
+            state,
+            SCREENSAVE_DIAG_LEVEL_WARNING,
+            6720UL,
+            "gl21_context",
+            "wglMakeCurrent(NULL, NULL) failed while releasing the advanced GL context."
+        );
     }
 }
 

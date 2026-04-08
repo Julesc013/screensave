@@ -142,8 +142,22 @@ static int screensave_backend_registry_capture_caps_gl21(
         caps_out->state_flags |= SCREENSAVE_BACKEND_CAPS_STATE_COMPAT_PROFILE;
     }
     caps_out->private_capability_flags = state->caps.private_flags;
+    caps_out->required_private_capability_flags = state->caps.bundle.required_flags;
+    caps_out->preferred_private_capability_flags = state->caps.bundle.preferred_flags;
+    caps_out->missing_private_capability_flags = state->caps.bundle.missing_required_flags;
+    caps_out->rgba_bits = state->caps.rgba_bits;
+    caps_out->depth_bits = state->caps.depth_bits;
     caps_out->major_version = state->caps.major_version;
     caps_out->minor_version = state->caps.minor_version;
+    if (state->caps.vendor[0] != '\0') {
+        lstrcpynA(caps_out->vendor, state->caps.vendor, (int)sizeof(caps_out->vendor));
+    }
+    if (state->caps.renderer[0] != '\0') {
+        lstrcpynA(caps_out->renderer, state->caps.renderer, (int)sizeof(caps_out->renderer));
+    }
+    if (state->caps.version[0] != '\0') {
+        lstrcpynA(caps_out->version, state->caps.version, (int)sizeof(caps_out->version));
+    }
     return 1;
 }
 

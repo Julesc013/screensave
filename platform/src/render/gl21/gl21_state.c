@@ -32,13 +32,17 @@ void screensave_gl21_update_renderer_info(
         return;
     }
 
+    screensave_gl21_capture_refresh(state);
     renderer->info.active_kind = SCREENSAVE_RENDERER_KIND_GL21;
     renderer->info.capability_flags = SCREENSAVE_GL21_CAPABILITIES;
     renderer->info.backend_name = "gl21";
     renderer->info.status_text = status_text != NULL ? status_text : "ready";
     renderer->info.vendor_name = state->caps.vendor[0] != '\0' ? state->caps.vendor : NULL;
     renderer->info.renderer_name = state->caps.renderer[0] != '\0' ? state->caps.renderer : NULL;
-    renderer->info.version_name = state->caps.version[0] != '\0' ? state->caps.version : NULL;
+    renderer->info.version_name =
+        state->detail_text[0] != '\0'
+            ? state->detail_text
+            : (state->caps.version[0] != '\0' ? state->caps.version : NULL);
 
     if (drawable_size != NULL) {
         renderer->info.drawable_size = *drawable_size;
