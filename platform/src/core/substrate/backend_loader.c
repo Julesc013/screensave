@@ -267,6 +267,19 @@ static void screensave_backend_loader_apply_selection(
 
     if (
         request->diagnostics != NULL &&
+        descriptor->backend_kind == SCREENSAVE_BACKEND_KIND_GL11 &&
+        request->requested_kind != SCREENSAVE_RENDERER_KIND_GL11
+    ) {
+        screensave_backend_loader_emit_create_diag(
+            request->diagnostics,
+            SCREENSAVE_DIAG_LEVEL_INFO,
+            4103UL,
+            "Renderer selection is using the GL11 compat lane."
+        );
+    }
+
+    if (
+        request->diagnostics != NULL &&
         descriptor->backend_kind == SCREENSAVE_BACKEND_KIND_GDI &&
         request->requested_kind != SCREENSAVE_RENDERER_KIND_GDI
     ) {

@@ -63,6 +63,7 @@ PLATFORM_OBJS := \
 	$(PLATFORM_DIR)/gl11_backend.o \
 	$(PLATFORM_DIR)/gl11_bitmap.o \
 	$(PLATFORM_DIR)/gl11_caps.o \
+	$(PLATFORM_DIR)/gl11_capture.o \
 	$(PLATFORM_DIR)/gl11_context.o \
 	$(PLATFORM_DIR)/gl11_present.o \
 	$(PLATFORM_DIR)/gl11_primitives.o \

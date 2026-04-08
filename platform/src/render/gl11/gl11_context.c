@@ -15,6 +15,74 @@ static void screensave_gl11_normalize_size(const screensave_sizei *source, scree
     }
 }
 
+static void screensave_gl11_context_reset_runtime(screensave_gl11_state *state)
+{
+    screensave_diag_context *diagnostics;
+    HWND target_window;
+
+    if (state == NULL) {
+        return;
+    }
+
+    diagnostics = state->diagnostics;
+    target_window = state->target_window;
+    ZeroMemory(state, sizeof(*state));
+    state->diagnostics = diagnostics;
+    state->target_window = target_window;
+}
+
+static void screensave_gl11_context_release_window_dc(screensave_gl11_state *state)
+{
+    if (state == NULL) {
+        return;
+    }
+
+    if (state->window_dc != NULL) {
+        ReleaseDC(state->target_window, state->window_dc);
+        state->window_dc = NULL;
+    }
+}
+
+static void screensave_gl11_context_release_gl_context(screensave_gl11_state *state)
+{
+    if (state == NULL) {
+        return;
+    }
+
+    if (state->gl_context != NULL) {
+        if (wglGetCurrentContext() == state->gl_context) {
+            wglMakeCurrent(NULL, NULL);
+        }
+        wglDeleteContext(state->gl_context);
+        state->gl_context = NULL;
+    }
+}
+
+static void screensave_gl11_context_cleanup_failed_create(screensave_gl11_state *state)
+{
+    screensave_gl11_context_release_gl_context(state);
+    screensave_gl11_context_release_window_dc(state);
+    if (state != NULL) {
+        state->pixel_format = 0;
+    }
+}
+
+static void screensave_gl11_context_capture_pixel_format_caps(
+    screensave_gl11_state *state,
+    const PIXELFORMATDESCRIPTOR *actual_format
+)
+{
+    if (state == NULL || actual_format == NULL) {
+        return;
+    }
+
+    state->caps.double_buffered = (actual_format->dwFlags & PFD_DOUBLEBUFFER) != 0U;
+    state->caps.support_gdi = (actual_format->dwFlags & PFD_SUPPORT_GDI) != 0U;
+    state->caps.generic_format = (actual_format->dwFlags & PFD_GENERIC_FORMAT) != 0U;
+    state->caps.rgba_bits = (int)actual_format->cColorBits;
+    state->caps.depth_bits = (int)actual_format->cDepthBits;
+}
+
 static int screensave_gl11_choose_or_describe_pixel_format(
     screensave_gl11_state *state,
     PIXELFORMATDESCRIPTOR *actual_format,
@@ -82,6 +150,14 @@ static int screensave_gl11_choose_or_describe_pixel_format(
             );
             return 0;
         }
+    } else {
+        screensave_gl11_emit_diag(
+            state,
+            SCREENSAVE_DIAG_LEVEL_INFO,
+            6208UL,
+            "gl11_context",
+            "GL11 is reusing the existing window pixel format."
+        );
     }
 
     ZeroMemory(actual_format, sizeof(*actual_format));
@@ -116,11 +192,16 @@ static int screensave_gl11_choose_or_describe_pixel_format(
     }
 
     state->pixel_format = pixel_format;
-    state->caps.double_buffered = (actual_format->dwFlags & PFD_DOUBLEBUFFER) != 0U;
-    state->caps.support_gdi = (actual_format->dwFlags & PFD_SUPPORT_GDI) != 0U;
-    state->caps.generic_format = (actual_format->dwFlags & PFD_GENERIC_FORMAT) != 0U;
-    state->caps.rgba_bits = (int)actual_format->cColorBits;
-    state->caps.depth_bits = (int)actual_format->cDepthBits;
+    screensave_gl11_context_capture_pixel_format_caps(state, actual_format);
+    if (state->caps.generic_format) {
+        screensave_gl11_emit_diag(
+            state,
+            SCREENSAVE_DIAG_LEVEL_WARNING,
+            6209UL,
+            "gl11_context",
+            "GL11 is running on a generic pixel format; presentation acceleration may be limited."
+        );
+    }
     return 1;
 }
 
@@ -136,12 +217,14 @@ int screensave_gl11_context_create(
         *failure_reason_out = NULL;
     }
 
-    if (state == NULL || state->target_window == NULL) {
+    if (state == NULL || state->target_window == NULL || !IsWindow(state->target_window)) {
         if (failure_reason_out != NULL) {
             *failure_reason_out = "gl11-invalid-window";
         }
         return 0;
     }
+
+    screensave_gl11_context_reset_runtime(state);
 
     state->window_dc = GetDC(state->target_window);
     if (state->window_dc == NULL) {
@@ -159,8 +242,7 @@ int screensave_gl11_context_create(
     }
 
     if (!screensave_gl11_choose_or_describe_pixel_format(state, &actual_format, failure_reason_out)) {
-        ReleaseDC(state->target_window, state->window_dc);
-        state->window_dc = NULL;
+        screensave_gl11_context_cleanup_failed_create(state);
         return 0;
     }
 
@@ -176,12 +258,12 @@ int screensave_gl11_context_create(
             "gl11_context",
             "wglCreateContext failed for the GL11 window."
         );
-        ReleaseDC(state->target_window, state->window_dc);
-        state->window_dc = NULL;
+        screensave_gl11_context_cleanup_failed_create(state);
         return 0;
     }
 
     screensave_gl11_normalize_size(drawable_size, &state->drawable_size);
+    screensave_gl11_capture_refresh(state);
     return 1;
 }
 
@@ -191,19 +273,8 @@ void screensave_gl11_context_destroy(screensave_gl11_state *state)
         return;
     }
 
-    if (wglGetCurrentContext() == state->gl_context) {
-        wglMakeCurrent(NULL, NULL);
-    }
-
-    if (state->gl_context != NULL) {
-        wglDeleteContext(state->gl_context);
-        state->gl_context = NULL;
-    }
-
-    if (state->window_dc != NULL) {
-        ReleaseDC(state->target_window, state->window_dc);
-        state->window_dc = NULL;
-    }
+    screensave_gl11_context_release_gl_context(state);
+    screensave_gl11_context_release_window_dc(state);
 }
 
 int screensave_gl11_context_make_current(
@@ -214,6 +285,10 @@ int screensave_gl11_context_make_current(
 {
     if (state == NULL || state->window_dc == NULL || state->gl_context == NULL) {
         return 0;
+    }
+
+    if (wglGetCurrentContext() == state->gl_context) {
+        return 1;
     }
 
     if (!wglMakeCurrent(state->window_dc, state->gl_context)) {
@@ -236,7 +311,13 @@ void screensave_gl11_context_release_current(screensave_gl11_state *state)
         return;
     }
 
-    if (wglGetCurrentContext() == state->gl_context) {
-        wglMakeCurrent(NULL, NULL);
+    if (wglGetCurrentContext() == state->gl_context && !wglMakeCurrent(NULL, NULL)) {
+        screensave_gl11_emit_diag(
+            state,
+            SCREENSAVE_DIAG_LEVEL_WARNING,
+            6210UL,
+            "gl11_context",
+            "wglMakeCurrent(NULL, NULL) failed while releasing the GL11 context."
+        );
     }
 }

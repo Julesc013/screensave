@@ -99,6 +99,7 @@
     <ClCompile Include="..\..\..\platform\src\render\gl11\gl11_backend.c" />
     <ClCompile Include="..\..\..\platform\src\render\gl11\gl11_bitmap.c" />
     <ClCompile Include="..\..\..\platform\src\render\gl11\gl11_caps.c" />
+    <ClCompile Include="..\..\..\platform\src\render\gl11\gl11_capture.c" />
     <ClCompile Include="..\..\..\platform\src\render\gl11\gl11_context.c" />
     <ClCompile Include="..\..\..\platform\src\render\gl11\gl11_present.c" />
     <ClCompile Include="..\..\..\platform\src\render\gl11\gl11_primitives.c" />

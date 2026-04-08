@@ -22,6 +22,8 @@ typedef struct screensave_gl11_caps_tag {
     int generic_format;
     int rgba_bits;
     int depth_bits;
+    int major_version;
+    int minor_version;
     char vendor[64];
     char renderer[96];
     char version[64];
@@ -35,6 +37,10 @@ typedef struct screensave_gl11_state_tag {
     screensave_sizei drawable_size;
     int pixel_format;
     int frame_open;
+    unsigned long present_count;
+    unsigned long swap_count;
+    unsigned long flush_count;
+    char detail_text[96];
     screensave_gl11_caps caps;
 } screensave_gl11_state;
 
@@ -62,6 +68,7 @@ void screensave_gl11_emit_diag(
     const char *origin,
     const char *text
 );
+void screensave_gl11_capture_refresh(screensave_gl11_state *state);
 
 int screensave_gl11_context_create(
     screensave_gl11_state *state,

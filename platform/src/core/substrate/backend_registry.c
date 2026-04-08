@@ -100,6 +100,11 @@ static int screensave_backend_registry_capture_caps_gl11(
     }
     caps_out->rgba_bits = state->caps.rgba_bits;
     caps_out->depth_bits = state->caps.depth_bits;
+    caps_out->major_version = state->caps.major_version;
+    caps_out->minor_version = state->caps.minor_version;
+    if (state->caps.version[0] != '\0') {
+        lstrcpynA(caps_out->version, state->caps.version, (int)sizeof(caps_out->version));
+    }
     return 1;
 }
 
