@@ -104,11 +104,13 @@ PLATFORM_OBJS := \
 	$(PLATFORM_DIR)/scr_validation_scene.o \
 	$(PLATFORM_DIR)/scr_window.o
 
-saver_objs = $(foreach unit,$(SAVER_UNITS),$(INT_ROOT)/$(1)/$(1)_$(unit).o)
+saver_extra_units = $(if $(filter $(1),plasma),output plan presentation treatment validate,)
+saver_all_units = $(SAVER_UNITS) $(call saver_extra_units,$(1))
+saver_objs = $(foreach unit,$(call saver_all_units,$(1)),$(INT_ROOT)/$(1)/$(1)_$(unit).o)
 saver_resource_objs = $(INT_ROOT)/$(1)/$(1)_config_res.o $(INT_ROOT)/$(1)/$(1)_version_res.o $(INT_ROOT)/$(1)/screensave_host_res.o
-benchlab_saver_objs = $(foreach owner,$(SAVERS),$(foreach unit,$(SAVER_UNITS),$(BENCHLAB_DIR)/$(owner)_$(unit).o))
+benchlab_saver_objs = $(foreach owner,$(SAVERS),$(foreach unit,$(call saver_all_units,$(owner)),$(BENCHLAB_DIR)/$(owner)_$(unit).o))
 benchlab_resource_objs = $(foreach owner,$(SAVERS),$(BENCHLAB_DIR)/$(owner)_config_res.o)
-suite_saver_objs = $(foreach owner,$(SAVERS),$(foreach unit,$(SAVER_UNITS),$(SUITE_DIR)/$(owner)_$(unit).o))
+suite_saver_objs = $(foreach owner,$(SAVERS),$(foreach unit,$(call saver_all_units,$(owner)),$(SUITE_DIR)/$(owner)_$(unit).o))
 suite_resource_objs = $(foreach owner,$(SAVERS),$(SUITE_DIR)/$(owner)_config_res.o)
 suite_app_objs = $(foreach unit,$(SUITE_APP_UNITS),$(SUITE_DIR)/suite_$(unit).o)
 INNER_SAVER_OBJS := $(foreach saver,$(INNER_SAVERS),$(call saver_objs,$(saver)))

@@ -56,38 +56,15 @@ unsigned long plasma_rng_range(plasma_rng_state *state, unsigned long upper_boun
     return plasma_rng_next(state) % upper_bound;
 }
 
-static const screensave_theme_descriptor *plasma_resolve_theme(
-    const screensave_saver_environment *environment
-)
-{
-    const screensave_common_config *common_config;
-    const screensave_theme_descriptor *theme;
-
-    if (environment == NULL || environment->config_binding == NULL) {
-        return plasma_find_theme_descriptor(PLASMA_DEFAULT_THEME_KEY);
-    }
-
-    common_config = environment->config_binding->common_config;
-    if (common_config == NULL) {
-        return plasma_find_theme_descriptor(PLASMA_DEFAULT_THEME_KEY);
-    }
-
-    theme = plasma_find_theme_descriptor(common_config->theme_key);
-    if (theme == NULL) {
-        theme = plasma_find_theme_descriptor(PLASMA_DEFAULT_THEME_KEY);
-    }
-
-    return theme;
-}
-
 static int plasma_resolution_divisor(
-    const screensave_saver_session *session
+    const plasma_plan *plan,
+    const plasma_execution_state *state
 )
 {
     int divisor;
 
     divisor = 4;
-    switch (session->config.resolution_mode) {
+    switch (plan->resolution_mode) {
     case PLASMA_RESOLUTION_COARSE:
         divisor = 6;
         break;
@@ -102,12 +79,12 @@ static int plasma_resolution_divisor(
         break;
     }
 
-    if (session->detail_level == SCREENSAVE_DETAIL_LEVEL_LOW) {
+    if (plan->detail_level == SCREENSAVE_DETAIL_LEVEL_LOW) {
         divisor += 1;
-    } else if (session->detail_level == SCREENSAVE_DETAIL_LEVEL_HIGH && divisor > 2) {
+    } else if (plan->detail_level == SCREENSAVE_DETAIL_LEVEL_HIGH && divisor > 2) {
         divisor -= 1;
     }
-    if (session->preview_mode) {
+    if (state->preview_mode) {
         divisor += 2;
     }
     if (divisor < 2) {
@@ -118,15 +95,16 @@ static int plasma_resolution_divisor(
 }
 
 static void plasma_compute_field_size(
-    const screensave_saver_session *session,
+    const plasma_plan *plan,
+    const plasma_execution_state *state,
     screensave_sizei *field_size
 )
 {
     int divisor;
 
-    divisor = plasma_resolution_divisor(session);
-    field_size->width = session->drawable_size.width / divisor;
-    field_size->height = session->drawable_size.height / divisor;
+    divisor = plasma_resolution_divisor(plan, state);
+    field_size->width = state->drawable_size.width / divisor;
+    field_size->height = state->drawable_size.height / divisor;
 
     if (field_size->width < 40) {
         field_size->width = 40;
@@ -140,25 +118,26 @@ static void plasma_compute_field_size(
     }
 }
 
-static void plasma_zero_fields(screensave_saver_session *session)
+static void plasma_zero_fields(plasma_execution_state *state)
 {
     int cell_count;
 
     if (
-        session == NULL ||
-        session->field_primary == NULL ||
-        session->field_secondary == NULL
+        state == NULL ||
+        state->field_primary == NULL ||
+        state->field_secondary == NULL
     ) {
         return;
     }
 
-    cell_count = plasma_field_cell_count(&session->field_size);
-    ZeroMemory(session->field_primary, (size_t)cell_count);
-    ZeroMemory(session->field_secondary, (size_t)cell_count);
+    cell_count = plasma_field_cell_count(&state->field_size);
+    ZeroMemory(state->field_primary, (size_t)cell_count);
+    ZeroMemory(state->field_secondary, (size_t)cell_count);
 }
 
 static int plasma_resize_visual_state(
-    screensave_saver_session *session
+    const plasma_plan *plan,
+    plasma_execution_state *state
 )
 {
     screensave_sizei desired_size;
@@ -166,16 +145,16 @@ static int plasma_resize_visual_state(
     unsigned char *new_primary;
     unsigned char *new_secondary;
 
-    if (session == NULL) {
+    if (plan == NULL || state == NULL) {
         return 0;
     }
 
-    plasma_compute_field_size(session, &desired_size);
+    plasma_compute_field_size(plan, state, &desired_size);
     if (
-        session->field_primary != NULL &&
-        session->field_secondary != NULL &&
-        session->field_size.width == desired_size.width &&
-        session->field_size.height == desired_size.height
+        state->field_primary != NULL &&
+        state->field_secondary != NULL &&
+        state->field_size.width == desired_size.width &&
+        state->field_size.height == desired_size.height
     ) {
         return 1;
     }
@@ -192,34 +171,35 @@ static int plasma_resize_visual_state(
     ZeroMemory(new_primary, (size_t)cell_count);
     ZeroMemory(new_secondary, (size_t)cell_count);
 
-    if (session->visual_buffer.pixels == NULL) {
-        if (!screensave_visual_buffer_init(&session->visual_buffer, &desired_size)) {
+    if (state->visual_buffer.pixels == NULL) {
+        if (!screensave_visual_buffer_init(&state->visual_buffer, &desired_size)) {
             free(new_primary);
             free(new_secondary);
             return 0;
         }
-    } else if (!screensave_visual_buffer_resize(&session->visual_buffer, &desired_size)) {
+    } else if (!screensave_visual_buffer_resize(&state->visual_buffer, &desired_size)) {
         free(new_primary);
         free(new_secondary);
         return 0;
     }
 
-    free(session->field_primary);
-    free(session->field_secondary);
-    session->field_primary = new_primary;
-    session->field_secondary = new_secondary;
-    session->field_size = desired_size;
+    free(state->field_primary);
+    free(state->field_secondary);
+    state->field_primary = new_primary;
+    state->field_secondary = new_secondary;
+    state->field_size = desired_size;
     return 1;
 }
 
 static unsigned long plasma_speed_units(
-    const screensave_saver_session *session
+    const plasma_plan *plan,
+    const plasma_execution_state *state
 )
 {
     unsigned long speed;
 
     speed = 4UL;
-    switch (session->config.speed_mode) {
+    switch (plan->speed_mode) {
     case PLASMA_SPEED_GENTLE:
         speed = 2UL;
         break;
@@ -234,7 +214,7 @@ static unsigned long plasma_speed_units(
         break;
     }
 
-    if (session->preview_mode && speed > 1UL) {
+    if (state->preview_mode && speed > 1UL) {
         speed -= 1UL;
     }
 
@@ -242,46 +222,51 @@ static unsigned long plasma_speed_units(
 }
 
 static unsigned long plasma_variation_interval_millis(
-    const screensave_saver_session *session
+    const plasma_plan *plan,
+    const plasma_execution_state *state
 )
 {
-    if (session == NULL) {
+    if (plan == NULL || state == NULL) {
         return 12000UL;
     }
 
-    if (session->preview_mode) {
+    if (state->preview_mode) {
         return 7000UL;
     }
-    if (session->config.effect_mode == PLASMA_EFFECT_INTERFERENCE) {
+    if (plan->effect_mode == PLASMA_EFFECT_INTERFERENCE) {
         return 11000UL;
     }
-    if (session->config.effect_mode == PLASMA_EFFECT_FIRE) {
+    if (plan->effect_mode == PLASMA_EFFECT_FIRE) {
         return 15000UL;
     }
     return 13000UL;
 }
 
 static unsigned int plasma_fire_floor(
-    const screensave_saver_session *session
+    const plasma_plan *plan,
+    const plasma_execution_state *state
 )
 {
     unsigned int base_value;
 
     base_value = 180U;
-    if (session->config.speed_mode == PLASMA_SPEED_GENTLE) {
+    if (plan->speed_mode == PLASMA_SPEED_GENTLE) {
         base_value = 156U;
-    } else if (session->config.speed_mode == PLASMA_SPEED_LIVELY) {
+    } else if (plan->speed_mode == PLASMA_SPEED_LIVELY) {
         base_value = 208U;
     }
 
-    if (session->preview_mode && base_value > 20U) {
+    if (state->preview_mode && base_value > 20U) {
         base_value -= 20U;
     }
 
     return base_value;
 }
 
-static void plasma_update_fire(screensave_saver_session *session)
+static void plasma_update_fire(
+    const plasma_plan *plan,
+    plasma_execution_state *state
+)
 {
     int width;
     int height;
@@ -289,18 +274,18 @@ static void plasma_update_fire(screensave_saver_session *session)
     int y;
     unsigned int base_value;
 
-    width = session->field_size.width;
-    height = session->field_size.height;
-    base_value = plasma_fire_floor(session);
+    width = state->field_size.width;
+    height = state->field_size.height;
+    base_value = plasma_fire_floor(plan, state);
 
     for (x = 0; x < width; ++x) {
         unsigned int heat;
 
-        heat = base_value + (unsigned int)plasma_rng_range(&session->rng, 76UL);
+        heat = base_value + (unsigned int)plasma_rng_range(&state->rng, 76UL);
         if (heat > 255U) {
             heat = 255U;
         }
-        session->field_secondary[((height - 1) * width) + x] = (unsigned char)heat;
+        state->field_secondary[((height - 1) * width) + x] = (unsigned char)heat;
     }
 
     for (y = 0; y < height - 1; ++y) {
@@ -320,16 +305,16 @@ static void plasma_update_fire(screensave_saver_session *session)
             far_index = ((below_row + 1 < height ? below_row + 1 : below_row) * width) + x;
 
             value =
-                (unsigned int)session->field_primary[left_index] +
-                (unsigned int)session->field_primary[center_index] +
-                (unsigned int)session->field_primary[right_index] +
-                (unsigned int)session->field_primary[far_index];
+                (unsigned int)state->field_primary[left_index] +
+                (unsigned int)state->field_primary[center_index] +
+                (unsigned int)state->field_primary[right_index] +
+                (unsigned int)state->field_primary[far_index];
             value /= 4U;
 
             cooling = 6U;
-            if (session->config.speed_mode == PLASMA_SPEED_GENTLE) {
+            if (plan->speed_mode == PLASMA_SPEED_GENTLE) {
                 cooling = 4U;
-            } else if (session->config.speed_mode == PLASMA_SPEED_LIVELY) {
+            } else if (plan->speed_mode == PLASMA_SPEED_LIVELY) {
                 cooling = 9U;
             }
 
@@ -339,12 +324,12 @@ static void plasma_update_fire(screensave_saver_session *session)
                 value = 0U;
             }
 
-            session->field_secondary[(y * width) + x] = (unsigned char)value;
+            state->field_secondary[(y * width) + x] = (unsigned char)value;
         }
     }
 }
 
-static void plasma_update_plasma(screensave_saver_session *session)
+static void plasma_update_plasma(plasma_execution_state *state)
 {
     int width;
     int height;
@@ -355,12 +340,12 @@ static void plasma_update_plasma(screensave_saver_session *session)
     unsigned int phase_c;
     unsigned int phase_d;
 
-    width = session->field_size.width;
-    height = session->field_size.height;
-    phase_a = (unsigned int)((session->phase_millis / 7UL) & 255UL);
-    phase_b = (unsigned int)((session->phase_millis / 11UL) & 255UL);
-    phase_c = (unsigned int)((session->phase_millis / 5UL) & 255UL);
-    phase_d = (unsigned int)((session->phase_millis / 13UL) & 255UL);
+    width = state->field_size.width;
+    height = state->field_size.height;
+    phase_a = (unsigned int)((state->phase_millis / 7UL) & 255UL);
+    phase_b = (unsigned int)((state->phase_millis / 11UL) & 255UL);
+    phase_c = (unsigned int)((state->phase_millis / 5UL) & 255UL);
+    phase_d = (unsigned int)((state->phase_millis / 13UL) & 255UL);
 
     for (y = 0; y < height; ++y) {
         for (x = 0; x < width; ++x) {
@@ -372,12 +357,12 @@ static void plasma_update_plasma(screensave_saver_session *session)
                 plasma_triangle_wave((unsigned int)((x + y) * 5) + phase_c) +
                 plasma_triangle_wave((unsigned int)((x * 3) + (y * 5)) + phase_d);
             value /= 4U;
-            session->field_primary[(y * width) + x] = (unsigned char)value;
+            state->field_primary[(y * width) + x] = (unsigned char)value;
         }
     }
 }
 
-static void plasma_update_interference(screensave_saver_session *session)
+static void plasma_update_interference(plasma_execution_state *state)
 {
     int width;
     int height;
@@ -390,14 +375,14 @@ static void plasma_update_interference(screensave_saver_session *session)
     int source_c_x;
     int source_c_y;
 
-    width = session->field_size.width;
-    height = session->field_size.height;
-    source_a_x = (int)(((unsigned long)width * plasma_triangle_wave((unsigned int)(session->source_phase_a & 255UL))) / 255UL);
-    source_a_y = (int)(((unsigned long)height * plasma_triangle_wave((unsigned int)((session->source_phase_a / 2UL) & 255UL))) / 255UL);
-    source_b_x = (int)(((unsigned long)width * plasma_triangle_wave((unsigned int)(session->source_phase_b & 255UL))) / 255UL);
-    source_b_y = (int)(((unsigned long)height * plasma_triangle_wave((unsigned int)((session->source_phase_b / 3UL) & 255UL))) / 255UL);
-    source_c_x = (int)(((unsigned long)width * plasma_triangle_wave((unsigned int)(session->source_phase_c & 255UL))) / 255UL);
-    source_c_y = (int)(((unsigned long)height * plasma_triangle_wave((unsigned int)((session->source_phase_c / 5UL) & 255UL))) / 255UL);
+    width = state->field_size.width;
+    height = state->field_size.height;
+    source_a_x = (int)(((unsigned long)width * plasma_triangle_wave((unsigned int)(state->source_phase_a & 255UL))) / 255UL);
+    source_a_y = (int)(((unsigned long)height * plasma_triangle_wave((unsigned int)((state->source_phase_a / 2UL) & 255UL))) / 255UL);
+    source_b_x = (int)(((unsigned long)width * plasma_triangle_wave((unsigned int)(state->source_phase_b & 255UL))) / 255UL);
+    source_b_y = (int)(((unsigned long)height * plasma_triangle_wave((unsigned int)((state->source_phase_b / 3UL) & 255UL))) / 255UL);
+    source_c_x = (int)(((unsigned long)width * plasma_triangle_wave((unsigned int)(state->source_phase_c & 255UL))) / 255UL);
+    source_c_y = (int)(((unsigned long)height * plasma_triangle_wave((unsigned int)((state->source_phase_c / 5UL) & 255UL))) / 255UL);
 
     for (y = 0; y < height; ++y) {
         for (x = 0; x < width; ++x) {
@@ -413,16 +398,19 @@ static void plasma_update_interference(screensave_saver_session *session)
             distance_b = plasma_abs_int(x - source_b_x) + plasma_abs_int(y - source_b_y);
             distance_c = plasma_abs_int(x - source_c_x) + plasma_abs_int(y - source_c_y);
 
-            wave_a = plasma_triangle_wave((unsigned int)(distance_a * 8) + (unsigned int)(session->source_phase_a & 255UL));
-            wave_b = plasma_triangle_wave((unsigned int)(distance_b * 6) + (unsigned int)(session->source_phase_b & 255UL));
-            wave_c = plasma_triangle_wave((unsigned int)(distance_c * 5) + (unsigned int)(session->source_phase_c & 255UL));
+            wave_a = plasma_triangle_wave((unsigned int)(distance_a * 8) + (unsigned int)(state->source_phase_a & 255UL));
+            wave_b = plasma_triangle_wave((unsigned int)(distance_b * 6) + (unsigned int)(state->source_phase_b & 255UL));
+            wave_c = plasma_triangle_wave((unsigned int)(distance_c * 5) + (unsigned int)(state->source_phase_c & 255UL));
             value = (wave_a + wave_b + wave_c) / 3U;
-            session->field_primary[(y * width) + x] = (unsigned char)value;
+            state->field_primary[(y * width) + x] = (unsigned char)value;
         }
     }
 }
 
-static void plasma_apply_smoothing(screensave_saver_session *session)
+static void plasma_apply_smoothing(
+    const plasma_plan *plan,
+    plasma_execution_state *state
+)
 {
     int width;
     int height;
@@ -430,20 +418,20 @@ static void plasma_apply_smoothing(screensave_saver_session *session)
     int y;
     unsigned int blend_amount;
 
-    if (session->config.smoothing_mode == PLASMA_SMOOTHING_OFF) {
+    if (plan->smoothing_mode == PLASMA_SMOOTHING_OFF) {
         return;
     }
 
     blend_amount = 72U;
-    if (session->config.smoothing_mode == PLASMA_SMOOTHING_GLOW) {
+    if (plan->smoothing_mode == PLASMA_SMOOTHING_GLOW) {
         blend_amount = 128U;
     }
-    if (session->preview_mode && blend_amount > 64U) {
+    if (state->preview_mode && blend_amount > 64U) {
         blend_amount = 64U;
     }
 
-    width = session->field_size.width;
-    height = session->field_size.height;
+    width = state->field_size.width;
+    height = state->field_size.height;
     for (y = 0; y < height; ++y) {
         for (x = 0; x < width; ++x) {
             int sample_count;
@@ -473,7 +461,7 @@ static void plasma_apply_smoothing(screensave_saver_session *session)
                         neighbor_x = width - 1;
                     }
 
-                    blur_value += (unsigned int)session->field_primary[(neighbor_y * width) + neighbor_x];
+                    blur_value += (unsigned int)state->field_primary[(neighbor_y * width) + neighbor_x];
                     sample_count += 1;
                 }
             }
@@ -482,8 +470,8 @@ static void plasma_apply_smoothing(screensave_saver_session *session)
                 blur_value /= (unsigned int)sample_count;
             }
             index = (unsigned int)((y * width) + x);
-            original_value = (unsigned int)session->field_primary[index];
-            session->field_secondary[index] = (unsigned char)(
+            original_value = (unsigned int)state->field_primary[index];
+            state->field_secondary[index] = (unsigned char)(
                 ((original_value * (255U - blend_amount)) + (blur_value * blend_amount)) / 255U
             );
         }
@@ -492,66 +480,72 @@ static void plasma_apply_smoothing(screensave_saver_session *session)
     {
         unsigned char *swap_buffer;
 
-        swap_buffer = session->field_primary;
-        session->field_primary = session->field_secondary;
-        session->field_secondary = swap_buffer;
+        swap_buffer = state->field_primary;
+        state->field_primary = state->field_secondary;
+        state->field_secondary = swap_buffer;
     }
 }
 
-static void plasma_warm_start_effect(screensave_saver_session *session)
+static void plasma_warm_start_effect(
+    const plasma_plan *plan,
+    plasma_execution_state *state
+)
 {
     int warm_steps;
 
-    if (session == NULL) {
+    if (plan == NULL || state == NULL) {
         return;
     }
 
-    plasma_zero_fields(session);
+    plasma_zero_fields(state);
     warm_steps = 2;
-    if (session->config.effect_mode == PLASMA_EFFECT_FIRE) {
+    if (plan->effect_mode == PLASMA_EFFECT_FIRE) {
         warm_steps = 18;
-    } else if (session->config.effect_mode == PLASMA_EFFECT_INTERFERENCE) {
+    } else if (plan->effect_mode == PLASMA_EFFECT_INTERFERENCE) {
         warm_steps = 4;
     }
     while (warm_steps-- > 0) {
-        if (session->config.effect_mode == PLASMA_EFFECT_FIRE) {
+        if (plan->effect_mode == PLASMA_EFFECT_FIRE) {
             unsigned char *swap_buffer;
 
-            plasma_update_fire(session);
-            swap_buffer = session->field_primary;
-            session->field_primary = session->field_secondary;
-            session->field_secondary = swap_buffer;
-        } else if (session->config.effect_mode == PLASMA_EFFECT_INTERFERENCE) {
-            plasma_update_interference(session);
+            plasma_update_fire(plan, state);
+            swap_buffer = state->field_primary;
+            state->field_primary = state->field_secondary;
+            state->field_secondary = swap_buffer;
+        } else if (plan->effect_mode == PLASMA_EFFECT_INTERFERENCE) {
+            plasma_update_interference(state);
         } else {
-            plasma_update_plasma(session);
+            plasma_update_plasma(state);
         }
-        plasma_apply_smoothing(session);
-        session->phase_millis += 33UL;
-        session->palette_phase = (session->palette_phase + 3UL) & 255UL;
-        session->source_phase_a += 5UL;
-        session->source_phase_b += 3UL;
-        session->source_phase_c += 7UL;
+        plasma_apply_smoothing(plan, state);
+        state->phase_millis += 33UL;
+        state->palette_phase = (state->palette_phase + 3UL) & 255UL;
+        state->source_phase_a += 5UL;
+        state->source_phase_b += 3UL;
+        state->source_phase_c += 7UL;
     }
 }
 
-static void plasma_refresh_composition(screensave_saver_session *session)
+static void plasma_refresh_composition(
+    const plasma_plan *plan,
+    plasma_execution_state *state
+)
 {
-    if (session == NULL) {
+    if (plan == NULL || state == NULL) {
         return;
     }
 
-    session->phase_millis += 96UL + plasma_rng_range(&session->rng, 320UL);
-    session->palette_phase = (session->palette_phase + 32UL + plasma_rng_range(&session->rng, 96UL)) & 255UL;
-    session->source_phase_a += 32UL + plasma_rng_range(&session->rng, 128UL);
-    session->source_phase_b += 24UL + plasma_rng_range(&session->rng, 112UL);
-    session->source_phase_c += 40UL + plasma_rng_range(&session->rng, 144UL);
+    state->phase_millis += 96UL + plasma_rng_range(&state->rng, 320UL);
+    state->palette_phase = (state->palette_phase + 32UL + plasma_rng_range(&state->rng, 96UL)) & 255UL;
+    state->source_phase_a += 32UL + plasma_rng_range(&state->rng, 128UL);
+    state->source_phase_b += 24UL + plasma_rng_range(&state->rng, 112UL);
+    state->source_phase_c += 40UL + plasma_rng_range(&state->rng, 144UL);
 
-    if (session->config.effect_mode == PLASMA_EFFECT_INTERFERENCE) {
-        session->source_phase_a += 32UL;
-        session->source_phase_b += 48UL;
-    } else if (session->config.effect_mode == PLASMA_EFFECT_FIRE) {
-        session->palette_phase = (session->palette_phase + 18UL) & 255UL;
+    if (plan->effect_mode == PLASMA_EFFECT_INTERFERENCE) {
+        state->source_phase_a += 32UL;
+        state->source_phase_b += 48UL;
+    } else if (plan->effect_mode == PLASMA_EFFECT_FIRE) {
+        state->palette_phase = (state->palette_phase + 18UL) & 255UL;
     }
 }
 
@@ -562,9 +556,7 @@ int plasma_create_session(
 )
 {
     screensave_saver_session *session;
-    const plasma_config *configured;
-
-    (void)module;
+    plasma_execution_state *state;
 
     if (session_out == NULL || environment == NULL) {
         return 0;
@@ -577,44 +569,33 @@ int plasma_create_session(
     }
 
     ZeroMemory(session, sizeof(*session));
-    session->drawable_size = environment->drawable_size;
-    session->detail_level =
-        environment->config_binding != NULL &&
-        environment->config_binding->common_config != NULL
-            ? environment->config_binding->common_config->detail_level
-            : SCREENSAVE_DETAIL_LEVEL_STANDARD;
-    session->preview_mode = environment->mode == SCREENSAVE_SESSION_MODE_PREVIEW;
-    session->theme = plasma_resolve_theme(environment);
-    session->config.effect_mode = PLASMA_EFFECT_FIRE;
-    session->config.speed_mode = PLASMA_SPEED_GENTLE;
-    session->config.resolution_mode = PLASMA_RESOLUTION_STANDARD;
-    session->config.smoothing_mode = PLASMA_SMOOTHING_SOFT;
-
-    configured = NULL;
-    if (
-        environment->config_binding != NULL &&
-        environment->config_binding->product_config != NULL &&
-        environment->config_binding->product_config_size == sizeof(plasma_config)
-    ) {
-        configured = (const plasma_config *)environment->config_binding->product_config;
-    }
-    if (configured != NULL) {
-        session->config = *configured;
+    if (!plasma_plan_compile(&session->plan, module, environment)) {
+        free(session);
+        return 0;
     }
 
-    plasma_rng_seed(&session->rng, environment->seed.stream_seed ^ environment->seed.base_seed);
-    session->palette_phase = environment->seed.base_seed & 255UL;
-    session->source_phase_a = environment->seed.stream_seed & 255UL;
-    session->source_phase_b = (environment->seed.stream_seed >> 7) & 255UL;
-    session->source_phase_c = (environment->seed.stream_seed >> 13) & 255UL;
-    session->variation_elapsed_millis = 0UL;
+    state = &session->state;
+    state->drawable_size = environment->drawable_size;
+    state->active_renderer_kind = plasma_resolve_renderer_kind(environment);
+    state->preview_mode = environment->mode == SCREENSAVE_SESSION_MODE_PREVIEW;
+    if (!plasma_plan_validate_for_renderer_kind(&session->plan, module, state->active_renderer_kind)) {
+        free(session);
+        return 0;
+    }
 
-    if (!plasma_resize_visual_state(session)) {
+    plasma_rng_seed(&state->rng, session->plan.resolved_rng_seed);
+    state->palette_phase = session->plan.base_seed & 255UL;
+    state->source_phase_a = session->plan.stream_seed & 255UL;
+    state->source_phase_b = (session->plan.stream_seed >> 7) & 255UL;
+    state->source_phase_c = (session->plan.stream_seed >> 13) & 255UL;
+    state->variation_elapsed_millis = 0UL;
+
+    if (!plasma_resize_visual_state(&session->plan, state)) {
         plasma_destroy_session(session);
         return 0;
     }
 
-    plasma_warm_start_effect(session);
+    plasma_warm_start_effect(&session->plan, state);
     *session_out = session;
     return 1;
 }
@@ -625,9 +606,9 @@ void plasma_destroy_session(screensave_saver_session *session)
         return;
     }
 
-    free(session->field_primary);
-    free(session->field_secondary);
-    screensave_visual_buffer_dispose(&session->visual_buffer);
+    free(session->state.field_primary);
+    free(session->state.field_secondary);
+    screensave_visual_buffer_dispose(&session->state.visual_buffer);
     free(session);
 }
 
@@ -636,14 +617,21 @@ void plasma_resize_session(
     const screensave_saver_environment *environment
 )
 {
+    plasma_execution_state *state;
+
     if (session == NULL || environment == NULL) {
         return;
     }
 
-    session->drawable_size = environment->drawable_size;
-    session->preview_mode = environment->mode == SCREENSAVE_SESSION_MODE_PREVIEW;
-    if (plasma_resize_visual_state(session)) {
-        plasma_warm_start_effect(session);
+    state = &session->state;
+    state->drawable_size = environment->drawable_size;
+    state->active_renderer_kind = plasma_resolve_renderer_kind(environment);
+    state->preview_mode = environment->mode == SCREENSAVE_SESSION_MODE_PREVIEW;
+    if (!plasma_plan_validate_for_renderer_kind(&session->plan, plasma_get_module(), state->active_renderer_kind)) {
+        return;
+    }
+    if (plasma_resize_visual_state(&session->plan, state)) {
+        plasma_warm_start_effect(&session->plan, state);
     }
 }
 
@@ -652,6 +640,7 @@ void plasma_step_session(
     const screensave_saver_environment *environment
 )
 {
+    plasma_execution_state *state;
     unsigned long delta_millis;
     unsigned long speed_units;
 
@@ -659,36 +648,37 @@ void plasma_step_session(
         return;
     }
 
+    state = &session->state;
     delta_millis = environment->clock.delta_millis;
     if (delta_millis > 200UL) {
         delta_millis = 200UL;
     }
 
-    speed_units = plasma_speed_units(session);
-    session->variation_elapsed_millis += delta_millis;
-    session->phase_millis += delta_millis * speed_units;
-    session->palette_phase = (session->palette_phase + ((delta_millis * speed_units) / 10UL) + 1UL) & 255UL;
-    session->source_phase_a += (delta_millis * (speed_units + 1UL)) / 11UL + 1UL;
-    session->source_phase_b += (delta_millis * (speed_units + 3UL)) / 17UL + 1UL;
-    session->source_phase_c += (delta_millis * (speed_units + 5UL)) / 23UL + 1UL;
+    speed_units = plasma_speed_units(&session->plan, state);
+    state->variation_elapsed_millis += delta_millis;
+    state->phase_millis += delta_millis * speed_units;
+    state->palette_phase = (state->palette_phase + ((delta_millis * speed_units) / 10UL) + 1UL) & 255UL;
+    state->source_phase_a += (delta_millis * (speed_units + 1UL)) / 11UL + 1UL;
+    state->source_phase_b += (delta_millis * (speed_units + 3UL)) / 17UL + 1UL;
+    state->source_phase_c += (delta_millis * (speed_units + 5UL)) / 23UL + 1UL;
 
-    if (session->config.effect_mode == PLASMA_EFFECT_FIRE) {
+    if (session->plan.effect_mode == PLASMA_EFFECT_FIRE) {
         unsigned char *swap_buffer;
 
-        plasma_update_fire(session);
-        swap_buffer = session->field_primary;
-        session->field_primary = session->field_secondary;
-        session->field_secondary = swap_buffer;
-    } else if (session->config.effect_mode == PLASMA_EFFECT_INTERFERENCE) {
-        plasma_update_interference(session);
+        plasma_update_fire(&session->plan, state);
+        swap_buffer = state->field_primary;
+        state->field_primary = state->field_secondary;
+        state->field_secondary = swap_buffer;
+    } else if (session->plan.effect_mode == PLASMA_EFFECT_INTERFERENCE) {
+        plasma_update_interference(state);
     } else {
-        plasma_update_plasma(session);
+        plasma_update_plasma(state);
     }
 
-    plasma_apply_smoothing(session);
+    plasma_apply_smoothing(&session->plan, state);
 
-    if (session->variation_elapsed_millis >= plasma_variation_interval_millis(session)) {
-        session->variation_elapsed_millis = 0UL;
-        plasma_refresh_composition(session);
+    if (state->variation_elapsed_millis >= plasma_variation_interval_millis(&session->plan, state)) {
+        state->variation_elapsed_millis = 0UL;
+        plasma_refresh_composition(&session->plan, state);
     }
 }

@@ -2,13 +2,13 @@
 
 #include "plasma_internal.h"
 
-static const char *plasma_canonical_preset_key(const char *preset_key)
+const char *plasma_classic_canonical_key(const char *key)
 {
-    if (preset_key != NULL && lstrcmpiA(preset_key, "ember_lava") == 0) {
+    if (key != NULL && lstrcmpiA(key, "ember_lava") == 0) {
         return "plasma_lava";
     }
 
-    return preset_key;
+    return key;
 }
 
 const screensave_preset_descriptor g_plasma_presets[] = {
@@ -90,29 +90,48 @@ static const plasma_preset_values g_plasma_preset_values[] = {
 const screensave_preset_descriptor *plasma_get_presets(unsigned int *count_out)
 {
     if (count_out != NULL) {
-        *count_out = (unsigned int)(sizeof(g_plasma_presets) / sizeof(g_plasma_presets[0]));
+        *count_out = plasma_classic_preset_count();
     }
 
     return g_plasma_presets;
 }
 
-const plasma_preset_values *plasma_find_preset_values(const char *preset_key)
+unsigned int plasma_classic_preset_count(void)
+{
+    return (unsigned int)(sizeof(g_plasma_presets) / sizeof(g_plasma_presets[0]));
+}
+
+const screensave_preset_descriptor *plasma_find_preset_descriptor(const char *preset_key)
 {
     unsigned int preset_count;
     const screensave_preset_descriptor *presets;
-    unsigned int index;
 
     presets = plasma_get_presets(&preset_count);
-    preset_key = plasma_canonical_preset_key(preset_key);
+    preset_key = plasma_classic_canonical_key(preset_key);
     if (preset_key == NULL || preset_key[0] == '\0') {
         return NULL;
     }
 
-    for (index = 0U; index < preset_count; ++index) {
-        if (
-            presets[index].preset_key != NULL &&
-            strcmp(presets[index].preset_key, preset_key) == 0
-        ) {
+    return screensave_find_preset(presets, preset_count, preset_key);
+}
+
+int plasma_classic_is_known_preset_key(const char *preset_key)
+{
+    return plasma_find_preset_descriptor(preset_key) != NULL;
+}
+
+const plasma_preset_values *plasma_find_preset_values(const char *preset_key)
+{
+    const screensave_preset_descriptor *preset_descriptor;
+    unsigned int index;
+
+    preset_descriptor = plasma_find_preset_descriptor(preset_key);
+    if (preset_descriptor == NULL) {
+        return NULL;
+    }
+
+    for (index = 0U; index < plasma_classic_preset_count(); ++index) {
+        if (&g_plasma_presets[index] == preset_descriptor) {
             return &g_plasma_preset_values[index];
         }
     }
@@ -186,8 +205,6 @@ void plasma_apply_preset_to_config(
     plasma_config *product_config
 )
 {
-    unsigned int preset_count;
-    const screensave_preset_descriptor *presets;
     const screensave_preset_descriptor *preset_descriptor;
     const plasma_preset_values *preset_values;
 
@@ -195,9 +212,7 @@ void plasma_apply_preset_to_config(
         return;
     }
 
-    preset_key = plasma_canonical_preset_key(preset_key);
-    presets = plasma_get_presets(&preset_count);
-    preset_descriptor = screensave_find_preset(presets, preset_count, preset_key);
+    preset_descriptor = plasma_find_preset_descriptor(preset_key);
     preset_values = plasma_find_preset_values(preset_key);
     if (preset_descriptor == NULL || preset_values == NULL) {
         return;

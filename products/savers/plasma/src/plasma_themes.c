@@ -2,15 +2,6 @@
 
 #include "plasma_internal.h"
 
-static const char *plasma_canonical_theme_key(const char *theme_key)
-{
-    if (theme_key != NULL && lstrcmpiA(theme_key, "ember_lava") == 0) {
-        return "plasma_lava";
-    }
-
-    return theme_key;
-}
-
 const screensave_theme_descriptor g_plasma_themes[] = {
     {
         "plasma_lava",
@@ -66,10 +57,20 @@ const screensave_theme_descriptor g_plasma_themes[] = {
 const screensave_theme_descriptor *plasma_get_themes(unsigned int *count_out)
 {
     if (count_out != NULL) {
-        *count_out = (unsigned int)(sizeof(g_plasma_themes) / sizeof(g_plasma_themes[0]));
+        *count_out = plasma_classic_theme_count();
     }
 
     return g_plasma_themes;
+}
+
+unsigned int plasma_classic_theme_count(void)
+{
+    return (unsigned int)(sizeof(g_plasma_themes) / sizeof(g_plasma_themes[0]));
+}
+
+int plasma_classic_is_known_theme_key(const char *theme_key)
+{
+    return plasma_find_theme_descriptor(theme_key) != NULL;
 }
 
 const screensave_theme_descriptor *plasma_find_theme_descriptor(const char *theme_key)
@@ -79,7 +80,7 @@ const screensave_theme_descriptor *plasma_find_theme_descriptor(const char *them
     unsigned int index;
 
     themes = plasma_get_themes(&theme_count);
-    theme_key = plasma_canonical_theme_key(theme_key);
+    theme_key = plasma_classic_canonical_key(theme_key);
     if (theme_key == NULL || theme_key[0] == '\0') {
         return NULL;
     }

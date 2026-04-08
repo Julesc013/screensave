@@ -7,6 +7,9 @@
 #include "screensave/diagnostics_api.h"
 #include "screensave/saver_api.h"
 #include "screensave/visual_buffer_api.h"
+#include "plasma_classic.h"
+#include "plasma_plan.h"
+#include "plasma_validate.h"
 
 #define PLASMA_PRODUCT_REGISTRY_ROOTA "Software\\Julesc013\\ScreenSave\\Products\\plasma"
 #define PLASMA_DEFAULT_PRESET_KEY "plasma_lava"
@@ -59,12 +62,10 @@ typedef struct plasma_rng_state_tag {
 extern const screensave_preset_descriptor g_plasma_presets[];
 extern const screensave_theme_descriptor g_plasma_themes[];
 
-struct screensave_saver_session_tag {
-    plasma_config config;
-    const screensave_theme_descriptor *theme;
+typedef struct plasma_execution_state_tag {
     screensave_sizei drawable_size;
     screensave_sizei field_size;
-    screensave_detail_level detail_level;
+    screensave_renderer_kind active_renderer_kind;
     int preview_mode;
     plasma_rng_state rng;
     screensave_visual_buffer visual_buffer;
@@ -76,6 +77,11 @@ struct screensave_saver_session_tag {
     unsigned long source_phase_b;
     unsigned long source_phase_c;
     unsigned long variation_elapsed_millis;
+} plasma_execution_state;
+
+struct screensave_saver_session_tag {
+    plasma_plan plan;
+    plasma_execution_state state;
 };
 
 const screensave_saver_module *plasma_get_module(void);
