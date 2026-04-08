@@ -112,6 +112,12 @@
     <ClCompile Include="..\..\..\platform\src\render\gl21\gl21_primitives.c" />
     <ClCompile Include="..\..\..\platform\src\render\gl21\gl21_state.c" />
     <ClCompile Include="..\..\..\platform\src\render\gl33\gl33_backend.c" />
+    <ClCompile Include="..\..\..\platform\src\render\gl33\gl33_caps.c" />
+    <ClCompile Include="..\..\..\platform\src\render\gl33\gl33_capture.c" />
+    <ClCompile Include="..\..\..\platform\src\render\gl33\gl33_context.c" />
+    <ClCompile Include="..\..\..\platform\src\render\gl33\gl33_present.c" />
+    <ClCompile Include="..\..\..\platform\src\render\gl33\gl33_primitives.c" />
+    <ClCompile Include="..\..\..\platform\src\render\gl33\gl33_state.c" />
     <ClCompile Include="..\..\..\platform\src\render\gl46\gl46_backend.c" />
     <ClCompile Include="..\..\..\platform\src\render\null\null_backend.c" />
     <ClCompile Include="..\..\..\platform\src\host\win32_scr\scr_args.c" />
