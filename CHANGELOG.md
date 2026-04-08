@@ -2,6 +2,25 @@
 
 All notable repository changes are recorded here in prompt history order.
 
+## SX03 - 2026-04-08
+
+### Added
+
+- `platform/src/render/gl11/gl11_capture.c` as the private home for GL11 compat-lane detail text and lightweight present-time parity diagnostics.
+
+### Changed
+
+- Hardened the optional GL11 lane around a clearer WGL session lifecycle by tightening pixel-format reuse and selection, partial-init cleanup, explicit teardown, and current-context handling so failed GL11 setup leaves a cleaner landing for the hardened GDI floor.
+- Centralized the GL11 frame-open and present status story so the compat lane now reports double-buffered swap versus single-buffered flush explicitly, keeps backend-detail text up to date, and feeds more useful requested-versus-active diagnostics to BenchLab and the Win32 host overlays.
+- Carried parsed GL11 version numbers, pixel-format traits, and compat-lane landing detail into the private backend-caps and loader path so later `SX` routing work can build on stable private data instead of re-spreading ad hoc GL11 probing.
+- Corrected the active roadmap surfaces so `SX03` is now the completed GL11 parity-lane hardening step and `SX04` becomes the next active substrate stage instead of skipping straight to a `gl33` program.
+
+### Validation
+
+- Built `build/mingw/i686` with `PROFILE=debug` and `CC=gcc`, producing the shared platform library plus the checked-in saver, BenchLab, and Suite targets after the GL11 compat-lane hardening cut.
+- Confirmed the GL11 changes stayed behind the private implementation boundary and did not widen the public renderer-facing contract or move product code onto private substrate headers.
+- Kept `SX03` bounded to GL11 lifecycle, present-path, fallback, diagnostics, build integration, and doctrine normalization only; this prompt did not implement GL21 or higher-tier feature growth, adopt non-GL families, rewrite the public renderer API, or widen product scope.
+
 ## SX02 - 2026-04-08
 
 ### Added
