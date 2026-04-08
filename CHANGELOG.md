@@ -2,6 +2,25 @@
 
 All notable repository changes are recorded here in prompt history order.
 
+## SX07 - 2026-04-08
+
+### Added
+
+- `platform/include/screensave/private/service_common.h`, `image_service.h`, `text_service.h`, `present_service.h`, `backend_family_service.h`, and `service_registry.h` as the private seam headers for future image, text, present-policy, backend-family, and provider-registry work beneath the frozen public renderer contract.
+- `platform/src/core/substrate/image_service.c`, `text_service.c`, `present_service.c`, `backend_family_service.c`, and `service_registry.c` as the first real private homes for those future-service seams and their default band-aware binding logic.
+
+### Changed
+
+- Replaced the old two-slot private seam placeholder with a typed seam layer that now carries image, text, present-policy, and backend-family bindings beside the real backend caps and present-path state, while keeping those concepts private and dynamically optional.
+- Wired the private backend loader and renderer runtime so service seams now bind through a small private registry during backend selection instead of remaining inert placeholders, without widening the public renderer contract or moving products onto `screensave/private/`.
+- Added a narrow host-diagnostics summary for the private seam bindings and updated active README, architecture, roadmap, and policy docs so `SX07` now reads as the future-service seam step while avoiding any claim that WIC, DirectWrite, Direct2D, D3D, Vulkan, or similar families are already adopted.
+
+### Validation
+
+- Built `build/mingw/i686` with `PROFILE=debug` and `CC=gcc`, producing the shared platform library plus the checked-in saver, BenchLab, and Suite targets after the SX07 seam integration.
+- Confirmed the new seam units are compile-integrated and loader-integrated rather than decorative stubs, while products still build against the existing public `platform/include/screensave/` contract.
+- Kept `SX07` bounded to private seam structure, private diagnostics surfacing, build integration, and doctrine normalization only; this prompt did not adopt non-GL families, rewrite the public renderer API, or widen product scope.
+
 ## SX06 - 2026-04-08
 
 ### Added
