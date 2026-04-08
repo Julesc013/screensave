@@ -44,8 +44,8 @@ Optional `SS03` remains reserved, but it is not the active platform program gate
 `SX` is the bounded post-`SS` and pre-`PL` substrate series.
 It exists to make the private substrate more durable without replacing the public renderer ladder or reopening product doctrine.
 
-`SX00`, `SX01`, `SX02`, `SX03`, `SX04`, `SX05`, and `SX06` are now complete.
-The next substrate step is optional `SX07`, which may record the explicit handoff from the hardened `SX` substrate into `PL` if that checkpoint is still useful.
+`SX00`, `SX01`, `SX02`, `SX03`, `SX04`, `SX05`, `SX06`, and `SX07` are now complete.
+The next substrate step is optional `SX08`, which may record the explicit adapter-proof and `PL` handoff checkpoint if that gate is still useful.
 
 `SX` is not:
 

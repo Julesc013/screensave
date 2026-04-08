@@ -8,8 +8,8 @@ This document defines the active `SX` program that sits after the closed `SS` br
 
 - `SS00`, `SS01`, and `SS02` are complete.
 - Optional `SS03` remains a reserved maintenance-policy sidecar, not the active platform program.
-- `SX00`, `SX01`, `SX02`, `SX03`, `SX04`, `SX05`, and `SX06` are complete.
-- Optional `SX07` is the next substrate checkpoint if we want an explicit handoff before `PL`.
+- `SX00`, `SX01`, `SX02`, `SX03`, `SX04`, `SX05`, `SX06`, and `SX07` are complete.
+- Optional `SX08` is the next substrate checkpoint if we want an explicit adapter-proof and `PL` handoff gate.
 - `PL` begins only after `SX` hands off a proven substrate.
 
 ## What SX Is
@@ -44,7 +44,8 @@ The current intended `SX` order is:
 | `SX04` | GL21 advanced-lane hardening | harden the first real advanced tier around an explicit private capability bundle and disciplined degradation to `gl11` and `gdi` |
 | `SX05` | GL33 modern-lane bring-up | make `gl33` real as the first bounded modern tier without weakening lower-tier discipline |
 | `SX06` | GL46 premium-lane bring-up | make `gl46` real as the bounded premium tier without weakening the lower-tier degradation model |
-| optional `SX07` | substrate handoff checkpoint | record that the substrate is stable enough to support `PL` without reopening its constitution |
+| `SX07` | future-service seams | add private image, text, present-policy, and future-backend-family seams without turning them into public doctrine or adopted non-GL families |
+| optional `SX08` | substrate handoff checkpoint | record that the hardened GL ladder plus private seam layer are stable enough for later optional adapter work and `PL` without reopening the constitution |
 
 These steps are ordered on purpose.
 Later higher-capability work must not skip substrate hardening of the lower tiers.
