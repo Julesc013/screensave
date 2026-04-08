@@ -46,7 +46,7 @@ static const screensave_saver_module g_gallery_module = {
     {
         "gallery",
         "Gallery",
-        "Renderer-showcase saver with compatibility, GL11 classic, advanced GL21, and bounded GL33 modern showcase scene families."
+        "Renderer-showcase saver with compatibility, GL11 classic, advanced GL21, bounded GL33 modern, and bounded GL46 premium showcase scene families."
     },
     SCREENSAVE_SAVER_CAP_GDI |
         SCREENSAVE_SAVER_CAP_GL11 |

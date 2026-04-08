@@ -12,6 +12,7 @@
 #define GALLERY_DEFAULT_THEME_KEY "compatibility_gallery"
 #define GALLERY_PRESET_COUNT 8U
 #define GALLERY_THEME_COUNT 8U
+#define GALLERY_MARKER_LIMIT 16U
 
 typedef enum gallery_scene_mode_tag {
     GALLERY_SCENE_COMPATIBILITY = 0,
@@ -39,7 +40,8 @@ typedef enum gallery_renderer_tier_tag {
     GALLERY_TIER_GDI = 0,
     GALLERY_TIER_GL11 = 1,
     GALLERY_TIER_GL21 = 2,
-    GALLERY_TIER_GL33 = 3
+    GALLERY_TIER_GL33 = 3,
+    GALLERY_TIER_GL46 = 4
 } gallery_renderer_tier;
 
 typedef struct gallery_marker_tag {
@@ -64,7 +66,7 @@ struct screensave_saver_session_tag {
     unsigned int scene_phase;
     unsigned int drift_phase;
     unsigned int marker_count;
-    gallery_marker markers[12];
+    gallery_marker markers[GALLERY_MARKER_LIMIT];
 };
 
 const screensave_saver_module *gallery_get_module(void);

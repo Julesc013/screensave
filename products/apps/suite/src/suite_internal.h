@@ -63,6 +63,7 @@ typedef struct suite_manifest_info_tag {
     int supports_gl11;
     int supports_gl21;
     int supports_gl33;
+    int supports_gl46;
 } suite_manifest_info;
 
 typedef struct suite_catalog_entry_tag {

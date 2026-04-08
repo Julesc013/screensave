@@ -245,7 +245,7 @@ static int suite_create_controls(suite_app *app)
     SendMessageA(app->renderer_combo, CB_ADDSTRING, 0U, (LPARAM)"OpenGL 1.1");
     SendMessageA(app->renderer_combo, CB_ADDSTRING, 0U, (LPARAM)"OpenGL 2.1");
     SendMessageA(app->renderer_combo, CB_ADDSTRING, 0U, (LPARAM)"OpenGL 3.3 (modern optional)");
-    SendMessageA(app->renderer_combo, CB_ADDSTRING, 0U, (LPARAM)"OpenGL 4.6 (placeholder)");
+    SendMessageA(app->renderer_combo, CB_ADDSTRING, 0U, (LPARAM)"OpenGL 4.6 (premium optional)");
     SendMessageA(app->renderer_combo, CB_SETCURSEL, 0U, 0L);
     return 1;
 }
