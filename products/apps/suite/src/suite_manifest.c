@@ -290,10 +290,25 @@ static void suite_manifest_set_defaults(
     manifest->supports_gdi = 1;
     manifest->supports_gl11 = (module->capability_flags & SCREENSAVE_SAVER_CAP_GL11) != 0UL;
     manifest->supports_gl21 = (module->capability_flags & SCREENSAVE_SAVER_CAP_GL21) != 0UL;
-    manifest->supports_gl33 = 0;
-    manifest->supports_gl46 = 0;
+    manifest->supports_gl33 = (module->capability_flags & SCREENSAVE_SAVER_CAP_GL33) != 0UL;
+    manifest->supports_gl46 = (module->capability_flags & SCREENSAVE_SAVER_CAP_GL46) != 0UL;
     manifest->long_run_stable = (module->capability_flags & SCREENSAVE_SAVER_CAP_LONG_RUN_STABLE) != 0UL;
-    manifest->preview_safe = 1;
+    manifest->preview_safe = (module->capability_flags & SCREENSAVE_SAVER_CAP_PREVIEW_SAFE) != 0UL;
+    suite_text_copy(
+        manifest->minimum_kind,
+        sizeof(manifest->minimum_kind),
+        screensave_renderer_kind_name(module->routing_policy.minimum_kind)
+    );
+    suite_text_copy(
+        manifest->preferred_kind,
+        sizeof(manifest->preferred_kind),
+        screensave_renderer_kind_name(module->routing_policy.preferred_kind)
+    );
+    suite_text_copy(
+        manifest->quality_class,
+        sizeof(manifest->quality_class),
+        screensave_capability_quality_name(module->routing_policy.quality_class)
+    );
 }
 
 static int suite_manifest_load_callback(
@@ -376,6 +391,33 @@ static int suite_manifest_load_callback(
         }
         if (lstrcmpiA(key, "renderer") == 0) {
             return suite_text_copy(manifest->renderer, sizeof(manifest->renderer), value);
+        }
+        return 1;
+    }
+
+    if (lstrcmpiA(section, "routing") == 0) {
+        if (lstrcmpiA(key, "minimum_kind") == 0) {
+            return suite_text_copy(manifest->minimum_kind, sizeof(manifest->minimum_kind), value);
+        }
+        if (lstrcmpiA(key, "preferred_kind") == 0) {
+            return suite_text_copy(manifest->preferred_kind, sizeof(manifest->preferred_kind), value);
+        }
+        if (lstrcmpiA(key, "quality_class") == 0) {
+            return suite_text_copy(manifest->quality_class, sizeof(manifest->quality_class), value);
+        }
+        if (lstrcmpiA(key, "degraded_behavior") == 0) {
+            return suite_text_copy(
+                manifest->degraded_behavior,
+                sizeof(manifest->degraded_behavior),
+                value
+            );
+        }
+        if (lstrcmpiA(key, "unsupported_paths") == 0) {
+            return suite_text_copy(
+                manifest->unsupported_paths,
+                sizeof(manifest->unsupported_paths),
+                value
+            );
         }
         return 1;
     }

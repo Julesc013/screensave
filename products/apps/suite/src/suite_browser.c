@@ -277,8 +277,27 @@ void suite_draw_info(HDC dc, const RECT *client_rect, const suite_app *app)
     suite_browser_append_line(info_text, sizeof(info_text), "Family", entry->family_label);
     suite_browser_append_line(info_text, sizeof(info_text), "Summary", summary_text);
     suite_browser_append_line(info_text, sizeof(info_text), "Renderer support", entry->manifest.renderer);
+    suite_browser_append_line(info_text, sizeof(info_text), "Minimum renderer lane", entry->manifest.minimum_kind);
+    suite_browser_append_line(info_text, sizeof(info_text), "Preferred renderer lane", entry->manifest.preferred_kind);
+    suite_browser_append_line(info_text, sizeof(info_text), "Quality class", entry->manifest.quality_class);
     suite_browser_append_flag_line(info_text, sizeof(info_text), "Preview safe", entry->manifest.preview_safe);
     suite_browser_append_flag_line(info_text, sizeof(info_text), "Long-run stable", entry->manifest.long_run_stable);
+    if (entry->manifest.degraded_behavior[0] != '\0') {
+        suite_browser_append_line(
+            info_text,
+            sizeof(info_text),
+            "Degraded behavior",
+            entry->manifest.degraded_behavior
+        );
+    }
+    if (entry->manifest.unsupported_paths[0] != '\0') {
+        suite_browser_append_line(
+            info_text,
+            sizeof(info_text),
+            "Unsupported paths",
+            entry->manifest.unsupported_paths
+        );
+    }
     suite_browser_append_flag_line(
         info_text,
         sizeof(info_text),

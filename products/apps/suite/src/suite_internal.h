@@ -57,6 +57,11 @@ typedef struct suite_manifest_info_tag {
     char default_theme[64];
     char scope[64];
     char renderer[64];
+    char minimum_kind[16];
+    char preferred_kind[16];
+    char quality_class[16];
+    char degraded_behavior[128];
+    char unsupported_paths[128];
     int preview_safe;
     int long_run_stable;
     int supports_gdi;

@@ -161,6 +161,26 @@ void scr_build_overlay_text(const scr_host_context *context, char *buffer, int b
             buffer_size,
             screensave_display_renderer_kind(renderer_info.requested_kind)
         );
+        if (context->module != NULL) {
+            scr_append_text(buffer, buffer_size, "\r\nRouting profile: min ");
+            scr_append_text(
+                buffer,
+                buffer_size,
+                screensave_display_renderer_kind(context->module->routing_policy.minimum_kind)
+            );
+            scr_append_text(buffer, buffer_size, " pref ");
+            scr_append_text(
+                buffer,
+                buffer_size,
+                screensave_display_renderer_kind(context->module->routing_policy.preferred_kind)
+            );
+            scr_append_text(buffer, buffer_size, " quality ");
+            scr_append_text(
+                buffer,
+                buffer_size,
+                screensave_capability_quality_name(context->module->routing_policy.quality_class)
+            );
+        }
         scr_append_text(buffer, buffer_size, "\r\nActive renderer: ");
         scr_append_text(
             buffer,

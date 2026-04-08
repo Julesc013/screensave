@@ -251,8 +251,10 @@ static int screensave_display_special_renderer_reason(
     unsigned int buffer_size
 )
 {
+    const char *policy_suffix;
     const char *suffix;
     const char *fallback;
+    const char *policy_action;
     char requested_token[16];
     char active_token[16];
     unsigned int requested_length;
@@ -266,6 +268,74 @@ static int screensave_display_special_renderer_reason(
         buffer_size == 0U
     ) {
         return 0;
+    }
+
+    if (strncmp(reason_code, "policy-auto-prefer-", 19U) == 0) {
+        active_text = screensave_display_renderer_kind_token(reason_code + 19U);
+        if (
+            active_text != NULL &&
+            screensave_display_text_copy(buffer, buffer_size, "Auto policy preferred ") &&
+            screensave_display_append_text(buffer, buffer_size, active_text)
+        ) {
+            return 1;
+        }
+    }
+
+    if (strncmp(reason_code, "policy-request-", 15U) == 0) {
+        policy_suffix = reason_code + 15U;
+        fallback = strstr(policy_suffix, "-clamp-");
+        policy_action = "-clamp-";
+        if (fallback == NULL) {
+            fallback = strstr(policy_suffix, "-raise-");
+            policy_action = "-raise-";
+        }
+
+        if (fallback != NULL) {
+            requested_length = (unsigned int)(fallback - policy_suffix);
+            active_length = (unsigned int)strlen(fallback + strlen(policy_action));
+            if (
+                requested_length > 0U &&
+                requested_length < sizeof(requested_token) &&
+                active_length > 0U &&
+                active_length < sizeof(active_token)
+            ) {
+                memcpy(requested_token, policy_suffix, requested_length);
+                requested_token[requested_length] = '\0';
+                memcpy(active_token, fallback + strlen(policy_action), active_length + 1U);
+                requested_text = screensave_display_renderer_kind_token(requested_token);
+                active_text = screensave_display_renderer_kind_token(active_token);
+                if (
+                    requested_text != NULL &&
+                    active_text != NULL &&
+                    screensave_display_text_copy(buffer, buffer_size, "Requested ") &&
+                    screensave_display_append_text(buffer, buffer_size, requested_text)
+                ) {
+                    if (strcmp(policy_action, "-clamp-") == 0) {
+                        if (
+                            screensave_display_append_text(buffer, buffer_size, "; saver policy capped it at ") &&
+                            screensave_display_append_text(buffer, buffer_size, active_text)
+                        ) {
+                            return 1;
+                        }
+                    } else if (
+                        screensave_display_append_text(buffer, buffer_size, "; saver policy raised it to ") &&
+                        screensave_display_append_text(buffer, buffer_size, active_text)
+                    ) {
+                        return 1;
+                    }
+                }
+            }
+        } else {
+            requested_text = screensave_display_renderer_kind_token(policy_suffix);
+            if (
+                requested_text != NULL &&
+                screensave_display_text_copy(buffer, buffer_size, "Requested ") &&
+                screensave_display_append_text(buffer, buffer_size, requested_text) &&
+                screensave_display_append_text(buffer, buffer_size, " within saver policy")
+            ) {
+                return 1;
+            }
+        }
     }
 
     if (strncmp(reason_code, "force-", 6U) == 0) {

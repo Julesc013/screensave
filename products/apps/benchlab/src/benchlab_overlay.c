@@ -69,6 +69,26 @@ static void benchlab_build_overlay_text(const benchlab_app *app, char *buffer, i
         buffer_size,
         screensave_display_renderer_kind(app->requested_renderer_kind)
     );
+    if (app->module != NULL) {
+        benchlab_append_text(buffer, buffer_size, "\r\nRouting profile: min ");
+        benchlab_append_text(
+            buffer,
+            buffer_size,
+            screensave_display_renderer_kind(app->module->routing_policy.minimum_kind)
+        );
+        benchlab_append_text(buffer, buffer_size, " pref ");
+        benchlab_append_text(
+            buffer,
+            buffer_size,
+            screensave_display_renderer_kind(app->module->routing_policy.preferred_kind)
+        );
+        benchlab_append_text(buffer, buffer_size, " quality ");
+        benchlab_append_text(
+            buffer,
+            buffer_size,
+            screensave_capability_quality_name(app->module->routing_policy.quality_class)
+        );
+    }
 
     if (app->renderer != NULL) {
         screensave_renderer_get_info(app->renderer, &renderer_info);
