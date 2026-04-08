@@ -143,7 +143,7 @@ static const char *screensave_backend_loader_auto_selection_reason(
     case SCREENSAVE_RENDERER_KIND_GL46:
         return "auto-prefer-gl46";
     case SCREENSAVE_RENDERER_KIND_GL33:
-        return "auto-fallback-gl33";
+        return "auto-prefer-gl33";
     case SCREENSAVE_RENDERER_KIND_GL21:
         return "auto-fallback-gl21";
     case SCREENSAVE_RENDERER_KIND_GL11:
@@ -275,6 +275,19 @@ static void screensave_backend_loader_apply_selection(
             SCREENSAVE_DIAG_LEVEL_INFO,
             4103UL,
             "Renderer selection is using the GL11 compat lane."
+        );
+    }
+
+    if (
+        request->diagnostics != NULL &&
+        descriptor->backend_kind == SCREENSAVE_BACKEND_KIND_GL33 &&
+        request->requested_kind != SCREENSAVE_RENDERER_KIND_GL33
+    ) {
+        screensave_backend_loader_emit_create_diag(
+            request->diagnostics,
+            SCREENSAVE_DIAG_LEVEL_INFO,
+            4105UL,
+            "Renderer selection is using the GL33 modern lane."
         );
     }
 
