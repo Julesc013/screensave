@@ -15,6 +15,7 @@ static gallery_renderer_tier gallery_tier_from_info(const screensave_renderer_in
     switch (info->active_kind) {
     case SCREENSAVE_RENDERER_KIND_GL46:
     case SCREENSAVE_RENDERER_KIND_GL33:
+        return GALLERY_TIER_GL33;
     case SCREENSAVE_RENDERER_KIND_GL21:
         return GALLERY_TIER_GL21;
     case SCREENSAVE_RENDERER_KIND_GL11:
@@ -69,6 +70,11 @@ static screensave_color gallery_background_color(const screensave_saver_session 
         color.red = (unsigned char)(color.red / 4U);
         color.green = (unsigned char)(color.green / 4U);
         color.blue = (unsigned char)(color.blue / 4U);
+    } else if (tier == GALLERY_TIER_GL33) {
+        color = session->theme->accent_color;
+        color.red = (unsigned char)(color.red / 5U);
+        color.green = (unsigned char)(color.green / 5U);
+        color.blue = (unsigned char)(color.blue / 5U);
     } else if (tier == GALLERY_TIER_GL21) {
         color = session->theme->primary_color;
         color.red = (unsigned char)(color.red / 4U);
@@ -201,6 +207,8 @@ static int gallery_marker_visual_count(const screensave_saver_session *session, 
 
     if (tier == GALLERY_TIER_GL11) {
         count += 1;
+    } else if (tier == GALLERY_TIER_GL33) {
+        count += 4;
     } else if (tier == GALLERY_TIER_GL21) {
         count += 3;
     }
@@ -259,7 +267,7 @@ static void gallery_draw_marker_field(
             marker->y + offset_y,
             radius + 4,
             radius + 2,
-            tier == GALLERY_TIER_GL21 ? 12U : 8U,
+            tier == GALLERY_TIER_GL33 ? 16U : (tier == GALLERY_TIER_GL21 ? 12U : 8U),
             (double)(session->phase_counter % 360UL) * (M_PI / 180.0),
             highlight
         );
@@ -297,12 +305,18 @@ static void gallery_draw_compatibility_scene(
     back = gallery_background_color(session, tier);
     frame = gallery_mix(back, session->theme->primary_color, 88U);
     accent = gallery_mix(back, session->theme->accent_color, 174U);
-    glow = gallery_mix(frame, session->theme->accent_color, tier == GALLERY_TIER_GL21 ? 184U : 128U);
+    glow = gallery_mix(
+        frame,
+        session->theme->accent_color,
+        tier == GALLERY_TIER_GL33 ? 208U : (tier == GALLERY_TIER_GL21 ? 184U : 128U)
+    );
 
     screensave_renderer_clear(renderer, back);
     panel_count = 3;
     if (tier == GALLERY_TIER_GL11) {
         panel_count = 4;
+    } else if (tier == GALLERY_TIER_GL33) {
+        panel_count = 6;
     } else if (tier == GALLERY_TIER_GL21) {
         panel_count = 5;
     }
@@ -331,7 +345,7 @@ static void gallery_draw_compatibility_scene(
             panel_top + panel_height / 2,
             (panel_width / 3),
             (panel_height / 3),
-            tier == GALLERY_TIER_GL21 ? 12U : 8U,
+            tier == GALLERY_TIER_GL33 ? 16U : (tier == GALLERY_TIER_GL21 ? 12U : 8U),
             (double)((session->phase_counter + (unsigned long)index) % 360UL) * (M_PI / 180.0),
             accent
         );
@@ -358,13 +372,19 @@ static void gallery_draw_neon_scene(
     back = gallery_background_color(session, tier);
     neon_a = gallery_mix(back, session->theme->primary_color, 144U);
     neon_b = gallery_mix(back, session->theme->accent_color, 192U);
-    neon_c = gallery_mix(neon_a, session->theme->accent_color, tier == GALLERY_TIER_GL21 ? 160U : 112U);
+    neon_c = gallery_mix(
+        neon_a,
+        session->theme->accent_color,
+        tier == GALLERY_TIER_GL33 ? 196U : (tier == GALLERY_TIER_GL21 ? 160U : 112U)
+    );
 
     screensave_renderer_clear(renderer, back);
 
     sweep_count = 6;
     if (tier == GALLERY_TIER_GL11) {
         sweep_count = 8;
+    } else if (tier == GALLERY_TIER_GL33) {
+        sweep_count = 12;
     } else if (tier == GALLERY_TIER_GL21) {
         sweep_count = 10;
     }
@@ -396,7 +416,7 @@ static void gallery_draw_neon_scene(
                 y,
                 14 + (index % 3) * 4,
                 8 + (index % 2) * 3,
-                tier == GALLERY_TIER_GL21 ? 12U : 8U,
+                tier == GALLERY_TIER_GL33 ? 16U : (tier == GALLERY_TIER_GL21 ? 12U : 8U),
                 (double)((session->phase_counter + (unsigned long)index) % 360UL) * (M_PI / 90.0),
                 neon_c
             );
@@ -424,13 +444,19 @@ static void gallery_draw_showcase_scene(
     back = gallery_background_color(session, tier);
     frame = gallery_mix(back, session->theme->primary_color, 120U);
     highlight = gallery_mix(back, session->theme->accent_color, 178U);
-    beam = gallery_mix(frame, session->theme->accent_color, tier == GALLERY_TIER_GL21 ? 200U : 148U);
+    beam = gallery_mix(
+        frame,
+        session->theme->accent_color,
+        tier == GALLERY_TIER_GL33 ? 228U : (tier == GALLERY_TIER_GL21 ? 200U : 148U)
+    );
 
     screensave_renderer_clear(renderer, back);
 
     layer_count = 4;
     if (tier == GALLERY_TIER_GL11) {
         layer_count = 5;
+    } else if (tier == GALLERY_TIER_GL33) {
+        layer_count = 9;
     } else if (tier == GALLERY_TIER_GL21) {
         layer_count = 7;
     }
@@ -459,7 +485,7 @@ static void gallery_draw_showcase_scene(
             session->drawable_size.height / 2,
             width / 4,
             height / 4,
-            tier == GALLERY_TIER_GL21 ? 12U : 8U,
+            tier == GALLERY_TIER_GL33 ? 16U : (tier == GALLERY_TIER_GL21 ? 12U : 8U),
             (double)((session->phase_counter + (unsigned long)(index * 31)) % 360UL) * (M_PI / 180.0),
             beam
         );
@@ -479,6 +505,16 @@ static void gallery_draw_showcase_scene(
         start_point.x = (session->drawable_size.width * 2) / 3;
         end_point.x = (session->drawable_size.width * 2) / 3;
         screensave_renderer_draw_line(renderer, &start_point, &end_point, highlight);
+        if (tier == GALLERY_TIER_GL33) {
+            start_point.x = 0;
+            start_point.y = session->drawable_size.height / 3;
+            end_point.x = session->drawable_size.width - 1;
+            end_point.y = session->drawable_size.height / 3;
+            screensave_renderer_draw_line(renderer, &start_point, &end_point, beam);
+            start_point.y = (session->drawable_size.height * 2) / 3;
+            end_point.y = (session->drawable_size.height * 2) / 3;
+            screensave_renderer_draw_line(renderer, &start_point, &end_point, beam);
+        }
     }
 
     gallery_draw_marker_field(session, renderer, tier, frame, beam);

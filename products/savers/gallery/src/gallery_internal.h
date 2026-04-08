@@ -38,7 +38,8 @@ typedef struct gallery_preset_values_tag {
 typedef enum gallery_renderer_tier_tag {
     GALLERY_TIER_GDI = 0,
     GALLERY_TIER_GL11 = 1,
-    GALLERY_TIER_GL21 = 2
+    GALLERY_TIER_GL21 = 2,
+    GALLERY_TIER_GL33 = 3
 } gallery_renderer_tier;
 
 typedef struct gallery_marker_tag {
