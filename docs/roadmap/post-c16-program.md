@@ -44,8 +44,8 @@ Optional `SS03` remains reserved, but it is not the active platform program gate
 `SX` is the bounded post-`SS` and pre-`PL` substrate series.
 It exists to make the private substrate more durable without replacing the public renderer ladder or reopening product doctrine.
 
-`SX00`, `SX01`, `SX02`, and `SX03` are now complete.
-The next active substrate step is `SX04`, which hardens the first real advanced lane only after the GDI floor and GL11 compat lane are trustworthy.
+`SX00`, `SX01`, `SX02`, `SX03`, and `SX04` are now complete.
+The next active substrate step is `SX05`, which may bring up the later `gl33` modern tier only after the hardened GL21 advanced lane has proved durable.
 
 `SX` is not:
 
