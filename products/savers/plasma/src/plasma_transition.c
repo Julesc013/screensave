@@ -173,9 +173,7 @@ static const plasma_content_preset_set_entry *plasma_transition_active_preset_se
             policy = PLASMA_TRANSITION_POLICY_AUTO;
         }
         if (policy_out != NULL) {
-            *policy_out = plan->transition_policy == PLASMA_TRANSITION_POLICY_JOURNEY
-                ? PLASMA_TRANSITION_POLICY_JOURNEY
-                : policy;
+            *policy_out = policy;
         }
         if (interval_out != NULL && step->dwell_millis > 0UL) {
             *interval_out = step->dwell_millis;
@@ -220,9 +218,7 @@ static const plasma_content_theme_set_entry *plasma_transition_active_theme_set(
             policy = PLASMA_TRANSITION_POLICY_AUTO;
         }
         if (policy_out != NULL) {
-            *policy_out = plan->transition_policy == PLASMA_TRANSITION_POLICY_JOURNEY
-                ? PLASMA_TRANSITION_POLICY_JOURNEY
-                : policy;
+            *policy_out = policy;
         }
         if (interval_out != NULL && step->dwell_millis > 0UL) {
             *interval_out = step->dwell_millis;
@@ -232,7 +228,11 @@ static const plasma_content_theme_set_entry *plasma_transition_active_theme_set(
         }
     }
 
-    if (policy == PLASMA_TRANSITION_POLICY_THEME_SET || policy == PLASMA_TRANSITION_POLICY_AUTO) {
+    if (
+        policy == PLASMA_TRANSITION_POLICY_THEME_SET ||
+        policy == PLASMA_TRANSITION_POLICY_PRESET_SET ||
+        policy == PLASMA_TRANSITION_POLICY_AUTO
+    ) {
         return plan->selection.active_theme_set;
     }
 

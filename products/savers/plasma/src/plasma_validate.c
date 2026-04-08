@@ -116,7 +116,7 @@ int plasma_plan_validate_for_renderer_kind(
 
     if (plasma_is_lower_band_kind(renderer_kind)) {
         return
-            plan->active_renderer_kind == renderer_kind &&
+            plasma_is_lower_band_kind(plan->active_renderer_kind) &&
             !plan->advanced_enabled &&
             !plan->modern_enabled &&
             !plan->premium_enabled;
