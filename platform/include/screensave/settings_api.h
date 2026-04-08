@@ -33,6 +33,7 @@ typedef enum screensave_pack_source_kind_tag {
 #define SCREENSAVE_PACK_ISSUE_BAD_CONTENT_FLAGS 0x00000010UL
 #define SCREENSAVE_PACK_ISSUE_BAD_ENTRY_PATH 0x00000020UL
 #define SCREENSAVE_PACK_ISSUE_MISSING_ENTRIES 0x00000040UL
+#define SCREENSAVE_PACK_ISSUE_BAD_ROUTING 0x00000080UL
 
 #define SCREENSAVE_PACK_ENTRY_LIMIT 16U
 #define SCREENSAVE_PACK_TEXT_LENGTH 96U
@@ -66,6 +67,11 @@ typedef struct screensave_pack_manifest_tag {
     char product_key[SCREENSAVE_PACK_TEXT_LENGTH];
     char display_name[SCREENSAVE_PACK_TEXT_LENGTH];
     char description[SCREENSAVE_PACK_PATH_LENGTH];
+    char minimum_kind[16];
+    char preferred_kind[16];
+    char quality_class[16];
+    char degraded_behavior[SCREENSAVE_PACK_PATH_LENGTH];
+    char unsupported_paths[SCREENSAVE_PACK_PATH_LENGTH];
     char manifest_path[SCREENSAVE_PACK_PATH_LENGTH];
     char preset_files[SCREENSAVE_PACK_ENTRY_LIMIT][SCREENSAVE_PACK_PATH_LENGTH];
     char theme_files[SCREENSAVE_PACK_ENTRY_LIMIT][SCREENSAVE_PACK_PATH_LENGTH];

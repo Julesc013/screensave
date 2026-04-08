@@ -164,6 +164,93 @@ static int screensave_parse_detail_level(const char *text, screensave_detail_lev
     return 0;
 }
 
+static int screensave_parse_renderer_kind_text(
+    const char *text,
+    screensave_renderer_kind *kind_out
+)
+{
+    if (text == NULL || kind_out == NULL) {
+        return 0;
+    }
+
+    if (lstrcmpiA(text, "gdi") == 0) {
+        *kind_out = SCREENSAVE_RENDERER_KIND_GDI;
+        return 1;
+    }
+    if (lstrcmpiA(text, "gl11") == 0) {
+        *kind_out = SCREENSAVE_RENDERER_KIND_GL11;
+        return 1;
+    }
+    if (lstrcmpiA(text, "gl21") == 0) {
+        *kind_out = SCREENSAVE_RENDERER_KIND_GL21;
+        return 1;
+    }
+    if (lstrcmpiA(text, "gl33") == 0) {
+        *kind_out = SCREENSAVE_RENDERER_KIND_GL33;
+        return 1;
+    }
+    if (lstrcmpiA(text, "gl46") == 0) {
+        *kind_out = SCREENSAVE_RENDERER_KIND_GL46;
+        return 1;
+    }
+
+    return 0;
+}
+
+static int screensave_renderer_kind_rank(screensave_renderer_kind kind)
+{
+    switch (kind) {
+    case SCREENSAVE_RENDERER_KIND_GDI:
+        return 1;
+
+    case SCREENSAVE_RENDERER_KIND_GL11:
+        return 2;
+
+    case SCREENSAVE_RENDERER_KIND_GL21:
+        return 3;
+
+    case SCREENSAVE_RENDERER_KIND_GL33:
+        return 4;
+
+    case SCREENSAVE_RENDERER_KIND_GL46:
+        return 5;
+
+    case SCREENSAVE_RENDERER_KIND_NULL:
+    case SCREENSAVE_RENDERER_KIND_UNKNOWN:
+    default:
+        return 0;
+    }
+}
+
+static int screensave_parse_capability_quality_text(
+    const char *text,
+    screensave_capability_quality_class *quality_out
+)
+{
+    if (text == NULL || quality_out == NULL) {
+        return 0;
+    }
+
+    if (lstrcmpiA(text, "safe") == 0) {
+        *quality_out = SCREENSAVE_CAPABILITY_QUALITY_SAFE;
+        return 1;
+    }
+    if (lstrcmpiA(text, "balanced") == 0) {
+        *quality_out = SCREENSAVE_CAPABILITY_QUALITY_BALANCED;
+        return 1;
+    }
+    if (lstrcmpiA(text, "high") == 0) {
+        *quality_out = SCREENSAVE_CAPABILITY_QUALITY_HIGH;
+        return 1;
+    }
+    if (lstrcmpiA(text, "premium") == 0) {
+        *quality_out = SCREENSAVE_CAPABILITY_QUALITY_PREMIUM;
+        return 1;
+    }
+
+    return 0;
+}
+
 static int screensave_parse_randomization_mode(
     const char *text,
     screensave_randomization_mode *mode_out
@@ -761,6 +848,30 @@ int screensave_settings_export_file(
             fclose(file);
             return 0;
         }
+
+        if (
+            !writer.write_string(
+                writer.context,
+                "routing",
+                "minimum_kind",
+                screensave_renderer_kind_name(module->routing_policy.minimum_kind)
+            ) ||
+            !writer.write_string(
+                writer.context,
+                "routing",
+                "preferred_kind",
+                screensave_renderer_kind_name(module->routing_policy.preferred_kind)
+            ) ||
+            !writer.write_string(
+                writer.context,
+                "routing",
+                "quality_class",
+                screensave_capability_quality_name(module->routing_policy.quality_class)
+            )
+        ) {
+            fclose(file);
+            return 0;
+        }
     } else {
         const screensave_theme_descriptor *theme_descriptor;
         char color_text[16];
@@ -847,6 +958,11 @@ typedef struct screensave_settings_import_context_tag {
     int saw_product_key;
     int saw_version;
     int invalid;
+    char minimum_kind[16];
+    char preferred_kind[16];
+    char quality_class[16];
+    char degraded_behavior[128];
+    char unsupported_paths[128];
 } screensave_settings_import_context;
 
 static int screensave_settings_import_callback(
@@ -1009,6 +1125,66 @@ static int screensave_settings_import_callback(
         return 1;
     }
 
+    if (lstrcmpiA(section, "routing") == 0) {
+        if (lstrcmpiA(key, "minimum_kind") == 0) {
+            screensave_renderer_kind minimum_kind;
+
+            if (
+                !screensave_parse_renderer_kind_text(value, &minimum_kind) ||
+                screensave_renderer_kind_rank(minimum_kind) == 0
+            ) {
+                return 0;
+            }
+            return screensave_text_copy(
+                import_context->minimum_kind,
+                sizeof(import_context->minimum_kind),
+                value
+            );
+        }
+        if (lstrcmpiA(key, "preferred_kind") == 0) {
+            screensave_renderer_kind preferred_kind;
+
+            if (
+                !screensave_parse_renderer_kind_text(value, &preferred_kind) ||
+                screensave_renderer_kind_rank(preferred_kind) == 0
+            ) {
+                return 0;
+            }
+            return screensave_text_copy(
+                import_context->preferred_kind,
+                sizeof(import_context->preferred_kind),
+                value
+            );
+        }
+        if (lstrcmpiA(key, "quality_class") == 0) {
+            screensave_capability_quality_class quality_class;
+
+            if (!screensave_parse_capability_quality_text(value, &quality_class)) {
+                return 0;
+            }
+            return screensave_text_copy(
+                import_context->quality_class,
+                sizeof(import_context->quality_class),
+                value
+            );
+        }
+        if (lstrcmpiA(key, "degraded_behavior") == 0) {
+            return screensave_text_copy(
+                import_context->degraded_behavior,
+                sizeof(import_context->degraded_behavior),
+                value
+            );
+        }
+        if (lstrcmpiA(key, "unsupported_paths") == 0) {
+            return screensave_text_copy(
+                import_context->unsupported_paths,
+                sizeof(import_context->unsupported_paths),
+                value
+            );
+        }
+        return 1;
+    }
+
     config_hooks = import_context->module->config_hooks;
     if (config_hooks != NULL && config_hooks->import_settings_entry != NULL) {
         return config_hooks->import_settings_entry(
@@ -1037,6 +1213,8 @@ int screensave_settings_import_file(
 {
     screensave_settings_import_context import_context;
     const char *canonical_product_key;
+    screensave_renderer_kind minimum_kind;
+    screensave_renderer_kind preferred_kind;
 
     if (module == NULL || config_state == NULL || path == NULL) {
         return 0;
@@ -1103,6 +1281,23 @@ int screensave_settings_import_file(
         return 0;
     }
 
+    if (
+        import_context.minimum_kind[0] != '\0' &&
+        import_context.preferred_kind[0] != '\0' &&
+        screensave_parse_renderer_kind_text(import_context.minimum_kind, &minimum_kind) &&
+        screensave_parse_renderer_kind_text(import_context.preferred_kind, &preferred_kind) &&
+        screensave_renderer_kind_rank(minimum_kind) > screensave_renderer_kind_rank(preferred_kind)
+    ) {
+        screensave_settings_emit_diag(
+            diagnostics,
+            SCREENSAVE_DIAG_LEVEL_ERROR,
+            7611UL,
+            "screensave_settings_import_file",
+            "The imported routing metadata declared a minimum renderer above its preferred renderer."
+        );
+        return 0;
+    }
+
     screensave_saver_config_state_clamp(module, config_state);
     return !import_context.invalid;
 }
@@ -1153,6 +1348,8 @@ int screensave_pack_manifest_validate(
 {
     unsigned long flags;
     unsigned int index;
+    screensave_renderer_kind minimum_kind;
+    screensave_renderer_kind preferred_kind;
 
     flags = 0UL;
     if (manifest == NULL) {
@@ -1179,6 +1376,15 @@ int screensave_pack_manifest_validate(
             manifest->scene_file_count == 0U
         ) {
             flags |= SCREENSAVE_PACK_ISSUE_MISSING_ENTRIES;
+        }
+        if (
+            manifest->minimum_kind[0] != '\0' &&
+            manifest->preferred_kind[0] != '\0' &&
+            screensave_parse_renderer_kind_text(manifest->minimum_kind, &minimum_kind) &&
+            screensave_parse_renderer_kind_text(manifest->preferred_kind, &preferred_kind) &&
+            screensave_renderer_kind_rank(minimum_kind) > screensave_renderer_kind_rank(preferred_kind)
+        ) {
+            flags |= SCREENSAVE_PACK_ISSUE_BAD_ROUTING;
         }
 
         for (index = 0U; index < manifest->preset_file_count; ++index) {
@@ -1254,6 +1460,48 @@ static int screensave_pack_load_callback(
             }
             manifest->content_flags = parsed_value;
             return 1;
+        }
+        return 1;
+    }
+
+    if (lstrcmpiA(section, "routing") == 0) {
+        if (lstrcmpiA(key, "minimum_kind") == 0) {
+            screensave_renderer_kind minimum_kind;
+
+            if (!screensave_parse_renderer_kind_text(value, &minimum_kind)) {
+                return 0;
+            }
+            return screensave_text_copy(manifest->minimum_kind, sizeof(manifest->minimum_kind), value);
+        }
+        if (lstrcmpiA(key, "preferred_kind") == 0) {
+            screensave_renderer_kind preferred_kind;
+
+            if (!screensave_parse_renderer_kind_text(value, &preferred_kind)) {
+                return 0;
+            }
+            return screensave_text_copy(manifest->preferred_kind, sizeof(manifest->preferred_kind), value);
+        }
+        if (lstrcmpiA(key, "quality_class") == 0) {
+            screensave_capability_quality_class quality_class;
+
+            if (!screensave_parse_capability_quality_text(value, &quality_class)) {
+                return 0;
+            }
+            return screensave_text_copy(manifest->quality_class, sizeof(manifest->quality_class), value);
+        }
+        if (lstrcmpiA(key, "degraded_behavior") == 0) {
+            return screensave_text_copy(
+                manifest->degraded_behavior,
+                sizeof(manifest->degraded_behavior),
+                value
+            );
+        }
+        if (lstrcmpiA(key, "unsupported_paths") == 0) {
+            return screensave_text_copy(
+                manifest->unsupported_paths,
+                sizeof(manifest->unsupported_paths),
+                value
+            );
         }
         return 1;
     }
