@@ -1,6 +1,7 @@
 #include <string.h>
 
 #include "screensave/private/backend_loader.h"
+#include "screensave/private/routing_policy.h"
 #include "screensave/private/renderer_runtime.h"
 
 static void screensave_renderer_zero_info(screensave_renderer_info *info)
@@ -157,22 +158,46 @@ int screensave_renderer_create_for_window(
     screensave_renderer **renderer_out
 )
 {
+    return screensave_renderer_create_for_saver_window(
+        NULL,
+        NULL,
+        requested_kind,
+        target_window,
+        drawable_size,
+        diagnostics,
+        renderer_out
+    );
+}
+
+int screensave_renderer_create_for_saver_window(
+    const screensave_saver_module *module,
+    const screensave_common_config *common_config,
+    screensave_renderer_kind requested_kind,
+    HWND target_window,
+    const screensave_sizei *drawable_size,
+    screensave_diag_context *diagnostics,
+    screensave_renderer **renderer_out
+)
+{
     screensave_backend_request request;
 
     if (renderer_out == NULL) {
         return 0;
     }
 
-    memset(&request, 0, sizeof(request));
-    request.requested_kind = requested_kind;
-    request.target_window = target_window;
-    if (drawable_size != NULL) {
-        request.drawable_size = *drawable_size;
-    } else {
-        request.drawable_size.width = 0;
-        request.drawable_size.height = 0;
+    if (
+        !screensave_routing_prepare_backend_request(
+            module,
+            common_config,
+            requested_kind,
+            target_window,
+            drawable_size,
+            diagnostics,
+            &request
+        )
+    ) {
+        return 0;
     }
-    request.diagnostics = diagnostics;
 
     return screensave_backend_loader_select_and_create(
         &request,

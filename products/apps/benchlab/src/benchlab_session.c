@@ -367,7 +367,9 @@ int benchlab_session_create_runtime(benchlab_app *app, HWND window)
     }
 
     benchlab_get_client_size(window, &drawable_size);
-    if (!screensave_renderer_create_for_window(
+    if (!screensave_renderer_create_for_saver_window(
+            app->module,
+            &app->saver_config.common,
             app->requested_renderer_kind,
             window,
             &drawable_size,

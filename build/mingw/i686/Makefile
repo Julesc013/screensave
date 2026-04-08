@@ -47,6 +47,7 @@ PLATFORM_OBJS := \
 	$(PLATFORM_DIR)/present_path.o \
 	$(PLATFORM_DIR)/present_service.o \
 	$(PLATFORM_DIR)/render_band.o \
+	$(PLATFORM_DIR)/routing_policy.o \
 	$(PLATFORM_DIR)/service_registry.o \
 	$(PLATFORM_DIR)/service_seams.o \
 	$(PLATFORM_DIR)/text_service.o \

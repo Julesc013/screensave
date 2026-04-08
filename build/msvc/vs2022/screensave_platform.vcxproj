@@ -78,6 +78,7 @@
     <ClCompile Include="..\..\..\platform\src\core\substrate\present_path.c" />
     <ClCompile Include="..\..\..\platform\src\core\substrate\present_service.c" />
     <ClCompile Include="..\..\..\platform\src\core\substrate\render_band.c" />
+    <ClCompile Include="..\..\..\platform\src\core\substrate\routing_policy.c" />
     <ClCompile Include="..\..\..\platform\src\core\substrate\service_registry.c" />
     <ClCompile Include="..\..\..\platform\src\core\substrate\service_seams.c" />
     <ClCompile Include="..\..\..\platform\src\core\substrate\text_service.c" />

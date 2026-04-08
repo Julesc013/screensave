@@ -243,7 +243,9 @@ static int scr_create_renderer_and_session(scr_host_context *context, HWND windo
     }
 
     scr_get_client_size(window, &drawable_size);
-    if (!screensave_renderer_create_for_window(
+    if (!screensave_renderer_create_for_saver_window(
+            context->module,
+            &context->settings.common,
             context->requested_renderer_kind,
             window,
             &drawable_size,

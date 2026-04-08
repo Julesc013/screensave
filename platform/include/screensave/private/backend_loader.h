@@ -4,12 +4,18 @@
 #include <windows.h>
 
 #include "screensave/diagnostics_api.h"
+#include "screensave/saver_api.h"
 #include "screensave/private/backend_caps.h"
 #include "screensave/private/present_path.h"
 #include "screensave/private/service_seams.h"
 
 typedef struct screensave_backend_request_tag {
     screensave_renderer_kind requested_kind;
+    screensave_renderer_kind effective_kind;
+    screensave_renderer_kind minimum_kind;
+    screensave_renderer_kind preferred_kind;
+    screensave_capability_quality_class quality_class;
+    const char *policy_reason;
     HWND target_window;
     screensave_sizei drawable_size;
     screensave_diag_context *diagnostics;
@@ -20,7 +26,12 @@ typedef struct screensave_backend_selection_tag {
     screensave_render_band requested_band_ceiling;
     screensave_render_band active_band;
     screensave_renderer_kind requested_kind;
+    screensave_renderer_kind effective_kind;
+    screensave_renderer_kind minimum_kind;
+    screensave_renderer_kind preferred_kind;
     screensave_renderer_kind active_kind;
+    screensave_capability_quality_class quality_class;
+    const char *policy_reason;
     const char *selection_reason;
     const char *fallback_reason;
     const char *status_text;

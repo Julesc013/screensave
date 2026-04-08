@@ -3,8 +3,11 @@
 
 #include <windows.h>
 
+#include "screensave/config_api.h"
 #include "screensave/diagnostics_api.h"
 #include "screensave/types.h"
+
+struct screensave_saver_module_tag;
 
 typedef enum screensave_renderer_kind_tag {
     SCREENSAVE_RENDERER_KIND_UNKNOWN = 0,
@@ -57,6 +60,15 @@ typedef struct screensave_renderer_tag screensave_renderer;
 const char *screensave_renderer_kind_name(screensave_renderer_kind kind);
 int screensave_renderer_has_capability(unsigned long capability_flags, unsigned long capability_flag);
 int screensave_renderer_create_for_window(
+    screensave_renderer_kind requested_kind,
+    HWND target_window,
+    const screensave_sizei *drawable_size,
+    screensave_diag_context *diagnostics,
+    screensave_renderer **renderer_out
+);
+int screensave_renderer_create_for_saver_window(
+    const struct screensave_saver_module_tag *module,
+    const screensave_common_config *common_config,
     screensave_renderer_kind requested_kind,
     HWND target_window,
     const screensave_sizei *drawable_size,

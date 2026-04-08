@@ -217,7 +217,9 @@ int suite_preview_start(suite_app *app)
 
     suite_get_client_size(app->preview_window, &drawable_size);
     requested_kind = (screensave_renderer_kind)app->app_config.renderer_request;
-    if (!screensave_renderer_create_for_window(
+    if (!screensave_renderer_create_for_saver_window(
+            module,
+            &app->working_config.common,
             requested_kind,
             app->preview_window,
             &drawable_size,
@@ -561,7 +563,9 @@ static int suite_run_start_runtime(suite_run_window *run_window)
     }
 
     suite_get_client_size(run_window->window, &drawable_size);
-    if (!screensave_renderer_create_for_window(
+    if (!screensave_renderer_create_for_saver_window(
+            module,
+            &run_window->working_config.common,
             run_window->requested_renderer_kind,
             run_window->window,
             &drawable_size,

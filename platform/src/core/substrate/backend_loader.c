@@ -41,7 +41,11 @@ static void screensave_backend_loader_init_selection(
         screensave_render_band_ceiling_for_request(requested_kind);
     selection->active_band = SCREENSAVE_RENDER_BAND_UNKNOWN;
     selection->requested_kind = requested_kind;
+    selection->effective_kind = requested_kind;
+    selection->minimum_kind = SCREENSAVE_RENDERER_KIND_UNKNOWN;
+    selection->preferred_kind = SCREENSAVE_RENDERER_KIND_UNKNOWN;
     selection->active_kind = SCREENSAVE_RENDERER_KIND_UNKNOWN;
+    selection->quality_class = SCREENSAVE_CAPABILITY_QUALITY_SAFE;
     screensave_backend_caps_init(
         &selection->caps,
         SCREENSAVE_BACKEND_KIND_UNKNOWN,
@@ -202,12 +206,19 @@ static void screensave_backend_loader_apply_selection(
     active_kind = screensave_backend_kind_public_kind(descriptor->backend_kind);
     selection->backend_kind = descriptor->backend_kind;
     selection->requested_kind = request->requested_kind;
+    selection->effective_kind = request->effective_kind;
+    selection->minimum_kind = request->minimum_kind;
+    selection->preferred_kind = request->preferred_kind;
     selection->active_kind = active_kind;
     selection->requested_band_ceiling =
-        screensave_render_band_ceiling_for_request(request->requested_kind);
+        screensave_render_band_ceiling_for_request(request->effective_kind);
     selection->active_band = descriptor->band;
+    selection->quality_class = request->quality_class;
+    selection->policy_reason = request->policy_reason;
     selection_reason =
-        request->requested_kind == SCREENSAVE_RENDERER_KIND_UNKNOWN
+        request->policy_reason != NULL
+            ? request->policy_reason
+            : request->requested_kind == SCREENSAVE_RENDERER_KIND_UNKNOWN
             ? screensave_backend_loader_auto_selection_reason(active_kind)
             : screensave_backend_loader_force_selection_reason(
                 request->requested_kind,
@@ -217,8 +228,8 @@ static void screensave_backend_loader_apply_selection(
     selection->fallback_reason = fallback_reason;
     status_text = NULL;
     if (
-        request->requested_kind == SCREENSAVE_RENDERER_KIND_UNKNOWN ||
-        request->requested_kind != active_kind
+        request->effective_kind != SCREENSAVE_RENDERER_KIND_UNKNOWN &&
+        request->effective_kind != active_kind
     ) {
         status_text = screensave_backend_loader_fallback_status_text(active_kind);
     }
@@ -364,7 +375,7 @@ int screensave_backend_loader_select_and_create(
     }
 
     chain = screensave_backend_registry_chain_for_request(
-        request->requested_kind,
+        request->effective_kind,
         &chain_count
     );
     if (chain == NULL || chain_count == 0U) {
