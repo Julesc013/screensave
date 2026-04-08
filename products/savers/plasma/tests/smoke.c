@@ -447,6 +447,9 @@ int main(void)
     const screensave_theme_descriptor *theme_descriptor;
     const plasma_settings_descriptor *settings_descriptor;
     const plasma_settings_descriptor *settings_catalog;
+    const plasma_validation_matrix_entry *matrix_entry;
+    const plasma_performance_envelope_entry *envelope_entry;
+    const plasma_known_limit_entry *known_limit_entry;
     plasma_plan plan;
     plasma_output_frame output_frame;
     plasma_treated_frame treated_frame;
@@ -475,7 +478,15 @@ int main(void)
     int smoothing_enabled;
     unsigned int smoothing_blend;
     unsigned int transition_progress;
+    unsigned int matrix_count;
+    unsigned int envelope_count;
+    unsigned int known_limit_count;
+    unsigned int soak_iteration;
+    unsigned int expected_journey_index;
+    unsigned int settle_iteration;
     unsigned long mid_speed_units;
+    unsigned long settle_delta;
+    screensave_renderer_kind soak_renderer_kind;
     char benchlab_overlay[2048];
     char benchlab_report[4096];
     unsigned int settings_count;
@@ -2737,6 +2748,237 @@ int main(void)
     ) {
         plasma_destroy_session(session);
         return 147;
+    }
+    plasma_destroy_session(session);
+
+    matrix_entry = NULL;
+    envelope_entry = NULL;
+    known_limit_entry = NULL;
+    if (
+        !plasma_validation_matrix_is_consistent() ||
+        !plasma_validation_performance_envelopes_are_consistent() ||
+        !plasma_validation_known_limits_are_consistent()
+    ) {
+        return 201;
+    }
+    (void)plasma_validation_get_matrix(&matrix_count);
+    (void)plasma_validation_get_performance_envelopes(&envelope_count);
+    (void)plasma_validation_get_known_limits(&known_limit_count);
+    if (matrix_count < 10U || envelope_count < 5U || known_limit_count < 5U) {
+        return 202;
+    }
+
+    matrix_entry = plasma_validation_find_matrix_entry("classic_default", "gdi");
+    if (
+        matrix_entry == NULL ||
+        matrix_entry->status != PLASMA_VALIDATION_STATUS_VALIDATED ||
+        strcmp(plasma_validation_status_name(matrix_entry->status), "validated") != 0
+    ) {
+        return 203;
+    }
+    matrix_entry = plasma_validation_find_matrix_entry("premium_request_degrade", "auto");
+    if (
+        matrix_entry == NULL ||
+        matrix_entry->status != PLASMA_VALIDATION_STATUS_VALIDATED
+    ) {
+        return 204;
+    }
+    matrix_entry = plasma_validation_find_matrix_entry("experimental_pool", "product");
+    if (
+        matrix_entry == NULL ||
+        matrix_entry->status != PLASMA_VALIDATION_STATUS_DOCUMENTED_ONLY
+    ) {
+        return 205;
+    }
+    matrix_entry = plasma_validation_find_matrix_entry("cross_driver_ladder", "all");
+    if (
+        matrix_entry == NULL ||
+        matrix_entry->status != PLASMA_VALIDATION_STATUS_BLOCKED
+    ) {
+        return 206;
+    }
+
+    envelope_entry = plasma_validation_find_performance_envelope("premium_gl46_heightfield");
+    if (
+        envelope_entry == NULL ||
+        envelope_entry->status != PLASMA_VALIDATION_STATUS_VALIDATED ||
+        strcmp(envelope_entry->lane_key, "gl46") != 0
+    ) {
+        return 207;
+    }
+    envelope_entry = plasma_validation_find_performance_envelope("transition_subset");
+    if (
+        envelope_entry == NULL ||
+        envelope_entry->status != PLASMA_VALIDATION_STATUS_PARTIAL
+    ) {
+        return 208;
+    }
+
+    known_limit_entry = plasma_validation_find_known_limit("premium_heightfield_only");
+    if (
+        known_limit_entry == NULL ||
+        known_limit_entry->status != PLASMA_VALIDATION_STATUS_UNSUPPORTED
+    ) {
+        return 209;
+    }
+    known_limit_entry = plasma_validation_find_known_limit("cross_hardware_gap");
+    if (
+        known_limit_entry == NULL ||
+        known_limit_entry->status != PLASMA_VALIDATION_STATUS_BLOCKED
+    ) {
+        return 210;
+    }
+
+    for (soak_iteration = 0U; soak_iteration < 12U; ++soak_iteration) {
+        soak_renderer_kind =
+            (soak_iteration & 1U) == 0U
+                ? SCREENSAVE_RENDERER_KIND_GDI
+                : SCREENSAVE_RENDERER_KIND_GL11;
+        plasma_config_set_defaults(&common_config, &product_config, sizeof(product_config));
+        screensave_config_binding_init(&binding, &common_config, &product_config, sizeof(product_config));
+        ZeroMemory(&environment, sizeof(environment));
+        fake_size.width = 320;
+        fake_size.height = 240;
+        plasma_smoke_init_fake_renderer(
+            &fake_renderer,
+            soak_renderer_kind,
+            soak_renderer_kind,
+            &fake_size
+        );
+        environment.mode = SCREENSAVE_SESSION_MODE_WINDOWED;
+        environment.drawable_size = fake_size;
+        environment.seed.base_seed = 0x51510000UL + (unsigned long)soak_iteration;
+        environment.seed.stream_seed = 0x61610000UL + (unsigned long)soak_iteration;
+        environment.seed.deterministic = common_config.use_deterministic_seed;
+        environment.config_binding = &binding;
+        environment.renderer = &fake_renderer;
+
+        session = NULL;
+        if (!plasma_create_session(module, &session, &environment) || session == NULL) {
+            return 211;
+        }
+        if (!plasma_plan_validate_for_renderer_kind(&session->plan, module, soak_renderer_kind)) {
+            plasma_destroy_session(session);
+            return 212;
+        }
+
+        for (index = 0U; index < 24U; ++index) {
+            plasma_smoke_step_session_delta(session, &environment, 33UL);
+            plasma_render_session(session, &environment);
+            if (!plasma_plan_validate_for_renderer_kind(&session->plan, module, soak_renderer_kind)) {
+                plasma_destroy_session(session);
+                return 213;
+            }
+        }
+        if (session->state.phase_millis == 0UL) {
+            plasma_destroy_session(session);
+            return 214;
+        }
+        plasma_destroy_session(session);
+    }
+
+    plasma_config_set_defaults(&common_config, &product_config, sizeof(product_config));
+    plasma_apply_preset_to_config("plasma_lava", &common_config, &product_config);
+    common_config.preset_key = "plasma_lava";
+    common_config.theme_key = "plasma_lava";
+    plasma_transition_preferences_set_defaults(&product_config.transition);
+    product_config.transition.enabled = 1;
+    product_config.transition.policy = PLASMA_TRANSITION_POLICY_JOURNEY;
+    product_config.transition.duration_millis = 600UL;
+    product_config.transition.interval_millis = 900UL;
+    lstrcpyA(product_config.transition.journey_key, "classic_cycle");
+    screensave_config_binding_init(&binding, &common_config, &product_config, sizeof(product_config));
+    ZeroMemory(&environment, sizeof(environment));
+    fake_size.width = 320;
+    fake_size.height = 240;
+    plasma_smoke_init_fake_renderer(
+        &fake_renderer,
+        SCREENSAVE_RENDERER_KIND_GL21,
+        SCREENSAVE_RENDERER_KIND_GL21,
+        &fake_size
+    );
+    environment.mode = SCREENSAVE_SESSION_MODE_WINDOWED;
+    environment.drawable_size = fake_size;
+    environment.seed.base_seed = 0x91929394UL;
+    environment.seed.stream_seed = 0x95969798UL;
+    environment.seed.deterministic = common_config.use_deterministic_seed;
+    environment.config_binding = &binding;
+    environment.renderer = &fake_renderer;
+
+    session = NULL;
+    if (!plasma_create_session(module, &session, &environment) || session == NULL) {
+        return 215;
+    }
+    for (soak_iteration = 0U; soak_iteration < 8U; ++soak_iteration) {
+        unsigned long dwell_millis;
+        plasma_transition_type active_type;
+
+        if (
+            session->state.transition.journey == NULL ||
+            session->state.transition.journey->step_count == 0U
+        ) {
+            plasma_destroy_session(session);
+            return 216;
+        }
+
+        expected_journey_index =
+            (session->state.transition.journey_step_index + 1U) %
+            session->state.transition.journey->step_count;
+        dwell_millis =
+            session->state.transition.journey->steps[
+                session->state.transition.journey_step_index %
+                session->state.transition.journey->step_count
+            ].dwell_millis;
+        if (dwell_millis == 0UL) {
+            dwell_millis = session->plan.transition_interval_millis;
+        }
+
+        plasma_smoke_step_session_delta(session, &environment, dwell_millis);
+        plasma_render_session(session, &environment);
+        active_type = session->state.transition.active_type;
+        if (
+            !plasma_plan_validate_for_renderer_kind(&session->plan, module, SCREENSAVE_RENDERER_KIND_GL21) ||
+            !session->plan.transition_requested ||
+            !session->plan.transition_enabled ||
+            !session->state.transition.active ||
+            (
+                active_type != PLASMA_TRANSITION_TYPE_PRESET_MORPH &&
+                active_type != PLASMA_TRANSITION_TYPE_BRIDGE_MORPH
+            ) ||
+            session->state.transition.journey == NULL
+        ) {
+            plasma_destroy_session(session);
+            return 216;
+        }
+
+        settle_delta = session->plan.transition_duration_millis / 2UL;
+        if (settle_delta == 0UL) {
+            settle_delta = session->plan.transition_duration_millis;
+        }
+        for (settle_iteration = 0U; settle_iteration < 4U; ++settle_iteration) {
+            if (!session->state.transition.active) {
+                break;
+            }
+
+            plasma_smoke_step_session_delta(session, &environment, settle_delta);
+            plasma_render_session(session, &environment);
+        }
+        if (
+            !plasma_plan_validate_for_renderer_kind(&session->plan, module, SCREENSAVE_RENDERER_KIND_GL21) ||
+            session->state.transition.active ||
+            session->state.transition.journey == NULL ||
+            session->state.transition.journey_step_index != expected_journey_index
+        ) {
+            plasma_destroy_session(session);
+            return 217;
+        }
+    }
+    if (
+        session->plan.transition_policy != PLASMA_TRANSITION_POLICY_JOURNEY ||
+        session->state.phase_millis == 0UL
+    ) {
+        plasma_destroy_session(session);
+        return 218;
     }
     plasma_destroy_session(session);
 
