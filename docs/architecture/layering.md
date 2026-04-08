@@ -55,6 +55,7 @@ Series 14 proves the same layering can also support heavyweight software-3D, tra
 Series 15 proves the same layering can also support a capability-gated GL21 backend, explicit GL33 and GL46 placeholders, an internal null safety fallback, and a renderer-showcase product while keeping advanced context logic backend-private, renderer selection narrow in shared core code, and Gallery product behavior inside the owning product.
 `SX` now hardens the same layering model further by authorizing richer private substrate routing and service seams without promoting them into the public contract prematurely.
 `SX02` applies that rule to the renderer floor directly: `platform/src/core/substrate/` owns selection and routing policy, while `platform/src/render/gdi/` now owns the hardened universal floor for backbuffer lifetime, present behavior, and backend-private diagnostics detail.
+`SX03` applies the same rule to the compat lane: `platform/src/render/gl11/` now owns the conservative WGL session, swap-or-flush present path, and parity-oriented backend detail without pushing GL11 internals into saver or product code.
 
 ## Product Boundary
 
