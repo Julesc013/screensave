@@ -15,5 +15,5 @@ Current stage: Series 08 makes the optional universal GL11 path real here, and `
 - `gl11_bitmap.c` provides the modest bitmap-view upload path required by the shared contract
 - `gl11_state.c` keeps backend-private renderer-info and diagnostics helpers local
 
-This backend is optional. The runtime selection path must fall back explicitly to GDI whenever GL11 cannot be initialized honestly, and `SX03` keeps it as the conservative accelerated parity tier beneath the optional higher-capability GL21 lane and any later explicit GL placeholders.
+This backend is optional. The runtime selection path must fall back explicitly to GDI whenever GL11 cannot be initialized honestly, and `SX03` keeps it as the conservative accelerated parity tier beneath the optional higher-capability GL21, GL33, and GL46 lanes.
 Type: runtime implementation.

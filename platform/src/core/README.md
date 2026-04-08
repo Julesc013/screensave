@@ -22,4 +22,5 @@ Series 10 adds only a narrow shared software-visual-buffer helper here so Plasma
 Series 11 adds only a narrow shared byte-grid helper here so Pipeworks and Lifeforms can share small occupancy and double-buffered state storage without promoting a broad simulation or tile framework.
 Series 15 adds only narrow tiered renderer-selection and fallback-reporting glue here so GDI remains the guaranteed floor, GL11 remains the conservative accelerated middle tier, GL21 stays strictly optional and capability-gated, GL33 and GL46 can stay explicit in the public ladder, and the null backend remains an internal emergency fallback only.
 SX01 keeps the public renderer contract intact while moving backend kinds, band routing, capability capture, present-path policy, and future image/text service seams into the new private `substrate/` layer.
+SX05 and SX06 then make the `modern` and `premium` bands real without widening the public renderer contract, so this core layer continues to own selection, fallback, and private caps reporting while backend-private lifecycle stays in `platform/src/render/`.
 Type: runtime implementation.

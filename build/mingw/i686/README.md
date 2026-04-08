@@ -1,10 +1,10 @@
 # MinGW i686 Lane
 
-This is the concrete GCC-family x86 lane for the current `C09` saver-and-app baseline.
+This is the concrete GCC-family x86 lane for the frozen `C16` baseline plus the current `SX06` substrate state.
 
 ## What Exists Now
 
-- `Makefile` for the shared platform library, one true `.scr` output per saver through `anthology.scr`, the real `benchlab.exe` and `suite.exe` targets, the core-plus-GDI-plus-GL11-plus-GL21 platform objects, the explicit GL33/GL46 placeholder objects, the internal null safety backend object, the owning saver product objects, anthology's explicit inner-saver linkage objects, Suite's explicit linked-saver browser/preview objects, per-saver config and version resources, the shared host resource, and the conservative `opengl32` link dependency required for the optional renderer tiers
+- `Makefile` for the shared platform library, one true `.scr` output per saver through `anthology.scr`, the real `benchlab.exe` and `suite.exe` targets, the core-plus-GDI-plus-GL11-plus-GL21-plus-GL33-plus-GL46 platform objects, the internal null safety backend object, the owning saver product objects, anthology's explicit inner-saver linkage objects, Suite's explicit linked-saver browser/preview objects, per-saver config and version resources, the shared host resource, and the conservative `opengl32` link dependency required for the optional renderer tiers
 
 The target graph mirrors the VS2022 lane closely so later implementation work does not have to invent two unrelated build stories.
 
@@ -35,7 +35,7 @@ Profiles are currently `debug` or `release`.
 ## Deferred Work
 
 - historical MinGW variant documentation beyond this lane
-- later real renderer tiers beyond the current GL21 path and the explicit GL33/GL46 placeholders
+- later renderer work beyond the current GL21, GL33, and GL46 paths
 - validation on actual target machines
 
 This lane is concrete enough for static review and later extension, not a claim of complete shipping readiness.

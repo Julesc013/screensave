@@ -16,7 +16,7 @@ The build scaffold is not the constitutional source of truth.
 The normative compatibility and target rules remain in `specs/build_targets.md` and related specs.
 This directory translates those rules into reviewable build lanes.
 
-## Current State At The C09 Baseline
+## Current State At The Frozen C16 And SX06 Substrate Baseline
 
 Real now:
 
@@ -28,7 +28,8 @@ Real now:
 - a real mandatory GDI backend under `platform/src/render/gdi/`
 - a real optional OpenGL 1.1 backend under `platform/src/render/gl11/`
 - a real optional GL21 capability path under `platform/src/render/gl21/`
-- explicit GL33 and GL46 placeholder tiers under `platform/src/render/gl33/` and `platform/src/render/gl46/`
+- a real optional GL33 modern lane under `platform/src/render/gl33/`
+- a real optional GL46 premium lane under `platform/src/render/gl46/`
 - a real internal null safety backend under `platform/src/render/null/`
 - a narrow shared software visual-buffer helper under `platform/src/core/visual/`
 - a narrow shared grid-state helper under `platform/src/core/grid/`
@@ -47,7 +48,7 @@ Real now:
 
 Deferred:
 
-- later real renderer tiers beyond the current GDI, GL11, GL21, GL33-placeholder, GL46-placeholder, and null safety stack
+- later renderer work beyond the current GDI, GL11, GL21, GL33, GL46, and null safety stack
 - later-series work beyond Nocturne, Ricochet, Deepfield, Plasma, Phosphor, Pipeworks, Lifeforms, Signals, Mechanize, Ecosystems, Stormglass, Transit, Observatory, Vector, Explorer, City, Atlas, Gallery, and Anthology
 - broader suite-surface work beyond the current bounded `suite` app
 - full legacy project files for VS6 and VS2008

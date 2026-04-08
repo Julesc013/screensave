@@ -1,6 +1,6 @@
 # VS2022 Lane
 
-This is the concrete modern MSVC lane for the current `C09` saver-and-app baseline.
+This is the concrete modern MSVC lane for the frozen `C16` baseline plus the current `SX06` substrate state.
 
 ## What Exists Now
 
@@ -29,11 +29,11 @@ This is the concrete modern MSVC lane for the current `C09` saver-and-app baseli
 - `suite.vcxproj`
 
 These files stay intentionally small.
-They define one shared static-library target, nineteen first-class `.scr` saver targets, and two windowed app targets with a shared core runtime, the mandatory GDI backend, the optional GL11 backend, the optional GL21 backend, explicit GL33 and GL46 placeholders, the internal null safety backend, a real host skeleton, nineteen real saver products, and the current app pair.
+They define one shared static-library target, nineteen first-class `.scr` saver targets, and two windowed app targets with a shared core runtime, the mandatory GDI backend, the optional GL11 backend, the optional GL21 backend, the real optional GL33 modern lane, the real optional GL46 premium lane, the internal null safety backend, a real host skeleton, nineteen real saver products, and the current app pair.
 
 ## What The Targets Mean
 
-- `screensave_platform` compiles the shared non-renderer core runtime, the mandatory GDI backend, the optional GL11 backend, the optional GL21 backend, the explicit GL33 and GL46 placeholders, the internal null safety backend, and the Win32 host implementation.
+- `screensave_platform` compiles the shared non-renderer core runtime, the mandatory GDI backend, the optional GL11 backend, the optional GL21 backend, the real optional GL33 modern lane, the real optional GL46 premium lane, the internal null safety backend, and the Win32 host implementation.
 - `nocturne` through `gallery` each compile only their owning saver sources, their product config dialog resource, their product version resource, and the shared host resource, then emit the matching saver-named `.scr` target.
 - `anthology` stays explicit as the suite meta-saver target: it compiles its owning anthology sources plus the current eighteen inner saver modules in-process, then emits `anthology.scr` without turning the build graph into a plugin loader or external-orchestration wrapper.
 - Each saver target binds directly to its owning saver module through the shared host entry instead of depending on the older multi-saver default-selection distribution pattern.
@@ -62,6 +62,6 @@ No generated files should be checked into this directory.
 
 ## Deferred Work
 
-- later real renderer tiers beyond the current GL21 path and the explicit GL33/GL46 placeholders
+- later renderer work beyond the current GL21, GL33, and GL46 paths
 - packaging, installer, and release-production work
 - broader solution structure for later suite-level products beyond the current real `suite` app

@@ -2,7 +2,7 @@
 
 ScreenSave is a retro-compatible Windows screensaver platform and product monorepo. Its primary public release is `ScreenSave Core`, a ZIP of standalone `.scr` savers built around a conservative baseline: C89, x86 Win32, the classic ANSI Win32 screensaver host path, mandatory `gdi`, and optional capability-gated OpenGL tiers.
 
-The frozen public baseline is `c16-core-baseline`. `SS00` through `SS02` and `SX00` through `SX05` are complete, active post-`C16` planning now lives under [`docs/roadmap/`](docs/roadmap/), and current release limits remain tracked in [`validation/notes/c16-known-issues.md`](validation/notes/c16-known-issues.md).
+The frozen public baseline is `c16-core-baseline`. `SS00` through `SS02` and `SX00` through `SX06` are complete, active post-`C16` planning now lives under [`docs/roadmap/`](docs/roadmap/), and current release limits remain tracked in [`validation/notes/c16-known-issues.md`](validation/notes/c16-known-issues.md).
 
 Implementation currently exists through `S15` plus continuation `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, `C13` Wave A, Wave B, and Wave C, `C14`, `C15`, and `C16`.
 Post-`SS` work now proceeds in the bounded `SX` substrate series.
@@ -47,7 +47,7 @@ Companion channels stay separate from Core:
 - Guaranteed renderer floor: `gdi`
 - Optional accelerated tiers: OpenGL 1.1 (`gl11`) and OpenGL 2.1 (`gl21`), both detected at runtime and subordinate to the universal baseline
 - Optional modern tier: OpenGL 3.3 (`gl33`), capability-gated and bounded above the advanced tier without redefining the baseline
-- Future premium placeholder tier: `gl46`
+- Optional premium tier: OpenGL 4.6 (`gl46`), capability-gated above the modern tier without redefining the baseline
 - Internal-only safety tier: `null`
 
 Universal behavior ships first. If an optional capability is absent, ScreenSave must fall back cleanly or keep that behavior out of the universal saver set. For validated coverage and known limits, see [`validation/notes/ss02-support-matrix.md`](validation/notes/ss02-support-matrix.md) and [`validation/notes/c16-known-issues.md`](validation/notes/c16-known-issues.md).

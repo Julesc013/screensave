@@ -58,6 +58,7 @@ Series 15 proves the same layering can also support a capability-gated GL21 back
 `SX03` applies the same rule to the compat lane: `platform/src/render/gl11/` now owns the conservative WGL session, swap-or-flush present path, and parity-oriented backend detail without pushing GL11 internals into saver or product code.
 `SX04` applies the same rule to the first real advanced tier: `platform/src/render/gl21/` now owns explicit advanced-context setup, a formal private capability bundle, bounded optional feature capture, and disciplined degradation signals without turning `gl21` into a public modern-tier contract.
 `SX05` applies the same rule to the first real modern tier: `platform/src/render/gl33/` now owns bounded modern-context creation, dynamic function loading, private capability-bundle capture, and deliberate degradation down through `gl21`, `gl11`, and `gdi`, while `gallery` remains the bounded proof surface rather than a migration mandate.
+`SX06` applies the same rule to the real premium tier: `platform/src/render/gl46/` now owns bounded 4.6 compatibility-context creation, premium capability-bundle capture, premium-only function loading, and deliberate degradation back through `gl33`, `gl21`, `gl11`, and `gdi`, while `gallery` remains the bounded proof surface rather than a whole-line requirement.
 
 ## Product Boundary
 

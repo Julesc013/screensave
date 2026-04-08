@@ -45,4 +45,5 @@ During `SX`, the architecture keeps the public renderer ladder and the current n
 `SX01` makes that split real in code by introducing private substrate headers under `platform/include/screensave/private/` and private routing helpers under `platform/src/core/substrate/`, while savers and companion apps continue to build against the same public `screensave/` headers.
 `SX02`, `SX03`, and `SX04` then harden the `gdi`, `gl11`, and `gl21` lanes without widening the public contract.
 `SX05` makes `gl33` the first real modern tier by adding a bounded modern backend under the private substrate and proving it on `gallery` without turning that proof into a suite-wide migration.
+`SX06` then makes `gl46` the real premium tier with the same bounded-proof discipline and the same explicit degradation path back through `gl33`, `gl21`, `gl11`, and `gdi`.
 `gallery` is the bounded renderer-proof surface during that work, BenchLab remains diagnostics-only, and `plasma` stays the first flagship `PL` track rather than becoming the scope of `SX`.
