@@ -2,6 +2,25 @@
 
 All notable repository changes are recorded here in prompt history order.
 
+## SX05 - 2026-04-08
+
+### Added
+
+- `platform/src/render/gl33/gl33_capture.c`, `gl33_caps.c`, `gl33_context.c`, `gl33_present.c`, `gl33_primitives.c`, and `gl33_state.c` as the real private homes for GL33 modern-lane capability capture, modern-context lifecycle, shader-backed drawing, present detail, and proof-oriented backend text.
+
+### Changed
+
+- Brought the optional `gl33` tier to life as the first real bounded modern lane by replacing the old placeholder backend with a compatibility-profile OpenGL 3.3 backend that owns dynamic function loading, a formal private modern capability bundle, shader-backed primitive and bitmap rendering, and auditable teardown.
+- Tightened substrate routing so GL33 now participates as a real modern band above `gl21`, with explicit backend-caps capture, real resize and present-path hooks, clearer loader diagnostics, and deliberate degradation down through `gl21`, `gl11`, and `gdi` instead of placeholder failure.
+- Added a bounded proof surface on `gallery` by introducing an internal GL33 renderer tier, modest modern-lane scene-density and composition differences, and manifest-level GL33 support reporting without widening the public saver capability contract or forcing broad saver-line migration.
+- Updated active README, spec, roadmap, architecture, renderer-layer, host-selector, suite-selector, and product-lineup docs so GL33 now reads as a real optional modern tier while `gl46` remains the later premium placeholder.
+
+### Validation
+
+- Built `build/mingw/i686` with `PROFILE=debug` and `CC=gcc`, producing the shared platform library plus the checked-in saver, BenchLab, and Suite targets after the GL33 modern-lane bring-up.
+- Confirmed the GL33 changes stayed behind the private implementation boundary and did not widen the public renderer-facing contract or move product code onto private substrate headers.
+- Kept `SX05` bounded to GL33 lifecycle, function-loading, capability modeling, degradation, bounded proof-surface integration, build integration, and doctrine normalization only; this prompt did not implement GL46 behavior, adopt non-GL families, rewrite the public renderer API, or widen product scope.
+
 ## SX04 - 2026-04-08
 
 ### Added
