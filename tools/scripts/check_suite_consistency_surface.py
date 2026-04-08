@@ -124,6 +124,7 @@ def main() -> int:
         "Preset key:",
         "Theme key:",
         "Renderer preference:",
+        "Routing profile:",
         "Selection path:",
         "Fallback cause:",
         "Renderer status:",
@@ -148,6 +149,9 @@ def main() -> int:
         "Selected theme",
         "Detail level",
         "Randomization mode",
+        "Minimum renderer lane",
+        "Preferred renderer lane",
+        "Quality class",
         "Preview renderer preference",
         "Selection path",
         "Fallback cause",
@@ -159,6 +163,11 @@ def main() -> int:
         "GDI floor",
         "OpenGL 1.1 optional",
         "OpenGL 2.1 optional",
+        "OpenGL 3.3 modern optional",
+        "OpenGL 4.6 premium optional",
+        "minimum_kind",
+        "preferred_kind",
+        "quality_class",
         "Quiet and Foundation",
         "Framebuffer and Vector",
         "Grid and Simulation",
@@ -198,6 +207,11 @@ def main() -> int:
     require(
         "Post-`SS` work now proceeds in the bounded `SX` substrate series." in readme,
         "README.md must record the post-C16 handoff.",
+        errors,
+    )
+    require(
+        "`SS00` through `SS02` and `SX00` through `SX08` are complete" in readme,
+        "README.md must record SX08 as complete.",
         errors,
     )
     require(
@@ -241,6 +255,7 @@ def main() -> int:
         errors,
     )
     require("## C12 - 2026-03-30" in changelog, "CHANGELOG.md must record C12.", errors)
+    require("## SX08 - 2026-04-08" in changelog, "CHANGELOG.md must record SX08.", errors)
 
     if errors:
         for error in errors:

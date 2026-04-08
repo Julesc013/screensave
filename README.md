@@ -2,7 +2,7 @@
 
 ScreenSave is a retro-compatible Windows screensaver platform and product monorepo. Its primary public release is `ScreenSave Core`, a ZIP of standalone `.scr` savers built around a conservative baseline: C89, x86 Win32, the classic ANSI Win32 screensaver host path, mandatory `gdi`, and optional capability-gated OpenGL tiers.
 
-The frozen public baseline is `c16-core-baseline`. `SS00` through `SS02` and `SX00` through `SX07` are complete, active post-`C16` planning now lives under [`docs/roadmap/`](docs/roadmap/), and current release limits remain tracked in [`validation/notes/c16-known-issues.md`](validation/notes/c16-known-issues.md).
+The frozen public baseline is `c16-core-baseline`. `SS00` through `SS02` and `SX00` through `SX08` are complete, active post-`C16` planning now lives under [`docs/roadmap/`](docs/roadmap/), and current release limits remain tracked in [`validation/notes/c16-known-issues.md`](validation/notes/c16-known-issues.md).
 
 Implementation currently exists through `S15` plus continuation `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, `C13` Wave A, Wave B, and Wave C, `C14`, `C15`, and `C16`.
 Post-`SS` work now proceeds in the bounded `SX` substrate series.
@@ -99,7 +99,7 @@ Repository-health and release-support validation lives under [`tools/scripts/`](
 - Architecture: [`docs/architecture/overview.md`](docs/architecture/overview.md) and [`docs/architecture/repo-structure.md`](docs/architecture/repo-structure.md)
 - Product lineup: [`docs/roadmap/products-and-lineup.md`](docs/roadmap/products-and-lineup.md)
 - SDK surface: [`products/sdk/README.md`](products/sdk/README.md)
-- Specs: [`specs/README.md`](specs/README.md), [`specs/compatibility.md`](specs/compatibility.md), [`specs/saver_api.md`](specs/saver_api.md), and [`specs/renderer_contract.md`](specs/renderer_contract.md)
+- Specs: [`specs/README.md`](specs/README.md), [`specs/compatibility.md`](specs/compatibility.md), [`specs/saver_api.md`](specs/saver_api.md), [`specs/renderer_contract.md`](specs/renderer_contract.md), and [`specs/routing_policy.md`](specs/routing_policy.md)
 - For contributors: start with [`build/README.md`](build/README.md), [`products/sdk/README.md`](products/sdk/README.md), [`specs/README.md`](specs/README.md), and [`docs/architecture/README.md`](docs/architecture/README.md)
 
 ## Project History

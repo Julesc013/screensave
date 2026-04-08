@@ -15,6 +15,9 @@ TEMPLATE_ROOT = ROOT / "products" / "savers" / "_template"
 EXAMPLE_PACK_ROOT = SDK_ROOT / "examples" / "template_pack"
 
 SLUG_RE = re.compile(r"^[a-z0-9_]+$")
+RENDERER_ORDER = ("gdi", "gl11", "gl21", "gl33", "gl46")
+ALLOWED_RENDERERS = set(RENDERER_ORDER)
+ALLOWED_QUALITY_CLASSES = {"safe", "balanced", "high", "premium"}
 REQUIRED_TEMPLATE_SUFFIXES = (
     "_entry.c",
     "_internal.h",
@@ -47,6 +50,48 @@ def read_ini(path: pathlib.Path) -> configparser.ConfigParser:
     return parser
 
 
+def validate_routing_section(
+    parser: configparser.ConfigParser,
+    path: pathlib.Path,
+    errors: list[str],
+    *,
+    required: bool,
+) -> None:
+    if not parser.has_section("routing"):
+        require(
+            not required,
+            f"{path.relative_to(ROOT)} must declare a [routing] section.",
+            errors,
+        )
+        return
+
+    minimum_kind = parser.get("routing", "minimum_kind", fallback="")
+    preferred_kind = parser.get("routing", "preferred_kind", fallback="")
+    quality_class = parser.get("routing", "quality_class", fallback="")
+
+    require(
+        minimum_kind in ALLOWED_RENDERERS,
+        f"{path.relative_to(ROOT)} must use a known routing minimum_kind.",
+        errors,
+    )
+    require(
+        preferred_kind in ALLOWED_RENDERERS,
+        f"{path.relative_to(ROOT)} must use a known routing preferred_kind.",
+        errors,
+    )
+    require(
+        quality_class in ALLOWED_QUALITY_CLASSES,
+        f"{path.relative_to(ROOT)} must use a known routing quality_class.",
+        errors,
+    )
+    if minimum_kind in ALLOWED_RENDERERS and preferred_kind in ALLOWED_RENDERERS:
+        require(
+            RENDERER_ORDER.index(minimum_kind) <= RENDERER_ORDER.index(preferred_kind),
+            f"{path.relative_to(ROOT)} must not rank minimum_kind above preferred_kind.",
+            errors,
+        )
+
+
 def validate_sdk_baseline(errors: list[str]) -> None:
     required_paths = (
         SDK_ROOT / "README.md",
@@ -73,8 +118,8 @@ def validate_sdk_baseline(errors: list[str]) -> None:
     if errors:
         return
 
-    validate_saver_root(TEMPLATE_ROOT, errors)
-    validate_pack_root(EXAMPLE_PACK_ROOT, errors)
+    validate_saver_root(TEMPLATE_ROOT, errors, require_routing=True)
+    validate_pack_root(EXAMPLE_PACK_ROOT, errors, require_routing=True)
 
     require(
         "real contributor-facing templates" in read_text(SDK_ROOT / "README.md"),
@@ -131,7 +176,7 @@ def validate_sdk_baseline(errors: list[str]) -> None:
     )
 
 
-def validate_saver_root(path: pathlib.Path, errors: list[str]) -> None:
+def validate_saver_root(path: pathlib.Path, errors: list[str], *, require_routing: bool = False) -> None:
     manifest_path = path / "manifest.ini"
     readme_path = path / "README.md"
     presets_dir = path / "presets"
@@ -162,6 +207,7 @@ def validate_saver_root(path: pathlib.Path, errors: list[str]) -> None:
     require(default_preset != "", f"{manifest_path} must declare a default_preset.", errors)
     require(default_theme != "", f"{manifest_path} must declare a default_theme.", errors)
     require(manifest.get("capabilities", "gdi", fallback="") == "1", f"{manifest_path} must declare gdi=1.", errors)
+    validate_routing_section(manifest, manifest_path, errors, required=require_routing)
 
     for suffix in REQUIRED_TEMPLATE_SUFFIXES:
         require(
@@ -202,6 +248,7 @@ def validate_preset_file(path: pathlib.Path, errors: list[str]) -> None:
     require(parser.get("product", "schema_version", fallback="") == "1", f"{path.relative_to(ROOT)} must declare schema_version=1.", errors)
     require(parser.get("common", "preset_key", fallback="") != "", f"{path.relative_to(ROOT)} must declare common preset_key.", errors)
     require(parser.get("common", "theme_key", fallback="") != "", f"{path.relative_to(ROOT)} must declare common theme_key.", errors)
+    validate_routing_section(parser, path, errors, required=False)
 
 
 def validate_theme_file(path: pathlib.Path, errors: list[str]) -> None:
@@ -215,7 +262,7 @@ def validate_theme_file(path: pathlib.Path, errors: list[str]) -> None:
     require(parser.get("theme", "display_name", fallback="") != "", f"{path.relative_to(ROOT)} must declare display_name.", errors)
 
 
-def validate_pack_root(path: pathlib.Path, errors: list[str]) -> None:
+def validate_pack_root(path: pathlib.Path, errors: list[str], *, require_routing: bool = False) -> None:
     manifest_path = path / "pack.ini"
     require(manifest_path.exists(), f"{path.relative_to(ROOT)} is missing pack.ini.", errors)
     if errors:
@@ -227,6 +274,7 @@ def validate_pack_root(path: pathlib.Path, errors: list[str]) -> None:
     require(parser.get("pack", "schema_version", fallback="") == "1", f"{manifest_path.relative_to(ROOT)} must declare schema_version=1.", errors)
     require(parser.get("pack", "product_key", fallback="") != "", f"{manifest_path.relative_to(ROOT)} must declare product_key.", errors)
     require(parser.get("pack", "display_name", fallback="") != "", f"{manifest_path.relative_to(ROOT)} must declare display_name.", errors)
+    validate_routing_section(parser, manifest_path, errors, required=require_routing)
 
     file_items = parser.items("files") if parser.has_section("files") else []
     require(bool(file_items), f"{manifest_path.relative_to(ROOT)} must declare at least one file entry.", errors)

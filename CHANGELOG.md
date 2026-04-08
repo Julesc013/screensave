@@ -2,6 +2,26 @@
 
 All notable repository changes are recorded here in prompt history order.
 
+## SX08 - 2026-04-08
+
+### Added
+
+- `specs/routing_policy.md` as the normative capability-routing specification for saver policy, manifest mirrors, conservative defaults, and requested-versus-selected routing outcomes.
+- `platform/include/screensave/private/routing_policy.h` and `platform/src/core/substrate/routing_policy.c` as the private central routing-policy unit that prepares saver-aware backend requests before backend selection begins.
+
+### Changed
+
+- Extended the public saver contract with stable capability flags and a bounded routing-policy shape so savers can declare supported public-ladder ceilings, minimum and preferred lanes, and a stable quality class without exposing backend-private substrate types.
+- Added a narrow saver-aware public renderer creation path, updated the Win32 host plus Suite and BenchLab runtime creation sites to use it, and kept the older generic renderer-creation helper intact so products stay on the public side while routing policy remains centralized in the private substrate.
+- Extended shared settings import and pack-manifest parsing with optional `[routing]` sections, conservative validation, and safe defaults so preset and pack metadata can participate in the capability-aware schema without making older content invalid.
+- Annotated the current saver line plus representative preset and pack surfaces with honest routing metadata, updated Suite and diagnostics overlays to show routing profile and richer selection-path detail, and normalized the active roadmap and contributor docs so SX08 now reads as the capability-manifest and routing-policy step rather than a future handoff placeholder.
+
+### Validation
+
+- Built `build/mingw/i686` with `PROFILE=debug` and `CC=gcc`, producing the shared platform library plus the checked-in saver, BenchLab, and Suite targets after the capability-routing integration.
+- Ran the active release, bundle, backlog, naming, meta-saver, suite, and SDK static checks after updating the SDK and suite validators to cover the new routing schema surfaces.
+- Confirmed products still build against public headers, older preset and pack files remain readable without `[routing]`, and routing outcomes are now observable through existing diagnostics surfaces instead of scattered heuristics.
+
 ## SX07 - 2026-04-08
 
 ### Added
