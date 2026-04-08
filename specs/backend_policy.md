@@ -32,7 +32,7 @@ The following are private substrate concerns during `SX`:
 - present-path internals
 - backend-private state ownership
 - future service seams such as image, text, or presentation support layers
-- future optional non-GL implementation families
+- future backend-family seams that keep later optional non-GL implementation families private first
 
 Private implementation detail belongs under `platform/src/` and related internal notes.
 It does not belong in the public headers or product doctrine unless a later explicit spec promotes it.
@@ -54,7 +54,7 @@ Future service seams are allowed only under these rules:
 - they must not weaken `gdi` as the compatibility floor
 - they must not silently change the public renderer ladder
 
-Examples of future service seams may include image support, text support, presentation support, or other helper families.
+Examples of future service seams may include image support, text support, higher-level presentation or output-policy support, future backend-family routing, or other helper families.
 Their existence does not make them public contracts automatically.
 
 ## Non-GL Family Restraint

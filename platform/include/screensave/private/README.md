@@ -1,7 +1,7 @@
 # Private Platform Headers
 
 Purpose: private substrate headers that sit beneath the stable public `screensave/` contract.
-Belongs here: backend kinds, internal render bands, backend capability state, loader and registry seams, present-path routing, and future optional service seams.
+Belongs here: backend kinds, internal render bands, backend capability state, loader and registry seams, present-path routing, and future optional service seams such as image, text, present-policy, and future backend-family support.
 Does not belong here: product includes, release-facing contracts, or backend-specific declarations that still belong in one implementation subtree.
 Type: private runtime implementation contract.
 
