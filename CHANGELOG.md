@@ -2,6 +2,27 @@
 
 All notable repository changes are recorded here in prompt history order.
 
+## SX09 - 2026-04-08
+
+### Added
+
+- `validation/notes/sx09-substrate-validation-summary.md` and `validation/notes/sx09-tier-proof-matrix.md` as the durable closeout notes for the finished SX substrate, including a bounded per-tier proof matrix and honest limits for what SX09 did and did not exercise.
+- `validation/captures/sx09/README.md` as the index for the checked-in deterministic BenchLab report set gathered during SX09.
+- `docs/roadmap/pl00-substrate-handoff.md` as the explicit PL-facing handoff for the now-finished substrate.
+
+### Changed
+
+- Hardened BenchLab's SX09 report path so requested, policy-target, selected-band, degraded-path, fallback-cause, backend-detail, overlay, and recent-diagnostic state are captured together in bounded deterministic text evidence rather than remaining live-UI-only diagnostics.
+- Fixed BenchLab's hidden GDI proof path by routing report-mode present through an offscreen compatible memory DC, which keeps the universal floor proof honest during non-interactive capture.
+- Added automatic MinGW C header dependency tracking so private-header growth now rebuilds dependent renderer and app objects instead of leaving stale objects behind during incremental validation.
+- Updated active README, architecture, roadmap, and BenchLab docs so SX09 now reads as the substrate-validation and PL-handoff closeout step rather than an optional future checkpoint.
+
+### Validation
+
+- Built `build/mingw/i686` with `PROFILE=debug` and `CC=gcc`, then confirmed the checked-in BenchLab report matrix runs cleanly for bounded `gallery`, `nocturne`, and `plasma` proof surfaces.
+- Confirmed the full ladder on the showcase surface with deterministic BenchLab reports for `gdi`, `gl11`, `gl21`, `gl33`, and `gl46`, plus auto-routing and saver-policy clamp captures.
+- Confirmed the MinGW lane now regenerates object dependencies and can rebuild private-header dependents instead of hiding stale-object corruption during substrate validation.
+
 ## SX08 - 2026-04-08
 
 ### Added
