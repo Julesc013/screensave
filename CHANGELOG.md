@@ -2,6 +2,25 @@
 
 All notable repository changes are recorded here in prompt history order.
 
+## SX04 - 2026-04-08
+
+### Added
+
+- `platform/src/render/gl21/gl21_capture.c` as the private home for GL21 advanced-lane backend detail text, capability-bundle proof detail, and lightweight present-time diagnostics.
+
+### Changed
+
+- Hardened the optional GL21 lane around a clearer advanced-context lifecycle by tightening window validation, pixel-format reuse and inspection, partial-init cleanup, explicit current release, and auditable teardown so failed GL21 setup leaves a cleaner landing for the hardened GL11 and GDI tiers.
+- Formalized the first real advanced-tier capability bundle with explicit required, preferred, available, and missing private flags, parsed version capture, and richer backend-caps propagation so later substrate routing can build on stable private data instead of re-spreading scattered extension folklore.
+- Centralized the GL21 status and present story so the advanced lane now reports double-buffered swap versus single-buffered flush explicitly, refreshes backend-detail text for BenchLab and host overlays, and emits clearer loader diagnostics when renderer selection lands on the GL21 advanced lane.
+- Corrected the active roadmap and renderer-layer docs so `SX04` is now the completed GL21 advanced-lane hardening step and `SX05` becomes the next active substrate stage instead of leaving the hardened middle tier implicit.
+
+### Validation
+
+- Built `build/mingw/i686` with `PROFILE=debug` and `CC=gcc`, producing the shared platform library plus the checked-in saver, BenchLab, and Suite targets after the GL21 advanced-lane hardening cut.
+- Confirmed the GL21 changes stayed behind the private implementation boundary and did not widen the public renderer-facing contract or move product code onto private substrate headers.
+- Kept `SX04` bounded to GL21 lifecycle, capability modeling, degradation detail, diagnostics, build integration, and doctrine normalization only; this prompt did not implement GL33 or GL46 behavior, adopt non-GL families, rewrite the public renderer API, or widen product scope.
+
 ## SX03 - 2026-04-08
 
 ### Added
