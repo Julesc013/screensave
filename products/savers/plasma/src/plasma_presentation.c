@@ -10,9 +10,16 @@ int plasma_presentation_validate_plan(const struct plasma_plan_tag *plan)
         return 1;
     }
 
+    if (!plan->premium_enabled) {
+        return 0;
+    }
+
     return
-        plan->presentation_mode == PLASMA_PRESENTATION_MODE_HEIGHTFIELD &&
-        plan->premium_enabled;
+        plan->presentation_mode == PLASMA_PRESENTATION_MODE_HEIGHTFIELD ||
+        plan->presentation_mode == PLASMA_PRESENTATION_MODE_CURTAIN ||
+        plan->presentation_mode == PLASMA_PRESENTATION_MODE_RIBBON ||
+        plan->presentation_mode == PLASMA_PRESENTATION_MODE_CONTOUR_EXTRUSION ||
+        plan->presentation_mode == PLASMA_PRESENTATION_MODE_BOUNDED_SURFACE;
 }
 
 int plasma_presentation_prepare(

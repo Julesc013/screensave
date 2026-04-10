@@ -50,8 +50,16 @@ Meaning of states:
 | `settings_subset` | `product` | Validated | [`../tests/pl11-settings-proof.md`](../tests/pl11-settings-proof.md) | Layered settings surfaces and current gating rules remain backed by smoke and recorded proof. |
 | `benchlab_surface` | `product` | Validated | [`../tests/pl12-benchlab-proof.md`](../tests/pl12-benchlab-proof.md) | BenchLab field export, forcing, and clamp reporting remain backed by smoke and captures. |
 | `transition_soak` | `product` | Partial | [`../tests/pl13-transition-validation.md`](../tests/pl13-transition-validation.md) | Repeated transition stepping is covered for the implemented subset, not all theoretical pairs. |
-| `experimental_pool` | `product` | Partial | [`../tests/px30-output-proof.md`](../tests/px30-output-proof.md) | `PX30` adds a bounded built-in experimental preset slice for contour, banded, and treatment studies without changing the stable-only default pool. |
-| `non_heightfield_presentations` | `gl46` | Unsupported | [`pl09-premium-lane.md`](./pl09-premium-lane.md) | Other premium-dimensional presentation modes are not implemented. |
+| `lab_shell_surface` | `product` | Partial | [`../tests/px40-authoring-proof.md`](../tests/px40-authoring-proof.md) | `PX40` grows the first file-first Plasma Lab shell into a stronger CLI-first authoring surface for validate, inventory, authored compare, compatibility, and migration reporting. |
+| `ops_toolchain_surface` | `product` | Partial | [`../tests/px40-ops-tools-proof.md`](../tests/px40-ops-tools-proof.md) | `PX40` adds bounded capture-backed degrade inspection and semantic BenchLab text-capture diff support without claiming a broad rendered determinism lab. |
+| `experimental_pool` | `product` | Partial | [`../tests/px31-glyph-proof.md`](../tests/px31-glyph-proof.md) | `PX30` and `PX31` grow a bounded built-in experimental preset slice for contour, banded, treatment, glyph, and field-family studies without changing the stable-only default pool. |
+| `contour_output_subset` | `product` | Partial | [`../tests/px30-output-proof.md`](../tests/px30-output-proof.md) | `PX30` makes `contour_only` and `contour_bands` real on the bounded supported subset. |
+| `banded_output_subset` | `product` | Partial | [`../tests/px30-output-proof.md`](../tests/px30-output-proof.md) | `PX30` makes `posterized_bands` real on the bounded supported subset instead of leaving banding as taxonomy only. |
+| `treatment_family_subset` | `product` | Partial | [`../tests/px30-treatment-proof.md`](../tests/px30-treatment-proof.md) | `PX30` makes a curated treatment subset real with explicit slot placement, degrade policy, and experimental posture. |
+| `glyph_output_subset` | `product` | Partial | [`../tests/px31-glyph-proof.md`](../tests/px31-glyph-proof.md) | `PX31` makes a bounded glyph subset real with explicit `ascii_glyph` and `matrix_glyph` truth and no silent raster fallback. |
+| `field_family_i_subset` | `product` | Partial | [`../tests/px31-field-families-i-proof.md`](../tests/px31-field-families-i-proof.md) | `PX31` makes bounded chemical, lattice, and caustic studies real on the existing Plasma engine seams without widening into later-wave field breadth. |
+| `field_family_ii_subset` | `product` | Partial | [`../tests/px32-field-families-ii-proof.md`](../tests/px32-field-families-ii-proof.md) | `PX32` makes bounded aurora, substrate, and arc studies real on the existing Plasma engine seams without widening into scenic or later-wave ecosystem work. |
+| `dimensional_presentation_subset` | `gl46` | Partial | [`../tests/px32-dimensional-proof.md`](../tests/px32-dimensional-proof.md) | `PX32` broadens the premium dimensional subset beyond `heightfield` to bounded `curtain`, `ribbon`, `contour_extrusion`, and `bounded_surface` while keeping unsupported breadth explicit. |
 | `cross_driver_ladder` | `all` | Blocked | [`pl13-known-limits.md`](./pl13-known-limits.md) | PL13 proof came from one capable validation machine, not a multi-driver denial sweep. |
 
 ## Evidence Notes For Material Areas
@@ -81,7 +89,7 @@ PL13 does not claim:
 - a broad cross-machine hardware sweep
 - universal pairwise transition proof for every theoretical preset/theme combination
 - numeric FPS or memory SLAs
-- validation of unimplemented premium presentation modes
+- validation of unsupported broader premium presentation modes such as `bounded_billboard_volume`
 
 ## What PL14 May Build On Next
 

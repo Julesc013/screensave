@@ -85,7 +85,7 @@ Availability is resolved product-locally from:
 
 Current important gates:
 
-- `content_filter` is available only when experimental content exists; `PX30` makes that true through a bounded experimental preset slice while the default pool still remains stable-only.
+- `content_filter` is available only when experimental content exists; `PX30`, `PX31`, and `PX32` make that true through bounded experimental preset slices while the default pool still remains stable-only.
 - `favorites_only` is unavailable until favorite keys are actually configured.
 - `journey_key` is unavailable unless transitions are enabled and the transition policy can consume a journey.
 - `deterministic_seed` is unavailable until deterministic seed mode is enabled.
@@ -118,7 +118,7 @@ It does leave a real seam for it through:
 | `theme_key` | `basic` | `content` | `content_key` | `plasma_lava` | `user` | always | content selection, plan |
 | `speed_mode` | `basic` | `motion` | `enum` | `gentle` | `user` | always | plan, execution |
 | `detail_level` | `advanced` | `render` | `enum` | `standard` | `user` | always | plan |
-| `effect_mode` | `advanced` | `generator` | `enum` | `fire` | `user` | always | plan, execution |
+| `effect_mode` | `advanced` | `generator` | `enum` | `fire` | `user` | always | plan, execution, bounded experimental generator-family selection |
 | `resolution_mode` | `advanced` | `render` | `enum` | `standard` | `user` | always | plan, execution |
 | `smoothing_mode` | `advanced` | `treatment` | `enum` | `soft` | `user` | always | plan, presentation |
 | `preset_set_key` | `advanced` | `selection` | `content_key` | empty | `user` | requires real preset sets | content selection, transition |
@@ -149,7 +149,7 @@ Prepared for later but not claimed as fully implemented:
 
 - deeper BenchLab-specific forcing and inspection
 - broader lane-selection controls
-- wider output/treatment/presentation control coverage
+- wider output/treatment/presentation control coverage beyond the current preset-driven non-raster subset
 - richer favorite/exclusion list editing
 - future settings that depend on later content or performance work
 

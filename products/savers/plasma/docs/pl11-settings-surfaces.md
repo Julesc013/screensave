@@ -61,7 +61,7 @@ Advanced exposes stable power-user controls that remain honest for normal produc
 The current implemented Advanced subset adds:
 
 - render detail
-- effect family
+- effect family, including the bounded experimental PX31 field-family-I and PX32 field-family-II studies
 - field resolution
 - smoothing
 - preset set
@@ -109,7 +109,7 @@ The current implemented rules include:
 - `favorites_only` is only available when favorite keys are actually configured.
 - `content_filter` is only available when the registry actually contains experimental content.
 
-The default Plasma pool remains stable-only, but `PX30` adds a bounded experimental preset slice, so the experimental content-pool control is now present in the model and available on the current Author/Lab surface.
+The default Plasma pool remains stable-only, but `PX30` through `PX32` add bounded experimental preset slices, so the experimental content-pool control is now present in the model and available on the current Author/Lab surface.
 
 ## Persistence And Resolution Overview
 
@@ -181,7 +181,7 @@ Intentionally deferred:
 
 - The current dialog uses one layered product dialog with show/hide behavior rather than separate per-surface windows.
 - Favorites and exclusions remain product-local real settings, but PL11 only surfaces `favorites_only`; full favorite/exclusion list editing remains later work.
-- Experimental content filtering is implemented in the model, and `PX30` now makes it available through a bounded experimental preset slice while the default pool still remains stable-only.
+- Experimental content filtering is implemented in the model, and `PX30` through `PX32` now make it available through a bounded experimental preset slice while the default pool still remains stable-only.
 - Advanced/modern/premium lane behavior remains capability-gated by the runtime engine; PL11 does not add a full lane-forcing UI.
 
 ## What Remained Intentionally Unchanged

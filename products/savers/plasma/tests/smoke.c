@@ -458,6 +458,37 @@ static int plasma_smoke_resolve_repo_root(
     return 1;
 }
 
+static unsigned int plasma_smoke_count_non_black_pixels(
+    const screensave_visual_buffer *visual_buffer
+)
+{
+    unsigned int lit_count;
+    int x;
+    int y;
+
+    if (visual_buffer == NULL || visual_buffer->pixels == NULL) {
+        return 0U;
+    }
+
+    lit_count = 0U;
+    for (y = 0; y < visual_buffer->size.height; ++y) {
+        const unsigned char *row;
+
+        row = visual_buffer->pixels + ((size_t)y * (size_t)visual_buffer->stride_bytes);
+        for (x = 0; x < visual_buffer->size.width; ++x) {
+            if (
+                row[(x * 4) + 0] != 0U ||
+                row[(x * 4) + 1] != 0U ||
+                row[(x * 4) + 2] != 0U
+            ) {
+                ++lit_count;
+            }
+        }
+    }
+
+    return lit_count;
+}
+
 int main(void)
 {
     static const char *const g_required_preset_keys[] = {
@@ -474,7 +505,16 @@ int main(void)
         "phosphor_topography",
         "stipple_bands",
         "emboss_current",
-        "crt_signal_bands"
+        "crt_signal_bands",
+        "ascii_reactor",
+        "matrix_lattice",
+        "cellular_bloom",
+        "quasi_crystal_bands",
+        "caustic_waterlight",
+        "aurora_curtain",
+        "ribbon_aurora",
+        "substrate_relief",
+        "filament_extrusion"
     };
     static const char *const g_required_theme_keys[] = {
         "plasma_lava",
@@ -702,7 +742,25 @@ int main(void)
         plasma_content_find_preset_entry("aurora_bands") == NULL ||
         plasma_content_find_preset_entry("aurora_bands")->channel != PLASMA_CONTENT_CHANNEL_EXPERIMENTAL ||
         plasma_content_find_preset_entry("phosphor_topography") == NULL ||
-        plasma_content_find_preset_entry("phosphor_topography")->channel != PLASMA_CONTENT_CHANNEL_EXPERIMENTAL
+        plasma_content_find_preset_entry("phosphor_topography")->channel != PLASMA_CONTENT_CHANNEL_EXPERIMENTAL ||
+        plasma_content_find_preset_entry("ascii_reactor") == NULL ||
+        plasma_content_find_preset_entry("ascii_reactor")->channel != PLASMA_CONTENT_CHANNEL_EXPERIMENTAL ||
+        plasma_content_find_preset_entry("matrix_lattice") == NULL ||
+        plasma_content_find_preset_entry("matrix_lattice")->channel != PLASMA_CONTENT_CHANNEL_EXPERIMENTAL ||
+        plasma_content_find_preset_entry("cellular_bloom") == NULL ||
+        plasma_content_find_preset_entry("cellular_bloom")->channel != PLASMA_CONTENT_CHANNEL_EXPERIMENTAL ||
+        plasma_content_find_preset_entry("quasi_crystal_bands") == NULL ||
+        plasma_content_find_preset_entry("quasi_crystal_bands")->channel != PLASMA_CONTENT_CHANNEL_EXPERIMENTAL ||
+        plasma_content_find_preset_entry("caustic_waterlight") == NULL ||
+        plasma_content_find_preset_entry("caustic_waterlight")->channel != PLASMA_CONTENT_CHANNEL_EXPERIMENTAL ||
+        plasma_content_find_preset_entry("aurora_curtain") == NULL ||
+        plasma_content_find_preset_entry("aurora_curtain")->channel != PLASMA_CONTENT_CHANNEL_EXPERIMENTAL ||
+        plasma_content_find_preset_entry("ribbon_aurora") == NULL ||
+        plasma_content_find_preset_entry("ribbon_aurora")->channel != PLASMA_CONTENT_CHANNEL_EXPERIMENTAL ||
+        plasma_content_find_preset_entry("substrate_relief") == NULL ||
+        plasma_content_find_preset_entry("substrate_relief")->channel != PLASMA_CONTENT_CHANNEL_EXPERIMENTAL ||
+        plasma_content_find_preset_entry("filament_extrusion") == NULL ||
+        plasma_content_find_preset_entry("filament_extrusion")->channel != PLASMA_CONTENT_CHANNEL_EXPERIMENTAL
     ) {
         return 360;
     }
@@ -1246,7 +1304,7 @@ int main(void)
         registry->preset_set_count != 7U ||
         registry->theme_set_count != 4U ||
         !plasma_content_registry_has_channel(PLASMA_CONTENT_CHANNEL_STABLE) ||
-        plasma_content_registry_has_channel(PLASMA_CONTENT_CHANNEL_EXPERIMENTAL)
+        !plasma_content_registry_has_channel(PLASMA_CONTENT_CHANNEL_EXPERIMENTAL)
     ) {
         return 101;
     }
@@ -2196,6 +2254,453 @@ int main(void)
     plasma_destroy_session(session);
 
     plasma_config_set_defaults(&common_config, &product_config, sizeof(product_config));
+    plasma_apply_preset_to_config("ascii_reactor", &common_config, &product_config);
+    common_config.preset_key = "ascii_reactor";
+    common_config.theme_key = "amber_terminal";
+    product_config.selection.content_filter = PLASMA_CONTENT_FILTER_STABLE_AND_EXPERIMENTAL;
+    screensave_config_binding_init(&binding, &common_config, &product_config, sizeof(product_config));
+    ZeroMemory(&environment, sizeof(environment));
+    fake_size.width = 320;
+    fake_size.height = 240;
+    plasma_smoke_init_fake_renderer(
+        &fake_renderer,
+        SCREENSAVE_RENDERER_KIND_GDI,
+        SCREENSAVE_RENDERER_KIND_GDI,
+        &fake_size
+    );
+    environment.mode = SCREENSAVE_SESSION_MODE_WINDOWED;
+    environment.drawable_size = fake_size;
+    environment.seed.base_seed = 0x21222324UL;
+    environment.seed.stream_seed = 0x25262728UL;
+    environment.seed.deterministic = common_config.use_deterministic_seed;
+    environment.config_binding = &binding;
+    environment.renderer = &fake_renderer;
+    session = NULL;
+    if (!plasma_create_session(module, &session, &environment) || session == NULL) {
+        return 383;
+    }
+    plasma_smoke_step_session_delta(session, &environment, 33UL);
+    if (
+        strcmp(session->plan.preset_key, "ascii_reactor") != 0 ||
+        session->plan.effect_mode != PLASMA_EFFECT_CHEMICAL ||
+        session->plan.output_family != PLASMA_OUTPUT_FAMILY_GLYPH ||
+        session->plan.output_mode != PLASMA_OUTPUT_MODE_ASCII_GLYPH ||
+        !plasma_output_validate_plan(&session->plan) ||
+        !plasma_treatment_validate_plan(&session->plan) ||
+        !plasma_output_build(&session->plan, &session->state, &output_frame) ||
+        !plasma_treatment_apply(
+            &session->plan,
+            &session->state,
+            &output_frame,
+            &session->state.visual_buffer,
+            &treated_frame
+        ) ||
+        plasma_smoke_count_non_black_pixels(&session->state.visual_buffer) == 0U ||
+        !plasma_plan_validate_for_renderer_kind(&session->plan, module, SCREENSAVE_RENDERER_KIND_GDI) ||
+        !plasma_plan_validate_for_renderer_kind(&session->plan, module, SCREENSAVE_RENDERER_KIND_GL11)
+    ) {
+        plasma_destroy_session(session);
+        return 384;
+    }
+    plasma_destroy_session(session);
+
+    plasma_config_set_defaults(&common_config, &product_config, sizeof(product_config));
+    plasma_apply_preset_to_config("matrix_lattice", &common_config, &product_config);
+    common_config.preset_key = "matrix_lattice";
+    common_config.theme_key = "museum_phosphor";
+    product_config.selection.content_filter = PLASMA_CONTENT_FILTER_STABLE_AND_EXPERIMENTAL;
+    screensave_config_binding_init(&binding, &common_config, &product_config, sizeof(product_config));
+    ZeroMemory(&environment, sizeof(environment));
+    fake_size.width = 320;
+    fake_size.height = 240;
+    plasma_smoke_init_fake_renderer(
+        &fake_renderer,
+        SCREENSAVE_RENDERER_KIND_GL11,
+        SCREENSAVE_RENDERER_KIND_GL11,
+        &fake_size
+    );
+    environment.mode = SCREENSAVE_SESSION_MODE_WINDOWED;
+    environment.drawable_size = fake_size;
+    environment.seed.base_seed = 0x31323334UL;
+    environment.seed.stream_seed = 0x35363738UL;
+    environment.seed.deterministic = common_config.use_deterministic_seed;
+    environment.config_binding = &binding;
+    environment.renderer = &fake_renderer;
+    session = NULL;
+    if (!plasma_create_session(module, &session, &environment) || session == NULL) {
+        return 385;
+    }
+    plasma_smoke_step_session_delta(session, &environment, 66UL);
+    if (
+        strcmp(session->plan.preset_key, "matrix_lattice") != 0 ||
+        session->plan.effect_mode != PLASMA_EFFECT_LATTICE ||
+        session->plan.output_family != PLASMA_OUTPUT_FAMILY_GLYPH ||
+        session->plan.output_mode != PLASMA_OUTPUT_MODE_MATRIX_GLYPH ||
+        !plasma_output_validate_plan(&session->plan) ||
+        !plasma_treatment_validate_plan(&session->plan) ||
+        !plasma_output_build(&session->plan, &session->state, &output_frame) ||
+        !plasma_treatment_apply(
+            &session->plan,
+            &session->state,
+            &output_frame,
+            &session->state.visual_buffer,
+            &treated_frame
+        ) ||
+        plasma_smoke_count_non_black_pixels(&session->state.visual_buffer) == 0U ||
+        !plasma_plan_validate_for_renderer_kind(&session->plan, module, SCREENSAVE_RENDERER_KIND_GDI) ||
+        !plasma_plan_validate_for_renderer_kind(&session->plan, module, SCREENSAVE_RENDERER_KIND_GL11)
+    ) {
+        plasma_destroy_session(session);
+        return 386;
+    }
+    benchlab_config_state.common = common_config;
+    benchlab_config_state.product_config = &product_config;
+    benchlab_config_state.product_config_size = sizeof(product_config);
+    if (
+        !plasma_benchlab_build_snapshot(
+            session,
+            &benchlab_config_state,
+            SCREENSAVE_RENDERER_KIND_GL11,
+            &benchlab_snapshot
+        ) ||
+        strcmp(benchlab_snapshot.profile_class, "experimental") != 0 ||
+        strcmp(benchlab_snapshot.generator_family, "lattice_quasi_crystal") != 0 ||
+        strcmp(benchlab_snapshot.output_family, "glyph") != 0 ||
+        strcmp(benchlab_snapshot.output_mode, "matrix_glyph") != 0
+    ) {
+        plasma_destroy_session(session);
+        return 387;
+    }
+    if (
+        !plasma_benchlab_build_report_section(
+            session,
+            &benchlab_config_state,
+            SCREENSAVE_RENDERER_KIND_GL11,
+            benchlab_report,
+            (unsigned int)sizeof(benchlab_report)
+        ) ||
+        strstr(benchlab_report, "Generator family: lattice_quasi_crystal") == NULL ||
+        strstr(benchlab_report, "Output family: glyph") == NULL ||
+        strstr(benchlab_report, "Output mode: matrix_glyph") == NULL
+    ) {
+        plasma_destroy_session(session);
+        return 388;
+    }
+    plasma_destroy_session(session);
+
+    if (
+        !plasma_compile_plan_for_renderer(
+            module,
+            "cellular_bloom",
+            "aurora_cool",
+            &selection_preferences,
+            SCREENSAVE_RENDERER_KIND_GDI,
+            SCREENSAVE_RENDERER_KIND_GDI,
+            &plan
+        ) ||
+        plan.effect_mode != PLASMA_EFFECT_CHEMICAL ||
+        plan.output_family != PLASMA_OUTPUT_FAMILY_RASTER ||
+        plan.output_mode != PLASMA_OUTPUT_MODE_NATIVE_RASTER ||
+        plan.filter_treatment != PLASMA_FILTER_TREATMENT_GLOW_EDGE
+    ) {
+        return 389;
+    }
+    if (
+        !plasma_compile_plan_for_renderer(
+            module,
+            "quasi_crystal_bands",
+            "midnight_interference",
+            &selection_preferences,
+            SCREENSAVE_RENDERER_KIND_GDI,
+            SCREENSAVE_RENDERER_KIND_GDI,
+            &plan
+        ) ||
+        plan.effect_mode != PLASMA_EFFECT_LATTICE ||
+        plan.output_family != PLASMA_OUTPUT_FAMILY_BANDED ||
+        plan.output_mode != PLASMA_OUTPUT_MODE_POSTERIZED_BANDS ||
+        plan.accent_treatment != PLASMA_ACCENT_TREATMENT_ACCENT_PASS
+    ) {
+        return 390;
+    }
+    plasma_config_set_defaults(&common_config, &product_config, sizeof(product_config));
+    plasma_apply_preset_to_config("caustic_waterlight", &common_config, &product_config);
+    common_config.preset_key = "caustic_waterlight";
+    common_config.theme_key = "oceanic_blue";
+    product_config.selection.content_filter = PLASMA_CONTENT_FILTER_STABLE_AND_EXPERIMENTAL;
+    screensave_config_binding_init(&binding, &common_config, &product_config, sizeof(product_config));
+    ZeroMemory(&environment, sizeof(environment));
+    fake_size.width = 320;
+    fake_size.height = 240;
+    plasma_smoke_init_fake_renderer(
+        &fake_renderer,
+        SCREENSAVE_RENDERER_KIND_GDI,
+        SCREENSAVE_RENDERER_KIND_GDI,
+        &fake_size
+    );
+    environment.mode = SCREENSAVE_SESSION_MODE_WINDOWED;
+    environment.drawable_size = fake_size;
+    environment.seed.base_seed = 0x41424344UL;
+    environment.seed.stream_seed = 0x45464748UL;
+    environment.seed.deterministic = common_config.use_deterministic_seed;
+    environment.config_binding = &binding;
+    environment.renderer = &fake_renderer;
+    session = NULL;
+    if (!plasma_create_session(module, &session, &environment) || session == NULL) {
+        return 391;
+    }
+    plasma_smoke_step_session_delta(session, &environment, 33UL);
+    if (
+        strcmp(session->plan.preset_key, "caustic_waterlight") != 0 ||
+        session->plan.effect_mode != PLASMA_EFFECT_CAUSTIC ||
+        session->plan.output_family != PLASMA_OUTPUT_FAMILY_CONTOUR ||
+        session->plan.output_mode != PLASMA_OUTPUT_MODE_CONTOUR_BANDS ||
+        session->plan.filter_treatment != PLASMA_FILTER_TREATMENT_GLOW_EDGE ||
+        !plasma_output_validate_plan(&session->plan) ||
+        !plasma_treatment_validate_plan(&session->plan) ||
+        !plasma_output_build(&session->plan, &session->state, &output_frame) ||
+        !plasma_treatment_apply(
+            &session->plan,
+            &session->state,
+            &output_frame,
+            &session->state.visual_buffer,
+            &treated_frame
+        ) ||
+        plasma_smoke_count_non_black_pixels(&session->state.visual_buffer) == 0U
+    ) {
+        plasma_destroy_session(session);
+        return 392;
+    }
+    plasma_destroy_session(session);
+
+    plasma_selection_preferences_set_defaults(&selection_preferences);
+    if (
+        !plasma_compile_plan_for_renderer(
+            module,
+            "aurora_curtain",
+            "aurora_cool",
+            &selection_preferences,
+            SCREENSAVE_RENDERER_KIND_GL46,
+            SCREENSAVE_RENDERER_KIND_GL46,
+            &plan
+        ) ||
+        strcmp(plan.preset_key, "aurora_curtain") != 0 ||
+        plan.effect_mode != PLASMA_EFFECT_AURORA ||
+        plan.output_family != PLASMA_OUTPUT_FAMILY_RASTER ||
+        plan.output_mode != PLASMA_OUTPUT_MODE_NATIVE_RASTER ||
+        plan.filter_treatment != PLASMA_FILTER_TREATMENT_GLOW_EDGE ||
+        plan.presentation_mode != PLASMA_PRESENTATION_MODE_CURTAIN ||
+        !plan.premium_requested ||
+        !plan.premium_enabled ||
+        plan.premium_degraded ||
+        !plasma_output_validate_plan(&plan) ||
+        !plasma_treatment_validate_plan(&plan) ||
+        !plasma_presentation_validate_plan(&plan) ||
+        !plasma_plan_validate_for_renderer_kind(&plan, module, SCREENSAVE_RENDERER_KIND_GL46)
+    ) {
+        return 410;
+    }
+    if (
+        !plasma_compile_plan_for_renderer(
+            module,
+            "aurora_curtain",
+            "aurora_cool",
+            &selection_preferences,
+            SCREENSAVE_RENDERER_KIND_GL46,
+            SCREENSAVE_RENDERER_KIND_GL11,
+            &plan
+        ) ||
+        plan.effect_mode != PLASMA_EFFECT_AURORA ||
+        plan.presentation_mode != PLASMA_PRESENTATION_MODE_FLAT ||
+        !plan.premium_requested ||
+        plan.premium_enabled ||
+        !plan.premium_degraded ||
+        !plasma_plan_validate_for_renderer_kind(&plan, module, SCREENSAVE_RENDERER_KIND_GL11)
+    ) {
+        return 411;
+    }
+
+    plasma_config_set_defaults(&common_config, &product_config, sizeof(product_config));
+    plasma_apply_preset_to_config("ribbon_aurora", &common_config, &product_config);
+    common_config.preset_key = "ribbon_aurora";
+    common_config.theme_key = "aurora_cool";
+    product_config.selection.content_filter = PLASMA_CONTENT_FILTER_STABLE_AND_EXPERIMENTAL;
+    screensave_config_binding_init(&binding, &common_config, &product_config, sizeof(product_config));
+    ZeroMemory(&environment, sizeof(environment));
+    fake_size.width = 320;
+    fake_size.height = 240;
+    plasma_smoke_init_fake_renderer(
+        &fake_renderer,
+        SCREENSAVE_RENDERER_KIND_GL46,
+        SCREENSAVE_RENDERER_KIND_GL46,
+        &fake_size
+    );
+    environment.mode = SCREENSAVE_SESSION_MODE_WINDOWED;
+    environment.drawable_size = fake_size;
+    environment.seed.base_seed = 0x51525354UL;
+    environment.seed.stream_seed = 0x55565758UL;
+    environment.seed.deterministic = common_config.use_deterministic_seed;
+    environment.config_binding = &binding;
+    environment.renderer = &fake_renderer;
+    session = NULL;
+    if (!plasma_create_session(module, &session, &environment) || session == NULL) {
+        return 412;
+    }
+    plasma_smoke_step_session_delta(session, &environment, 33UL);
+    if (
+        strcmp(session->plan.preset_key, "ribbon_aurora") != 0 ||
+        session->plan.effect_mode != PLASMA_EFFECT_AURORA ||
+        session->plan.output_family != PLASMA_OUTPUT_FAMILY_BANDED ||
+        session->plan.output_mode != PLASMA_OUTPUT_MODE_POSTERIZED_BANDS ||
+        session->plan.accent_treatment != PLASMA_ACCENT_TREATMENT_ACCENT_PASS ||
+        session->plan.presentation_mode != PLASMA_PRESENTATION_MODE_RIBBON ||
+        !session->plan.premium_enabled ||
+        !plasma_output_validate_plan(&session->plan) ||
+        !plasma_treatment_validate_plan(&session->plan) ||
+        !plasma_presentation_validate_plan(&session->plan) ||
+        !plasma_output_build(&session->plan, &session->state, &output_frame) ||
+        !plasma_treatment_apply(
+            &session->plan,
+            &session->state,
+            &output_frame,
+            &session->state.visual_buffer,
+            &treated_frame
+        ) ||
+        !plasma_presentation_prepare(
+            &session->plan,
+            &session->state,
+            &treated_frame,
+            &presentation_target
+        )
+    ) {
+        plasma_destroy_session(session);
+        return 413;
+    }
+    benchlab_config_state.common = common_config;
+    benchlab_config_state.product_config = &product_config;
+    benchlab_config_state.product_config_size = sizeof(product_config);
+    if (
+        !plasma_benchlab_build_snapshot(
+            session,
+            &benchlab_config_state,
+            SCREENSAVE_RENDERER_KIND_GL46,
+            &benchlab_snapshot
+        ) ||
+        strcmp(benchlab_snapshot.profile_class, "experimental") != 0 ||
+        strcmp(benchlab_snapshot.generator_family, "aurora_curtain_ribbon") != 0 ||
+        strcmp(benchlab_snapshot.output_family, "banded") != 0 ||
+        strcmp(benchlab_snapshot.output_mode, "posterized_bands") != 0 ||
+        strcmp(benchlab_snapshot.presentation_mode, "ribbon") != 0 ||
+        strcmp(benchlab_snapshot.requested_lane, "premium") != 0 ||
+        strcmp(benchlab_snapshot.resolved_lane, "premium") != 0
+    ) {
+        plasma_destroy_session(session);
+        return 414;
+    }
+    plasma_destroy_session(session);
+
+    if (
+        !plasma_compile_plan_for_renderer(
+            module,
+            "substrate_relief",
+            "quiet_darkroom",
+            &selection_preferences,
+            SCREENSAVE_RENDERER_KIND_GL46,
+            SCREENSAVE_RENDERER_KIND_GL46,
+            &plan
+        ) ||
+        plan.effect_mode != PLASMA_EFFECT_SUBSTRATE ||
+        plan.output_family != PLASMA_OUTPUT_FAMILY_RASTER ||
+        plan.output_mode != PLASMA_OUTPUT_MODE_NATIVE_RASTER ||
+        plan.filter_treatment != PLASMA_FILTER_TREATMENT_EMBOSS_EDGE ||
+        plan.emulation_treatment != PLASMA_EMULATION_TREATMENT_PHOSPHOR ||
+        plan.presentation_mode != PLASMA_PRESENTATION_MODE_BOUNDED_SURFACE ||
+        !plan.premium_enabled ||
+        !plasma_output_validate_plan(&plan) ||
+        !plasma_treatment_validate_plan(&plan) ||
+        !plasma_presentation_validate_plan(&plan) ||
+        !plasma_plan_validate_for_renderer_kind(&plan, module, SCREENSAVE_RENDERER_KIND_GL46)
+    ) {
+        return 415;
+    }
+
+    plasma_config_set_defaults(&common_config, &product_config, sizeof(product_config));
+    plasma_apply_preset_to_config("filament_extrusion", &common_config, &product_config);
+    common_config.preset_key = "filament_extrusion";
+    common_config.theme_key = "midnight_interference";
+    product_config.selection.content_filter = PLASMA_CONTENT_FILTER_STABLE_AND_EXPERIMENTAL;
+    screensave_config_binding_init(&binding, &common_config, &product_config, sizeof(product_config));
+    ZeroMemory(&environment, sizeof(environment));
+    fake_size.width = 320;
+    fake_size.height = 240;
+    plasma_smoke_init_fake_renderer(
+        &fake_renderer,
+        SCREENSAVE_RENDERER_KIND_GL46,
+        SCREENSAVE_RENDERER_KIND_GL46,
+        &fake_size
+    );
+    environment.mode = SCREENSAVE_SESSION_MODE_WINDOWED;
+    environment.drawable_size = fake_size;
+    environment.seed.base_seed = 0x61626364UL;
+    environment.seed.stream_seed = 0x65666768UL;
+    environment.seed.deterministic = common_config.use_deterministic_seed;
+    environment.config_binding = &binding;
+    environment.renderer = &fake_renderer;
+    session = NULL;
+    if (!plasma_create_session(module, &session, &environment) || session == NULL) {
+        return 416;
+    }
+    plasma_smoke_step_session_delta(session, &environment, 33UL);
+    if (
+        strcmp(session->plan.preset_key, "filament_extrusion") != 0 ||
+        session->plan.effect_mode != PLASMA_EFFECT_ARC ||
+        session->plan.output_family != PLASMA_OUTPUT_FAMILY_CONTOUR ||
+        session->plan.output_mode != PLASMA_OUTPUT_MODE_CONTOUR_BANDS ||
+        session->plan.filter_treatment != PLASMA_FILTER_TREATMENT_GLOW_EDGE ||
+        session->plan.accent_treatment != PLASMA_ACCENT_TREATMENT_ACCENT_PASS ||
+        session->plan.presentation_mode != PLASMA_PRESENTATION_MODE_CONTOUR_EXTRUSION ||
+        !session->plan.premium_enabled ||
+        !plasma_output_validate_plan(&session->plan) ||
+        !plasma_treatment_validate_plan(&session->plan) ||
+        !plasma_presentation_validate_plan(&session->plan) ||
+        !plasma_output_build(&session->plan, &session->state, &output_frame) ||
+        !plasma_treatment_apply(
+            &session->plan,
+            &session->state,
+            &output_frame,
+            &session->state.visual_buffer,
+            &treated_frame
+        ) ||
+        !plasma_presentation_prepare(
+            &session->plan,
+            &session->state,
+            &treated_frame,
+            &presentation_target
+        )
+    ) {
+        plasma_destroy_session(session);
+        return 417;
+    }
+    benchlab_config_state.common = common_config;
+    benchlab_config_state.product_config = &product_config;
+    benchlab_config_state.product_config_size = sizeof(product_config);
+    if (
+        !plasma_benchlab_build_report_section(
+            session,
+            &benchlab_config_state,
+            SCREENSAVE_RENDERER_KIND_GL46,
+            benchlab_report,
+            (unsigned int)sizeof(benchlab_report)
+        ) ||
+        strstr(benchlab_report, "Generator family: arc_discharge") == NULL ||
+        strstr(benchlab_report, "Output family: contour") == NULL ||
+        strstr(benchlab_report, "Presentation mode: contour_extrusion") == NULL
+    ) {
+        plasma_destroy_session(session);
+        return 418;
+    }
+    plasma_destroy_session(session);
+
+    plasma_config_set_defaults(&common_config, &product_config, sizeof(product_config));
     lstrcpyA(product_config.selection.theme_set_key, "warm_classics");
     plasma_transition_preferences_set_defaults(&product_config.transition);
     product_config.transition.enabled = 1;
@@ -3130,10 +3635,10 @@ int main(void)
         benchlab_forcing.theme_key[0] != '\0' ||
         !benchlab_forcing.transition_duration_override_enabled ||
         benchlab_forcing.transition_duration_millis != 400UL ||
-        benchlab_forcing.presentation_request != PLASMA_BENCHLAB_PRESENTATION_AUTO ||
+        benchlab_forcing.presentation_request != PLASMA_BENCHLAB_PRESENTATION_RIBBON ||
         (benchlab_forcing.clamp_flags & PLASMA_BENCHLAB_CLAMP_THEME_KEY) == 0UL ||
         (benchlab_forcing.clamp_flags & PLASMA_BENCHLAB_CLAMP_TRANSITION_DURATION) == 0UL ||
-        (benchlab_forcing.clamp_flags & PLASMA_BENCHLAB_CLAMP_PRESENTATION) == 0UL
+        (benchlab_forcing.clamp_flags & PLASMA_BENCHLAB_CLAMP_PRESENTATION) != 0UL
     ) {
         return 137;
     }
@@ -3414,7 +3919,7 @@ int main(void)
     (void)plasma_validation_get_matrix(&matrix_count);
     (void)plasma_validation_get_performance_envelopes(&envelope_count);
     (void)plasma_validation_get_known_limits(&known_limit_count);
-    if (matrix_count < 25U || envelope_count < 10U || known_limit_count < 13U) {
+    if (matrix_count < 28U || envelope_count < 14U || known_limit_count < 16U) {
         return 202;
     }
 
@@ -3460,6 +3965,34 @@ int main(void)
         matrix_entry->status != PLASMA_VALIDATION_STATUS_PARTIAL
     ) {
         return 376;
+    }
+    matrix_entry = plasma_validation_find_matrix_entry("glyph_output_subset", "product");
+    if (
+        matrix_entry == NULL ||
+        matrix_entry->status != PLASMA_VALIDATION_STATUS_PARTIAL
+    ) {
+        return 393;
+    }
+    matrix_entry = plasma_validation_find_matrix_entry("field_family_i_subset", "product");
+    if (
+        matrix_entry == NULL ||
+        matrix_entry->status != PLASMA_VALIDATION_STATUS_PARTIAL
+    ) {
+        return 394;
+    }
+    matrix_entry = plasma_validation_find_matrix_entry("field_family_ii_subset", "product");
+    if (
+        matrix_entry == NULL ||
+        matrix_entry->status != PLASMA_VALIDATION_STATUS_PARTIAL
+    ) {
+        return 419;
+    }
+    matrix_entry = plasma_validation_find_matrix_entry("dimensional_presentation_subset", "gl46");
+    if (
+        matrix_entry == NULL ||
+        matrix_entry->status != PLASMA_VALIDATION_STATUS_PARTIAL
+    ) {
+        return 420;
     }
     matrix_entry = plasma_validation_find_matrix_entry("cross_driver_ladder", "all");
     if (
@@ -3517,6 +4050,13 @@ int main(void)
     ) {
         return 248;
     }
+    matrix_entry = plasma_validation_find_matrix_entry("ops_toolchain_surface", "product");
+    if (
+        matrix_entry == NULL ||
+        matrix_entry->status != PLASMA_VALIDATION_STATUS_PARTIAL
+    ) {
+        return 424;
+    }
     matrix_entry = plasma_validation_find_matrix_entry("selection_foundation", "product");
     if (
         matrix_entry == NULL ||
@@ -3569,6 +4109,34 @@ int main(void)
     ) {
         return 378;
     }
+    envelope_entry = plasma_validation_find_performance_envelope("glyph_subset");
+    if (
+        envelope_entry == NULL ||
+        envelope_entry->status != PLASMA_VALIDATION_STATUS_PARTIAL
+    ) {
+        return 395;
+    }
+    envelope_entry = plasma_validation_find_performance_envelope("field_family_i_subset");
+    if (
+        envelope_entry == NULL ||
+        envelope_entry->status != PLASMA_VALIDATION_STATUS_PARTIAL
+    ) {
+        return 396;
+    }
+    envelope_entry = plasma_validation_find_performance_envelope("field_family_ii_subset");
+    if (
+        envelope_entry == NULL ||
+        envelope_entry->status != PLASMA_VALIDATION_STATUS_PARTIAL
+    ) {
+        return 421;
+    }
+    envelope_entry = plasma_validation_find_performance_envelope("premium_dimensional_subset");
+    if (
+        envelope_entry == NULL ||
+        envelope_entry->status != PLASMA_VALIDATION_STATUS_PARTIAL
+    ) {
+        return 422;
+    }
 
     known_limit_entry = plasma_validation_find_known_limit("experimental_pool_bounded");
     if (
@@ -3577,10 +4145,10 @@ int main(void)
     ) {
         return 379;
     }
-    known_limit_entry = plasma_validation_find_known_limit("premium_heightfield_only");
+    known_limit_entry = plasma_validation_find_known_limit("dimensional_presentation_subset_bounded");
     if (
         known_limit_entry == NULL ||
-        known_limit_entry->status != PLASMA_VALIDATION_STATUS_UNSUPPORTED
+        known_limit_entry->status != PLASMA_VALIDATION_STATUS_PARTIAL
     ) {
         return 209;
     }
@@ -3619,6 +4187,13 @@ int main(void)
     ) {
         return 251;
     }
+    known_limit_entry = plasma_validation_find_known_limit("capture_diff_bounded");
+    if (
+        known_limit_entry == NULL ||
+        known_limit_entry->status != PLASMA_VALIDATION_STATUS_PARTIAL
+    ) {
+        return 425;
+    }
     known_limit_entry = plasma_validation_find_known_limit("output_family_subset_bounded");
     if (
         known_limit_entry == NULL ||
@@ -3632,6 +4207,27 @@ int main(void)
         known_limit_entry->status != PLASMA_VALIDATION_STATUS_PARTIAL
     ) {
         return 381;
+    }
+    known_limit_entry = plasma_validation_find_known_limit("glyph_output_subset_bounded");
+    if (
+        known_limit_entry == NULL ||
+        known_limit_entry->status != PLASMA_VALIDATION_STATUS_PARTIAL
+    ) {
+        return 397;
+    }
+    known_limit_entry = plasma_validation_find_known_limit("field_family_i_subset_bounded");
+    if (
+        known_limit_entry == NULL ||
+        known_limit_entry->status != PLASMA_VALIDATION_STATUS_PARTIAL
+    ) {
+        return 398;
+    }
+    known_limit_entry = plasma_validation_find_known_limit("field_family_ii_subset_bounded");
+    if (
+        known_limit_entry == NULL ||
+        known_limit_entry->status != PLASMA_VALIDATION_STATUS_PARTIAL
+    ) {
+        return 423;
     }
     known_limit_entry = plasma_validation_find_known_limit("selection_foundation_bounded");
     if (

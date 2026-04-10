@@ -58,12 +58,12 @@ static const plasma_settings_descriptor g_plasma_settings_catalog[] = {
     {
         "effect_mode",
         "Effect Family",
-        "Selects the preserved classic effect family.",
+        "Selects the current Plasma effect family, including the bounded experimental PX31 and PX32 field-family studies.",
         PLASMA_SETTINGS_SURFACE_ADVANCED,
         "generator",
         PLASMA_SETTINGS_VALUE_ENUM,
         "fire",
-        "plasma|fire|interference",
+        "plasma|fire|interference|chemical_cellular_growth|lattice_quasi_crystal|caustic_marbling|aurora_curtain_ribbon|substrate_vein_coral|arc_discharge",
         PLASMA_SETTINGS_PERSIST_USER,
         PLASMA_SETTINGS_AFFECTS_RUNTIME_PLAN | PLASMA_SETTINGS_AFFECTS_EXECUTION_STATE,
         1

@@ -236,6 +236,241 @@ static int plasma_treatment_is_contour_edge(
         );
 }
 
+typedef struct plasma_glyph_pattern_tag {
+    unsigned char rows[6];
+} plasma_glyph_pattern;
+
+static const plasma_glyph_pattern g_plasma_ascii_patterns[] = {
+    { { 0x0U, 0x0U, 0x0U, 0x0U, 0x0U, 0x0U } },
+    { { 0x0U, 0x0U, 0x0U, 0x0U, 0x6U, 0x6U } },
+    { { 0x0U, 0x6U, 0x6U, 0x0U, 0x6U, 0x6U } },
+    { { 0x0U, 0x0U, 0xFU, 0xFU, 0x0U, 0x0U } },
+    { { 0x0U, 0xFU, 0x0U, 0xFU, 0x0U, 0x0U } },
+    { { 0x2U, 0x2U, 0xFU, 0xFU, 0x2U, 0x2U } },
+    { { 0x9U, 0x6U, 0xFU, 0xFU, 0x6U, 0x9U } },
+    { { 0xAU, 0xFU, 0xAU, 0xFU, 0xAU, 0x0U } },
+    { { 0x9U, 0x1U, 0x2U, 0x4U, 0x8U, 0x9U } },
+    { { 0x6U, 0x9U, 0xFU, 0xDU, 0x8U, 0x7U } }
+};
+
+static const plasma_glyph_pattern g_plasma_matrix_patterns[] = {
+    { { 0x6U, 0x9U, 0x9U, 0x9U, 0x9U, 0x6U } },
+    { { 0x2U, 0x6U, 0x2U, 0x2U, 0x2U, 0x7U } },
+    { { 0x6U, 0x9U, 0x1U, 0x2U, 0x4U, 0xFU } },
+    { { 0xEU, 0x1U, 0x6U, 0x1U, 0x9U, 0x6U } },
+    { { 0x2U, 0x6U, 0xAU, 0xFU, 0x2U, 0x2U } },
+    { { 0xFU, 0x8U, 0xEU, 0x1U, 0x9U, 0x6U } },
+    { { 0x7U, 0x8U, 0xEU, 0x9U, 0x9U, 0x6U } },
+    { { 0xFU, 0x1U, 0x2U, 0x4U, 0x4U, 0x4U } }
+};
+
+static unsigned int plasma_treatment_glyph_cell_width(plasma_output_mode mode)
+{
+    if (mode == PLASMA_OUTPUT_MODE_MATRIX_GLYPH) {
+        return 4U;
+    }
+
+    return 4U;
+}
+
+static unsigned int plasma_treatment_glyph_cell_height(plasma_output_mode mode)
+{
+    if (mode == PLASMA_OUTPUT_MODE_MATRIX_GLYPH) {
+        return 6U;
+    }
+
+    return 6U;
+}
+
+static unsigned int plasma_treatment_sample_cell_scalar(
+    const plasma_output_frame *output,
+    unsigned int cell_x,
+    unsigned int cell_y,
+    unsigned int cell_width,
+    unsigned int cell_height
+)
+{
+    int sample_x;
+    int sample_y;
+
+    sample_x = (int)(cell_x * cell_width) + (int)(cell_width / 2U);
+    sample_y = (int)(cell_y * cell_height) + (int)(cell_height / 2U);
+    return (unsigned int)plasma_treatment_sample_scalar(output, sample_x, sample_y);
+}
+
+static int plasma_treatment_cell_has_contour(
+    const plasma_output_frame *output,
+    unsigned int cell_x,
+    unsigned int cell_y,
+    unsigned int cell_width,
+    unsigned int cell_height,
+    unsigned int band_count
+)
+{
+    int sample_x;
+    int sample_y;
+
+    sample_x = (int)(cell_x * cell_width) + (int)(cell_width / 2U);
+    sample_y = (int)(cell_y * cell_height) + (int)(cell_height / 2U);
+    return plasma_treatment_is_contour_edge(output, sample_x, sample_y, band_count);
+}
+
+static screensave_color plasma_treatment_scale_color(
+    screensave_color color,
+    unsigned int amount
+)
+{
+    if (amount > 255U) {
+        amount = 255U;
+    }
+
+    return screensave_color_lerp(plasma_treatment_background_color(), color, amount);
+}
+
+static int plasma_treatment_pattern_bit(
+    const plasma_glyph_pattern *pattern,
+    unsigned int column,
+    unsigned int row
+)
+{
+    unsigned int bit_index;
+
+    if (pattern == NULL || column >= 4U || row >= 6U) {
+        return 0;
+    }
+
+    bit_index = 3U - column;
+    return (pattern->rows[row] & (unsigned char)(1U << bit_index)) != 0U;
+}
+
+static const plasma_glyph_pattern *plasma_treatment_select_ascii_pattern(
+    unsigned int value,
+    int contour_edge
+)
+{
+    unsigned int count;
+    unsigned int index;
+
+    count = (unsigned int)(sizeof(g_plasma_ascii_patterns) / sizeof(g_plasma_ascii_patterns[0]));
+    if (value < 10U) {
+        return &g_plasma_ascii_patterns[0];
+    }
+
+    index = (value * (count - 1U)) / 255U;
+    if (contour_edge && index + 1U < count) {
+        ++index;
+    }
+
+    return &g_plasma_ascii_patterns[index];
+}
+
+static const plasma_glyph_pattern *plasma_treatment_select_matrix_pattern(
+    unsigned int value,
+    unsigned int cell_x,
+    unsigned int cell_y,
+    const struct plasma_execution_state_tag *state
+)
+{
+    unsigned int count;
+    unsigned int index;
+    unsigned long phase_step;
+
+    count = (unsigned int)(sizeof(g_plasma_matrix_patterns) / sizeof(g_plasma_matrix_patterns[0]));
+    phase_step = state != NULL ? (state->phase_millis / 43UL) : 0UL;
+    index = (
+        value +
+        (cell_x * 17U) +
+        (cell_y * 11U) +
+        (unsigned int)(phase_step & 255UL)
+    ) % count;
+    return &g_plasma_matrix_patterns[index];
+}
+
+static unsigned int plasma_treatment_matrix_trail_strength(
+    const struct plasma_execution_state_tag *state,
+    unsigned int cell_x,
+    unsigned int cell_y,
+    unsigned int cell_rows
+)
+{
+    unsigned int cycle;
+    unsigned int head_row;
+    unsigned int distance;
+    unsigned long phase_step;
+
+    if (state == NULL || cell_rows == 0U) {
+        return 0U;
+    }
+
+    cycle = cell_rows + 9U;
+    phase_step = state->phase_millis / 37UL;
+    head_row = (unsigned int)(
+        (phase_step + (unsigned long)(cell_x * 3U) + (state->source_phase_a & 7UL)) %
+        (unsigned long)cycle
+    );
+    if (head_row >= cell_rows || cell_y > head_row) {
+        return 0U;
+    }
+
+    distance = head_row - cell_y;
+    if (distance == 0U) {
+        return 255U;
+    }
+    if (distance > 6U) {
+        return 0U;
+    }
+
+    return 224U - (distance * 28U);
+}
+
+static screensave_color plasma_treatment_ascii_color(
+    const struct plasma_plan_tag *plan,
+    const struct plasma_execution_state_tag *state,
+    unsigned int value,
+    int contour_edge
+)
+{
+    screensave_color color;
+    screensave_color white_color;
+
+    color = plasma_treatment_palette_color(plan, state, value);
+    if (contour_edge) {
+        white_color.red = 255;
+        white_color.green = 255;
+        white_color.blue = 255;
+        white_color.alpha = 255;
+        color = screensave_color_lerp(color, white_color, 84U);
+    }
+
+    return plasma_treatment_scale_color(color, 72U + ((value * 160U) / 255U));
+}
+
+static screensave_color plasma_treatment_matrix_color(
+    const struct plasma_plan_tag *plan,
+    const struct plasma_execution_state_tag *state,
+    unsigned int value,
+    unsigned int trail_strength
+)
+{
+    screensave_color color;
+    screensave_color white_color;
+
+    color = plasma_treatment_palette_color(plan, state, value);
+    color = screensave_color_lerp(plan->theme->primary_color, color, 160U);
+
+    white_color.red = 255;
+    white_color.green = 255;
+    white_color.blue = 255;
+    white_color.alpha = 255;
+    if (trail_strength >= 240U) {
+        color = screensave_color_lerp(color, white_color, 112U);
+    } else {
+        color = screensave_color_lerp(color, plan->theme->accent_color, 56U);
+    }
+
+    return plasma_treatment_scale_color(color, trail_strength);
+}
+
 static int plasma_theme_map_output(
     const struct plasma_plan_tag *plan,
     const struct plasma_execution_state_tag *state,
@@ -323,6 +558,77 @@ static int plasma_theme_map_output(
                     color = screensave_color_lerp(plan->theme->accent_color, white_color, 80U);
                 } else if ((band_index & 1U) != 0U) {
                     color = screensave_color_lerp(color, plan->theme->accent_color, 28U);
+                }
+            } else if (
+                output->family == PLASMA_OUTPUT_FAMILY_GLYPH &&
+                (
+                    output->mode == PLASMA_OUTPUT_MODE_ASCII_GLYPH ||
+                    output->mode == PLASMA_OUTPUT_MODE_MATRIX_GLYPH
+                )
+            ) {
+                unsigned int cell_width;
+                unsigned int cell_height;
+                unsigned int cell_x;
+                unsigned int cell_y;
+                unsigned int cell_value;
+                unsigned int local_x;
+                unsigned int local_y;
+                const plasma_glyph_pattern *pattern;
+
+                cell_width = plasma_treatment_glyph_cell_width(output->mode);
+                cell_height = plasma_treatment_glyph_cell_height(output->mode);
+                cell_x = (unsigned int)x / cell_width;
+                cell_y = (unsigned int)y / cell_height;
+                local_x = (unsigned int)x % cell_width;
+                local_y = (unsigned int)y % cell_height;
+                cell_value = plasma_treatment_sample_cell_scalar(
+                    output,
+                    cell_x,
+                    cell_y,
+                    cell_width,
+                    cell_height
+                );
+
+                if (output->mode == PLASMA_OUTPUT_MODE_ASCII_GLYPH) {
+                    int cell_contour;
+
+                    cell_contour = plasma_treatment_cell_has_contour(
+                        output,
+                        cell_x,
+                        cell_y,
+                        cell_width,
+                        cell_height,
+                        band_count
+                    );
+                    pattern = plasma_treatment_select_ascii_pattern(cell_value, cell_contour);
+                    if (plasma_treatment_pattern_bit(pattern, local_x, local_y)) {
+                        color = plasma_treatment_ascii_color(plan, state, cell_value, cell_contour);
+                    } else {
+                        color = background_color;
+                    }
+                } else {
+                    unsigned int cell_rows;
+                    unsigned int trail_strength;
+
+                    cell_rows = (unsigned int)(
+                        (output->size.height + (int)cell_height - 1) / (int)cell_height
+                    );
+                    trail_strength = plasma_treatment_matrix_trail_strength(
+                        state,
+                        cell_x,
+                        cell_y,
+                        cell_rows
+                    );
+                    pattern = plasma_treatment_select_matrix_pattern(cell_value, cell_x, cell_y, state);
+                    if (
+                        trail_strength > 0U &&
+                        cell_value >= 24U &&
+                        plasma_treatment_pattern_bit(pattern, local_x, local_y)
+                    ) {
+                        color = plasma_treatment_matrix_color(plan, state, cell_value, trail_strength);
+                    } else {
+                        color = background_color;
+                    }
                 }
             } else {
                 return 0;

@@ -405,6 +405,24 @@ static unsigned long plasma_variation_interval_millis(
     if (plan->effect_mode == PLASMA_EFFECT_INTERFERENCE) {
         return 11000UL;
     }
+    if (plan->effect_mode == PLASMA_EFFECT_LATTICE) {
+        return 10500UL;
+    }
+    if (plan->effect_mode == PLASMA_EFFECT_CHEMICAL) {
+        return 12500UL;
+    }
+    if (plan->effect_mode == PLASMA_EFFECT_CAUSTIC) {
+        return 14000UL;
+    }
+    if (plan->effect_mode == PLASMA_EFFECT_AURORA) {
+        return 11200UL;
+    }
+    if (plan->effect_mode == PLASMA_EFFECT_SUBSTRATE) {
+        return 14600UL;
+    }
+    if (plan->effect_mode == PLASMA_EFFECT_ARC) {
+        return 9200UL;
+    }
     if (plan->effect_mode == PLASMA_EFFECT_FIRE) {
         return 15000UL;
     }
@@ -576,6 +594,327 @@ static void plasma_update_interference(plasma_execution_state *state)
     }
 }
 
+static void plasma_update_chemical(plasma_execution_state *state)
+{
+    int width;
+    int height;
+    int x;
+    int y;
+    unsigned int phase_a;
+    unsigned int phase_b;
+    unsigned int phase_c;
+    unsigned int phase_d;
+
+    width = state->field_size.width;
+    height = state->field_size.height;
+    phase_a = (unsigned int)((state->phase_millis / 9UL) & 255UL);
+    phase_b = (unsigned int)((state->phase_millis / 13UL) & 255UL);
+    phase_c = (unsigned int)((state->phase_millis / 7UL) & 255UL);
+    phase_d = (unsigned int)((state->phase_millis / 5UL) & 255UL);
+
+    for (y = 0; y < height; ++y) {
+        for (x = 0; x < width; ++x) {
+            unsigned int wave_a;
+            unsigned int wave_b;
+            unsigned int wave_c;
+            unsigned int cell_seed;
+            unsigned int mix_value;
+            unsigned int value;
+
+            wave_a = plasma_triangle_wave((unsigned int)(x * 7) + phase_a);
+            wave_b = plasma_triangle_wave((unsigned int)(y * 9) + phase_b);
+            wave_c = plasma_triangle_wave((unsigned int)((x + y) * 5) + phase_c);
+            cell_seed = plasma_triangle_wave(
+                (unsigned int)(((x / 4) * 19) + ((y / 4) * 23)) + phase_d
+            );
+            mix_value = (wave_a + wave_b + wave_c + cell_seed) / 4U;
+
+            if (mix_value < 72U) {
+                value = (mix_value * mix_value) / 72U;
+            } else if (mix_value < 168U) {
+                value = 160U + ((mix_value - 72U) * 80U) / 96U;
+            } else {
+                value = 224U + ((mix_value - 168U) * 31U) / 87U;
+            }
+            if (value > 255U) {
+                value = 255U;
+            }
+
+            state->field_primary[(y * width) + x] = (unsigned char)value;
+        }
+    }
+}
+
+static void plasma_update_lattice(plasma_execution_state *state)
+{
+    int width;
+    int height;
+    int x;
+    int y;
+    unsigned int phase_a;
+    unsigned int phase_b;
+    unsigned int phase_c;
+    unsigned int phase_d;
+
+    width = state->field_size.width;
+    height = state->field_size.height;
+    phase_a = (unsigned int)((state->phase_millis / 8UL) & 255UL);
+    phase_b = (unsigned int)((state->phase_millis / 12UL) & 255UL);
+    phase_c = (unsigned int)((state->phase_millis / 6UL) & 255UL);
+    phase_d = (unsigned int)((state->phase_millis / 10UL) & 255UL);
+
+    for (y = 0; y < height; ++y) {
+        for (x = 0; x < width; ++x) {
+            unsigned int axial_a;
+            unsigned int axial_b;
+            unsigned int diagonal;
+            unsigned int diamond;
+            unsigned int value;
+            unsigned int lattice_hit;
+
+            axial_a = plasma_triangle_wave((unsigned int)(x * 13) + phase_a);
+            axial_b = plasma_triangle_wave((unsigned int)(y * 11) + phase_b);
+            diagonal = plasma_triangle_wave((unsigned int)((x + y) * 9) + phase_c);
+            diamond = plasma_triangle_wave(
+                (unsigned int)((plasma_abs_int(x - (width / 2)) + plasma_abs_int(y - (height / 2))) * 7) +
+                phase_d
+            );
+            value = (axial_a + axial_b + diagonal + diamond) / 4U;
+            lattice_hit = 0U;
+            if ((((unsigned int)(x + y) + (phase_a / 16U)) & 7U) == 0U) {
+                lattice_hit += 44U;
+            }
+            if ((((unsigned int)plasma_abs_int(x - y) + (phase_b / 16U)) & 7U) == 0U) {
+                lattice_hit += 28U;
+            }
+            value += lattice_hit;
+            if (value > 255U) {
+                value = 255U;
+            }
+
+            state->field_primary[(y * width) + x] = (unsigned char)value;
+        }
+    }
+}
+
+static void plasma_update_caustic(plasma_execution_state *state)
+{
+    int width;
+    int height;
+    int x;
+    int y;
+    unsigned int phase_a;
+    unsigned int phase_b;
+    unsigned int phase_c;
+    unsigned int phase_d;
+
+    width = state->field_size.width;
+    height = state->field_size.height;
+    phase_a = (unsigned int)((state->phase_millis / 7UL) & 255UL);
+    phase_b = (unsigned int)((state->phase_millis / 11UL) & 255UL);
+    phase_c = (unsigned int)((state->phase_millis / 5UL) & 255UL);
+    phase_d = (unsigned int)((state->phase_millis / 9UL) & 255UL);
+
+    for (y = 0; y < height; ++y) {
+        for (x = 0; x < width; ++x) {
+            int warp_x;
+            int warp_y;
+            unsigned int wave_a;
+            unsigned int wave_b;
+            unsigned int wave_c;
+            unsigned int highlight;
+            unsigned int value;
+
+            warp_x = x + (((int)plasma_triangle_wave((unsigned int)(y * 9) + phase_a)) - 128) / 18;
+            warp_y = y + (((int)plasma_triangle_wave((unsigned int)(x * 7) + phase_b)) - 128) / 18;
+            wave_a = plasma_triangle_wave(
+                (unsigned int)(plasma_abs_int((warp_x * 5) + (warp_y * 3))) + phase_c
+            );
+            wave_b = plasma_triangle_wave(
+                (unsigned int)(plasma_abs_int((warp_x * 2) - (warp_y * 7))) + phase_d
+            );
+            wave_c = plasma_triangle_wave(
+                (unsigned int)(plasma_abs_int((warp_x * 4) - (warp_y * 4))) + phase_a
+            );
+            highlight = (unsigned int)plasma_abs_int((int)wave_a - (int)wave_b);
+            value = (wave_a + wave_b + wave_c) / 3U;
+            if (highlight > 96U) {
+                value += (highlight - 96U) / 2U;
+            }
+            if (value > 255U) {
+                value = 255U;
+            }
+
+            state->field_primary[(y * width) + x] = (unsigned char)value;
+        }
+    }
+}
+
+static void plasma_update_aurora(plasma_execution_state *state)
+{
+    int width;
+    int height;
+    int x;
+    int y;
+    unsigned int phase_a;
+    unsigned int phase_b;
+    unsigned int phase_c;
+    unsigned int phase_d;
+
+    width = state->field_size.width;
+    height = state->field_size.height;
+    phase_a = (unsigned int)((state->phase_millis / 6UL) & 255UL);
+    phase_b = (unsigned int)((state->phase_millis / 10UL) & 255UL);
+    phase_c = (unsigned int)((state->phase_millis / 15UL) & 255UL);
+    phase_d = (unsigned int)((state->phase_millis / 8UL) & 255UL);
+
+    for (y = 0; y < height; ++y) {
+        for (x = 0; x < width; ++x) {
+            unsigned int column_wave;
+            unsigned int vertical_wave;
+            unsigned int fold_wave;
+            unsigned int curtain_depth;
+            unsigned int highlight;
+            unsigned int value;
+
+            column_wave = plasma_triangle_wave((unsigned int)(x * 9) + phase_a);
+            vertical_wave = plasma_triangle_wave((unsigned int)(y * 5) + phase_b);
+            fold_wave = plasma_triangle_wave((unsigned int)((x * 3) + (y * 7)) + phase_c);
+            curtain_depth = plasma_triangle_wave(
+                (unsigned int)(plasma_abs_int(x - (width / 2)) * 6) + phase_d
+            );
+
+            value = (column_wave + fold_wave + (255U - curtain_depth)) / 3U;
+            value = (value + ((vertical_wave * (unsigned int)(y + 1)) / (unsigned int)height)) / 2U;
+            highlight = 0U;
+            if ((((unsigned int)x + (phase_a / 12U)) & 15U) < 2U) {
+                highlight += 28U;
+            }
+            if (y > height / 3) {
+                highlight += (unsigned int)((y - (height / 3)) * 40) / (unsigned int)height;
+            }
+            value += highlight;
+            if (value > 255U) {
+                value = 255U;
+            }
+
+            state->field_primary[(y * width) + x] = (unsigned char)value;
+        }
+    }
+}
+
+static void plasma_update_substrate(plasma_execution_state *state)
+{
+    int width;
+    int height;
+    int x;
+    int y;
+    unsigned int phase_a;
+    unsigned int phase_b;
+    unsigned int phase_c;
+    unsigned int phase_d;
+
+    width = state->field_size.width;
+    height = state->field_size.height;
+    phase_a = (unsigned int)((state->phase_millis / 11UL) & 255UL);
+    phase_b = (unsigned int)((state->phase_millis / 7UL) & 255UL);
+    phase_c = (unsigned int)((state->phase_millis / 13UL) & 255UL);
+    phase_d = (unsigned int)((state->phase_millis / 17UL) & 255UL);
+
+    for (y = 0; y < height; ++y) {
+        for (x = 0; x < width; ++x) {
+            unsigned int bed_wave;
+            unsigned int grain_wave;
+            unsigned int vein_a;
+            unsigned int vein_b;
+            unsigned int branch_gap;
+            unsigned int value;
+
+            bed_wave = plasma_triangle_wave((unsigned int)((x * 4) + (y * 6)) + phase_a);
+            grain_wave = plasma_triangle_wave(
+                (unsigned int)(((x / 3) * 29) + ((y / 3) * 17)) + phase_b
+            );
+            vein_a = plasma_triangle_wave(
+                (unsigned int)plasma_abs_int((x * 9) - (y * 7)) + phase_c
+            );
+            vein_b = plasma_triangle_wave(
+                (unsigned int)plasma_abs_int((x * 5) + (y * 11)) + phase_d
+            );
+            branch_gap = (unsigned int)plasma_abs_int((int)vein_a - (int)vein_b);
+
+            value = (bed_wave + grain_wave) / 2U;
+            if (branch_gap < 44U) {
+                value += (44U - branch_gap) * 3U;
+            } else if (branch_gap > 180U) {
+                value += (branch_gap - 180U) / 2U;
+            }
+            if ((((unsigned int)x + (unsigned int)(y * 2) + (phase_a / 10U)) & 31U) == 0U) {
+                value += 22U;
+            }
+            if (value > 255U) {
+                value = 255U;
+            }
+
+            state->field_primary[(y * width) + x] = (unsigned char)value;
+        }
+    }
+}
+
+static void plasma_update_arc(plasma_execution_state *state)
+{
+    int width;
+    int height;
+    int x;
+    int y;
+    unsigned int phase_a;
+    unsigned int phase_b;
+    unsigned int phase_c;
+    unsigned int phase_d;
+
+    width = state->field_size.width;
+    height = state->field_size.height;
+    phase_a = (unsigned int)((state->phase_millis / 5UL) & 255UL);
+    phase_b = (unsigned int)((state->phase_millis / 9UL) & 255UL);
+    phase_c = (unsigned int)((state->phase_millis / 4UL) & 255UL);
+    phase_d = (unsigned int)((state->phase_millis / 12UL) & 255UL);
+
+    for (y = 0; y < height; ++y) {
+        for (x = 0; x < width; ++x) {
+            unsigned int discharge_a;
+            unsigned int discharge_b;
+            unsigned int filament;
+            unsigned int branch;
+            unsigned int value;
+
+            discharge_a = (unsigned int)plasma_abs_int(
+                (int)plasma_triangle_wave((unsigned int)(x * 17) + phase_a) -
+                (int)plasma_triangle_wave((unsigned int)(y * 11) + phase_b)
+            );
+            discharge_b = (unsigned int)plasma_abs_int(
+                (int)plasma_triangle_wave((unsigned int)((x + y) * 9) + phase_c) -
+                (int)plasma_triangle_wave(
+                    (unsigned int)(plasma_abs_int(x - y) * 13) + phase_d
+                )
+            );
+            filament = 255U - ((discharge_a + discharge_b) / 2U);
+            branch = plasma_triangle_wave((unsigned int)((x * 5) + (y * 3)) + phase_c);
+            if (filament < 96U) {
+                value = filament / 2U;
+            } else {
+                value = 148U + ((filament - 96U) * 107U) / 159U;
+            }
+            if (branch > 220U) {
+                value += (branch - 220U) * 2U;
+            }
+            if (value > 255U) {
+                value = 255U;
+            }
+
+            state->field_primary[(y * width) + x] = (unsigned char)value;
+        }
+    }
+}
+
 static void plasma_apply_smoothing(
     const plasma_plan *plan,
     plasma_execution_state *state
@@ -671,6 +1010,19 @@ static void plasma_warm_start_effect(
         warm_steps = 18;
     } else if (plan->effect_mode == PLASMA_EFFECT_INTERFERENCE) {
         warm_steps = 4;
+    } else if (plan->effect_mode == PLASMA_EFFECT_CHEMICAL) {
+        warm_steps = 5;
+    } else if (plan->effect_mode == PLASMA_EFFECT_AURORA) {
+        warm_steps = 4;
+    } else if (plan->effect_mode == PLASMA_EFFECT_SUBSTRATE) {
+        warm_steps = 6;
+    } else if (plan->effect_mode == PLASMA_EFFECT_ARC) {
+        warm_steps = 5;
+    } else if (
+        plan->effect_mode == PLASMA_EFFECT_LATTICE ||
+        plan->effect_mode == PLASMA_EFFECT_CAUSTIC
+    ) {
+        warm_steps = 4;
     }
     while (warm_steps-- > 0) {
         if (plan->effect_mode == PLASMA_EFFECT_FIRE) {
@@ -682,6 +1034,18 @@ static void plasma_warm_start_effect(
             state->field_secondary = swap_buffer;
         } else if (plan->effect_mode == PLASMA_EFFECT_INTERFERENCE) {
             plasma_update_interference(state);
+        } else if (plan->effect_mode == PLASMA_EFFECT_CHEMICAL) {
+            plasma_update_chemical(state);
+        } else if (plan->effect_mode == PLASMA_EFFECT_LATTICE) {
+            plasma_update_lattice(state);
+        } else if (plan->effect_mode == PLASMA_EFFECT_CAUSTIC) {
+            plasma_update_caustic(state);
+        } else if (plan->effect_mode == PLASMA_EFFECT_AURORA) {
+            plasma_update_aurora(state);
+        } else if (plan->effect_mode == PLASMA_EFFECT_SUBSTRATE) {
+            plasma_update_substrate(state);
+        } else if (plan->effect_mode == PLASMA_EFFECT_ARC) {
+            plasma_update_arc(state);
         } else {
             plasma_update_plasma(state);
         }
@@ -722,6 +1086,33 @@ static void plasma_refresh_composition(
         state->source_phase_a += 32UL;
         state->source_phase_b += 48UL;
     } else if (plan->effect_mode == PLASMA_EFFECT_FIRE) {
+        state->palette_phase = (state->palette_phase + 18UL) & 255UL;
+    } else if (plan->effect_mode == PLASMA_EFFECT_LATTICE) {
+        state->source_phase_a += 16UL;
+        state->source_phase_b += 56UL;
+        state->source_phase_c += 24UL;
+    } else if (plan->effect_mode == PLASMA_EFFECT_CAUSTIC) {
+        state->source_phase_a += 48UL;
+        state->source_phase_b += 28UL;
+        state->source_phase_c += 36UL;
+        state->palette_phase = (state->palette_phase + 22UL) & 255UL;
+    } else if (plan->effect_mode == PLASMA_EFFECT_CHEMICAL) {
+        state->source_phase_a += 20UL;
+        state->source_phase_b += 24UL;
+        state->source_phase_c += 28UL;
+    } else if (plan->effect_mode == PLASMA_EFFECT_AURORA) {
+        state->source_phase_a += 40UL;
+        state->source_phase_b += 18UL;
+        state->source_phase_c += 46UL;
+        state->palette_phase = (state->palette_phase + 12UL) & 255UL;
+    } else if (plan->effect_mode == PLASMA_EFFECT_SUBSTRATE) {
+        state->source_phase_a += 26UL;
+        state->source_phase_b += 34UL;
+        state->source_phase_c += 20UL;
+    } else if (plan->effect_mode == PLASMA_EFFECT_ARC) {
+        state->source_phase_a += 54UL;
+        state->source_phase_b += 42UL;
+        state->source_phase_c += 60UL;
         state->palette_phase = (state->palette_phase + 18UL) & 255UL;
     }
 }
@@ -879,6 +1270,18 @@ void plasma_step_session(
         state->field_secondary = swap_buffer;
     } else if (session->plan.effect_mode == PLASMA_EFFECT_INTERFERENCE) {
         plasma_update_interference(state);
+    } else if (session->plan.effect_mode == PLASMA_EFFECT_CHEMICAL) {
+        plasma_update_chemical(state);
+    } else if (session->plan.effect_mode == PLASMA_EFFECT_LATTICE) {
+        plasma_update_lattice(state);
+    } else if (session->plan.effect_mode == PLASMA_EFFECT_CAUSTIC) {
+        plasma_update_caustic(state);
+    } else if (session->plan.effect_mode == PLASMA_EFFECT_AURORA) {
+        plasma_update_aurora(state);
+    } else if (session->plan.effect_mode == PLASMA_EFFECT_SUBSTRATE) {
+        plasma_update_substrate(state);
+    } else if (session->plan.effect_mode == PLASMA_EFFECT_ARC) {
+        plasma_update_arc(state);
     } else {
         plasma_update_plasma(state);
     }

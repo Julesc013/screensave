@@ -23,13 +23,19 @@
 #define PLASMA_PRODUCT_REGISTRY_ROOTA "Software\\Julesc013\\ScreenSave\\Products\\plasma"
 #define PLASMA_DEFAULT_PRESET_KEY "plasma_lava"
 #define PLASMA_DEFAULT_THEME_KEY "plasma_lava"
-#define PLASMA_PRESET_COUNT 14U
+#define PLASMA_PRESET_COUNT 23U
 #define PLASMA_THEME_COUNT 7U
 
 typedef enum plasma_effect_mode_tag {
     PLASMA_EFFECT_PLASMA = 0,
     PLASMA_EFFECT_FIRE = 1,
-    PLASMA_EFFECT_INTERFERENCE = 2
+    PLASMA_EFFECT_INTERFERENCE = 2,
+    PLASMA_EFFECT_CHEMICAL = 3,
+    PLASMA_EFFECT_LATTICE = 4,
+    PLASMA_EFFECT_CAUSTIC = 5,
+    PLASMA_EFFECT_AURORA = 6,
+    PLASMA_EFFECT_SUBSTRATE = 7,
+    PLASMA_EFFECT_ARC = 8
 } plasma_effect_mode;
 
 typedef enum plasma_speed_mode_tag {
@@ -72,6 +78,7 @@ struct plasma_preset_values_tag {
     plasma_filter_treatment filter_treatment;
     plasma_emulation_treatment emulation_treatment;
     plasma_accent_treatment accent_treatment;
+    plasma_presentation_mode presentation_mode;
 };
 
 typedef struct plasma_rng_state_tag {

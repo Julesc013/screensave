@@ -29,7 +29,13 @@ static const char g_plasma_empty_key[] = "";
 static const plasma_combo_item g_plasma_effect_items[] = {
     { PLASMA_EFFECT_PLASMA, "Plasma" },
     { PLASMA_EFFECT_FIRE, "Fire" },
-    { PLASMA_EFFECT_INTERFERENCE, "Interference Field" }
+    { PLASMA_EFFECT_INTERFERENCE, "Interference Field" },
+    { PLASMA_EFFECT_CHEMICAL, "Chemical / Cellular (Experimental)" },
+    { PLASMA_EFFECT_LATTICE, "Lattice / Quasi-Crystal (Experimental)" },
+    { PLASMA_EFFECT_CAUSTIC, "Caustic / Marbling (Experimental)" },
+    { PLASMA_EFFECT_AURORA, "Aurora / Curtain / Ribbon (Experimental)" },
+    { PLASMA_EFFECT_SUBSTRATE, "Substrate / Vein / Coral (Experimental)" },
+    { PLASMA_EFFECT_ARC, "Arc / Filament / Discharge (Experimental)" }
 };
 
 static const plasma_combo_item g_plasma_speed_items[] = {
@@ -331,7 +337,7 @@ void plasma_config_clamp(
         }
     }
 
-    if (config->effect_mode < PLASMA_EFFECT_PLASMA || config->effect_mode > PLASMA_EFFECT_INTERFERENCE) {
+    if (config->effect_mode < PLASMA_EFFECT_PLASMA || config->effect_mode > PLASMA_EFFECT_ARC) {
         config->effect_mode = PLASMA_EFFECT_FIRE;
     }
     if (config->speed_mode < PLASMA_SPEED_GENTLE || config->speed_mode > PLASMA_SPEED_LIVELY) {
@@ -1553,6 +1559,48 @@ static int plasma_parse_effect_mode(const char *text, int *value_out)
     }
     if (lstrcmpiA(text, "interference") == 0) {
         *value_out = PLASMA_EFFECT_INTERFERENCE;
+        return 1;
+    }
+    if (
+        lstrcmpiA(text, "chemical") == 0 ||
+        lstrcmpiA(text, "chemical_cellular_growth") == 0
+    ) {
+        *value_out = PLASMA_EFFECT_CHEMICAL;
+        return 1;
+    }
+    if (
+        lstrcmpiA(text, "lattice") == 0 ||
+        lstrcmpiA(text, "lattice_quasi_crystal") == 0
+    ) {
+        *value_out = PLASMA_EFFECT_LATTICE;
+        return 1;
+    }
+    if (
+        lstrcmpiA(text, "caustic") == 0 ||
+        lstrcmpiA(text, "caustic_marbling") == 0
+    ) {
+        *value_out = PLASMA_EFFECT_CAUSTIC;
+        return 1;
+    }
+    if (
+        lstrcmpiA(text, "aurora") == 0 ||
+        lstrcmpiA(text, "aurora_curtain_ribbon") == 0
+    ) {
+        *value_out = PLASMA_EFFECT_AURORA;
+        return 1;
+    }
+    if (
+        lstrcmpiA(text, "substrate") == 0 ||
+        lstrcmpiA(text, "substrate_vein_coral") == 0
+    ) {
+        *value_out = PLASMA_EFFECT_SUBSTRATE;
+        return 1;
+    }
+    if (
+        lstrcmpiA(text, "arc") == 0 ||
+        lstrcmpiA(text, "arc_discharge") == 0
+    ) {
+        *value_out = PLASMA_EFFECT_ARC;
         return 1;
     }
     return 0;

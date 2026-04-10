@@ -124,8 +124,15 @@ static const plasma_validation_matrix_entry g_plasma_validation_matrix[] = {
         "lab_shell_surface",
         "product",
         PLASMA_VALIDATION_STATUS_PARTIAL,
-        "products/savers/plasma/tests/px20-lab-shell-proof.md",
-        "PX20 adds a minimal file-first Plasma Lab shell for validate, compare, and degrade-report workflows without promising a full editor."
+        "products/savers/plasma/tests/px40-authoring-proof.md",
+        "PX40 grows the first file-first Plasma Lab shell into a stronger CLI-first authoring surface for validate, inventory, authored compare, compatibility, and migration reporting without promising a full editor."
+    },
+    {
+        "ops_toolchain_surface",
+        "product",
+        PLASMA_VALIDATION_STATUS_PARTIAL,
+        "products/savers/plasma/tests/px40-ops-tools-proof.md",
+        "PX40 adds bounded capture-backed degrade inspection and semantic BenchLab text-capture diff support without claiming broad rendered determinism or a platform-wide automation lab."
     },
     {
         "selection_foundation",
@@ -139,7 +146,7 @@ static const plasma_validation_matrix_entry g_plasma_validation_matrix[] = {
         "product",
         PLASMA_VALIDATION_STATUS_PARTIAL,
         "products/savers/plasma/tests/px30-output-proof.md",
-        "PX30 adds a bounded built-in experimental preset pool for contour, banded, and treatment studies without changing the default stable-only pool."
+        "PX30 and PX31 grow a bounded built-in experimental preset pool for contour, banded, treatment, glyph, and field-family studies without changing the default stable-only pool."
     },
     {
         "contour_output_subset",
@@ -163,11 +170,32 @@ static const plasma_validation_matrix_entry g_plasma_validation_matrix[] = {
         "PX30 makes a bounded treatment subset real with explicit slot placement, degrade policy, and experimental posture."
     },
     {
-        "non_heightfield_presentations",
+        "glyph_output_subset",
+        "product",
+        PLASMA_VALIDATION_STATUS_PARTIAL,
+        "products/savers/plasma/tests/px31-glyph-proof.md",
+        "PX31 makes a bounded glyph output subset real with explicit ASCII and Matrix modes, output-family truth, and no silent raster fallback."
+    },
+    {
+        "field_family_i_subset",
+        "product",
+        PLASMA_VALIDATION_STATUS_PARTIAL,
+        "products/savers/plasma/tests/px31-field-families-i-proof.md",
+        "PX31 makes bounded chemical, lattice, and caustic field-family studies real on the existing Plasma engine seams without widening into later field-family or dimensional work."
+    },
+    {
+        "field_family_ii_subset",
+        "product",
+        PLASMA_VALIDATION_STATUS_PARTIAL,
+        "products/savers/plasma/tests/px32-field-families-ii-proof.md",
+        "PX32 makes bounded aurora, substrate, and arc studies real on the existing Plasma engine seams without widening into scenic or later-wave ecosystem work."
+    },
+    {
+        "dimensional_presentation_subset",
         "gl46",
-        PLASMA_VALIDATION_STATUS_UNSUPPORTED,
-        "products/savers/plasma/docs/pl09-premium-lane.md",
-        "Curtain, ribbon, contour extrusion, bounded surface, and billboard-style premium presentations are not implemented."
+        PLASMA_VALIDATION_STATUS_PARTIAL,
+        "products/savers/plasma/tests/px32-dimensional-proof.md",
+        "PX32 broadens the premium dimensional subset beyond heightfield to bounded curtain, ribbon, contour extrusion, and bounded surface modes while keeping unsupported breadth explicit."
     },
     {
         "cross_driver_ladder",
@@ -288,6 +316,50 @@ static const plasma_performance_envelope_entry g_plasma_performance_envelopes[] 
         "No broad effect-zoo or exhaustive lane-by-lane treatment guarantee is claimed.",
         "Fresh compiled reruns remain bounded by the current local toolchain blocker in this checkout.",
         "products/savers/plasma/tests/px30-treatment-proof.md"
+    },
+    {
+        "glyph_subset",
+        "product",
+        PLASMA_VALIDATION_STATUS_PARTIAL,
+        "bounded_qualitative",
+        "PX31 compiles and renders a bounded glyph subset through the normal product path with explicit ASCII and Matrix output-mode truth.",
+        "The truthful glyph subset is preset-driven and experimental-first rather than a broad generic glyph rendering system.",
+        "No claim is made for glyph-specific transitions, rich Unicode coverage, or broader output-family breadth beyond the admitted ASCII and Matrix modes.",
+        "Fresh compiled reruns remain bounded by the current local toolchain blocker in this checkout.",
+        "products/savers/plasma/tests/px31-glyph-proof.md"
+    },
+    {
+        "field_family_i_subset",
+        "product",
+        PLASMA_VALIDATION_STATUS_PARTIAL,
+        "bounded_qualitative",
+        "PX31 compiles and steps a bounded subset of new field families through the existing Plasma simulation path.",
+        "The truthful subset is limited to chemical or cellular growth, lattice or quasi-crystal, and caustic or marbling studies on the existing engine seams.",
+        "No claim is made for broader field-family-II breadth, richer dimensional work, or exhaustive lane sweeps in this tranche.",
+        "Fresh compiled reruns remain bounded by the current local toolchain blocker in this checkout.",
+        "products/savers/plasma/tests/px31-field-families-i-proof.md"
+    },
+    {
+        "field_family_ii_subset",
+        "product",
+        PLASMA_VALIDATION_STATUS_PARTIAL,
+        "bounded_qualitative",
+        "PX32 compiles and steps a bounded subset of later experimental field families through the existing Plasma simulation path.",
+        "The truthful subset is limited to aurora or curtain-ribbon studies, substrate or vein-coral studies, and arc or discharge studies on the existing engine seams.",
+        "No claim is made for scenic world behavior, broader ecosystem work, or exhaustive lane sweeps in this tranche.",
+        "Fresh compiled reruns remain bounded by the current local toolchain blocker in this checkout.",
+        "products/savers/plasma/tests/px32-field-families-ii-proof.md"
+    },
+    {
+        "premium_dimensional_subset",
+        "gl46",
+        PLASMA_VALIDATION_STATUS_PARTIAL,
+        "bounded_qualitative",
+        "PX32 compiles and presents a bounded dimensional subset on the premium lane beyond the original heightfield path.",
+        "The truthful dimensional subset is limited to heightfield, curtain, ribbon, contour extrusion, and bounded surface while keeping billboard-volume and scenic breadth out of scope.",
+        "Dimensional degrade remains explicit back to flat presentation on lower lanes instead of silent fake premium behavior.",
+        "Fresh compiled reruns remain bounded by the current local toolchain blocker in this checkout.",
+        "products/savers/plasma/tests/px32-dimensional-proof.md"
     }
 };
 
@@ -295,13 +367,13 @@ static const plasma_known_limit_entry g_plasma_known_limits[] = {
     {
         "experimental_pool_bounded",
         PLASMA_VALIDATION_STATUS_PARTIAL,
-        "PX30 adds a bounded built-in experimental preset pool, but it remains a narrow opt-in study slice rather than a broad experimental catalog.",
+        "PX30 and PX31 add a bounded built-in experimental preset pool, but it remains a narrow opt-in study slice rather than a broad experimental catalog.",
         "products/savers/plasma/docs/pl13-known-limits.md"
     },
     {
-        "premium_heightfield_only",
-        PLASMA_VALIDATION_STATUS_UNSUPPORTED,
-        "Heightfield is the only implemented dimensional presentation mode. Other premium-dimensional modes remain intentionally unsupported.",
+        "dimensional_presentation_subset_bounded",
+        PLASMA_VALIDATION_STATUS_PARTIAL,
+        "PX32 broadens the dimensional subset to heightfield, curtain, ribbon, contour extrusion, and bounded surface, but billboard-style volume and broader scenic presentation remain unsupported.",
         "products/savers/plasma/docs/pl13-known-limits.md"
     },
     {
@@ -349,19 +421,43 @@ static const plasma_known_limit_entry g_plasma_known_limits[] = {
     {
         "lab_shell_cli_only",
         PLASMA_VALIDATION_STATUS_PARTIAL,
-        "The first Plasma Lab shell is intentionally file-first and CLI-oriented. It is not yet a live visual editor, gallery, or suite-grade authoring workstation.",
+        "PX40 grows the first Plasma Lab shell into a stronger CLI-first authoring and ops toolchain, but it is still not a live visual editor, gallery, or suite-grade authoring workstation.",
+        "products/savers/plasma/docs/pl13-known-limits.md"
+    },
+    {
+        "capture_diff_bounded",
+        PLASMA_VALIDATION_STATUS_PARTIAL,
+        "PX40 adds semantic BenchLab text-capture comparison and capture-backed degrade inspection, but it does not claim raw-text identity or pixel-perfect determinism across every lane or renderer path.",
         "products/savers/plasma/docs/pl13-known-limits.md"
     },
     {
         "output_family_subset_bounded",
         PLASMA_VALIDATION_STATUS_PARTIAL,
-        "PX30 makes bounded contour and banded output subsets real, but glyph, surface, and exhaustive non-raster coverage remain later-wave work.",
+        "PX30 and PX31 make bounded contour, banded, and glyph output subsets real, but surface output and broader non-raster coverage remain later-wave work.",
         "products/savers/plasma/docs/pl13-known-limits.md"
     },
     {
         "treatment_family_subset_bounded",
         PLASMA_VALIDATION_STATUS_PARTIAL,
         "PX30 lands a curated treatment subset with explicit slot and degrade policy, but it does not implement every named treatment family or every theoretical combination.",
+        "products/savers/plasma/docs/pl13-known-limits.md"
+    },
+    {
+        "glyph_output_subset_bounded",
+        PLASMA_VALIDATION_STATUS_PARTIAL,
+        "PX31 lands a bounded ASCII and Matrix glyph subset, but it does not implement a broad text renderer, richer glyph alphabets, or every treatment and transition combination.",
+        "products/savers/plasma/docs/pl13-known-limits.md"
+    },
+    {
+        "field_family_i_subset_bounded",
+        PLASMA_VALIDATION_STATUS_PARTIAL,
+        "PX31 lands bounded chemical, lattice, and caustic studies, but it does not implement broader field-family-II breadth, dimensional uplift, or exhaustive lane proof for the new families.",
+        "products/savers/plasma/docs/pl13-known-limits.md"
+    },
+    {
+        "field_family_ii_subset_bounded",
+        PLASMA_VALIDATION_STATUS_PARTIAL,
+        "PX32 lands bounded aurora, substrate, and arc studies, but it does not implement richer ecological or scenic behavior, exhaustive lane proof, or broader later-wave ecosystem work.",
         "products/savers/plasma/docs/pl13-known-limits.md"
     },
     {

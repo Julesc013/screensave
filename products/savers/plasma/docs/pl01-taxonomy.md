@@ -33,10 +33,10 @@ Current repo support is still much narrower than the target taxonomy frozen here
 
 | Area | Current repo support | PL01 freeze |
 | --- | --- | --- |
-| generator vocabulary | legacy `effect_mode` values `plasma`, `fire`, `interference` | canonical generator-family taxonomy |
-| output vocabulary | classic raster output plus a bounded experimental contour and banded subset | canonical output-family and output-mode taxonomy |
+| generator vocabulary | legacy `effect_mode` values `plasma`, `fire`, `interference` plus a bounded experimental PX31 field-family-I subset | canonical generator-family taxonomy |
+| output vocabulary | classic raster output plus bounded experimental contour, banded, and glyph subsets | canonical output-family and output-mode taxonomy |
 | treatment vocabulary | legacy `smoothing` bridge plus a bounded implemented treatment subset | fixed treatment-slot taxonomy |
-| presentation vocabulary | implicit flat presentation | dimensional presentation taxonomy |
+| presentation vocabulary | flat presentation plus a bounded experimental dimensional subset | dimensional presentation taxonomy |
 | theme vocabulary | concrete theme keys and display names only | theme-family taxonomy plus concrete-theme meaning |
 | policy vocabulary | saver-level `quality_class`, manifest safety claims, some pack routing metadata | full profile, quality, safety, degrade, and transition taxonomy |
 | transition vocabulary | none | frozen vocabulary only, no engine claim |
@@ -93,12 +93,12 @@ Status values in the table are literal:
 | `wind` | `stable_target` | flow-dominant abstract field behavior emphasizing directional motion | not a current field id |
 | `rain_like_abstract` | `stable_target` | abstract streak or droplet-pattern field behavior without literal weather scene framing | not a current field id |
 | `lava` | `stable_target` | molten, heavy, field-derived motion family distinct from merely warm palette mapping | current `plasma_lava` naming is preset/theme identity, not generator metadata |
-| `aurora` | `stable_target` | curtain-like luminous field family distinct from merely cool palette mapping | current `aurora_plasma` naming is preset identity, not generator metadata |
-| `chemical_cellular_growth` | `experimental_first` | abstract, field-derived chemical, cellular, or growth-like behavior kept non-literal and non-ecological | not a current field id |
-| `lattice_quasi_crystal` | `stable_target` | structured interference or tessellated field behavior that stays abstract and non-object-like | not a current field id |
-| `caustic_marbling` | `stable_target` | refractive, marbled, or caustic-feel field behavior that stays abstract and surface-free | not a current field id |
-| `substrate_vein_coral` | `experimental_first` | branching, veined, or coral-like abstractions that risk literal/ecological reading | not a current field id |
-| `arc_discharge` | `stable_target` | abstract electrical or discharge-style field behavior without scenic machinery framing | not a current field id |
+| `aurora` | `experimental_first` | curtain-like luminous field family distinct from merely cool palette mapping | bounded experimental subset implemented today through `PX32` |
+| `chemical_cellular_growth` | `experimental_first` | abstract, field-derived chemical, cellular, or growth-like behavior kept non-literal and non-ecological | bounded experimental subset implemented today through `PX31` |
+| `lattice_quasi_crystal` | `experimental_first` | structured interference or tessellated field behavior that stays abstract and non-object-like | bounded experimental subset implemented today through `PX31` |
+| `caustic_marbling` | `experimental_first` | refractive, marbled, or caustic-feel field behavior that stays abstract and surface-free | bounded experimental subset implemented today through `PX31` |
+| `substrate_vein_coral` | `experimental_first` | branching, veined, or coral-like abstractions that risk literal/ecological reading | bounded experimental subset implemented today through `PX32` |
+| `arc_discharge` | `experimental_first` | abstract electrical or discharge-style field behavior without scenic machinery framing | bounded experimental subset implemented today through `PX32` |
 
 Rules:
 
@@ -133,7 +133,7 @@ Modifiers are categories, not promises that each category already has a separate
 | `raster` | direct pixel or texel-style field presentation | current classic output family |
 | `banded` | bucketed or posterized field presentation where banding is the main identity | bounded experimental subset implemented today |
 | `contour` | quantized, iso-line, or contour-result presentation | bounded experimental subset implemented today |
-| `glyph` | symbol- or index-driven presentation derived from the field | taxonomy only today |
+| `glyph` | symbol- or index-driven presentation derived from the field | bounded experimental subset implemented today |
 | `surface` | surface-oriented interpretation of the field before final dimensional presentation | taxonomy only today |
 
 ## Output Mode Taxonomy
@@ -145,8 +145,8 @@ Modifiers are categories, not promises that each category already has a separate
 | `posterized_bands` | `banded` | discrete filled band presentation whose main identity is posterized bucket structure | bounded experimental subset implemented today |
 | `contour_only` | `contour` | contour lines or extracted contour result without filled band regions | bounded experimental subset implemented today |
 | `contour_bands` | `contour` | contour result combined with discrete filled bands | bounded experimental subset implemented today |
-| `ascii_glyph` | `glyph` | ASCII character presentation derived from the field | taxonomy only today |
-| `matrix_glyph` | `glyph` | denser glyph presentation associated with matrix-style symbol flow | taxonomy only today |
+| `ascii_glyph` | `glyph` | ASCII character presentation derived from the field | bounded experimental subset implemented today |
+| `matrix_glyph` | `glyph` | denser glyph presentation associated with matrix-style symbol flow | bounded experimental subset implemented today |
 | `heightfield_surface` | `surface` | surface output whose main topology is heightfield-driven | taxonomy only today |
 | `curtain_surface` | `surface` | surface output whose main topology is curtain-like sheets | taxonomy only today |
 | `ribbon_surface` | `surface` | surface output whose main topology is ribbon-like strips | taxonomy only today |
@@ -179,11 +179,11 @@ It is not the final PL01 treatment vocabulary and should not be treated as proof
 | Presentation mode | Frozen meaning | Current status |
 | --- | --- | --- |
 | `flat` | plain 2D presentation | current classic posture |
-| `heightfield` | bounded height-based depth presentation | taxonomy only today |
-| `curtain` | bounded curtain-sheet presentation | taxonomy only today |
-| `ribbon` | bounded ribbon-strip presentation | taxonomy only today |
-| `contour_extrusion` | bounded extrusion of contour-derived forms | taxonomy only today |
-| `bounded_surface` | bounded 2.5D or 3D surface presentation that remains abstract | taxonomy only today |
+| `heightfield` | bounded height-based depth presentation | bounded premium subset implemented today |
+| `curtain` | bounded curtain-sheet presentation | bounded experimental subset implemented today |
+| `ribbon` | bounded ribbon-strip presentation | bounded experimental subset implemented today |
+| `contour_extrusion` | bounded extrusion of contour-derived forms | bounded experimental subset implemented today |
+| `bounded_surface` | bounded 2.5D or 3D surface presentation that remains abstract | bounded experimental subset implemented today |
 | `bounded_billboard` | bounded volume-like or billboard-style presentation without scenic camera behavior | taxonomy only today |
 
 Rules:
@@ -331,11 +331,16 @@ none of the transition vocabulary above is implemented as a current runtime feat
 Implemented today:
 
 - generator equivalents for `plasma`, `fire_like`, and `wave`
+- bounded experimental generator equivalents for `chemical_cellular_growth`, `lattice_quasi_crystal`, and `caustic_marbling`
+- bounded experimental generator equivalents for `aurora`, `substrate_vein_coral`, and `arc_discharge`
 - classic `raster` output in a `native_raster` posture
 - bounded experimental `banded` output in a `posterized_bands` posture
 - bounded experimental `contour` output in `contour_only` and `contour_bands` postures
+- bounded experimental `glyph` output in `ascii_glyph` and `matrix_glyph` postures
 - bounded treatment subset across filter, emulation, and accent slots
 - flat presentation
+- bounded premium `heightfield`
+- bounded experimental `curtain`, `ribbon`, `contour_extrusion`, and `bounded_surface`
 - saver-level `quality_class=safe`
 - saver-level `preview_safe` and `long_run_stable` claims, with `long_run_safe` reserved as the canonical PL01 tag term
 
@@ -345,7 +350,7 @@ Taxonomy-only today:
 - explicit modifier-set metadata
 - explicit output-family and output-mode metadata
 - fixed treatment slots
-- dimensional presentation metadata
+- structured dimensional-presentation metadata beyond the current bounded subset
 - theme-family metadata
 - transition and journey metadata
 - structured degrade-policy tokens in product files

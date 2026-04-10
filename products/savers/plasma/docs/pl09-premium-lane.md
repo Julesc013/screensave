@@ -70,7 +70,7 @@ It does not mean:
 - an extra premium-only field refinement pass layered on top of the modern field state
 - a premium-only post chain after the existing treatment path
 - dedicated premium treatment and presentation buffers
-- the first real dimensional presentation path: `heightfield`
+- a bounded dimensional presentation subset rooted in `heightfield`
 
 The product identity remains Plasma.
 The premium lane is an optional showcase uplift of the same saver, not a separate product and not a hidden new minimum.
@@ -100,7 +100,7 @@ Not implemented here:
 
 ## Bounded Dimensional Presentation Modes Implemented In PL09
 
-`PL09` makes exactly one bounded dimensional presentation mode real:
+`PL09` originally makes exactly one bounded dimensional presentation mode real:
 
 - `heightfield`
 
@@ -111,12 +111,14 @@ The `heightfield` path:
 - remains bounded inside the current bitmap presentation pipeline
 - uses vertical lift and bounded highlight/shadow shaping rather than free-camera geometry
 
-Still taxonomy-only and not implemented here:
+Current repo reality is broader because later `PX32` work now also implements:
 
 - `curtain`
 - `ribbon`
 - `contour_extrusion`
 - `bounded_surface`
+
+Still unsupported in the current repo:
 - `bounded_billboard_volume`
 
 Those unsupported modes remain rejected honestly rather than silently mapped to fake premium behavior.
@@ -146,7 +148,7 @@ When premium-capable content is requested on `gl46` but only `gl33` is active, P
 - premium-only field refinement
 - premium-only post refinement
 - premium-only treatment and presentation buffers
-- `heightfield` presentation
+- non-flat premium presentation when the requested bounded subset cannot be honored
 
 What remains:
 
@@ -213,7 +215,7 @@ PL09 explicitly preserves:
 
 ## Current Known Limitations
 
-- The premium lane currently implements exactly one real dimensional presentation mode: `heightfield`.
+- The premium lane now implements a bounded dimensional subset rooted in `heightfield` and extended by `PX32`.
 - The premium presentation path remains bitmap-presented rather than a free-camera geometry pipeline.
 - No live transition, journey, settings-surface, or BenchLab behavior is introduced here.
 - No scenic or world-simulated behavior is claimed.

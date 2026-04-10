@@ -18,6 +18,10 @@ static int plasma_output_mode_matches_family(
             mode == PLASMA_OUTPUT_MODE_CONTOUR_BANDS;
 
     case PLASMA_OUTPUT_FAMILY_GLYPH:
+        return
+            mode == PLASMA_OUTPUT_MODE_ASCII_GLYPH ||
+            mode == PLASMA_OUTPUT_MODE_MATRIX_GLYPH;
+
     case PLASMA_OUTPUT_FAMILY_SURFACE:
     default:
         return 0;

@@ -73,9 +73,12 @@ Current implemented subset:
 - `native_raster`
 - bounded experimental `banded`
 - bounded experimental `contour`
+- bounded experimental `glyph`
 - bounded experimental `posterized_bands`
 - bounded experimental `contour_only`
 - bounded experimental `contour_bands`
+- bounded experimental `ascii_glyph`
+- bounded experimental `matrix_glyph`
 
 Current policy:
 
@@ -141,11 +144,16 @@ Framework vocabulary is structurally real for:
 Current implemented subset:
 
 - `flat`
+- bounded premium `heightfield`
+- bounded experimental `curtain`
+- bounded experimental `ribbon`
+- bounded experimental `contour_extrusion`
+- bounded experimental `bounded_surface`
 
 Current policy:
 
 - unsupported presentation modes are rejected explicitly
-- no fake heightfield, curtain, ribbon, or bounded-volume execution is claimed
+- no fake `bounded_billboard_volume` or scenic presentation execution is claimed
 
 ## Currently Implemented Subset Vs Future Taxonomy
 
@@ -156,15 +164,18 @@ Implemented and used now:
 - output family `raster`
 - output mode `native_raster`
 - bounded experimental output families `banded` and `contour`
-- bounded experimental output modes `posterized_bands`, `contour_only`, and `contour_bands`
+- bounded experimental output family `glyph`
+- bounded experimental output modes `posterized_bands`, `contour_only`, `contour_bands`, `ascii_glyph`, and `matrix_glyph`
 - treatment slots with explicit `none` values plus the bounded implemented subset
 - presentation mode `flat`
+- bounded premium presentation mode `heightfield`
+- bounded experimental presentation modes `curtain`, `ribbon`, `contour_extrusion`, and `bounded_surface`
 
 Enumerated but not implemented now:
 
-- glyph and surface output families and modes
+- surface output families and modes
 - unsupported treatment values outside the bounded implemented subset
-- non-flat presentation modes
+- `bounded_billboard_volume`
 
 That limitation is intentional.
 `PL04` is a framework phase, not a broad feature drop.
@@ -211,7 +222,7 @@ Current runtime effect:
 - current pack surface
 - current renderer-law posture
 
-It also does not add glyph output, new field families, or broader dimensional showcase behavior yet.
+It also does not add surface output, later field-family breadth, or broader dimensional showcase behavior yet.
 
 ## What PL05 May Build On Next
 

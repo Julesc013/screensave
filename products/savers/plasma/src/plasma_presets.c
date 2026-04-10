@@ -137,6 +137,87 @@ const screensave_preset_descriptor g_plasma_presets[] = {
         SCREENSAVE_DETAIL_LEVEL_STANDARD,
         1,
         0x00000A26UL
+    },
+    {
+        "ascii_reactor",
+        "ASCII Reactor",
+        "Chemical cellular study rendered through a bounded amber ASCII glyph ramp.",
+        "amber_terminal",
+        SCREENSAVE_DETAIL_LEVEL_HIGH,
+        1,
+        0x00000A30UL
+    },
+    {
+        "matrix_lattice",
+        "Matrix Lattice",
+        "Structured lattice study rendered through bounded columnar matrix-glyph flow.",
+        "museum_phosphor",
+        SCREENSAVE_DETAIL_LEVEL_HIGH,
+        1,
+        0x00000A31UL
+    },
+    {
+        "cellular_bloom",
+        "Cellular Bloom",
+        "Soft chemical bloom field with bounded glow-edge lift and no literal biological framing.",
+        "aurora_cool",
+        SCREENSAVE_DETAIL_LEVEL_HIGH,
+        1,
+        0x00000A32UL
+    },
+    {
+        "quasi_crystal_bands",
+        "Quasi-Crystal Bands",
+        "Structured lattice field quantized into deliberate banded strata with restrained accent lift.",
+        "midnight_interference",
+        SCREENSAVE_DETAIL_LEVEL_HIGH,
+        1,
+        0x00000A33UL
+    },
+    {
+        "caustic_waterlight",
+        "Caustic Waterlight",
+        "Abstract refractive waterlight study rendered as bounded caustic contour bands.",
+        "oceanic_blue",
+        SCREENSAVE_DETAIL_LEVEL_HIGH,
+        1,
+        0x00000A34UL
+    },
+    {
+        "aurora_curtain",
+        "Aurora Curtain",
+        "Cool ribbon-curtain field study with bounded premium curtain lift and no scenic sky framing.",
+        "aurora_cool",
+        SCREENSAVE_DETAIL_LEVEL_HIGH,
+        1,
+        0x00000A40UL
+    },
+    {
+        "ribbon_aurora",
+        "Ribbon Aurora",
+        "Layered aurora study folded into a bounded ribbon presentation with deliberate non-scenic flow.",
+        "midnight_interference",
+        SCREENSAVE_DETAIL_LEVEL_HIGH,
+        1,
+        0x00000A41UL
+    },
+    {
+        "substrate_relief",
+        "Substrate Relief",
+        "Abstract substrate-vein growth study lifted into a bounded surface relief without literal biology cues.",
+        "museum_phosphor",
+        SCREENSAVE_DETAIL_LEVEL_HIGH,
+        1,
+        0x00000A42UL
+    },
+    {
+        "filament_extrusion",
+        "Filament Extrusion",
+        "Bounded discharge-filament study rendered as lifted contour extrusion with explicit premium gating.",
+        "amber_terminal",
+        SCREENSAVE_DETAIL_LEVEL_HIGH,
+        1,
+        0x00000A43UL
     }
 };
 
@@ -151,7 +232,8 @@ static const plasma_preset_values g_plasma_preset_values[] = {
         PLASMA_SAMPLING_TREATMENT_NONE,
         PLASMA_FILTER_TREATMENT_NONE,
         PLASMA_EMULATION_TREATMENT_NONE,
-        PLASMA_ACCENT_TREATMENT_NONE
+        PLASMA_ACCENT_TREATMENT_NONE,
+        PLASMA_PRESENTATION_MODE_FLAT
     },
     {
         PLASMA_EFFECT_PLASMA,
@@ -163,7 +245,8 @@ static const plasma_preset_values g_plasma_preset_values[] = {
         PLASMA_SAMPLING_TREATMENT_NONE,
         PLASMA_FILTER_TREATMENT_NONE,
         PLASMA_EMULATION_TREATMENT_NONE,
-        PLASMA_ACCENT_TREATMENT_NONE
+        PLASMA_ACCENT_TREATMENT_NONE,
+        PLASMA_PRESENTATION_MODE_FLAT
     },
     {
         PLASMA_EFFECT_INTERFERENCE,
@@ -175,7 +258,8 @@ static const plasma_preset_values g_plasma_preset_values[] = {
         PLASMA_SAMPLING_TREATMENT_NONE,
         PLASMA_FILTER_TREATMENT_NONE,
         PLASMA_EMULATION_TREATMENT_NONE,
-        PLASMA_ACCENT_TREATMENT_NONE
+        PLASMA_ACCENT_TREATMENT_NONE,
+        PLASMA_PRESENTATION_MODE_FLAT
     },
     {
         PLASMA_EFFECT_PLASMA,
@@ -187,7 +271,8 @@ static const plasma_preset_values g_plasma_preset_values[] = {
         PLASMA_SAMPLING_TREATMENT_NONE,
         PLASMA_FILTER_TREATMENT_NONE,
         PLASMA_EMULATION_TREATMENT_NONE,
-        PLASMA_ACCENT_TREATMENT_NONE
+        PLASMA_ACCENT_TREATMENT_NONE,
+        PLASMA_PRESENTATION_MODE_FLAT
     },
     {
         PLASMA_EFFECT_FIRE,
@@ -199,7 +284,8 @@ static const plasma_preset_values g_plasma_preset_values[] = {
         PLASMA_SAMPLING_TREATMENT_NONE,
         PLASMA_FILTER_TREATMENT_NONE,
         PLASMA_EMULATION_TREATMENT_NONE,
-        PLASMA_ACCENT_TREATMENT_NONE
+        PLASMA_ACCENT_TREATMENT_NONE,
+        PLASMA_PRESENTATION_MODE_FLAT
     },
     {
         PLASMA_EFFECT_INTERFERENCE,
@@ -211,7 +297,8 @@ static const plasma_preset_values g_plasma_preset_values[] = {
         PLASMA_SAMPLING_TREATMENT_NONE,
         PLASMA_FILTER_TREATMENT_NONE,
         PLASMA_EMULATION_TREATMENT_NONE,
-        PLASMA_ACCENT_TREATMENT_NONE
+        PLASMA_ACCENT_TREATMENT_NONE,
+        PLASMA_PRESENTATION_MODE_FLAT
     },
     {
         PLASMA_EFFECT_PLASMA,
@@ -223,7 +310,8 @@ static const plasma_preset_values g_plasma_preset_values[] = {
         PLASMA_SAMPLING_TREATMENT_NONE,
         PLASMA_FILTER_TREATMENT_NONE,
         PLASMA_EMULATION_TREATMENT_NONE,
-        PLASMA_ACCENT_TREATMENT_NONE
+        PLASMA_ACCENT_TREATMENT_NONE,
+        PLASMA_PRESENTATION_MODE_FLAT
     },
     {
         PLASMA_EFFECT_FIRE,
@@ -235,7 +323,8 @@ static const plasma_preset_values g_plasma_preset_values[] = {
         PLASMA_SAMPLING_TREATMENT_NONE,
         PLASMA_FILTER_TREATMENT_NONE,
         PLASMA_EMULATION_TREATMENT_NONE,
-        PLASMA_ACCENT_TREATMENT_NONE
+        PLASMA_ACCENT_TREATMENT_NONE,
+        PLASMA_PRESENTATION_MODE_FLAT
     },
     {
         PLASMA_EFFECT_PLASMA,
@@ -247,7 +336,8 @@ static const plasma_preset_values g_plasma_preset_values[] = {
         PLASMA_SAMPLING_TREATMENT_NONE,
         PLASMA_FILTER_TREATMENT_NONE,
         PLASMA_EMULATION_TREATMENT_NONE,
-        PLASMA_ACCENT_TREATMENT_ACCENT_PASS
+        PLASMA_ACCENT_TREATMENT_ACCENT_PASS,
+        PLASMA_PRESENTATION_MODE_FLAT
     },
     {
         PLASMA_EFFECT_INTERFERENCE,
@@ -259,7 +349,8 @@ static const plasma_preset_values g_plasma_preset_values[] = {
         PLASMA_SAMPLING_TREATMENT_NONE,
         PLASMA_FILTER_TREATMENT_GLOW_EDGE,
         PLASMA_EMULATION_TREATMENT_NONE,
-        PLASMA_ACCENT_TREATMENT_NONE
+        PLASMA_ACCENT_TREATMENT_NONE,
+        PLASMA_PRESENTATION_MODE_FLAT
     },
     {
         PLASMA_EFFECT_PLASMA,
@@ -271,7 +362,8 @@ static const plasma_preset_values g_plasma_preset_values[] = {
         PLASMA_SAMPLING_TREATMENT_NONE,
         PLASMA_FILTER_TREATMENT_NONE,
         PLASMA_EMULATION_TREATMENT_PHOSPHOR,
-        PLASMA_ACCENT_TREATMENT_NONE
+        PLASMA_ACCENT_TREATMENT_NONE,
+        PLASMA_PRESENTATION_MODE_FLAT
     },
     {
         PLASMA_EFFECT_FIRE,
@@ -283,7 +375,8 @@ static const plasma_preset_values g_plasma_preset_values[] = {
         PLASMA_SAMPLING_TREATMENT_NONE,
         PLASMA_FILTER_TREATMENT_HALFTONE_STIPPLE,
         PLASMA_EMULATION_TREATMENT_NONE,
-        PLASMA_ACCENT_TREATMENT_NONE
+        PLASMA_ACCENT_TREATMENT_NONE,
+        PLASMA_PRESENTATION_MODE_FLAT
     },
     {
         PLASMA_EFFECT_INTERFERENCE,
@@ -295,7 +388,8 @@ static const plasma_preset_values g_plasma_preset_values[] = {
         PLASMA_SAMPLING_TREATMENT_NONE,
         PLASMA_FILTER_TREATMENT_EMBOSS_EDGE,
         PLASMA_EMULATION_TREATMENT_NONE,
-        PLASMA_ACCENT_TREATMENT_NONE
+        PLASMA_ACCENT_TREATMENT_NONE,
+        PLASMA_PRESENTATION_MODE_FLAT
     },
     {
         PLASMA_EFFECT_PLASMA,
@@ -307,7 +401,125 @@ static const plasma_preset_values g_plasma_preset_values[] = {
         PLASMA_SAMPLING_TREATMENT_NONE,
         PLASMA_FILTER_TREATMENT_NONE,
         PLASMA_EMULATION_TREATMENT_CRT,
-        PLASMA_ACCENT_TREATMENT_ACCENT_PASS
+        PLASMA_ACCENT_TREATMENT_ACCENT_PASS,
+        PLASMA_PRESENTATION_MODE_FLAT
+    },
+    {
+        PLASMA_EFFECT_CHEMICAL,
+        PLASMA_SPEED_GENTLE,
+        PLASMA_RESOLUTION_FINE,
+        PLASMA_SMOOTHING_OFF,
+        PLASMA_OUTPUT_FAMILY_GLYPH,
+        PLASMA_OUTPUT_MODE_ASCII_GLYPH,
+        PLASMA_SAMPLING_TREATMENT_NONE,
+        PLASMA_FILTER_TREATMENT_NONE,
+        PLASMA_EMULATION_TREATMENT_NONE,
+        PLASMA_ACCENT_TREATMENT_NONE,
+        PLASMA_PRESENTATION_MODE_FLAT
+    },
+    {
+        PLASMA_EFFECT_LATTICE,
+        PLASMA_SPEED_STANDARD,
+        PLASMA_RESOLUTION_FINE,
+        PLASMA_SMOOTHING_OFF,
+        PLASMA_OUTPUT_FAMILY_GLYPH,
+        PLASMA_OUTPUT_MODE_MATRIX_GLYPH,
+        PLASMA_SAMPLING_TREATMENT_NONE,
+        PLASMA_FILTER_TREATMENT_NONE,
+        PLASMA_EMULATION_TREATMENT_NONE,
+        PLASMA_ACCENT_TREATMENT_NONE,
+        PLASMA_PRESENTATION_MODE_FLAT
+    },
+    {
+        PLASMA_EFFECT_CHEMICAL,
+        PLASMA_SPEED_GENTLE,
+        PLASMA_RESOLUTION_FINE,
+        PLASMA_SMOOTHING_SOFT,
+        PLASMA_OUTPUT_FAMILY_RASTER,
+        PLASMA_OUTPUT_MODE_NATIVE_RASTER,
+        PLASMA_SAMPLING_TREATMENT_NONE,
+        PLASMA_FILTER_TREATMENT_GLOW_EDGE,
+        PLASMA_EMULATION_TREATMENT_NONE,
+        PLASMA_ACCENT_TREATMENT_NONE,
+        PLASMA_PRESENTATION_MODE_FLAT
+    },
+    {
+        PLASMA_EFFECT_LATTICE,
+        PLASMA_SPEED_STANDARD,
+        PLASMA_RESOLUTION_FINE,
+        PLASMA_SMOOTHING_OFF,
+        PLASMA_OUTPUT_FAMILY_BANDED,
+        PLASMA_OUTPUT_MODE_POSTERIZED_BANDS,
+        PLASMA_SAMPLING_TREATMENT_NONE,
+        PLASMA_FILTER_TREATMENT_NONE,
+        PLASMA_EMULATION_TREATMENT_NONE,
+        PLASMA_ACCENT_TREATMENT_ACCENT_PASS,
+        PLASMA_PRESENTATION_MODE_FLAT
+    },
+    {
+        PLASMA_EFFECT_CAUSTIC,
+        PLASMA_SPEED_GENTLE,
+        PLASMA_RESOLUTION_FINE,
+        PLASMA_SMOOTHING_SOFT,
+        PLASMA_OUTPUT_FAMILY_CONTOUR,
+        PLASMA_OUTPUT_MODE_CONTOUR_BANDS,
+        PLASMA_SAMPLING_TREATMENT_NONE,
+        PLASMA_FILTER_TREATMENT_GLOW_EDGE,
+        PLASMA_EMULATION_TREATMENT_NONE,
+        PLASMA_ACCENT_TREATMENT_NONE,
+        PLASMA_PRESENTATION_MODE_FLAT
+    },
+    {
+        PLASMA_EFFECT_AURORA,
+        PLASMA_SPEED_GENTLE,
+        PLASMA_RESOLUTION_FINE,
+        PLASMA_SMOOTHING_SOFT,
+        PLASMA_OUTPUT_FAMILY_RASTER,
+        PLASMA_OUTPUT_MODE_NATIVE_RASTER,
+        PLASMA_SAMPLING_TREATMENT_NONE,
+        PLASMA_FILTER_TREATMENT_GLOW_EDGE,
+        PLASMA_EMULATION_TREATMENT_NONE,
+        PLASMA_ACCENT_TREATMENT_NONE,
+        PLASMA_PRESENTATION_MODE_CURTAIN
+    },
+    {
+        PLASMA_EFFECT_AURORA,
+        PLASMA_SPEED_STANDARD,
+        PLASMA_RESOLUTION_FINE,
+        PLASMA_SMOOTHING_OFF,
+        PLASMA_OUTPUT_FAMILY_BANDED,
+        PLASMA_OUTPUT_MODE_POSTERIZED_BANDS,
+        PLASMA_SAMPLING_TREATMENT_NONE,
+        PLASMA_FILTER_TREATMENT_NONE,
+        PLASMA_EMULATION_TREATMENT_NONE,
+        PLASMA_ACCENT_TREATMENT_ACCENT_PASS,
+        PLASMA_PRESENTATION_MODE_RIBBON
+    },
+    {
+        PLASMA_EFFECT_SUBSTRATE,
+        PLASMA_SPEED_GENTLE,
+        PLASMA_RESOLUTION_FINE,
+        PLASMA_SMOOTHING_SOFT,
+        PLASMA_OUTPUT_FAMILY_RASTER,
+        PLASMA_OUTPUT_MODE_NATIVE_RASTER,
+        PLASMA_SAMPLING_TREATMENT_NONE,
+        PLASMA_FILTER_TREATMENT_EMBOSS_EDGE,
+        PLASMA_EMULATION_TREATMENT_PHOSPHOR,
+        PLASMA_ACCENT_TREATMENT_NONE,
+        PLASMA_PRESENTATION_MODE_BOUNDED_SURFACE
+    },
+    {
+        PLASMA_EFFECT_ARC,
+        PLASMA_SPEED_STANDARD,
+        PLASMA_RESOLUTION_FINE,
+        PLASMA_SMOOTHING_OFF,
+        PLASMA_OUTPUT_FAMILY_CONTOUR,
+        PLASMA_OUTPUT_MODE_CONTOUR_BANDS,
+        PLASMA_SAMPLING_TREATMENT_NONE,
+        PLASMA_FILTER_TREATMENT_GLOW_EDGE,
+        PLASMA_EMULATION_TREATMENT_NONE,
+        PLASMA_ACCENT_TREATMENT_ACCENT_PASS,
+        PLASMA_PRESENTATION_MODE_CONTOUR_EXTRUSION
     }
 };
 
@@ -365,6 +577,24 @@ const char *plasma_effect_mode_name(int effect_mode)
 
     case PLASMA_EFFECT_INTERFERENCE:
         return "interference";
+
+    case PLASMA_EFFECT_CHEMICAL:
+        return "chemical_cellular_growth";
+
+    case PLASMA_EFFECT_LATTICE:
+        return "lattice_quasi_crystal";
+
+    case PLASMA_EFFECT_CAUSTIC:
+        return "caustic_marbling";
+
+    case PLASMA_EFFECT_AURORA:
+        return "aurora_curtain_ribbon";
+
+    case PLASMA_EFFECT_SUBSTRATE:
+        return "substrate_vein_coral";
+
+    case PLASMA_EFFECT_ARC:
+        return "arc_discharge";
 
     case PLASMA_EFFECT_PLASMA:
     default:

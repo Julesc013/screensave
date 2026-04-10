@@ -274,6 +274,7 @@ static const char *plasma_benchlab_resolved_lane(const plasma_plan *plan)
 
 static const char *plasma_benchlab_requested_lane(
     const plasma_config *config,
+    const plasma_plan *plan,
     screensave_renderer_kind requested_renderer_kind
 )
 {
@@ -284,8 +285,11 @@ static const char *plasma_benchlab_requested_lane(
     if (
         config != NULL &&
         config->benchlab.active &&
-        config->benchlab.presentation_request == PLASMA_BENCHLAB_PRESENTATION_HEIGHTFIELD
+        config->benchlab.presentation_request != PLASMA_BENCHLAB_PRESENTATION_AUTO
     ) {
+        return "premium";
+    }
+    if (plan != NULL && plan->premium_requested) {
         return "premium";
     }
 
@@ -308,9 +312,12 @@ static const char *plasma_benchlab_degraded_from_lane(
     if (
         config != NULL &&
         config->benchlab.active &&
-        config->benchlab.presentation_request == PLASMA_BENCHLAB_PRESENTATION_HEIGHTFIELD &&
-        plan->presentation_mode != PLASMA_PRESENTATION_MODE_HEIGHTFIELD
+        config->benchlab.presentation_request != PLASMA_BENCHLAB_PRESENTATION_AUTO &&
+        !plan->premium_enabled
     ) {
+        return "premium";
+    }
+    if (plan->premium_degraded) {
         return "premium";
     }
 
@@ -385,6 +392,24 @@ static const char *plasma_benchlab_generator_family_name(const plasma_plan *plan
 
     case PLASMA_EFFECT_INTERFERENCE:
         return "interference";
+
+    case PLASMA_EFFECT_CHEMICAL:
+        return "chemical_cellular_growth";
+
+    case PLASMA_EFFECT_LATTICE:
+        return "lattice_quasi_crystal";
+
+    case PLASMA_EFFECT_CAUSTIC:
+        return "caustic_marbling";
+
+    case PLASMA_EFFECT_AURORA:
+        return "aurora_curtain_ribbon";
+
+    case PLASMA_EFFECT_SUBSTRATE:
+        return "substrate_vein_coral";
+
+    case PLASMA_EFFECT_ARC:
+        return "arc_discharge";
 
     case PLASMA_EFFECT_FIRE:
     default:
@@ -829,8 +854,90 @@ static int plasma_benchlab_parse_presentation_request(
         *request_out = PLASMA_BENCHLAB_PRESENTATION_HEIGHTFIELD;
         return 1;
     }
+    if (lstrcmpiA(text, "curtain") == 0) {
+        *request_out = PLASMA_BENCHLAB_PRESENTATION_CURTAIN;
+        return 1;
+    }
+    if (lstrcmpiA(text, "ribbon") == 0) {
+        *request_out = PLASMA_BENCHLAB_PRESENTATION_RIBBON;
+        return 1;
+    }
+    if (
+        lstrcmpiA(text, "contour_extrusion") == 0 ||
+        lstrcmpiA(text, "contour-extrusion") == 0
+    ) {
+        *request_out = PLASMA_BENCHLAB_PRESENTATION_CONTOUR_EXTRUSION;
+        return 1;
+    }
+    if (
+        lstrcmpiA(text, "bounded_surface") == 0 ||
+        lstrcmpiA(text, "bounded-surface") == 0
+    ) {
+        *request_out = PLASMA_BENCHLAB_PRESENTATION_BOUNDED_SURFACE;
+        return 1;
+    }
 
     return 0;
+}
+
+static plasma_presentation_mode plasma_benchlab_requested_presentation_mode(
+    plasma_benchlab_presentation_request request
+)
+{
+    switch (request) {
+    case PLASMA_BENCHLAB_PRESENTATION_HEIGHTFIELD:
+        return PLASMA_PRESENTATION_MODE_HEIGHTFIELD;
+
+    case PLASMA_BENCHLAB_PRESENTATION_CURTAIN:
+        return PLASMA_PRESENTATION_MODE_CURTAIN;
+
+    case PLASMA_BENCHLAB_PRESENTATION_RIBBON:
+        return PLASMA_PRESENTATION_MODE_RIBBON;
+
+    case PLASMA_BENCHLAB_PRESENTATION_CONTOUR_EXTRUSION:
+        return PLASMA_PRESENTATION_MODE_CONTOUR_EXTRUSION;
+
+    case PLASMA_BENCHLAB_PRESENTATION_BOUNDED_SURFACE:
+        return PLASMA_PRESENTATION_MODE_BOUNDED_SURFACE;
+
+    case PLASMA_BENCHLAB_PRESENTATION_AUTO:
+    default:
+        return PLASMA_PRESENTATION_MODE_FLAT;
+    }
+}
+
+static int plasma_benchlab_plan_supports_requested_presentation(
+    const plasma_plan *plan,
+    plasma_benchlab_presentation_request request
+)
+{
+    plasma_presentation_mode requested_mode;
+
+    if (plan == NULL || request == PLASMA_BENCHLAB_PRESENTATION_AUTO) {
+        return 0;
+    }
+
+    requested_mode = plasma_benchlab_requested_presentation_mode(request);
+    if (!plan->premium_enabled) {
+        return 0;
+    }
+    if (
+        requested_mode != PLASMA_PRESENTATION_MODE_HEIGHTFIELD &&
+        requested_mode != PLASMA_PRESENTATION_MODE_CURTAIN &&
+        requested_mode != PLASMA_PRESENTATION_MODE_RIBBON &&
+        requested_mode != PLASMA_PRESENTATION_MODE_CONTOUR_EXTRUSION &&
+        requested_mode != PLASMA_PRESENTATION_MODE_BOUNDED_SURFACE
+    ) {
+        return 0;
+    }
+    if (
+        requested_mode == PLASMA_PRESENTATION_MODE_CONTOUR_EXTRUSION &&
+        plan->output_family != PLASMA_OUTPUT_FAMILY_CONTOUR
+    ) {
+        return 0;
+    }
+
+    return 1;
 }
 
 void plasma_benchlab_forcing_set_defaults(plasma_benchlab_forcing *forcing)
@@ -981,7 +1088,7 @@ void plasma_benchlab_forcing_clamp(plasma_benchlab_forcing *forcing)
 
     if (
         forcing->presentation_request < PLASMA_BENCHLAB_PRESENTATION_AUTO ||
-        forcing->presentation_request > PLASMA_BENCHLAB_PRESENTATION_HEIGHTFIELD
+        forcing->presentation_request > PLASMA_BENCHLAB_PRESENTATION_BOUNDED_SURFACE
     ) {
         forcing->presentation_request = PLASMA_BENCHLAB_PRESENTATION_AUTO;
         forcing->clamp_flags |= PLASMA_BENCHLAB_CLAMP_PRESENTATION;
@@ -1475,10 +1582,13 @@ void plasma_benchlab_apply_plan_forcing(
         return;
     }
 
-    if (forcing->presentation_request == PLASMA_BENCHLAB_PRESENTATION_HEIGHTFIELD) {
-        if (plan->premium_enabled) {
-            plan->presentation_mode = PLASMA_PRESENTATION_MODE_HEIGHTFIELD;
-        }
+    if (
+        forcing->presentation_request != PLASMA_BENCHLAB_PRESENTATION_AUTO &&
+        plasma_benchlab_plan_supports_requested_presentation(plan, forcing->presentation_request)
+    ) {
+        plan->presentation_mode = plasma_benchlab_requested_presentation_mode(
+            forcing->presentation_request
+        );
     }
 }
 
@@ -1591,8 +1701,10 @@ static unsigned long plasma_benchlab_build_clamp_flags(
         }
     }
     if (
-        forcing->presentation_request == PLASMA_BENCHLAB_PRESENTATION_HEIGHTFIELD &&
-        plan->presentation_mode != PLASMA_PRESENTATION_MODE_HEIGHTFIELD
+        forcing->presentation_request != PLASMA_BENCHLAB_PRESENTATION_AUTO &&
+        plan->presentation_mode != plasma_benchlab_requested_presentation_mode(
+            forcing->presentation_request
+        )
     ) {
         flags |= PLASMA_BENCHLAB_CLAMP_PRESENTATION;
     }
@@ -1682,7 +1794,11 @@ int plasma_benchlab_build_snapshot(
     theme_entry = plasma_benchlab_selected_theme_entry(session);
     runtime = &session->state.transition;
 
-    snapshot_out->requested_lane = plasma_benchlab_requested_lane(config, requested_renderer_kind);
+    snapshot_out->requested_lane = plasma_benchlab_requested_lane(
+        config,
+        &session->plan,
+        requested_renderer_kind
+    );
     snapshot_out->resolved_lane = plasma_benchlab_resolved_lane(&session->plan);
     snapshot_out->degraded_from_lane = plasma_benchlab_degraded_from_lane(
         &session->plan,

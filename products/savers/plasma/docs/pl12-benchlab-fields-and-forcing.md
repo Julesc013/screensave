@@ -69,6 +69,8 @@ Current export surfaces:
 
 Both surfaces report resolved truth, not just requested values.
 `PX30` extends that truth surface so `profile_class`, output-family, output-mode, and treatment-slot fields now carry a bounded experimental contour, banded, and treatment subset rather than only the classic raster default.
+`PX31` extends it further so `generator_family`, `output_family`, and `output_mode` now also carry a bounded experimental glyph subset and bounded field-family-I studies rather than leaving those names taxonomy only.
+`PX32` extends it again so `generator_family` and `presentation_mode` now also carry bounded field-family-II and dimensional-subset truth instead of leaving those names taxonomy only.
 
 ## Forcing And Override Catalog
 
@@ -89,7 +91,7 @@ Implemented forcing subset:
 | `/plasma-transition-seed:` | Requests transition seed continuity policy | policy must parse |
 | `/plasma-transition-interval:` | Requests transition interval | value is clamped into supported bounds |
 | `/plasma-transition-duration:` | Requests transition duration | value is clamped into supported bounds |
-| `/plasma-presentation:` | Requests bounded product-local presentation uplift | currently only `auto` and `heightfield` are supported |
+| `/plasma-presentation:` | Requests bounded product-local presentation uplift | `auto`, `heightfield`, `curtain`, `ribbon`, `contour_extrusion`, and `bounded_surface` are supported |
 
 Shared BenchLab controls still used:
 
@@ -104,7 +106,7 @@ Key availability rules in the current implementation:
 - unsupported presentation requests are reset to `auto` and reported as clamps
 - transition interval and duration overrides are bounded and clamped
 - product-local forcing still flows through normal config clamping and plan validation
-- a requested premium-only presentation uplift only becomes real if the resolved lane actually supports it
+- a requested premium-only presentation uplift only becomes real if the resolved lane and current plan actually support it
 
 ## Resolved, Clamped, And Degraded Reporting Rules
 

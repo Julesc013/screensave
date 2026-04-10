@@ -27,7 +27,11 @@ struct plasma_plan_tag;
 
 typedef enum plasma_benchlab_presentation_request_tag {
     PLASMA_BENCHLAB_PRESENTATION_AUTO = 0,
-    PLASMA_BENCHLAB_PRESENTATION_HEIGHTFIELD = 1
+    PLASMA_BENCHLAB_PRESENTATION_HEIGHTFIELD = 1,
+    PLASMA_BENCHLAB_PRESENTATION_CURTAIN = 2,
+    PLASMA_BENCHLAB_PRESENTATION_RIBBON = 3,
+    PLASMA_BENCHLAB_PRESENTATION_CONTOUR_EXTRUSION = 4,
+    PLASMA_BENCHLAB_PRESENTATION_BOUNDED_SURFACE = 5
 } plasma_benchlab_presentation_request;
 
 typedef struct plasma_benchlab_forcing_tag {

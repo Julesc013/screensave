@@ -123,6 +123,7 @@ int plasma_plan_compile(
     plan->filter_treatment = preset_values->filter_treatment;
     plan->emulation_treatment = preset_values->emulation_treatment;
     plan->accent_treatment = preset_values->accent_treatment;
+    plan->presentation_mode = preset_values->presentation_mode;
     plan->detail_level = settings_resolution.detail_level;
     plan->seed_policy = settings_resolution.use_deterministic_seed
         ? PLASMA_PLAN_SEED_POLICY_FIXED
@@ -195,7 +196,7 @@ int plasma_plan_validate(
 
     if (
         plan->effect_mode < PLASMA_EFFECT_PLASMA ||
-        plan->effect_mode > PLASMA_EFFECT_INTERFERENCE ||
+        plan->effect_mode > PLASMA_EFFECT_ARC ||
         plan->speed_mode < PLASMA_SPEED_GENTLE ||
         plan->speed_mode > PLASMA_SPEED_LIVELY ||
         plan->resolution_mode < PLASMA_RESOLUTION_COARSE ||
