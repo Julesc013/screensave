@@ -1,0 +1,31 @@
+wave_id = "wave4"
+status = "blocked"
+gate_ref = "docs/roadmap/mx-wave-gates.md#wave-4-gate"
+summary = "Expand Plasma's expressive surface and only then connect mature product surfaces to broader shared ops and integration."
+
+[[epics]]
+id = "PX40"
+owner_tag = "P"
+title = "Output, treatment, field, and dimensional expansion"
+modes = ["ASK", "CODE"]
+depends_on = ["PX30", "PX31", "PX32"]
+conditional = false
+scope = "Expand Plasma language and composition after the authoring, Lab, and selection substrate is mature."
+
+[[epics]]
+id = "SY40"
+owner_tag = "H"
+title = "Shared ops and integration surfaces"
+modes = ["ASK", "CODE"]
+depends_on = ["PX31", "PX40", "PX41"]
+conditional = false
+scope = "Connect mature product-owned surfaces to shared tooling, companions, and automation without redefining product law."
+
+[[epics]]
+id = "PX41"
+owner_tag = "P"
+title = "Plasma curation and provenance operations"
+modes = ["ASK", "CODE"]
+depends_on = ["PX30", "PX40"]
+conditional = false
+scope = "Make Plasma curation and provenance operations explicit while keeping them product-owned first."

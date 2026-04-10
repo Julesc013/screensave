@@ -1,0 +1,31 @@
+wave_id = "wave1"
+status = "blocked"
+gate_ref = "docs/roadmap/mx-wave-gates.md#wave-1-gate"
+summary = "Harden shared proof posture and Plasma caveat surfaces before any promotion review or authoring expansion."
+
+[[epics]]
+id = "SY10"
+owner_tag = "S"
+title = "Shared proof and environment baseline"
+modes = ["ASK", "CODE"]
+depends_on = ["MX00"]
+conditional = false
+scope = "Tighten shared proof, environment, and dependency-baseline follow-on without changing platform law."
+
+[[epics]]
+id = "PX10"
+owner_tag = "P"
+title = "Plasma proof hardening and caveat baseline"
+modes = ["ASK", "CODE"]
+depends_on = ["MX00"]
+conditional = false
+scope = "Burn down the first Plasma proof and support caveats while preserving the current stable cut."
+
+[[epics]]
+id = "PX11"
+owner_tag = "P"
+title = "Plasma transition coverage hardening"
+modes = ["ASK", "CODE"]
+depends_on = ["MX00", "PX10"]
+conditional = false
+scope = "Broaden transition proof within the current bounded subset without overclaiming exhaustive coverage."

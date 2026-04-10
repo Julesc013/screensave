@@ -1,0 +1,22 @@
+wave_id = "wave2"
+status = "blocked"
+gate_ref = "docs/roadmap/mx-wave-gates.md#wave-2-gate"
+summary = "Freeze promotion-review and authoring-boundary decisions before deeper product substrate work."
+
+[[epics]]
+id = "SY20"
+owner_tag = "H"
+title = "Conditional shared contract uplift"
+modes = ["ASK", "CODE"]
+depends_on = ["SY10", "PX20"]
+conditional = true
+scope = "Promote a narrow shared contract only if Wave 1 proves a real multi-product or platform-law need."
+
+[[epics]]
+id = "PX20"
+owner_tag = "P"
+title = "Plasma promotion review and authoring boundary freeze"
+modes = ["ASK", "CODE"]
+depends_on = ["SY10", "PX10", "PX11"]
+conditional = false
+scope = "Freeze what remains Plasma-local, what may later promote, and what must stay bounded before Wave 3."

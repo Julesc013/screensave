@@ -1,8 +1,11 @@
 # SX Series
 
-This document defines the active `SX` program that sits after the closed `SS` bridge and before `PL`.
+This document records the `SX` program that sat after the closed `SS` bridge and before `PL`.
 
 `SX` exists to harden the private renderer substrate and capability-expansion model without reopening the public product doctrine that was already frozen through `C16` and normalized through `SS`.
+
+Current repo reality has since moved through the completed Plasma `PL00` through `PL14` line.
+The active post-PL control plane now lives in [mx-program.md](./mx-program.md).
 
 ## Current Status
 

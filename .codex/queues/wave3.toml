@@ -1,0 +1,31 @@
+wave_id = "wave3"
+status = "blocked"
+gate_ref = "docs/roadmap/mx-wave-gates.md#wave-3-gate"
+summary = "Land the product-local authoring, Lab, and selection substrate before larger expressive expansion."
+
+[[epics]]
+id = "PX30"
+owner_tag = "P"
+title = "Pack provenance and authorable sets and journeys"
+modes = ["ASK", "CODE"]
+depends_on = ["PX20"]
+conditional = false
+scope = "Make Plasma authoring and provenance surfaces real without promoting them prematurely into shared scope."
+
+[[epics]]
+id = "PX31"
+owner_tag = "P"
+title = "Minimal Plasma Lab and validator/comparer core"
+modes = ["ASK", "CODE"]
+depends_on = ["PX20"]
+conditional = false
+scope = "Land the first bounded Plasma-owned Lab and comparer substrate."
+
+[[epics]]
+id = "PX32"
+owner_tag = "P"
+title = "Plasma selection intelligence"
+modes = ["ASK", "CODE"]
+depends_on = ["PX20"]
+conditional = false
+scope = "Extend selection logic on top of the frozen Plasma content and promotion boundary."

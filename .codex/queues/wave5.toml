@@ -1,0 +1,13 @@
+wave_id = "wave5"
+status = "blocked"
+gate_ref = "docs/roadmap/mx-wave-gates.md#wave-5-gate"
+summary = "Run the final promotion review and stable recut only after hardening, substrate maturity, expansion, and integration are complete."
+
+[[epics]]
+id = "PX50"
+owner_tag = "H"
+title = "Final promotion review and stable recut"
+modes = ["ASK", "CODE"]
+depends_on = ["SY40", "PX40", "PX41"]
+conditional = false
+scope = "Decide what, if anything, is ready to move into the stable promise and recut the release posture honestly."

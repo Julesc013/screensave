@@ -1,0 +1,13 @@
+wave_id = "wave0"
+status = "open"
+gate_ref = "docs/roadmap/mx-wave-gates.md#wave-0-gate"
+summary = "Freeze the post-PL control plane before any later SY or PX wave is admitted."
+
+[[epics]]
+id = "MX00"
+owner_tag = "H"
+title = "Master control plane freeze"
+modes = ["ASK", "CODE"]
+depends_on = []
+conditional = false
+scope = "Create the MX governance docs, PX00 Plasma control docs, and initial queue manifests."

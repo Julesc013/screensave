@@ -23,7 +23,7 @@ Future concept entries that still read like working titles are descriptive ancho
 
 ## Framebuffer And Vector Family And Related Studies
 
-- `plasma`: warm low-motion abstract saver and a real Framebuffer and Vector Family product. It remains the first flagship `PL` track after `SX`, not an `SX00` implementation promise.
+- `plasma`: warm low-motion abstract saver and a real Framebuffer and Vector Family product. The bounded flagship `PL` line is complete through `PL14`; later work now routes through the post-PL `MX` and `PX` control plane rather than a new `PL` series.
 - `phosphor`: waveform and phosphor-inspired motion and a real Framebuffer and Vector Family product.
 - Working title `starfield`: classic depth and drift presentation.
 - Working title `ribbon_drift`: simple motion study built around lines and trails.

@@ -1,6 +1,6 @@
 # Roadmap Docs
 
-This directory explains both the completed continuation bridge and the active post-`C16` release program.
+This directory explains the completed continuation bridge, the `SS` and `SX` lineage, and the current post-PL control plane.
 
 Belongs here:
 - Series planning.
@@ -16,10 +16,16 @@ Type: explanatory roadmap.
 
 ## Active Doctrine
 
-- [post-c16-program.md](./post-c16-program.md) defines the current post-`C16` sequence with `SS` closed, `SX` active, and `PL` next.
-- [sx-series.md](./sx-series.md) defines the bounded substrate-hardening and capability-expansion constitution that now sits between `SS` and `PL`.
+- [mx-program.md](./mx-program.md) defines the current post-PL master control plane and canonical wave sequence.
+- [mx-owner-map.md](./mx-owner-map.md), [mx-system-dependency-board.md](./mx-system-dependency-board.md), [mx-wave-gates.md](./mx-wave-gates.md), [mx-shared-promotion-rules.md](./mx-shared-promotion-rules.md), [mx-codex-queue-contract.md](./mx-codex-queue-contract.md), and [mx-proof-surface-map.md](./mx-proof-surface-map.md) freeze the governing post-PL execution substrate.
 - [release-channels.md](./release-channels.md) defines the durable Core-versus-companion channel doctrine.
 - [core-zip-doctrine.md](./core-zip-doctrine.md) defines what belongs in the primary Core saver ZIP.
+
+## Lineage And Handoff Context
+
+- [post-c16-program.md](./post-c16-program.md) records the post-`C16` lineage that admitted `SS`, `SX`, and the later `PL` line.
+- [sx-series.md](./sx-series.md) records the completed substrate-hardening series and the handoff that Plasma inherited.
+- [pl00-substrate-handoff.md](./pl00-substrate-handoff.md) records the bounded substrate contract that Plasma started from.
 
 ## Historical Completion Record
 
@@ -28,4 +34,5 @@ Type: explanatory roadmap.
 - [backlog-routing.md](./backlog-routing.md), [backlog-inventory.md](./backlog-inventory.md), and [refinement-threads.md](./refinement-threads.md) retain the `C11` through `C16` planning context as historical material.
 
 The `C00` through `C16` continuation bridge is complete and closed.
-`SS` is closed, `SX` is now active, and `PL` remains the later flagship program after the frozen Core baseline.
+`SS` and `SX` remain part of the lineage record.
+The current active execution doctrine is the post-PL `MX` control plane.

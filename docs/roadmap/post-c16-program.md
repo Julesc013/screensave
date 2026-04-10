@@ -1,7 +1,9 @@
 # Post-C16 Program
 
-This document defines the active program after the frozen `C16` baseline.
-It now records the closed `SS` bridge, the active `SX` substrate series, and the later `PL` flagship program.
+This document records the post-`C16` lineage that admitted the closed `SS` bridge, the completed `SX` substrate series, and the later `PL` flagship program.
+
+Current repo reality has since moved through the completed Plasma `PL00` through `PL14` line.
+The active post-PL control plane now lives in [mx-program.md](./mx-program.md).
 
 ## Closed Baseline
 
