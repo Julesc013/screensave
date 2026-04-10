@@ -8,78 +8,78 @@ static const plasma_content_pack_asset g_lava_remix_assets[] = {
 };
 
 static const plasma_content_weighted_key g_classic_core_preset_members[] = {
-    { "plasma_lava", 1U },
-    { "aurora_plasma", 1U },
-    { "ocean_interference", 1U },
-    { "museum_phosphor", 1U },
-    { "quiet_darkroom", 1U },
+    { "plasma_lava", 4U },
+    { "aurora_plasma", 2U },
+    { "ocean_interference", 2U },
+    { "museum_phosphor", 2U },
+    { "quiet_darkroom", 3U },
     { "midnight_interference", 1U },
-    { "amber_terminal", 1U }
+    { "amber_terminal", 2U }
 };
 
 static const plasma_content_weighted_key g_dark_room_preset_members[] = {
-    { "quiet_darkroom", 1U },
-    { "museum_phosphor", 1U },
-    { "midnight_interference", 1U },
-    { "amber_terminal", 1U }
+    { "quiet_darkroom", 4U },
+    { "museum_phosphor", 3U },
+    { "midnight_interference", 2U },
+    { "amber_terminal", 2U }
 };
 
 static const plasma_content_weighted_key g_fire_classics_preset_members[] = {
-    { "plasma_lava", 1U },
-    { "quiet_darkroom", 1U }
+    { "plasma_lava", 3U },
+    { "quiet_darkroom", 2U }
 };
 
 static const plasma_content_weighted_key g_plasma_classics_preset_members[] = {
-    { "aurora_plasma", 1U },
-    { "museum_phosphor", 1U },
-    { "amber_terminal", 1U }
+    { "aurora_plasma", 3U },
+    { "museum_phosphor", 2U },
+    { "amber_terminal", 2U }
 };
 
 static const plasma_content_weighted_key g_interference_classics_preset_members[] = {
-    { "ocean_interference", 1U },
-    { "midnight_interference", 1U }
+    { "ocean_interference", 3U },
+    { "midnight_interference", 2U }
 };
 
 static const plasma_content_weighted_key g_warm_bridge_classics_preset_members[] = {
-    { "plasma_lava", 1U },
-    { "quiet_darkroom", 1U },
-    { "museum_phosphor", 1U },
-    { "amber_terminal", 1U }
+    { "plasma_lava", 3U },
+    { "quiet_darkroom", 3U },
+    { "museum_phosphor", 2U },
+    { "amber_terminal", 2U }
 };
 
 static const plasma_content_weighted_key g_cool_bridge_classics_preset_members[] = {
-    { "aurora_plasma", 1U },
-    { "ocean_interference", 1U },
-    { "midnight_interference", 1U }
+    { "aurora_plasma", 3U },
+    { "ocean_interference", 3U },
+    { "midnight_interference", 2U }
 };
 
 static const plasma_content_weighted_key g_classic_core_theme_members[] = {
-    { "plasma_lava", 1U },
-    { "aurora_cool", 1U },
-    { "oceanic_blue", 1U },
-    { "museum_phosphor", 1U },
-    { "quiet_darkroom", 1U },
+    { "plasma_lava", 4U },
+    { "aurora_cool", 2U },
+    { "oceanic_blue", 2U },
+    { "museum_phosphor", 2U },
+    { "quiet_darkroom", 3U },
     { "midnight_interference", 1U },
-    { "amber_terminal", 1U }
+    { "amber_terminal", 2U }
 };
 
 static const plasma_content_weighted_key g_dark_room_theme_members[] = {
-    { "museum_phosphor", 1U },
-    { "quiet_darkroom", 1U },
-    { "midnight_interference", 1U },
-    { "amber_terminal", 1U }
+    { "museum_phosphor", 3U },
+    { "quiet_darkroom", 4U },
+    { "midnight_interference", 2U },
+    { "amber_terminal", 2U }
 };
 
 static const plasma_content_weighted_key g_warm_classics_theme_members[] = {
-    { "plasma_lava", 1U },
-    { "quiet_darkroom", 1U },
-    { "amber_terminal", 1U }
+    { "plasma_lava", 3U },
+    { "quiet_darkroom", 2U },
+    { "amber_terminal", 2U }
 };
 
 static const plasma_content_weighted_key g_cool_classics_theme_members[] = {
-    { "aurora_cool", 1U },
-    { "oceanic_blue", 1U },
-    { "midnight_interference", 1U }
+    { "aurora_cool", 3U },
+    { "oceanic_blue", 3U },
+    { "midnight_interference", 2U }
 };
 
 static const plasma_content_preset_entry g_preset_entries[] = {

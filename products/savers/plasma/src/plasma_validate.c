@@ -107,6 +107,34 @@ static const plasma_validation_matrix_entry g_plasma_validation_matrix[] = {
         "PX11 broadens the bounded transition soak story to include named warm and cool bridge-cycle paths in smoke while keeping exhaustive pairwise long-run proof explicitly out of scope."
     },
     {
+        "pack_provenance_surface",
+        "product",
+        PLASMA_VALIDATION_STATUS_PARTIAL,
+        "products/savers/plasma/tests/px20-content-validation-proof.md",
+        "PX20 adds a Plasma-local provenance sidecar for lava_remix and validates that it stays aligned with the existing shared pack.ini shell."
+    },
+    {
+        "authoring_substrate",
+        "product",
+        PLASMA_VALIDATION_STATUS_PARTIAL,
+        "products/savers/plasma/tests/px20-authoring-substrate-proof.md",
+        "PX20 makes authored preset-set, theme-set, and journey files real on disk and compares them against the compiled Plasma catalog."
+    },
+    {
+        "lab_shell_surface",
+        "product",
+        PLASMA_VALIDATION_STATUS_PARTIAL,
+        "products/savers/plasma/tests/px20-lab-shell-proof.md",
+        "PX20 adds a minimal file-first Plasma Lab shell for validate, compare, and degrade-report workflows without promising a full editor."
+    },
+    {
+        "selection_foundation",
+        "product",
+        PLASMA_VALIDATION_STATUS_PARTIAL,
+        "products/savers/plasma/tests/px20-selection-foundation-proof.md",
+        "PX20 makes authored set weights materially real in fallback selection and freezes the current selection-foundation boundary honestly."
+    },
+    {
         "experimental_pool",
         "product",
         PLASMA_VALIDATION_STATUS_DOCUMENTED_ONLY,
@@ -267,6 +295,24 @@ static const plasma_known_limit_entry g_plasma_known_limits[] = {
         "environment_safety_bounded",
         PLASMA_VALIDATION_STATUS_PARTIAL,
         "Current safety claims are limited to preview-safe, long-run-stable posture, descriptive dark-room content choices, and truthful clamp or fallback behavior. OLED, battery, thermal, remote, and safe-mode terms remain unmodeled.",
+        "products/savers/plasma/docs/pl13-known-limits.md"
+    },
+    {
+        "authored_registry_partial",
+        PLASMA_VALIDATION_STATUS_PARTIAL,
+        "PX20 moves sets, journeys, and pack provenance into real authored files, but the built-in preset and theme descriptor inventory still remains primarily compiled and legacy-INI anchored.",
+        "products/savers/plasma/docs/pl13-known-limits.md"
+    },
+    {
+        "lab_shell_cli_only",
+        PLASMA_VALIDATION_STATUS_PARTIAL,
+        "The first Plasma Lab shell is intentionally file-first and CLI-oriented. It is not yet a live visual editor, gallery, or suite-grade authoring workstation.",
+        "products/savers/plasma/docs/pl13-known-limits.md"
+    },
+    {
+        "selection_foundation_bounded",
+        PLASMA_VALIDATION_STATUS_PARTIAL,
+        "Selection now honors authored set weights for bounded fallback behavior, but richer anti-repeat memory, semantic similarity, and safety-tag reasoning remain later-wave work.",
         "products/savers/plasma/docs/pl13-known-limits.md"
     }
 };

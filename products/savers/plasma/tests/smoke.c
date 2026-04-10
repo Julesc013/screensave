@@ -416,6 +416,48 @@ static void plasma_smoke_step_session_delta(
     plasma_step_session(session, environment);
 }
 
+static int plasma_smoke_resolve_repo_root(
+    char *repo_root_out,
+    unsigned int repo_root_size
+)
+{
+    const char *match;
+    size_t length;
+
+    if (repo_root_out == NULL || repo_root_size == 0U) {
+        return 0;
+    }
+
+    match = strstr(__FILE__, "products\\savers\\plasma\\tests\\smoke.c");
+    if (match == NULL) {
+        match = strstr(__FILE__, "products/savers/plasma/tests/smoke.c");
+    }
+    if (match == NULL) {
+        lstrcpynA(repo_root_out, ".", (int)repo_root_size);
+        return 1;
+    }
+
+    length = (size_t)(match - __FILE__);
+    if (length == 0U) {
+        lstrcpynA(repo_root_out, ".", (int)repo_root_size);
+        return 1;
+    }
+    if (length + 1U > repo_root_size) {
+        return 0;
+    }
+
+    memcpy(repo_root_out, __FILE__, length);
+    repo_root_out[length] = '\0';
+    while (
+        length > 0U &&
+        (repo_root_out[length - 1U] == '\\' || repo_root_out[length - 1U] == '/')
+    ) {
+        repo_root_out[length - 1U] = '\0';
+        --length;
+    }
+    return 1;
+}
+
 int main(void)
 {
     static const char *const g_required_preset_keys[] = {
@@ -499,6 +541,8 @@ int main(void)
     unsigned long windowed_phase_after;
     char benchlab_overlay[2048];
     char benchlab_report[4096];
+    char authoring_message[260];
+    char repo_root[MAX_PATH];
     unsigned int settings_count;
     unsigned int index;
 
@@ -1179,7 +1223,7 @@ int main(void)
         registry->preset_count != PLASMA_PRESET_COUNT ||
         registry->theme_count != PLASMA_THEME_COUNT ||
         registry->pack_count != 1U ||
-        registry->preset_set_count != 5U ||
+        registry->preset_set_count != 7U ||
         registry->theme_set_count != 4U ||
         !plasma_content_registry_has_channel(PLASMA_CONTENT_CHANNEL_STABLE) ||
         plasma_content_registry_has_channel(PLASMA_CONTENT_CHANNEL_EXPERIMENTAL)
@@ -1191,6 +1235,8 @@ int main(void)
         plasma_content_find_preset_set("fire_classics") == NULL ||
         plasma_content_find_preset_set("plasma_classics") == NULL ||
         plasma_content_find_preset_set("interference_classics") == NULL ||
+        plasma_content_find_preset_set("warm_bridge_classics") == NULL ||
+        plasma_content_find_preset_set("cool_bridge_classics") == NULL ||
         plasma_content_find_theme_set("warm_classics") == NULL ||
         plasma_content_find_theme_set("cool_classics") == NULL
     ) {
@@ -1233,6 +1279,16 @@ int main(void)
         strcmp(pack_manifest.theme_files[0], "themes/lava_remix.theme.ini") != 0
     ) {
         return 104;
+    }
+
+    if (
+        !plasma_smoke_resolve_repo_root(repo_root, (unsigned int)sizeof(repo_root)) ||
+        !plasma_authoring_validate_repo_surface(
+            repo_root,
+            authoring_message,
+            (unsigned int)sizeof(authoring_message))
+    ) {
+        return 243;
     }
 
     if (
@@ -1329,6 +1385,42 @@ int main(void)
         !plan.selection.favorites_only_applied
     ) {
         return 109;
+    }
+
+    plasma_selection_preferences_set_defaults(&selection_preferences);
+    lstrcpyA(selection_preferences.preset_set_key, "classic_core");
+    lstrcpyA(selection_preferences.theme_set_key, "classic_core");
+    if (
+        !plasma_compile_selection_plan(
+            module,
+            "ghost_preset",
+            "ghost_theme",
+            &selection_preferences,
+            &plan
+        ) ||
+        strcmp(plan.preset_key, "plasma_lava") != 0 ||
+        strcmp(plan.theme_key, "plasma_lava") != 0
+    ) {
+        return 244;
+    }
+
+    plasma_selection_preferences_set_defaults(&selection_preferences);
+    lstrcpyA(selection_preferences.preset_set_key, "classic_core");
+    lstrcpyA(selection_preferences.theme_set_key, "classic_core");
+    lstrcpyA(selection_preferences.excluded_preset_keys, "plasma_lava");
+    lstrcpyA(selection_preferences.excluded_theme_keys, "plasma_lava");
+    if (
+        !plasma_compile_selection_plan(
+            module,
+            "ghost_preset",
+            "ghost_theme",
+            &selection_preferences,
+            &plan
+        ) ||
+        strcmp(plan.preset_key, "quiet_darkroom") != 0 ||
+        strcmp(plan.theme_key, "quiet_darkroom") != 0
+    ) {
+        return 245;
     }
 
     plasma_selection_preferences_set_defaults(&selection_preferences);
@@ -2993,7 +3085,7 @@ int main(void)
     (void)plasma_validation_get_matrix(&matrix_count);
     (void)plasma_validation_get_performance_envelopes(&envelope_count);
     (void)plasma_validation_get_known_limits(&known_limit_count);
-    if (matrix_count < 14U || envelope_count < 7U || known_limit_count < 7U) {
+    if (matrix_count < 22U || envelope_count < 8U || known_limit_count < 11U) {
         return 202;
     }
 
@@ -3054,6 +3146,34 @@ int main(void)
     ) {
         return 233;
     }
+    matrix_entry = plasma_validation_find_matrix_entry("pack_provenance_surface", "product");
+    if (
+        matrix_entry == NULL ||
+        matrix_entry->status != PLASMA_VALIDATION_STATUS_PARTIAL
+    ) {
+        return 246;
+    }
+    matrix_entry = plasma_validation_find_matrix_entry("authoring_substrate", "product");
+    if (
+        matrix_entry == NULL ||
+        matrix_entry->status != PLASMA_VALIDATION_STATUS_PARTIAL
+    ) {
+        return 247;
+    }
+    matrix_entry = plasma_validation_find_matrix_entry("lab_shell_surface", "product");
+    if (
+        matrix_entry == NULL ||
+        matrix_entry->status != PLASMA_VALIDATION_STATUS_PARTIAL
+    ) {
+        return 248;
+    }
+    matrix_entry = plasma_validation_find_matrix_entry("selection_foundation", "product");
+    if (
+        matrix_entry == NULL ||
+        matrix_entry->status != PLASMA_VALIDATION_STATUS_PARTIAL
+    ) {
+        return 249;
+    }
 
     envelope_entry = plasma_validation_find_performance_envelope("premium_gl46_heightfield");
     if (
@@ -3113,6 +3233,27 @@ int main(void)
         known_limit_entry->status != PLASMA_VALIDATION_STATUS_PARTIAL
     ) {
         return 237;
+    }
+    known_limit_entry = plasma_validation_find_known_limit("authored_registry_partial");
+    if (
+        known_limit_entry == NULL ||
+        known_limit_entry->status != PLASMA_VALIDATION_STATUS_PARTIAL
+    ) {
+        return 250;
+    }
+    known_limit_entry = plasma_validation_find_known_limit("lab_shell_cli_only");
+    if (
+        known_limit_entry == NULL ||
+        known_limit_entry->status != PLASMA_VALIDATION_STATUS_PARTIAL
+    ) {
+        return 251;
+    }
+    known_limit_entry = plasma_validation_find_known_limit("selection_foundation_bounded");
+    if (
+        known_limit_entry == NULL ||
+        known_limit_entry->status != PLASMA_VALIDATION_STATUS_PARTIAL
+    ) {
+        return 252;
     }
 
     plasma_config_set_defaults(&common_config, &product_config, sizeof(product_config));

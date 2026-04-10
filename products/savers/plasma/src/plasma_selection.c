@@ -398,6 +398,120 @@ static int plasma_theme_matches_filters(
     return 1;
 }
 
+static const plasma_content_preset_entry *plasma_select_weighted_preset_from_set(
+    const plasma_content_preset_set_entry *active_set,
+    plasma_content_filter filter,
+    unsigned long favorite_mask,
+    unsigned long excluded_mask,
+    int favorites_only_requested,
+    int *favorites_only_applied_out
+)
+{
+    const plasma_content_preset_entry *best_entry;
+    unsigned int best_weight;
+    unsigned int index;
+    int best_applied;
+
+    if (favorites_only_applied_out != NULL) {
+        *favorites_only_applied_out = 0;
+    }
+    if (active_set == NULL) {
+        return NULL;
+    }
+
+    best_entry = NULL;
+    best_weight = 0U;
+    best_applied = 0;
+    for (index = 0U; index < active_set->member_count; ++index) {
+        const plasma_content_preset_entry *entry;
+        int applied;
+
+        entry = plasma_content_find_preset_entry(active_set->members[index].content_key);
+        if (
+            plasma_preset_matches_filters(
+                entry,
+                active_set,
+                filter,
+                favorite_mask,
+                excluded_mask,
+                favorites_only_requested,
+                &applied
+            )
+        ) {
+            if (
+                best_entry == NULL ||
+                active_set->members[index].weight > best_weight
+            ) {
+                best_entry = entry;
+                best_weight = active_set->members[index].weight;
+                best_applied = applied;
+            }
+        }
+    }
+
+    if (best_entry != NULL && favorites_only_applied_out != NULL) {
+        *favorites_only_applied_out = best_applied;
+    }
+    return best_entry;
+}
+
+static const plasma_content_theme_entry *plasma_select_weighted_theme_from_set(
+    const plasma_content_theme_set_entry *active_set,
+    plasma_content_filter filter,
+    unsigned long favorite_mask,
+    unsigned long excluded_mask,
+    int favorites_only_requested,
+    int *favorites_only_applied_out
+)
+{
+    const plasma_content_theme_entry *best_entry;
+    unsigned int best_weight;
+    unsigned int index;
+    int best_applied;
+
+    if (favorites_only_applied_out != NULL) {
+        *favorites_only_applied_out = 0;
+    }
+    if (active_set == NULL) {
+        return NULL;
+    }
+
+    best_entry = NULL;
+    best_weight = 0U;
+    best_applied = 0;
+    for (index = 0U; index < active_set->member_count; ++index) {
+        const plasma_content_theme_entry *entry;
+        int applied;
+
+        entry = plasma_content_find_theme_entry(active_set->members[index].content_key);
+        if (
+            plasma_theme_matches_filters(
+                entry,
+                active_set,
+                filter,
+                favorite_mask,
+                excluded_mask,
+                favorites_only_requested,
+                &applied
+            )
+        ) {
+            if (
+                best_entry == NULL ||
+                active_set->members[index].weight > best_weight
+            ) {
+                best_entry = entry;
+                best_weight = active_set->members[index].weight;
+                best_applied = applied;
+            }
+        }
+    }
+
+    if (best_entry != NULL && favorites_only_applied_out != NULL) {
+        *favorites_only_applied_out = best_applied;
+    }
+    return best_entry;
+}
+
 static const plasma_content_preset_entry *plasma_select_fallback_preset(
     const plasma_content_preset_set_entry *active_set,
     plasma_content_filter filter,
@@ -408,6 +522,7 @@ static const plasma_content_preset_entry *plasma_select_fallback_preset(
 )
 {
     const plasma_content_registry *registry;
+    const plasma_content_preset_entry *weighted_entry;
     unsigned int index;
 
     registry = plasma_content_get_registry();
@@ -416,27 +531,16 @@ static const plasma_content_preset_entry *plasma_select_fallback_preset(
     }
 
     if (active_set != NULL) {
-        for (index = 0U; index < active_set->member_count; ++index) {
-            const plasma_content_preset_entry *entry;
-            int applied;
-
-            entry = plasma_content_find_preset_entry(active_set->members[index].content_key);
-            if (
-                plasma_preset_matches_filters(
-                    entry,
-                    active_set,
-                    filter,
-                    favorite_mask,
-                    excluded_mask,
-                    favorites_only_requested,
-                    &applied
-                )
-            ) {
-                if (favorites_only_applied_out != NULL) {
-                    *favorites_only_applied_out = applied;
-                }
-                return entry;
-            }
+        weighted_entry = plasma_select_weighted_preset_from_set(
+            active_set,
+            filter,
+            favorite_mask,
+            excluded_mask,
+            favorites_only_requested,
+            favorites_only_applied_out
+        );
+        if (weighted_entry != NULL) {
+            return weighted_entry;
         }
     }
 
@@ -478,6 +582,7 @@ static const plasma_content_theme_entry *plasma_select_fallback_theme(
 {
     const plasma_content_theme_entry *entry;
     const plasma_content_registry *registry;
+    const plasma_content_theme_entry *weighted_entry;
     unsigned int index;
 
     entry = plasma_content_find_theme_entry(preferred_theme_key);
@@ -501,26 +606,16 @@ static const plasma_content_theme_entry *plasma_select_fallback_theme(
     }
 
     if (active_set != NULL) {
-        for (index = 0U; index < active_set->member_count; ++index) {
-            int applied;
-
-            entry = plasma_content_find_theme_entry(active_set->members[index].content_key);
-            if (
-                plasma_theme_matches_filters(
-                    entry,
-                    active_set,
-                    filter,
-                    favorite_mask,
-                    excluded_mask,
-                    favorites_only_requested,
-                    &applied
-                )
-            ) {
-                if (favorites_only_applied_out != NULL) {
-                    *favorites_only_applied_out = applied;
-                }
-                return entry;
-            }
+        weighted_entry = plasma_select_weighted_theme_from_set(
+            active_set,
+            filter,
+            favorite_mask,
+            excluded_mask,
+            favorites_only_requested,
+            favorites_only_applied_out
+        );
+        if (weighted_entry != NULL) {
+            return weighted_entry;
         }
     }
 

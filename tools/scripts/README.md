@@ -23,4 +23,5 @@ Current stage:
 - `check_release_candidate_surface.py` validates the preserved C14 release-candidate notes, the C15 doctrine handoff, manifest/version alignment, and historical staged outputs.
 - `check_release_baseline_surface.py` validates the frozen C16 Core baseline notes, manifest/version alignment, companion-artifact references, and refreshed staged outputs.
 - `check_release_scaffold.py` generates a manual release-scaffold report without publishing anything.
+- `plasma_lab.py` provides the bounded PX20 Plasma Lab shell for authored-substrate validation, authored-object comparison, and pack degrade-report output.
 Type: tooling.

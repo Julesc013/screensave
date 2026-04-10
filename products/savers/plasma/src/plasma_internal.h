@@ -13,6 +13,7 @@
 #include "plasma_premium.h"
 #include "plasma_transition.h"
 #include "plasma_content.h"
+#include "plasma_authoring.h"
 #include "plasma_selection.h"
 #include "plasma_settings.h"
 #include "plasma_benchlab.h"
