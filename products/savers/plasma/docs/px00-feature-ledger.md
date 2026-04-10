@@ -70,6 +70,19 @@ They are not broad new stable promotions.
 - BenchLab now exposes requested, resolved, and fallback transition types separately
 - the stable-promotion review remains evidence-gated and does not broaden stable scope in this tranche
 
+## PX20 Data And Authoring Surface
+
+`PX20` makes the following product-local substrate surfaces real without widening stable scope:
+
+- `lava_remix` now carries a Plasma-local provenance sidecar beside the shared `pack.ini` shell
+- preset sets, theme sets, and journeys now exist as checked-in authored files instead of code-only structure
+- a product-local authoring validator now checks authored files against the compiled registry and journey catalog
+- the first bounded `plasma_lab.py` shell can validate authored files, compare authored objects, and print a degrade report
+- set weights now materially affect fallback selection instead of remaining decorative metadata only
+
+These are substrate and support surfaces.
+They are not a new stable visual-language promotion and they are not a full authoring suite.
+
 ## Areas Most Likely To Be Reviewed For Later Promotion
 
 Promotion review is evidence-gated.

@@ -3,7 +3,26 @@
 This directory holds product-local Plasma planning and doctrine documents.
 They live with the product so later `PL` work can extend them without rewriting shared platform law.
 
-## Current Documents
+## Post-PL Control Docs
+
+- [PX00 Post-PL Program](./px00-post-pl-program.md): defines Plasma's current post-PL posture, role, and early-wave priorities
+- [PX00 Feature Ledger](./px00-feature-ledger.md): records the current stable, experimental, deferred, and caveat posture from the repo as it exists now
+- [PX00 Risk Register](./px00-risk-register.md): records the current support, proof, governance, and scope risks that later `PX` work must manage explicitly
+
+## Post-PL Wave Docs
+
+- [PX10 Support Hardening](./px10-support-hardening.md): records the first post-PL Plasma support-hardening tranche over hardware proof, soak posture, multi-monitor baseline, and environment safety
+- [PX11 Transition Coverage](./px11-transition-coverage.md): records the bounded transition-coverage expansion and first promotion review
+- [PX11 Transition Compatibility Matrix](./px11-transition-compatibility-matrix.md): records the named direct, bridge, fallback, and unsupported transition classes currently admitted
+- [PX11 Promotion Review 1](./px11-promotion-review-1.md): records the evidence-backed decision to keep the current broader transition-capable surface experimental
+- [PX20 Data And Authoring Substrate](./px20-data-and-authoring-substrate.md): records the first Wave 2 Plasma-local data-first and authoring-first substrate tranche
+- [PX20 Pack And Provenance](./px20-pack-and-provenance.md): records the Plasma-local pack provenance sidecar and compatibility boundary
+- [PX20 Authorable Sets And Journeys](./px20-authorable-sets-and-journeys.md): records the first checked-in authored set and journey files
+- [PX20 Plasma Lab Shell](./px20-plasma-lab-shell.md): records the first bounded file-first Plasma Lab shell
+- [PX20 Validation And Compare](./px20-validation-and-compare.md): records the current validator, comparer, and degrade-report substrate
+- [PX20 Selection Intelligence](./px20-selection-intelligence.md): records the current selection-foundation boundary and weighted authored fallback semantics
+
+## PL00-PL14 Program Record
 
 - [PL00 Constitution](./pl00-constitution.md): freezes Plasma identity, boundaries, lower-band truth, migration obligations, and future commitments after `SX09`
 - [PL01 Taxonomy Freeze](./pl01-taxonomy.md): freezes Plasma ontology, vocabulary, and canonical taxonomy while separating current support from target terms
@@ -34,5 +53,6 @@ They live with the product so later `PL` work can extend them without rewriting 
 
 ## Intended Follow-On
 
-Later `PL` phases should add their own product-local docs here as they land.
-At `PL14`, no later implementation phase is claimed as implemented.
+`PL00` through `PL14` are complete.
+Post-PL hardening and expansion now routes through the `PX00` control docs and the master `MX` control plane.
+No later post-PL implementation phase is claimed as implemented until it lands explicitly.

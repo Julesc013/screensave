@@ -18,6 +18,9 @@ It is factual, current-state documentation, not a wishlist.
 - Performance envelopes are bounded qualitatively rather than with hard numeric SLAs.
 - Multi-monitor support is bounded to the shared one-window virtual-desktop baseline rather than independent per-monitor Plasma behavior.
 - Environment safety support is bounded to current preview-safe, long-run-stable, descriptive dark-room content, and truthful clamp or fallback behavior.
+- The authored substrate is still partial: sets, journeys, and pack provenance are on disk, but built-in preset and theme descriptors are still primarily compiled and legacy-INI anchored.
+- The first Plasma Lab shell is CLI-only and support-oriented rather than a full editor.
+- Selection intelligence is still bounded to weighted authored fallback, existing favorites/exclusions, and current set or journey hooks.
 
 ## Known Degrade And Fallback Caveats
 
@@ -46,6 +49,7 @@ It is factual, current-state documentation, not a wishlist.
 - Numeric performance promises remain out of bounds until a later measurement pass exists.
 - Multi-monitor claims must stay within the one-session virtual-desktop baseline until later product or host work proves anything broader.
 - Environment safety claims must stay within current preview-safe and long-run-stable posture until richer safety modes actually exist.
+- Wave 3 expansion must treat the current authored substrate as real but partial rather than assuming a finished authoring suite already exists.
 
 ## Grounded Limit Register
 
@@ -59,6 +63,9 @@ It is factual, current-state documentation, not a wishlist.
 | `numeric_perf_sla_gap` | Blocked | PL13 does not claim hard numeric frame-time, memory, or startup SLAs. |
 | `multi_monitor_baseline_bounded` | Partial | Current multi-monitor support is the shared virtual-desktop baseline, not independent per-monitor behavior. |
 | `environment_safety_bounded` | Partial | Current safety claims are limited to preview-safe, long-run-stable posture, descriptive dark-room content, and truthful clamp or fallback behavior. |
+| `authored_registry_partial` | Partial | `PX20` moves sets, journeys, and pack provenance into real files, but the built-in preset and theme descriptor inventory still remains partially code-anchored. |
+| `lab_shell_cli_only` | Partial | The first Plasma Lab shell is intentionally CLI-first and support-oriented rather than a live editor. |
+| `selection_foundation_bounded` | Partial | Selection now honors authored set weights for bounded fallback behavior, but richer anti-repeat, semantic grouping, and safety-aware logic remain later work. |
 
 ## Scope Boundary
 
