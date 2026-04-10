@@ -13,7 +13,7 @@ It is factual, current-state documentation, not a wishlist.
 
 ## Partially Validated Features Or Paths
 
-- Transition proof is bounded to the curated implemented subset, not every possible preset or theme pairing.
+- Transition proof is bounded to the curated implemented subset, named compatibility classes, and curated bridge-cycle journeys rather than every possible preset or theme pairing.
 - BenchLab forcing is bounded to the implemented Plasma-specific forcing subset, not every imaginable future knob.
 - Performance envelopes are bounded qualitatively rather than with hard numeric SLAs.
 - Multi-monitor support is bounded to the shared one-window virtual-desktop baseline rather than independent per-monitor Plasma behavior.
@@ -22,7 +22,7 @@ It is factual, current-state documentation, not a wishlist.
 ## Known Degrade And Fallback Caveats
 
 - Premium presentation requests can degrade honestly back to the compat baseline when the requested path is not available, but PL13 does not claim every theoretical multi-hop forcing combination was exercised live.
-- Transition fallback coverage is grounded in the implemented fallback policies and curated pairs already present in the product, not in speculative future content families.
+- Transition fallback and hard-cut coverage are grounded in the implemented fallback policies, named compatibility classes, and curated bridge-cycle pairs already present in the product, not in speculative future content families.
 - Lower-band truth remains the reference floor; richer-lane requests must still be treated as optional uplifts.
 
 ## Known Content, Transition, Settings, And BenchLab Limits
@@ -42,7 +42,7 @@ It is factual, current-state documentation, not a wishlist.
 
 - Release-cut decisions will need to respect that cross-hardware coverage is still blocked.
 - Release messaging must stay within the validated premium subset and must not imply more than `heightfield` for dimensional presentation.
-- Transition claims must stay bounded to the implemented supported subset unless PL14 gathers more pairwise proof.
+- Transition claims must stay bounded to the implemented supported subset, named compatibility classes, and curated bridge-cycle journeys unless later work gathers more pairwise proof.
 - Numeric performance promises remain out of bounds until a later measurement pass exists.
 - Multi-monitor claims must stay within the one-session virtual-desktop baseline until later product or host work proves anything broader.
 - Environment safety claims must stay within current preview-safe and long-run-stable posture until richer safety modes actually exist.
@@ -53,7 +53,7 @@ It is factual, current-state documentation, not a wishlist.
 | --- | --- | --- |
 | `experimental_pool_empty` | Documented Only | Experimental filtering exists, but no shipped experimental Plasma content exists in the current repo. |
 | `premium_heightfield_only` | Unsupported | `heightfield` is the only implemented dimensional presentation mode. |
-| `transition_pair_coverage_bounded` | Partial | Transition proof covers the shipped supported subset, not every theoretical pair. |
+| `transition_pair_coverage_bounded` | Partial | Transition proof covers the shipped supported subset, named compatibility classes, and curated bridge-cycle journeys, not every theoretical pair. |
 | `benchlab_forcing_bounded` | Partial | BenchLab forcing covers the implemented subset only. |
 | `cross_hardware_gap` | Blocked | Proof comes from one capable validation machine rather than a wider hardware sweep. |
 | `numeric_perf_sla_gap` | Blocked | PL13 does not claim hard numeric frame-time, memory, or startup SLAs. |

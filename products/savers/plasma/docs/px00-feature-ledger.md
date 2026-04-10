@@ -22,7 +22,7 @@ This ledger records the current repo-grounded Plasma feature posture at the star
 | `gl33` modern lane | implemented and validated | optional uplift, not the stable support center |
 | `gl46` premium lane | implemented and validated | bounded premium subset only |
 | `heightfield` presentation | implemented and validated | only one dimensional mode is real today |
-| Transition subset | implemented and validated for a curated subset | pair coverage remains bounded |
+| Transition subset | implemented and validated for named direct classes, curated bridge cycles, explicit fallback and hard-cut grammar, and curated journeys | pair coverage and fresh rerun breadth remain bounded |
 | Advanced settings surface | implemented | not part of the simple stable default path |
 | Author/Lab settings surface | implemented | deeper control surface remains opt-in |
 | BenchLab forcing subset | implemented and validated | bounded support tooling, not a broad product promise |
@@ -60,6 +60,15 @@ This ledger records the current repo-grounded Plasma feature posture at the star
 
 Those are stronger support surfaces for later waves.
 They are not broad new stable promotions.
+
+## PX11 Transition Hardening Surface
+
+`PX11` broadens the bounded transition surface without widening the visual language:
+
+- curated `warm_bridge_classics` and `cool_bridge_classics` sets now make supported bridge-capable sequences explicit
+- `warm_bridge_cycle` and `cool_bridge_cycle` journeys give later waves named supportable transition paths instead of generic “some bridge pairs exist” wording
+- BenchLab now exposes requested, resolved, and fallback transition types separately
+- the stable-promotion review remains evidence-gated and does not broaden stable scope in this tranche
 
 ## Areas Most Likely To Be Reviewed For Later Promotion
 

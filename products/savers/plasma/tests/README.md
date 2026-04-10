@@ -5,4 +5,6 @@ The current smoke check covers module validity, default config/clamp behavior, P
 
 PL13 adds proof-catalog consistency checks, bounded performance-envelope and known-limit assertions, repeated lower-band create/destroy soak coverage, and repeated journey-driven transition soak coverage that uses the real authored dwell values and bounded bridge-settle ticks.
 
-`pl05-lower-band-proof.md`, `pl06-content-proof.md`, `pl07-advanced-proof.md`, `pl08-modern-proof.md`, `pl09-premium-proof.md`, `pl10-transition-proof.md`, `pl11-settings-proof.md`, `pl12-benchlab-proof.md`, `pl13-soak-and-proof.md`, `pl13-transition-validation.md`, `px10-hardware-proof.md`, and `px10-soak-proof.md` record the exact proof evidence, rebuild commands where available, and current rerun blockers for those phases.
+PX11 extends the bounded transition proof surface with explicit hard-cut coverage, curated warm and cool bridge-cycle journey coverage, and BenchLab assertions for requested-versus-resolved-versus-fallback transition truth.
+
+`pl05-lower-band-proof.md`, `pl06-content-proof.md`, `pl07-advanced-proof.md`, `pl08-modern-proof.md`, `pl09-premium-proof.md`, `pl10-transition-proof.md`, `pl11-settings-proof.md`, `pl12-benchlab-proof.md`, `pl13-soak-and-proof.md`, `pl13-transition-validation.md`, `px10-hardware-proof.md`, `px10-soak-proof.md`, `px11-transition-proof.md`, and `px11-promotion-review-proof.md` record the exact proof evidence, rebuild commands where available, and current rerun blockers for those phases.

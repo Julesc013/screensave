@@ -54,8 +54,8 @@ static const plasma_validation_matrix_entry g_plasma_validation_matrix[] = {
         "transition_subset",
         "gl11",
         PLASMA_VALIDATION_STATUS_VALIDATED,
-        "validation/captures/pl13/benchlab-plasma-journey-gl11.txt",
-        "Journey-focused GL11 report proves the bounded transition subset remains active without premium dependence."
+        "products/savers/plasma/tests/px11-transition-proof.md",
+        "PX11 keeps the lower-band transition subset bounded but names the supported direct and fallback classes explicitly and records the current capture anchor honestly."
     },
     {
         "settings_subset",
@@ -103,8 +103,8 @@ static const plasma_validation_matrix_entry g_plasma_validation_matrix[] = {
         "transition_soak",
         "product",
         PLASMA_VALIDATION_STATUS_PARTIAL,
-        "products/savers/plasma/tests/pl13-transition-validation.md",
-        "Bounded repeated transition stepping is validated, but exhaustive pairwise long-run transition proof remains outside PL13."
+        "products/savers/plasma/tests/px11-transition-proof.md",
+        "PX11 broadens the bounded transition soak story to include named warm and cool bridge-cycle paths in smoke while keeping exhaustive pairwise long-run proof explicitly out of scope."
     },
     {
         "experimental_pool",
@@ -191,10 +191,10 @@ static const plasma_performance_envelope_entry g_plasma_performance_envelopes[] 
         PLASMA_VALIDATION_STATUS_PARTIAL,
         "bounded_qualitative",
         "Transition-capable session compilation and restart behavior are validated for the implemented subset.",
-        "Real theme morph, preset morph, bridge, fallback, and journey behavior are exercised only for bounded curated pairs and sets.",
-        "Transition timing, fallback, and journey progression are validated for the implemented subset only.",
+        "Real theme morph, preset morph, bridge, fallback, hard-cut, and journey behavior are exercised only for bounded named classes, curated bridge-cycle sets, and curated journeys.",
+        "Requested, resolved, and fallback transition truth is now exported explicitly in BenchLab for the implemented subset only.",
         "Repeated transition stepping is bounded and stable in smoke, but exhaustive pairwise soak coverage is not claimed.",
-        "products/savers/plasma/tests/pl13-transition-validation.md"
+        "products/savers/plasma/tests/px11-transition-proof.md"
     },
     {
         "lower_band_restart_soak",
@@ -236,7 +236,7 @@ static const plasma_known_limit_entry g_plasma_known_limits[] = {
     {
         "transition_pair_coverage_bounded",
         PLASMA_VALIDATION_STATUS_PARTIAL,
-        "Transition proof covers the implemented theme, preset, bridge, and journey subset, not every theoretical preset/theme pairing.",
+        "Transition proof now names the implemented direct classes, curated warm and cool bridge cycles, and explicit hard-cut or fallback grammar, but it still does not cover every theoretical preset or theme pairing.",
         "products/savers/plasma/docs/pl13-known-limits.md"
     },
     {
