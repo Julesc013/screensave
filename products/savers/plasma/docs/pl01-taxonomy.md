@@ -34,8 +34,8 @@ Current repo support is still much narrower than the target taxonomy frozen here
 | Area | Current repo support | PL01 freeze |
 | --- | --- | --- |
 | generator vocabulary | legacy `effect_mode` values `plasma`, `fire`, `interference` | canonical generator-family taxonomy |
-| output vocabulary | implicit classic raster output only | canonical output-family and output-mode taxonomy |
-| treatment vocabulary | legacy `smoothing` values `off`, `soft`, `glow` | fixed treatment-slot taxonomy |
+| output vocabulary | classic raster output plus a bounded experimental contour and banded subset | canonical output-family and output-mode taxonomy |
+| treatment vocabulary | legacy `smoothing` bridge plus a bounded implemented treatment subset | fixed treatment-slot taxonomy |
 | presentation vocabulary | implicit flat presentation | dimensional presentation taxonomy |
 | theme vocabulary | concrete theme keys and display names only | theme-family taxonomy plus concrete-theme meaning |
 | policy vocabulary | saver-level `quality_class`, manifest safety claims, some pack routing metadata | full profile, quality, safety, degrade, and transition taxonomy |
@@ -131,8 +131,8 @@ Modifiers are categories, not promises that each category already has a separate
 | Output family | Frozen meaning | Current status |
 | --- | --- | --- |
 | `raster` | direct pixel or texel-style field presentation | current classic output family |
-| `banded` | bucketed or posterized field presentation where banding is the main identity | taxonomy only today |
-| `contour` | quantized, iso-line, or contour-result presentation | taxonomy only today |
+| `banded` | bucketed or posterized field presentation where banding is the main identity | bounded experimental subset implemented today |
+| `contour` | quantized, iso-line, or contour-result presentation | bounded experimental subset implemented today |
 | `glyph` | symbol- or index-driven presentation derived from the field | taxonomy only today |
 | `surface` | surface-oriented interpretation of the field before final dimensional presentation | taxonomy only today |
 
@@ -142,8 +142,9 @@ Modifiers are categories, not promises that each category already has a separate
 | --- | --- | --- | --- |
 | `native_raster` | `raster` | direct raster presentation with no dither-as-identity | current classic mode |
 | `dithered_raster` | `raster` | raster presentation whose primary identity is dithered quantization | taxonomy only today |
-| `contour_only` | `contour` | contour lines or extracted contour result without filled band regions | taxonomy only today |
-| `contour_bands` | `contour` | contour result combined with discrete filled bands | taxonomy only today |
+| `posterized_bands` | `banded` | discrete filled band presentation whose main identity is posterized bucket structure | bounded experimental subset implemented today |
+| `contour_only` | `contour` | contour lines or extracted contour result without filled band regions | bounded experimental subset implemented today |
+| `contour_bands` | `contour` | contour result combined with discrete filled bands | bounded experimental subset implemented today |
 | `ascii_glyph` | `glyph` | ASCII character presentation derived from the field | taxonomy only today |
 | `matrix_glyph` | `glyph` | denser glyph presentation associated with matrix-style symbol flow | taxonomy only today |
 | `heightfield_surface` | `surface` | surface output whose main topology is heightfield-driven | taxonomy only today |
@@ -331,6 +332,9 @@ Implemented today:
 
 - generator equivalents for `plasma`, `fire_like`, and `wave`
 - classic `raster` output in a `native_raster` posture
+- bounded experimental `banded` output in a `posterized_bands` posture
+- bounded experimental `contour` output in `contour_only` and `contour_bands` postures
+- bounded treatment subset across filter, emulation, and accent slots
 - flat presentation
 - saver-level `quality_class=safe`
 - saver-level `preview_safe` and `long_run_stable` claims, with `long_run_safe` reserved as the canonical PL01 tag term

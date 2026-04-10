@@ -23,6 +23,9 @@ This ledger records the current repo-grounded Plasma feature posture at the star
 | `gl46` premium lane | implemented and validated | bounded premium subset only |
 | `heightfield` presentation | implemented and validated | only one dimensional mode is real today |
 | Transition subset | implemented and validated for named direct classes, curated bridge cycles, explicit fallback and hard-cut grammar, and curated journeys | pair coverage and fresh rerun breadth remain bounded |
+| PX30 contour and banded subset | implemented | bounded non-raster grammar is real, but still experimental and preset-driven |
+| PX30 treatment subset | implemented | curated slot-disciplined subset only, not a broad stable effect inventory |
+| PX30 experimental preset slice | implemented | new shipped experimental content exists, but it is intentionally narrow and non-default |
 | Advanced settings surface | implemented | not part of the simple stable default path |
 | Author/Lab settings surface | implemented | deeper control surface remains opt-in |
 | BenchLab forcing subset | implemented and validated | bounded support tooling, not a broad product promise |
@@ -32,7 +35,7 @@ This ledger records the current repo-grounded Plasma feature posture at the star
 | Area | Current State | Reason |
 | --- | --- | --- |
 | Additional dimensional modes | not implemented | `heightfield` is the only real dimensional mode |
-| Broad experimental content pool | not shipped | structural support exists, but shipped content remains stable-only |
+| Broad experimental content pool | not shipped | `PX30` adds only a narrow experimental preset slice rather than a broad alternate catalog |
 | Exhaustive transition pair coverage | not claimed | current proof only covers the curated implemented subset |
 | Broad cross-hardware lane guarantee | not claimed | proof came from one capable validation machine |
 | Numeric performance SLAs | not claimed | current performance envelope is qualitative and bounded |
@@ -82,6 +85,19 @@ They are not broad new stable promotions.
 
 These are substrate and support surfaces.
 They are not a new stable visual-language promotion and they are not a full authoring suite.
+
+## PX30 Output And Treatment Surface
+
+`PX30` makes the following bounded experimental visual-language surfaces real without widening the stable default:
+
+- `contour_only` and `contour_bands` now execute as real contour output modes
+- `posterized_bands` now executes as a real banded output mode
+- `glow_edge`, `halftone_stipple`, `emboss_edge`, `phosphor`, `crt`, and `accent_pass` now exist as a bounded treatment subset with explicit slot identity
+- a small shipped experimental preset slice now carries those surfaces honestly
+- BenchLab and the validation catalog now report the bounded non-raster and treatment subset explicitly
+
+These are experimental output and treatment surfaces.
+They are not a stable promotion, not glyph work, and not new field-family work.
 
 ## Areas Most Likely To Be Reviewed For Later Promotion
 

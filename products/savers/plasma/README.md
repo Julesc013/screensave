@@ -19,5 +19,5 @@ It is not a general pixel-effects lab, palette editor, or shader showcase.
 The current release cut is Classic-first and lower-band-first.
 
 - Stable Core Plasma is centered on the preserved default classic path and the truthful `gdi` / `gl11` baseline.
-- Richer lanes, bounded dimensional presentation, transitions, and deeper lab-facing controls remain opt-in experimental material in the current cut.
+- Richer lanes, bounded dimensional presentation, transitions, deeper lab-facing controls, and the bounded PX30 contour, banded, and treatment studies remain opt-in experimental material in the current cut.
 - The current ship gate is documented as `GO WITH CAVEATS` in [`docs/pl14-ship-readiness.md`](./docs/pl14-ship-readiness.md).

@@ -167,15 +167,7 @@ int plasma_modern_validate_plan(
                 PLASMA_MODERN_COMPONENT_REFINED_FILTER |
                 PLASMA_MODERN_COMPONENT_PRESENTATION_BUFFER
             ) ||
-            plan->modern_degrade_policy != plasma_modern_default_degrade_policy() ||
-            plan->output_family != PLASMA_OUTPUT_FAMILY_RASTER ||
-            plan->output_mode != PLASMA_OUTPUT_MODE_NATIVE_RASTER ||
-            plan->sampling_treatment != PLASMA_SAMPLING_TREATMENT_NONE ||
-            plan->filter_treatment != PLASMA_FILTER_TREATMENT_BLUR ||
-            plan->emulation_treatment != PLASMA_EMULATION_TREATMENT_NONE ||
-            plan->accent_treatment != PLASMA_ACCENT_TREATMENT_OVERLAY_PASS ||
-            (!plan->premium_enabled &&
-                plan->presentation_mode != PLASMA_PRESENTATION_MODE_FLAT)
+            plan->modern_degrade_policy != plasma_modern_default_degrade_policy()
         ) {
             return 0;
         }

@@ -85,7 +85,7 @@ Availability is resolved product-locally from:
 
 Current important gates:
 
-- `content_filter` is unavailable while the shipped registry remains stable-only.
+- `content_filter` is available only when experimental content exists; `PX30` makes that true through a bounded experimental preset slice while the default pool still remains stable-only.
 - `favorites_only` is unavailable until favorite keys are actually configured.
 - `journey_key` is unavailable unless transitions are enabled and the transition policy can consume a journey.
 - `deterministic_seed` is unavailable until deterministic seed mode is enabled.

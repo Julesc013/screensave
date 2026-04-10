@@ -50,7 +50,7 @@ Meaning of states:
 | `settings_subset` | `product` | Validated | [`../tests/pl11-settings-proof.md`](../tests/pl11-settings-proof.md) | Layered settings surfaces and current gating rules remain backed by smoke and recorded proof. |
 | `benchlab_surface` | `product` | Validated | [`../tests/pl12-benchlab-proof.md`](../tests/pl12-benchlab-proof.md) | BenchLab field export, forcing, and clamp reporting remain backed by smoke and captures. |
 | `transition_soak` | `product` | Partial | [`../tests/pl13-transition-validation.md`](../tests/pl13-transition-validation.md) | Repeated transition stepping is covered for the implemented subset, not all theoretical pairs. |
-| `experimental_pool` | `product` | Documented Only | [`pl06-selection-and-sets.md`](./pl06-selection-and-sets.md) | Experimental filtering exists, but the current repo ships stable-only Plasma content. |
+| `experimental_pool` | `product` | Partial | [`../tests/px30-output-proof.md`](../tests/px30-output-proof.md) | `PX30` adds a bounded built-in experimental preset slice for contour, banded, and treatment studies without changing the stable-only default pool. |
 | `non_heightfield_presentations` | `gl46` | Unsupported | [`pl09-premium-lane.md`](./pl09-premium-lane.md) | Other premium-dimensional presentation modes are not implemented. |
 | `cross_driver_ladder` | `all` | Blocked | [`pl13-known-limits.md`](./pl13-known-limits.md) | PL13 proof came from one capable validation machine, not a multi-driver denial sweep. |
 

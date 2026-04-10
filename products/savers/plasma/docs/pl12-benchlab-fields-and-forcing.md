@@ -68,6 +68,7 @@ Current export surfaces:
 - report section: longer proof-facing product section
 
 Both surfaces report resolved truth, not just requested values.
+`PX30` extends that truth surface so `profile_class`, output-family, output-mode, and treatment-slot fields now carry a bounded experimental contour, banded, and treatment subset rather than only the classic raster default.
 
 ## Forcing And Override Catalog
 

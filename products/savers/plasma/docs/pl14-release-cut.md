@@ -37,6 +37,9 @@ They are not part of the default stable Core promise.
 | `advanced -> gl21` | Ship as optional experimental uplift | Implemented and validated, but not required for the stable baseline and not yet broad enough for unconditional stable support claims |
 | `modern -> gl33` | Ship as optional experimental uplift | Implemented and validated, but still a richer optional lane rather than a default support target |
 | `premium -> gl46` with `heightfield` | Ship as optional experimental uplift | Implemented and validated only for the bounded `heightfield` subset; premium breadth remains intentionally narrow |
+| Bounded contour and banded output subset | Ship as opt-in experimental behavior | Implemented for a bounded preset-driven subset, but not broad enough or proved enough for stable default claims |
+| Bounded treatment-family subset | Ship as opt-in experimental behavior | Implemented and supportable for a curated slot-disciplined subset, but still intentionally narrower than the full taxonomy |
+| Bounded experimental preset pool | Ship as opt-in experimental content | Real shipped experimental content now exists, but it is a narrow study slice rather than a broad alternate default catalog |
 | Transition engine subset | Ship as opt-in experimental behavior | Real morphs and journeys are implemented, but transition pair coverage and soak proof remain bounded rather than exhaustive |
 | Advanced and Author-Lab control surfaces | Ship as opt-in experimental control surfaces | Meaningful and implemented, but they expose richer or riskier controls beyond the default stable support center |
 | BenchLab forcing overrides | Ship as support-facing experimental tooling | Implemented and validated for the bounded subset only, not as an end-user stability promise |
@@ -48,7 +51,8 @@ These areas are outside this release cut and should not be presented as shipping
 | Area | Deferred / Non-Ship Decision | Why |
 | --- | --- | --- |
 | Additional dimensional presentation modes beyond `heightfield` | Do not ship | Unsupported in the repo today |
-| Broad experimental content pool | Do not ship | The shipped Plasma content pool is still stable-only |
+| Broad experimental content pool | Do not ship | `PX30` only adds a narrow experimental preset slice, not a broad alternate content catalog |
+| Glyph output family work | Do not ship | Reserved for later Wave 3 work |
 | Exhaustive transition pair coverage | Do not ship as a claim | Only the curated implemented subset is proved |
 | Broad cross-hardware lane guarantees | Do not ship as a claim | PL13 proof came from one capable validation machine |
 | Numeric performance SLAs | Do not ship as a claim | PL13 records qualitative envelopes only |
@@ -59,8 +63,9 @@ These areas are outside this release cut and should not be presented as shipping
 
 - Identity integrity: strong enough for stable Core because the preserved Classic/default path remains intact and still defines the product.
 - Lower-band truth: strong enough for stable Core because `gdi` and `gl11` are separately proved and remain the routing center of gravity.
-- Content curation: stable enough for Core because the shipped content pool is currently stable-only; there is no need to pretend a broader experimental content catalog exists.
+- Content curation: stable enough for Core because the default content pool remains stable-only even though a bounded experimental preset slice now exists.
 - Richer lanes: suitable to ship only as experimental because they are real, but still optional and not broadly validated across environments.
+- Output and treatment widening: suitable to ship only as experimental because the new PX30 subset is real but still bounded, preset-driven, and evidence-limited.
 - Transitions: suitable to ship only as experimental because the implemented subset is meaningful and real, but pair coverage remains bounded.
 - Settings and BenchLab: suitable to ship with a split posture, where safe defaults and reporting are part of stable support, while deeper forcing and lab surfaces remain experimental/support-facing.
 

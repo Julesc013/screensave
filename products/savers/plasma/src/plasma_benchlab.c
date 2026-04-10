@@ -481,6 +481,9 @@ static const char *plasma_benchlab_output_mode_name(
     case PLASMA_OUTPUT_MODE_EXTRUDED_CONTOUR_SURFACE:
         return "extruded_contour_surface";
 
+    case PLASMA_OUTPUT_MODE_POSTERIZED_BANDS:
+        return "posterized_bands";
+
     case PLASMA_OUTPUT_MODE_NATIVE_RASTER:
     default:
         return "native_raster";

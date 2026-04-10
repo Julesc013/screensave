@@ -55,6 +55,7 @@ int plasma_plan_compile(
     plasma_config product_config;
     plasma_settings_context settings_context;
     plasma_settings_resolution settings_resolution;
+    const plasma_preset_values *preset_values;
     const screensave_config_binding *binding;
     screensave_renderer_kind requested_kind;
     screensave_renderer_kind active_kind;
@@ -112,6 +113,16 @@ int plasma_plan_compile(
     plan->speed_mode = settings_resolution.speed_mode;
     plan->resolution_mode = settings_resolution.resolution_mode;
     plan->smoothing_mode = settings_resolution.smoothing_mode;
+    preset_values = plasma_find_preset_values(plan->preset_key);
+    if (preset_values == NULL) {
+        return 0;
+    }
+    plan->output_family = preset_values->output_family;
+    plan->output_mode = preset_values->output_mode;
+    plan->sampling_treatment = preset_values->sampling_treatment;
+    plan->filter_treatment = preset_values->filter_treatment;
+    plan->emulation_treatment = preset_values->emulation_treatment;
+    plan->accent_treatment = preset_values->accent_treatment;
     plan->detail_level = settings_resolution.detail_level;
     plan->seed_policy = settings_resolution.use_deterministic_seed
         ? PLASMA_PLAN_SEED_POLICY_FIXED

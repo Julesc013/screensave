@@ -45,6 +45,10 @@ An item belongs in neither cut when it is:
 - optional `gl33` modern lane
 - optional `gl46` premium lane
 - bounded premium `heightfield` presentation mode
+- bounded experimental preset pool for contour, banded, and treatment studies
+- bounded contour output subset
+- bounded banded output subset
+- bounded treatment-family subset
 - bounded real transition subset:
   - theme morphs
   - preset morphs
@@ -56,7 +60,8 @@ An item belongs in neither cut when it is:
 
 ## Content And Features Excluded From Both For Now
 
-- any shipped experimental content pool
+- any broad shipped experimental content pool
+- glyph output and glyph-specific content
 - premium-dimensional modes other than `heightfield`
 - scenic or world-simulated premium presentation
 - exhaustive transition pair coverage
@@ -78,7 +83,7 @@ The default pool remains stable-first and classic-first:
 
 The split is enforceable in the current repo because:
 
-- the shipped content pool is stable-only
+- the default content pool is still stable-only even though a bounded experimental preset slice now exists
 - richer lanes are not the default routing center
 - premium presentation is opt-in and capability-gated
 - transition behavior is opt-in rather than part of the default baseline
@@ -87,7 +92,7 @@ The split is enforceable in the current repo because:
 ## User And Support Implications
 
 - End users who do nothing get the stable Plasma Classic-centered experience.
-- Users who opt into richer lanes, transitions, or deeper lab surfaces are stepping into experimental territory that is implemented and bounded, but not part of the narrow stable Core promise.
+- Users who opt into richer lanes, transitions, deeper lab surfaces, or the bounded PX30 experimental content slice are stepping into implemented but bounded experimental territory.
 - Support and release messaging should describe richer-lane and transition behavior as optional uplift, not as the baseline every system must reproduce.
 
 ## Scope Boundary

@@ -137,9 +137,30 @@ static const plasma_validation_matrix_entry g_plasma_validation_matrix[] = {
     {
         "experimental_pool",
         "product",
-        PLASMA_VALIDATION_STATUS_DOCUMENTED_ONLY,
-        "products/savers/plasma/docs/pl06-selection-and-sets.md",
-        "Experimental-pool plumbing exists, but shipped Plasma content remains stable-only in the current repo."
+        PLASMA_VALIDATION_STATUS_PARTIAL,
+        "products/savers/plasma/tests/px30-output-proof.md",
+        "PX30 adds a bounded built-in experimental preset pool for contour, banded, and treatment studies without changing the default stable-only pool."
+    },
+    {
+        "contour_output_subset",
+        "product",
+        PLASMA_VALIDATION_STATUS_PARTIAL,
+        "products/savers/plasma/tests/px30-output-proof.md",
+        "PX30 makes contour-only and contour-bands real on the bounded implemented subset while keeping unsupported combinations explicit."
+    },
+    {
+        "banded_output_subset",
+        "product",
+        PLASMA_VALIDATION_STATUS_PARTIAL,
+        "products/savers/plasma/tests/px30-output-proof.md",
+        "PX30 makes posterized banded output a real first-class grammar on the bounded implemented subset instead of leaving banding as taxonomy only."
+    },
+    {
+        "treatment_family_subset",
+        "product",
+        PLASMA_VALIDATION_STATUS_PARTIAL,
+        "products/savers/plasma/tests/px30-treatment-proof.md",
+        "PX30 makes a bounded treatment subset real with explicit slot placement, degrade policy, and experimental posture."
     },
     {
         "non_heightfield_presentations",
@@ -245,14 +266,36 @@ static const plasma_performance_envelope_entry g_plasma_performance_envelopes[] 
         "Preview transition behavior remains the bounded current product behavior rather than a separate preview-only transition system.",
         "PX10 formalizes the preview-safe runtime meaning, but does not add a fresh native preview-host rerun in this checkout.",
         "products/savers/plasma/docs/px10-environment-safety.md"
+    },
+    {
+        "contour_and_banded_subset",
+        "product",
+        PLASMA_VALIDATION_STATUS_PARTIAL,
+        "bounded_qualitative",
+        "PX30 compiles and renders a bounded contour and banded output subset through the normal product path.",
+        "The truthful output subset remains lower-band-safe and uses explicit output-family and output-mode reporting rather than silent raster fallback.",
+        "No claim is made for glyph, surface, or exhaustive output-mode coverage in this tranche.",
+        "Fresh compiled reruns remain bounded by the current local toolchain blocker in this checkout.",
+        "products/savers/plasma/tests/px30-output-proof.md"
+    },
+    {
+        "treatment_subset",
+        "product",
+        PLASMA_VALIDATION_STATUS_PARTIAL,
+        "bounded_qualitative",
+        "PX30 compiles and reports a bounded treatment subset across filter, emulation, and accent slots.",
+        "The truthful treatment subset is limited to glow-edge, halftone-stipple, emboss-edge, phosphor, crt, and accent-pass plus existing advanced-only blur and overlay behavior.",
+        "No broad effect-zoo or exhaustive lane-by-lane treatment guarantee is claimed.",
+        "Fresh compiled reruns remain bounded by the current local toolchain blocker in this checkout.",
+        "products/savers/plasma/tests/px30-treatment-proof.md"
     }
 };
 
 static const plasma_known_limit_entry g_plasma_known_limits[] = {
     {
-        "experimental_pool_empty",
-        PLASMA_VALIDATION_STATUS_DOCUMENTED_ONLY,
-        "The current repo ships stable-only Plasma content. Experimental filtering and selection posture exist, but there is no shipped experimental pool to validate as content.",
+        "experimental_pool_bounded",
+        PLASMA_VALIDATION_STATUS_PARTIAL,
+        "PX30 adds a bounded built-in experimental preset pool, but it remains a narrow opt-in study slice rather than a broad experimental catalog.",
         "products/savers/plasma/docs/pl13-known-limits.md"
     },
     {
@@ -307,6 +350,18 @@ static const plasma_known_limit_entry g_plasma_known_limits[] = {
         "lab_shell_cli_only",
         PLASMA_VALIDATION_STATUS_PARTIAL,
         "The first Plasma Lab shell is intentionally file-first and CLI-oriented. It is not yet a live visual editor, gallery, or suite-grade authoring workstation.",
+        "products/savers/plasma/docs/pl13-known-limits.md"
+    },
+    {
+        "output_family_subset_bounded",
+        PLASMA_VALIDATION_STATUS_PARTIAL,
+        "PX30 makes bounded contour and banded output subsets real, but glyph, surface, and exhaustive non-raster coverage remain later-wave work.",
+        "products/savers/plasma/docs/pl13-known-limits.md"
+    },
+    {
+        "treatment_family_subset_bounded",
+        PLASMA_VALIDATION_STATUS_PARTIAL,
+        "PX30 lands a curated treatment subset with explicit slot and degrade policy, but it does not implement every named treatment family or every theoretical combination.",
         "products/savers/plasma/docs/pl13-known-limits.md"
     },
     {
@@ -708,7 +763,10 @@ int plasma_plan_validate_for_renderer_kind(
             plan->active_renderer_kind == SCREENSAVE_RENDERER_KIND_GL46 &&
             plan->advanced_enabled &&
             plan->modern_enabled &&
-            plan->premium_enabled;
+            (
+                plan->premium_enabled ||
+                (!plan->premium_enabled && !plan->premium_capable)
+            );
     }
 
     return 0;

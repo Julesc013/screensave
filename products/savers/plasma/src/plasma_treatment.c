@@ -11,6 +11,73 @@ static screensave_color plasma_treatment_background_color(void)
     return color;
 }
 
+static unsigned char plasma_treatment_clamp_channel(unsigned int value)
+{
+    if (value > 255U) {
+        return 255U;
+    }
+
+    return (unsigned char)value;
+}
+
+static unsigned int plasma_treatment_abs_int(int value)
+{
+    return (unsigned int)(value < 0 ? -value : value);
+}
+
+static unsigned char plasma_treatment_sample_scalar(
+    const plasma_output_frame *output,
+    int x,
+    int y
+)
+{
+    int width;
+    int height;
+
+    if (
+        output == NULL ||
+        output->scalar_values == NULL ||
+        output->size.width <= 0 ||
+        output->size.height <= 0
+    ) {
+        return 0U;
+    }
+
+    width = output->size.width;
+    height = output->size.height;
+    if (x < 0) {
+        x = 0;
+    } else if (x >= width) {
+        x = width - 1;
+    }
+    if (y < 0) {
+        y = 0;
+    } else if (y >= height) {
+        y = height - 1;
+    }
+
+    return output->scalar_values[(y * width) + x];
+}
+
+static unsigned int plasma_treatment_max3(
+    unsigned int first,
+    unsigned int second,
+    unsigned int third
+)
+{
+    unsigned int value;
+
+    value = first;
+    if (second > value) {
+        value = second;
+    }
+    if (third > value) {
+        value = third;
+    }
+
+    return value;
+}
+
 static screensave_color plasma_treatment_palette_color(
     const struct plasma_plan_tag *plan,
     const struct plasma_execution_state_tag *state,
@@ -76,13 +143,109 @@ static screensave_color plasma_treatment_palette_color(
     return screensave_color_lerp(accent_color, highlight_color, amount);
 }
 
-static int plasma_theme_map_raster_output(
+static unsigned int plasma_treatment_band_count(const struct plasma_plan_tag *plan)
+{
+    unsigned int band_count;
+
+    if (plan == NULL) {
+        return 6U;
+    }
+
+    band_count = 6U;
+    if (plan->output_mode == PLASMA_OUTPUT_MODE_CONTOUR_ONLY) {
+        band_count = 9U;
+    } else if (plan->output_mode == PLASMA_OUTPUT_MODE_CONTOUR_BANDS) {
+        band_count = 7U;
+    }
+
+    if (plan->effect_mode == PLASMA_EFFECT_INTERFERENCE && band_count < 10U) {
+        band_count += 1U;
+    }
+    if (plan->resolution_mode == PLASMA_RESOLUTION_COARSE && band_count > 4U) {
+        band_count -= 1U;
+    } else if (plan->resolution_mode == PLASMA_RESOLUTION_FINE && band_count < 10U) {
+        band_count += 1U;
+    }
+
+    if (band_count < 4U) {
+        band_count = 4U;
+    } else if (band_count > 10U) {
+        band_count = 10U;
+    }
+
+    return band_count;
+}
+
+static unsigned int plasma_treatment_band_index(
+    unsigned int value,
+    unsigned int band_count
+)
+{
+    if (band_count == 0U) {
+        return 0U;
+    }
+
+    return (value * band_count) / 256U;
+}
+
+static unsigned int plasma_treatment_band_value(
+    unsigned int band_index,
+    unsigned int band_count
+)
+{
+    if (band_count <= 1U) {
+        return 0U;
+    }
+    if (band_index >= band_count) {
+        band_index = band_count - 1U;
+    }
+
+    return (band_index * 255U) / (band_count - 1U);
+}
+
+static int plasma_treatment_is_contour_edge(
+    const plasma_output_frame *output,
+    int x,
+    int y,
+    unsigned int band_count
+)
+{
+    unsigned int center_index;
+
+    center_index = plasma_treatment_band_index(
+        (unsigned int)plasma_treatment_sample_scalar(output, x, y),
+        band_count
+    );
+
+    return
+        center_index != plasma_treatment_band_index(
+            (unsigned int)plasma_treatment_sample_scalar(output, x - 1, y),
+            band_count
+        ) ||
+        center_index != plasma_treatment_band_index(
+            (unsigned int)plasma_treatment_sample_scalar(output, x + 1, y),
+            band_count
+        ) ||
+        center_index != plasma_treatment_band_index(
+            (unsigned int)plasma_treatment_sample_scalar(output, x, y - 1),
+            band_count
+        ) ||
+        center_index != plasma_treatment_band_index(
+            (unsigned int)plasma_treatment_sample_scalar(output, x, y + 1),
+            band_count
+        );
+}
+
+static int plasma_theme_map_output(
     const struct plasma_plan_tag *plan,
     const struct plasma_execution_state_tag *state,
     const plasma_output_frame *output,
     screensave_visual_buffer *visual_buffer
 )
 {
+    screensave_color background_color;
+    screensave_color white_color;
+    unsigned int band_count;
     int x;
     int y;
 
@@ -105,16 +268,66 @@ static int plasma_theme_map_raster_output(
         return 0;
     }
 
+    background_color = plasma_treatment_background_color();
+    white_color.red = 255;
+    white_color.green = 255;
+    white_color.blue = 255;
+    white_color.alpha = 255;
+    band_count = plasma_treatment_band_count(plan);
+
     for (y = 0; y < output->size.height; ++y) {
         unsigned char *row;
 
         row = visual_buffer->pixels + ((size_t)y * (size_t)visual_buffer->stride_bytes);
         for (x = 0; x < output->size.width; ++x) {
-            screensave_color color;
             unsigned int value;
+            unsigned int band_index;
+            unsigned int band_value;
+            int contour_edge;
+            screensave_color color;
 
-            value = (unsigned int)output->scalar_values[(y * output->size.width) + x];
-            color = plasma_treatment_palette_color(plan, state, value);
+            value = (unsigned int)plasma_treatment_sample_scalar(output, x, y);
+            band_index = plasma_treatment_band_index(value, band_count);
+            band_value = plasma_treatment_band_value(band_index, band_count);
+            contour_edge = plasma_treatment_is_contour_edge(output, x, y, band_count);
+
+            if (
+                output->family == PLASMA_OUTPUT_FAMILY_RASTER &&
+                output->mode == PLASMA_OUTPUT_MODE_NATIVE_RASTER
+            ) {
+                color = plasma_treatment_palette_color(plan, state, value);
+            } else if (
+                output->family == PLASMA_OUTPUT_FAMILY_BANDED &&
+                output->mode == PLASMA_OUTPUT_MODE_POSTERIZED_BANDS
+            ) {
+                color = plasma_treatment_palette_color(plan, state, band_value);
+                if ((band_index & 1U) != 0U) {
+                    color = screensave_color_lerp(color, plan->theme->accent_color, 40U);
+                }
+            } else if (
+                output->family == PLASMA_OUTPUT_FAMILY_CONTOUR &&
+                output->mode == PLASMA_OUTPUT_MODE_CONTOUR_ONLY
+            ) {
+                if (contour_edge) {
+                    color = plasma_treatment_palette_color(plan, state, band_value);
+                    color = screensave_color_lerp(color, white_color, 88U);
+                } else {
+                    color = background_color;
+                }
+            } else if (
+                output->family == PLASMA_OUTPUT_FAMILY_CONTOUR &&
+                output->mode == PLASMA_OUTPUT_MODE_CONTOUR_BANDS
+            ) {
+                color = plasma_treatment_palette_color(plan, state, band_value);
+                if (contour_edge) {
+                    color = screensave_color_lerp(plan->theme->accent_color, white_color, 80U);
+                } else if ((band_index & 1U) != 0U) {
+                    color = screensave_color_lerp(color, plan->theme->accent_color, 28U);
+                }
+            } else {
+                return 0;
+            }
+
             row[(x * 4) + 0] = color.blue;
             row[(x * 4) + 1] = color.green;
             row[(x * 4) + 2] = color.red;
@@ -141,9 +354,171 @@ static int plasma_apply_sampling_treatment(
     return plan->sampling_treatment == PLASMA_SAMPLING_TREATMENT_NONE;
 }
 
+static int plasma_apply_glow_edge_filter(
+    const struct plasma_plan_tag *plan,
+    const plasma_output_frame *output,
+    screensave_visual_buffer *visual_buffer
+)
+{
+    int x;
+    int y;
+
+    if (
+        plan == NULL ||
+        output == NULL ||
+        visual_buffer == NULL ||
+        plan->theme == NULL ||
+        visual_buffer->pixels == NULL
+    ) {
+        return 0;
+    }
+
+    for (y = 0; y < visual_buffer->size.height; ++y) {
+        unsigned char *row;
+
+        row = visual_buffer->pixels + ((size_t)y * (size_t)visual_buffer->stride_bytes);
+        for (x = 0; x < visual_buffer->size.width; ++x) {
+            int x_gradient;
+            int y_gradient;
+            unsigned int intensity;
+            unsigned int blue_value;
+            unsigned int green_value;
+            unsigned int red_value;
+
+            x_gradient =
+                (int)plasma_treatment_sample_scalar(output, x + 1, y) -
+                (int)plasma_treatment_sample_scalar(output, x - 1, y);
+            y_gradient =
+                (int)plasma_treatment_sample_scalar(output, x, y + 1) -
+                (int)plasma_treatment_sample_scalar(output, x, y - 1);
+            intensity = plasma_treatment_abs_int(x_gradient) + plasma_treatment_abs_int(y_gradient);
+            if (intensity > 255U) {
+                intensity = 255U;
+            }
+
+            blue_value =
+                (unsigned int)row[(x * 4) + 0] +
+                (((unsigned int)plan->theme->accent_color.blue * intensity) / 255U) / 3U;
+            green_value =
+                (unsigned int)row[(x * 4) + 1] +
+                (((unsigned int)plan->theme->accent_color.green * intensity) / 255U) / 3U;
+            red_value =
+                (unsigned int)row[(x * 4) + 2] +
+                (((unsigned int)plan->theme->accent_color.red * intensity) / 255U) / 3U;
+
+            row[(x * 4) + 0] = plasma_treatment_clamp_channel(blue_value);
+            row[(x * 4) + 1] = plasma_treatment_clamp_channel(green_value);
+            row[(x * 4) + 2] = plasma_treatment_clamp_channel(red_value);
+            row[(x * 4) + 3] = 255U;
+        }
+    }
+
+    return 1;
+}
+
+static int plasma_apply_halftone_stipple_filter(
+    const plasma_output_frame *output,
+    screensave_visual_buffer *visual_buffer
+)
+{
+    static const unsigned int g_thresholds[4] = { 48U, 168U, 112U, 224U };
+    int x;
+    int y;
+
+    if (
+        output == NULL ||
+        visual_buffer == NULL ||
+        visual_buffer->pixels == NULL
+    ) {
+        return 0;
+    }
+
+    for (y = 0; y < visual_buffer->size.height; ++y) {
+        unsigned char *row;
+
+        row = visual_buffer->pixels + ((size_t)y * (size_t)visual_buffer->stride_bytes);
+        for (x = 0; x < visual_buffer->size.width; ++x) {
+            unsigned int scalar_value;
+            unsigned int threshold;
+            unsigned int blue_value;
+            unsigned int green_value;
+            unsigned int red_value;
+
+            scalar_value = (unsigned int)plasma_treatment_sample_scalar(output, x, y);
+            threshold = g_thresholds[((unsigned int)(y & 1) * 2U) + (unsigned int)(x & 1)];
+            if (scalar_value < threshold) {
+                blue_value = ((unsigned int)row[(x * 4) + 0] * 48U) / 255U;
+                green_value = ((unsigned int)row[(x * 4) + 1] * 48U) / 255U;
+                red_value = ((unsigned int)row[(x * 4) + 2] * 48U) / 255U;
+                row[(x * 4) + 0] = (unsigned char)blue_value;
+                row[(x * 4) + 1] = (unsigned char)green_value;
+                row[(x * 4) + 2] = (unsigned char)red_value;
+                row[(x * 4) + 3] = 255U;
+            }
+        }
+    }
+
+    return 1;
+}
+
+static int plasma_apply_emboss_edge_filter(
+    const plasma_output_frame *output,
+    screensave_visual_buffer *visual_buffer
+)
+{
+    int x;
+    int y;
+
+    if (
+        output == NULL ||
+        visual_buffer == NULL ||
+        visual_buffer->pixels == NULL
+    ) {
+        return 0;
+    }
+
+    for (y = 0; y < visual_buffer->size.height; ++y) {
+        unsigned char *row;
+
+        row = visual_buffer->pixels + ((size_t)y * (size_t)visual_buffer->stride_bytes);
+        for (x = 0; x < visual_buffer->size.width; ++x) {
+            int x_gradient;
+            int y_gradient;
+            int shade;
+            unsigned int blue_value;
+            unsigned int green_value;
+            unsigned int red_value;
+
+            x_gradient =
+                (int)plasma_treatment_sample_scalar(output, x + 1, y) -
+                (int)plasma_treatment_sample_scalar(output, x - 1, y);
+            y_gradient =
+                (int)plasma_treatment_sample_scalar(output, x, y + 1) -
+                (int)plasma_treatment_sample_scalar(output, x, y - 1);
+            shade = 128 + ((x_gradient + y_gradient) / 4);
+            if (shade < 32) {
+                shade = 32;
+            } else if (shade > 224) {
+                shade = 224;
+            }
+
+            blue_value = ((unsigned int)row[(x * 4) + 0] * (unsigned int)shade) / 128U;
+            green_value = ((unsigned int)row[(x * 4) + 1] * (unsigned int)shade) / 128U;
+            red_value = ((unsigned int)row[(x * 4) + 2] * (unsigned int)shade) / 128U;
+            row[(x * 4) + 0] = plasma_treatment_clamp_channel(blue_value);
+            row[(x * 4) + 1] = plasma_treatment_clamp_channel(green_value);
+            row[(x * 4) + 2] = plasma_treatment_clamp_channel(red_value);
+            row[(x * 4) + 3] = 255U;
+        }
+    }
+
+    return 1;
+}
+
 static int plasma_apply_filter_treatment(
     const struct plasma_plan_tag *plan,
     struct plasma_execution_state_tag *state,
+    const plasma_output_frame *output,
     screensave_visual_buffer *visual_buffer
 )
 {
@@ -151,15 +526,146 @@ static int plasma_apply_filter_treatment(
         return 0;
     }
 
-    if (plan->filter_treatment == PLASMA_FILTER_TREATMENT_NONE) {
+    switch (plan->filter_treatment) {
+    case PLASMA_FILTER_TREATMENT_NONE:
         return 1;
-    }
 
-    if (!plasma_advanced_apply_blur_filter(plan, state, visual_buffer)) {
+    case PLASMA_FILTER_TREATMENT_BLUR:
+        if (!plasma_advanced_apply_blur_filter(plan, state, visual_buffer)) {
+            return 0;
+        }
+        return plasma_modern_apply_filter_refinement(plan, state, visual_buffer);
+
+    case PLASMA_FILTER_TREATMENT_GLOW_EDGE:
+        return plasma_apply_glow_edge_filter(plan, output, visual_buffer);
+
+    case PLASMA_FILTER_TREATMENT_HALFTONE_STIPPLE:
+        return plasma_apply_halftone_stipple_filter(output, visual_buffer);
+
+    case PLASMA_FILTER_TREATMENT_EMBOSS_EDGE:
+        return plasma_apply_emboss_edge_filter(output, visual_buffer);
+
+    case PLASMA_FILTER_TREATMENT_KALEIDOSCOPE_MIRROR:
+    case PLASMA_FILTER_TREATMENT_RESTRAINED_GLITCH:
+    default:
+        return 0;
+    }
+}
+
+static int plasma_apply_phosphor_emulation(
+    const struct plasma_plan_tag *plan,
+    screensave_visual_buffer *visual_buffer
+)
+{
+    int x;
+    int y;
+
+    if (plan == NULL || visual_buffer == NULL || visual_buffer->pixels == NULL || plan->theme == NULL) {
         return 0;
     }
 
-    return plasma_modern_apply_filter_refinement(plan, state, visual_buffer);
+    for (y = 0; y < visual_buffer->size.height; ++y) {
+        unsigned char *row;
+
+        row = visual_buffer->pixels + ((size_t)y * (size_t)visual_buffer->stride_bytes);
+        for (x = 0; x < visual_buffer->size.width; ++x) {
+            unsigned int blue_value;
+            unsigned int green_value;
+            unsigned int red_value;
+            unsigned int luma_value;
+            unsigned int scanline_scale;
+
+            blue_value = (unsigned int)row[(x * 4) + 0];
+            green_value = (unsigned int)row[(x * 4) + 1];
+            red_value = (unsigned int)row[(x * 4) + 2];
+            luma_value = plasma_treatment_max3(blue_value, green_value, red_value);
+            scanline_scale = (y & 1) == 0 ? 255U : 212U;
+
+            row[(x * 4) + 0] = plasma_treatment_clamp_channel(
+                (((unsigned int)plan->theme->primary_color.blue * luma_value) / 255U) * scanline_scale / 255U
+            );
+            row[(x * 4) + 1] = plasma_treatment_clamp_channel(
+                (((unsigned int)plan->theme->primary_color.green * luma_value) / 255U) * scanline_scale / 255U
+            );
+            row[(x * 4) + 2] = plasma_treatment_clamp_channel(
+                (((unsigned int)plan->theme->primary_color.red * luma_value) / 255U) * scanline_scale / 255U
+            );
+            row[(x * 4) + 3] = 255U;
+        }
+    }
+
+    return 1;
+}
+
+static int plasma_apply_crt_emulation(
+    screensave_visual_buffer *visual_buffer
+)
+{
+    int center_x;
+    int center_y;
+    int x;
+    int y;
+
+    if (visual_buffer == NULL || visual_buffer->pixels == NULL) {
+        return 0;
+    }
+
+    center_x = visual_buffer->size.width / 2;
+    center_y = visual_buffer->size.height / 2;
+    if (center_x <= 0) {
+        center_x = 1;
+    }
+    if (center_y <= 0) {
+        center_y = 1;
+    }
+
+    for (y = 0; y < visual_buffer->size.height; ++y) {
+        unsigned char *row;
+
+        row = visual_buffer->pixels + ((size_t)y * (size_t)visual_buffer->stride_bytes);
+        for (x = 0; x < visual_buffer->size.width; ++x) {
+            unsigned int blue_value;
+            unsigned int green_value;
+            unsigned int red_value;
+            unsigned int mask_scale;
+            unsigned int scanline_scale;
+            unsigned int vignette_scale;
+
+            blue_value = (unsigned int)row[(x * 4) + 0];
+            green_value = (unsigned int)row[(x * 4) + 1];
+            red_value = (unsigned int)row[(x * 4) + 2];
+
+            mask_scale = 208U;
+            if ((x % 3) == 0) {
+                red_value = (red_value * 255U) / 220U;
+            } else if ((x % 3) == 1) {
+                green_value = (green_value * 255U) / 220U;
+            } else {
+                blue_value = (blue_value * 255U) / 220U;
+            }
+
+            scanline_scale = (y & 1) == 0 ? 244U : 196U;
+            vignette_scale = 255U -
+                (plasma_treatment_abs_int(x - center_x) * 56U) / (unsigned int)center_x -
+                (plasma_treatment_abs_int(y - center_y) * 56U) / (unsigned int)center_y;
+            if (vignette_scale < 128U) {
+                vignette_scale = 128U;
+            }
+
+            row[(x * 4) + 0] = plasma_treatment_clamp_channel(
+                (((blue_value * mask_scale) / 255U) * scanline_scale / 255U) * vignette_scale / 255U
+            );
+            row[(x * 4) + 1] = plasma_treatment_clamp_channel(
+                (((green_value * mask_scale) / 255U) * scanline_scale / 255U) * vignette_scale / 255U
+            );
+            row[(x * 4) + 2] = plasma_treatment_clamp_channel(
+                (((red_value * mask_scale) / 255U) * scanline_scale / 255U) * vignette_scale / 255U
+            );
+            row[(x * 4) + 3] = 255U;
+        }
+    }
+
+    return 1;
 }
 
 static int plasma_apply_emulation_treatment(
@@ -169,13 +675,70 @@ static int plasma_apply_emulation_treatment(
 )
 {
     (void)state;
-    (void)visual_buffer;
 
     if (plan == NULL) {
         return 0;
     }
 
-    return plan->emulation_treatment == PLASMA_EMULATION_TREATMENT_NONE;
+    switch (plan->emulation_treatment) {
+    case PLASMA_EMULATION_TREATMENT_NONE:
+        return 1;
+
+    case PLASMA_EMULATION_TREATMENT_PHOSPHOR:
+        return plasma_apply_phosphor_emulation(plan, visual_buffer);
+
+    case PLASMA_EMULATION_TREATMENT_CRT:
+        return plasma_apply_crt_emulation(visual_buffer);
+
+    default:
+        return 0;
+    }
+}
+
+static int plasma_apply_accent_pass(
+    const struct plasma_plan_tag *plan,
+    screensave_visual_buffer *visual_buffer
+)
+{
+    int x;
+    int y;
+
+    if (plan == NULL || visual_buffer == NULL || visual_buffer->pixels == NULL || plan->theme == NULL) {
+        return 0;
+    }
+
+    for (y = 0; y < visual_buffer->size.height; ++y) {
+        unsigned char *row;
+
+        row = visual_buffer->pixels + ((size_t)y * (size_t)visual_buffer->stride_bytes);
+        for (x = 0; x < visual_buffer->size.width; ++x) {
+            unsigned int blue_value;
+            unsigned int green_value;
+            unsigned int red_value;
+            unsigned int intensity;
+
+            blue_value = (unsigned int)row[(x * 4) + 0];
+            green_value = (unsigned int)row[(x * 4) + 1];
+            red_value = (unsigned int)row[(x * 4) + 2];
+            intensity = plasma_treatment_max3(blue_value, green_value, red_value);
+            if (intensity < 80U) {
+                continue;
+            }
+
+            row[(x * 4) + 0] = plasma_treatment_clamp_channel(
+                blue_value + ((((unsigned int)plan->theme->accent_color.blue * intensity) / 255U) / 6U)
+            );
+            row[(x * 4) + 1] = plasma_treatment_clamp_channel(
+                green_value + ((((unsigned int)plan->theme->accent_color.green * intensity) / 255U) / 6U)
+            );
+            row[(x * 4) + 2] = plasma_treatment_clamp_channel(
+                red_value + ((((unsigned int)plan->theme->accent_color.red * intensity) / 255U) / 6U)
+            );
+            row[(x * 4) + 3] = 255U;
+        }
+    }
+
+    return 1;
 }
 
 static int plasma_apply_accent_treatment(
@@ -188,11 +751,19 @@ static int plasma_apply_accent_treatment(
         return 0;
     }
 
-    if (plan->accent_treatment == PLASMA_ACCENT_TREATMENT_NONE) {
+    switch (plan->accent_treatment) {
+    case PLASMA_ACCENT_TREATMENT_NONE:
         return 1;
-    }
 
-    return plasma_advanced_apply_overlay_accent(plan, state, visual_buffer);
+    case PLASMA_ACCENT_TREATMENT_OVERLAY_PASS:
+        return plasma_advanced_apply_overlay_accent(plan, state, visual_buffer);
+
+    case PLASMA_ACCENT_TREATMENT_ACCENT_PASS:
+        return plasma_apply_accent_pass(plan, visual_buffer);
+
+    default:
+        return 0;
+    }
 }
 
 int plasma_treatment_validate_plan(const struct plasma_plan_tag *plan)
@@ -204,19 +775,39 @@ int plasma_treatment_validate_plan(const struct plasma_plan_tag *plan)
     if (plan->sampling_treatment != PLASMA_SAMPLING_TREATMENT_NONE) {
         return 0;
     }
+
+    switch (plan->filter_treatment) {
+    case PLASMA_FILTER_TREATMENT_NONE:
+    case PLASMA_FILTER_TREATMENT_GLOW_EDGE:
+    case PLASMA_FILTER_TREATMENT_HALFTONE_STIPPLE:
+    case PLASMA_FILTER_TREATMENT_EMBOSS_EDGE:
+        break;
+
+    case PLASMA_FILTER_TREATMENT_BLUR:
+        if (!plan->advanced_enabled) {
+            return 0;
+        }
+        break;
+
+    default:
+        return 0;
+    }
+
     if (
-        plan->filter_treatment != PLASMA_FILTER_TREATMENT_NONE &&
-        !(plan->advanced_enabled && plan->filter_treatment == PLASMA_FILTER_TREATMENT_BLUR)
+        plan->emulation_treatment != PLASMA_EMULATION_TREATMENT_NONE &&
+        plan->emulation_treatment != PLASMA_EMULATION_TREATMENT_PHOSPHOR &&
+        plan->emulation_treatment != PLASMA_EMULATION_TREATMENT_CRT
     ) {
         return 0;
     }
-    if (plan->emulation_treatment != PLASMA_EMULATION_TREATMENT_NONE) {
-        return 0;
+
+    if (plan->accent_treatment == PLASMA_ACCENT_TREATMENT_OVERLAY_PASS) {
+        return plan->advanced_enabled;
     }
 
     return
         plan->accent_treatment == PLASMA_ACCENT_TREATMENT_NONE ||
-        (plan->advanced_enabled && plan->accent_treatment == PLASMA_ACCENT_TREATMENT_OVERLAY_PASS);
+        plan->accent_treatment == PLASMA_ACCENT_TREATMENT_ACCENT_PASS;
 }
 
 int plasma_treatment_apply(
@@ -237,13 +828,13 @@ int plasma_treatment_apply(
         return 0;
     }
 
-    if (!plasma_theme_map_raster_output(plan, state, output, visual_buffer)) {
+    if (!plasma_theme_map_output(plan, state, output, visual_buffer)) {
         return 0;
     }
     if (!plasma_apply_sampling_treatment(plan, state, visual_buffer)) {
         return 0;
     }
-    if (!plasma_apply_filter_treatment(plan, (struct plasma_execution_state_tag *)state, visual_buffer)) {
+    if (!plasma_apply_filter_treatment(plan, (struct plasma_execution_state_tag *)state, output, visual_buffer)) {
         return 0;
     }
     if (!plasma_apply_emulation_treatment(plan, state, visual_buffer)) {

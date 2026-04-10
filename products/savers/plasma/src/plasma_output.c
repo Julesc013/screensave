@@ -1,16 +1,36 @@
 #include "plasma_internal.h"
 
+static int plasma_output_mode_matches_family(
+    plasma_output_family family,
+    plasma_output_mode mode
+)
+{
+    switch (family) {
+    case PLASMA_OUTPUT_FAMILY_RASTER:
+        return mode == PLASMA_OUTPUT_MODE_NATIVE_RASTER;
+
+    case PLASMA_OUTPUT_FAMILY_BANDED:
+        return mode == PLASMA_OUTPUT_MODE_POSTERIZED_BANDS;
+
+    case PLASMA_OUTPUT_FAMILY_CONTOUR:
+        return
+            mode == PLASMA_OUTPUT_MODE_CONTOUR_ONLY ||
+            mode == PLASMA_OUTPUT_MODE_CONTOUR_BANDS;
+
+    case PLASMA_OUTPUT_FAMILY_GLYPH:
+    case PLASMA_OUTPUT_FAMILY_SURFACE:
+    default:
+        return 0;
+    }
+}
+
 int plasma_output_validate_plan(const struct plasma_plan_tag *plan)
 {
     if (plan == NULL) {
         return 0;
     }
 
-    if (plan->output_family != PLASMA_OUTPUT_FAMILY_RASTER) {
-        return 0;
-    }
-
-    return plan->output_mode == PLASMA_OUTPUT_MODE_NATIVE_RASTER;
+    return plasma_output_mode_matches_family(plan->output_family, plan->output_mode);
 }
 
 int plasma_output_build(

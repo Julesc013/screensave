@@ -71,6 +71,11 @@ Current implemented subset:
 
 - `raster`
 - `native_raster`
+- bounded experimental `banded`
+- bounded experimental `contour`
+- bounded experimental `posterized_bands`
+- bounded experimental `contour_only`
+- bounded experimental `contour_bands`
 
 Current policy:
 
@@ -100,7 +105,15 @@ Framework vocabulary is structurally real for:
 
 Current implemented subset:
 
-- explicit `none` defaults only
+- explicit `none` defaults
+- richer-lane `blur`
+- richer-lane `overlay_pass`
+- bounded experimental `glow_edge`
+- bounded experimental `halftone_stipple`
+- bounded experimental `emboss_edge`
+- bounded experimental `phosphor`
+- bounded experimental `crt`
+- bounded experimental `accent_pass`
 
 Important classic-preservation note:
 
@@ -142,13 +155,15 @@ Implemented and used now:
 
 - output family `raster`
 - output mode `native_raster`
-- treatment slots with explicit `none` values
+- bounded experimental output families `banded` and `contour`
+- bounded experimental output modes `posterized_bands`, `contour_only`, and `contour_bands`
+- treatment slots with explicit `none` values plus the bounded implemented subset
 - presentation mode `flat`
 
 Enumerated but not implemented now:
 
-- non-raster output families and modes
-- non-`none` treatment values
+- glyph and surface output families and modes
+- unsupported treatment values outside the bounded implemented subset
 - non-flat presentation modes
 
 That limitation is intentional.
@@ -196,7 +211,7 @@ Current runtime effect:
 - current pack surface
 - current renderer-law posture
 
-It also does not add public glyph, contour, surface, or dimensional showcase behavior yet.
+It also does not add glyph output, new field families, or broader dimensional showcase behavior yet.
 
 ## What PL05 May Build On Next
 

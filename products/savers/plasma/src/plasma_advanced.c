@@ -48,6 +48,21 @@ static unsigned char plasma_advanced_clamp_channel(unsigned int value)
     return (unsigned char)value;
 }
 
+static int plasma_advanced_prefers_default_visual_uplift(
+    const struct plasma_plan_tag *plan
+)
+{
+    return
+        plan != NULL &&
+        plan->output_family == PLASMA_OUTPUT_FAMILY_RASTER &&
+        plan->output_mode == PLASMA_OUTPUT_MODE_NATIVE_RASTER &&
+        plan->sampling_treatment == PLASMA_SAMPLING_TREATMENT_NONE &&
+        plan->filter_treatment == PLASMA_FILTER_TREATMENT_NONE &&
+        plan->emulation_treatment == PLASMA_EMULATION_TREATMENT_NONE &&
+        plan->accent_treatment == PLASMA_ACCENT_TREATMENT_NONE &&
+        plan->presentation_mode == PLASMA_PRESENTATION_MODE_FLAT;
+}
+
 int plasma_is_advanced_kind(screensave_renderer_kind renderer_kind)
 {
     return plasma_is_advanced_runtime_kind(renderer_kind);
@@ -95,14 +110,6 @@ void plasma_advanced_bind_plan(
         ? plasma_advanced_default_degrade_policy()
         : 0UL;
 
-    plan->output_family = PLASMA_OUTPUT_FAMILY_RASTER;
-    plan->output_mode = PLASMA_OUTPUT_MODE_NATIVE_RASTER;
-    plan->sampling_treatment = PLASMA_SAMPLING_TREATMENT_NONE;
-    plan->filter_treatment = PLASMA_FILTER_TREATMENT_NONE;
-    plan->emulation_treatment = PLASMA_EMULATION_TREATMENT_NONE;
-    plan->accent_treatment = PLASMA_ACCENT_TREATMENT_NONE;
-    plan->presentation_mode = PLASMA_PRESENTATION_MODE_FLAT;
-
     if (
         module != NULL &&
         plan->advanced_capable &&
@@ -115,8 +122,10 @@ void plasma_advanced_bind_plan(
             PLASMA_ADVANCED_COMPONENT_DOMAIN_WARP |
             PLASMA_ADVANCED_COMPONENT_FLOW_TURBULENCE |
             PLASMA_ADVANCED_COMPONENT_GLOW_POST;
-        plan->filter_treatment = PLASMA_FILTER_TREATMENT_BLUR;
-        plan->accent_treatment = PLASMA_ACCENT_TREATMENT_OVERLAY_PASS;
+        if (plasma_advanced_prefers_default_visual_uplift(plan)) {
+            plan->filter_treatment = PLASMA_FILTER_TREATMENT_BLUR;
+            plan->accent_treatment = PLASMA_ACCENT_TREATMENT_OVERLAY_PASS;
+        }
         return;
     }
 
@@ -171,15 +180,7 @@ int plasma_advanced_validate_plan(
                 PLASMA_ADVANCED_COMPONENT_FLOW_TURBULENCE |
                 PLASMA_ADVANCED_COMPONENT_GLOW_POST
             ) ||
-            plan->advanced_degrade_policy != plasma_advanced_default_degrade_policy() ||
-            plan->sampling_treatment != PLASMA_SAMPLING_TREATMENT_NONE ||
-            plan->filter_treatment != PLASMA_FILTER_TREATMENT_BLUR ||
-            plan->emulation_treatment != PLASMA_EMULATION_TREATMENT_NONE ||
-            plan->accent_treatment != PLASMA_ACCENT_TREATMENT_OVERLAY_PASS ||
-            plan->output_family != PLASMA_OUTPUT_FAMILY_RASTER ||
-            plan->output_mode != PLASMA_OUTPUT_MODE_NATIVE_RASTER ||
-            (!plan->premium_enabled &&
-                plan->presentation_mode != PLASMA_PRESENTATION_MODE_FLAT)
+            plan->advanced_degrade_policy != plasma_advanced_default_degrade_policy()
         ) {
             return 0;
         }
@@ -189,11 +190,8 @@ int plasma_advanced_validate_plan(
 
     if (
         plan->advanced_components != 0UL ||
-        plan->sampling_treatment != PLASMA_SAMPLING_TREATMENT_NONE ||
-        plan->filter_treatment != PLASMA_FILTER_TREATMENT_NONE ||
-        plan->emulation_treatment != PLASMA_EMULATION_TREATMENT_NONE ||
-        plan->accent_treatment != PLASMA_ACCENT_TREATMENT_NONE ||
-        plan->presentation_mode != PLASMA_PRESENTATION_MODE_FLAT
+        (plan->filter_treatment == PLASMA_FILTER_TREATMENT_BLUR) ||
+        (plan->accent_treatment == PLASMA_ACCENT_TREATMENT_OVERLAY_PASS)
     ) {
         return 0;
     }

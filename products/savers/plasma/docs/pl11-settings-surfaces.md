@@ -109,7 +109,7 @@ The current implemented rules include:
 - `favorites_only` is only available when favorite keys are actually configured.
 - `content_filter` is only available when the registry actually contains experimental content.
 
-Current shipped Plasma content remains stable-only, so the experimental content-pool control is present in the model but disabled honestly in the current product surface.
+The default Plasma pool remains stable-only, but `PX30` adds a bounded experimental preset slice, so the experimental content-pool control is now present in the model and available on the current Author/Lab surface.
 
 ## Persistence And Resolution Overview
 
@@ -181,7 +181,7 @@ Intentionally deferred:
 
 - The current dialog uses one layered product dialog with show/hide behavior rather than separate per-surface windows.
 - Favorites and exclusions remain product-local real settings, but PL11 only surfaces `favorites_only`; full favorite/exclusion list editing remains later work.
-- Experimental content filtering is implemented in the model, but current shipped Plasma content remains stable-only, so the control is disabled honestly.
+- Experimental content filtering is implemented in the model, and `PX30` now makes it available through a bounded experimental preset slice while the default pool still remains stable-only.
 - Advanced/modern/premium lane behavior remains capability-gated by the runtime engine; PL11 does not add a full lane-forcing UI.
 
 ## What Remained Intentionally Unchanged

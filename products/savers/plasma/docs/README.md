@@ -21,6 +21,9 @@ They live with the product so later `PL` work can extend them without rewriting 
 - [PX20 Plasma Lab Shell](./px20-plasma-lab-shell.md): records the first bounded file-first Plasma Lab shell
 - [PX20 Validation And Compare](./px20-validation-and-compare.md): records the current validator, comparer, and degrade-report substrate
 - [PX20 Selection Intelligence](./px20-selection-intelligence.md): records the current selection-foundation boundary and weighted authored fallback semantics
+- [PX30 Contour And Banded](./px30-contour-and-banded.md): records the first bounded non-raster output-family expansion for contour and banded studies
+- [PX30 Treatment Families](./px30-treatment-families.md): records the bounded treatment-family subset now implemented
+- [PX30 Stable Vs Experimental Notes](./px30-stable-vs-experimental-notes.md): records the explicit experimental-first posture for the new PX30 surfaces
 
 ## PL00-PL14 Program Record
 

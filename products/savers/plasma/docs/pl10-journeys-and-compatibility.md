@@ -158,7 +158,7 @@ PL10 does not yet claim a richer continuity model for:
 
 ## Stable Vs Experimental Journey Considerations
 
-The current repo content remains stable-only.
+The default repo content pool remains stable-only, but `PX30` adds a bounded experimental preset slice for output and treatment studies.
 PL10 therefore does not add an experimental journey pool or experimental-only transition matrix.
 
 The current implemented subset stays inside stable classic content and stable classic-adjacent sets:
