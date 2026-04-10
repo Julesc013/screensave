@@ -67,6 +67,14 @@ The following identity rules now apply across savers, `anthology`, `suite`, and 
 - Manifest summaries, about text, and resource descriptions should describe the current role of the product, not an older stage of the series.
 - `suite`, `anthology`, and BenchLab must keep their role boundaries explicit in manifests and docs.
 
+Wave 4 shared role and exposure vocabulary is frozen separately in:
+
+- [SY40 Suite And Anthology Contract](./sy40-suite-and-anthology-contract.md)
+- [SY40 SDK Reference Contract](./sy40-sdk-reference-contract.md)
+
+Those documents define the thin shared role and exposure boundary only.
+They do not create shared runtime behavior, shared favorites law, or shared curation behavior.
+
 ## Renderer And Compatibility Truth
 
 The suite-wide compatibility grammar is:

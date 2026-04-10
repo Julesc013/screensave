@@ -49,6 +49,10 @@ quality_class=safe
 Keep capability claims honest.
 Keep `[routing]` aligned with the compiled saver module policy used at runtime.
 
+Shared Wave 4 reference vocabulary for saver identity, default exposure, and stable-versus-experimental visibility is frozen in [`docs/roadmap/sy40-sdk-reference-contract.md`](../../docs/roadmap/sy40-sdk-reference-contract.md).
+That contract covers only the shared outer shell.
+Preset meaning, theme meaning, favorites, journeys, provenance, and automation remain product-local unless later promoted explicitly.
+
 ## Built-In Saver Preset Catalog Files
 
 Path shape:
