@@ -77,6 +77,9 @@ typedef struct plasma_benchlab_snapshot_tag {
     const char *presentation_mode;
     const char *transition_policy;
     const char *transition_type;
+    const char *transition_requested_type;
+    const char *transition_resolved_type;
+    const char *transition_fallback_type;
     const char *transition_fallback_policy;
     const char *transition_seed_policy;
     const char *transition_source_preset;

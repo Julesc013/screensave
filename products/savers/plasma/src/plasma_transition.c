@@ -11,6 +11,14 @@ static const plasma_content_journey_step g_dark_room_cycle_steps[] = {
     { "dark_room_classics", "warm_classics", PLASMA_TRANSITION_POLICY_PRESET_SET, 12000UL }
 };
 
+static const plasma_content_journey_step g_warm_bridge_cycle_steps[] = {
+    { "warm_bridge_classics", "warm_classics", PLASMA_TRANSITION_POLICY_PRESET_SET, 9000UL }
+};
+
+static const plasma_content_journey_step g_cool_bridge_cycle_steps[] = {
+    { "cool_bridge_classics", "cool_classics", PLASMA_TRANSITION_POLICY_PRESET_SET, 9000UL }
+};
+
 static const plasma_content_journey_entry g_transition_journeys[] = {
     {
         "classic_cycle",
@@ -25,6 +33,20 @@ static const plasma_content_journey_entry g_transition_journeys[] = {
         "Ordered journey across the quieter dark-room-safe classic subset.",
         g_dark_room_cycle_steps,
         (unsigned int)(sizeof(g_dark_room_cycle_steps) / sizeof(g_dark_room_cycle_steps[0]))
+    },
+    {
+        "warm_bridge_cycle",
+        "Warm Bridge Cycle",
+        "Ordered journey across the warm classic subset that alternates direct preset morphs with bounded warm-bridge crossings.",
+        g_warm_bridge_cycle_steps,
+        (unsigned int)(sizeof(g_warm_bridge_cycle_steps) / sizeof(g_warm_bridge_cycle_steps[0]))
+    },
+    {
+        "cool_bridge_cycle",
+        "Cool Bridge Cycle",
+        "Ordered journey across the cool classic subset that alternates direct preset morphs with bounded cool-field bridge crossings.",
+        g_cool_bridge_cycle_steps,
+        (unsigned int)(sizeof(g_cool_bridge_cycle_steps) / sizeof(g_cool_bridge_cycle_steps[0]))
     }
 };
 

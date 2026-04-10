@@ -727,6 +727,39 @@ static const char *plasma_benchlab_transition_type_text(
     return "none";
 }
 
+static const char *plasma_benchlab_requested_transition_type_text(
+    const plasma_transition_runtime *runtime
+)
+{
+    if (runtime == NULL || runtime->requested_type == PLASMA_TRANSITION_TYPE_NONE) {
+        return "none";
+    }
+
+    return plasma_transition_type_name(runtime->requested_type);
+}
+
+static const char *plasma_benchlab_resolved_transition_type_text(
+    const plasma_transition_runtime *runtime
+)
+{
+    if (runtime == NULL || runtime->active_type == PLASMA_TRANSITION_TYPE_NONE) {
+        return "none";
+    }
+
+    return plasma_transition_type_name(runtime->active_type);
+}
+
+static const char *plasma_benchlab_fallback_transition_type_text(
+    const plasma_transition_runtime *runtime
+)
+{
+    if (runtime == NULL || runtime->fallback_type == PLASMA_TRANSITION_TYPE_NONE) {
+        return "none";
+    }
+
+    return plasma_transition_type_name(runtime->fallback_type);
+}
+
 static void plasma_benchlab_forcing_copy_key(
     char *buffer,
     unsigned int buffer_size,
@@ -1708,6 +1741,12 @@ int plasma_benchlab_build_snapshot(
     snapshot_out->transition_policy =
         plasma_transition_policy_name(session->plan.transition_policy);
     snapshot_out->transition_type = plasma_benchlab_transition_type_text(runtime);
+    snapshot_out->transition_requested_type =
+        plasma_benchlab_requested_transition_type_text(runtime);
+    snapshot_out->transition_resolved_type =
+        plasma_benchlab_resolved_transition_type_text(runtime);
+    snapshot_out->transition_fallback_type =
+        plasma_benchlab_fallback_transition_type_text(runtime);
     snapshot_out->transition_fallback_policy =
         plasma_transition_fallback_policy_name(session->plan.transition_fallback_policy);
     snapshot_out->transition_seed_policy =
@@ -1977,6 +2016,15 @@ int plasma_benchlab_build_report_section(
         return 0;
     }
     if (!plasma_benchlab_append_label_text(buffer, buffer_size, "Transition type: ", snapshot.transition_type)) {
+        return 0;
+    }
+    if (!plasma_benchlab_append_label_text(buffer, buffer_size, "Transition requested type: ", snapshot.transition_requested_type)) {
+        return 0;
+    }
+    if (!plasma_benchlab_append_label_text(buffer, buffer_size, "Transition resolved type: ", snapshot.transition_resolved_type)) {
+        return 0;
+    }
+    if (!plasma_benchlab_append_label_text(buffer, buffer_size, "Transition fallback type: ", snapshot.transition_fallback_type)) {
         return 0;
     }
     if (!plasma_benchlab_append_label_text(buffer, buffer_size, "Transition fallback: ", snapshot.transition_fallback_policy)) {

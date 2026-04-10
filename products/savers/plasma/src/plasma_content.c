@@ -40,6 +40,19 @@ static const plasma_content_weighted_key g_interference_classics_preset_members[
     { "midnight_interference", 1U }
 };
 
+static const plasma_content_weighted_key g_warm_bridge_classics_preset_members[] = {
+    { "plasma_lava", 1U },
+    { "quiet_darkroom", 1U },
+    { "museum_phosphor", 1U },
+    { "amber_terminal", 1U }
+};
+
+static const plasma_content_weighted_key g_cool_bridge_classics_preset_members[] = {
+    { "aurora_plasma", 1U },
+    { "ocean_interference", 1U },
+    { "midnight_interference", 1U }
+};
+
 static const plasma_content_weighted_key g_classic_core_theme_members[] = {
     { "plasma_lava", 1U },
     { "aurora_cool", 1U },
@@ -271,6 +284,22 @@ static const plasma_content_preset_set_entry g_preset_sets[] = {
         PLASMA_CONTENT_CHANNEL_STABLE,
         g_interference_classics_preset_members,
         (unsigned int)(sizeof(g_interference_classics_preset_members) / sizeof(g_interference_classics_preset_members[0]))
+    },
+    {
+        "warm_bridge_classics",
+        "Warm Bridge Classics",
+        "Curated warm-theme classic presets that alternate between direct fire or plasma morphs and bounded warm-bridge crossings.",
+        PLASMA_CONTENT_CHANNEL_STABLE,
+        g_warm_bridge_classics_preset_members,
+        (unsigned int)(sizeof(g_warm_bridge_classics_preset_members) / sizeof(g_warm_bridge_classics_preset_members[0]))
+    },
+    {
+        "cool_bridge_classics",
+        "Cool Bridge Classics",
+        "Curated cool-theme classic presets that alternate between direct interference morphs and bounded cool-field bridge crossings.",
+        PLASMA_CONTENT_CHANNEL_STABLE,
+        g_cool_bridge_classics_preset_members,
+        (unsigned int)(sizeof(g_cool_bridge_classics_preset_members) / sizeof(g_cool_bridge_classics_preset_members[0]))
     }
 };
 

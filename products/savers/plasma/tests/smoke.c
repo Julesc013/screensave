@@ -2096,6 +2096,45 @@ int main(void)
     common_config.preset_key = "quiet_darkroom";
     common_config.theme_key = "quiet_darkroom";
     lstrcpyA(product_config.selection.preset_set_key, "dark_room_classics");
+    lstrcpyA(product_config.selection.theme_set_key, "warm_classics");
+    plasma_transition_preferences_set_defaults(&product_config.transition);
+    product_config.transition.enabled = 1;
+    product_config.transition.policy = PLASMA_TRANSITION_POLICY_PRESET_SET;
+    product_config.transition.fallback_policy = PLASMA_TRANSITION_FALLBACK_HARD_CUT;
+    product_config.transition.duration_millis = 600UL;
+    product_config.transition.interval_millis = 800UL;
+    screensave_config_binding_init(&binding, &common_config, &product_config, sizeof(product_config));
+    ZeroMemory(&environment, sizeof(environment));
+    environment.mode = SCREENSAVE_SESSION_MODE_WINDOWED;
+    environment.drawable_size.width = 320;
+    environment.drawable_size.height = 240;
+    environment.seed.base_seed = 0x696A6B6CUL;
+    environment.seed.stream_seed = 0x6D6E6F70UL;
+    environment.seed.deterministic = common_config.use_deterministic_seed;
+    environment.config_binding = &binding;
+
+    session = NULL;
+    if (!plasma_create_session(module, &session, &environment) || session == NULL) {
+        return 241;
+    }
+    plasma_smoke_step_session_delta(session, &environment, 800UL);
+    if (
+        session->state.transition.active ||
+        session->state.transition.active_type != PLASMA_TRANSITION_TYPE_HARD_CUT ||
+        session->state.transition.requested_type != PLASMA_TRANSITION_TYPE_PRESET_MORPH ||
+        strcmp(session->plan.preset_key, "museum_phosphor") != 0 ||
+        strcmp(session->plan.theme_key, "amber_terminal") != 0
+    ) {
+        plasma_destroy_session(session);
+        return 242;
+    }
+    plasma_destroy_session(session);
+
+    plasma_config_set_defaults(&common_config, &product_config, sizeof(product_config));
+    plasma_apply_preset_to_config("quiet_darkroom", &common_config, &product_config);
+    common_config.preset_key = "quiet_darkroom";
+    common_config.theme_key = "quiet_darkroom";
+    lstrcpyA(product_config.selection.preset_set_key, "dark_room_classics");
     plasma_transition_preferences_set_defaults(&product_config.transition);
     product_config.transition.enabled = 1;
     product_config.transition.policy = PLASMA_TRANSITION_POLICY_PRESET_SET;
@@ -2149,6 +2188,186 @@ int main(void)
     plasma_destroy_session(session);
 
     plasma_config_set_defaults(&common_config, &product_config, sizeof(product_config));
+    plasma_apply_preset_to_config("quiet_darkroom", &common_config, &product_config);
+    common_config.preset_key = "quiet_darkroom";
+    common_config.theme_key = "quiet_darkroom";
+    plasma_transition_preferences_set_defaults(&product_config.transition);
+    product_config.transition.enabled = 1;
+    product_config.transition.policy = PLASMA_TRANSITION_POLICY_JOURNEY;
+    product_config.transition.duration_millis = 600UL;
+    product_config.transition.interval_millis = 900UL;
+    lstrcpyA(product_config.transition.journey_key, "warm_bridge_cycle");
+    screensave_config_binding_init(&binding, &common_config, &product_config, sizeof(product_config));
+    ZeroMemory(&environment, sizeof(environment));
+    fake_size.width = 320;
+    fake_size.height = 240;
+    plasma_smoke_init_fake_renderer(
+        &fake_renderer,
+        SCREENSAVE_RENDERER_KIND_GL21,
+        SCREENSAVE_RENDERER_KIND_GL21,
+        &fake_size
+    );
+    environment.mode = SCREENSAVE_SESSION_MODE_WINDOWED;
+    environment.drawable_size = fake_size;
+    environment.seed.base_seed = 0x818A8384UL;
+    environment.seed.stream_seed = 0x858E8788UL;
+    environment.seed.deterministic = common_config.use_deterministic_seed;
+    environment.config_binding = &binding;
+    environment.renderer = &fake_renderer;
+
+    session = NULL;
+    if (!plasma_create_session(module, &session, &environment) || session == NULL) {
+        return 243;
+    }
+    plasma_smoke_step_session_delta(session, &environment, 9000UL);
+    if (
+        !session->state.transition.active ||
+        session->state.transition.active_type != PLASMA_TRANSITION_TYPE_BRIDGE_MORPH ||
+        session->state.transition.requested_type != PLASMA_TRANSITION_TYPE_PRESET_MORPH ||
+        session->state.transition.fallback_type != PLASMA_TRANSITION_TYPE_NONE ||
+        session->state.transition.target_preset == NULL ||
+        session->state.transition.target_theme == NULL ||
+        strcmp(session->state.transition.target_preset->preset_key, "museum_phosphor") != 0 ||
+        strcmp(session->state.transition.target_theme->theme_key, "amber_terminal") != 0
+    ) {
+        plasma_destroy_session(session);
+        return 244;
+    }
+    benchlab_config_state.common = common_config;
+    benchlab_config_state.product_config = &product_config;
+    benchlab_config_state.product_config_size = sizeof(product_config);
+    if (
+        !plasma_benchlab_build_snapshot(
+            session,
+            &benchlab_config_state,
+            SCREENSAVE_RENDERER_KIND_GL21,
+            &benchlab_snapshot
+        ) ||
+        strcmp(benchlab_snapshot.transition_type, "bridge_morph") != 0 ||
+        strcmp(benchlab_snapshot.transition_requested_type, "preset_morph") != 0 ||
+        strcmp(benchlab_snapshot.transition_resolved_type, "bridge_morph") != 0 ||
+        strcmp(benchlab_snapshot.transition_fallback_type, "none") != 0
+    ) {
+        plasma_destroy_session(session);
+        return 245;
+    }
+    if (
+        !plasma_benchlab_build_report_section(
+            session,
+            &benchlab_config_state,
+            SCREENSAVE_RENDERER_KIND_GL21,
+            benchlab_report,
+            (unsigned int)sizeof(benchlab_report)
+        ) ||
+        strstr(benchlab_report, "Transition requested type: preset_morph") == NULL ||
+        strstr(benchlab_report, "Transition resolved type: bridge_morph") == NULL ||
+        strstr(benchlab_report, "Transition fallback type: none") == NULL
+    ) {
+        plasma_destroy_session(session);
+        return 246;
+    }
+    plasma_smoke_step_session_delta(session, &environment, 600UL);
+    if (
+        session->state.transition.active ||
+        strcmp(session->plan.preset_key, "museum_phosphor") != 0 ||
+        strcmp(session->plan.theme_key, "amber_terminal") != 0
+    ) {
+        plasma_destroy_session(session);
+        return 247;
+    }
+    plasma_destroy_session(session);
+
+    plasma_config_set_defaults(&common_config, &product_config, sizeof(product_config));
+    plasma_apply_preset_to_config("aurora_plasma", &common_config, &product_config);
+    common_config.preset_key = "aurora_plasma";
+    common_config.theme_key = "aurora_cool";
+    plasma_transition_preferences_set_defaults(&product_config.transition);
+    product_config.transition.enabled = 1;
+    product_config.transition.policy = PLASMA_TRANSITION_POLICY_JOURNEY;
+    product_config.transition.duration_millis = 600UL;
+    product_config.transition.interval_millis = 900UL;
+    lstrcpyA(product_config.transition.journey_key, "cool_bridge_cycle");
+    screensave_config_binding_init(&binding, &common_config, &product_config, sizeof(product_config));
+    ZeroMemory(&environment, sizeof(environment));
+    fake_size.width = 320;
+    fake_size.height = 240;
+    plasma_smoke_init_fake_renderer(
+        &fake_renderer,
+        SCREENSAVE_RENDERER_KIND_GL11,
+        SCREENSAVE_RENDERER_KIND_GL11,
+        &fake_size
+    );
+    environment.mode = SCREENSAVE_SESSION_MODE_WINDOWED;
+    environment.drawable_size = fake_size;
+    environment.seed.base_seed = 0x919A9394UL;
+    environment.seed.stream_seed = 0x959E9798UL;
+    environment.seed.deterministic = common_config.use_deterministic_seed;
+    environment.config_binding = &binding;
+    environment.renderer = &fake_renderer;
+
+    session = NULL;
+    if (!plasma_create_session(module, &session, &environment) || session == NULL) {
+        return 248;
+    }
+    plasma_smoke_step_session_delta(session, &environment, 9000UL);
+    if (
+        !session->state.transition.active ||
+        session->state.transition.active_type != PLASMA_TRANSITION_TYPE_FALLBACK ||
+        session->state.transition.requested_type != PLASMA_TRANSITION_TYPE_PRESET_MORPH ||
+        session->state.transition.fallback_type != PLASMA_TRANSITION_TYPE_THEME_MORPH ||
+        session->state.transition.target_preset == NULL ||
+        session->state.transition.target_theme == NULL ||
+        strcmp(session->state.transition.target_preset->preset_key, "ocean_interference") != 0 ||
+        strcmp(session->state.transition.target_theme->theme_key, "oceanic_blue") != 0
+    ) {
+        plasma_destroy_session(session);
+        return 249;
+    }
+    benchlab_config_state.common = common_config;
+    benchlab_config_state.product_config = &product_config;
+    benchlab_config_state.product_config_size = sizeof(product_config);
+    if (
+        !plasma_benchlab_build_snapshot(
+            session,
+            &benchlab_config_state,
+            SCREENSAVE_RENDERER_KIND_GL11,
+            &benchlab_snapshot
+        ) ||
+        strcmp(benchlab_snapshot.transition_type, "fallback_transition") != 0 ||
+        strcmp(benchlab_snapshot.transition_requested_type, "preset_morph") != 0 ||
+        strcmp(benchlab_snapshot.transition_resolved_type, "fallback_transition") != 0 ||
+        strcmp(benchlab_snapshot.transition_fallback_type, "theme_morph") != 0
+    ) {
+        plasma_destroy_session(session);
+        return 250;
+    }
+    if (
+        !plasma_benchlab_build_report_section(
+            session,
+            &benchlab_config_state,
+            SCREENSAVE_RENDERER_KIND_GL11,
+            benchlab_report,
+            (unsigned int)sizeof(benchlab_report)
+        ) ||
+        strstr(benchlab_report, "Transition requested type: preset_morph") == NULL ||
+        strstr(benchlab_report, "Transition resolved type: fallback_transition") == NULL ||
+        strstr(benchlab_report, "Transition fallback type: theme_morph") == NULL
+    ) {
+        plasma_destroy_session(session);
+        return 251;
+    }
+    plasma_smoke_step_session_delta(session, &environment, 600UL);
+    if (
+        session->state.transition.active ||
+        strcmp(session->plan.preset_key, "ocean_interference") != 0 ||
+        strcmp(session->plan.theme_key, "oceanic_blue") != 0
+    ) {
+        plasma_destroy_session(session);
+        return 252;
+    }
+    plasma_destroy_session(session);
+
+    plasma_config_set_defaults(&common_config, &product_config, sizeof(product_config));
     plasma_apply_preset_to_config("plasma_lava", &common_config, &product_config);
     common_config.preset_key = "plasma_lava";
     common_config.theme_key = "plasma_lava";
@@ -2183,19 +2402,19 @@ int main(void)
     plasma_smoke_step_session_delta(session, &environment, 9000UL);
     if (!session->state.transition.active) {
         plasma_destroy_session(session);
-        return 167;
+        return 253;
     }
     if (session->state.transition.active_type != PLASMA_TRANSITION_TYPE_PRESET_MORPH) {
         plasma_destroy_session(session);
-        return 169;
+        return 254;
     }
     if (session->state.transition.journey == NULL) {
         plasma_destroy_session(session);
-        return 170;
+        return 255;
     }
     if (session->state.transition.journey_step_index != 0U) {
         plasma_destroy_session(session);
-        return 171;
+        return 256;
     }
     plasma_smoke_step_session_delta(session, &environment, 600UL);
     if (
@@ -2204,7 +2423,7 @@ int main(void)
         strcmp(session->plan.preset_key, "quiet_darkroom") != 0
     ) {
         plasma_destroy_session(session);
-        return 168;
+        return 257;
     }
     plasma_destroy_session(session);
 
