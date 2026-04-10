@@ -2,7 +2,11 @@
 
 ## Purpose
 
-This document defines the stable-versus-experimental split for the current Plasma release cut.
+This document defines the original `PL14` stable-versus-experimental split.
+
+Current note:
+the current post-`PX41` split now lives in [`px50-stable-recut.md`](./px50-stable-recut.md) and [`px50-experimental-and-deferred.md`](./px50-experimental-and-deferred.md).
+`PX50` keeps the stable runtime cut narrow and carries later-wave breadth forward explicitly as experimental or deferred.
 
 ## Stable Vs Experimental Criteria
 
@@ -38,17 +42,24 @@ An item belongs in neither cut when it is:
 - truthful `gdi` and `gl11` baseline routing posture
 - safe default settings posture with stable-only content filtering
 - product-local BenchLab reporting for support and proof
+- PX40 read-only authoring and ops reports over the current authored substrate and pack shell
 
 ## Experimental Content And Features Included In This Release
 
 - optional `gl21` advanced lane
 - optional `gl33` modern lane
 - optional `gl46` premium lane
-- bounded premium `heightfield` presentation mode
-- bounded experimental preset pool for contour, banded, and treatment studies
+- bounded premium dimensional presentation subset
+- bounded experimental preset pool for contour, banded, treatment, glyph, field-family-I, and field-family-II studies
 - bounded contour output subset
 - bounded banded output subset
 - bounded treatment-family subset
+- bounded glyph output subset
+- bounded field-family-I subset
+- bounded field-family-II subset
+- bounded premium dimensional subset beyond `heightfield`
+- capture-backed degrade inspection over existing BenchLab text captures
+- semantic BenchLab text-capture diff over existing checked-in report surfaces
 - bounded real transition subset:
   - theme morphs
   - preset morphs
@@ -61,8 +72,9 @@ An item belongs in neither cut when it is:
 ## Content And Features Excluded From Both For Now
 
 - any broad shipped experimental content pool
-- glyph output and glyph-specific content
-- premium-dimensional modes other than `heightfield`
+- field-families II breadth beyond the admitted bounded subset
+- surface output family work
+- premium-dimensional breadth beyond the admitted bounded subset
 - scenic or world-simulated premium presentation
 - exhaustive transition pair coverage
 - hard numeric performance guarantees
@@ -88,11 +100,12 @@ The split is enforceable in the current repo because:
 - premium presentation is opt-in and capability-gated
 - transition behavior is opt-in rather than part of the default baseline
 - deeper control surfaces sit outside the default simple path
+- capture-backed compare surfaces stay outside the default simple path and remain bounded to existing text captures
 
 ## User And Support Implications
 
 - End users who do nothing get the stable Plasma Classic-centered experience.
-- Users who opt into richer lanes, transitions, deeper lab surfaces, or the bounded PX30 experimental content slice are stepping into implemented but bounded experimental territory.
+- Users who opt into richer lanes, transitions, deeper lab surfaces, capture-backed compare surfaces, or the bounded PX30-PX32 experimental content slice are stepping into implemented but bounded experimental territory.
 - Support and release messaging should describe richer-lane and transition behavior as optional uplift, not as the baseline every system must reproduce.
 
 ## Scope Boundary

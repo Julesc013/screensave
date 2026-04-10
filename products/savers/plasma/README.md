@@ -16,8 +16,9 @@ It is not a general pixel-effects lab, palette editor, or shader showcase.
 
 ## Current Release Posture
 
-The current release cut is Classic-first and lower-band-first.
+The current release cut is recorded in the `PX50` recut docs and remains Classic-first and lower-band-first.
 
-- Stable Core Plasma is centered on the preserved default classic path and the truthful `gdi` / `gl11` baseline.
-- Richer lanes, bounded dimensional presentation, transitions, deeper lab-facing controls, and the bounded PX30 contour, banded, and treatment studies remain opt-in experimental material in the current cut.
-- The current ship gate is documented as `GO WITH CAVEATS` in [`docs/pl14-ship-readiness.md`](./docs/pl14-ship-readiness.md).
+- Stable Core Plasma remains centered on the preserved default classic path and the truthful `gdi` / `gl11` baseline.
+- `PX50` keeps richer lanes, bounded dimensional presentation, transitions, capture-backed compare, and the bounded PX30 through PX32 study surfaces opt-in experimental.
+- `PX50` admits a narrow stable support-surface widening only: BenchLab reporting, PX40 read-only authoring and ops reports, and the PX41 stable metadata-report slice that restates already-stable product truth.
+- The current ship gate remains `GO WITH CAVEATS` and is now documented in [`docs/px50-ship-posture.md`](./docs/px50-ship-posture.md).

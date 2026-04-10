@@ -24,6 +24,23 @@ They live with the product so later `PL` work can extend them without rewriting 
 - [PX30 Contour And Banded](./px30-contour-and-banded.md): records the first bounded non-raster output-family expansion for contour and banded studies
 - [PX30 Treatment Families](./px30-treatment-families.md): records the bounded treatment-family subset now implemented
 - [PX30 Stable Vs Experimental Notes](./px30-stable-vs-experimental-notes.md): records the explicit experimental-first posture for the new PX30 surfaces
+- [PX31 Glyph Family](./px31-glyph-family.md): records the first bounded glyph-family subset with explicit ASCII and Matrix truth
+- [PX31 Field Families I](./px31-field-families-i.md): records the first bounded new field-family subset for chemical, lattice, and caustic studies
+- [PX31 Stable Vs Experimental Notes](./px31-stable-vs-experimental-notes.md): records the explicit experimental-first posture for the new PX31 surfaces
+- [PX32 Field Families II](./px32-field-families-ii.md): records the later bounded new field-family subset for aurora, substrate, and arc studies
+- [PX32 Dimensional Expansion](./px32-dimensional-expansion.md): records the bounded premium dimensional subset now implemented beyond `heightfield`
+- [PX32 Stable Vs Experimental Notes](./px32-stable-vs-experimental-notes.md): records the explicit experimental-first posture for the new PX32 surfaces
+- [PX40 Plasma Lab](./px40-plasma-lab.md): records the first serious bounded CLI-first Plasma Lab surface after the minimal PX20 shell
+- [PX40 Authoring And Ops Tools](./px40-authoring-and-ops-tools.md): records the validator, comparer, migration, degradation-inspection, and text-capture diff tool surfaces now implemented
+- [PX40 Stable Vs Experimental Notes](./px40-stable-vs-experimental-notes.md): records the stable-versus-experimental posture for the new PX40 tooling surfaces
+- [PX41 Suite And Anthology Bridges](./px41-suite-and-anthology-bridges.md): records the bounded Plasma-local projection surface exposed to `anthology` and `suite`
+- [PX41 SDK And Automation](./px41-sdk-and-automation.md): records the bounded Plasma-local SDK/reference and control-profile surface
+- [PX41 Community And Curation](./px41-community-and-curation.md): records the bounded Plasma-local curation and provenance surface
+- [PX41 Stable Vs Experimental Notes](./px41-stable-vs-experimental-notes.md): records the stable-versus-experimental posture for the new PX41 metadata and report surfaces
+- [PX50 Stable Recut](./px50-stable-recut.md): records the current evidence-backed stable cut after Waves 1 through 4
+- [PX50 Experimental And Deferred](./px50-experimental-and-deferred.md): records the current experimental and deferred or non-claim cut after Waves 1 through 4
+- [PX50 Ship Posture](./px50-ship-posture.md): records the current ship decision and strongest remaining caveats
+- [PX50 Release Notes Draft](./px50-release-notes-draft.md): provides the current truthful release-note-grade summary of the recut
 
 ## PL00-PL14 Program Record
 
@@ -57,5 +74,5 @@ They live with the product so later `PL` work can extend them without rewriting 
 ## Intended Follow-On
 
 `PL00` through `PL14` are complete.
-Post-PL hardening and expansion now routes through the `PX00` control docs and the master `MX` control plane.
-No later post-PL implementation phase is claimed as implemented until it lands explicitly.
+The later post-PL waves now route through the `PX00` control docs and the master `MX` control plane, with `PX50` acting as the current closure-point recut for the implemented Waves 1 through 4.
+No later post-`PX50` implementation phase is claimed as implemented until it lands explicitly.

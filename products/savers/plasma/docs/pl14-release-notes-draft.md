@@ -1,5 +1,9 @@
 # PL14 Release Notes Draft
 
+Current note:
+the current release-note-grade recut now lives in [`px50-release-notes-draft.md`](./px50-release-notes-draft.md).
+This `PL14` draft remains the original end-of-program baseline.
+
 ## Scope Of This Release
 
 This Plasma release delivers the refactored flagship Plasma saver as a preserved Classic-first product with a truthful lower-band baseline, explicit content and settings systems, real bounded transition support, and product-local BenchLab proof surfaces.

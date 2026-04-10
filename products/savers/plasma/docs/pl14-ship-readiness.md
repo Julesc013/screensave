@@ -2,7 +2,11 @@
 
 ## Purpose
 
-This document records Plasma's final PL14 ship-readiness decision for the current release cut.
+This document records Plasma's original `PL14` ship-readiness decision.
+
+Current note:
+the current post-`PX41` ship decision now lives in [`px50-ship-posture.md`](./px50-ship-posture.md).
+`PX50` re-runs the decision after Waves 1 through 4 and keeps the posture at `GO WITH CAVEATS` with clearer support-surface and caveat boundaries.
 
 ## Executive Summary
 
