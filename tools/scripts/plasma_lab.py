@@ -24,6 +24,8 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 PLASMA_ROOT = REPO_ROOT / "products" / "savers" / "plasma"
 PACK_ROOT = PLASMA_ROOT / "packs" / "lava_remix"
 CAPTURE_ROOT = REPO_ROOT / "validation" / "captures"
+INTEGRATION_ROOT = PLASMA_ROOT / "integration"
+CURATION_ROOT = PLASMA_ROOT / "curation"
 
 EXPECTED_PRESET_SETS = {
     "classic_core": PLASMA_ROOT / "preset_sets" / "classic_core.presetset.ini",
@@ -49,8 +51,22 @@ EXPECTED_JOURNEYS = {
     "cool_bridge_cycle": PLASMA_ROOT / "journeys" / "cool_bridge_cycle.journey.ini",
 }
 
+PROJECTION_SURFACE = INTEGRATION_ROOT / "projection_surface.ini"
+SDK_REFERENCE_SURFACE = INTEGRATION_ROOT / "sdk_reference.ini"
+CONTROL_PROFILES_SURFACE = INTEGRATION_ROOT / "control_profiles.ini"
+CURATED_COLLECTIONS_SURFACE = CURATION_ROOT / "curated_collections.ini"
+PROVENANCE_INDEX_SURFACE = CURATION_ROOT / "provenance_index.ini"
+
 CHANNEL_VALUES = {"stable", "experimental"}
 SOURCE_KIND_VALUES = {"built_in", "portable", "user"}
+CONSUMER_VALUES = {"anthology", "suite"}
+DETAIL_LEVEL_VALUES = {"low", "standard", "high"}
+SEED_MODE_VALUES = {"session", "deterministic"}
+RANDOMIZATION_MODE_VALUES = {"off", "session"}
+LOCAL_ONLY_BEHAVIOR_VALUES = {"product_local_only"}
+JOURNEY_BEHAVIOR_VALUES = {"curated_local_only", "unsupported"}
+SETTINGS_HANDOFF_VALUES = {"not_applicable", "product_owned_dialog"}
+PREVIEW_VISIBILITY_VALUES = {"not_applicable", "stable_only", "explicit_opt_in"}
 
 C_ARRAY_RE = re.compile(
     r"static const (?P<type_name>[a-zA-Z0-9_]+) (?P<array_name>[a-zA-Z0-9_]+)\[\] = \{(?P<body>.*?)\n\};",
@@ -169,6 +185,22 @@ def build_parser() -> argparse.ArgumentParser:
         help="Print a bounded migration and key-audit report for the current repo surface",
     )
 
+    subparsers.add_parser(
+        "integration-report",
+        help="Print bounded local anthology, suite, SDK, and control bridge metadata",
+    )
+
+    control_parser = subparsers.add_parser(
+        "control-report",
+        help="Print a bounded local control-profile report",
+    )
+    control_parser.add_argument("--profile", required=True)
+
+    subparsers.add_parser(
+        "curation-report",
+        help="Print bounded local curation and provenance metadata",
+    )
+
     degrade_parser = subparsers.add_parser(
         "degrade-report",
         help="Print a bounded pack or capture degrade report",
@@ -217,6 +249,274 @@ def normalize_profile_scope(path: Path, value: str) -> str:
     if value not in CHANNEL_VALUES:
         raise ValueError(f"{path}: unsupported profile_scope {value}")
     return value
+
+
+def require_bool(parser: configparser.ConfigParser, path: Path, section: str, key: str) -> bool:
+    value = require(parser, section, key)
+    if value.lower() in {"true", "yes", "1"}:
+        return True
+    if value.lower() in {"false", "no", "0"}:
+        return False
+    raise ValueError(f"{path}: invalid boolean [{section}] {key}={value}")
+
+
+def optional(parser: configparser.ConfigParser, section: str, key: str) -> str:
+    if not parser.has_option(section, key):
+        return ""
+    return parser.get(section, key).strip()
+
+
+def parse_csv_list(value: str) -> List[str]:
+    if not value:
+        return []
+    stripped = value.strip()
+    if not stripped or stripped.lower() == "none":
+        return []
+    return [token.strip() for token in stripped.split(",") if token.strip()]
+
+
+def load_saver_manifest(path: Path) -> Dict[str, str]:
+    parser = read_ini(path)
+    return {
+        "key": require(parser, "product", "key"),
+        "name": require(parser, "product", "name"),
+        "summary": require(parser, "identity", "summary"),
+        "default_preset": require(parser, "identity", "default_preset"),
+        "default_theme": require(parser, "identity", "default_theme"),
+        "minimum_kind": require(parser, "routing", "minimum_kind"),
+        "preferred_kind": require(parser, "routing", "preferred_kind"),
+        "quality_class": require(parser, "routing", "quality_class"),
+    }
+
+
+def load_projection_surface(path: Path) -> Dict[str, object]:
+    parser = read_ini(path)
+    if require(parser, "format", "kind") != "plasma-projection-surface":
+        raise ValueError(f"{path}: wrong kind")
+    if require_int(parser, "format", "version") != 1:
+        raise ValueError(f"{path}: wrong format version")
+    if require(parser, "product", "key") != "plasma":
+        raise ValueError(f"{path}: wrong product key")
+    if require_int(parser, "product", "schema_version") != 1:
+        raise ValueError(f"{path}: wrong product schema version")
+
+    bridges: List[Dict[str, object]] = []
+    index = 1
+    while True:
+        section = f"bridge_{index}"
+        if not parser.has_section(section):
+            break
+        consumer = require(parser, section, "consumer")
+        if consumer not in CONSUMER_VALUES:
+            raise ValueError(f"{path}: unsupported consumer {consumer}")
+        visibility = require(parser, section, "visibility")
+        if visibility not in CHANNEL_VALUES:
+            raise ValueError(f"{path}: unsupported visibility {visibility}")
+        favorite_behavior = require(parser, section, "favorite_behavior")
+        if favorite_behavior not in LOCAL_ONLY_BEHAVIOR_VALUES:
+            raise ValueError(f"{path}: unsupported favorite_behavior {favorite_behavior}")
+        exclusion_behavior = require(parser, section, "exclusion_behavior")
+        if exclusion_behavior not in LOCAL_ONLY_BEHAVIOR_VALUES:
+            raise ValueError(f"{path}: unsupported exclusion_behavior {exclusion_behavior}")
+        journey_behavior = require(parser, section, "journey_behavior")
+        if journey_behavior not in JOURNEY_BEHAVIOR_VALUES:
+            raise ValueError(f"{path}: unsupported journey_behavior {journey_behavior}")
+        settings_handoff = require(parser, section, "settings_handoff")
+        if settings_handoff not in SETTINGS_HANDOFF_VALUES:
+            raise ValueError(f"{path}: unsupported settings_handoff {settings_handoff}")
+        preview_visibility = require(parser, section, "preview_visibility")
+        if preview_visibility not in PREVIEW_VISIBILITY_VALUES:
+            raise ValueError(f"{path}: unsupported preview_visibility {preview_visibility}")
+        bridges.append(
+            {
+                "bridge_key": require(parser, section, "bridge_key"),
+                "consumer": consumer,
+                "visibility": visibility,
+                "collection_key": require(parser, section, "collection_key"),
+                "featured": require_bool(parser, path, section, "featured"),
+                "curated": require_bool(parser, path, section, "curated"),
+                "favorite_behavior": favorite_behavior,
+                "exclusion_behavior": exclusion_behavior,
+                "journey_behavior": journey_behavior,
+                "settings_handoff": settings_handoff,
+                "preview_visibility": preview_visibility,
+                "shared_contract": require(parser, section, "shared_contract"),
+                "summary": require(parser, section, "summary"),
+            }
+        )
+        index += 1
+    if not bridges:
+        raise ValueError(f"{path}: no bridge sections")
+    return {"path": path, "bridges": bridges}
+
+
+def load_sdk_reference_surface(path: Path) -> Dict[str, str]:
+    parser = read_ini(path)
+    if require(parser, "format", "kind") != "plasma-sdk-reference":
+        raise ValueError(f"{path}: wrong kind")
+    if require_int(parser, "format", "version") != 1:
+        raise ValueError(f"{path}: wrong format version")
+    if require(parser, "product", "key") != "plasma":
+        raise ValueError(f"{path}: wrong product key")
+    if require_int(parser, "product", "schema_version") != 1:
+        raise ValueError(f"{path}: wrong product schema version")
+    return {
+        "path": path,
+        "reference_class": require(parser, "reference", "reference_class"),
+        "shared_contract": require(parser, "reference", "shared_contract"),
+        "default_collection_key": require(parser, "reference", "default_collection_key"),
+        "experimental_collection_key": require(parser, "reference", "experimental_collection_key"),
+        "example_pack_key": require(parser, "reference", "example_pack_key"),
+        "stable_control_profile": require(parser, "reference", "stable_control_profile"),
+        "minimum_kind": require(parser, "reference", "minimum_kind"),
+        "preferred_kind": require(parser, "reference", "preferred_kind"),
+        "quality_class": require(parser, "reference", "quality_class"),
+        "authoring_entrypoint": require(parser, "reference", "authoring_entrypoint"),
+        "summary": require(parser, "reference", "summary"),
+    }
+
+
+def load_control_profiles(path: Path) -> Dict[str, object]:
+    parser = read_ini(path)
+    if require(parser, "format", "kind") != "plasma-control-profiles":
+        raise ValueError(f"{path}: wrong kind")
+    if require_int(parser, "format", "version") != 1:
+        raise ValueError(f"{path}: wrong format version")
+    if require(parser, "product", "key") != "plasma":
+        raise ValueError(f"{path}: wrong product key")
+    if require_int(parser, "product", "schema_version") != 1:
+        raise ValueError(f"{path}: wrong product schema version")
+
+    profiles: List[Dict[str, object]] = []
+    index = 1
+    while True:
+        section = f"profile_{index}"
+        if not parser.has_section(section):
+            break
+        visibility = require(parser, section, "visibility")
+        if visibility not in CHANNEL_VALUES:
+            raise ValueError(f"{path}: unsupported visibility {visibility}")
+        detail_level = require(parser, section, "detail_level")
+        if detail_level not in DETAIL_LEVEL_VALUES:
+            raise ValueError(f"{path}: unsupported detail_level {detail_level}")
+        seed_mode = require(parser, section, "seed_mode")
+        if seed_mode not in SEED_MODE_VALUES:
+            raise ValueError(f"{path}: unsupported seed_mode {seed_mode}")
+        randomization_mode = require(parser, section, "randomization_mode")
+        if randomization_mode not in RANDOMIZATION_MODE_VALUES:
+            raise ValueError(f"{path}: unsupported randomization_mode {randomization_mode}")
+        profiles.append(
+            {
+                "profile_key": require(parser, section, "profile_key"),
+                "visibility": visibility,
+                "preset_key": require(parser, section, "preset_key"),
+                "theme_key": require(parser, section, "theme_key"),
+                "preset_set_key": optional(parser, section, "preset_set_key"),
+                "theme_set_key": optional(parser, section, "theme_set_key"),
+                "journey_key": optional(parser, section, "journey_key"),
+                "detail_level": detail_level,
+                "seed_mode": seed_mode,
+                "deterministic_seed": str(require_int(parser, section, "deterministic_seed")),
+                "randomization_mode": randomization_mode,
+                "favorite_preset_keys": parse_csv_list(optional(parser, section, "favorite_preset_keys")),
+                "excluded_preset_keys": parse_csv_list(optional(parser, section, "excluded_preset_keys")),
+                "allow_experimental": require_bool(parser, path, section, "allow_experimental"),
+                "summary": require(parser, section, "summary"),
+            }
+        )
+        index += 1
+    if not profiles:
+        raise ValueError(f"{path}: no profile sections")
+    return {"path": path, "profiles": profiles}
+
+
+def load_curated_collections(path: Path) -> Dict[str, object]:
+    parser = read_ini(path)
+    if require(parser, "format", "kind") != "plasma-curated-collections":
+        raise ValueError(f"{path}: wrong kind")
+    if require_int(parser, "format", "version") != 1:
+        raise ValueError(f"{path}: wrong format version")
+    if require(parser, "product", "key") != "plasma":
+        raise ValueError(f"{path}: wrong product key")
+    if require_int(parser, "product", "schema_version") != 1:
+        raise ValueError(f"{path}: wrong product schema version")
+
+    collections: List[Dict[str, object]] = []
+    index = 1
+    while True:
+        section = f"collection_{index}"
+        if not parser.has_section(section):
+            break
+        channel = require(parser, section, "channel")
+        if channel not in CHANNEL_VALUES:
+            raise ValueError(f"{path}: unsupported channel {channel}")
+        visibility = require(parser, section, "visibility")
+        if visibility not in CHANNEL_VALUES:
+            raise ValueError(f"{path}: unsupported visibility {visibility}")
+        collections.append(
+            {
+                "collection_key": require(parser, section, "collection_key"),
+                "display_name": require(parser, section, "display_name"),
+                "channel": channel,
+                "visibility": visibility,
+                "preset_set_key": optional(parser, section, "preset_set_key"),
+                "theme_set_key": optional(parser, section, "theme_set_key"),
+                "journey_key": optional(parser, section, "journey_key"),
+                "pack_key": optional(parser, section, "pack_key"),
+                "preset_keys": parse_csv_list(optional(parser, section, "preset_keys")),
+                "theme_keys": parse_csv_list(optional(parser, section, "theme_keys")),
+                "featured": require_bool(parser, path, section, "featured"),
+                "sdk_reference": require_bool(parser, path, section, "sdk_reference"),
+                "summary": require(parser, section, "summary"),
+            }
+        )
+        index += 1
+    if not collections:
+        raise ValueError(f"{path}: no collection sections")
+    return {"path": path, "collections": collections}
+
+
+def load_provenance_index(path: Path) -> Dict[str, object]:
+    parser = read_ini(path)
+    if require(parser, "format", "kind") != "plasma-provenance-index":
+        raise ValueError(f"{path}: wrong kind")
+    if require_int(parser, "format", "version") != 1:
+        raise ValueError(f"{path}: wrong format version")
+    if require(parser, "product", "key") != "plasma":
+        raise ValueError(f"{path}: wrong product key")
+    if require_int(parser, "product", "schema_version") != 1:
+        raise ValueError(f"{path}: wrong product schema version")
+
+    entries: List[Dict[str, object]] = []
+    index = 1
+    while True:
+        section = f"entry_{index}"
+        if not parser.has_section(section):
+            break
+        channel = require(parser, section, "channel")
+        if channel not in CHANNEL_VALUES:
+            raise ValueError(f"{path}: unsupported channel {channel}")
+        source_kind = require(parser, section, "source_kind")
+        if source_kind not in SOURCE_KIND_VALUES:
+            raise ValueError(f"{path}: unsupported source_kind {source_kind}")
+        entries.append(
+            {
+                "entry_key": require(parser, section, "entry_key"),
+                "pack_key": require(parser, section, "pack_key"),
+                "channel": channel,
+                "support_tier": require(parser, section, "support_tier"),
+                "source_kind": source_kind,
+                "provenance_kind": require(parser, section, "provenance_kind"),
+                "trust_tier": require(parser, section, "trust_tier"),
+                "featured_collection_key": require(parser, section, "featured_collection_key"),
+                "sdk_reference": require_bool(parser, path, section, "sdk_reference"),
+                "summary": require(parser, section, "summary"),
+            }
+        )
+        index += 1
+    if not entries:
+        raise ValueError(f"{path}: no provenance entries")
+    return {"path": path, "entries": entries}
 
 
 def load_preset_set(path: Path) -> Dict[str, object]:
@@ -454,18 +754,25 @@ def load_authored_repo_surface() -> Dict[str, Dict[str, Dict[str, object]]]:
     preset_sets = {key: load_preset_set(path) for key, path in EXPECTED_PRESET_SETS.items()}
     theme_sets = {key: load_theme_set(path) for key, path in EXPECTED_THEME_SETS.items()}
     journeys = {key: load_journey(path) for key, path in EXPECTED_JOURNEYS.items()}
-    manifest = load_pack_manifest(PACK_ROOT / "pack.ini")
+    saver_manifest = load_saver_manifest(PLASMA_ROOT / "manifest.ini")
+    pack_manifest = load_pack_manifest(PACK_ROOT / "pack.ini")
     provenance = load_pack_provenance(PACK_ROOT / "pack.provenance.ini")
     return {
+        "manifest": saver_manifest,
         "preset_sets": preset_sets,
         "theme_sets": theme_sets,
         "journeys": journeys,
         "packs": {
-            manifest["pack_key"]: {
-                "manifest": manifest,
+            pack_manifest["pack_key"]: {
+                "manifest": pack_manifest,
                 "provenance": provenance,
             }
         },
+        "projection_surface": load_projection_surface(PROJECTION_SURFACE),
+        "sdk_reference": load_sdk_reference_surface(SDK_REFERENCE_SURFACE),
+        "control_profiles": load_control_profiles(CONTROL_PROFILES_SURFACE),
+        "curated_collections": load_curated_collections(CURATED_COLLECTIONS_SURFACE),
+        "provenance_index": load_provenance_index(PROVENANCE_INDEX_SURFACE),
     }
 
 
@@ -692,6 +999,249 @@ def audit_repo_surface() -> Tuple[List[str], List[str], List[str], Dict[str, obj
     else:
         notes.append("validated lava_remix against the shared SDK pack shell")
 
+    try:
+        collections = repo_surface["curated_collections"]["collections"]
+        collection_keys: set[str] = set()
+        collections_by_key: Dict[str, Dict[str, object]] = {}
+        for collection in collections:
+            collection_key = str(collection["collection_key"])
+            if collection_key in collection_keys:
+                raise ValueError(f"duplicate curated collection {collection_key}")
+            collection_keys.add(collection_key)
+            collections_by_key[collection_key] = collection
+
+            preset_set_key = str(collection["preset_set_key"])
+            theme_set_key = str(collection["theme_set_key"])
+            journey_key = str(collection["journey_key"])
+            pack_key = str(collection["pack_key"])
+            preset_keys = list(collection["preset_keys"])
+            theme_keys = list(collection["theme_keys"])
+            stable_visibility = str(collection["visibility"]) == "stable"
+
+            if not any((preset_set_key, theme_set_key, journey_key, pack_key, preset_keys, theme_keys)):
+                raise ValueError(f"curated collection {collection_key} has no content targets")
+            if preset_set_key and preset_set_key not in repo_surface["preset_sets"]:
+                raise ValueError(f"curated collection {collection_key} references unknown preset_set_key {preset_set_key}")
+            if theme_set_key and theme_set_key not in repo_surface["theme_sets"]:
+                raise ValueError(f"curated collection {collection_key} references unknown theme_set_key {theme_set_key}")
+            if journey_key and journey_key not in repo_surface["journeys"]:
+                raise ValueError(f"curated collection {collection_key} references unknown journey_key {journey_key}")
+            if pack_key and pack_key not in repo_surface["packs"]:
+                raise ValueError(f"curated collection {collection_key} references unknown pack_key {pack_key}")
+
+            if stable_visibility and str(collection["channel"]) != "stable":
+                raise ValueError(f"curated collection {collection_key} is stable-visible but not stable-channel")
+            if stable_visibility and preset_set_key and repo_surface["preset_sets"][preset_set_key]["profile_scope"] != "stable":
+                raise ValueError(f"curated collection {collection_key} stable visibility references non-stable preset set {preset_set_key}")
+            if stable_visibility and theme_set_key and repo_surface["theme_sets"][theme_set_key]["profile_scope"] != "stable":
+                raise ValueError(f"curated collection {collection_key} stable visibility references non-stable theme set {theme_set_key}")
+            if stable_visibility and journey_key and repo_surface["journeys"][journey_key]["profile_scope"] != "stable":
+                raise ValueError(f"curated collection {collection_key} stable visibility references non-stable journey {journey_key}")
+            if stable_visibility and pack_key and repo_surface["packs"][pack_key]["provenance"]["channel"] != "stable":
+                raise ValueError(f"curated collection {collection_key} stable visibility references non-stable pack {pack_key}")
+
+            unknown_presets = [
+                preset_key
+                for preset_key in preset_keys
+                if canonicalize_key(preset_key, aliases) not in preset_catalog
+            ]
+            if unknown_presets:
+                raise ValueError(
+                    f"curated collection {collection_key} references unknown preset keys {', '.join(unknown_presets)}"
+                )
+            unknown_themes = [
+                theme_key
+                for theme_key in theme_keys
+                if canonicalize_key(theme_key, aliases) not in theme_catalog
+            ]
+            if unknown_themes:
+                raise ValueError(
+                    f"curated collection {collection_key} references unknown theme keys {', '.join(unknown_themes)}"
+                )
+
+            preset_alias_hits = find_alias_hits(preset_keys, aliases)
+            if preset_alias_hits:
+                rendered = ", ".join(f"{alias} -> {canonical}" for alias, canonical in preset_alias_hits)
+                warnings.append(f"curated collection {collection_key}: alias preset keys should be normalized ({rendered})")
+            theme_alias_hits = find_alias_hits(theme_keys, aliases)
+            if theme_alias_hits:
+                rendered = ", ".join(f"{alias} -> {canonical}" for alias, canonical in theme_alias_hits)
+                warnings.append(f"curated collection {collection_key}: alias theme keys should be normalized ({rendered})")
+
+            if stable_visibility:
+                experimental_presets = [
+                    preset_key
+                    for preset_key in preset_keys
+                    if preset_catalog[canonicalize_key(preset_key, aliases)]["channel"] == "experimental"
+                ]
+                if experimental_presets:
+                    raise ValueError(
+                        f"curated collection {collection_key} stable visibility references experimental preset keys {', '.join(experimental_presets)}"
+                    )
+                experimental_themes = [
+                    theme_key
+                    for theme_key in theme_keys
+                    if theme_catalog[canonicalize_key(theme_key, aliases)]["channel"] == "experimental"
+                ]
+                if experimental_themes:
+                    raise ValueError(
+                        f"curated collection {collection_key} stable visibility references experimental theme keys {', '.join(experimental_themes)}"
+                    )
+            notes.append(f"validated curated collection {collection_key}")
+
+        bridges = repo_surface["projection_surface"]["bridges"]
+        bridge_keys: set[str] = set()
+        for bridge in bridges:
+            bridge_key = str(bridge["bridge_key"])
+            if bridge_key in bridge_keys:
+                raise ValueError(f"duplicate projection bridge {bridge_key}")
+            bridge_keys.add(bridge_key)
+            collection_key = str(bridge["collection_key"])
+            if collection_key not in collections_by_key:
+                raise ValueError(f"projection bridge {bridge_key} references unknown collection {collection_key}")
+            collection = collections_by_key[collection_key]
+            if str(bridge["visibility"]) != str(collection["visibility"]):
+                raise ValueError(f"projection bridge {bridge_key} visibility does not match collection {collection_key}")
+            if str(bridge["shared_contract"]) != "sy40_suite_and_anthology":
+                raise ValueError(f"projection bridge {bridge_key} references unsupported shared contract {bridge['shared_contract']}")
+            if str(bridge["consumer"]) == "anthology":
+                if str(bridge["settings_handoff"]) != "not_applicable" or str(bridge["preview_visibility"]) != "not_applicable":
+                    raise ValueError(f"projection bridge {bridge_key} uses suite-only handoff or preview fields")
+            else:
+                if str(bridge["settings_handoff"]) != "product_owned_dialog":
+                    raise ValueError(f"projection bridge {bridge_key} must use product_owned_dialog settings handoff")
+                if str(bridge["preview_visibility"]) == "not_applicable":
+                    raise ValueError(f"projection bridge {bridge_key} must declare preview_visibility")
+            notes.append(f"validated projection bridge {bridge_key}")
+
+        control_profiles = repo_surface["control_profiles"]["profiles"]
+        control_profiles_by_key: Dict[str, Dict[str, object]] = {}
+        for profile in control_profiles:
+            profile_key = str(profile["profile_key"])
+            if profile_key in control_profiles_by_key:
+                raise ValueError(f"duplicate control profile {profile_key}")
+            control_profiles_by_key[profile_key] = profile
+            preset_key = canonicalize_key(str(profile["preset_key"]), aliases)
+            theme_key = canonicalize_key(str(profile["theme_key"]), aliases)
+            preset_set_key = str(profile["preset_set_key"])
+            theme_set_key = str(profile["theme_set_key"])
+            journey_key = str(profile["journey_key"])
+            stable_visibility = str(profile["visibility"]) == "stable"
+
+            if preset_key not in preset_catalog:
+                raise ValueError(f"control profile {profile_key} references unknown preset_key {profile['preset_key']}")
+            if theme_key not in theme_catalog:
+                raise ValueError(f"control profile {profile_key} references unknown theme_key {profile['theme_key']}")
+            if preset_set_key and preset_set_key not in repo_surface["preset_sets"]:
+                raise ValueError(f"control profile {profile_key} references unknown preset_set_key {preset_set_key}")
+            if theme_set_key and theme_set_key not in repo_surface["theme_sets"]:
+                raise ValueError(f"control profile {profile_key} references unknown theme_set_key {theme_set_key}")
+            if journey_key and journey_key not in repo_surface["journeys"]:
+                raise ValueError(f"control profile {profile_key} references unknown journey_key {journey_key}")
+
+            if preset_set_key:
+                preset_members = [member_key for member_key, _ in repo_surface["preset_sets"][preset_set_key]["members"]]
+                if preset_key not in {canonicalize_key(member_key, aliases) for member_key in preset_members}:
+                    raise ValueError(f"control profile {profile_key} preset_key is not a member of preset_set_key {preset_set_key}")
+            if theme_set_key:
+                theme_members = [member_key for member_key, _ in repo_surface["theme_sets"][theme_set_key]["members"]]
+                if theme_key not in {canonicalize_key(member_key, aliases) for member_key in theme_members}:
+                    raise ValueError(f"control profile {profile_key} theme_key is not a member of theme_set_key {theme_set_key}")
+
+            favorite_alias_hits = find_alias_hits(profile["favorite_preset_keys"], aliases)
+            if favorite_alias_hits:
+                rendered = ", ".join(f"{alias} -> {canonical}" for alias, canonical in favorite_alias_hits)
+                warnings.append(f"control profile {profile_key}: alias favorite_preset_keys should be normalized ({rendered})")
+            excluded_alias_hits = find_alias_hits(profile["excluded_preset_keys"], aliases)
+            if excluded_alias_hits:
+                rendered = ", ".join(f"{alias} -> {canonical}" for alias, canonical in excluded_alias_hits)
+                warnings.append(f"control profile {profile_key}: alias excluded_preset_keys should be normalized ({rendered})")
+
+            favorite_keys = [canonicalize_key(key, aliases) for key in profile["favorite_preset_keys"]]
+            excluded_keys = [canonicalize_key(key, aliases) for key in profile["excluded_preset_keys"]]
+            for favorite_key in favorite_keys:
+                if favorite_key not in preset_catalog:
+                    raise ValueError(f"control profile {profile_key} references unknown favorite preset {favorite_key}")
+            for excluded_key in excluded_keys:
+                if excluded_key not in preset_catalog:
+                    raise ValueError(f"control profile {profile_key} references unknown excluded preset {excluded_key}")
+
+            if stable_visibility:
+                if bool(profile["allow_experimental"]):
+                    raise ValueError(f"control profile {profile_key} stable visibility cannot allow experimental content")
+                if str(preset_catalog[preset_key]["channel"]) != "stable":
+                    raise ValueError(f"control profile {profile_key} stable visibility references experimental preset {preset_key}")
+                if str(theme_catalog[theme_key]["channel"]) != "stable":
+                    raise ValueError(f"control profile {profile_key} stable visibility references experimental theme {theme_key}")
+                if preset_set_key and repo_surface["preset_sets"][preset_set_key]["profile_scope"] != "stable":
+                    raise ValueError(f"control profile {profile_key} stable visibility references non-stable preset set {preset_set_key}")
+                if theme_set_key and repo_surface["theme_sets"][theme_set_key]["profile_scope"] != "stable":
+                    raise ValueError(f"control profile {profile_key} stable visibility references non-stable theme set {theme_set_key}")
+                if journey_key and repo_surface["journeys"][journey_key]["profile_scope"] != "stable":
+                    raise ValueError(f"control profile {profile_key} stable visibility references non-stable journey {journey_key}")
+                experimental_favorites = [
+                    favorite_key for favorite_key in favorite_keys if preset_catalog[favorite_key]["channel"] == "experimental"
+                ]
+                if experimental_favorites:
+                    raise ValueError(
+                        f"control profile {profile_key} stable visibility references experimental favorites {', '.join(experimental_favorites)}"
+                    )
+            notes.append(f"validated control profile {profile_key}")
+
+        sdk_reference = repo_surface["sdk_reference"]
+        if str(sdk_reference["shared_contract"]) != "sy40_sdk_reference":
+            raise ValueError(f"sdk reference uses unsupported shared contract {sdk_reference['shared_contract']}")
+        if str(sdk_reference["default_collection_key"]) not in collections_by_key:
+            raise ValueError(f"sdk reference references unknown default collection {sdk_reference['default_collection_key']}")
+        if str(sdk_reference["experimental_collection_key"]) not in collections_by_key:
+            raise ValueError(
+                f"sdk reference references unknown experimental collection {sdk_reference['experimental_collection_key']}"
+            )
+        if str(sdk_reference["example_pack_key"]) not in repo_surface["packs"]:
+            raise ValueError(f"sdk reference references unknown example pack {sdk_reference['example_pack_key']}")
+        stable_profile_key = str(sdk_reference["stable_control_profile"])
+        if stable_profile_key not in control_profiles_by_key:
+            raise ValueError(f"sdk reference references unknown stable control profile {stable_profile_key}")
+        if str(control_profiles_by_key[stable_profile_key]["visibility"]) != "stable":
+            raise ValueError(f"sdk reference stable control profile {stable_profile_key} is not stable")
+        if str(collections_by_key[str(sdk_reference['default_collection_key'])]["visibility"]) != "stable":
+            raise ValueError("sdk reference default collection must be stable")
+        if str(collections_by_key[str(sdk_reference['experimental_collection_key'])]["visibility"]) != "experimental":
+            raise ValueError("sdk reference experimental collection must be experimental")
+        if str(sdk_reference["minimum_kind"]) != str(repo_surface["manifest"]["minimum_kind"]):
+            raise ValueError("sdk reference minimum_kind does not match manifest.ini")
+        if str(sdk_reference["preferred_kind"]) != str(repo_surface["manifest"]["preferred_kind"]):
+            raise ValueError("sdk reference preferred_kind does not match manifest.ini")
+        if str(sdk_reference["quality_class"]) != str(repo_surface["manifest"]["quality_class"]):
+            raise ValueError("sdk reference quality_class does not match manifest.ini")
+        if str(sdk_reference["authoring_entrypoint"]) != "python tools/scripts/plasma_lab.py":
+            raise ValueError("sdk reference authoring_entrypoint is not the current Plasma Lab entrypoint")
+        notes.append("validated sdk reference bridge surface")
+
+        provenance_entries = repo_surface["provenance_index"]["entries"]
+        provenance_keys: set[str] = set()
+        for entry in provenance_entries:
+            entry_key = str(entry["entry_key"])
+            if entry_key in provenance_keys:
+                raise ValueError(f"duplicate provenance index entry {entry_key}")
+            provenance_keys.add(entry_key)
+            pack_key = str(entry["pack_key"])
+            if pack_key not in repo_surface["packs"]:
+                raise ValueError(f"provenance index entry {entry_key} references unknown pack {pack_key}")
+            if str(entry["featured_collection_key"]) not in collections_by_key:
+                raise ValueError(
+                    f"provenance index entry {entry_key} references unknown collection {entry['featured_collection_key']}"
+                )
+            pack_provenance = repo_surface["packs"][pack_key]["provenance"]
+            for field in ("channel", "support_tier", "source_kind", "provenance_kind"):
+                if str(entry[field]) != str(pack_provenance[field]):
+                    raise ValueError(
+                        f"provenance index entry {entry_key} mismatch for {field}: {entry[field]!r} != {pack_provenance[field]!r}"
+                    )
+            notes.append(f"validated provenance index entry {entry_key}")
+    except Exception as exc:  # pylint: disable=broad-except
+        failures.append(str(exc))
+
     return failures, warnings, notes, catalog, repo_surface
 
 
@@ -752,10 +1302,21 @@ def authoring_report() -> int:
         f"channels={', '.join(sorted(pack['provenance']['channel'] for pack in repo_surface['packs'].values()))}"
     )
     print(
+        f"- local bridge metadata: bridges={len(repo_surface['projection_surface']['bridges'])} "
+        f"control_profiles={len(repo_surface['control_profiles']['profiles'])} "
+        f"collections={len(repo_surface['curated_collections']['collections'])} "
+        f"provenance_entries={len(repo_surface['provenance_index']['entries'])}"
+    )
+    print(
         f"- canonical aliases: {', '.join(f'{alias}->{canonical}' for alias, canonical in sorted(aliases.items())) or 'none'}"
     )
-    print("- author workflow entry points: validate, authoring-report, compare, compat-report, migration-report, degrade-report, capture-diff")
+    print(
+        "- author workflow entry points: validate, authoring-report, compare, compat-report, migration-report, integration-report, control-report, curation-report, degrade-report, capture-diff"
+    )
     print("- current authored boundary: set files, journey files, and pack provenance are on disk; built-in preset and theme descriptors remain compiled and legacy-INI anchored")
+    print(
+        "- local bridge boundary: projection, sdk-reference, control-profile, collection, and provenance metadata are file-first and report-first only; no suite-runtime bridge, no automation daemon, and no community platform"
+    )
     print("- lab boundary: CLI-first and report-first only; no live editor, no gallery browser, and no pixel-diff renderer harness")
     if failures:
         print("- repo audit status: failures present")
@@ -954,6 +1515,132 @@ def migration_report() -> int:
     return 0
 
 
+def integration_report() -> int:
+    failures, warnings, _, _, repo_surface = audit_repo_surface()
+    print("PX41 Plasma Lab integration report")
+    print("- shared contracts consumed: sy40_suite_and_anthology, sy40_sdk_reference")
+    print(f"- anthology and suite bridges: {len(repo_surface['projection_surface']['bridges'])}")
+    for bridge in repo_surface["projection_surface"]["bridges"]:
+        print(
+            f"  {bridge['bridge_key']}: consumer={bridge['consumer']} visibility={bridge['visibility']} "
+            f"collection={bridge['collection_key']} featured={str(bridge['featured']).lower()} "
+            f"curated={str(bridge['curated']).lower()}"
+        )
+        print(
+            f"    favorite_behavior={bridge['favorite_behavior']} exclusion_behavior={bridge['exclusion_behavior']} "
+            f"journey_behavior={bridge['journey_behavior']} settings_handoff={bridge['settings_handoff']} "
+            f"preview_visibility={bridge['preview_visibility']}"
+        )
+    sdk_reference = repo_surface["sdk_reference"]
+    print("- sdk reference surface:")
+    print(
+        f"  class={sdk_reference['reference_class']} example_pack={sdk_reference['example_pack_key']} "
+        f"default_collection={sdk_reference['default_collection_key']} "
+        f"experimental_collection={sdk_reference['experimental_collection_key']}"
+    )
+    print(
+        f"  routing={sdk_reference['minimum_kind']}->{sdk_reference['preferred_kind']} "
+        f"quality_class={sdk_reference['quality_class']} "
+        f"authoring_entrypoint={sdk_reference['authoring_entrypoint']}"
+    )
+    print(f"- control profiles: {len(repo_surface['control_profiles']['profiles'])}")
+    for profile in repo_surface["control_profiles"]["profiles"]:
+        print(
+            f"  {profile['profile_key']}: visibility={profile['visibility']} preset={profile['preset_key']} "
+            f"theme={profile['theme_key']} journey={profile['journey_key'] or 'none'} "
+            f"allow_experimental={str(profile['allow_experimental']).lower()}"
+        )
+    if failures:
+        print("- validation blockers:")
+        for failure in failures:
+            print(f"  {failure}")
+        return 1
+    for warning in warnings:
+        print(f"- warning: {warning}")
+    return 0
+
+
+def control_report(profile_key: str) -> int:
+    failures, warnings, _, catalog, repo_surface = audit_repo_surface()
+    aliases = catalog["aliases"]
+    profiles = {
+        str(profile["profile_key"]): profile
+        for profile in repo_surface["control_profiles"]["profiles"]
+    }
+    if profile_key not in profiles:
+        print(f"Unknown control profile {profile_key}", file=sys.stderr)
+        return 1
+    profile = profiles[profile_key]
+    favorite_keys = [canonicalize_key(key, aliases) for key in profile["favorite_preset_keys"]]
+    excluded_keys = [canonicalize_key(key, aliases) for key in profile["excluded_preset_keys"]]
+    print(f"PX41 Plasma Lab control report: {profile_key}")
+    print(f"- visibility: {profile['visibility']}")
+    print(f"- preset: {profile['preset_key']}")
+    print(f"- theme: {profile['theme_key']}")
+    print(f"- preset_set: {profile['preset_set_key'] or 'none'}")
+    print(f"- theme_set: {profile['theme_set_key'] or 'none'}")
+    print(f"- journey: {profile['journey_key'] or 'none'}")
+    print(
+        f"- seed and detail: seed_mode={profile['seed_mode']} deterministic_seed={profile['deterministic_seed']} "
+        f"detail_level={profile['detail_level']} randomization_mode={profile['randomization_mode']}"
+    )
+    print(
+        f"- favorites and exclusions: favorites={','.join(favorite_keys) if favorite_keys else 'none'} "
+        f"excluded={','.join(excluded_keys) if excluded_keys else 'none'}"
+    )
+    print(
+        f"- clamp posture: allow_experimental={str(profile['allow_experimental']).lower()} "
+        "runtime bypass=none validation=report_first"
+    )
+    if failures:
+        print("- validation blockers:")
+        for failure in failures:
+            print(f"  {failure}")
+        return 1
+    for warning in warnings:
+        print(f"- warning: {warning}")
+    return 0
+
+
+def curation_report() -> int:
+    failures, warnings, _, _, repo_surface = audit_repo_surface()
+    print("PX41 Plasma Lab curation report")
+    print(f"- curated collections: {len(repo_surface['curated_collections']['collections'])}")
+    for collection in repo_surface["curated_collections"]["collections"]:
+        print(
+            f"  {collection['collection_key']}: visibility={collection['visibility']} "
+            f"channel={collection['channel']} featured={str(collection['featured']).lower()} "
+            f"sdk_reference={str(collection['sdk_reference']).lower()} pack={collection['pack_key'] or 'none'}"
+        )
+        print(
+            f"    preset_set={collection['preset_set_key'] or 'none'} theme_set={collection['theme_set_key'] or 'none'} "
+            f"journey={collection['journey_key'] or 'none'}"
+        )
+        print(
+            f"    preset_keys={','.join(collection['preset_keys']) if collection['preset_keys'] else 'none'} "
+            f"theme_keys={','.join(collection['theme_keys']) if collection['theme_keys'] else 'none'}"
+        )
+    print(f"- provenance index entries: {len(repo_surface['provenance_index']['entries'])}")
+    for entry in repo_surface["provenance_index"]["entries"]:
+        print(
+            f"  {entry['entry_key']}: pack={entry['pack_key']} channel={entry['channel']} "
+            f"support_tier={entry['support_tier']} source_kind={entry['source_kind']} "
+            f"trust_tier={entry['trust_tier']}"
+        )
+        print(
+            f"    featured_collection={entry['featured_collection_key']} "
+            f"sdk_reference={str(entry['sdk_reference']).lower()}"
+        )
+    if failures:
+        print("- validation blockers:")
+        for failure in failures:
+            print(f"  {failure}")
+        return 1
+    for warning in warnings:
+        print(f"- warning: {warning}")
+    return 0
+
+
 def degrade_report_for_pack(pack_key: str) -> int:
     if pack_key != "lava_remix":
         print(f"Unknown pack {pack_key}", file=sys.stderr)
@@ -1062,6 +1749,12 @@ def main(argv: Sequence[str]) -> int:
         return compat_report(args.kind, args.target)
     if args.command == "migration-report":
         return migration_report()
+    if args.command == "integration-report":
+        return integration_report()
+    if args.command == "control-report":
+        return control_report(args.profile)
+    if args.command == "curation-report":
+        return curation_report()
     if args.command == "degrade-report":
         if args.pack:
             return degrade_report_for_pack(args.pack)
