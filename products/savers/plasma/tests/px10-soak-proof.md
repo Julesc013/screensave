@@ -30,6 +30,7 @@ Actual checked-in evidence reviewed for this tranche:
 - deterministic degrade proof from premium-only presentation request back to the compat baseline
 - repeated journey-driven transition stepping on `gl21`
 - a longer deterministic `gl11` journey capture for the bounded lower-band transition subset
+- a product-local smoke assertion that preview-mode runtime stays calmer than the equivalent windowed runtime on the same lower-band path
 
 ## Non-Fatal Observations
 

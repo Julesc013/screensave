@@ -440,7 +440,11 @@ int main(void)
     plasma_config product_config;
     screensave_config_binding binding;
     screensave_saver_environment environment;
+    screensave_saver_environment preview_environment;
+    screensave_saver_environment windowed_environment;
     screensave_saver_session *session;
+    screensave_saver_session *preview_session;
+    screensave_saver_session *windowed_session;
     unsigned long issue_flags;
     const screensave_saver_module *module;
     const screensave_preset_descriptor *preset_descriptor;
@@ -468,6 +472,8 @@ int main(void)
     screensave_settings_writer settings_writer;
     screensave_session_seed random_seed;
     screensave_renderer fake_renderer;
+    screensave_renderer preview_renderer;
+    screensave_renderer windowed_renderer;
     screensave_sizei fake_size;
     screensave_color source_primary;
     screensave_color source_accent;
@@ -485,8 +491,12 @@ int main(void)
     unsigned int expected_journey_index;
     unsigned int settle_iteration;
     unsigned long mid_speed_units;
+    unsigned long preview_phase_before;
+    unsigned long preview_phase_after;
     unsigned long settle_delta;
     screensave_renderer_kind soak_renderer_kind;
+    unsigned long windowed_phase_before;
+    unsigned long windowed_phase_after;
     char benchlab_overlay[2048];
     char benchlab_report[4096];
     unsigned int settings_count;
@@ -2764,7 +2774,7 @@ int main(void)
     (void)plasma_validation_get_matrix(&matrix_count);
     (void)plasma_validation_get_performance_envelopes(&envelope_count);
     (void)plasma_validation_get_known_limits(&known_limit_count);
-    if (matrix_count < 10U || envelope_count < 5U || known_limit_count < 5U) {
+    if (matrix_count < 14U || envelope_count < 7U || known_limit_count < 7U) {
         return 202;
     }
 
@@ -2797,6 +2807,34 @@ int main(void)
     ) {
         return 206;
     }
+    matrix_entry = plasma_validation_find_matrix_entry("hardware_matrix", "product");
+    if (
+        matrix_entry == NULL ||
+        matrix_entry->status != PLASMA_VALIDATION_STATUS_PARTIAL
+    ) {
+        return 230;
+    }
+    matrix_entry = plasma_validation_find_matrix_entry("performance_soak_posture", "product");
+    if (
+        matrix_entry == NULL ||
+        matrix_entry->status != PLASMA_VALIDATION_STATUS_PARTIAL
+    ) {
+        return 231;
+    }
+    matrix_entry = plasma_validation_find_matrix_entry("multi_monitor_baseline", "product");
+    if (
+        matrix_entry == NULL ||
+        matrix_entry->status != PLASMA_VALIDATION_STATUS_PARTIAL
+    ) {
+        return 232;
+    }
+    matrix_entry = plasma_validation_find_matrix_entry("environment_safety_surface", "product");
+    if (
+        matrix_entry == NULL ||
+        matrix_entry->status != PLASMA_VALIDATION_STATUS_PARTIAL
+    ) {
+        return 233;
+    }
 
     envelope_entry = plasma_validation_find_performance_envelope("premium_gl46_heightfield");
     if (
@@ -2813,6 +2851,21 @@ int main(void)
     ) {
         return 208;
     }
+    envelope_entry = plasma_validation_find_performance_envelope("lower_band_restart_soak");
+    if (
+        envelope_entry == NULL ||
+        envelope_entry->status != PLASMA_VALIDATION_STATUS_VALIDATED ||
+        strcmp(envelope_entry->measurement_mode, "measured") != 0
+    ) {
+        return 234;
+    }
+    envelope_entry = plasma_validation_find_performance_envelope("preview_safe_runtime");
+    if (
+        envelope_entry == NULL ||
+        envelope_entry->status != PLASMA_VALIDATION_STATUS_PARTIAL
+    ) {
+        return 235;
+    }
 
     known_limit_entry = plasma_validation_find_known_limit("premium_heightfield_only");
     if (
@@ -2828,6 +2881,99 @@ int main(void)
     ) {
         return 210;
     }
+    known_limit_entry = plasma_validation_find_known_limit("multi_monitor_baseline_bounded");
+    if (
+        known_limit_entry == NULL ||
+        known_limit_entry->status != PLASMA_VALIDATION_STATUS_PARTIAL
+    ) {
+        return 236;
+    }
+    known_limit_entry = plasma_validation_find_known_limit("environment_safety_bounded");
+    if (
+        known_limit_entry == NULL ||
+        known_limit_entry->status != PLASMA_VALIDATION_STATUS_PARTIAL
+    ) {
+        return 237;
+    }
+
+    plasma_config_set_defaults(&common_config, &product_config, sizeof(product_config));
+    screensave_config_binding_init(&binding, &common_config, &product_config, sizeof(product_config));
+    ZeroMemory(&preview_environment, sizeof(preview_environment));
+    ZeroMemory(&windowed_environment, sizeof(windowed_environment));
+    fake_size.width = 320;
+    fake_size.height = 240;
+    plasma_smoke_init_fake_renderer(
+        &preview_renderer,
+        SCREENSAVE_RENDERER_KIND_GDI,
+        SCREENSAVE_RENDERER_KIND_GDI,
+        &fake_size
+    );
+    plasma_smoke_init_fake_renderer(
+        &windowed_renderer,
+        SCREENSAVE_RENDERER_KIND_GDI,
+        SCREENSAVE_RENDERER_KIND_GDI,
+        &fake_size
+    );
+    preview_environment.mode = SCREENSAVE_SESSION_MODE_PREVIEW;
+    preview_environment.drawable_size = fake_size;
+    preview_environment.seed.base_seed = 0x71727374UL;
+    preview_environment.seed.stream_seed = 0x75767778UL;
+    preview_environment.seed.deterministic = common_config.use_deterministic_seed;
+    preview_environment.config_binding = &binding;
+    preview_environment.renderer = &preview_renderer;
+    windowed_environment = preview_environment;
+    windowed_environment.mode = SCREENSAVE_SESSION_MODE_WINDOWED;
+    windowed_environment.renderer = &windowed_renderer;
+
+    preview_session = NULL;
+    windowed_session = NULL;
+    if (
+        !plasma_create_session(module, &preview_session, &preview_environment) ||
+        preview_session == NULL ||
+        !plasma_create_session(module, &windowed_session, &windowed_environment) ||
+        windowed_session == NULL
+    ) {
+        if (preview_session != NULL) {
+            plasma_destroy_session(preview_session);
+        }
+        if (windowed_session != NULL) {
+            plasma_destroy_session(windowed_session);
+        }
+        return 238;
+    }
+    if (
+        !preview_session->state.preview_mode ||
+        windowed_session->state.preview_mode ||
+        preview_session->state.active_renderer_kind != SCREENSAVE_RENDERER_KIND_GDI ||
+        windowed_session->state.active_renderer_kind != SCREENSAVE_RENDERER_KIND_GDI ||
+        !plasma_plan_validate_lower_band_baseline(&preview_session->plan, module) ||
+        !plasma_plan_validate_lower_band_baseline(&windowed_session->plan, module) ||
+        preview_session->state.field_size.width >= windowed_session->state.field_size.width ||
+        preview_session->state.field_size.height >= windowed_session->state.field_size.height
+    ) {
+        plasma_destroy_session(preview_session);
+        plasma_destroy_session(windowed_session);
+        return 239;
+    }
+
+    preview_phase_before = preview_session->state.phase_millis;
+    windowed_phase_before = windowed_session->state.phase_millis;
+    plasma_smoke_step_session_delta(preview_session, &preview_environment, 1000UL);
+    plasma_smoke_step_session_delta(windowed_session, &windowed_environment, 1000UL);
+    preview_phase_after = preview_session->state.phase_millis;
+    windowed_phase_after = windowed_session->state.phase_millis;
+    if (
+        preview_phase_after <= preview_phase_before ||
+        windowed_phase_after <= windowed_phase_before ||
+        (preview_phase_after - preview_phase_before) >=
+            (windowed_phase_after - windowed_phase_before)
+    ) {
+        plasma_destroy_session(preview_session);
+        plasma_destroy_session(windowed_session);
+        return 240;
+    }
+    plasma_destroy_session(preview_session);
+    plasma_destroy_session(windowed_session);
 
     for (soak_iteration = 0U; soak_iteration < 12U; ++soak_iteration) {
         soak_renderer_kind =
