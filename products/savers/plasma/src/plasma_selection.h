@@ -4,7 +4,6 @@
 #include "screensave/config_api.h"
 #include "plasma_content.h"
 
-#define PLASMA_CONTENT_KEY_TEXT_LENGTH 64U
 #define PLASMA_CONTENT_KEY_LIST_LENGTH 256U
 
 typedef enum plasma_content_filter_tag {

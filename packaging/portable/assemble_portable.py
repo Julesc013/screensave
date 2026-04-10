@@ -37,7 +37,8 @@ def ensure_directory(path: pathlib.Path) -> None:
 
 def write_text(path: pathlib.Path, text: str) -> None:
     ensure_directory(path.parent)
-    path.write_text(text, encoding="utf-8", newline="\n")
+    with path.open("w", encoding="utf-8", newline="\n") as handle:
+        handle.write(text)
 
 
 def copy_file(source: pathlib.Path, destination: pathlib.Path) -> None:

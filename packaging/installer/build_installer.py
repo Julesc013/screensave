@@ -33,7 +33,14 @@ def copy_file(source: Path, destination: Path) -> None:
 def copy_tree(source: Path, destination: Path) -> None:
     if destination.exists():
         shutil.rmtree(destination)
-    shutil.copytree(source, destination)
+    destination.mkdir(parents=True, exist_ok=True)
+    for path in sorted(source.rglob("*")):
+        relative = path.relative_to(source)
+        target = destination / relative
+        if path.is_dir():
+            target.mkdir(parents=True, exist_ok=True)
+        else:
+            copy_file(path, target)
 
 
 def sha256_for_file(path: Path) -> str:

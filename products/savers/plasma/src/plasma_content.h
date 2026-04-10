@@ -8,6 +8,8 @@
 
 typedef struct plasma_preset_values_tag plasma_preset_values;
 
+#define PLASMA_CONTENT_KEY_TEXT_LENGTH 64U
+
 typedef enum plasma_content_source_tag {
     PLASMA_CONTENT_SOURCE_BUILT_IN = 0,
     PLASMA_CONTENT_SOURCE_PACK = 1,
