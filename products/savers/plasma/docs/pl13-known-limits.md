@@ -16,6 +16,8 @@ It is factual, current-state documentation, not a wishlist.
 - Transition proof is bounded to the curated implemented subset, not every possible preset or theme pairing.
 - BenchLab forcing is bounded to the implemented Plasma-specific forcing subset, not every imaginable future knob.
 - Performance envelopes are bounded qualitatively rather than with hard numeric SLAs.
+- Multi-monitor support is bounded to the shared one-window virtual-desktop baseline rather than independent per-monitor Plasma behavior.
+- Environment safety support is bounded to current preview-safe, long-run-stable, descriptive dark-room content, and truthful clamp or fallback behavior.
 
 ## Known Degrade And Fallback Caveats
 
@@ -33,6 +35,7 @@ It is factual, current-state documentation, not a wishlist.
 
 - The current capture set comes from one capable validation machine.
 - PL13 does not include a wider cross-driver, cross-GPU, or low-capability denial sweep.
+- Mixed-topology and Plasma-specific preview-host reruns are not part of the current checked-in evidence set.
 - Fullscreen `.scr` host behavior is not being claimed from BenchLab captures alone.
 
 ## Risks And Blockers Relevant To PL14
@@ -41,6 +44,8 @@ It is factual, current-state documentation, not a wishlist.
 - Release messaging must stay within the validated premium subset and must not imply more than `heightfield` for dimensional presentation.
 - Transition claims must stay bounded to the implemented supported subset unless PL14 gathers more pairwise proof.
 - Numeric performance promises remain out of bounds until a later measurement pass exists.
+- Multi-monitor claims must stay within the one-session virtual-desktop baseline until later product or host work proves anything broader.
+- Environment safety claims must stay within current preview-safe and long-run-stable posture until richer safety modes actually exist.
 
 ## Grounded Limit Register
 
@@ -52,6 +57,8 @@ It is factual, current-state documentation, not a wishlist.
 | `benchlab_forcing_bounded` | Partial | BenchLab forcing covers the implemented subset only. |
 | `cross_hardware_gap` | Blocked | Proof comes from one capable validation machine rather than a wider hardware sweep. |
 | `numeric_perf_sla_gap` | Blocked | PL13 does not claim hard numeric frame-time, memory, or startup SLAs. |
+| `multi_monitor_baseline_bounded` | Partial | Current multi-monitor support is the shared virtual-desktop baseline, not independent per-monitor behavior. |
+| `environment_safety_bounded` | Partial | Current safety claims are limited to preview-safe, long-run-stable posture, descriptive dark-room content, and truthful clamp or fallback behavior. |
 
 ## Scope Boundary
 

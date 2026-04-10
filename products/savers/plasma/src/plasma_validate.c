@@ -72,6 +72,34 @@ static const plasma_validation_matrix_entry g_plasma_validation_matrix[] = {
         "BenchLab field export, bounded forcing, and clamp reporting are backed by smoke coverage and PL12 captures."
     },
     {
+        "hardware_matrix",
+        "product",
+        PLASMA_VALIDATION_STATUS_PARTIAL,
+        "products/savers/plasma/docs/px10-hardware-proof.md",
+        "PX10 turns the current single-machine lane ladder, shared host carry-forward evidence, and blocked breadth into an explicit Plasma-local hardware matrix."
+    },
+    {
+        "performance_soak_posture",
+        "product",
+        PLASMA_VALIDATION_STATUS_PARTIAL,
+        "products/savers/plasma/docs/px10-performance-and-soak.md",
+        "PX10 splits measured run counts, bounded qualitative envelopes, and unknown numeric claims explicitly without creating hard performance SLAs."
+    },
+    {
+        "multi_monitor_baseline",
+        "product",
+        PLASMA_VALIDATION_STATUS_PARTIAL,
+        "products/savers/plasma/docs/px10-multi-monitor.md",
+        "PX10 freezes the truthful one-session virtual-desktop baseline for Plasma and leaves independent per-monitor behavior explicitly unsupported."
+    },
+    {
+        "environment_safety_surface",
+        "product",
+        PLASMA_VALIDATION_STATUS_PARTIAL,
+        "products/savers/plasma/docs/px10-environment-safety.md",
+        "PX10 ties preview-safe, long-run-stable, dark-room descriptive content, and current clamp or fallback behavior back to actual product-local behavior."
+    },
+    {
         "transition_soak",
         "product",
         PLASMA_VALIDATION_STATUS_PARTIAL,
@@ -167,6 +195,28 @@ static const plasma_performance_envelope_entry g_plasma_performance_envelopes[] 
         "Transition timing, fallback, and journey progression are validated for the implemented subset only.",
         "Repeated transition stepping is bounded and stable in smoke, but exhaustive pairwise soak coverage is not claimed.",
         "products/savers/plasma/tests/pl13-transition-validation.md"
+    },
+    {
+        "lower_band_restart_soak",
+        "product",
+        PLASMA_VALIDATION_STATUS_VALIDATED,
+        "measured",
+        "The checked-in smoke harness repeatedly creates and compiles lower-band classic sessions on the preserved default path.",
+        "The strongest restart and steady-state support surface remains the stable classic baseline on the lower bands.",
+        "No transition-cost claim is attached to this restart envelope.",
+        "The current smoke harness uses twelve lower-band restart iterations with twenty-four bounded steps per iteration.",
+        "products/savers/plasma/tests/px10-soak-proof.md"
+    },
+    {
+        "preview_safe_runtime",
+        "product",
+        PLASMA_VALIDATION_STATUS_PARTIAL,
+        "bounded_qualitative",
+        "Preview-mode session creation uses the same truthful routing posture as the normal product path.",
+        "Preview mode reduces field density, motion intensity, and smoothing aggressiveness rather than inventing a separate visual language.",
+        "Preview transition behavior remains the bounded current product behavior rather than a separate preview-only transition system.",
+        "PX10 formalizes the preview-safe runtime meaning, but does not add a fresh native preview-host rerun in this checkout.",
+        "products/savers/plasma/docs/px10-environment-safety.md"
     }
 };
 
@@ -198,13 +248,25 @@ static const plasma_known_limit_entry g_plasma_known_limits[] = {
     {
         "cross_hardware_gap",
         PLASMA_VALIDATION_STATUS_BLOCKED,
-        "The PL13 capture set comes from one capable validation machine and does not include a live lower-capability denial sweep across multiple drivers or GPUs.",
+        "The product-local PX10 matrix now makes the known machine and blocked breadth explicit, but the repo still lacks a second GPU, alternate driver family, or lower-capability denial sweep.",
         "products/savers/plasma/docs/pl13-known-limits.md"
     },
     {
         "numeric_perf_sla_gap",
         PLASMA_VALIDATION_STATUS_BLOCKED,
-        "PL13 records bounded qualitative envelopes and repeatable proof runs, but it does not claim hard numeric frame-time or memory SLAs.",
+        "PX10 now splits measured run counts, bounded qualitative envelopes, and unknowns explicitly, but the repo still does not claim hard numeric frame-time, startup, or memory SLAs.",
+        "products/savers/plasma/docs/pl13-known-limits.md"
+    },
+    {
+        "multi_monitor_baseline_bounded",
+        PLASMA_VALIDATION_STATUS_PARTIAL,
+        "Current multi-monitor support is the shared one-window virtual-desktop baseline. Independent per-monitor behavior, hero or follower roles, and monitor-aware layout policy remain out of scope.",
+        "products/savers/plasma/docs/pl13-known-limits.md"
+    },
+    {
+        "environment_safety_bounded",
+        PLASMA_VALIDATION_STATUS_PARTIAL,
+        "Current safety claims are limited to preview-safe, long-run-stable posture, descriptive dark-room content choices, and truthful clamp or fallback behavior. OLED, battery, thermal, remote, and safe-mode terms remain unmodeled.",
         "products/savers/plasma/docs/pl13-known-limits.md"
     }
 };
