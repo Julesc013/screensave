@@ -39,8 +39,8 @@ Meaning of states:
 
 | Area | Lane / Scope | Status | Evidence | Meaning |
 | --- | --- | --- | --- | --- |
-| `classic_default` | `gdi` | Validated | [`validation/captures/pl13/benchlab-plasma-gdi.txt`](../../../../validation/captures/pl13/benchlab-plasma-gdi.txt) | Preserved classic baseline proved on the universal floor. |
-| `classic_default` | `gl11` | Validated | [`validation/captures/pl13/benchlab-plasma-gl11.txt`](../../../../validation/captures/pl13/benchlab-plasma-gl11.txt) | Preserved classic baseline proved on the compat lane. |
+| `default_stable_path` | `gdi` | Validated | [`validation/captures/pl13/benchlab-plasma-gdi.txt`](../../../../validation/captures/pl13/benchlab-plasma-gdi.txt) | Preserved default stable path proved on the universal floor without a separate Classic runtime gate. |
+| `default_stable_path` | `gl11` | Validated | [`validation/captures/pl13/benchlab-plasma-gl11.txt`](../../../../validation/captures/pl13/benchlab-plasma-gl11.txt) | Preserved default stable path proved on the compat lane without a separate Classic runtime mode. |
 | `content_registry` | `product` | Validated | [`../tests/pl06-content-proof.md`](../tests/pl06-content-proof.md) | Registry, sets, favorites, exclusions, and pack preservation are still backed by smoke and proof notes. |
 | `advanced_lane` | `gl21` | Validated | [`validation/captures/pl13/benchlab-plasma-gl21.txt`](../../../../validation/captures/pl13/benchlab-plasma-gl21.txt) | Bounded advanced lane still compiles and selects honestly. |
 | `modern_lane` | `gl33` | Validated | [`validation/captures/pl13/benchlab-plasma-gl33.txt`](../../../../validation/captures/pl13/benchlab-plasma-gl33.txt) | Bounded modern lane still compiles and selects honestly. |
@@ -68,6 +68,8 @@ Meaning of states:
 - Richer-lane proof is represented separately for `gl21`, `gl33`, and `gl46` so later phases do not have to infer lane viability from one merged report.
 - Transition proof uses both smoke assertions and a long-enough `gl11` BenchLab journey capture that reaches a live `preset_morph`.
 - Settings and BenchLab cells intentionally point back to the earlier phase proof notes because PL13 is validating continued truth, not re-implementing those systems.
+- Legacy proof callers may still look up `classic_default`, but `U01` freezes
+  `default_stable_path` as the canonical key.
 
 ## Preserved Default And Classic Invariants
 
@@ -79,7 +81,7 @@ PL13 re-verified that:
 - default theme remains `plasma_lava`
 - `ember_lava -> plasma_lava` still resolves
 - manifest routing posture remains `minimum_kind=gdi`, `preferred_kind=gl11`, `quality_class=safe`
-- when validation hooks are inactive, the default classic path remains `raster` + `native_raster` + `flat`
+- when validation hooks are inactive, the preserved default path remains `raster` + `native_raster` + `flat`
 
 ## Intentionally Outside Scope
 

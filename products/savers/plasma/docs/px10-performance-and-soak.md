@@ -40,12 +40,15 @@ These claims remain honest and supportable, but still qualitative:
 
 | Envelope | Evidence Class | Evidence | Current Meaning |
 | --- | --- | --- | --- |
-| `classic_gdi` | `bounded_qualitative` | [`../../../../validation/captures/pl13/benchlab-plasma-gdi.txt`](../../../../validation/captures/pl13/benchlab-plasma-gdi.txt) | The preserved classic default path compiles, starts, and runs on the mandatory floor without richer-lane dependence. |
-| `classic_gl11` | `bounded_qualitative` | [`../../../../validation/captures/pl13/benchlab-plasma-gl11.txt`](../../../../validation/captures/pl13/benchlab-plasma-gl11.txt) | The preferred stable accelerated lane remains honest and bounded. |
+| `default_path_gdi` | `bounded_qualitative` | [`../../../../validation/captures/pl13/benchlab-plasma-gdi.txt`](../../../../validation/captures/pl13/benchlab-plasma-gdi.txt) | The preserved default path compiles, starts, and runs on the mandatory floor without richer-lane dependence. |
+| `default_path_gl11` | `bounded_qualitative` | [`../../../../validation/captures/pl13/benchlab-plasma-gl11.txt`](../../../../validation/captures/pl13/benchlab-plasma-gl11.txt) | The preferred stable accelerated default lane remains honest and bounded. |
 | `advanced_gl21` | `bounded_qualitative` | [`../../../../validation/captures/pl13/benchlab-plasma-gl21.txt`](../../../../validation/captures/pl13/benchlab-plasma-gl21.txt) | The bounded advanced component subset is real, but PX10 does not convert that into a broader cost promise. |
 | `modern_gl33` | `bounded_qualitative` | [`../../../../validation/captures/pl13/benchlab-plasma-gl33.txt`](../../../../validation/captures/pl13/benchlab-plasma-gl33.txt) | The bounded modern subset is real, but not numerically characterized. |
 | `premium_gl46_heightfield` | `bounded_qualitative` | [`../../../../validation/captures/pl13/benchlab-plasma-gl46-heightfield.txt`](../../../../validation/captures/pl13/benchlab-plasma-gl46-heightfield.txt) | The current premium subset plus `heightfield` is real, but still bounded and not given hard cost limits. |
 | `transition_subset` | `bounded_qualitative` | [`../tests/pl13-transition-validation.md`](../tests/pl13-transition-validation.md) | Theme morph, preset morph, bridge, fallback, and journey behavior are supportable only for the implemented curated subset. |
+
+Legacy proof callers may still resolve `classic_gdi` and `classic_gl11`, but
+the canonical envelope names now describe the preserved default path directly.
 
 ## Startup And Session-Compile Notes
 
