@@ -222,9 +222,6 @@ void plasma_premium_bind_plan(
             PLASMA_PREMIUM_COMPONENT_EXTENDED_HISTORY |
             PLASMA_PREMIUM_COMPONENT_POST_CHAIN |
             PLASMA_PREMIUM_COMPONENT_DIMENSIONAL_PRESENTATION;
-        if (plan->presentation_mode == PLASMA_PRESENTATION_MODE_FLAT) {
-            plan->presentation_mode = PLASMA_PRESENTATION_MODE_HEIGHTFIELD;
-        }
         return;
     }
 
@@ -281,7 +278,8 @@ int plasma_premium_validate_plan(
                 PLASMA_PREMIUM_COMPONENT_DIMENSIONAL_PRESENTATION
             ) ||
             plan->premium_degrade_policy != plasma_premium_default_degrade_policy() ||
-            !plasma_premium_plan_supports_presentation(plan)
+            (plan->presentation_mode != PLASMA_PRESENTATION_MODE_FLAT &&
+                !plasma_premium_plan_supports_presentation(plan))
         ) {
             return 0;
         }

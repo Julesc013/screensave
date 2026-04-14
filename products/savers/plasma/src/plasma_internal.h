@@ -62,6 +62,13 @@ typedef struct plasma_config_tag {
     int speed_mode;
     int resolution_mode;
     int smoothing_mode;
+    plasma_output_family output_family;
+    plasma_output_mode output_mode;
+    plasma_sampling_treatment sampling_treatment;
+    plasma_filter_treatment filter_treatment;
+    plasma_emulation_treatment emulation_treatment;
+    plasma_accent_treatment accent_treatment;
+    plasma_presentation_mode presentation_mode;
     plasma_selection_preferences selection;
     plasma_transition_preferences transition;
     plasma_benchlab_forcing benchlab;

@@ -288,6 +288,13 @@ void plasma_config_set_defaults(
     config->speed_mode = PLASMA_SPEED_GENTLE;
     config->resolution_mode = PLASMA_RESOLUTION_STANDARD;
     config->smoothing_mode = PLASMA_SMOOTHING_SOFT;
+    config->output_family = PLASMA_OUTPUT_FAMILY_RASTER;
+    config->output_mode = PLASMA_OUTPUT_MODE_NATIVE_RASTER;
+    config->sampling_treatment = PLASMA_SAMPLING_TREATMENT_NONE;
+    config->filter_treatment = PLASMA_FILTER_TREATMENT_NONE;
+    config->emulation_treatment = PLASMA_EMULATION_TREATMENT_NONE;
+    config->accent_treatment = PLASMA_ACCENT_TREATMENT_NONE;
+    config->presentation_mode = PLASMA_PRESENTATION_MODE_FLAT;
     plasma_selection_preferences_set_defaults(&config->selection);
     plasma_transition_preferences_set_defaults(&config->transition);
     plasma_benchlab_forcing_set_defaults(&config->benchlab);
@@ -339,6 +346,81 @@ void plasma_config_clamp(
     }
     if (config->smoothing_mode < PLASMA_SMOOTHING_OFF || config->smoothing_mode > PLASMA_SMOOTHING_GLOW) {
         config->smoothing_mode = PLASMA_SMOOTHING_SOFT;
+    }
+    if (
+        config->output_family < PLASMA_OUTPUT_FAMILY_RASTER ||
+        config->output_family > PLASMA_OUTPUT_FAMILY_GLYPH
+    ) {
+        config->output_family = PLASMA_OUTPUT_FAMILY_RASTER;
+    }
+    switch (config->output_family) {
+    case PLASMA_OUTPUT_FAMILY_RASTER:
+        config->output_mode = PLASMA_OUTPUT_MODE_NATIVE_RASTER;
+        break;
+
+    case PLASMA_OUTPUT_FAMILY_BANDED:
+        if (config->output_mode != PLASMA_OUTPUT_MODE_POSTERIZED_BANDS) {
+            config->output_mode = PLASMA_OUTPUT_MODE_POSTERIZED_BANDS;
+        }
+        break;
+
+    case PLASMA_OUTPUT_FAMILY_CONTOUR:
+        if (
+            config->output_mode != PLASMA_OUTPUT_MODE_CONTOUR_ONLY &&
+            config->output_mode != PLASMA_OUTPUT_MODE_CONTOUR_BANDS
+        ) {
+            config->output_mode = PLASMA_OUTPUT_MODE_CONTOUR_ONLY;
+        }
+        break;
+
+    case PLASMA_OUTPUT_FAMILY_GLYPH:
+        if (
+            config->output_mode != PLASMA_OUTPUT_MODE_ASCII_GLYPH &&
+            config->output_mode != PLASMA_OUTPUT_MODE_MATRIX_GLYPH
+        ) {
+            config->output_mode = PLASMA_OUTPUT_MODE_ASCII_GLYPH;
+        }
+        break;
+
+    default:
+        config->output_family = PLASMA_OUTPUT_FAMILY_RASTER;
+        config->output_mode = PLASMA_OUTPUT_MODE_NATIVE_RASTER;
+        break;
+    }
+    if (config->sampling_treatment != PLASMA_SAMPLING_TREATMENT_NONE) {
+        config->sampling_treatment = PLASMA_SAMPLING_TREATMENT_NONE;
+    }
+    switch (config->filter_treatment) {
+    case PLASMA_FILTER_TREATMENT_NONE:
+    case PLASMA_FILTER_TREATMENT_BLUR:
+    case PLASMA_FILTER_TREATMENT_GLOW_EDGE:
+    case PLASMA_FILTER_TREATMENT_HALFTONE_STIPPLE:
+    case PLASMA_FILTER_TREATMENT_EMBOSS_EDGE:
+        break;
+
+    default:
+        config->filter_treatment = PLASMA_FILTER_TREATMENT_NONE;
+        break;
+    }
+    if (
+        config->emulation_treatment != PLASMA_EMULATION_TREATMENT_NONE &&
+        config->emulation_treatment != PLASMA_EMULATION_TREATMENT_PHOSPHOR &&
+        config->emulation_treatment != PLASMA_EMULATION_TREATMENT_CRT
+    ) {
+        config->emulation_treatment = PLASMA_EMULATION_TREATMENT_NONE;
+    }
+    if (
+        config->accent_treatment != PLASMA_ACCENT_TREATMENT_NONE &&
+        config->accent_treatment != PLASMA_ACCENT_TREATMENT_OVERLAY_PASS &&
+        config->accent_treatment != PLASMA_ACCENT_TREATMENT_ACCENT_PASS
+    ) {
+        config->accent_treatment = PLASMA_ACCENT_TREATMENT_NONE;
+    }
+    if (
+        config->presentation_mode < PLASMA_PRESENTATION_MODE_FLAT ||
+        config->presentation_mode > PLASMA_PRESENTATION_MODE_BOUNDED_SURFACE
+    ) {
+        config->presentation_mode = PLASMA_PRESENTATION_MODE_FLAT;
     }
 
     plasma_selection_preferences_clamp(&config->selection);
@@ -443,6 +525,34 @@ int plasma_config_load(
     value_dword = (unsigned long)config->smoothing_mode;
     if (plasma_read_dword(key, "SmoothingMode", &value_dword)) {
         config->smoothing_mode = (int)value_dword;
+    }
+    value_dword = (unsigned long)config->output_family;
+    if (plasma_read_dword(key, "OutputFamily", &value_dword)) {
+        config->output_family = (plasma_output_family)value_dword;
+    }
+    value_dword = (unsigned long)config->output_mode;
+    if (plasma_read_dword(key, "OutputMode", &value_dword)) {
+        config->output_mode = (plasma_output_mode)value_dword;
+    }
+    value_dword = (unsigned long)config->sampling_treatment;
+    if (plasma_read_dword(key, "SamplingTreatment", &value_dword)) {
+        config->sampling_treatment = (plasma_sampling_treatment)value_dword;
+    }
+    value_dword = (unsigned long)config->filter_treatment;
+    if (plasma_read_dword(key, "FilterTreatment", &value_dword)) {
+        config->filter_treatment = (plasma_filter_treatment)value_dword;
+    }
+    value_dword = (unsigned long)config->emulation_treatment;
+    if (plasma_read_dword(key, "EmulationTreatment", &value_dword)) {
+        config->emulation_treatment = (plasma_emulation_treatment)value_dword;
+    }
+    value_dword = (unsigned long)config->accent_treatment;
+    if (plasma_read_dword(key, "AccentTreatment", &value_dword)) {
+        config->accent_treatment = (plasma_accent_treatment)value_dword;
+    }
+    value_dword = (unsigned long)config->presentation_mode;
+    if (plasma_read_dword(key, "PresentationMode", &value_dword)) {
+        config->presentation_mode = (plasma_presentation_mode)value_dword;
     }
 
     value_dword = (unsigned long)config->selection.content_filter;
@@ -621,6 +731,47 @@ int plasma_config_save(
     }
     if (result == ERROR_SUCCESS) {
         result = plasma_write_dword(key, "SmoothingMode", (unsigned long)safe_product_config.smoothing_mode);
+    }
+    if (result == ERROR_SUCCESS) {
+        result = plasma_write_dword(key, "OutputFamily", (unsigned long)safe_product_config.output_family);
+    }
+    if (result == ERROR_SUCCESS) {
+        result = plasma_write_dword(key, "OutputMode", (unsigned long)safe_product_config.output_mode);
+    }
+    if (result == ERROR_SUCCESS) {
+        result = plasma_write_dword(
+            key,
+            "SamplingTreatment",
+            (unsigned long)safe_product_config.sampling_treatment
+        );
+    }
+    if (result == ERROR_SUCCESS) {
+        result = plasma_write_dword(
+            key,
+            "FilterTreatment",
+            (unsigned long)safe_product_config.filter_treatment
+        );
+    }
+    if (result == ERROR_SUCCESS) {
+        result = plasma_write_dword(
+            key,
+            "EmulationTreatment",
+            (unsigned long)safe_product_config.emulation_treatment
+        );
+    }
+    if (result == ERROR_SUCCESS) {
+        result = plasma_write_dword(
+            key,
+            "AccentTreatment",
+            (unsigned long)safe_product_config.accent_treatment
+        );
+    }
+    if (result == ERROR_SUCCESS) {
+        result = plasma_write_dword(
+            key,
+            "PresentationMode",
+            (unsigned long)safe_product_config.presentation_mode
+        );
     }
     if (result == ERROR_SUCCESS) {
         result = plasma_write_dword(
@@ -1614,6 +1765,304 @@ static int plasma_parse_speed_mode(const char *text, int *value_out)
     return 0;
 }
 
+static const char *plasma_output_family_name(plasma_output_family family)
+{
+    switch (family) {
+    case PLASMA_OUTPUT_FAMILY_BANDED:
+        return "banded";
+
+    case PLASMA_OUTPUT_FAMILY_CONTOUR:
+        return "contour";
+
+    case PLASMA_OUTPUT_FAMILY_GLYPH:
+        return "glyph";
+
+    case PLASMA_OUTPUT_FAMILY_RASTER:
+    default:
+        return "raster";
+    }
+}
+
+static int plasma_parse_output_family(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "raster") == 0) {
+        *value_out = PLASMA_OUTPUT_FAMILY_RASTER;
+        return 1;
+    }
+    if (lstrcmpiA(text, "banded") == 0) {
+        *value_out = PLASMA_OUTPUT_FAMILY_BANDED;
+        return 1;
+    }
+    if (lstrcmpiA(text, "contour") == 0) {
+        *value_out = PLASMA_OUTPUT_FAMILY_CONTOUR;
+        return 1;
+    }
+    if (lstrcmpiA(text, "glyph") == 0) {
+        *value_out = PLASMA_OUTPUT_FAMILY_GLYPH;
+        return 1;
+    }
+
+    return 0;
+}
+
+static const char *plasma_output_mode_name(plasma_output_mode mode)
+{
+    switch (mode) {
+    case PLASMA_OUTPUT_MODE_POSTERIZED_BANDS:
+        return "posterized_bands";
+
+    case PLASMA_OUTPUT_MODE_CONTOUR_ONLY:
+        return "contour_only";
+
+    case PLASMA_OUTPUT_MODE_CONTOUR_BANDS:
+        return "contour_bands";
+
+    case PLASMA_OUTPUT_MODE_ASCII_GLYPH:
+        return "ascii_glyph";
+
+    case PLASMA_OUTPUT_MODE_MATRIX_GLYPH:
+        return "matrix_glyph";
+
+    case PLASMA_OUTPUT_MODE_NATIVE_RASTER:
+    default:
+        return "native_raster";
+    }
+}
+
+static int plasma_parse_output_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "native_raster") == 0 || lstrcmpiA(text, "native") == 0) {
+        *value_out = PLASMA_OUTPUT_MODE_NATIVE_RASTER;
+        return 1;
+    }
+    if (lstrcmpiA(text, "posterized_bands") == 0 || lstrcmpiA(text, "bands") == 0) {
+        *value_out = PLASMA_OUTPUT_MODE_POSTERIZED_BANDS;
+        return 1;
+    }
+    if (lstrcmpiA(text, "contour_only") == 0) {
+        *value_out = PLASMA_OUTPUT_MODE_CONTOUR_ONLY;
+        return 1;
+    }
+    if (lstrcmpiA(text, "contour_bands") == 0) {
+        *value_out = PLASMA_OUTPUT_MODE_CONTOUR_BANDS;
+        return 1;
+    }
+    if (lstrcmpiA(text, "ascii_glyph") == 0 || lstrcmpiA(text, "ascii") == 0) {
+        *value_out = PLASMA_OUTPUT_MODE_ASCII_GLYPH;
+        return 1;
+    }
+    if (lstrcmpiA(text, "matrix_glyph") == 0 || lstrcmpiA(text, "matrix") == 0) {
+        *value_out = PLASMA_OUTPUT_MODE_MATRIX_GLYPH;
+        return 1;
+    }
+
+    return 0;
+}
+
+static const char *plasma_sampling_treatment_name(plasma_sampling_treatment treatment)
+{
+    (void)treatment;
+    return "none";
+}
+
+static int plasma_parse_sampling_treatment(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "none") == 0) {
+        *value_out = PLASMA_SAMPLING_TREATMENT_NONE;
+        return 1;
+    }
+
+    return 0;
+}
+
+static const char *plasma_filter_treatment_name(plasma_filter_treatment treatment)
+{
+    switch (treatment) {
+    case PLASMA_FILTER_TREATMENT_BLUR:
+        return "blur";
+
+    case PLASMA_FILTER_TREATMENT_GLOW_EDGE:
+        return "glow_edge";
+
+    case PLASMA_FILTER_TREATMENT_HALFTONE_STIPPLE:
+        return "halftone_stipple";
+
+    case PLASMA_FILTER_TREATMENT_EMBOSS_EDGE:
+        return "emboss_edge";
+
+    case PLASMA_FILTER_TREATMENT_NONE:
+    default:
+        return "none";
+    }
+}
+
+static int plasma_parse_filter_treatment(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "none") == 0) {
+        *value_out = PLASMA_FILTER_TREATMENT_NONE;
+        return 1;
+    }
+    if (lstrcmpiA(text, "blur") == 0) {
+        *value_out = PLASMA_FILTER_TREATMENT_BLUR;
+        return 1;
+    }
+    if (lstrcmpiA(text, "glow_edge") == 0) {
+        *value_out = PLASMA_FILTER_TREATMENT_GLOW_EDGE;
+        return 1;
+    }
+    if (lstrcmpiA(text, "halftone_stipple") == 0) {
+        *value_out = PLASMA_FILTER_TREATMENT_HALFTONE_STIPPLE;
+        return 1;
+    }
+    if (lstrcmpiA(text, "emboss_edge") == 0) {
+        *value_out = PLASMA_FILTER_TREATMENT_EMBOSS_EDGE;
+        return 1;
+    }
+
+    return 0;
+}
+
+static const char *plasma_emulation_treatment_name(plasma_emulation_treatment treatment)
+{
+    switch (treatment) {
+    case PLASMA_EMULATION_TREATMENT_PHOSPHOR:
+        return "phosphor";
+
+    case PLASMA_EMULATION_TREATMENT_CRT:
+        return "crt";
+
+    case PLASMA_EMULATION_TREATMENT_NONE:
+    default:
+        return "none";
+    }
+}
+
+static int plasma_parse_emulation_treatment(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "none") == 0) {
+        *value_out = PLASMA_EMULATION_TREATMENT_NONE;
+        return 1;
+    }
+    if (lstrcmpiA(text, "phosphor") == 0) {
+        *value_out = PLASMA_EMULATION_TREATMENT_PHOSPHOR;
+        return 1;
+    }
+    if (lstrcmpiA(text, "crt") == 0) {
+        *value_out = PLASMA_EMULATION_TREATMENT_CRT;
+        return 1;
+    }
+
+    return 0;
+}
+
+static const char *plasma_accent_treatment_name(plasma_accent_treatment treatment)
+{
+    switch (treatment) {
+    case PLASMA_ACCENT_TREATMENT_OVERLAY_PASS:
+        return "overlay_pass";
+
+    case PLASMA_ACCENT_TREATMENT_ACCENT_PASS:
+        return "accent_pass";
+
+    case PLASMA_ACCENT_TREATMENT_NONE:
+    default:
+        return "none";
+    }
+}
+
+static int plasma_parse_accent_treatment(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "none") == 0) {
+        *value_out = PLASMA_ACCENT_TREATMENT_NONE;
+        return 1;
+    }
+    if (lstrcmpiA(text, "overlay_pass") == 0) {
+        *value_out = PLASMA_ACCENT_TREATMENT_OVERLAY_PASS;
+        return 1;
+    }
+    if (lstrcmpiA(text, "accent_pass") == 0) {
+        *value_out = PLASMA_ACCENT_TREATMENT_ACCENT_PASS;
+        return 1;
+    }
+
+    return 0;
+}
+
+static const char *plasma_presentation_mode_name(plasma_presentation_mode mode)
+{
+    switch (mode) {
+    case PLASMA_PRESENTATION_MODE_HEIGHTFIELD:
+        return "heightfield";
+
+    case PLASMA_PRESENTATION_MODE_CURTAIN:
+        return "curtain";
+
+    case PLASMA_PRESENTATION_MODE_RIBBON:
+        return "ribbon";
+
+    case PLASMA_PRESENTATION_MODE_CONTOUR_EXTRUSION:
+        return "contour_extrusion";
+
+    case PLASMA_PRESENTATION_MODE_BOUNDED_SURFACE:
+        return "bounded_surface";
+
+    case PLASMA_PRESENTATION_MODE_FLAT:
+    default:
+        return "flat";
+    }
+}
+
+static int plasma_parse_presentation_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "flat") == 0) {
+        *value_out = PLASMA_PRESENTATION_MODE_FLAT;
+        return 1;
+    }
+    if (lstrcmpiA(text, "heightfield") == 0) {
+        *value_out = PLASMA_PRESENTATION_MODE_HEIGHTFIELD;
+        return 1;
+    }
+    if (lstrcmpiA(text, "curtain") == 0) {
+        *value_out = PLASMA_PRESENTATION_MODE_CURTAIN;
+        return 1;
+    }
+    if (lstrcmpiA(text, "ribbon") == 0) {
+        *value_out = PLASMA_PRESENTATION_MODE_RIBBON;
+        return 1;
+    }
+    if (lstrcmpiA(text, "contour_extrusion") == 0) {
+        *value_out = PLASMA_PRESENTATION_MODE_CONTOUR_EXTRUSION;
+        return 1;
+    }
+    if (lstrcmpiA(text, "bounded_surface") == 0) {
+        *value_out = PLASMA_PRESENTATION_MODE_BOUNDED_SURFACE;
+        return 1;
+    }
+
+    return 0;
+}
+
 static int plasma_parse_resolution_mode(const char *text, int *value_out)
 {
     if (text == NULL || value_out == NULL) {
@@ -1757,6 +2206,48 @@ int plasma_config_export_settings_entries(
         ) &&
         writer->write_string(
             writer->context,
+            "product",
+            "output_family",
+            plasma_output_family_name(config->output_family)
+        ) &&
+        writer->write_string(
+            writer->context,
+            "product",
+            "output_mode",
+            plasma_output_mode_name(config->output_mode)
+        ) &&
+        writer->write_string(
+            writer->context,
+            "product",
+            "sampling_treatment",
+            plasma_sampling_treatment_name(config->sampling_treatment)
+        ) &&
+        writer->write_string(
+            writer->context,
+            "product",
+            "filter_treatment",
+            plasma_filter_treatment_name(config->filter_treatment)
+        ) &&
+        writer->write_string(
+            writer->context,
+            "product",
+            "emulation_treatment",
+            plasma_emulation_treatment_name(config->emulation_treatment)
+        ) &&
+        writer->write_string(
+            writer->context,
+            "product",
+            "accent_treatment",
+            plasma_accent_treatment_name(config->accent_treatment)
+        ) &&
+        writer->write_string(
+            writer->context,
+            "product",
+            "presentation_mode",
+            plasma_presentation_mode_name(config->presentation_mode)
+        ) &&
+        writer->write_string(
+            writer->context,
             "content",
             "content_filter",
             plasma_selection_content_filter_name(config->selection.content_filter)
@@ -1892,6 +2383,27 @@ int plasma_config_import_settings_entry(
         }
         if (lstrcmpiA(key, "smoothing_mode") == 0 || lstrcmpiA(key, "smoothing") == 0) {
             return plasma_parse_smoothing_mode(value, &config->smoothing_mode);
+        }
+        if (lstrcmpiA(key, "output_family") == 0) {
+            return plasma_parse_output_family(value, (int *)&config->output_family);
+        }
+        if (lstrcmpiA(key, "output_mode") == 0) {
+            return plasma_parse_output_mode(value, (int *)&config->output_mode);
+        }
+        if (lstrcmpiA(key, "sampling_treatment") == 0 || lstrcmpiA(key, "sampling") == 0) {
+            return plasma_parse_sampling_treatment(value, (int *)&config->sampling_treatment);
+        }
+        if (lstrcmpiA(key, "filter_treatment") == 0 || lstrcmpiA(key, "filter") == 0) {
+            return plasma_parse_filter_treatment(value, (int *)&config->filter_treatment);
+        }
+        if (lstrcmpiA(key, "emulation_treatment") == 0 || lstrcmpiA(key, "emulation") == 0) {
+            return plasma_parse_emulation_treatment(value, (int *)&config->emulation_treatment);
+        }
+        if (lstrcmpiA(key, "accent_treatment") == 0 || lstrcmpiA(key, "accent") == 0) {
+            return plasma_parse_accent_treatment(value, (int *)&config->accent_treatment);
+        }
+        if (lstrcmpiA(key, "presentation_mode") == 0 || lstrcmpiA(key, "presentation") == 0) {
+            return plasma_parse_presentation_mode(value, (int *)&config->presentation_mode);
         }
         return 1;
     }

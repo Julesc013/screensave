@@ -348,6 +348,54 @@ static int plasma_compile_plan_for_renderer(
     return plasma_plan_compile(plan_out, module, &environment);
 }
 
+static int plasma_compile_configured_plan_for_renderer(
+    const screensave_saver_module *module,
+    const screensave_common_config *common_config,
+    const plasma_config *product_config,
+    screensave_renderer_kind requested_kind,
+    screensave_renderer_kind active_kind,
+    plasma_plan *plan_out
+)
+{
+    screensave_common_config safe_common_config;
+    plasma_config safe_product_config;
+    screensave_config_binding binding;
+    screensave_saver_environment environment;
+    screensave_renderer renderer;
+    screensave_sizei drawable_size;
+
+    if (
+        module == NULL ||
+        common_config == NULL ||
+        product_config == NULL ||
+        plan_out == NULL
+    ) {
+        return 0;
+    }
+
+    safe_common_config = *common_config;
+    safe_product_config = *product_config;
+    screensave_config_binding_init(
+        &binding,
+        &safe_common_config,
+        &safe_product_config,
+        sizeof(safe_product_config)
+    );
+    ZeroMemory(&environment, sizeof(environment));
+    drawable_size.width = 320;
+    drawable_size.height = 240;
+    plasma_smoke_init_fake_renderer(&renderer, requested_kind, active_kind, &drawable_size);
+    environment.mode = SCREENSAVE_SESSION_MODE_WINDOWED;
+    environment.drawable_size = drawable_size;
+    environment.seed.base_seed = 0x00000A55UL;
+    environment.seed.stream_seed = 0x00000A77UL;
+    environment.seed.deterministic = safe_common_config.use_deterministic_seed;
+    environment.config_binding = &binding;
+    environment.renderer = &renderer;
+
+    return plasma_plan_compile(plan_out, module, &environment);
+}
+
 static int plasma_compile_transition_plan(
     const screensave_saver_module *module,
     const char *preset_key,
@@ -699,6 +747,9 @@ int main(void)
     }
     if (
         plasma_settings_find_descriptor("preset_key") == NULL ||
+        plasma_settings_find_descriptor("output_family") == NULL ||
+        plasma_settings_find_descriptor("filter_treatment") == NULL ||
+        plasma_settings_find_descriptor("presentation_mode") == NULL ||
         plasma_settings_find_descriptor("transition_policy") == NULL ||
         plasma_settings_find_descriptor("journey_key") == NULL ||
         plasma_settings_find_descriptor("diagnostics_overlay_enabled") == NULL
@@ -724,6 +775,13 @@ int main(void)
         settings_resolution.speed_mode != product_config.speed_mode ||
         settings_resolution.resolution_mode != product_config.resolution_mode ||
         settings_resolution.smoothing_mode != product_config.smoothing_mode ||
+        settings_resolution.output_family != product_config.output_family ||
+        settings_resolution.output_mode != product_config.output_mode ||
+        settings_resolution.sampling_treatment != product_config.sampling_treatment ||
+        settings_resolution.filter_treatment != product_config.filter_treatment ||
+        settings_resolution.emulation_treatment != product_config.emulation_treatment ||
+        settings_resolution.accent_treatment != product_config.accent_treatment ||
+        settings_resolution.presentation_mode != product_config.presentation_mode ||
         settings_resolution.transitions_enabled ||
         settings_resolution.transition_policy != PLASMA_TRANSITION_POLICY_DISABLED ||
         settings_resolution.content_filter != PLASMA_CONTENT_FILTER_STABLE_ONLY ||
@@ -970,8 +1028,8 @@ int main(void)
         !plan.advanced_enabled ||
         plan.advanced_degraded ||
         plan.advanced_components != PLASMA_SMOKE_ADVANCED_COMPONENTS ||
-        plan.filter_treatment != PLASMA_FILTER_TREATMENT_BLUR ||
-        plan.accent_treatment != PLASMA_ACCENT_TREATMENT_OVERLAY_PASS ||
+        plan.filter_treatment != PLASMA_FILTER_TREATMENT_NONE ||
+        plan.accent_treatment != PLASMA_ACCENT_TREATMENT_NONE ||
         !plan.modern_capable ||
         plan.modern_requested ||
         plan.modern_enabled ||
@@ -1067,8 +1125,8 @@ int main(void)
         plan.premium_enabled ||
         plan.premium_degraded ||
         plan.premium_components != 0UL ||
-        plan.filter_treatment != PLASMA_FILTER_TREATMENT_BLUR ||
-        plan.accent_treatment != PLASMA_ACCENT_TREATMENT_OVERLAY_PASS ||
+        plan.filter_treatment != PLASMA_FILTER_TREATMENT_NONE ||
+        plan.accent_treatment != PLASMA_ACCENT_TREATMENT_NONE ||
         plasma_plan_is_lower_band_baseline(&plan) ||
         !plasma_plan_validate_for_renderer_kind(&plan, module, SCREENSAVE_RENDERER_KIND_GL33) ||
         plasma_plan_validate_for_renderer_kind(&plan, module, SCREENSAVE_RENDERER_KIND_GL21) ||
@@ -1181,7 +1239,7 @@ int main(void)
         !plan.premium_enabled ||
         plan.premium_degraded ||
         plan.premium_components != PLASMA_SMOKE_PREMIUM_COMPONENTS ||
-        plan.presentation_mode != PLASMA_PRESENTATION_MODE_HEIGHTFIELD ||
+        plan.presentation_mode != PLASMA_PRESENTATION_MODE_FLAT ||
         !plasma_plan_validate_for_renderer_kind(&plan, module, SCREENSAVE_RENDERER_KIND_GL46) ||
         plasma_plan_validate_for_renderer_kind(&plan, module, SCREENSAVE_RENDERER_KIND_GL33) ||
         plasma_plan_validate_for_renderer_kind(&plan, module, SCREENSAVE_RENDERER_KIND_GL21)
@@ -1282,6 +1340,134 @@ int main(void)
         plasma_plan_validate_for_renderer_kind(&plan, module, SCREENSAVE_RENDERER_KIND_GL46)
     ) {
         return 49;
+    }
+
+    plasma_config_set_defaults(&common_config, &product_config, sizeof(product_config));
+    plasma_apply_preset_to_config("plasma_lava", &common_config, &product_config);
+    common_config.preset_key = "plasma_lava";
+    common_config.theme_key = "plasma_lava";
+    common_config.detail_level = SCREENSAVE_DETAIL_LEVEL_HIGH;
+    product_config.effect_mode = PLASMA_EFFECT_AURORA;
+    product_config.speed_mode = PLASMA_SPEED_LIVELY;
+    product_config.resolution_mode = PLASMA_RESOLUTION_FINE;
+    product_config.smoothing_mode = PLASMA_SMOOTHING_GLOW;
+    product_config.output_family = PLASMA_OUTPUT_FAMILY_CONTOUR;
+    product_config.output_mode = PLASMA_OUTPUT_MODE_CONTOUR_BANDS;
+    product_config.filter_treatment = PLASMA_FILTER_TREATMENT_GLOW_EDGE;
+    product_config.emulation_treatment = PLASMA_EMULATION_TREATMENT_PHOSPHOR;
+    product_config.accent_treatment = PLASMA_ACCENT_TREATMENT_ACCENT_PASS;
+    product_config.presentation_mode = PLASMA_PRESENTATION_MODE_HEIGHTFIELD;
+    if (
+        !plasma_compile_configured_plan_for_renderer(
+            module,
+            &common_config,
+            &product_config,
+            SCREENSAVE_RENDERER_KIND_GL46,
+            SCREENSAVE_RENDERER_KIND_GL46,
+            &plan
+        ) ||
+        plan.requested_detail_level != SCREENSAVE_DETAIL_LEVEL_HIGH ||
+        plan.requested_effect_mode != PLASMA_EFFECT_AURORA ||
+        plan.requested_speed_mode != PLASMA_SPEED_LIVELY ||
+        plan.requested_resolution_mode != PLASMA_RESOLUTION_FINE ||
+        plan.requested_smoothing_mode != PLASMA_SMOOTHING_GLOW ||
+        plan.requested_output_family != PLASMA_OUTPUT_FAMILY_CONTOUR ||
+        plan.requested_output_mode != PLASMA_OUTPUT_MODE_CONTOUR_BANDS ||
+        plan.requested_filter_treatment != PLASMA_FILTER_TREATMENT_GLOW_EDGE ||
+        plan.requested_emulation_treatment != PLASMA_EMULATION_TREATMENT_PHOSPHOR ||
+        plan.requested_accent_treatment != PLASMA_ACCENT_TREATMENT_ACCENT_PASS ||
+        plan.requested_presentation_mode != PLASMA_PRESENTATION_MODE_HEIGHTFIELD ||
+        plan.detail_level != SCREENSAVE_DETAIL_LEVEL_HIGH ||
+        plan.effect_mode != PLASMA_EFFECT_AURORA ||
+        plan.speed_mode != PLASMA_SPEED_LIVELY ||
+        plan.resolution_mode != PLASMA_RESOLUTION_FINE ||
+        plan.smoothing_mode != PLASMA_SMOOTHING_GLOW ||
+        plan.output_family != PLASMA_OUTPUT_FAMILY_CONTOUR ||
+        plan.output_mode != PLASMA_OUTPUT_MODE_CONTOUR_BANDS ||
+        plan.filter_treatment != PLASMA_FILTER_TREATMENT_GLOW_EDGE ||
+        plan.emulation_treatment != PLASMA_EMULATION_TREATMENT_PHOSPHOR ||
+        plan.accent_treatment != PLASMA_ACCENT_TREATMENT_ACCENT_PASS ||
+        plan.presentation_mode != PLASMA_PRESENTATION_MODE_HEIGHTFIELD ||
+        !plan.premium_requested ||
+        !plan.premium_enabled ||
+        plan.premium_degraded ||
+        !plasma_plan_validate_for_renderer_kind(&plan, module, SCREENSAVE_RENDERER_KIND_GL46)
+    ) {
+        return 429;
+    }
+    if (
+        !plasma_compile_configured_plan_for_renderer(
+            module,
+            &common_config,
+            &product_config,
+            SCREENSAVE_RENDERER_KIND_GL46,
+            SCREENSAVE_RENDERER_KIND_GL11,
+            &plan
+        ) ||
+        plan.requested_effect_mode != PLASMA_EFFECT_AURORA ||
+        plan.requested_output_family != PLASMA_OUTPUT_FAMILY_CONTOUR ||
+        plan.requested_output_mode != PLASMA_OUTPUT_MODE_CONTOUR_BANDS ||
+        plan.requested_filter_treatment != PLASMA_FILTER_TREATMENT_GLOW_EDGE ||
+        plan.requested_presentation_mode != PLASMA_PRESENTATION_MODE_HEIGHTFIELD ||
+        plan.effect_mode != PLASMA_EFFECT_AURORA ||
+        plan.output_family != PLASMA_OUTPUT_FAMILY_CONTOUR ||
+        plan.output_mode != PLASMA_OUTPUT_MODE_CONTOUR_BANDS ||
+        plan.filter_treatment != PLASMA_FILTER_TREATMENT_GLOW_EDGE ||
+        plan.presentation_mode != PLASMA_PRESENTATION_MODE_FLAT ||
+        !plan.premium_requested ||
+        plan.premium_enabled ||
+        !plan.premium_degraded ||
+        !plasma_plan_validate_for_renderer_kind(&plan, module, SCREENSAVE_RENDERER_KIND_GL11)
+    ) {
+        return 430;
+    }
+
+    plasma_config_set_defaults(&common_config, &product_config, sizeof(product_config));
+    plasma_apply_preset_to_config("plasma_lava", &common_config, &product_config);
+    common_config.preset_key = "plasma_lava";
+    common_config.theme_key = "plasma_lava";
+    product_config.filter_treatment = PLASMA_FILTER_TREATMENT_BLUR;
+    product_config.accent_treatment = PLASMA_ACCENT_TREATMENT_OVERLAY_PASS;
+    if (
+        !plasma_compile_configured_plan_for_renderer(
+            module,
+            &common_config,
+            &product_config,
+            SCREENSAVE_RENDERER_KIND_GL21,
+            SCREENSAVE_RENDERER_KIND_GL21,
+            &plan
+        ) ||
+        plan.requested_filter_treatment != PLASMA_FILTER_TREATMENT_BLUR ||
+        plan.requested_accent_treatment != PLASMA_ACCENT_TREATMENT_OVERLAY_PASS ||
+        plan.filter_treatment != PLASMA_FILTER_TREATMENT_BLUR ||
+        plan.accent_treatment != PLASMA_ACCENT_TREATMENT_OVERLAY_PASS ||
+        !plan.advanced_requested ||
+        !plan.advanced_enabled ||
+        plan.advanced_degraded ||
+        !plasma_plan_validate_for_renderer_kind(&plan, module, SCREENSAVE_RENDERER_KIND_GL21)
+    ) {
+        return 431;
+    }
+    if (
+        !plasma_compile_configured_plan_for_renderer(
+            module,
+            &common_config,
+            &product_config,
+            SCREENSAVE_RENDERER_KIND_GL21,
+            SCREENSAVE_RENDERER_KIND_GL11,
+            &plan
+        ) ||
+        plan.requested_filter_treatment != PLASMA_FILTER_TREATMENT_BLUR ||
+        plan.requested_accent_treatment != PLASMA_ACCENT_TREATMENT_OVERLAY_PASS ||
+        plan.filter_treatment != PLASMA_FILTER_TREATMENT_NONE ||
+        plan.accent_treatment != PLASMA_ACCENT_TREATMENT_NONE ||
+        !plan.advanced_requested ||
+        plan.advanced_enabled ||
+        !plan.advanced_degraded ||
+        !plasma_plan_is_lower_band_baseline(&plan) ||
+        !plasma_plan_validate_for_renderer_kind(&plan, module, SCREENSAVE_RENDERER_KIND_GL11)
+    ) {
+        return 432;
     }
 
     for (index = 0U; index < (unsigned int)(sizeof(g_required_preset_keys) / sizeof(g_required_preset_keys[0])); ++index) {
@@ -1674,6 +1860,157 @@ int main(void)
         )
     ) {
         return 113;
+    }
+
+    plasma_config_set_defaults(&common_config, &product_config, sizeof(product_config));
+    if (
+        !plasma_config_import_settings_entry(
+            module,
+            &common_config,
+            &product_config,
+            sizeof(product_config),
+            SCREENSAVE_SETTINGS_FILE_PRESET,
+            "product",
+            "effect",
+            "aurora",
+            NULL
+        ) ||
+        !plasma_config_import_settings_entry(
+            module,
+            &common_config,
+            &product_config,
+            sizeof(product_config),
+            SCREENSAVE_SETTINGS_FILE_PRESET,
+            "product",
+            "speed",
+            "lively",
+            NULL
+        ) ||
+        !plasma_config_import_settings_entry(
+            module,
+            &common_config,
+            &product_config,
+            sizeof(product_config),
+            SCREENSAVE_SETTINGS_FILE_PRESET,
+            "product",
+            "output_family",
+            "contour",
+            NULL
+        ) ||
+        !plasma_config_import_settings_entry(
+            module,
+            &common_config,
+            &product_config,
+            sizeof(product_config),
+            SCREENSAVE_SETTINGS_FILE_PRESET,
+            "product",
+            "output_mode",
+            "contour_bands",
+            NULL
+        ) ||
+        !plasma_config_import_settings_entry(
+            module,
+            &common_config,
+            &product_config,
+            sizeof(product_config),
+            SCREENSAVE_SETTINGS_FILE_PRESET,
+            "product",
+            "sampling",
+            "none",
+            NULL
+        ) ||
+        !plasma_config_import_settings_entry(
+            module,
+            &common_config,
+            &product_config,
+            sizeof(product_config),
+            SCREENSAVE_SETTINGS_FILE_PRESET,
+            "product",
+            "filter",
+            "glow_edge",
+            NULL
+        ) ||
+        !plasma_config_import_settings_entry(
+            module,
+            &common_config,
+            &product_config,
+            sizeof(product_config),
+            SCREENSAVE_SETTINGS_FILE_PRESET,
+            "product",
+            "emulation",
+            "phosphor",
+            NULL
+        ) ||
+        !plasma_config_import_settings_entry(
+            module,
+            &common_config,
+            &product_config,
+            sizeof(product_config),
+            SCREENSAVE_SETTINGS_FILE_PRESET,
+            "product",
+            "accent",
+            "accent_pass",
+            NULL
+        ) ||
+        !plasma_config_import_settings_entry(
+            module,
+            &common_config,
+            &product_config,
+            sizeof(product_config),
+            SCREENSAVE_SETTINGS_FILE_PRESET,
+            "product",
+            "presentation",
+            "heightfield",
+            NULL
+        )
+    ) {
+        return 426;
+    }
+    plasma_config_clamp(&common_config, &product_config, sizeof(product_config));
+    if (
+        product_config.effect_mode != PLASMA_EFFECT_AURORA ||
+        product_config.speed_mode != PLASMA_SPEED_LIVELY ||
+        product_config.output_family != PLASMA_OUTPUT_FAMILY_CONTOUR ||
+        product_config.output_mode != PLASMA_OUTPUT_MODE_CONTOUR_BANDS ||
+        product_config.sampling_treatment != PLASMA_SAMPLING_TREATMENT_NONE ||
+        product_config.filter_treatment != PLASMA_FILTER_TREATMENT_GLOW_EDGE ||
+        product_config.emulation_treatment != PLASMA_EMULATION_TREATMENT_PHOSPHOR ||
+        product_config.accent_treatment != PLASMA_ACCENT_TREATMENT_ACCENT_PASS ||
+        product_config.presentation_mode != PLASMA_PRESENTATION_MODE_HEIGHTFIELD
+    ) {
+        return 427;
+    }
+
+    ZeroMemory(&settings_capture, sizeof(settings_capture));
+    ZeroMemory(&settings_writer, sizeof(settings_writer));
+    settings_writer.context = &settings_capture;
+    settings_writer.write_string = plasma_smoke_capture_write_string;
+    if (
+        !plasma_config_export_settings_entries(
+            module,
+            &common_config,
+            &product_config,
+            sizeof(product_config),
+            SCREENSAVE_SETTINGS_FILE_PRESET,
+            &settings_writer,
+            NULL
+        ) ||
+        !plasma_smoke_capture_has_string(
+            &settings_capture,
+            "product",
+            "effect",
+            "aurora_curtain_ribbon"
+        ) ||
+        !plasma_smoke_capture_has_string(&settings_capture, "product", "speed", "lively") ||
+        !plasma_smoke_capture_has_string(&settings_capture, "product", "output_family", "contour") ||
+        !plasma_smoke_capture_has_string(&settings_capture, "product", "output_mode", "contour_bands") ||
+        !plasma_smoke_capture_has_string(&settings_capture, "product", "sampling_treatment", "none") ||
+        !plasma_smoke_capture_has_string(&settings_capture, "product", "filter_treatment", "glow_edge") ||
+        !plasma_smoke_capture_has_string(&settings_capture, "product", "emulation_treatment", "phosphor") ||
+        !plasma_smoke_capture_has_string(&settings_capture, "product", "accent_treatment", "accent_pass") ||
+        !plasma_smoke_capture_has_string(&settings_capture, "product", "presentation_mode", "heightfield")
+    ) {
+        return 428;
     }
 
     plasma_selection_preferences_set_defaults(&selection_preferences);
@@ -2896,6 +3233,62 @@ int main(void)
     plasma_destroy_session(session);
 
     plasma_config_set_defaults(&common_config, &product_config, sizeof(product_config));
+    plasma_apply_preset_to_config("aurora_plasma", &common_config, &product_config);
+    common_config.preset_key = "aurora_plasma";
+    common_config.theme_key = "aurora_cool";
+    product_config.effect_mode = PLASMA_EFFECT_CHEMICAL;
+    product_config.speed_mode = PLASMA_SPEED_LIVELY;
+    product_config.output_family = PLASMA_OUTPUT_FAMILY_CONTOUR;
+    product_config.output_mode = PLASMA_OUTPUT_MODE_CONTOUR_ONLY;
+    product_config.filter_treatment = PLASMA_FILTER_TREATMENT_GLOW_EDGE;
+    lstrcpyA(product_config.selection.preset_set_key, "plasma_classics");
+    plasma_transition_preferences_set_defaults(&product_config.transition);
+    product_config.transition.enabled = 1;
+    product_config.transition.policy = PLASMA_TRANSITION_POLICY_PRESET_SET;
+    product_config.transition.duration_millis = 600UL;
+    product_config.transition.interval_millis = 800UL;
+    screensave_config_binding_init(&binding, &common_config, &product_config, sizeof(product_config));
+    ZeroMemory(&environment, sizeof(environment));
+    environment.mode = SCREENSAVE_SESSION_MODE_WINDOWED;
+    environment.drawable_size.width = 320;
+    environment.drawable_size.height = 240;
+    environment.seed.base_seed = 0x71727374UL;
+    environment.seed.stream_seed = 0x75767778UL;
+    environment.seed.deterministic = common_config.use_deterministic_seed;
+    environment.config_binding = &binding;
+
+    session = NULL;
+    if (!plasma_create_session(module, &session, &environment) || session == NULL) {
+        return 433;
+    }
+    plasma_smoke_step_session_delta(session, &environment, 800UL);
+    plasma_smoke_step_session_delta(session, &environment, 700UL);
+    if (
+        session->state.transition.active ||
+        strcmp(session->plan.preset_key, "museum_phosphor") != 0 ||
+        strcmp(session->plan.theme_key, "museum_phosphor") != 0 ||
+        session->plan.requested_effect_mode != PLASMA_EFFECT_CHEMICAL ||
+        session->plan.requested_speed_mode != PLASMA_SPEED_LIVELY ||
+        session->plan.requested_output_family != PLASMA_OUTPUT_FAMILY_CONTOUR ||
+        session->plan.requested_output_mode != PLASMA_OUTPUT_MODE_CONTOUR_ONLY ||
+        session->plan.requested_filter_treatment != PLASMA_FILTER_TREATMENT_GLOW_EDGE ||
+        session->plan.effect_mode != PLASMA_EFFECT_CHEMICAL ||
+        session->plan.speed_mode != PLASMA_SPEED_LIVELY ||
+        session->plan.output_family != PLASMA_OUTPUT_FAMILY_CONTOUR ||
+        session->plan.output_mode != PLASMA_OUTPUT_MODE_CONTOUR_ONLY ||
+        session->plan.filter_treatment != PLASMA_FILTER_TREATMENT_GLOW_EDGE ||
+        !plasma_plan_validate_for_renderer_kind(
+            &session->plan,
+            module,
+            session->state.active_renderer_kind
+        )
+    ) {
+        plasma_destroy_session(session);
+        return 434;
+    }
+    plasma_destroy_session(session);
+
+    plasma_config_set_defaults(&common_config, &product_config, sizeof(product_config));
     plasma_apply_preset_to_config("quiet_darkroom", &common_config, &product_config);
     common_config.preset_key = "quiet_darkroom";
     common_config.theme_key = "quiet_darkroom";
@@ -3572,7 +3965,7 @@ int main(void)
         session->plan.advanced_degraded ||
         session->plan.modern_degraded ||
         session->plan.premium_degraded ||
-        session->plan.presentation_mode != PLASMA_PRESENTATION_MODE_HEIGHTFIELD ||
+        session->plan.presentation_mode != PLASMA_PRESENTATION_MODE_FLAT ||
         session->state.field_history == NULL ||
         session->state.advanced_treatment_buffer.pixels == NULL ||
         session->state.modern_treatment_buffer.pixels == NULL ||
@@ -3618,7 +4011,7 @@ int main(void)
     }
     plasma_render_session(session, &environment);
     if (
-        presentation_target.bitmap_view.pixels != (const void *)session->state.premium_presentation_buffer.pixels ||
+        presentation_target.bitmap_view.pixels != (const void *)session->state.modern_presentation_buffer.pixels ||
         presentation_target.bitmap_view.size.width != session->state.field_size.width ||
         presentation_target.bitmap_view.size.height != session->state.field_size.height ||
         session->state.premium_treatment_buffer.pixels == NULL ||

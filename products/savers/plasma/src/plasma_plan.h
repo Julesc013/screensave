@@ -19,6 +19,18 @@ typedef struct plasma_plan_tag {
     const screensave_preset_descriptor *preset;
     const char *theme_key;
     const screensave_theme_descriptor *theme;
+    screensave_detail_level requested_detail_level;
+    int requested_effect_mode;
+    int requested_speed_mode;
+    int requested_resolution_mode;
+    int requested_smoothing_mode;
+    plasma_output_family requested_output_family;
+    plasma_output_mode requested_output_mode;
+    plasma_sampling_treatment requested_sampling_treatment;
+    plasma_filter_treatment requested_filter_treatment;
+    plasma_emulation_treatment requested_emulation_treatment;
+    plasma_accent_treatment requested_accent_treatment;
+    plasma_presentation_mode requested_presentation_mode;
     int effect_mode;
     int speed_mode;
     int resolution_mode;

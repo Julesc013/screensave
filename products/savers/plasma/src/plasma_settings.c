@@ -95,6 +95,84 @@ static const plasma_settings_descriptor g_plasma_settings_catalog[] = {
         1
     },
     {
+        "output_family",
+        "Output Family",
+        "Selects the resolved output family instead of leaving non-raster grammar preset-owned.",
+        PLASMA_SETTINGS_SURFACE_ADVANCED,
+        "output",
+        PLASMA_SETTINGS_VALUE_ENUM,
+        "raster",
+        "raster|banded|contour|glyph",
+        PLASMA_SETTINGS_PERSIST_USER,
+        PLASMA_SETTINGS_AFFECTS_RUNTIME_PLAN | PLASMA_SETTINGS_AFFECTS_PRESENTATION,
+        1
+    },
+    {
+        "output_mode",
+        "Output Mode",
+        "Selects the resolved output mode within the active output family.",
+        PLASMA_SETTINGS_SURFACE_ADVANCED,
+        "output",
+        PLASMA_SETTINGS_VALUE_ENUM,
+        "native_raster",
+        "native_raster|posterized_bands|contour_only|contour_bands|ascii_glyph|matrix_glyph",
+        PLASMA_SETTINGS_PERSIST_USER,
+        PLASMA_SETTINGS_AFFECTS_RUNTIME_PLAN | PLASMA_SETTINGS_AFFECTS_PRESENTATION,
+        1
+    },
+    {
+        "filter_treatment",
+        "Filter Treatment",
+        "Selects the bounded post-filter treatment slot instead of hiding it behind presets or lane uplift.",
+        PLASMA_SETTINGS_SURFACE_ADVANCED,
+        "treatment",
+        PLASMA_SETTINGS_VALUE_ENUM,
+        "none",
+        "none|blur|glow_edge|halftone_stipple|emboss_edge",
+        PLASMA_SETTINGS_PERSIST_USER,
+        PLASMA_SETTINGS_AFFECTS_RUNTIME_PLAN | PLASMA_SETTINGS_AFFECTS_PRESENTATION,
+        1
+    },
+    {
+        "emulation_treatment",
+        "Emulation Treatment",
+        "Selects the bounded display-emulation slot explicitly.",
+        PLASMA_SETTINGS_SURFACE_ADVANCED,
+        "treatment",
+        PLASMA_SETTINGS_VALUE_ENUM,
+        "none",
+        "none|phosphor|crt",
+        PLASMA_SETTINGS_PERSIST_USER,
+        PLASMA_SETTINGS_AFFECTS_RUNTIME_PLAN | PLASMA_SETTINGS_AFFECTS_PRESENTATION,
+        1
+    },
+    {
+        "accent_treatment",
+        "Accent Treatment",
+        "Selects the bounded accent slot explicitly.",
+        PLASMA_SETTINGS_SURFACE_ADVANCED,
+        "treatment",
+        PLASMA_SETTINGS_VALUE_ENUM,
+        "none",
+        "none|overlay_pass|accent_pass",
+        PLASMA_SETTINGS_PERSIST_USER,
+        PLASMA_SETTINGS_AFFECTS_RUNTIME_PLAN | PLASMA_SETTINGS_AFFECTS_PRESENTATION,
+        1
+    },
+    {
+        "presentation_mode",
+        "Presentation Mode",
+        "Selects the resolved presentation posture instead of letting richer lanes invent one implicitly.",
+        PLASMA_SETTINGS_SURFACE_ADVANCED,
+        "presentation",
+        PLASMA_SETTINGS_VALUE_ENUM,
+        "flat",
+        "flat|heightfield|curtain|ribbon|contour_extrusion|bounded_surface",
+        PLASMA_SETTINGS_PERSIST_USER,
+        PLASMA_SETTINGS_AFFECTS_RUNTIME_PLAN | PLASMA_SETTINGS_AFFECTS_PRESENTATION,
+        1
+    },
+    {
         "preset_set_key",
         "Preset Set",
         "Selects the active preset-set surface for curated selection and journeys.",
@@ -588,6 +666,13 @@ int plasma_settings_resolve(
     resolution->speed_mode = context->product_config->speed_mode;
     resolution->resolution_mode = context->product_config->resolution_mode;
     resolution->smoothing_mode = context->product_config->smoothing_mode;
+    resolution->output_family = context->product_config->output_family;
+    resolution->output_mode = context->product_config->output_mode;
+    resolution->sampling_treatment = context->product_config->sampling_treatment;
+    resolution->filter_treatment = context->product_config->filter_treatment;
+    resolution->emulation_treatment = context->product_config->emulation_treatment;
+    resolution->accent_treatment = context->product_config->accent_treatment;
+    resolution->presentation_mode = context->product_config->presentation_mode;
     resolution->content_filter = PLASMA_CONTENT_FILTER_STABLE_ONLY;
     resolution->favorites_only = 0;
     resolution->preset_set_key = "";

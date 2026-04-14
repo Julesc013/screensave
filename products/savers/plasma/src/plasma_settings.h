@@ -3,8 +3,11 @@
 
 #include "screensave/config_api.h"
 #include "screensave/saver_api.h"
+#include "plasma_output.h"
 #include "plasma_selection.h"
+#include "plasma_treatment.h"
 #include "plasma_transition.h"
+#include "plasma_presentation.h"
 
 struct plasma_config_tag;
 
@@ -72,6 +75,13 @@ typedef struct plasma_settings_resolution_tag {
     int speed_mode;
     int resolution_mode;
     int smoothing_mode;
+    plasma_output_family output_family;
+    plasma_output_mode output_mode;
+    plasma_sampling_treatment sampling_treatment;
+    plasma_filter_treatment filter_treatment;
+    plasma_emulation_treatment emulation_treatment;
+    plasma_accent_treatment accent_treatment;
+    plasma_presentation_mode presentation_mode;
     plasma_content_filter content_filter;
     int favorites_only;
     const char *preset_set_key;

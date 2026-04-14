@@ -48,21 +48,6 @@ static unsigned char plasma_advanced_clamp_channel(unsigned int value)
     return (unsigned char)value;
 }
 
-static int plasma_advanced_prefers_default_visual_uplift(
-    const struct plasma_plan_tag *plan
-)
-{
-    return
-        plan != NULL &&
-        plan->output_family == PLASMA_OUTPUT_FAMILY_RASTER &&
-        plan->output_mode == PLASMA_OUTPUT_MODE_NATIVE_RASTER &&
-        plan->sampling_treatment == PLASMA_SAMPLING_TREATMENT_NONE &&
-        plan->filter_treatment == PLASMA_FILTER_TREATMENT_NONE &&
-        plan->emulation_treatment == PLASMA_EMULATION_TREATMENT_NONE &&
-        plan->accent_treatment == PLASMA_ACCENT_TREATMENT_NONE &&
-        plan->presentation_mode == PLASMA_PRESENTATION_MODE_FLAT;
-}
-
 int plasma_is_advanced_kind(screensave_renderer_kind renderer_kind)
 {
     return plasma_is_advanced_runtime_kind(renderer_kind);
@@ -102,7 +87,9 @@ void plasma_advanced_bind_plan(
         plan->selection.selected_preset->advanced_capable;
     plan->advanced_requested =
         plasma_is_advanced_request_kind(requested_kind) ||
-        plasma_is_advanced_kind(active_kind);
+        plasma_is_advanced_kind(active_kind) ||
+        plan->filter_treatment == PLASMA_FILTER_TREATMENT_BLUR ||
+        plan->accent_treatment == PLASMA_ACCENT_TREATMENT_OVERLAY_PASS;
     plan->advanced_enabled = 0;
     plan->advanced_degraded = 0;
     plan->advanced_components = 0UL;
@@ -122,10 +109,6 @@ void plasma_advanced_bind_plan(
             PLASMA_ADVANCED_COMPONENT_DOMAIN_WARP |
             PLASMA_ADVANCED_COMPONENT_FLOW_TURBULENCE |
             PLASMA_ADVANCED_COMPONENT_GLOW_POST;
-        if (plasma_advanced_prefers_default_visual_uplift(plan)) {
-            plan->filter_treatment = PLASMA_FILTER_TREATMENT_BLUR;
-            plan->accent_treatment = PLASMA_ACCENT_TREATMENT_OVERLAY_PASS;
-        }
         return;
     }
 
@@ -135,6 +118,15 @@ void plasma_advanced_bind_plan(
         plasma_is_lower_band_kind(active_kind)
     ) {
         plan->advanced_degraded = 1;
+    }
+
+    if (!plan->advanced_enabled) {
+        if (plan->filter_treatment == PLASMA_FILTER_TREATMENT_BLUR) {
+            plan->filter_treatment = PLASMA_FILTER_TREATMENT_NONE;
+        }
+        if (plan->accent_treatment == PLASMA_ACCENT_TREATMENT_OVERLAY_PASS) {
+            plan->accent_treatment = PLASMA_ACCENT_TREATMENT_NONE;
+        }
     }
 }
 

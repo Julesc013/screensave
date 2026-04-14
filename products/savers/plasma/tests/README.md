@@ -7,6 +7,8 @@ PL13 adds proof-catalog consistency checks, bounded performance-envelope and kno
 
 PX11 extends the bounded transition proof surface with explicit hard-cut coverage, curated warm and cool bridge-cycle journey coverage, and BenchLab assertions for requested-versus-resolved-versus-fallback transition truth.
 
+U02 extends the smoke surface so generator, output, treatment, and presentation selections are proven to round-trip through product settings, drive the compiled plan directly, degrade honestly on lower lanes, and survive preset-morph transition commits when they were explicitly user-selected.
+
 PX20 adds a bounded authored-substrate and Lab-shell proof surface through `plasma_lab.py`, authored file validation, weighted-selection smoke assertions, and explicit proof notes for content validation, authoring substrate, the Lab shell, and the current selection-foundation boundary.
 
 PX30 adds bounded contour and banded output assertions, a bounded experimental preset pool, explicit treatment-subset assertions, and BenchLab text-surface assertions for experimental output and treatment truth.

@@ -390,6 +390,104 @@ static unsigned long plasma_transition_hash_text(const char *text)
     return hash;
 }
 
+static screensave_detail_level plasma_transition_resolve_target_detail_level(
+    const struct plasma_plan_tag *plan,
+    const plasma_content_preset_entry *source_preset,
+    const plasma_content_preset_entry *target_preset
+)
+{
+    if (plan == NULL) {
+        return SCREENSAVE_DETAIL_LEVEL_STANDARD;
+    }
+    if (
+        source_preset == NULL ||
+        source_preset->descriptor == NULL ||
+        target_preset == NULL ||
+        target_preset->descriptor == NULL
+    ) {
+        return plan->requested_detail_level;
+    }
+
+    if (plan->requested_detail_level != source_preset->descriptor->detail_level) {
+        return plan->requested_detail_level;
+    }
+
+    return target_preset->descriptor->detail_level;
+}
+
+static void plasma_transition_resolve_target_visuals(
+    const struct plasma_plan_tag *plan,
+    const plasma_preset_values *source_defaults,
+    const plasma_preset_values *target_defaults,
+    plasma_preset_values *visual_out
+)
+{
+    int output_overridden;
+
+    if (visual_out == NULL) {
+        return;
+    }
+
+    ZeroMemory(visual_out, sizeof(*visual_out));
+    if (target_defaults != NULL) {
+        *visual_out = *target_defaults;
+    }
+    if (plan == NULL) {
+        return;
+    }
+    if (source_defaults == NULL || target_defaults == NULL) {
+        visual_out->effect_mode = plan->requested_effect_mode;
+        visual_out->speed_mode = plan->requested_speed_mode;
+        visual_out->resolution_mode = plan->requested_resolution_mode;
+        visual_out->smoothing_mode = plan->requested_smoothing_mode;
+        visual_out->output_family = plan->requested_output_family;
+        visual_out->output_mode = plan->requested_output_mode;
+        visual_out->sampling_treatment = plan->requested_sampling_treatment;
+        visual_out->filter_treatment = plan->requested_filter_treatment;
+        visual_out->emulation_treatment = plan->requested_emulation_treatment;
+        visual_out->accent_treatment = plan->requested_accent_treatment;
+        visual_out->presentation_mode = plan->requested_presentation_mode;
+        return;
+    }
+
+    if (plan->requested_effect_mode != source_defaults->effect_mode) {
+        visual_out->effect_mode = plan->requested_effect_mode;
+    }
+    if (plan->requested_speed_mode != source_defaults->speed_mode) {
+        visual_out->speed_mode = plan->requested_speed_mode;
+    }
+    if (plan->requested_resolution_mode != source_defaults->resolution_mode) {
+        visual_out->resolution_mode = plan->requested_resolution_mode;
+    }
+    if (plan->requested_smoothing_mode != source_defaults->smoothing_mode) {
+        visual_out->smoothing_mode = plan->requested_smoothing_mode;
+    }
+
+    output_overridden =
+        plan->requested_output_family != source_defaults->output_family ||
+        plan->requested_output_mode != source_defaults->output_mode;
+    if (output_overridden) {
+        visual_out->output_family = plan->requested_output_family;
+        visual_out->output_mode = plan->requested_output_mode;
+    }
+
+    if (plan->requested_sampling_treatment != source_defaults->sampling_treatment) {
+        visual_out->sampling_treatment = plan->requested_sampling_treatment;
+    }
+    if (plan->requested_filter_treatment != source_defaults->filter_treatment) {
+        visual_out->filter_treatment = plan->requested_filter_treatment;
+    }
+    if (plan->requested_emulation_treatment != source_defaults->emulation_treatment) {
+        visual_out->emulation_treatment = plan->requested_emulation_treatment;
+    }
+    if (plan->requested_accent_treatment != source_defaults->accent_treatment) {
+        visual_out->accent_treatment = plan->requested_accent_treatment;
+    }
+    if (plan->requested_presentation_mode != source_defaults->presentation_mode) {
+        visual_out->presentation_mode = plan->requested_presentation_mode;
+    }
+}
+
 static unsigned long plasma_transition_commit_target(
     struct plasma_plan_tag *plan,
     struct plasma_execution_state_tag *state,
@@ -397,7 +495,10 @@ static unsigned long plasma_transition_commit_target(
 )
 {
     plasma_transition_runtime *runtime;
+    const plasma_preset_values *source_defaults;
     const plasma_preset_values *preset_values;
+    plasma_preset_values resolved_target;
+    screensave_detail_level target_detail_level;
     int resolution_changed;
     int detail_changed;
     int effect_changed;
@@ -411,14 +512,29 @@ static unsigned long plasma_transition_commit_target(
         return 0UL;
     }
 
+    source_defaults = runtime->source_preset != NULL
+        ? plasma_find_preset_values(runtime->source_preset->preset_key)
+        : NULL;
     preset_values = plasma_find_preset_values(runtime->target_preset->preset_key);
     if (preset_values == NULL) {
         return 0UL;
     }
 
-    resolution_changed = plan->resolution_mode != preset_values->resolution_mode;
-    detail_changed = plan->detail_level != runtime->target_preset->descriptor->detail_level;
-    effect_changed = plan->effect_mode != preset_values->effect_mode;
+    plasma_transition_resolve_target_visuals(
+        plan,
+        source_defaults,
+        preset_values,
+        &resolved_target
+    );
+    target_detail_level = plasma_transition_resolve_target_detail_level(
+        plan,
+        runtime->source_preset,
+        runtime->target_preset
+    );
+
+    resolution_changed = plan->resolution_mode != resolved_target.resolution_mode;
+    detail_changed = plan->detail_level != target_detail_level;
+    effect_changed = plan->effect_mode != resolved_target.effect_mode;
 
     plan->selection.selected_preset = runtime->target_preset;
     plan->selection.selected_theme = runtime->target_theme;
@@ -426,11 +542,30 @@ static unsigned long plasma_transition_commit_target(
     plan->preset = runtime->target_preset->descriptor;
     plan->theme_key = runtime->target_theme->theme_key;
     plan->theme = runtime->target_theme->descriptor;
-    plan->detail_level = runtime->target_preset->descriptor->detail_level;
-    plan->effect_mode = preset_values->effect_mode;
-    plan->speed_mode = preset_values->speed_mode;
-    plan->resolution_mode = preset_values->resolution_mode;
-    plan->smoothing_mode = preset_values->smoothing_mode;
+    plan->requested_detail_level = target_detail_level;
+    plan->requested_effect_mode = resolved_target.effect_mode;
+    plan->requested_speed_mode = resolved_target.speed_mode;
+    plan->requested_resolution_mode = resolved_target.resolution_mode;
+    plan->requested_smoothing_mode = resolved_target.smoothing_mode;
+    plan->requested_output_family = resolved_target.output_family;
+    plan->requested_output_mode = resolved_target.output_mode;
+    plan->requested_sampling_treatment = resolved_target.sampling_treatment;
+    plan->requested_filter_treatment = resolved_target.filter_treatment;
+    plan->requested_emulation_treatment = resolved_target.emulation_treatment;
+    plan->requested_accent_treatment = resolved_target.accent_treatment;
+    plan->requested_presentation_mode = resolved_target.presentation_mode;
+    plan->detail_level = plan->requested_detail_level;
+    plan->effect_mode = plan->requested_effect_mode;
+    plan->speed_mode = plan->requested_speed_mode;
+    plan->resolution_mode = plan->requested_resolution_mode;
+    plan->smoothing_mode = plan->requested_smoothing_mode;
+    plan->output_family = plan->requested_output_family;
+    plan->output_mode = plan->requested_output_mode;
+    plan->sampling_treatment = plan->requested_sampling_treatment;
+    plan->filter_treatment = plan->requested_filter_treatment;
+    plan->emulation_treatment = plan->requested_emulation_treatment;
+    plan->accent_treatment = plan->requested_accent_treatment;
+    plan->presentation_mode = plan->requested_presentation_mode;
     if (
         plan->transition_seed_policy == PLASMA_TRANSITION_SEED_CONTINUITY_RESEED_TARGET &&
         runtime->target_preset->descriptor->use_fixed_seed
@@ -1145,6 +1280,7 @@ unsigned long plasma_transition_effective_speed_units(
     const plasma_transition_runtime *runtime;
     const plasma_preset_values *source_values;
     const plasma_preset_values *target_values;
+    plasma_preset_values resolved_target;
     unsigned long source_speed;
     unsigned long target_speed;
     unsigned int amount;
@@ -1170,9 +1306,15 @@ unsigned long plasma_transition_effective_speed_units(
         return base_speed_units;
     }
 
+    plasma_transition_resolve_target_visuals(
+        plan,
+        source_values,
+        target_values,
+        &resolved_target
+    );
     amount = plasma_transition_progress_amount(state);
-    source_speed = plasma_transition_speed_units_for_mode(source_values->speed_mode);
-    target_speed = plasma_transition_speed_units_for_mode(target_values->speed_mode);
+    source_speed = plasma_transition_speed_units_for_mode(plan->requested_speed_mode);
+    target_speed = plasma_transition_speed_units_for_mode(resolved_target.speed_mode);
     return ((source_speed * (255UL - amount)) + (target_speed * amount)) / 255UL;
 }
 
@@ -1186,6 +1328,7 @@ int plasma_transition_resolve_smoothing(
     const plasma_transition_runtime *runtime;
     const plasma_preset_values *source_values;
     const plasma_preset_values *target_values;
+    plasma_preset_values resolved_target;
     unsigned int amount;
     unsigned int source_blend;
     unsigned int target_blend;
@@ -1217,9 +1360,15 @@ int plasma_transition_resolve_smoothing(
         return 1;
     }
 
+    plasma_transition_resolve_target_visuals(
+        plan,
+        source_values,
+        target_values,
+        &resolved_target
+    );
     amount = plasma_transition_progress_amount(state);
-    source_blend = plasma_transition_smoothing_amount_for_mode(source_values->smoothing_mode);
-    target_blend = plasma_transition_smoothing_amount_for_mode(target_values->smoothing_mode);
+    source_blend = plasma_transition_smoothing_amount_for_mode(plan->requested_smoothing_mode);
+    target_blend = plasma_transition_smoothing_amount_for_mode(resolved_target.smoothing_mode);
     *blend_amount_out =
         (unsigned int)(((unsigned long)source_blend * (255UL - amount) +
             (unsigned long)target_blend * amount) / 255UL);

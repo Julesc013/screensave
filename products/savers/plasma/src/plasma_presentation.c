@@ -39,7 +39,7 @@ int plasma_presentation_prepare(
         return 0;
     }
 
-    if (plan->premium_enabled) {
+    if (plan->premium_enabled && plan->presentation_mode != PLASMA_PRESENTATION_MODE_FLAT) {
         return plasma_premium_prepare_presentation(
             plan,
             (struct plasma_execution_state_tag *)state,

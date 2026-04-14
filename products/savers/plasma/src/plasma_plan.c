@@ -9,6 +9,18 @@ void plasma_plan_init(plasma_plan *plan)
     }
 
     ZeroMemory(plan, sizeof(*plan));
+    plan->requested_detail_level = SCREENSAVE_DETAIL_LEVEL_STANDARD;
+    plan->requested_effect_mode = PLASMA_EFFECT_FIRE;
+    plan->requested_speed_mode = PLASMA_SPEED_GENTLE;
+    plan->requested_resolution_mode = PLASMA_RESOLUTION_STANDARD;
+    plan->requested_smoothing_mode = PLASMA_SMOOTHING_SOFT;
+    plan->requested_output_family = PLASMA_OUTPUT_FAMILY_RASTER;
+    plan->requested_output_mode = PLASMA_OUTPUT_MODE_NATIVE_RASTER;
+    plan->requested_sampling_treatment = PLASMA_SAMPLING_TREATMENT_NONE;
+    plan->requested_filter_treatment = PLASMA_FILTER_TREATMENT_NONE;
+    plan->requested_emulation_treatment = PLASMA_EMULATION_TREATMENT_NONE;
+    plan->requested_accent_treatment = PLASMA_ACCENT_TREATMENT_NONE;
+    plan->requested_presentation_mode = PLASMA_PRESENTATION_MODE_FLAT;
     plan->effect_mode = PLASMA_EFFECT_FIRE;
     plan->speed_mode = PLASMA_SPEED_GENTLE;
     plan->resolution_mode = PLASMA_RESOLUTION_STANDARD;
@@ -54,7 +66,6 @@ int plasma_plan_compile(
     plasma_config product_config;
     plasma_settings_context settings_context;
     plasma_settings_resolution settings_resolution;
-    const plasma_preset_values *preset_values;
     const screensave_config_binding *binding;
     screensave_renderer_kind requested_kind;
     screensave_renderer_kind active_kind;
@@ -108,22 +119,30 @@ int plasma_plan_compile(
     plan->preset = plan->selection.selected_preset->descriptor;
     plan->theme_key = plan->selection.selected_theme->theme_key;
     plan->theme = plan->selection.selected_theme->descriptor;
+    plan->requested_detail_level = settings_resolution.detail_level;
+    plan->requested_effect_mode = settings_resolution.effect_mode;
+    plan->requested_speed_mode = settings_resolution.speed_mode;
+    plan->requested_resolution_mode = settings_resolution.resolution_mode;
+    plan->requested_smoothing_mode = settings_resolution.smoothing_mode;
+    plan->requested_output_family = settings_resolution.output_family;
+    plan->requested_output_mode = settings_resolution.output_mode;
+    plan->requested_sampling_treatment = settings_resolution.sampling_treatment;
+    plan->requested_filter_treatment = settings_resolution.filter_treatment;
+    plan->requested_emulation_treatment = settings_resolution.emulation_treatment;
+    plan->requested_accent_treatment = settings_resolution.accent_treatment;
+    plan->requested_presentation_mode = settings_resolution.presentation_mode;
+    plan->detail_level = plan->requested_detail_level;
     plan->effect_mode = settings_resolution.effect_mode;
     plan->speed_mode = settings_resolution.speed_mode;
     plan->resolution_mode = settings_resolution.resolution_mode;
     plan->smoothing_mode = settings_resolution.smoothing_mode;
-    preset_values = plasma_find_preset_values(plan->preset_key);
-    if (preset_values == NULL) {
-        return 0;
-    }
-    plan->output_family = preset_values->output_family;
-    plan->output_mode = preset_values->output_mode;
-    plan->sampling_treatment = preset_values->sampling_treatment;
-    plan->filter_treatment = preset_values->filter_treatment;
-    plan->emulation_treatment = preset_values->emulation_treatment;
-    plan->accent_treatment = preset_values->accent_treatment;
-    plan->presentation_mode = preset_values->presentation_mode;
-    plan->detail_level = settings_resolution.detail_level;
+    plan->output_family = settings_resolution.output_family;
+    plan->output_mode = settings_resolution.output_mode;
+    plan->sampling_treatment = settings_resolution.sampling_treatment;
+    plan->filter_treatment = settings_resolution.filter_treatment;
+    plan->emulation_treatment = settings_resolution.emulation_treatment;
+    plan->accent_treatment = settings_resolution.accent_treatment;
+    plan->presentation_mode = settings_resolution.presentation_mode;
     plan->seed_policy = settings_resolution.use_deterministic_seed
         ? PLASMA_PLAN_SEED_POLICY_FIXED
         : PLASMA_PLAN_SEED_POLICY_INHERIT;
