@@ -4,51 +4,51 @@ const screensave_theme_descriptor g_plasma_themes[] = {
     {
         "plasma_lava",
         "Plasma Lava",
-        "Warm plasma reds with amber highlights.",
-        { 192, 74, 20, 255 },
-        { 255, 194, 72, 255 }
+        "Classic lava reds with brighter amber lift and a deeper black floor.",
+        { 184, 60, 18, 255 },
+        { 255, 214, 86, 255 }
     },
     {
         "aurora_cool",
         "Aurora Cool",
-        "Cool cyan and green plasma tones.",
-        { 36, 124, 164, 255 },
-        { 108, 236, 188, 255 }
+        "Cold cyan foundations with brighter mint edge energy.",
+        { 28, 132, 156, 255 },
+        { 90, 248, 184, 255 }
     },
     {
         "oceanic_blue",
         "Oceanic Blue",
-        "Deep blue interference tones with pale highlights.",
-        { 24, 72, 164, 255 },
-        { 120, 204, 255, 255 }
+        "Deeper blue interference tones with glacial crest highlights.",
+        { 18, 66, 154, 255 },
+        { 132, 220, 255, 255 }
     },
     {
         "museum_phosphor",
         "Museum Phosphor",
-        "Restrained green monochrome for terminal-like presentation.",
-        { 44, 148, 64, 255 },
-        { 180, 255, 170, 255 }
+        "Restrained green phosphor tuned for monochrome long-run presentation.",
+        { 32, 126, 54, 255 },
+        { 188, 255, 158, 255 }
     },
     {
         "quiet_darkroom",
         "Quiet Darkroom",
-        "Muted plasma tones for low-distraction rooms.",
-        { 112, 58, 40, 255 },
-        { 204, 132, 96, 255 }
+        "Dark cinder warmth with lower-contrast highlights for quiet rooms.",
+        { 84, 42, 30, 255 },
+        { 176, 96, 72, 255 }
     },
     {
         "midnight_interference",
         "Midnight Interference",
-        "Deep blue-black interference tones with pale electric highlights.",
-        { 28, 52, 116, 255 },
-        { 144, 208, 255, 255 }
+        "Blue-black interference tones with colder electric lift.",
+        { 16, 34, 92, 255 },
+        { 120, 188, 255, 255 }
     },
     {
         "amber_terminal",
         "Amber Terminal",
-        "Warm amber monochrome tuned for dark-room-safe museum presentation.",
-        { 168, 108, 44, 255 },
-        { 244, 194, 108, 255 }
+        "Amber phosphor warmth with brighter terminal-style crest highlights.",
+        { 146, 88, 30, 255 },
+        { 255, 188, 88, 255 }
     }
 };
 

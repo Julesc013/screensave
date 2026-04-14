@@ -1021,6 +1021,88 @@ int main(void)
     ) {
         return 20;
     }
+    if (
+        !plasma_compile_plan_for_renderer(
+            module,
+            "aurora_plasma",
+            "aurora_cool",
+            NULL,
+            SCREENSAVE_RENDERER_KIND_GDI,
+            SCREENSAVE_RENDERER_KIND_GDI,
+            &plan
+        ) ||
+        plan.output_family != PLASMA_OUTPUT_FAMILY_RASTER ||
+        plan.output_mode != PLASMA_OUTPUT_MODE_NATIVE_RASTER ||
+        plan.filter_treatment != PLASMA_FILTER_TREATMENT_GLOW_EDGE ||
+        plan.emulation_treatment != PLASMA_EMULATION_TREATMENT_NONE ||
+        plan.accent_treatment != PLASMA_ACCENT_TREATMENT_NONE
+    ) {
+        return 436;
+    }
+    if (
+        !plasma_compile_plan_for_renderer(
+            module,
+            "museum_phosphor",
+            "museum_phosphor",
+            NULL,
+            SCREENSAVE_RENDERER_KIND_GDI,
+            SCREENSAVE_RENDERER_KIND_GDI,
+            &plan
+        ) ||
+        plan.filter_treatment != PLASMA_FILTER_TREATMENT_NONE ||
+        plan.emulation_treatment != PLASMA_EMULATION_TREATMENT_PHOSPHOR ||
+        plan.accent_treatment != PLASMA_ACCENT_TREATMENT_NONE
+    ) {
+        return 437;
+    }
+    if (
+        !plasma_compile_plan_for_renderer(
+            module,
+            "quiet_darkroom",
+            "quiet_darkroom",
+            NULL,
+            SCREENSAVE_RENDERER_KIND_GDI,
+            SCREENSAVE_RENDERER_KIND_GDI,
+            &plan
+        ) ||
+        plan.filter_treatment != PLASMA_FILTER_TREATMENT_NONE ||
+        plan.emulation_treatment != PLASMA_EMULATION_TREATMENT_CRT ||
+        plan.accent_treatment != PLASMA_ACCENT_TREATMENT_NONE
+    ) {
+        return 438;
+    }
+    if (
+        !plasma_compile_plan_for_renderer(
+            module,
+            "midnight_interference",
+            "midnight_interference",
+            NULL,
+            SCREENSAVE_RENDERER_KIND_GDI,
+            SCREENSAVE_RENDERER_KIND_GDI,
+            &plan
+        ) ||
+        plan.filter_treatment != PLASMA_FILTER_TREATMENT_EMBOSS_EDGE ||
+        plan.emulation_treatment != PLASMA_EMULATION_TREATMENT_NONE ||
+        plan.accent_treatment != PLASMA_ACCENT_TREATMENT_NONE
+    ) {
+        return 439;
+    }
+    if (
+        !plasma_compile_plan_for_renderer(
+            module,
+            "amber_terminal",
+            "amber_terminal",
+            NULL,
+            SCREENSAVE_RENDERER_KIND_GDI,
+            SCREENSAVE_RENDERER_KIND_GDI,
+            &plan
+        ) ||
+        plan.filter_treatment != PLASMA_FILTER_TREATMENT_NONE ||
+        plan.emulation_treatment != PLASMA_EMULATION_TREATMENT_PHOSPHOR ||
+        plan.accent_treatment != PLASMA_ACCENT_TREATMENT_ACCENT_PASS
+    ) {
+        return 440;
+    }
 
     if (
         !plasma_compile_plan_for_renderer(
@@ -2529,9 +2611,9 @@ int main(void)
         strcmp(plan.preset_key, "aurora_bands") != 0 ||
         plan.output_family != PLASMA_OUTPUT_FAMILY_BANDED ||
         plan.output_mode != PLASMA_OUTPUT_MODE_POSTERIZED_BANDS ||
-        plan.filter_treatment != PLASMA_FILTER_TREATMENT_NONE ||
+        plan.filter_treatment != PLASMA_FILTER_TREATMENT_GLOW_EDGE ||
         plan.emulation_treatment != PLASMA_EMULATION_TREATMENT_NONE ||
-        plan.accent_treatment != PLASMA_ACCENT_TREATMENT_ACCENT_PASS ||
+        plan.accent_treatment != PLASMA_ACCENT_TREATMENT_NONE ||
         !plasma_output_validate_plan(&plan) ||
         !plasma_treatment_validate_plan(&plan) ||
         !plasma_output_build(&plan, &session->state, &output_frame) ||
@@ -2633,6 +2715,7 @@ int main(void)
         plan.output_family != PLASMA_OUTPUT_FAMILY_CONTOUR ||
         plan.output_mode != PLASMA_OUTPUT_MODE_CONTOUR_BANDS ||
         plan.filter_treatment != PLASMA_FILTER_TREATMENT_EMBOSS_EDGE ||
+        plan.accent_treatment != PLASMA_ACCENT_TREATMENT_ACCENT_PASS ||
         !plasma_treatment_validate_plan(&plan)
     ) {
         return 368;
@@ -2822,6 +2905,7 @@ int main(void)
         plan.effect_mode != PLASMA_EFFECT_LATTICE ||
         plan.output_family != PLASMA_OUTPUT_FAMILY_BANDED ||
         plan.output_mode != PLASMA_OUTPUT_MODE_POSTERIZED_BANDS ||
+        plan.filter_treatment != PLASMA_FILTER_TREATMENT_EMBOSS_EDGE ||
         plan.accent_treatment != PLASMA_ACCENT_TREATMENT_ACCENT_PASS
     ) {
         return 390;
@@ -3256,7 +3340,7 @@ int main(void)
     product_config.speed_mode = PLASMA_SPEED_LIVELY;
     product_config.output_family = PLASMA_OUTPUT_FAMILY_CONTOUR;
     product_config.output_mode = PLASMA_OUTPUT_MODE_CONTOUR_ONLY;
-    product_config.filter_treatment = PLASMA_FILTER_TREATMENT_GLOW_EDGE;
+    product_config.filter_treatment = PLASMA_FILTER_TREATMENT_EMBOSS_EDGE;
     lstrcpyA(product_config.selection.preset_set_key, "plasma_classics");
     plasma_transition_preferences_set_defaults(&product_config.transition);
     product_config.transition.enabled = 1;
@@ -3287,12 +3371,12 @@ int main(void)
         session->plan.requested_speed_mode != PLASMA_SPEED_LIVELY ||
         session->plan.requested_output_family != PLASMA_OUTPUT_FAMILY_CONTOUR ||
         session->plan.requested_output_mode != PLASMA_OUTPUT_MODE_CONTOUR_ONLY ||
-        session->plan.requested_filter_treatment != PLASMA_FILTER_TREATMENT_GLOW_EDGE ||
+        session->plan.requested_filter_treatment != PLASMA_FILTER_TREATMENT_EMBOSS_EDGE ||
         session->plan.effect_mode != PLASMA_EFFECT_CHEMICAL ||
         session->plan.speed_mode != PLASMA_SPEED_LIVELY ||
         session->plan.output_family != PLASMA_OUTPUT_FAMILY_CONTOUR ||
         session->plan.output_mode != PLASMA_OUTPUT_MODE_CONTOUR_ONLY ||
-        session->plan.filter_treatment != PLASMA_FILTER_TREATMENT_GLOW_EDGE ||
+        session->plan.filter_treatment != PLASMA_FILTER_TREATMENT_EMBOSS_EDGE ||
         !plasma_plan_validate_for_renderer_kind(
             &session->plan,
             module,
@@ -4289,9 +4373,9 @@ int main(void)
         strcmp(benchlab_snapshot.preset_key, "aurora_bands") != 0 ||
         strcmp(benchlab_snapshot.output_family, "banded") != 0 ||
         strcmp(benchlab_snapshot.output_mode, "posterized_bands") != 0 ||
-        strcmp(benchlab_snapshot.filter_treatment, "none") != 0 ||
+        strcmp(benchlab_snapshot.filter_treatment, "glow_edge") != 0 ||
         strcmp(benchlab_snapshot.emulation_treatment, "none") != 0 ||
-        strcmp(benchlab_snapshot.accent_treatment, "accent_pass") != 0
+        strcmp(benchlab_snapshot.accent_treatment, "none") != 0
     ) {
         plasma_destroy_session(session);
         return 371;
@@ -4306,7 +4390,7 @@ int main(void)
         ) ||
         strstr(benchlab_overlay, "Profile: experimental / safe") == NULL ||
         strstr(benchlab_overlay, "Output: banded / posterized_bands") == NULL ||
-        strstr(benchlab_overlay, "Treatments: none | none | none | accent_pass") == NULL
+        strstr(benchlab_overlay, "Treatments: none | glow_edge | none | none") == NULL
     ) {
         plasma_destroy_session(session);
         return 372;
@@ -4322,7 +4406,8 @@ int main(void)
         strstr(benchlab_report, "Profile class: experimental") == NULL ||
         strstr(benchlab_report, "Output family: banded") == NULL ||
         strstr(benchlab_report, "Output mode: posterized_bands") == NULL ||
-        strstr(benchlab_report, "Accent treatment: accent_pass") == NULL
+        strstr(benchlab_report, "Filter treatment: glow_edge") == NULL ||
+        strstr(benchlab_report, "Accent treatment: none") == NULL
     ) {
         plasma_destroy_session(session);
         return 373;

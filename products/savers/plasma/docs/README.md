@@ -52,6 +52,9 @@ They live with the product so later `PL` work can extend them without rewriting 
 - [U02 Settings Authority Rewrite](./u02-settings-authority.md): records the move from preset-hidden grammar authority to resolved settings-owned runtime grammar
 - [U03 Settings Model](./u03-settings-model.md): records the recut of Plasma's user-facing, advanced, and author-facing settings layers
 - [U03 Settings Surfaces](./u03-settings-surfaces.md): records the dialog-side control mapping and hidden non-claim surfaces after the UI recut
+- [U04 Output, Treatment, And Presentation Truth](./u04-output-treatment-presentation-truth.md): records the surviving visual grammar surfaces and the stronger treatment and output separation
+- [U05 Destructive Simplification](./u05-destructive-simplification.md): records the keep, hide, retune, and non-claim decisions made during the salvage pass
+- [U06 Preset And Theme Tuning Notes](./u06-preset-theme-tuning-notes.md): records the first aggressive retune of built-in presets and palettes
 
 ## PL00-PL14 Program Record
 

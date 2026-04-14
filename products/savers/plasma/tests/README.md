@@ -11,6 +11,8 @@ U02 extends the smoke surface so generator, output, treatment, and presentation 
 
 U03 adds a smaller but important UI-truth guardrail by asserting the intended settings-surface mapping for the recut Basic, Advanced, and Author/Lab layers.
 
+U04 through U06 extend the smoke surface so the retuned stable presets, the rewired experimental preset truth, and the updated BenchLab output and treatment reporting all stay aligned with the actual shipped visual grammar.
+
 PX20 adds a bounded authored-substrate and Lab-shell proof surface through `plasma_lab.py`, authored file validation, weighted-selection smoke assertions, and explicit proof notes for content validation, authoring substrate, the Lab shell, and the current selection-foundation boundary.
 
 PX30 adds bounded contour and banded output assertions, a bounded experimental preset pool, explicit treatment-subset assertions, and BenchLab text-surface assertions for experimental output and treatment truth.

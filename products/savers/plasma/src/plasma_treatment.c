@@ -537,7 +537,7 @@ static int plasma_theme_map_output(
             ) {
                 color = plasma_treatment_palette_color(plan, state, band_value);
                 if ((band_index & 1U) != 0U) {
-                    color = screensave_color_lerp(color, plan->theme->accent_color, 40U);
+                    color = screensave_color_lerp(color, plan->theme->accent_color, 68U);
                 }
             } else if (
                 output->family == PLASMA_OUTPUT_FAMILY_CONTOUR &&
@@ -545,7 +545,7 @@ static int plasma_theme_map_output(
             ) {
                 if (contour_edge) {
                     color = plasma_treatment_palette_color(plan, state, band_value);
-                    color = screensave_color_lerp(color, white_color, 88U);
+                    color = screensave_color_lerp(color, white_color, 120U);
                 } else {
                     color = background_color;
                 }
@@ -555,9 +555,9 @@ static int plasma_theme_map_output(
             ) {
                 color = plasma_treatment_palette_color(plan, state, band_value);
                 if (contour_edge) {
-                    color = screensave_color_lerp(plan->theme->accent_color, white_color, 80U);
+                    color = screensave_color_lerp(plan->theme->accent_color, white_color, 96U);
                 } else if ((band_index & 1U) != 0U) {
-                    color = screensave_color_lerp(color, plan->theme->accent_color, 28U);
+                    color = screensave_color_lerp(color, plan->theme->accent_color, 44U);
                 }
             } else if (
                 output->family == PLASMA_OUTPUT_FAMILY_GLYPH &&
@@ -704,13 +704,13 @@ static int plasma_apply_glow_edge_filter(
 
             blue_value =
                 (unsigned int)row[(x * 4) + 0] +
-                (((unsigned int)plan->theme->accent_color.blue * intensity) / 255U) / 3U;
+                (((unsigned int)plan->theme->accent_color.blue * intensity) / 255U) / 2U;
             green_value =
                 (unsigned int)row[(x * 4) + 1] +
-                (((unsigned int)plan->theme->accent_color.green * intensity) / 255U) / 3U;
+                (((unsigned int)plan->theme->accent_color.green * intensity) / 255U) / 2U;
             red_value =
                 (unsigned int)row[(x * 4) + 2] +
-                (((unsigned int)plan->theme->accent_color.red * intensity) / 255U) / 3U;
+                (((unsigned int)plan->theme->accent_color.red * intensity) / 255U) / 2U;
 
             row[(x * 4) + 0] = plasma_treatment_clamp_channel(blue_value);
             row[(x * 4) + 1] = plasma_treatment_clamp_channel(green_value);
@@ -753,9 +753,9 @@ static int plasma_apply_halftone_stipple_filter(
             scalar_value = (unsigned int)plasma_treatment_sample_scalar(output, x, y);
             threshold = g_thresholds[((unsigned int)(y & 1) * 2U) + (unsigned int)(x & 1)];
             if (scalar_value < threshold) {
-                blue_value = ((unsigned int)row[(x * 4) + 0] * 48U) / 255U;
-                green_value = ((unsigned int)row[(x * 4) + 1] * 48U) / 255U;
-                red_value = ((unsigned int)row[(x * 4) + 2] * 48U) / 255U;
+                blue_value = ((unsigned int)row[(x * 4) + 0] * 36U) / 255U;
+                green_value = ((unsigned int)row[(x * 4) + 1] * 36U) / 255U;
+                red_value = ((unsigned int)row[(x * 4) + 2] * 36U) / 255U;
                 row[(x * 4) + 0] = (unsigned char)blue_value;
                 row[(x * 4) + 1] = (unsigned char)green_value;
                 row[(x * 4) + 2] = (unsigned char)red_value;
@@ -801,11 +801,11 @@ static int plasma_apply_emboss_edge_filter(
             y_gradient =
                 (int)plasma_treatment_sample_scalar(output, x, y + 1) -
                 (int)plasma_treatment_sample_scalar(output, x, y - 1);
-            shade = 128 + ((x_gradient + y_gradient) / 4);
-            if (shade < 32) {
-                shade = 32;
-            } else if (shade > 224) {
-                shade = 224;
+            shade = 136 + ((x_gradient + y_gradient) / 3);
+            if (shade < 24) {
+                shade = 24;
+            } else if (shade > 240) {
+                shade = 240;
             }
 
             blue_value = ((unsigned int)row[(x * 4) + 0] * (unsigned int)shade) / 128U;
@@ -885,7 +885,7 @@ static int plasma_apply_phosphor_emulation(
             green_value = (unsigned int)row[(x * 4) + 1];
             red_value = (unsigned int)row[(x * 4) + 2];
             luma_value = plasma_treatment_max3(blue_value, green_value, red_value);
-            scanline_scale = (y & 1) == 0 ? 255U : 212U;
+            scanline_scale = (y & 1) == 0 ? 255U : 196U;
 
             row[(x * 4) + 0] = plasma_treatment_clamp_channel(
                 (((unsigned int)plan->theme->primary_color.blue * luma_value) / 255U) * scanline_scale / 255U
@@ -950,12 +950,12 @@ static int plasma_apply_crt_emulation(
                 blue_value = (blue_value * 255U) / 220U;
             }
 
-            scanline_scale = (y & 1) == 0 ? 244U : 196U;
+            scanline_scale = (y & 1) == 0 ? 252U : 184U;
             vignette_scale = 255U -
                 (plasma_treatment_abs_int(x - center_x) * 56U) / (unsigned int)center_x -
                 (plasma_treatment_abs_int(y - center_y) * 56U) / (unsigned int)center_y;
-            if (vignette_scale < 128U) {
-                vignette_scale = 128U;
+            if (vignette_scale < 112U) {
+                vignette_scale = 112U;
             }
 
             row[(x * 4) + 0] = plasma_treatment_clamp_channel(
@@ -1027,18 +1027,18 @@ static int plasma_apply_accent_pass(
             green_value = (unsigned int)row[(x * 4) + 1];
             red_value = (unsigned int)row[(x * 4) + 2];
             intensity = plasma_treatment_max3(blue_value, green_value, red_value);
-            if (intensity < 80U) {
+            if (intensity < 64U) {
                 continue;
             }
 
             row[(x * 4) + 0] = plasma_treatment_clamp_channel(
-                blue_value + ((((unsigned int)plan->theme->accent_color.blue * intensity) / 255U) / 6U)
+                blue_value + ((((unsigned int)plan->theme->accent_color.blue * intensity) / 255U) / 4U)
             );
             row[(x * 4) + 1] = plasma_treatment_clamp_channel(
-                green_value + ((((unsigned int)plan->theme->accent_color.green * intensity) / 255U) / 6U)
+                green_value + ((((unsigned int)plan->theme->accent_color.green * intensity) / 255U) / 4U)
             );
             row[(x * 4) + 2] = plasma_treatment_clamp_channel(
-                red_value + ((((unsigned int)plan->theme->accent_color.red * intensity) / 255U) / 6U)
+                red_value + ((((unsigned int)plan->theme->accent_color.red * intensity) / 255U) / 4U)
             );
             row[(x * 4) + 3] = 255U;
         }

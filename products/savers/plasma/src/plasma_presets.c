@@ -24,7 +24,7 @@ const screensave_preset_descriptor g_plasma_presets[] = {
     {
         "aurora_plasma",
         "Aurora Plasma",
-        "Cool multi-wave plasma tuned for richer internal color motion.",
+        "Cool plasma study with explicit edge lift instead of plain raster fill.",
         "aurora_cool",
         SCREENSAVE_DETAIL_LEVEL_HIGH,
         1,
@@ -33,7 +33,7 @@ const screensave_preset_descriptor g_plasma_presets[] = {
     {
         "ocean_interference",
         "Ocean Interference",
-        "Layered wave interference with restrained blue palette drift.",
+        "Layered interference field with restrained blue crest highlights.",
         "oceanic_blue",
         SCREENSAVE_DETAIL_LEVEL_HIGH,
         1,
@@ -42,7 +42,7 @@ const screensave_preset_descriptor g_plasma_presets[] = {
     {
         "museum_phosphor",
         "Museum Phosphor",
-        "Low-motion monochrome plasma for quiet long-run presentation.",
+        "Low-motion green phosphor raster with explicit monochrome scanline emulation.",
         "museum_phosphor",
         SCREENSAVE_DETAIL_LEVEL_LOW,
         1,
@@ -51,7 +51,7 @@ const screensave_preset_descriptor g_plasma_presets[] = {
     {
         "quiet_darkroom",
         "Quiet Darkroom",
-        "Subdued plasma-fire preset with lower resolution and softer motion.",
+        "Subdued fire field with CRT-style falloff for calmer dark-room sessions.",
         "quiet_darkroom",
         SCREENSAVE_DETAIL_LEVEL_STANDARD,
         0,
@@ -60,7 +60,7 @@ const screensave_preset_descriptor g_plasma_presets[] = {
     {
         "midnight_interference",
         "Midnight Interference",
-        "Cool dark-room interference field with softer resolution and slower palette drift.",
+        "Dark interference field with embossed relief instead of plain soft raster drift.",
         "midnight_interference",
         SCREENSAVE_DETAIL_LEVEL_STANDARD,
         1,
@@ -69,7 +69,7 @@ const screensave_preset_descriptor g_plasma_presets[] = {
     {
         "amber_terminal",
         "Amber Terminal",
-        "Warm monochrome plasma tuned for quieter museum-style presentation.",
+        "Amber phosphor plasma with warm highlight lift for terminal-style rooms.",
         "amber_terminal",
         SCREENSAVE_DETAIL_LEVEL_LOW,
         1,
@@ -87,7 +87,7 @@ const screensave_preset_descriptor g_plasma_presets[] = {
     {
         "aurora_bands",
         "Aurora Bands",
-        "Cool plasma study that makes bucketed bands the primary output identity instead of plain raster glow.",
+        "Cool posterized band study with edge lift so the banding reads as structure instead of a palette swap.",
         "aurora_cool",
         SCREENSAVE_DETAIL_LEVEL_HIGH,
         1,
@@ -123,7 +123,7 @@ const screensave_preset_descriptor g_plasma_presets[] = {
     {
         "emboss_current",
         "Emboss Current",
-        "Cool contour-band study with bounded embossed edge shaping.",
+        "Cool contour-band study with embossed edge shaping and restrained accent lift.",
         "midnight_interference",
         SCREENSAVE_DETAIL_LEVEL_HIGH,
         1,
@@ -168,7 +168,7 @@ const screensave_preset_descriptor g_plasma_presets[] = {
     {
         "quasi_crystal_bands",
         "Quasi-Crystal Bands",
-        "Structured lattice field quantized into deliberate banded strata with restrained accent lift.",
+        "Structured lattice bands with embossed strata and restrained accent lift.",
         "midnight_interference",
         SCREENSAVE_DETAIL_LEVEL_HIGH,
         1,
@@ -243,7 +243,7 @@ static const plasma_preset_values g_plasma_preset_values[] = {
         PLASMA_OUTPUT_FAMILY_RASTER,
         PLASMA_OUTPUT_MODE_NATIVE_RASTER,
         PLASMA_SAMPLING_TREATMENT_NONE,
-        PLASMA_FILTER_TREATMENT_NONE,
+        PLASMA_FILTER_TREATMENT_GLOW_EDGE,
         PLASMA_EMULATION_TREATMENT_NONE,
         PLASMA_ACCENT_TREATMENT_NONE,
         PLASMA_PRESENTATION_MODE_FLAT
@@ -258,7 +258,7 @@ static const plasma_preset_values g_plasma_preset_values[] = {
         PLASMA_SAMPLING_TREATMENT_NONE,
         PLASMA_FILTER_TREATMENT_NONE,
         PLASMA_EMULATION_TREATMENT_NONE,
-        PLASMA_ACCENT_TREATMENT_NONE,
+        PLASMA_ACCENT_TREATMENT_ACCENT_PASS,
         PLASMA_PRESENTATION_MODE_FLAT
     },
     {
@@ -270,7 +270,7 @@ static const plasma_preset_values g_plasma_preset_values[] = {
         PLASMA_OUTPUT_MODE_NATIVE_RASTER,
         PLASMA_SAMPLING_TREATMENT_NONE,
         PLASMA_FILTER_TREATMENT_NONE,
-        PLASMA_EMULATION_TREATMENT_NONE,
+        PLASMA_EMULATION_TREATMENT_PHOSPHOR,
         PLASMA_ACCENT_TREATMENT_NONE,
         PLASMA_PRESENTATION_MODE_FLAT
     },
@@ -283,7 +283,7 @@ static const plasma_preset_values g_plasma_preset_values[] = {
         PLASMA_OUTPUT_MODE_NATIVE_RASTER,
         PLASMA_SAMPLING_TREATMENT_NONE,
         PLASMA_FILTER_TREATMENT_NONE,
-        PLASMA_EMULATION_TREATMENT_NONE,
+        PLASMA_EMULATION_TREATMENT_CRT,
         PLASMA_ACCENT_TREATMENT_NONE,
         PLASMA_PRESENTATION_MODE_FLAT
     },
@@ -295,7 +295,7 @@ static const plasma_preset_values g_plasma_preset_values[] = {
         PLASMA_OUTPUT_FAMILY_RASTER,
         PLASMA_OUTPUT_MODE_NATIVE_RASTER,
         PLASMA_SAMPLING_TREATMENT_NONE,
-        PLASMA_FILTER_TREATMENT_NONE,
+        PLASMA_FILTER_TREATMENT_EMBOSS_EDGE,
         PLASMA_EMULATION_TREATMENT_NONE,
         PLASMA_ACCENT_TREATMENT_NONE,
         PLASMA_PRESENTATION_MODE_FLAT
@@ -309,8 +309,8 @@ static const plasma_preset_values g_plasma_preset_values[] = {
         PLASMA_OUTPUT_MODE_NATIVE_RASTER,
         PLASMA_SAMPLING_TREATMENT_NONE,
         PLASMA_FILTER_TREATMENT_NONE,
-        PLASMA_EMULATION_TREATMENT_NONE,
-        PLASMA_ACCENT_TREATMENT_NONE,
+        PLASMA_EMULATION_TREATMENT_PHOSPHOR,
+        PLASMA_ACCENT_TREATMENT_ACCENT_PASS,
         PLASMA_PRESENTATION_MODE_FLAT
     },
     {
@@ -334,9 +334,9 @@ static const plasma_preset_values g_plasma_preset_values[] = {
         PLASMA_OUTPUT_FAMILY_BANDED,
         PLASMA_OUTPUT_MODE_POSTERIZED_BANDS,
         PLASMA_SAMPLING_TREATMENT_NONE,
-        PLASMA_FILTER_TREATMENT_NONE,
+        PLASMA_FILTER_TREATMENT_GLOW_EDGE,
         PLASMA_EMULATION_TREATMENT_NONE,
-        PLASMA_ACCENT_TREATMENT_ACCENT_PASS,
+        PLASMA_ACCENT_TREATMENT_NONE,
         PLASMA_PRESENTATION_MODE_FLAT
     },
     {
@@ -388,7 +388,7 @@ static const plasma_preset_values g_plasma_preset_values[] = {
         PLASMA_SAMPLING_TREATMENT_NONE,
         PLASMA_FILTER_TREATMENT_EMBOSS_EDGE,
         PLASMA_EMULATION_TREATMENT_NONE,
-        PLASMA_ACCENT_TREATMENT_NONE,
+        PLASMA_ACCENT_TREATMENT_ACCENT_PASS,
         PLASMA_PRESENTATION_MODE_FLAT
     },
     {
@@ -451,7 +451,7 @@ static const plasma_preset_values g_plasma_preset_values[] = {
         PLASMA_OUTPUT_FAMILY_BANDED,
         PLASMA_OUTPUT_MODE_POSTERIZED_BANDS,
         PLASMA_SAMPLING_TREATMENT_NONE,
-        PLASMA_FILTER_TREATMENT_NONE,
+        PLASMA_FILTER_TREATMENT_EMBOSS_EDGE,
         PLASMA_EMULATION_TREATMENT_NONE,
         PLASMA_ACCENT_TREATMENT_ACCENT_PASS,
         PLASMA_PRESENTATION_MODE_FLAT
