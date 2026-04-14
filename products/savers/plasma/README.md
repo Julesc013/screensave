@@ -24,3 +24,11 @@ The current release cut is recorded in the `PX50` recut docs and remains lower-b
 - Richer lanes, broader non-raster grammar, premium presentation, transitions, capture-backed compare, and the wider Wave 3 study slice remain explicit opt-in experimental surfaces.
 - The stable support surface includes BenchLab reporting, PX40 read-only authoring and ops reports, `preset-audit`, and the stable PX41 metadata-report slice that only restates already-stable product truth.
 - The current ship gate remains `GO WITH CAVEATS` and is documented in [`docs/px50-ship-posture.md`](./docs/px50-ship-posture.md).
+
+## Corrective Guardrail
+
+The canonical corrective baseline for future Plasma work is frozen in the `U00`
+docs.
+New breadth work should not bypass that diagnostic baseline, the U00 settings
+and uniqueness audits, or the corrective backlog that keeps coherence work ahead
+of feature expansion.

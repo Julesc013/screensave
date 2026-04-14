@@ -28,7 +28,7 @@ Wave evidence and posture sources:
 - `products/savers/plasma/docs/px32-stable-vs-experimental-notes.md`
 - `products/savers/plasma/docs/px40-stable-vs-experimental-notes.md`
 - `products/savers/plasma/docs/px41-stable-vs-experimental-notes.md`
-- `products/savers/plasma/docs/u00-salvage-baseline.md`
+- `products/savers/plasma/docs/u00-diagnostic-baseline.md`
 - `products/savers/plasma/docs/u01-runtime-unification.md`
 - `products/savers/plasma/docs/u02-settings-authority.md`
 - `products/savers/plasma/docs/u03-settings-model.md`
@@ -37,6 +37,7 @@ Wave evidence and posture sources:
 - `products/savers/plasma/docs/u06-preset-theme-tuning-notes.md`
 - `products/savers/plasma/docs/u07-proof-harness.md`
 - `products/savers/plasma/docs/u08-visual-qa-bar.md`
+- `products/savers/plasma/docs/u00-corrective-backlog.md`
 
 Proof and capture sources:
 
@@ -54,6 +55,7 @@ Proof and capture sources:
 - `products/savers/plasma/tests/px40-ops-tools-proof.md`
 - `products/savers/plasma/tests/px41-integration-proof.md`
 - `products/savers/plasma/tests/px41-curation-proof.md`
+- `products/savers/plasma/tests/u00-diagnostic-notes.md`
 - `products/savers/plasma/tests/README.md`
 - `validation/captures/pl13/benchlab-plasma-gdi.txt`
 - `validation/captures/pl13/benchlab-plasma-gl11.txt`

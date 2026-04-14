@@ -44,10 +44,13 @@ They live with the product so later `PL` work can extend them without rewriting 
 
 ## Salvage Program Docs
 
-- [U00 Salvage Baseline](./u00-salvage-baseline.md): freezes the factual starting point for the unification and salvage pass
+- [U00 Diagnostic Baseline](./u00-diagnostic-baseline.md): freezes the canonical corrective-program baseline against the current repo snapshot
 - [U00 Settings Influence Matrix](./u00-settings-influence-matrix.md): records which current controls materially affect selection, plan compilation, and rendered output
-- [U00 Visual Distinctness Audit](./u00-visual-distinctness-audit.md): records where current preset and mode distinctness is real versus merely documented
+- [U00 Visual Uniqueness Audit](./u00-visual-uniqueness-audit.md): records where current preset, theme, and grammar distinctness is real versus crowded or bounded
 - [U00 UI Gap Audit](./u00-ui-gap-audit.md): records the mismatch between the current dialog and the current runtime truth
+- [U00 Corrective Backlog](./u00-corrective-backlog.md): freezes the corrective phase order and anti-regression blockers for later Plasma work
+- [U00 Salvage Baseline](./u00-salvage-baseline.md): historical alias kept for older references; use the diagnostic baseline above for current truth
+- [U00 Visual Distinctness Audit](./u00-visual-distinctness-audit.md): historical alias kept for older references; use the visual uniqueness audit above for current truth
 - [U01 Runtime Unification](./u01-runtime-unification.md): records the removal of the remaining Classic-as-runtime-gate assumption
 - [U02 Settings Authority Rewrite](./u02-settings-authority.md): records the move from preset-hidden grammar authority to resolved settings-owned runtime grammar
 - [U03 Settings Model](./u03-settings-model.md): records the recut of Plasma's user-facing, advanced, and author-facing settings layers
@@ -92,3 +95,7 @@ They live with the product so later `PL` work can extend them without rewriting 
 `PL00` through `PL14` are complete.
 The later post-PL waves now route through the `PX00` control docs and the master `MX` control plane, with `PX50` acting as the current closure-point recut for the implemented Waves 1 through 4.
 No later post-`PX50` implementation phase is claimed as implemented until it lands explicitly.
+
+Future Plasma work should also treat the canonical U00 diagnostic baseline and
+corrective backlog as a hard guardrail.
+New breadth work should not bypass those coherence and proof obligations.
