@@ -50,6 +50,8 @@ They live with the product so later `PL` work can extend them without rewriting 
 - [U00 UI Gap Audit](./u00-ui-gap-audit.md): records the mismatch between the current dialog and the current runtime truth
 - [U01 Runtime Unification](./u01-runtime-unification.md): records the removal of the remaining Classic-as-runtime-gate assumption
 - [U02 Settings Authority Rewrite](./u02-settings-authority.md): records the move from preset-hidden grammar authority to resolved settings-owned runtime grammar
+- [U03 Settings Model](./u03-settings-model.md): records the recut of Plasma's user-facing, advanced, and author-facing settings layers
+- [U03 Settings Surfaces](./u03-settings-surfaces.md): records the dialog-side control mapping and hidden non-claim surfaces after the UI recut
 
 ## PL00-PL14 Program Record
 

@@ -56,6 +56,51 @@ static const plasma_combo_item g_plasma_smoothing_items[] = {
     { PLASMA_SMOOTHING_GLOW, "Glow Diffusion" }
 };
 
+static const plasma_combo_item g_plasma_output_family_items[] = {
+    { PLASMA_OUTPUT_FAMILY_RASTER, "Raster" },
+    { PLASMA_OUTPUT_FAMILY_BANDED, "Banded" },
+    { PLASMA_OUTPUT_FAMILY_CONTOUR, "Contour" },
+    { PLASMA_OUTPUT_FAMILY_GLYPH, "Glyph" }
+};
+
+static const plasma_combo_item g_plasma_output_mode_items[] = {
+    { PLASMA_OUTPUT_MODE_NATIVE_RASTER, "Native Raster" },
+    { PLASMA_OUTPUT_MODE_POSTERIZED_BANDS, "Posterized Bands" },
+    { PLASMA_OUTPUT_MODE_CONTOUR_ONLY, "Contour Only" },
+    { PLASMA_OUTPUT_MODE_CONTOUR_BANDS, "Contour Bands" },
+    { PLASMA_OUTPUT_MODE_ASCII_GLYPH, "ASCII Glyph" },
+    { PLASMA_OUTPUT_MODE_MATRIX_GLYPH, "Matrix Glyph" }
+};
+
+static const plasma_combo_item g_plasma_filter_treatment_items[] = {
+    { PLASMA_FILTER_TREATMENT_NONE, "None" },
+    { PLASMA_FILTER_TREATMENT_BLUR, "Blur (Advanced)" },
+    { PLASMA_FILTER_TREATMENT_GLOW_EDGE, "Glow Edge" },
+    { PLASMA_FILTER_TREATMENT_HALFTONE_STIPPLE, "Halftone Stipple" },
+    { PLASMA_FILTER_TREATMENT_EMBOSS_EDGE, "Emboss Edge" }
+};
+
+static const plasma_combo_item g_plasma_emulation_treatment_items[] = {
+    { PLASMA_EMULATION_TREATMENT_NONE, "None" },
+    { PLASMA_EMULATION_TREATMENT_PHOSPHOR, "Phosphor" },
+    { PLASMA_EMULATION_TREATMENT_CRT, "CRT" }
+};
+
+static const plasma_combo_item g_plasma_accent_treatment_items[] = {
+    { PLASMA_ACCENT_TREATMENT_NONE, "None" },
+    { PLASMA_ACCENT_TREATMENT_OVERLAY_PASS, "Overlay Pass (Advanced)" },
+    { PLASMA_ACCENT_TREATMENT_ACCENT_PASS, "Accent Pass" }
+};
+
+static const plasma_combo_item g_plasma_presentation_mode_items[] = {
+    { PLASMA_PRESENTATION_MODE_FLAT, "Flat" },
+    { PLASMA_PRESENTATION_MODE_HEIGHTFIELD, "Heightfield" },
+    { PLASMA_PRESENTATION_MODE_CURTAIN, "Curtain" },
+    { PLASMA_PRESENTATION_MODE_RIBBON, "Ribbon" },
+    { PLASMA_PRESENTATION_MODE_CONTOUR_EXTRUSION, "Contour Extrusion" },
+    { PLASMA_PRESENTATION_MODE_BOUNDED_SURFACE, "Bounded Surface" }
+};
+
 static const plasma_combo_item g_plasma_surface_items[] = {
     { PLASMA_SETTINGS_SURFACE_BASIC, "Basic" },
     { PLASMA_SETTINGS_SURFACE_ADVANCED, "Advanced" },
@@ -95,24 +140,30 @@ static const plasma_combo_item g_plasma_transition_seed_items[] = {
 
 static const plasma_dialog_binding g_plasma_dialog_bindings[] = {
     { IDC_PLASMA_LABEL_PRESET, IDC_PLASMA_PRESET, "preset_key" },
+    { IDC_PLASMA_LABEL_PRESET_SET, IDC_PLASMA_PRESET_SET, "preset_set_key" },
     { IDC_PLASMA_LABEL_THEME, IDC_PLASMA_THEME, "theme_key" },
+    { IDC_PLASMA_LABEL_THEME_SET, IDC_PLASMA_THEME_SET, "theme_set_key" },
     { IDC_PLASMA_LABEL_SPEED, IDC_PLASMA_SPEED, "speed_mode" },
+    { 0, IDC_PLASMA_FAVORITES_ONLY, "favorites_only" },
     { IDC_PLASMA_LABEL_DETAIL_LEVEL, IDC_PLASMA_DETAIL_LEVEL, "detail_level" },
+    { IDC_PLASMA_LABEL_CONTENT_FILTER, IDC_PLASMA_CONTENT_FILTER, "content_filter" },
+    { 0, IDC_PLASMA_TRANSITIONS_ENABLED, "transitions_enabled" },
     { IDC_PLASMA_LABEL_EFFECT, IDC_PLASMA_EFFECT, "effect_mode" },
+    { IDC_PLASMA_LABEL_OUTPUT_FAMILY, IDC_PLASMA_OUTPUT_FAMILY, "output_family" },
+    { IDC_PLASMA_LABEL_OUTPUT_MODE, IDC_PLASMA_OUTPUT_MODE, "output_mode" },
     { IDC_PLASMA_LABEL_RESOLUTION, IDC_PLASMA_RESOLUTION, "resolution_mode" },
     { IDC_PLASMA_LABEL_SMOOTHING, IDC_PLASMA_SMOOTHING, "smoothing_mode" },
-    { IDC_PLASMA_LABEL_CONTENT_FILTER, IDC_PLASMA_CONTENT_FILTER, "content_filter" },
-    { 0, IDC_PLASMA_FAVORITES_ONLY, "favorites_only" },
-    { IDC_PLASMA_LABEL_PRESET_SET, IDC_PLASMA_PRESET_SET, "preset_set_key" },
-    { IDC_PLASMA_LABEL_THEME_SET, IDC_PLASMA_THEME_SET, "theme_set_key" },
-    { 0, IDC_PLASMA_TRANSITIONS_ENABLED, "transitions_enabled" },
+    { IDC_PLASMA_LABEL_FILTER_TREATMENT, IDC_PLASMA_FILTER_TREATMENT, "filter_treatment" },
+    { IDC_PLASMA_LABEL_EMULATION_TREATMENT, IDC_PLASMA_EMULATION_TREATMENT, "emulation_treatment" },
+    { IDC_PLASMA_LABEL_ACCENT_TREATMENT, IDC_PLASMA_ACCENT_TREATMENT, "accent_treatment" },
+    { IDC_PLASMA_LABEL_PRESENTATION_MODE, IDC_PLASMA_PRESENTATION_MODE, "presentation_mode" },
+    { 0, IDC_PLASMA_DETERMINISTIC, "use_deterministic_seed" },
     { IDC_PLASMA_LABEL_TRANSITION_POLICY, IDC_PLASMA_TRANSITION_POLICY, "transition_policy" },
     { IDC_PLASMA_LABEL_JOURNEY, IDC_PLASMA_JOURNEY, "journey_key" },
     { IDC_PLASMA_LABEL_TRANSITION_FALLBACK, IDC_PLASMA_TRANSITION_FALLBACK, "transition_fallback_policy" },
     { IDC_PLASMA_LABEL_TRANSITION_SEED_POLICY, IDC_PLASMA_TRANSITION_SEED_POLICY, "transition_seed_policy" },
     { IDC_PLASMA_LABEL_TRANSITION_INTERVAL, IDC_PLASMA_TRANSITION_INTERVAL, "transition_interval_millis" },
     { IDC_PLASMA_LABEL_TRANSITION_DURATION, IDC_PLASMA_TRANSITION_DURATION, "transition_duration_millis" },
-    { 0, IDC_PLASMA_DETERMINISTIC, "use_deterministic_seed" },
     { IDC_PLASMA_LABEL_DETERMINISTIC_SEED, IDC_PLASMA_DETERMINISTIC_SEED_VALUE, "deterministic_seed" },
     { 0, IDC_PLASMA_DIAGNOSTICS, "diagnostics_overlay_enabled" }
 };
@@ -1028,6 +1079,56 @@ static void plasma_populate_named_combo(
     }
 }
 
+static int plasma_output_mode_is_visible_for_family(
+    plasma_output_family family,
+    plasma_output_mode mode
+)
+{
+    switch (family) {
+    case PLASMA_OUTPUT_FAMILY_BANDED:
+        return mode == PLASMA_OUTPUT_MODE_POSTERIZED_BANDS;
+
+    case PLASMA_OUTPUT_FAMILY_CONTOUR:
+        return
+            mode == PLASMA_OUTPUT_MODE_CONTOUR_ONLY ||
+            mode == PLASMA_OUTPUT_MODE_CONTOUR_BANDS;
+
+    case PLASMA_OUTPUT_FAMILY_GLYPH:
+        return
+            mode == PLASMA_OUTPUT_MODE_ASCII_GLYPH ||
+            mode == PLASMA_OUTPUT_MODE_MATRIX_GLYPH;
+
+    case PLASMA_OUTPUT_FAMILY_RASTER:
+    default:
+        return mode == PLASMA_OUTPUT_MODE_NATIVE_RASTER;
+    }
+}
+
+static void plasma_populate_output_mode_combo(
+    HWND dialog,
+    plasma_output_family family
+)
+{
+    unsigned int index;
+
+    SendDlgItemMessageA(dialog, IDC_PLASMA_OUTPUT_MODE, CB_RESETCONTENT, 0U, 0L);
+    for (index = 0U; index < (unsigned int)(sizeof(g_plasma_output_mode_items) / sizeof(g_plasma_output_mode_items[0])); ++index) {
+        if (
+            plasma_output_mode_is_visible_for_family(
+                family,
+                (plasma_output_mode)g_plasma_output_mode_items[index].value
+            )
+        ) {
+            plasma_add_combo_item(
+                dialog,
+                IDC_PLASMA_OUTPUT_MODE,
+                g_plasma_output_mode_items[index].display_name,
+                (LPARAM)g_plasma_output_mode_items[index].value
+            );
+        }
+    }
+}
+
 static void plasma_populate_dialog_lists(HWND dialog, const screensave_saver_module *module)
 {
     const plasma_content_registry *registry;
@@ -1084,6 +1185,37 @@ static void plasma_populate_dialog_lists(HWND dialog, const screensave_saver_mod
         IDC_PLASMA_SMOOTHING,
         g_plasma_smoothing_items,
         (unsigned int)(sizeof(g_plasma_smoothing_items) / sizeof(g_plasma_smoothing_items[0]))
+    );
+    plasma_populate_named_combo(
+        dialog,
+        IDC_PLASMA_OUTPUT_FAMILY,
+        g_plasma_output_family_items,
+        (unsigned int)(sizeof(g_plasma_output_family_items) / sizeof(g_plasma_output_family_items[0]))
+    );
+    plasma_populate_output_mode_combo(dialog, PLASMA_OUTPUT_FAMILY_RASTER);
+    plasma_populate_named_combo(
+        dialog,
+        IDC_PLASMA_FILTER_TREATMENT,
+        g_plasma_filter_treatment_items,
+        (unsigned int)(sizeof(g_plasma_filter_treatment_items) / sizeof(g_plasma_filter_treatment_items[0]))
+    );
+    plasma_populate_named_combo(
+        dialog,
+        IDC_PLASMA_EMULATION_TREATMENT,
+        g_plasma_emulation_treatment_items,
+        (unsigned int)(sizeof(g_plasma_emulation_treatment_items) / sizeof(g_plasma_emulation_treatment_items[0]))
+    );
+    plasma_populate_named_combo(
+        dialog,
+        IDC_PLASMA_ACCENT_TREATMENT,
+        g_plasma_accent_treatment_items,
+        (unsigned int)(sizeof(g_plasma_accent_treatment_items) / sizeof(g_plasma_accent_treatment_items[0]))
+    );
+    plasma_populate_named_combo(
+        dialog,
+        IDC_PLASMA_PRESENTATION_MODE,
+        g_plasma_presentation_mode_items,
+        (unsigned int)(sizeof(g_plasma_presentation_mode_items) / sizeof(g_plasma_presentation_mode_items[0]))
     );
     plasma_populate_named_combo(
         dialog,
@@ -1167,26 +1299,26 @@ static void plasma_update_dialog_info(
     if (surface == PLASMA_SETTINGS_SURFACE_BASIC) {
         lstrcatA(
             info,
-            "Basic keeps the stable Plasma Classic baseline simple: preset, theme, safe motion, and bounded transition toggles."
+            "Basic keeps the first-pass controls honest: preset, theme, speed, visual intensity, content pool, and transitions."
         );
     } else if (surface == PLASMA_SETTINGS_SURFACE_ADVANCED) {
         lstrcatA(
             info,
-            "Advanced adds stable power-user control over field detail, curated sets, deterministic seed mode, and bounded transition policy."
+            "Advanced adds the real visual grammar: generator family, output family and mode, detail, smoothing, treatments, presentation, and deterministic seed mode."
         );
     } else {
         lstrcatA(
             info,
-            "Author/Lab exposes the deeper product-local selection and transition controls without claiming full BenchLab forcing or inspection."
+            "Author/Lab keeps curation, journeys, fallback policy, deterministic seed value, and diagnostics in one bounded author-facing layer."
         );
     }
 
     if (settings_context != NULL) {
         if (!settings_context->experimental_content_available) {
-            lstrcatA(info, "\r\nExperimental pool controls stay disabled because the shipped Plasma registry is currently stable-only.");
+            lstrcatA(info, "\r\nExperimental pool controls stay disabled because the current registry has no experimental content.");
         }
         if (!settings_context->favorites_configured) {
-            lstrcatA(info, "\r\nFavorites-only selection stays disabled until favorite keys are configured through product-local settings import/export.");
+            lstrcatA(info, "\r\nFavorites-only stays disabled until favorite keys are configured through product settings import or export.");
         }
         if (!settings_context->journeys_available) {
             lstrcatA(info, "\r\nJourney controls stay unavailable until a product-local journey surface exists.");
@@ -1286,6 +1418,16 @@ static void plasma_read_dialog_settings(
     );
     product_config->speed_mode = plasma_get_combo_value(dialog, IDC_PLASMA_SPEED, product_config->speed_mode);
     product_config->effect_mode = plasma_get_combo_value(dialog, IDC_PLASMA_EFFECT, product_config->effect_mode);
+    product_config->output_family = (plasma_output_family)plasma_get_combo_value(
+        dialog,
+        IDC_PLASMA_OUTPUT_FAMILY,
+        product_config->output_family
+    );
+    product_config->output_mode = (plasma_output_mode)plasma_get_combo_value(
+        dialog,
+        IDC_PLASMA_OUTPUT_MODE,
+        product_config->output_mode
+    );
     product_config->resolution_mode = plasma_get_combo_value(
         dialog,
         IDC_PLASMA_RESOLUTION,
@@ -1295,6 +1437,26 @@ static void plasma_read_dialog_settings(
         dialog,
         IDC_PLASMA_SMOOTHING,
         product_config->smoothing_mode
+    );
+    product_config->filter_treatment = (plasma_filter_treatment)plasma_get_combo_value(
+        dialog,
+        IDC_PLASMA_FILTER_TREATMENT,
+        product_config->filter_treatment
+    );
+    product_config->emulation_treatment = (plasma_emulation_treatment)plasma_get_combo_value(
+        dialog,
+        IDC_PLASMA_EMULATION_TREATMENT,
+        product_config->emulation_treatment
+    );
+    product_config->accent_treatment = (plasma_accent_treatment)plasma_get_combo_value(
+        dialog,
+        IDC_PLASMA_ACCENT_TREATMENT,
+        product_config->accent_treatment
+    );
+    product_config->presentation_mode = (plasma_presentation_mode)plasma_get_combo_value(
+        dialog,
+        IDC_PLASMA_PRESENTATION_MODE,
+        product_config->presentation_mode
     );
     product_config->selection.content_filter = (plasma_content_filter)plasma_get_combo_value(
         dialog,
@@ -1413,8 +1575,19 @@ static void plasma_apply_settings_to_dialog(HWND dialog, plasma_dialog_state *di
     plasma_select_combo_value(dialog, IDC_PLASMA_SPEED, (LPARAM)product_config->speed_mode);
     plasma_select_combo_value(dialog, IDC_PLASMA_DETAIL_LEVEL, (LPARAM)common_config->detail_level);
     plasma_select_combo_value(dialog, IDC_PLASMA_EFFECT, (LPARAM)product_config->effect_mode);
+    plasma_select_combo_value(dialog, IDC_PLASMA_OUTPUT_FAMILY, (LPARAM)product_config->output_family);
+    plasma_populate_output_mode_combo(dialog, product_config->output_family);
+    plasma_select_combo_value(dialog, IDC_PLASMA_OUTPUT_MODE, (LPARAM)product_config->output_mode);
     plasma_select_combo_value(dialog, IDC_PLASMA_RESOLUTION, (LPARAM)product_config->resolution_mode);
     plasma_select_combo_value(dialog, IDC_PLASMA_SMOOTHING, (LPARAM)product_config->smoothing_mode);
+    plasma_select_combo_value(dialog, IDC_PLASMA_FILTER_TREATMENT, (LPARAM)product_config->filter_treatment);
+    plasma_select_combo_value(
+        dialog,
+        IDC_PLASMA_EMULATION_TREATMENT,
+        (LPARAM)product_config->emulation_treatment
+    );
+    plasma_select_combo_value(dialog, IDC_PLASMA_ACCENT_TREATMENT, (LPARAM)product_config->accent_treatment);
+    plasma_select_combo_value(dialog, IDC_PLASMA_PRESENTATION_MODE, (LPARAM)product_config->presentation_mode);
     plasma_select_combo_value(dialog, IDC_PLASMA_CONTENT_FILTER, (LPARAM)product_config->selection.content_filter);
     plasma_select_combo_string(dialog, IDC_PLASMA_PRESET_SET, product_config->selection.preset_set_key);
     plasma_select_combo_string(dialog, IDC_PLASMA_THEME_SET, product_config->selection.theme_set_key);
@@ -1568,8 +1741,14 @@ static INT_PTR CALLBACK plasma_config_dialog_proc(HWND dialog, UINT message, WPA
             (LOWORD(wParam) == IDC_PLASMA_SPEED && HIWORD(wParam) == CBN_SELCHANGE) ||
             (LOWORD(wParam) == IDC_PLASMA_DETAIL_LEVEL && HIWORD(wParam) == CBN_SELCHANGE) ||
             (LOWORD(wParam) == IDC_PLASMA_EFFECT && HIWORD(wParam) == CBN_SELCHANGE) ||
+            (LOWORD(wParam) == IDC_PLASMA_OUTPUT_FAMILY && HIWORD(wParam) == CBN_SELCHANGE) ||
+            (LOWORD(wParam) == IDC_PLASMA_OUTPUT_MODE && HIWORD(wParam) == CBN_SELCHANGE) ||
             (LOWORD(wParam) == IDC_PLASMA_RESOLUTION && HIWORD(wParam) == CBN_SELCHANGE) ||
             (LOWORD(wParam) == IDC_PLASMA_SMOOTHING && HIWORD(wParam) == CBN_SELCHANGE) ||
+            (LOWORD(wParam) == IDC_PLASMA_FILTER_TREATMENT && HIWORD(wParam) == CBN_SELCHANGE) ||
+            (LOWORD(wParam) == IDC_PLASMA_EMULATION_TREATMENT && HIWORD(wParam) == CBN_SELCHANGE) ||
+            (LOWORD(wParam) == IDC_PLASMA_ACCENT_TREATMENT && HIWORD(wParam) == CBN_SELCHANGE) ||
+            (LOWORD(wParam) == IDC_PLASMA_PRESENTATION_MODE && HIWORD(wParam) == CBN_SELCHANGE) ||
             (LOWORD(wParam) == IDC_PLASMA_CONTENT_FILTER && HIWORD(wParam) == CBN_SELCHANGE) ||
             (LOWORD(wParam) == IDC_PLASMA_PRESET_SET && HIWORD(wParam) == CBN_SELCHANGE) ||
             (LOWORD(wParam) == IDC_PLASMA_THEME_SET && HIWORD(wParam) == CBN_SELCHANGE) ||

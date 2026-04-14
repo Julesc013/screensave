@@ -747,6 +747,10 @@ int main(void)
     }
     if (
         plasma_settings_find_descriptor("preset_key") == NULL ||
+        plasma_settings_find_descriptor("detail_level") == NULL ||
+        plasma_settings_find_descriptor("content_filter") == NULL ||
+        plasma_settings_find_descriptor("transitions_enabled") == NULL ||
+        plasma_settings_find_descriptor("preset_set_key") == NULL ||
         plasma_settings_find_descriptor("output_family") == NULL ||
         plasma_settings_find_descriptor("filter_treatment") == NULL ||
         plasma_settings_find_descriptor("presentation_mode") == NULL ||
@@ -755,6 +759,18 @@ int main(void)
         plasma_settings_find_descriptor("diagnostics_overlay_enabled") == NULL
     ) {
         return 174;
+    }
+    settings_descriptor = plasma_settings_find_descriptor("detail_level");
+    if (
+        settings_descriptor == NULL ||
+        settings_descriptor->surface != PLASMA_SETTINGS_SURFACE_BASIC ||
+        plasma_settings_find_descriptor("content_filter")->surface != PLASMA_SETTINGS_SURFACE_BASIC ||
+        plasma_settings_find_descriptor("transitions_enabled")->surface != PLASMA_SETTINGS_SURFACE_BASIC ||
+        plasma_settings_find_descriptor("output_family")->surface != PLASMA_SETTINGS_SURFACE_ADVANCED ||
+        plasma_settings_find_descriptor("transition_policy")->surface != PLASMA_SETTINGS_SURFACE_AUTHOR_LAB ||
+        plasma_settings_find_descriptor("preset_set_key")->surface != PLASMA_SETTINGS_SURFACE_AUTHOR_LAB
+    ) {
+        return 435;
     }
 
     plasma_settings_context_init(
