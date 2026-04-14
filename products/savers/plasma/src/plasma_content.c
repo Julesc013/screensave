@@ -722,7 +722,7 @@ const plasma_content_preset_entry *plasma_content_find_preset_entry(const char *
     unsigned int index;
 
     registry = plasma_content_get_registry();
-    preset_key = plasma_classic_canonical_key(preset_key);
+    preset_key = plasma_canonical_content_key(preset_key);
     if (preset_key == NULL || preset_key[0] == '\0') {
         return NULL;
     }
@@ -742,7 +742,7 @@ const plasma_content_theme_entry *plasma_content_find_theme_entry(const char *th
     unsigned int index;
 
     registry = plasma_content_get_registry();
-    theme_key = plasma_classic_canonical_key(theme_key);
+    theme_key = plasma_canonical_content_key(theme_key);
     if (theme_key == NULL || theme_key[0] == '\0') {
         return NULL;
     }

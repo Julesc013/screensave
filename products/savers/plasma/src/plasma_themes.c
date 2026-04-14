@@ -55,20 +55,30 @@ const screensave_theme_descriptor g_plasma_themes[] = {
 const screensave_theme_descriptor *plasma_get_themes(unsigned int *count_out)
 {
     if (count_out != NULL) {
-        *count_out = plasma_classic_theme_count();
+        *count_out = plasma_theme_count();
     }
 
     return g_plasma_themes;
 }
 
-unsigned int plasma_classic_theme_count(void)
+unsigned int plasma_theme_count(void)
 {
     return (unsigned int)(sizeof(g_plasma_themes) / sizeof(g_plasma_themes[0]));
 }
 
-int plasma_classic_is_known_theme_key(const char *theme_key)
+unsigned int plasma_classic_theme_count(void)
+{
+    return plasma_theme_count();
+}
+
+int plasma_is_known_theme_key(const char *theme_key)
 {
     return plasma_find_theme_descriptor(theme_key) != NULL;
+}
+
+int plasma_classic_is_known_theme_key(const char *theme_key)
+{
+    return plasma_is_known_theme_key(theme_key);
 }
 
 const screensave_theme_descriptor *plasma_find_theme_descriptor(const char *theme_key)

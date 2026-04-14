@@ -2,13 +2,18 @@
 
 #include "plasma_internal.h"
 
-const char *plasma_classic_canonical_key(const char *key)
+const char *plasma_canonical_content_key(const char *key)
 {
     if (key != NULL && lstrcmpiA(key, "ember_lava") == 0) {
         return "plasma_lava";
     }
 
     return key;
+}
+
+const char *plasma_classic_canonical_key(const char *key)
+{
+    return plasma_canonical_content_key(key);
 }
 
 const screensave_preset_descriptor g_plasma_presets[] = {
@@ -526,15 +531,20 @@ static const plasma_preset_values g_plasma_preset_values[] = {
 const screensave_preset_descriptor *plasma_get_presets(unsigned int *count_out)
 {
     if (count_out != NULL) {
-        *count_out = plasma_classic_preset_count();
+        *count_out = plasma_preset_count();
     }
 
     return g_plasma_presets;
 }
 
-unsigned int plasma_classic_preset_count(void)
+unsigned int plasma_preset_count(void)
 {
     return (unsigned int)(sizeof(g_plasma_presets) / sizeof(g_plasma_presets[0]));
+}
+
+unsigned int plasma_classic_preset_count(void)
+{
+    return plasma_preset_count();
 }
 
 const screensave_preset_descriptor *plasma_find_preset_descriptor(const char *preset_key)
@@ -545,9 +555,14 @@ const screensave_preset_descriptor *plasma_find_preset_descriptor(const char *pr
     return entry != NULL ? entry->descriptor : NULL;
 }
 
-int plasma_classic_is_known_preset_key(const char *preset_key)
+int plasma_is_known_preset_key(const char *preset_key)
 {
     return plasma_find_preset_descriptor(preset_key) != NULL;
+}
+
+int plasma_classic_is_known_preset_key(const char *preset_key)
+{
+    return plasma_is_known_preset_key(preset_key);
 }
 
 const plasma_preset_values *plasma_find_preset_values(const char *preset_key)
@@ -560,7 +575,7 @@ const plasma_preset_values *plasma_find_preset_values(const char *preset_key)
         return NULL;
     }
 
-    for (index = 0U; index < plasma_classic_preset_count(); ++index) {
+    for (index = 0U; index < plasma_preset_count(); ++index) {
         if (&g_plasma_presets[index] == preset_descriptor) {
             return &g_plasma_preset_values[index];
         }

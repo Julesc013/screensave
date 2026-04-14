@@ -970,7 +970,7 @@ void plasma_benchlab_forcing_clamp(plasma_benchlab_forcing *forcing)
     if (forcing->preset_key[0] != '\0') {
         const char *canonical_key;
 
-        canonical_key = plasma_classic_canonical_key(forcing->preset_key);
+        canonical_key = plasma_canonical_content_key(forcing->preset_key);
         if (plasma_content_find_preset_entry(canonical_key) == NULL) {
             forcing->preset_key[0] = '\0';
             forcing->clamp_flags |= PLASMA_BENCHLAB_CLAMP_PRESET_KEY;
@@ -986,7 +986,7 @@ void plasma_benchlab_forcing_clamp(plasma_benchlab_forcing *forcing)
     if (forcing->theme_key[0] != '\0') {
         const char *canonical_key;
 
-        canonical_key = plasma_classic_canonical_key(forcing->theme_key);
+        canonical_key = plasma_canonical_content_key(forcing->theme_key);
         if (plasma_content_find_theme_entry(canonical_key) == NULL) {
             forcing->theme_key[0] = '\0';
             forcing->clamp_flags |= PLASMA_BENCHLAB_CLAMP_THEME_KEY;
@@ -1613,7 +1613,7 @@ static unsigned long plasma_benchlab_build_clamp_flags(
     }
 
     if (forcing->preset_key[0] != '\0') {
-        requested_text = plasma_classic_canonical_key(forcing->preset_key);
+        requested_text = plasma_canonical_content_key(forcing->preset_key);
         if (requested_text == NULL) {
             requested_text = forcing->preset_key;
         }
@@ -1622,7 +1622,7 @@ static unsigned long plasma_benchlab_build_clamp_flags(
         }
     }
     if (forcing->theme_key[0] != '\0') {
-        requested_text = plasma_classic_canonical_key(forcing->theme_key);
+        requested_text = plasma_canonical_content_key(forcing->theme_key);
         if (requested_text == NULL) {
             requested_text = forcing->theme_key;
         }

@@ -206,7 +206,7 @@ static int plasma_smoke_capture_has_string(
     return 0;
 }
 
-static int plasma_compile_classic_plan(
+static int plasma_compile_direct_plan(
     const screensave_saver_module *module,
     const char *preset_key,
     const char *theme_key,
@@ -1082,27 +1082,41 @@ int main(void)
         return 6;
     }
     if (
-        plasma_classic_preset_count() != PLASMA_PRESET_COUNT ||
-        plasma_classic_theme_count() != PLASMA_THEME_COUNT ||
-        module->preset_count != plasma_classic_preset_count() ||
-        module->theme_count != plasma_classic_theme_count()
+        plasma_preset_count() != PLASMA_PRESET_COUNT ||
+        plasma_theme_count() != PLASMA_THEME_COUNT ||
+        module->preset_count != plasma_preset_count() ||
+        module->theme_count != plasma_theme_count() ||
+        plasma_classic_preset_count() != plasma_preset_count() ||
+        plasma_classic_theme_count() != plasma_theme_count()
     ) {
         return 7;
     }
 
     for (index = 0U; index < (unsigned int)(sizeof(g_required_preset_keys) / sizeof(g_required_preset_keys[0])); ++index) {
-        if (!plasma_classic_is_known_preset_key(g_required_preset_keys[index])) {
+        if (
+            !plasma_is_known_preset_key(g_required_preset_keys[index]) ||
+            !plasma_classic_is_known_preset_key(g_required_preset_keys[index])
+        ) {
             return 8;
         }
     }
     for (index = 0U; index < (unsigned int)(sizeof(g_required_theme_keys) / sizeof(g_required_theme_keys[0])); ++index) {
-        if (!plasma_classic_is_known_theme_key(g_required_theme_keys[index])) {
+        if (
+            !plasma_is_known_theme_key(g_required_theme_keys[index]) ||
+            !plasma_classic_is_known_theme_key(g_required_theme_keys[index])
+        ) {
             return 9;
         }
     }
     if (
+        plasma_canonical_content_key("ember_lava") == NULL ||
+        strcmp(plasma_canonical_content_key("ember_lava"), "plasma_lava") != 0 ||
         plasma_classic_canonical_key("ember_lava") == NULL ||
-        strcmp(plasma_classic_canonical_key("ember_lava"), "plasma_lava") != 0
+        strcmp(plasma_classic_canonical_key("ember_lava"), "plasma_lava") != 0 ||
+        strcmp(
+            plasma_classic_canonical_key("ember_lava"),
+            plasma_canonical_content_key("ember_lava")
+        ) != 0
     ) {
         return 10;
     }
@@ -1322,7 +1336,7 @@ int main(void)
     plasma_config_set_defaults(&common_config, &product_config, sizeof(product_config));
     plasma_config_clamp(&common_config, &product_config, sizeof(product_config));
 
-    if (!plasma_compile_classic_plan(module, PLASMA_DEFAULT_PRESET_KEY, NULL, &plan)) {
+    if (!plasma_compile_direct_plan(module, PLASMA_DEFAULT_PRESET_KEY, NULL, &plan)) {
         return 15;
     }
     if (!plasma_plan_validate(&plan, module)) {
@@ -1397,7 +1411,7 @@ int main(void)
     ) {
         return 18;
     }
-    if (!plasma_compile_classic_plan(module, "ember_lava", "ember_lava", &plan)) {
+    if (!plasma_compile_direct_plan(module, "ember_lava", "ember_lava", &plan)) {
         return 19;
     }
     if (
@@ -1956,7 +1970,7 @@ int main(void)
     }
 
     for (index = 0U; index < (unsigned int)(sizeof(g_required_preset_keys) / sizeof(g_required_preset_keys[0])); ++index) {
-        if (!plasma_compile_classic_plan(module, g_required_preset_keys[index], NULL, &plan)) {
+        if (!plasma_compile_direct_plan(module, g_required_preset_keys[index], NULL, &plan)) {
             fprintf(stderr, "smoke: failed to compile preset plan for %s\n", g_required_preset_keys[index]);
             return 21;
         }
@@ -2086,7 +2100,7 @@ int main(void)
     }
 
     if (
-        !plasma_compile_classic_plan(module, PLASMA_DEFAULT_PRESET_KEY, NULL, &plan) ||
+        !plasma_compile_direct_plan(module, PLASMA_DEFAULT_PRESET_KEY, NULL, &plan) ||
         plan.selection.selected_preset == NULL ||
         plan.selection.selected_theme == NULL ||
         plan.selection.active_preset_set != NULL ||
@@ -4588,7 +4602,7 @@ int main(void)
 
     plasma_config_set_defaults(&common_config, &product_config, sizeof(product_config));
     plasma_benchlab_forcing_set_defaults(&product_config.benchlab);
-    if (!plasma_compile_classic_plan(module, NULL, NULL, &plan) || !plasma_plan_is_lower_band_baseline(&plan)) {
+    if (!plasma_compile_direct_plan(module, NULL, NULL, &plan) || !plasma_plan_is_lower_band_baseline(&plan)) {
         return 138;
     }
 
@@ -4867,13 +4881,19 @@ int main(void)
         return 202;
     }
 
-    matrix_entry = plasma_validation_find_matrix_entry("classic_default", "gdi");
+    matrix_entry = plasma_validation_find_matrix_entry("default_stable_path", "gdi");
     if (
         matrix_entry == NULL ||
         matrix_entry->status != PLASMA_VALIDATION_STATUS_VALIDATED ||
         strcmp(plasma_validation_status_name(matrix_entry->status), "validated") != 0
     ) {
         return 203;
+    }
+    if (
+        plasma_validation_find_matrix_entry("classic_default", "gdi") != matrix_entry ||
+        strcmp(matrix_entry->area_key, "default_stable_path") != 0
+    ) {
+        return 457;
     }
     matrix_entry = plasma_validation_find_matrix_entry("premium_request_degrade", "auto");
     if (
@@ -5010,6 +5030,24 @@ int main(void)
         return 249;
     }
 
+    envelope_entry = plasma_validation_find_performance_envelope("default_path_gdi");
+    if (
+        envelope_entry == NULL ||
+        envelope_entry->status != PLASMA_VALIDATION_STATUS_VALIDATED ||
+        strcmp(envelope_entry->lane_key, "gdi") != 0 ||
+        plasma_validation_find_performance_envelope("classic_gdi") != envelope_entry
+    ) {
+        return 458;
+    }
+    envelope_entry = plasma_validation_find_performance_envelope("default_path_gl11");
+    if (
+        envelope_entry == NULL ||
+        envelope_entry->status != PLASMA_VALIDATION_STATUS_VALIDATED ||
+        strcmp(envelope_entry->lane_key, "gl11") != 0 ||
+        plasma_validation_find_performance_envelope("classic_gl11") != envelope_entry
+    ) {
+        return 456;
+    }
     envelope_entry = plasma_validation_find_performance_envelope("premium_gl46_heightfield");
     if (
         envelope_entry == NULL ||

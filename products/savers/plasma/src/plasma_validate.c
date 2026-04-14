@@ -2,18 +2,18 @@
 
 static const plasma_validation_matrix_entry g_plasma_validation_matrix[] = {
     {
-        "classic_default",
+        "default_stable_path",
         "gdi",
         PLASMA_VALIDATION_STATUS_VALIDATED,
         "validation/captures/pl13/benchlab-plasma-gdi.txt",
-        "Forced GDI report proves the preserved default classic raster-plus-flat path remains truthful on the universal floor."
+        "Forced GDI report proves the preserved default raster-plus-flat path remains truthful on the universal floor without a Classic runtime gate."
     },
     {
-        "classic_default",
+        "default_stable_path",
         "gl11",
         PLASMA_VALIDATION_STATUS_VALIDATED,
         "validation/captures/pl13/benchlab-plasma-gl11.txt",
-        "Forced GL11 report proves the preserved default classic path remains truthful on the compat lane."
+        "Forced GL11 report proves the preserved default path remains truthful on the compat lane without a separate Classic runtime mode."
     },
     {
         "content_registry",
@@ -208,23 +208,23 @@ static const plasma_validation_matrix_entry g_plasma_validation_matrix[] = {
 
 static const plasma_performance_envelope_entry g_plasma_performance_envelopes[] = {
     {
-        "classic_gdi",
+        "default_path_gdi",
         "gdi",
         PLASMA_VALIDATION_STATUS_VALIDATED,
         "bounded_qualitative",
-        "Session creation, plan compilation, and BenchLab report-mode startup completed successfully on the preserved classic path.",
-        "The validated runtime surface is the classic raster-plus-flat path with no richer-lane treatment or presentation uplift.",
-        "No transition cost is claimed for the baseline GDI proof path beyond the bounded classic-default surface.",
+        "Session creation, plan compilation, and BenchLab report-mode startup completed successfully on the preserved default path.",
+        "The validated runtime surface is the preserved default raster-plus-flat path with no richer-lane treatment or presentation uplift.",
+        "No transition cost is claimed for the baseline GDI proof path beyond the bounded default stable surface.",
         "Repeated session creation/destruction and bounded smoke stepping complete without failure.",
         "validation/captures/pl13/benchlab-plasma-gdi.txt"
     },
     {
-        "classic_gl11",
+        "default_path_gl11",
         "gl11",
         PLASMA_VALIDATION_STATUS_VALIDATED,
         "bounded_qualitative",
         "Session creation, plan compilation, and BenchLab report-mode startup completed successfully on the compat lane.",
-        "The validated runtime surface is the classic default identity plus the bounded compat acceleration path.",
+        "The validated runtime surface is the preserved default identity plus the bounded compat acceleration path.",
         "Journey-focused transition proof exists on the lower-band compat path without requiring richer lanes.",
         "Repeated session creation/destruction and bounded transition stepping complete without failure.",
         "validation/captures/pl13/benchlab-plasma-gl11.txt"
@@ -479,6 +479,35 @@ static int plasma_validation_has_text(const char *text)
     return text != NULL && text[0] != '\0';
 }
 
+static const char *plasma_validation_canonical_matrix_area_key(const char *area_key)
+{
+    if (area_key == NULL) {
+        return NULL;
+    }
+
+    if (strcmp(area_key, "classic_default") == 0) {
+        return "default_stable_path";
+    }
+
+    return area_key;
+}
+
+static const char *plasma_validation_canonical_envelope_key(const char *envelope_key)
+{
+    if (envelope_key == NULL) {
+        return NULL;
+    }
+
+    if (strcmp(envelope_key, "classic_gdi") == 0) {
+        return "default_path_gdi";
+    }
+    if (strcmp(envelope_key, "classic_gl11") == 0) {
+        return "default_path_gl11";
+    }
+
+    return envelope_key;
+}
+
 static int plasma_validation_status_is_valid(plasma_validation_status status)
 {
     return
@@ -528,6 +557,7 @@ const plasma_validation_matrix_entry *plasma_validation_find_matrix_entry(
     unsigned int count;
     unsigned int index;
 
+    area_key = plasma_validation_canonical_matrix_area_key(area_key);
     count = (unsigned int)(
         sizeof(g_plasma_validation_matrix) / sizeof(g_plasma_validation_matrix[0])
     );
@@ -600,6 +630,7 @@ const plasma_performance_envelope_entry *plasma_validation_find_performance_enve
     unsigned int count;
     unsigned int index;
 
+    envelope_key = plasma_validation_canonical_envelope_key(envelope_key);
     count = (unsigned int)(
         sizeof(g_plasma_performance_envelopes) /
         sizeof(g_plasma_performance_envelopes[0])
