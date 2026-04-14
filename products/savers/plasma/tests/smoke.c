@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "screensave/private/renderer_runtime.h"
@@ -29,6 +30,19 @@ typedef struct plasma_smoke_capture_tag {
     plasma_smoke_capture_entry entries[PLASMA_SMOKE_CAPTURE_LIMIT];
     unsigned int count;
 } plasma_smoke_capture;
+
+typedef struct plasma_smoke_render_signature_tag {
+    unsigned long treated_hash;
+    unsigned long presented_hash;
+    unsigned int treated_lit_pixels;
+    unsigned int presented_lit_pixels;
+    screensave_sizei treated_size;
+    int treated_stride_bytes;
+    unsigned char *treated_pixels;
+    screensave_sizei presented_size;
+    int presented_stride_bytes;
+    unsigned char *presented_pixels;
+} plasma_smoke_render_signature;
 
 static int plasma_smoke_renderer_begin_frame(
     screensave_renderer *renderer,
@@ -546,6 +560,377 @@ static unsigned int plasma_smoke_count_non_black_pixels(
     return lit_count;
 }
 
+static void plasma_smoke_render_signature_init(
+    plasma_smoke_render_signature *signature
+)
+{
+    if (signature == NULL) {
+        return;
+    }
+
+    ZeroMemory(signature, sizeof(*signature));
+}
+
+static void plasma_smoke_render_signature_release(
+    plasma_smoke_render_signature *signature
+)
+{
+    if (signature == NULL) {
+        return;
+    }
+
+    if (signature->treated_pixels != NULL) {
+        free(signature->treated_pixels);
+    }
+    if (signature->presented_pixels != NULL) {
+        free(signature->presented_pixels);
+    }
+    ZeroMemory(signature, sizeof(*signature));
+}
+
+static unsigned long plasma_smoke_hash_bytes(
+    const unsigned char *bytes,
+    size_t byte_count
+)
+{
+    unsigned long hash;
+    size_t index;
+
+    if (bytes == NULL) {
+        return 0UL;
+    }
+
+    hash = 2166136261UL;
+    for (index = 0U; index < byte_count; ++index) {
+        hash ^= (unsigned long)bytes[index];
+        hash *= 16777619UL;
+    }
+
+    return hash;
+}
+
+static unsigned int plasma_smoke_count_non_black_bitmap(
+    const screensave_bitmap_view *bitmap
+)
+{
+    unsigned int lit_count;
+    const unsigned char *pixels;
+    int x;
+    int y;
+
+    if (
+        bitmap == NULL ||
+        bitmap->pixels == NULL ||
+        bitmap->size.width <= 0 ||
+        bitmap->size.height <= 0 ||
+        bitmap->stride_bytes <= 0
+    ) {
+        return 0U;
+    }
+
+    lit_count = 0U;
+    pixels = (const unsigned char *)bitmap->pixels;
+    for (y = 0; y < bitmap->size.height; ++y) {
+        const unsigned char *row;
+
+        row = pixels + ((size_t)y * (size_t)bitmap->stride_bytes);
+        for (x = 0; x < bitmap->size.width; ++x) {
+            if (
+                row[(x * 4) + 0] != 0U ||
+                row[(x * 4) + 1] != 0U ||
+                row[(x * 4) + 2] != 0U
+            ) {
+                ++lit_count;
+            }
+        }
+    }
+
+    return lit_count;
+}
+
+static int plasma_smoke_copy_pixel_bytes(
+    unsigned char **copy_out,
+    screensave_sizei *size_out,
+    int *stride_bytes_out,
+    const void *pixels,
+    const screensave_sizei *size,
+    int stride_bytes
+)
+{
+    size_t byte_count;
+    unsigned char *copy;
+
+    if (
+        copy_out == NULL ||
+        size_out == NULL ||
+        stride_bytes_out == NULL ||
+        pixels == NULL ||
+        size == NULL ||
+        size->width <= 0 ||
+        size->height <= 0 ||
+        stride_bytes <= 0
+    ) {
+        return 0;
+    }
+
+    byte_count = (size_t)stride_bytes * (size_t)size->height;
+    copy = (unsigned char *)malloc(byte_count);
+    if (copy == NULL) {
+        return 0;
+    }
+
+    memcpy(copy, pixels, byte_count);
+    *copy_out = copy;
+    *size_out = *size;
+    *stride_bytes_out = stride_bytes;
+    return 1;
+}
+
+static unsigned int plasma_smoke_count_pixel_differences(
+    const unsigned char *left_pixels,
+    const screensave_sizei *left_size,
+    int left_stride_bytes,
+    const unsigned char *right_pixels,
+    const screensave_sizei *right_size,
+    int right_stride_bytes
+)
+{
+    unsigned int difference_count;
+    int max_width;
+    int max_height;
+    int x;
+    int y;
+
+    if (
+        left_pixels == NULL ||
+        left_size == NULL ||
+        right_pixels == NULL ||
+        right_size == NULL ||
+        left_stride_bytes <= 0 ||
+        right_stride_bytes <= 0
+    ) {
+        return 0U;
+    }
+
+    if (
+        left_size->width != right_size->width ||
+        left_size->height != right_size->height
+    ) {
+        max_width = left_size->width > right_size->width ? left_size->width : right_size->width;
+        max_height = left_size->height > right_size->height ? left_size->height : right_size->height;
+        return (unsigned int)(max_width * max_height);
+    }
+
+    difference_count = 0U;
+    for (y = 0; y < left_size->height; ++y) {
+        const unsigned char *left_row;
+        const unsigned char *right_row;
+
+        left_row = left_pixels + ((size_t)y * (size_t)left_stride_bytes);
+        right_row = right_pixels + ((size_t)y * (size_t)right_stride_bytes);
+        for (x = 0; x < left_size->width; ++x) {
+            if (
+                left_row[(x * 4) + 0] != right_row[(x * 4) + 0] ||
+                left_row[(x * 4) + 1] != right_row[(x * 4) + 1] ||
+                left_row[(x * 4) + 2] != right_row[(x * 4) + 2]
+            ) {
+                ++difference_count;
+            }
+        }
+    }
+
+    return difference_count;
+}
+
+static unsigned int plasma_smoke_render_difference_count(
+    const plasma_smoke_render_signature *left,
+    const plasma_smoke_render_signature *right,
+    int compare_presented
+)
+{
+    if (compare_presented) {
+        return plasma_smoke_count_pixel_differences(
+            left != NULL ? left->presented_pixels : NULL,
+            left != NULL ? &left->presented_size : NULL,
+            left != NULL ? left->presented_stride_bytes : 0,
+            right != NULL ? right->presented_pixels : NULL,
+            right != NULL ? &right->presented_size : NULL,
+            right != NULL ? right->presented_stride_bytes : 0
+        );
+    }
+
+    return plasma_smoke_count_pixel_differences(
+        left != NULL ? left->treated_pixels : NULL,
+        left != NULL ? &left->treated_size : NULL,
+        left != NULL ? left->treated_stride_bytes : 0,
+        right != NULL ? right->treated_pixels : NULL,
+        right != NULL ? &right->treated_size : NULL,
+        right != NULL ? right->treated_stride_bytes : 0
+    );
+}
+
+static int plasma_smoke_signatures_meaningfully_different(
+    const plasma_smoke_render_signature *left,
+    const plasma_smoke_render_signature *right,
+    int compare_presented,
+    unsigned int minimum_pixel_difference
+)
+{
+    unsigned long left_hash;
+    unsigned long right_hash;
+
+    if (left == NULL || right == NULL) {
+        return 0;
+    }
+
+    left_hash = compare_presented ? left->presented_hash : left->treated_hash;
+    right_hash = compare_presented ? right->presented_hash : right->treated_hash;
+    if (left_hash == 0UL || right_hash == 0UL || left_hash == right_hash) {
+        return 0;
+    }
+
+    return plasma_smoke_render_difference_count(left, right, compare_presented) >= minimum_pixel_difference;
+}
+
+static int plasma_smoke_capture_render_signature(
+    const screensave_saver_module *module,
+    const screensave_common_config *common_config,
+    const plasma_config *product_config,
+    screensave_renderer_kind requested_kind,
+    screensave_renderer_kind active_kind,
+    unsigned long delta_millis,
+    plasma_smoke_render_signature *signature_out
+)
+{
+    screensave_common_config safe_common_config;
+    plasma_config safe_product_config;
+    screensave_config_binding binding;
+    screensave_saver_environment environment;
+    screensave_renderer renderer;
+    screensave_sizei drawable_size;
+    screensave_saver_session *session;
+    plasma_output_frame output_frame;
+    plasma_treated_frame treated_frame;
+    plasma_presentation_target presentation_target;
+    size_t byte_count;
+    int result;
+
+    if (
+        module == NULL ||
+        common_config == NULL ||
+        product_config == NULL ||
+        signature_out == NULL
+    ) {
+        return 0;
+    }
+
+    plasma_smoke_render_signature_release(signature_out);
+    plasma_smoke_render_signature_init(signature_out);
+
+    safe_common_config = *common_config;
+    safe_product_config = *product_config;
+    screensave_config_binding_init(
+        &binding,
+        &safe_common_config,
+        &safe_product_config,
+        sizeof(safe_product_config)
+    );
+
+    ZeroMemory(&environment, sizeof(environment));
+    drawable_size.width = 320;
+    drawable_size.height = 240;
+    plasma_smoke_init_fake_renderer(&renderer, requested_kind, active_kind, &drawable_size);
+    environment.mode = SCREENSAVE_SESSION_MODE_WINDOWED;
+    environment.drawable_size = drawable_size;
+    environment.seed.base_seed = 0x2468ACE0UL;
+    environment.seed.stream_seed = 0x13579BDFUL;
+    environment.seed.deterministic = safe_common_config.use_deterministic_seed;
+    environment.config_binding = &binding;
+    environment.renderer = &renderer;
+
+    session = NULL;
+    if (!plasma_create_session(module, &session, &environment) || session == NULL) {
+        return 0;
+    }
+
+    result = 0;
+    plasma_smoke_step_session_delta(session, &environment, delta_millis);
+    if (
+        !plasma_output_build(&session->plan, &session->state, &output_frame) ||
+        !plasma_treatment_apply(
+            &session->plan,
+            &session->state,
+            &output_frame,
+            &session->state.visual_buffer,
+            &treated_frame
+        ) ||
+        !plasma_presentation_prepare(
+            &session->plan,
+            &session->state,
+            &treated_frame,
+            &presentation_target
+        ) ||
+        session->state.visual_buffer.pixels == NULL ||
+        presentation_target.bitmap_view.pixels == NULL
+    ) {
+        plasma_destroy_session(session);
+        plasma_smoke_render_signature_release(signature_out);
+        return 0;
+    }
+
+    byte_count = (size_t)session->state.visual_buffer.stride_bytes *
+        (size_t)session->state.visual_buffer.size.height;
+    signature_out->treated_hash = plasma_smoke_hash_bytes(
+        session->state.visual_buffer.pixels,
+        byte_count
+    );
+    signature_out->treated_lit_pixels = plasma_smoke_count_non_black_pixels(
+        &session->state.visual_buffer
+    );
+    if (
+        !plasma_smoke_copy_pixel_bytes(
+            &signature_out->treated_pixels,
+            &signature_out->treated_size,
+            &signature_out->treated_stride_bytes,
+            session->state.visual_buffer.pixels,
+            &session->state.visual_buffer.size,
+            session->state.visual_buffer.stride_bytes
+        )
+    ) {
+        plasma_destroy_session(session);
+        plasma_smoke_render_signature_release(signature_out);
+        return 0;
+    }
+
+    byte_count = (size_t)presentation_target.bitmap_view.stride_bytes *
+        (size_t)presentation_target.bitmap_view.size.height;
+    signature_out->presented_hash = plasma_smoke_hash_bytes(
+        (const unsigned char *)presentation_target.bitmap_view.pixels,
+        byte_count
+    );
+    signature_out->presented_lit_pixels = plasma_smoke_count_non_black_bitmap(
+        &presentation_target.bitmap_view
+    );
+    if (
+        !plasma_smoke_copy_pixel_bytes(
+            &signature_out->presented_pixels,
+            &signature_out->presented_size,
+            &signature_out->presented_stride_bytes,
+            presentation_target.bitmap_view.pixels,
+            &presentation_target.bitmap_view.size,
+            presentation_target.bitmap_view.stride_bytes
+        )
+    ) {
+        plasma_destroy_session(session);
+        plasma_smoke_render_signature_release(signature_out);
+        return 0;
+    }
+
+    result = 1;
+    plasma_destroy_session(session);
+    return result;
+}
+
 int main(void)
 {
     static const char *const g_required_preset_keys[] = {
@@ -615,6 +1000,8 @@ int main(void)
     plasma_benchlab_snapshot benchlab_snapshot;
     screensave_saver_config_state benchlab_config_state;
     plasma_smoke_capture settings_capture;
+    plasma_smoke_render_signature baseline_render_signature;
+    plasma_smoke_render_signature variant_render_signature;
     screensave_settings_writer settings_writer;
     screensave_session_seed random_seed;
     screensave_renderer fake_renderer;
@@ -4794,6 +5181,335 @@ int main(void)
     ) {
         return 252;
     }
+
+    plasma_smoke_render_signature_init(&baseline_render_signature);
+    plasma_smoke_render_signature_init(&variant_render_signature);
+
+    plasma_config_set_defaults(&common_config, &product_config, sizeof(product_config));
+    common_config.use_deterministic_seed = 1;
+    common_config.deterministic_seed = 0x2468ACE0UL;
+    common_config.preset_key = "plasma_lava";
+    common_config.theme_key = "plasma_lava";
+    common_config.detail_level = SCREENSAVE_DETAIL_LEVEL_STANDARD;
+    product_config.effect_mode = PLASMA_EFFECT_PLASMA;
+    product_config.speed_mode = PLASMA_SPEED_GENTLE;
+    product_config.resolution_mode = PLASMA_RESOLUTION_STANDARD;
+    product_config.smoothing_mode = PLASMA_SMOOTHING_SOFT;
+    product_config.output_family = PLASMA_OUTPUT_FAMILY_RASTER;
+    product_config.output_mode = PLASMA_OUTPUT_MODE_NATIVE_RASTER;
+    product_config.sampling_treatment = PLASMA_SAMPLING_TREATMENT_NONE;
+    product_config.filter_treatment = PLASMA_FILTER_TREATMENT_NONE;
+    product_config.emulation_treatment = PLASMA_EMULATION_TREATMENT_NONE;
+    product_config.accent_treatment = PLASMA_ACCENT_TREATMENT_NONE;
+    product_config.presentation_mode = PLASMA_PRESENTATION_MODE_FLAT;
+
+    if (
+        !plasma_smoke_capture_render_signature(
+            module,
+            &common_config,
+            &product_config,
+            SCREENSAVE_RENDERER_KIND_GDI,
+            SCREENSAVE_RENDERER_KIND_GDI,
+            250UL,
+            &baseline_render_signature
+        ) ||
+        baseline_render_signature.treated_hash == 0UL ||
+        baseline_render_signature.presented_hash == 0UL ||
+        baseline_render_signature.treated_lit_pixels == 0U ||
+        baseline_render_signature.presented_lit_pixels == 0U
+    ) {
+        plasma_smoke_render_signature_release(&baseline_render_signature);
+        plasma_smoke_render_signature_release(&variant_render_signature);
+        return 441;
+    }
+
+    product_config.effect_mode = PLASMA_EFFECT_INTERFERENCE;
+    if (
+        !plasma_smoke_capture_render_signature(
+            module,
+            &common_config,
+            &product_config,
+            SCREENSAVE_RENDERER_KIND_GDI,
+            SCREENSAVE_RENDERER_KIND_GDI,
+            250UL,
+            &variant_render_signature
+        ) ||
+        !plasma_smoke_signatures_meaningfully_different(
+            &baseline_render_signature,
+            &variant_render_signature,
+            0,
+            128U
+        )
+    ) {
+        plasma_smoke_render_signature_release(&baseline_render_signature);
+        plasma_smoke_render_signature_release(&variant_render_signature);
+        return 442;
+    }
+    plasma_smoke_render_signature_release(&variant_render_signature);
+
+    product_config.effect_mode = PLASMA_EFFECT_PLASMA;
+    common_config.detail_level = SCREENSAVE_DETAIL_LEVEL_HIGH;
+    if (
+        !plasma_smoke_capture_render_signature(
+            module,
+            &common_config,
+            &product_config,
+            SCREENSAVE_RENDERER_KIND_GDI,
+            SCREENSAVE_RENDERER_KIND_GDI,
+            250UL,
+            &variant_render_signature
+        ) ||
+        !plasma_smoke_signatures_meaningfully_different(
+            &baseline_render_signature,
+            &variant_render_signature,
+            0,
+            64U
+        )
+    ) {
+        plasma_smoke_render_signature_release(&baseline_render_signature);
+        plasma_smoke_render_signature_release(&variant_render_signature);
+        return 443;
+    }
+    plasma_smoke_render_signature_release(&variant_render_signature);
+
+    common_config.detail_level = SCREENSAVE_DETAIL_LEVEL_STANDARD;
+    product_config.speed_mode = PLASMA_SPEED_LIVELY;
+    if (
+        !plasma_smoke_capture_render_signature(
+            module,
+            &common_config,
+            &product_config,
+            SCREENSAVE_RENDERER_KIND_GDI,
+            SCREENSAVE_RENDERER_KIND_GDI,
+            250UL,
+            &variant_render_signature
+        ) ||
+        !plasma_smoke_signatures_meaningfully_different(
+            &baseline_render_signature,
+            &variant_render_signature,
+            0,
+            64U
+        )
+    ) {
+        plasma_smoke_render_signature_release(&baseline_render_signature);
+        plasma_smoke_render_signature_release(&variant_render_signature);
+        return 444;
+    }
+    plasma_smoke_render_signature_release(&variant_render_signature);
+
+    product_config.speed_mode = PLASMA_SPEED_GENTLE;
+    product_config.resolution_mode = PLASMA_RESOLUTION_FINE;
+    if (
+        !plasma_smoke_capture_render_signature(
+            module,
+            &common_config,
+            &product_config,
+            SCREENSAVE_RENDERER_KIND_GDI,
+            SCREENSAVE_RENDERER_KIND_GDI,
+            250UL,
+            &variant_render_signature
+        ) ||
+        !plasma_smoke_signatures_meaningfully_different(
+            &baseline_render_signature,
+            &variant_render_signature,
+            0,
+            128U
+        )
+    ) {
+        plasma_smoke_render_signature_release(&baseline_render_signature);
+        plasma_smoke_render_signature_release(&variant_render_signature);
+        return 445;
+    }
+    plasma_smoke_render_signature_release(&variant_render_signature);
+
+    product_config.resolution_mode = PLASMA_RESOLUTION_STANDARD;
+    product_config.smoothing_mode = PLASMA_SMOOTHING_GLOW;
+    if (
+        !plasma_smoke_capture_render_signature(
+            module,
+            &common_config,
+            &product_config,
+            SCREENSAVE_RENDERER_KIND_GDI,
+            SCREENSAVE_RENDERER_KIND_GDI,
+            250UL,
+            &variant_render_signature
+        ) ||
+        !plasma_smoke_signatures_meaningfully_different(
+            &baseline_render_signature,
+            &variant_render_signature,
+            0,
+            64U
+        )
+    ) {
+        plasma_smoke_render_signature_release(&baseline_render_signature);
+        plasma_smoke_render_signature_release(&variant_render_signature);
+        return 446;
+    }
+    plasma_smoke_render_signature_release(&variant_render_signature);
+
+    product_config.smoothing_mode = PLASMA_SMOOTHING_SOFT;
+    product_config.output_family = PLASMA_OUTPUT_FAMILY_CONTOUR;
+    product_config.output_mode = PLASMA_OUTPUT_MODE_CONTOUR_BANDS;
+    if (
+        !plasma_smoke_capture_render_signature(
+            module,
+            &common_config,
+            &product_config,
+            SCREENSAVE_RENDERER_KIND_GDI,
+            SCREENSAVE_RENDERER_KIND_GDI,
+            250UL,
+            &variant_render_signature
+        ) ||
+        !plasma_smoke_signatures_meaningfully_different(
+            &baseline_render_signature,
+            &variant_render_signature,
+            0,
+            128U
+        )
+    ) {
+        plasma_smoke_render_signature_release(&baseline_render_signature);
+        plasma_smoke_render_signature_release(&variant_render_signature);
+        return 447;
+    }
+    plasma_smoke_render_signature_release(&variant_render_signature);
+
+    product_config.output_family = PLASMA_OUTPUT_FAMILY_RASTER;
+    product_config.output_mode = PLASMA_OUTPUT_MODE_NATIVE_RASTER;
+    product_config.filter_treatment = PLASMA_FILTER_TREATMENT_GLOW_EDGE;
+    if (
+        !plasma_smoke_capture_render_signature(
+            module,
+            &common_config,
+            &product_config,
+            SCREENSAVE_RENDERER_KIND_GDI,
+            SCREENSAVE_RENDERER_KIND_GDI,
+            250UL,
+            &variant_render_signature
+        ) ||
+        !plasma_smoke_signatures_meaningfully_different(
+            &baseline_render_signature,
+            &variant_render_signature,
+            0,
+            128U
+        )
+    ) {
+        plasma_smoke_render_signature_release(&baseline_render_signature);
+        plasma_smoke_render_signature_release(&variant_render_signature);
+        return 448;
+    }
+    plasma_smoke_render_signature_release(&variant_render_signature);
+
+    product_config.filter_treatment = PLASMA_FILTER_TREATMENT_NONE;
+    product_config.emulation_treatment = PLASMA_EMULATION_TREATMENT_PHOSPHOR;
+    if (
+        !plasma_smoke_capture_render_signature(
+            module,
+            &common_config,
+            &product_config,
+            SCREENSAVE_RENDERER_KIND_GDI,
+            SCREENSAVE_RENDERER_KIND_GDI,
+            250UL,
+            &variant_render_signature
+        ) ||
+        !plasma_smoke_signatures_meaningfully_different(
+            &baseline_render_signature,
+            &variant_render_signature,
+            0,
+            128U
+        )
+    ) {
+        plasma_smoke_render_signature_release(&baseline_render_signature);
+        plasma_smoke_render_signature_release(&variant_render_signature);
+        return 449;
+    }
+    plasma_smoke_render_signature_release(&variant_render_signature);
+
+    product_config.emulation_treatment = PLASMA_EMULATION_TREATMENT_NONE;
+    product_config.accent_treatment = PLASMA_ACCENT_TREATMENT_ACCENT_PASS;
+    if (
+        !plasma_smoke_capture_render_signature(
+            module,
+            &common_config,
+            &product_config,
+            SCREENSAVE_RENDERER_KIND_GDI,
+            SCREENSAVE_RENDERER_KIND_GDI,
+            250UL,
+            &variant_render_signature
+        ) ||
+        !plasma_smoke_signatures_meaningfully_different(
+            &baseline_render_signature,
+            &variant_render_signature,
+            0,
+            64U
+        )
+    ) {
+        plasma_smoke_render_signature_release(&baseline_render_signature);
+        plasma_smoke_render_signature_release(&variant_render_signature);
+        return 450;
+    }
+    plasma_smoke_render_signature_release(&variant_render_signature);
+    plasma_smoke_render_signature_release(&baseline_render_signature);
+
+    plasma_smoke_render_signature_init(&baseline_render_signature);
+    plasma_smoke_render_signature_init(&variant_render_signature);
+    plasma_config_set_defaults(&common_config, &product_config, sizeof(product_config));
+    common_config.use_deterministic_seed = 1;
+    common_config.deterministic_seed = 0x11223344UL;
+    common_config.preset_key = "aurora_curtain";
+    common_config.theme_key = "aurora_cool";
+    common_config.detail_level = SCREENSAVE_DETAIL_LEVEL_HIGH;
+    product_config.effect_mode = PLASMA_EFFECT_AURORA;
+    product_config.speed_mode = PLASMA_SPEED_STANDARD;
+    product_config.resolution_mode = PLASMA_RESOLUTION_FINE;
+    product_config.smoothing_mode = PLASMA_SMOOTHING_OFF;
+    product_config.output_family = PLASMA_OUTPUT_FAMILY_BANDED;
+    product_config.output_mode = PLASMA_OUTPUT_MODE_POSTERIZED_BANDS;
+    product_config.sampling_treatment = PLASMA_SAMPLING_TREATMENT_NONE;
+    product_config.filter_treatment = PLASMA_FILTER_TREATMENT_NONE;
+    product_config.emulation_treatment = PLASMA_EMULATION_TREATMENT_NONE;
+    product_config.accent_treatment = PLASMA_ACCENT_TREATMENT_NONE;
+    product_config.presentation_mode = PLASMA_PRESENTATION_MODE_FLAT;
+
+    if (
+        !plasma_smoke_capture_render_signature(
+            module,
+            &common_config,
+            &product_config,
+            SCREENSAVE_RENDERER_KIND_GL46,
+            SCREENSAVE_RENDERER_KIND_GL46,
+            250UL,
+            &baseline_render_signature
+        )
+    ) {
+        plasma_smoke_render_signature_release(&baseline_render_signature);
+        plasma_smoke_render_signature_release(&variant_render_signature);
+        return 451;
+    }
+
+    product_config.presentation_mode = PLASMA_PRESENTATION_MODE_RIBBON;
+    if (
+        !plasma_smoke_capture_render_signature(
+            module,
+            &common_config,
+            &product_config,
+            SCREENSAVE_RENDERER_KIND_GL46,
+            SCREENSAVE_RENDERER_KIND_GL46,
+            250UL,
+            &variant_render_signature
+        ) ||
+        !plasma_smoke_signatures_meaningfully_different(
+            &baseline_render_signature,
+            &variant_render_signature,
+            1,
+            128U
+        )
+    ) {
+        plasma_smoke_render_signature_release(&baseline_render_signature);
+        plasma_smoke_render_signature_release(&variant_render_signature);
+        return 452;
+    }
+    plasma_smoke_render_signature_release(&baseline_render_signature);
+    plasma_smoke_render_signature_release(&variant_render_signature);
 
     plasma_config_set_defaults(&common_config, &product_config, sizeof(product_config));
     screensave_config_binding_init(&binding, &common_config, &product_config, sizeof(product_config));

@@ -13,6 +13,10 @@ U03 adds a smaller but important UI-truth guardrail by asserting the intended se
 
 U04 through U06 extend the smoke surface so the retuned stable presets, the rewired experimental preset truth, and the updated BenchLab output and treatment reporting all stay aligned with the actual shipped visual grammar.
 
+U07 adds deterministic render-signature and pixel-difference checks so generator, detail, speed, resolution, smoothing, output family, treatment slots, and premium presentation changes are all proven to move the rendered result. It also adds the `plasma_lab.py preset-audit` report for compiled preset-signature and palette crowding.
+
+U08 records the visual QA bar that now governs whether a surface remains stable, stays experimental, or should be hidden.
+
 PX20 adds a bounded authored-substrate and Lab-shell proof surface through `plasma_lab.py`, authored file validation, weighted-selection smoke assertions, and explicit proof notes for content validation, authoring substrate, the Lab shell, and the current selection-foundation boundary.
 
 PX30 adds bounded contour and banded output assertions, a bounded experimental preset pool, explicit treatment-subset assertions, and BenchLab text-surface assertions for experimental output and treatment truth.

@@ -55,6 +55,8 @@ They live with the product so later `PL` work can extend them without rewriting 
 - [U04 Output, Treatment, And Presentation Truth](./u04-output-treatment-presentation-truth.md): records the surviving visual grammar surfaces and the stronger treatment and output separation
 - [U05 Destructive Simplification](./u05-destructive-simplification.md): records the keep, hide, retune, and non-claim decisions made during the salvage pass
 - [U06 Preset And Theme Tuning Notes](./u06-preset-theme-tuning-notes.md): records the first aggressive retune of built-in presets and palettes
+- [U07 Proof Harness](./u07-proof-harness.md): records the deterministic influence checks, preset-signature audit, and current dead-setting detection boundary
+- [U08 Visual QA Bar](./u08-visual-qa-bar.md): records the salvage-phase acceptance bar for stable and experimental surfaces
 
 ## PL00-PL14 Program Record
 

@@ -69,9 +69,10 @@ SETTINGS_HANDOFF_VALUES = {"not_applicable", "product_owned_dialog"}
 PREVIEW_VISIBILITY_VALUES = {"not_applicable", "stable_only", "explicit_opt_in"}
 
 C_ARRAY_RE = re.compile(
-    r"static const (?P<type_name>[a-zA-Z0-9_]+) (?P<array_name>[a-zA-Z0-9_]+)\[\] = \{(?P<body>.*?)\n\};",
+    r"(?:static\s+)?const (?P<type_name>[a-zA-Z0-9_]+) (?P<array_name>[a-zA-Z0-9_]+)\[\] = \{(?P<body>.*?)\n\};",
     re.S,
 )
+PRESET_DESCRIPTOR_KEY_RE = re.compile(r'\{\s*"(?P<key>[a-z0-9_]+)",', re.S)
 PRESET_ENTRY_RE = re.compile(
     r"""
     \{
@@ -106,6 +107,32 @@ ALIAS_RE = re.compile(
     r'lstrcmpiA\(key,\s*"(?P<alias>[a-z0-9_]+)"\)\s*==\s*0\)\s*\{\s*return\s*"(?P<canonical>[a-z0-9_]+)";',
     re.S,
 )
+THEME_DESCRIPTOR_RE = re.compile(
+    r"""
+    \{
+        \s*"(?P<key>[a-z0-9_]+)",
+        \s*"[^"]+",
+        \s*"[^"]+",
+        \s*\{\s*(?P<primary_red>\d+),\s*(?P<primary_green>\d+),\s*(?P<primary_blue>\d+),\s*\d+\s*\},
+        \s*\{\s*(?P<accent_red>\d+),\s*(?P<accent_green>\d+),\s*(?P<accent_blue>\d+),\s*\d+\s*\}
+        \s*\}
+    """,
+    re.S | re.X,
+)
+
+PRESET_VALUE_FIELDS = [
+    "effect_mode",
+    "speed_mode",
+    "resolution_mode",
+    "smoothing_mode",
+    "output_family",
+    "output_mode",
+    "sampling_treatment",
+    "filter_treatment",
+    "emulation_treatment",
+    "accent_treatment",
+    "presentation_mode",
+]
 
 CAPTURE_METADATA_KEYS = [
     "requested renderer",
@@ -215,6 +242,17 @@ def build_parser() -> argparse.ArgumentParser:
     )
     capture_diff_parser.add_argument("--left", required=True)
     capture_diff_parser.add_argument("--right", required=True)
+
+    preset_audit_parser = subparsers.add_parser(
+        "preset-audit",
+        help="Audit compiled preset signatures, near-duplicates, and theme separation",
+    )
+    preset_audit_parser.add_argument(
+        "--threshold",
+        type=int,
+        default=2,
+        help="Report preset pairs whose signature distance is at or below this threshold",
+    )
 
     return parser
 
@@ -701,6 +739,34 @@ def extract_c_array_body(path: Path, array_name: str) -> str:
     raise ValueError(f"{path}: could not find {array_name}")
 
 
+def extract_struct_entries(body: str) -> List[str]:
+    entries: List[str] = []
+    depth = 0
+    entry_start = -1
+
+    for index, char in enumerate(body):
+        if char == "{":
+            if depth == 0:
+                entry_start = index + 1
+            depth += 1
+        elif char == "}":
+            depth -= 1
+            if depth == 0 and entry_start >= 0:
+                entries.append(body[entry_start:index])
+                entry_start = -1
+
+    return entries
+
+
+def parse_struct_tokens(entry_text: str) -> List[str]:
+    tokens: List[str] = []
+    for line in entry_text.splitlines():
+        stripped = line.strip().rstrip(",")
+        if stripped:
+            tokens.append(stripped)
+    return tokens
+
+
 def load_alias_map() -> Dict[str, str]:
     source = (PLASMA_ROOT / "src" / "plasma_presets.c").read_text(encoding="utf-8")
     aliases: Dict[str, str] = {}
@@ -748,6 +814,94 @@ def load_compiled_catalog() -> Dict[str, Dict[str, Dict[str, object]]]:
         "themes": themes,
         "aliases": load_alias_map(),
     }
+
+
+def load_compiled_preset_signatures() -> Dict[str, Dict[str, object]]:
+    preset_path = PLASMA_ROOT / "src" / "plasma_presets.c"
+    descriptor_body = extract_c_array_body(preset_path, "g_plasma_presets")
+    values_body = extract_c_array_body(preset_path, "g_plasma_preset_values")
+    catalog = load_compiled_catalog()["presets"]
+
+    keys = [match.group("key") for match in PRESET_DESCRIPTOR_KEY_RE.finditer(descriptor_body)]
+    entries = extract_struct_entries(values_body)
+    if len(keys) != len(entries):
+        raise ValueError("compiled preset descriptor and value counts do not match")
+
+    signatures: Dict[str, Dict[str, object]] = {}
+    for key, entry_text in zip(keys, entries):
+        tokens = parse_struct_tokens(entry_text)
+        if len(tokens) != len(PRESET_VALUE_FIELDS):
+            raise ValueError(f"unexpected preset signature width for {key}")
+        signatures[key] = {
+            "key": key,
+            "channel": catalog[key]["channel"],
+            "values": tokens,
+        }
+    return signatures
+
+
+def load_compiled_theme_palettes() -> Dict[str, Dict[str, object]]:
+    theme_path = PLASMA_ROOT / "src" / "plasma_themes.c"
+    theme_body = extract_c_array_body(theme_path, "g_plasma_themes")
+    palettes: Dict[str, Dict[str, object]] = {}
+
+    for match in THEME_DESCRIPTOR_RE.finditer(theme_body):
+        palettes[match.group("key")] = {
+            "key": match.group("key"),
+            "primary": (
+                int(match.group("primary_red")),
+                int(match.group("primary_green")),
+                int(match.group("primary_blue")),
+            ),
+            "accent": (
+                int(match.group("accent_red")),
+                int(match.group("accent_green")),
+                int(match.group("accent_blue")),
+            ),
+        }
+
+    if not palettes:
+        raise ValueError("could not parse compiled theme palettes")
+    return palettes
+
+
+def preset_signature_distance(left: Sequence[str], right: Sequence[str]) -> int:
+    return sum(1 for left_value, right_value in zip(left, right) if left_value != right_value)
+
+
+def theme_palette_distance(
+    left: Dict[str, object],
+    right: Dict[str, object],
+) -> int:
+    left_primary = left["primary"]
+    right_primary = right["primary"]
+    left_accent = left["accent"]
+    right_accent = right["accent"]
+    return (
+        sum(abs(left_primary[index] - right_primary[index]) for index in range(3)) +
+        sum(abs(left_accent[index] - right_accent[index]) for index in range(3))
+    )
+
+
+def render_signature_summary(values: Sequence[str]) -> str:
+    field_map = dict(zip(PRESET_VALUE_FIELDS, values))
+    return (
+        f"{field_map['effect_mode']} / "
+        f"{field_map['output_family']}:{field_map['output_mode']} / "
+        f"{field_map['filter_treatment']} / "
+        f"{field_map['emulation_treatment']} / "
+        f"{field_map['accent_treatment']} / "
+        f"{field_map['presentation_mode']}"
+    )
+
+
+def render_signature_deltas(left: Sequence[str], right: Sequence[str]) -> str:
+    deltas = [
+        f"{field}={left_value}->{right_value}"
+        for field, left_value, right_value in zip(PRESET_VALUE_FIELDS, left, right)
+        if left_value != right_value
+    ]
+    return ", ".join(deltas) if deltas else "none"
 
 
 def load_authored_repo_surface() -> Dict[str, Dict[str, Dict[str, object]]]:
@@ -1737,6 +1891,116 @@ def capture_diff(left_path_text: str, right_path_text: str) -> int:
     return 0
 
 
+def preset_audit(threshold: int) -> int:
+    signatures = load_compiled_preset_signatures()
+    palettes = load_compiled_theme_palettes()
+    keys = sorted(signatures)
+    exact_duplicates: List[Tuple[str, str]] = []
+    near_duplicates: List[Tuple[int, str, str]] = []
+    stable_pairs: List[Tuple[int, str, str]] = []
+
+    for index, left_key in enumerate(keys):
+        for right_key in keys[index + 1:]:
+            distance = preset_signature_distance(
+                signatures[left_key]["values"],
+                signatures[right_key]["values"],
+            )
+            if distance == 0:
+                exact_duplicates.append((left_key, right_key))
+            if distance <= threshold:
+                near_duplicates.append((distance, left_key, right_key))
+            if (
+                signatures[left_key]["channel"] == "stable" and
+                signatures[right_key]["channel"] == "stable"
+            ):
+                stable_pairs.append((distance, left_key, right_key))
+
+    stable_pairs.sort()
+    near_duplicates.sort()
+
+    stable_filter_coverage = Counter(
+        signatures[key]["values"][PRESET_VALUE_FIELDS.index("filter_treatment")]
+        for key in keys
+        if signatures[key]["channel"] == "stable"
+    )
+    stable_emulation_coverage = Counter(
+        signatures[key]["values"][PRESET_VALUE_FIELDS.index("emulation_treatment")]
+        for key in keys
+        if signatures[key]["channel"] == "stable"
+    )
+    stable_accent_coverage = Counter(
+        signatures[key]["values"][PRESET_VALUE_FIELDS.index("accent_treatment")]
+        for key in keys
+        if signatures[key]["channel"] == "stable"
+    )
+
+    theme_pairs: List[Tuple[int, str, str]] = []
+    theme_keys = sorted(palettes)
+    for index, left_key in enumerate(theme_keys):
+        for right_key in theme_keys[index + 1:]:
+            theme_pairs.append((
+                theme_palette_distance(palettes[left_key], palettes[right_key]),
+                left_key,
+                right_key,
+            ))
+    theme_pairs.sort()
+
+    print("PX40 Plasma Lab preset audit")
+    print(f"- compiled presets audited: {len(keys)}")
+    if exact_duplicates:
+        print("- exact duplicate signatures:")
+        for left_key, right_key in exact_duplicates:
+            print(f"  {left_key} == {right_key}")
+    else:
+        print("- exact duplicate signatures: none")
+
+    if stable_pairs:
+        min_distance, left_key, right_key = stable_pairs[0]
+        print(
+            f"- closest stable pair: {left_key} <-> {right_key} "
+            f"(distance={min_distance}; {render_signature_deltas(signatures[left_key]['values'], signatures[right_key]['values'])})"
+        )
+    else:
+        print("- closest stable pair: none")
+
+    if near_duplicates:
+        print(f"- near-duplicate pairs at threshold <= {threshold}:")
+        for distance, left_key, right_key in near_duplicates:
+            print(
+                f"  {left_key} <-> {right_key}: distance={distance} "
+                f"({render_signature_deltas(signatures[left_key]['values'], signatures[right_key]['values'])})"
+            )
+    else:
+        print(f"- near-duplicate pairs at threshold <= {threshold}: none")
+
+    print(
+        "- stable treatment coverage: "
+        f"filter={dict(sorted(stable_filter_coverage.items()))} "
+        f"emulation={dict(sorted(stable_emulation_coverage.items()))} "
+        f"accent={dict(sorted(stable_accent_coverage.items()))}"
+    )
+    print("- example stable signatures:")
+    for key in keys:
+        if signatures[key]["channel"] != "stable":
+            continue
+        print(f"  {key}: {render_signature_summary(signatures[key]['values'])}")
+
+    if theme_pairs:
+        distance, left_key, right_key = theme_pairs[0]
+        print(f"- closest theme palette pair: {left_key} <-> {right_key} (distance={distance})")
+    else:
+        print("- closest theme palette pair: none")
+
+    print("- theme palette nearest pairs:")
+    for distance, left_key, right_key in theme_pairs[:5]:
+        print(f"  {left_key} <-> {right_key}: distance={distance}")
+
+    print(
+        "- audit posture: deterministic signature-distance only; this report does not replace the smoke-backed pixel-difference checks"
+    )
+    return 0 if not exact_duplicates else 1
+
+
 def main(argv: Sequence[str]) -> int:
     args = build_parser().parse_args(argv)
     if args.command == "validate":
@@ -1759,6 +2023,8 @@ def main(argv: Sequence[str]) -> int:
         if args.pack:
             return degrade_report_for_pack(args.pack)
         return degrade_report_for_capture(args.capture)
+    if args.command == "preset-audit":
+        return preset_audit(args.threshold)
     return capture_diff(args.left, args.right)
 
 
