@@ -1,72 +1,103 @@
 # Plasma U00 Settings Influence Matrix
 
-## Scope
+## Purpose
 
-This matrix records whether each current shipped setting materially affects:
+This matrix records what the current settings surface actually controls in the
+current repository snapshot.
 
-- selection state
-- resolved runtime plan
-- rendered output
-- reporting only
+It is not a wishlist.
+It is the blunt map later corrective work must use when deciding what to keep,
+hide, demote, or remove.
 
-It describes the repo state before the salvage rewrite.
+## Current Settings Truth
 
-## Current Matrix
+In the current snapshot, most surfaced grammar controls are no longer
+preset-hidden.
+That is real progress.
 
-| Surface Control | Selection | Plan | Output | Notes |
-| --- | --- | --- | --- | --- |
-| `preset_key` | Yes | Yes | Yes | Also silently selects output family, output mode, treatments, and presentation through `plasma_find_preset_values()` |
-| `theme_key` | Yes | Yes | Yes | Palette and accent only |
-| `speed_mode` | No | Yes | Yes | Real motion change |
-| `detail_level` | No | Yes | Yes | Field size and long-run density change |
-| `effect_mode` | No | Yes | Yes | Real generator change |
-| `resolution_mode` | No | Yes | Yes | Real field-size change |
-| `smoothing_mode` | No | Yes | Yes | Real field blur amount change |
-| `content_filter` | Yes | Sometimes | Indirect | Affects selection pool, not the currently selected preset if it already remains valid |
-| `favorites_only` | Yes | Sometimes | Indirect | Same caveat as content filter |
-| `preset_set_key` | Yes | Yes | Indirect | Matters only for set-driven selection and transitions |
-| `theme_set_key` | Yes | Yes | Indirect | Matters only for set-driven selection and transitions |
-| `transitions_enabled` | No | Yes | Yes | Long-run behavior only |
-| `transition_policy` | No | Yes | Yes | Long-run behavior only |
-| `journey_key` | No | Yes | Yes | Long-run behavior only |
-| `transition_fallback_policy` | No | Yes | Yes | Long-run unsupported-pair behavior only |
-| `transition_seed_policy` | No | Yes | Yes | Transition continuity only |
-| `transition_interval_millis` | No | Yes | Yes | Long-run cadence only |
-| `transition_duration_millis` | No | Yes | Yes | Transition timing only |
-| `use_deterministic_seed` | No | Yes | Yes | Real reproducibility change |
-| `deterministic_seed` | No | Yes | Yes | Real reproducibility change when deterministic mode is enabled |
-| `diagnostics_overlay_enabled` | No | No | No | Reporting/UI only |
-| `settings_surface` | No | No | No | UI only |
+The remaining settings problems are narrower and more specific:
 
-## Hidden Visual-Grammar Authority
+- some controls are only indirectly visual or only visible over long runs
+- some controls are conditionally available and effectively dead outside their
+  enabling context
+- some unsupported breadth still survives in config or enum vocabulary even
+  though it is not a truthful surfaced setting
+- some authoring and curation controls are still present in the product dialog
+  even though they are not normal day-to-day settings
 
-The following resolved plan fields are currently not settings-owned:
+## Influence Matrix
 
-- `output_family`
-- `output_mode`
-- `sampling_treatment`
-- `filter_treatment`
-- `emulation_treatment`
-- `accent_treatment`
-- `presentation_mode`
+| Setting Or Family | Affects Plan | Affects Rendered Output | Visually Meaningful | Preset-Authority-Dominated | Exposed In UI | Later Action | Rationale |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| `preset_key` | Yes | Yes | Yes | Partial | Yes | Keep | Preset identity is still a real product control, but it is now a curated bundle and content identity rather than the hidden final grammar owner. |
+| `theme_key` | Yes | Yes | Yes | No | Yes | Keep | Theme still materially changes palette and room mood. |
+| `speed_mode` | Yes | Yes | Yes | No | Yes | Keep | Real motion pacing change. |
+| `detail_level` | Yes | Yes | Yes | No | Yes | Keep | Real density and intensity change. |
+| `effect_mode` | Yes | Yes | Yes | No | Yes | Keep | Real generator-family control. |
+| `resolution_mode` | Yes | Yes | Yes | No | Yes | Keep | Real field-density change. |
+| `smoothing_mode` | Yes | Yes | Yes | No | Yes | Keep | Real smoothing treatment choice. |
+| `output_family` | Yes | Yes | Yes | No | Yes | Keep | Real grammar owner now; no longer a preset-hidden sidecar. |
+| `output_mode` | Yes | Yes | Yes | No | Yes | Keep | Real mode selection inside the active output family. |
+| `filter_treatment` | Yes | Yes | Yes | No | Yes | Keep | Real surfaced treatment slot. |
+| `emulation_treatment` | Yes | Yes | Yes | No | Yes | Keep | Real surfaced display-emulation slot. |
+| `accent_treatment` | Yes | Yes | Yes | No | Yes | Keep | Real surfaced accent slot, though some choices remain more bounded than others. |
+| `presentation_mode` | Yes | Yes | Yes | No | Yes | Keep | Real presentation owner now, but some modes remain experimentally bounded and lane-sensitive. |
+| `content_filter` | Indirect | Indirect | Conditional | No | Yes | Keep | Truthful stable versus experimental pool control, but it changes selection posture rather than every currently active frame. |
+| `transitions_enabled` | Yes | Conditional | Conditional | No | Yes | Keep | Real long-run behavior switch when a valid transition surface exists; not a direct one-frame look control. |
+| `transition_policy` | Yes | Conditional | Conditional | No | Yes | Demote to lab-only | Truthful but authoring-grade; visible effect only over time and only when transitions are enabled. |
+| `journey_key` | Yes | Conditional | Conditional | No | Yes | Demote to lab-only | Real only when transitions are enabled and journey routing is active. |
+| `transition_fallback_policy` | Yes | Conditional | Conditional | No | Yes | Demote to lab-only | A real support control, not a normal end-user visual control. |
+| `transition_seed_policy` | Yes | Conditional | Conditional | No | Yes | Demote to lab-only | Real but authoring-grade and only relevant during transitions. |
+| `transition_interval_millis` | Yes | Conditional | Weak | No | Yes | Demote to lab-only | Real only as long-run cadence tuning. |
+| `transition_duration_millis` | Yes | Conditional | Weak | No | Yes | Demote to lab-only | Real only as transition timing envelope tuning. |
+| `use_deterministic_seed` | Yes | Yes | Conditional | No | Yes | Keep | Real reproducibility switch; visually meaningful when comparing or validating. |
+| `deterministic_seed` | Yes | Yes | Conditional | No | Yes | Demote to lab-only | Real, but only when deterministic mode is enabled and mainly useful for proof and authoring. |
+| `preset_set_key` | Yes | Indirect | Conditional | No | Yes | Demote to lab-only | Real curation control, not a primary visual grammar control. |
+| `theme_set_key` | Yes | Indirect | Conditional | No | Yes | Demote to lab-only | Same as preset-set routing. |
+| `favorites_only` | Indirect | Indirect | Weak | No | Yes | Demote to lab-only | Real only when favorites are configured; the dialog still does not expose favorite editing directly. |
+| `diagnostics_overlay_enabled` | No | No | No | No | Yes | Demote to lab-only | Diagnostics-only; not part of visual grammar. |
+| `settings_surface` | No | No | No | No | Yes | Keep | UI-layer control only. It is honest, but it does not change the runtime result. |
+| `favorite_*` and `excluded_*` key lists | Indirect | Indirect | Conditional | No | No | Keep | Real authored selection controls, but file-first and not dialog-owned. |
+| `sampling_treatment` | Yes after import, then clamped | No | No | No | No | Hide | Exists in config and export vocabulary but still clamps to `none`. It is not a truthful product control. |
+| unsupported output and treatment enums | No in supported paths | No | No | No | No | Remove | Surviving enum or parser vocabulary is paper breadth and should not be allowed to look like real product authority. |
 
-They come from the preset-value table after settings resolution.
+## Dead Or Conditionally Dead Combinations
 
-## Dead Or Near-Dead Surfaces In Current State
+The following combinations are not fake in the abstract, but they are dead in
+normal use unless their enabling context exists:
 
-- `sampling_treatment` is enumerated in the runtime but only `none` validates in normal plan compilation
-- `PLASMA_OUTPUT_MODE_DITHERED_RASTER` exists in the enum but is not admitted by the output validator
-- `PLASMA_OUTPUT_FAMILY_SURFACE` is enumerated but not supported
-- `PLASMA_FILTER_TREATMENT_KALEIDOSCOPE_MIRROR` and `PLASMA_FILTER_TREATMENT_RESTRAINED_GLITCH` are enumerated but not implemented
-- `PLASMA_PRESENTATION_MODE_BOUNDED_BILLBOARD_VOLUME` is enumerated but unsupported
+- `deterministic_seed` without `use_deterministic_seed=true`
+- `journey_key` without transitions enabled and a journey-capable policy
+- transition policy, fallback, seed, interval, and duration without
+  `transitions_enabled=true`
+- `favorites_only=true` without configured favorite keys
+- set-driven controls without authored preset sets or theme sets
 
-## Correction Goal
+These surfaces should be treated as conditional authoring controls, not as
+always-meaningful user settings.
 
-After the salvage rewrite, every user-facing control must land in one of these buckets only:
+## Bounded Non-Claims
 
-- real selection control
-- real runtime-plan control
-- real rendered-output control
-- explicit reporting-only control
+The current repo still carries several non-claim surfaces that later phases
+should not promote casually:
 
-Nothing user-facing should remain a hidden preset-only master switch.
+- `sampling_treatment` beyond `none`
+- `PLASMA_OUTPUT_FAMILY_SURFACE`
+- `PLASMA_OUTPUT_MODE_DITHERED_RASTER`
+- `PLASMA_FILTER_TREATMENT_KALEIDOSCOPE_MIRROR`
+- `PLASMA_FILTER_TREATMENT_RESTRAINED_GLITCH`
+- `PLASMA_PRESENTATION_MODE_BOUNDED_BILLBOARD_VOLUME`
+
+They are code vocabulary, not truthful current product controls.
+
+## U00 Conclusion
+
+The main settings story is no longer "everything is fake."
+The truthful current diagnosis is narrower:
+
+- the core grammar settings are now real
+- selection, transition, and diagnostics controls still need sharper product
+  placement
+- dead or unsupported vocabulary still needs hiding or removal
+- authoring-grade controls should stay demoted until a later phase proves they
+  deserve broader exposure

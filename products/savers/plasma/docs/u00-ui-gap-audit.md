@@ -1,49 +1,52 @@
 # Plasma U00 UI Gap Audit
 
-## Current Dialog Truth
+## Purpose
 
-The current dialog is layered, but it is not yet aligned with the actual runtime grammar.
+This note records the gap between the current dialog surface and the current
+runtime truth.
+
+The current gap is no longer the old pre-U03 problem where the UI could not ask
+for most of the real grammar.
+The current gap is narrower:
+
+- too many unlike controls still live in one dialog
+- some controls are truthful but not equally appropriate for normal users
+- some real support and curation controls still lack a matching editing surface
+- unsupported vocabulary still exists beneath the dialog and can leak into docs
+  or import language if later work is careless
+
+## What The Current UI Exposes
+
+The current dialog exposes three settings surfaces through one product window.
 
 ### Basic
-
-Current controls:
 
 - preset
 - theme
 - speed
-
-Missing from the intended truthful basic surface:
-
-- explicit stable-vs-experimental pool control
-- transitions on/off
-- a simple visual-intensity entry point
+- visual intensity
+- content pool
+- transitions enabled
 
 ### Advanced
 
-Current controls:
-
-- detail level
-- effect family
-- resolution
+- generator family
+- output family
+- output mode
+- field resolution
 - smoothing
-- preset set
-- theme set
-- transitions enabled
-- transition policy
+- filter treatment
+- emulation treatment
+- accent treatment
+- presentation mode
 - deterministic seed mode
-
-Mismatch:
-
-- preset set and theme set are not normal advanced controls; they are authoring and curation controls
-- output family, output mode, treatments, and presentation are absent even though the runtime and docs discuss them
-- deterministic seed mode exists, but the rest of the real grammar is still preset-hidden
 
 ### Author/Lab
 
-Current controls:
-
-- content filter
+- preset set
+- theme set
 - favorites only
+- transition policy
 - journey
 - transition fallback
 - transition seed continuity
@@ -52,22 +55,101 @@ Current controls:
 - deterministic seed value
 - diagnostics overlay
 
-Mismatch:
+## What The Runtime Grammar Actually Needs
 
-- content filter is a day-to-day product truth and belongs much higher than Author/Lab
-- favorites-only exists without in-dialog favorite or exclusion editing
-- diagnostics exist, but the dialog does not surface the rest of the product-local truth it claims
+The current runtime needs the following categories to stay explicit:
 
-## Current Misleading Behaviors
+- content identity and palette
+- generator, output, treatment, and presentation grammar
+- stable versus experimental pool control
+- deterministic seed policy for proof and reproducibility
+- transition and journey controls for bounded long-run behavior
+- curation and authored-selection controls
+- diagnostics-only controls
 
-- Selecting a preset silently rewrites effect, speed, resolution, and smoothing, but also continues to hide the real output/treatment/presentation authority.
-- The UI never tells the user that most of the visible experimental grammar is preset-owned.
-- BenchLab can see more of the real runtime plan than the product dialog can request.
+The main runtime grammar is now represented in the dialog.
+The remaining problem is placement and product truth, not total absence.
 
-## Correction Goal
+## Misleading Or Incomplete UI Surfaces
 
-The dialog needs to become a truthful layered control surface:
+- `transitions_enabled` is a truthful Basic control, but its visible effect is
+  conditional and long-run rather than immediate. It needs stronger framing so
+  it does not read like a simple always-visible visual toggle.
+- `favorites_only` is truthful only when favorite lists exist, but the dialog
+  still does not let the user create or edit those lists directly.
+- preset and theme sets are real authoring controls, but they remain easy to
+  read as ordinary browsing controls even though they mainly exist to drive
+  curation and transition behavior.
+- the dialog still does not surface requested versus resolved versus degraded
+  state directly; BenchLab remains the truthful support surface for that.
+- the product window still hosts normal controls and support-grade controls in
+  one place. The surface split is real, but the window remains dense.
 
-- Basic for day-to-day preset, theme, pool, motion, and simple safety controls
-- Advanced for the real visual grammar
-- Author/Lab for curation, journeys, deterministic seed value, diagnostics, and bounded fallback policy
+## Missing Or Intentionally External Controls
+
+These are not missing by accident, but the gap still matters:
+
+- direct favorite and exclusion editing
+- direct authored set and journey editing
+- direct proof, capture, or BenchLab reporting inside the product dialog
+- explicit visual explanation of lane-sensitive degradation for premium
+  presentation choices
+
+These are acceptable external or later-phase surfaces for now, but they should
+not be mistaken for solved dialog problems.
+
+## Controls That Should Stay Hidden Until Real
+
+- `sampling_treatment`
+- unsupported output family and mode vocabulary
+- unsupported filter vocabulary
+- unsupported presentation vocabulary
+
+If these are surfaced again before they become real, the UI will start lying
+again.
+
+## First-Pass Future Split
+
+The current repo already approximates the intended split.
+The remaining U03-style anti-regression map should stay:
+
+### Basic
+
+- preset
+- theme
+- speed
+- visual intensity
+- content pool
+- transitions enabled
+
+### Advanced
+
+- generator family
+- output family
+- output mode
+- resolution
+- smoothing
+- filter treatment
+- emulation treatment
+- accent treatment
+- presentation mode
+- deterministic seed mode
+
+### Author/Lab
+
+- preset set
+- theme set
+- favorites only
+- journey
+- fallback policy
+- transition seed policy
+- transition timing
+- deterministic seed value
+- diagnostics overlay
+
+## U00 Conclusion
+
+The current UI is no longer fundamentally disconnected from the runtime.
+The remaining coherence gap is that it still compresses everyday controls,
+conditional transition controls, and authoring-grade curation controls into one
+product settings experience.
