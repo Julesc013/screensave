@@ -42,6 +42,13 @@ They live with the product so later `PL` work can extend them without rewriting 
 - [PX50 Ship Posture](./px50-ship-posture.md): records the current ship decision and strongest remaining caveats
 - [PX50 Release Notes Draft](./px50-release-notes-draft.md): provides the current truthful release-note-grade summary of the recut
 
+## Salvage Program Docs
+
+- [U00 Salvage Baseline](./u00-salvage-baseline.md): freezes the factual starting point for the unification and salvage pass
+- [U00 Settings Influence Matrix](./u00-settings-influence-matrix.md): records which current controls materially affect selection, plan compilation, and rendered output
+- [U00 Visual Distinctness Audit](./u00-visual-distinctness-audit.md): records where current preset and mode distinctness is real versus merely documented
+- [U00 UI Gap Audit](./u00-ui-gap-audit.md): records the mismatch between the current dialog and the current runtime truth
+
 ## PL00-PL14 Program Record
 
 - [PL00 Constitution](./pl00-constitution.md): freezes Plasma identity, boundaries, lower-band truth, migration obligations, and future commitments after `SX09`
