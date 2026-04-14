@@ -29,6 +29,9 @@ The current release cut is recorded in the `PX50` recut docs and remains lower-b
 
 The canonical corrective baseline for future Plasma work is frozen in the `U00`
 docs.
+The runtime-side completion of that first corrective tranche is frozen in the
+`U01` docs: one runtime, preserved Classic content identity, and no separate
+Classic execution regime.
 New breadth work should not bypass that diagnostic baseline, the U00 settings
 and uniqueness audits, or the corrective backlog that keeps coherence work ahead
 of feature expansion.

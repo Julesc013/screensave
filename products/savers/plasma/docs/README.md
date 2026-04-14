@@ -51,7 +51,9 @@ They live with the product so later `PL` work can extend them without rewriting 
 - [U00 Corrective Backlog](./u00-corrective-backlog.md): freezes the corrective phase order and anti-regression blockers for later Plasma work
 - [U00 Salvage Baseline](./u00-salvage-baseline.md): historical alias kept for older references; use the diagnostic baseline above for current truth
 - [U00 Visual Distinctness Audit](./u00-visual-distinctness-audit.md): historical alias kept for older references; use the visual uniqueness audit above for current truth
-- [U01 Runtime Unification](./u01-runtime-unification.md): records the removal of the remaining Classic-as-runtime-gate assumption
+- [U01 Runtime Unification](./u01-runtime-unification.md): records the unified-runtime rule and the remaining Classic-regime residue that was removed
+- [U01 Classic Compatibility](./u01-classic-compatibility.md): records the preserved Classic keys, aliases, content identity, and legacy proof lookups that still survive after runtime unification
+- [U01 Post-Unification Invariants](./u01-post-unification-invariants.md): freezes the runtime and compatibility invariants that later corrective phases may now assume
 - [U02 Settings Authority Rewrite](./u02-settings-authority.md): records the move from preset-hidden grammar authority to resolved settings-owned runtime grammar
 - [U03 Settings Model](./u03-settings-model.md): records the recut of Plasma's user-facing, advanced, and author-facing settings layers
 - [U03 Settings Surfaces](./u03-settings-surfaces.md): records the dialog-side control mapping and hidden non-claim surfaces after the UI recut
