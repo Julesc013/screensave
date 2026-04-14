@@ -48,6 +48,7 @@ They live with the product so later `PL` work can extend them without rewriting 
 - [U00 Settings Influence Matrix](./u00-settings-influence-matrix.md): records which current controls materially affect selection, plan compilation, and rendered output
 - [U00 Visual Distinctness Audit](./u00-visual-distinctness-audit.md): records where current preset and mode distinctness is real versus merely documented
 - [U00 UI Gap Audit](./u00-ui-gap-audit.md): records the mismatch between the current dialog and the current runtime truth
+- [U01 Runtime Unification](./u01-runtime-unification.md): records the removal of the remaining Classic-as-runtime-gate assumption
 
 ## PL00-PL14 Program Record
 

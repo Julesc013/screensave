@@ -785,7 +785,6 @@ int plasma_plan_is_lower_band_baseline(const struct plasma_plan_tag *plan)
 {
     if (
         plan == NULL ||
-        !plan->classic_execution ||
         plan->advanced_enabled ||
         plan->advanced_components != 0UL ||
         plan->modern_enabled ||

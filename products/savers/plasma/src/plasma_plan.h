@@ -70,7 +70,6 @@ typedef struct plasma_plan_tag {
     plasma_emulation_treatment emulation_treatment;
     plasma_accent_treatment accent_treatment;
     plasma_presentation_mode presentation_mode;
-    int classic_execution;
 } plasma_plan;
 
 void plasma_plan_init(plasma_plan *plan);

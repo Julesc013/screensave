@@ -31,6 +31,8 @@ typedef struct plasma_selection_state_tag {
     plasma_content_filter content_filter;
     int favorites_only_requested;
     int favorites_only_applied;
+    int explicit_preset_preserved;
+    int explicit_theme_preserved;
     unsigned long favorite_preset_mask;
     unsigned long excluded_preset_mask;
     unsigned long favorite_theme_mask;

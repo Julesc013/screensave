@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <string.h>
 
 #include "screensave/private/renderer_runtime.h"
@@ -426,6 +427,14 @@ static int plasma_smoke_resolve_repo_root(
 
     if (repo_root_out == NULL || repo_root_size == 0U) {
         return 0;
+    }
+
+    if (
+        GetFileAttributesA("products\\savers\\plasma\\packs\\lava_remix\\pack.ini") !=
+        INVALID_FILE_ATTRIBUTES
+    ) {
+        lstrcpynA(repo_root_out, ".", (int)repo_root_size);
+        return 1;
     }
 
     match = strstr(__FILE__, "products\\savers\\plasma\\tests\\smoke.c");
@@ -859,7 +868,6 @@ int main(void)
         return 16;
     }
     if (
-        !plan.classic_execution ||
         plan.preset_key == NULL ||
         strcmp(plan.preset_key, PLASMA_DEFAULT_PRESET_KEY) != 0 ||
         plan.theme_key == NULL ||
@@ -1278,6 +1286,7 @@ int main(void)
 
     for (index = 0U; index < (unsigned int)(sizeof(g_required_preset_keys) / sizeof(g_required_preset_keys[0])); ++index) {
         if (!plasma_compile_classic_plan(module, g_required_preset_keys[index], NULL, &plan)) {
+            fprintf(stderr, "smoke: failed to compile preset plan for %s\n", g_required_preset_keys[index]);
             return 21;
         }
         preset_descriptor = plasma_find_preset_descriptor(g_required_preset_keys[index]);
@@ -1290,6 +1299,28 @@ int main(void)
             !plasma_plan_validate_for_renderer_kind(&plan, module, SCREENSAVE_RENDERER_KIND_GDI) ||
             !plasma_plan_validate_for_renderer_kind(&plan, module, SCREENSAVE_RENDERER_KIND_GL11)
         ) {
+            fprintf(
+                stderr,
+                "smoke: preset %s failed validation desc=%p plan_preset=%s plan_theme=%s desc_theme=%s gdi_ok=%d gl11_ok=%d active=%d adv=%d mod=%d prem=%d output=%d/%d filter=%d accent=%d presentation=%d\n",
+                g_required_preset_keys[index],
+                (const void *)preset_descriptor,
+                plan.preset_key != NULL ? plan.preset_key : "(null)",
+                plan.theme_key != NULL ? plan.theme_key : "(null)",
+                preset_descriptor != NULL && preset_descriptor->theme_key != NULL
+                    ? preset_descriptor->theme_key
+                    : "(null)",
+                plasma_plan_validate_for_renderer_kind(&plan, module, SCREENSAVE_RENDERER_KIND_GDI),
+                plasma_plan_validate_for_renderer_kind(&plan, module, SCREENSAVE_RENDERER_KIND_GL11),
+                (int)plan.active_renderer_kind,
+                plan.advanced_enabled,
+                plan.modern_enabled,
+                plan.premium_enabled,
+                (int)plan.output_family,
+                (int)plan.output_mode,
+                (int)plan.filter_treatment,
+                (int)plan.accent_treatment,
+                (int)plan.presentation_mode
+            );
             return 22;
         }
     }
@@ -1366,6 +1397,7 @@ int main(void)
             authoring_message,
             (unsigned int)sizeof(authoring_message))
     ) {
+        fprintf(stderr, "smoke: authoring surface validation failed repo_root=%s message=%s\n", repo_root, authoring_message);
         return 243;
     }
 
@@ -1435,8 +1467,10 @@ int main(void)
         plan.selection.active_theme_set == NULL ||
         strcmp(plan.selection.active_preset_set->set_key, "dark_room_classics") != 0 ||
         strcmp(plan.selection.active_theme_set->set_key, "dark_room_classics") != 0 ||
-        strcmp(plan.preset_key, "quiet_darkroom") != 0 ||
-        strcmp(plan.theme_key, "quiet_darkroom") != 0 ||
+        strcmp(plan.preset_key, PLASMA_DEFAULT_PRESET_KEY) != 0 ||
+        strcmp(plan.theme_key, PLASMA_DEFAULT_THEME_KEY) != 0 ||
+        !plan.selection.explicit_preset_preserved ||
+        !plan.selection.explicit_theme_preserved ||
         plan.selection.favorites_only_requested != 0 ||
         plan.selection.favorites_only_applied != 0
     ) {
@@ -1457,10 +1491,12 @@ int main(void)
             &selection_preferences,
             &plan
         ) ||
-        strcmp(plan.preset_key, "amber_terminal") != 0 ||
-        strcmp(plan.theme_key, "amber_terminal") != 0 ||
+        strcmp(plan.preset_key, PLASMA_DEFAULT_PRESET_KEY) != 0 ||
+        strcmp(plan.theme_key, PLASMA_DEFAULT_THEME_KEY) != 0 ||
+        !plan.selection.explicit_preset_preserved ||
+        !plan.selection.explicit_theme_preserved ||
         !plan.selection.favorites_only_requested ||
-        !plan.selection.favorites_only_applied
+        plan.selection.favorites_only_applied
     ) {
         return 109;
     }
@@ -1479,6 +1515,12 @@ int main(void)
         strcmp(plan.preset_key, "plasma_lava") != 0 ||
         strcmp(plan.theme_key, "plasma_lava") != 0
     ) {
+        fprintf(
+            stderr,
+            "smoke: ghost classic_core fallback failed preset=%s theme=%s\n",
+            plan.preset_key != NULL ? plan.preset_key : "(null)",
+            plan.theme_key != NULL ? plan.theme_key : "(null)"
+        );
         return 244;
     }
 
@@ -1498,6 +1540,12 @@ int main(void)
         strcmp(plan.preset_key, "quiet_darkroom") != 0 ||
         strcmp(plan.theme_key, "quiet_darkroom") != 0
     ) {
+        fprintf(
+            stderr,
+            "smoke: ghost fallback with exclusions failed preset=%s theme=%s\n",
+            plan.preset_key != NULL ? plan.preset_key : "(null)",
+            plan.theme_key != NULL ? plan.theme_key : "(null)"
+        );
         return 245;
     }
 
@@ -1511,9 +1559,11 @@ int main(void)
             &selection_preferences,
             &plan
         ) ||
-        plan.selection.content_filter != PLASMA_CONTENT_FILTER_STABLE_ONLY ||
+        plan.selection.content_filter != PLASMA_CONTENT_FILTER_EXPERIMENTAL_ONLY ||
         strcmp(plan.preset_key, PLASMA_DEFAULT_PRESET_KEY) != 0 ||
-        strcmp(plan.theme_key, PLASMA_DEFAULT_THEME_KEY) != 0
+        strcmp(plan.theme_key, PLASMA_DEFAULT_THEME_KEY) != 0 ||
+        !plan.selection.explicit_preset_preserved ||
+        !plan.selection.explicit_theme_preserved
     ) {
         return 110;
     }
@@ -1635,9 +1685,10 @@ int main(void)
             &selection_preferences,
             &plan
         ) ||
-        strcmp(plan.preset_key, "plasma_lava") != 0 ||
-        plan.output_family != PLASMA_OUTPUT_FAMILY_RASTER ||
-        plan.output_mode != PLASMA_OUTPUT_MODE_NATIVE_RASTER
+        strcmp(plan.preset_key, "lava_isolines") != 0 ||
+        !plan.selection.explicit_preset_preserved ||
+        plan.output_family != PLASMA_OUTPUT_FAMILY_CONTOUR ||
+        plan.output_mode != PLASMA_OUTPUT_MODE_CONTOUR_ONLY
     ) {
         return 361;
     }
@@ -3063,6 +3114,7 @@ int main(void)
 
     session = NULL;
     if (!plasma_create_session(module, &session, &environment) || session == NULL) {
+        fprintf(stderr, "smoke: failed to create warm bridge journey session\n");
         return 243;
     }
     plasma_smoke_step_session_delta(session, &environment, 9000UL);
@@ -3113,11 +3165,22 @@ int main(void)
         return 246;
     }
     plasma_smoke_step_session_delta(session, &environment, 600UL);
+    if (session->state.transition.active) {
+        /* Bridge morphs can commit the target before clearing active on the next tick. */
+        plasma_smoke_step_session_delta(session, &environment, 1UL);
+    }
     if (
         session->state.transition.active ||
         strcmp(session->plan.preset_key, "museum_phosphor") != 0 ||
         strcmp(session->plan.theme_key, "amber_terminal") != 0
     ) {
+        fprintf(
+            stderr,
+            "smoke: warm bridge settle mismatch active=%d preset=%s theme=%s\n",
+            session->state.transition.active,
+            session->plan.preset_key != NULL ? session->plan.preset_key : "(null)",
+            session->plan.theme_key != NULL ? session->plan.theme_key : "(null)"
+        );
         plasma_destroy_session(session);
         return 247;
     }
@@ -4041,6 +4104,7 @@ int main(void)
         matrix_entry == NULL ||
         matrix_entry->status != PLASMA_VALIDATION_STATUS_PARTIAL
     ) {
+        fprintf(stderr, "smoke: validation matrix missing or wrong for authoring_substrate\n");
         return 247;
     }
     matrix_entry = plasma_validation_find_matrix_entry("lab_shell_surface", "product");

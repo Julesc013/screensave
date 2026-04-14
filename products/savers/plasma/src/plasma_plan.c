@@ -25,7 +25,6 @@ void plasma_plan_init(plasma_plan *plan)
     plan->emulation_treatment = PLASMA_EMULATION_TREATMENT_NONE;
     plan->accent_treatment = PLASMA_ACCENT_TREATMENT_NONE;
     plan->presentation_mode = PLASMA_PRESENTATION_MODE_FLAT;
-    plan->classic_execution = 1;
     plasma_advanced_plan_init(plan);
     plasma_modern_plan_init(plan);
     plasma_premium_plan_init(plan);
@@ -166,7 +165,6 @@ int plasma_plan_validate(
     if (
         plan == NULL ||
         !plasma_content_registry_validate() ||
-        !plan->classic_execution ||
         plan->preset_key == NULL ||
         plan->theme_key == NULL ||
         plan->preset == NULL ||

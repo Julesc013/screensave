@@ -315,26 +315,14 @@ void plasma_config_clamp(
         common_config->preset_key != NULL &&
         plasma_find_preset_values(common_config->preset_key) == NULL
     ) {
-        common_config->preset_key = PLASMA_DEFAULT_PRESET_KEY;
+        common_config->preset_key = NULL;
     }
 
     if (
         common_config->theme_key == NULL ||
         plasma_find_theme_descriptor(common_config->theme_key) == NULL
     ) {
-        if (common_config->preset_key != NULL) {
-            unsigned int preset_count;
-            const screensave_preset_descriptor *presets;
-            const screensave_preset_descriptor *preset_descriptor;
-
-            presets = plasma_get_presets(&preset_count);
-            preset_descriptor = screensave_find_preset(presets, preset_count, common_config->preset_key);
-            common_config->theme_key = preset_descriptor != NULL
-                ? preset_descriptor->theme_key
-                : PLASMA_DEFAULT_THEME_KEY;
-        } else {
-            common_config->theme_key = PLASMA_DEFAULT_THEME_KEY;
-        }
+        common_config->theme_key = NULL;
     }
 
     if (config->effect_mode < PLASMA_EFFECT_PLASMA || config->effect_mode > PLASMA_EFFECT_ARC) {

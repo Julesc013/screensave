@@ -776,60 +776,75 @@ int plasma_selection_resolve(
     state->excluded_theme_mask = plasma_parse_theme_key_mask(preferences->excluded_theme_keys);
 
     requested_preset = plasma_content_find_preset_entry(common_config->preset_key);
-    if (requested_preset == NULL) {
+    if (requested_preset != NULL) {
+        state->selected_preset = requested_preset;
+        state->explicit_preset_preserved = 1;
+        favorites_applied = 0;
+    } else {
         requested_preset = plasma_content_find_preset_entry(PLASMA_DEFAULT_PRESET_KEY);
+        if (
+            !plasma_preset_matches_filters(
+                requested_preset,
+                state->active_preset_set,
+                state->content_filter,
+                state->favorite_preset_mask,
+                state->excluded_preset_mask,
+                state->favorites_only_requested,
+                &favorites_applied
+            )
+        ) {
+            requested_preset = plasma_select_fallback_preset(
+                state->active_preset_set,
+                state->content_filter,
+                state->favorite_preset_mask,
+                state->excluded_preset_mask,
+                state->favorites_only_requested,
+                &favorites_applied
+            );
+        }
+        state->selected_preset = requested_preset;
     }
-    if (
-        !plasma_preset_matches_filters(
-            requested_preset,
-            state->active_preset_set,
-            state->content_filter,
-            state->favorite_preset_mask,
-            state->excluded_preset_mask,
-            state->favorites_only_requested,
-            &favorites_applied
-        )
-    ) {
-        requested_preset = plasma_select_fallback_preset(
-            state->active_preset_set,
-            state->content_filter,
-            state->favorite_preset_mask,
-            state->excluded_preset_mask,
-            state->favorites_only_requested,
-            &favorites_applied
-        );
-    }
-    state->selected_preset = requested_preset;
     state->favorites_only_applied = favorites_applied;
 
     requested_theme = plasma_content_find_theme_entry(common_config->theme_key);
-    if (requested_theme == NULL && state->selected_preset != NULL && state->selected_preset->descriptor != NULL) {
+    if (requested_theme != NULL) {
+        state->selected_theme = requested_theme;
+        state->explicit_theme_preserved = 1;
+        favorites_applied = 0;
+    } else if (state->selected_preset != NULL && state->selected_preset->descriptor != NULL) {
         requested_theme = plasma_content_find_theme_entry(state->selected_preset->descriptor->theme_key);
+        if (requested_theme != NULL) {
+            state->selected_theme = requested_theme;
+            state->explicit_theme_preserved = 1;
+            favorites_applied = 0;
+        }
     }
-    if (
-        !plasma_theme_matches_filters(
-            requested_theme,
-            state->active_theme_set,
-            state->content_filter,
-            state->favorite_theme_mask,
-            state->excluded_theme_mask,
-            state->favorites_only_requested,
-            &favorites_applied
-        )
-    ) {
-        requested_theme = plasma_select_fallback_theme(
-            state->active_theme_set,
-            state->content_filter,
-            state->favorite_theme_mask,
-            state->excluded_theme_mask,
-            state->favorites_only_requested,
-            state->selected_preset != NULL && state->selected_preset->descriptor != NULL
-                ? state->selected_preset->descriptor->theme_key
-                : PLASMA_DEFAULT_THEME_KEY,
-            &favorites_applied
-        );
+    if (state->selected_theme == NULL) {
+        if (
+            !plasma_theme_matches_filters(
+                requested_theme,
+                state->active_theme_set,
+                state->content_filter,
+                state->favorite_theme_mask,
+                state->excluded_theme_mask,
+                state->favorites_only_requested,
+                &favorites_applied
+            )
+        ) {
+            requested_theme = plasma_select_fallback_theme(
+                state->active_theme_set,
+                state->content_filter,
+                state->favorite_theme_mask,
+                state->excluded_theme_mask,
+                state->favorites_only_requested,
+                state->selected_preset != NULL && state->selected_preset->descriptor != NULL
+                    ? state->selected_preset->descriptor->theme_key
+                    : PLASMA_DEFAULT_THEME_KEY,
+                &favorites_applied
+            );
+        }
+        state->selected_theme = requested_theme;
     }
-    state->selected_theme = requested_theme;
     if (favorites_applied) {
         state->favorites_only_applied = 1;
     }
@@ -865,19 +880,23 @@ int plasma_selection_state_validate(const plasma_selection_state *state)
     }
 
     if (
-        !plasma_filter_allows_channel(state->content_filter, state->selected_preset->channel) ||
-        !plasma_filter_allows_channel(state->content_filter, state->selected_theme->channel)
+        (!state->explicit_preset_preserved &&
+            !plasma_filter_allows_channel(state->content_filter, state->selected_preset->channel)) ||
+        (!state->explicit_theme_preserved &&
+            !plasma_filter_allows_channel(state->content_filter, state->selected_theme->channel))
     ) {
         return 0;
     }
 
     if (
+        !state->explicit_preset_preserved &&
         state->active_preset_set != NULL &&
         !plasma_content_preset_in_set(state->active_preset_set, state->selected_preset)
     ) {
         return 0;
     }
     if (
+        !state->explicit_theme_preserved &&
         state->active_theme_set != NULL &&
         !plasma_content_theme_in_set(state->active_theme_set, state->selected_theme)
     ) {
@@ -885,8 +904,10 @@ int plasma_selection_state_validate(const plasma_selection_state *state)
     }
 
     if (
-        (state->excluded_preset_mask & (1UL << preset_index)) != 0UL ||
-        (state->excluded_theme_mask & (1UL << theme_index)) != 0UL
+        (!state->explicit_preset_preserved &&
+            (state->excluded_preset_mask & (1UL << preset_index)) != 0UL) ||
+        (!state->explicit_theme_preserved &&
+            (state->excluded_theme_mask & (1UL << theme_index)) != 0UL)
     ) {
         return 0;
     }
