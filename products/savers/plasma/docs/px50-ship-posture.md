@@ -26,10 +26,12 @@ Decision: **GO WITH CAVEATS**
 The decision remains `GO WITH CAVEATS` because:
 
 - the stable default product path is still well preserved and directly proved on `gdi` and `gl11`
+- the repo now has one unified runtime, truthful settings semantics, and a more coherent stable preset family than it had at `PL14`
 - the repo now has a stronger stable support-tooling surface than it had at `PL14`
 - the repo now has a clearer, more explicit local ecosystem and curation surface than it had at `PL14`
+- the repo now has deterministic influence checks and preset-signature audits that materially reduce fake-control risk
 - but richer runtime breadth, transition breadth, and Wave 3 visual-language breadth still remain bounded and experimental
-- and the proof envelope is still materially constrained by one-machine hardware breadth and no fresh compiled rerun expansion in the latest tranches
+- and the proof envelope is still materially constrained by one-machine hardware breadth and no universal screenshot diff framework
 
 ## Strongest Remaining Caveats And Blockers
 
@@ -38,6 +40,7 @@ The decision remains `GO WITH CAVEATS` because:
 - transition coverage remains curated rather than exhaustive
 - Wave 3 output, treatment, glyph, field, and dimensional widening remains experimentally bounded
 - PX40 capture-backed compare remains text-based and bounded rather than universal deterministic replay or rendered diff
+- the new deterministic smoke influence harness is still a bounded dead-setting detector rather than a full perceptual screenshot lab
 - PX41 integration and curation surfaces remain metadata-first and report-first rather than live-consumer proved
 - numeric performance SLAs still do not exist
 - the authored registry remains partial because built-in preset and theme descriptors are still partly code-anchored
@@ -47,7 +50,7 @@ The decision remains `GO WITH CAVEATS` because:
 This decision means:
 
 - Plasma can be released honestly today with a narrow stable runtime claim and an explicit experimental slice
-- release messaging can now describe stronger support tooling and stronger local integration metadata than the original `PL14` docs did
+- release messaging can now describe stronger support tooling, truthful settings semantics, and stronger local integration metadata than the original `PL14` docs did
 - maintainers have a clearer current answer to what is stable, what is experimental, and what is non-claim
 
 ## What This Decision Does Not Mean

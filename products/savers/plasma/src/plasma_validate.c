@@ -62,14 +62,14 @@ static const plasma_validation_matrix_entry g_plasma_validation_matrix[] = {
         "product",
         PLASMA_VALIDATION_STATUS_VALIDATED,
         "products/savers/plasma/tests/pl11-settings-proof.md",
-        "Layered settings surfaces and current gating rules are backed by smoke coverage and a recorded proof note."
+        "Layered settings surfaces, current gating rules, and the salvage-phase settings influence checks are backed by smoke coverage and recorded proof notes."
     },
     {
         "benchlab_surface",
         "product",
         PLASMA_VALIDATION_STATUS_VALIDATED,
         "products/savers/plasma/tests/pl12-benchlab-proof.md",
-        "BenchLab field export, bounded forcing, and clamp reporting are backed by smoke coverage and PL12 captures."
+        "BenchLab field export, bounded forcing, clamp reporting, and requested-versus-resolved-versus-degraded truth are backed by smoke coverage and PL12 captures."
     },
     {
         "hardware_matrix",
@@ -427,7 +427,13 @@ static const plasma_known_limit_entry g_plasma_known_limits[] = {
     {
         "capture_diff_bounded",
         PLASMA_VALIDATION_STATUS_PARTIAL,
-        "PX40 adds semantic BenchLab text-capture comparison and capture-backed degrade inspection, but it does not claim raw-text identity or pixel-perfect determinism across every lane or renderer path.",
+        "PX40 adds semantic BenchLab text-capture comparison and capture-backed degrade inspection, and U07 adds deterministic smoke render signatures, but the product still does not claim raw screenshot identity or universal pixel-perfect determinism across every lane or renderer path.",
+        "products/savers/plasma/docs/pl13-known-limits.md"
+    },
+    {
+        "render_signature_harness_bounded",
+        PLASMA_VALIDATION_STATUS_PARTIAL,
+        "U07 adds deterministic smoke render-signature and pixel-difference checks for the shipped settings subset, but the repo still lacks a universal screenshot diff framework or perceptual gold-standard lab.",
         "products/savers/plasma/docs/pl13-known-limits.md"
     },
     {

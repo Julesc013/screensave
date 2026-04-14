@@ -2,17 +2,19 @@
 
 ## Scope Of The Current Release Posture
 
-This Plasma cut ships as a preserved Classic-first product with a truthful lower-band baseline, an explicit experimental breadth slice, stronger read-only authoring and support tooling, and bounded local ecosystem metadata that does not redefine suite or platform law.
+This Plasma cut ships as a preserved Classic-first product on one unified runtime with a truthful lower-band baseline, an explicit experimental breadth slice, stronger read-only authoring and support tooling, and bounded local ecosystem metadata that does not redefine suite or platform law.
 
 ## What Is Preserved
 
 - Plasma remains `Plasma`.
 - `Plasma Classic` remains preserved inside the product.
+- Classic is now preserved as content identity and compatibility surface rather than as a separate runtime regime.
 - Default preset remains `plasma_lava`.
 - Default theme remains `plasma_lava`.
 - The stable default runtime path remains the classic raster-plus-flat path.
 - The stable routing posture remains `minimum_kind=gdi`, `preferred_kind=gl11`, `quality_class=safe`.
 - The default pool remains stable-first and classic-first.
+- Basic settings now truthfully control the shipped stable subset instead of deferring to hidden preset-only grammar.
 
 ## What Is Newly Available In The Stable Cut
 
@@ -26,6 +28,7 @@ The stable widening in this recut is narrow and support-surface-only:
   - authored-object `compare`
   - `compat-report`
   - `migration-report`
+  - `preset-audit`
   - pack-shell `degrade-report --pack`
 - PX41 stable local metadata and report surfaces now belong to the stable support surface when they only restate stable product truth:
   - `classic_core_featured`
@@ -44,7 +47,7 @@ The following remain implemented but explicitly experimental:
 - optional `gl21`, `gl33`, and `gl46` lanes
 - the bounded transition subset
 - the bounded premium dimensional subset
-- the bounded contour, banded, treatment, glyph, field-family-I, field-family-II, and dimensional study surfaces from `PX30` through `PX32`
+- the bounded contour, banded, treatment, glyph, field-family-I, field-family-II, and dimensional study surfaces from `PX30` through `PX32`, including their broader Advanced-surface controls
 - the bounded experimental preset slice that carries those studies
 - capture-backed `degrade-report --capture`
 - semantic BenchLab text `capture-diff`
@@ -69,6 +72,7 @@ They are not the hidden minimum.
 - the broad proof envelope still comes from one capable validation machine
 - transition coverage is meaningful but bounded
 - richer-lane, field, glyph, and dimensional breadth remain experimentally bounded
+- the deterministic influence harness is bounded and does not replace a universal screenshot diff lab
 - live `suite` and `anthology` consumer behavior is not claimed
 - automation remains local, bounded, and report-first
 - community and provenance surfaces remain local, narrow, and non-platform

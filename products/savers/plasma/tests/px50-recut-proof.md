@@ -28,6 +28,15 @@ Wave evidence and posture sources:
 - `products/savers/plasma/docs/px32-stable-vs-experimental-notes.md`
 - `products/savers/plasma/docs/px40-stable-vs-experimental-notes.md`
 - `products/savers/plasma/docs/px41-stable-vs-experimental-notes.md`
+- `products/savers/plasma/docs/u00-salvage-baseline.md`
+- `products/savers/plasma/docs/u01-runtime-unification.md`
+- `products/savers/plasma/docs/u02-settings-authority.md`
+- `products/savers/plasma/docs/u03-settings-model.md`
+- `products/savers/plasma/docs/u04-output-treatment-presentation-truth.md`
+- `products/savers/plasma/docs/u05-destructive-simplification.md`
+- `products/savers/plasma/docs/u06-preset-theme-tuning-notes.md`
+- `products/savers/plasma/docs/u07-proof-harness.md`
+- `products/savers/plasma/docs/u08-visual-qa-bar.md`
 
 Proof and capture sources:
 
@@ -45,6 +54,7 @@ Proof and capture sources:
 - `products/savers/plasma/tests/px40-ops-tools-proof.md`
 - `products/savers/plasma/tests/px41-integration-proof.md`
 - `products/savers/plasma/tests/px41-curation-proof.md`
+- `products/savers/plasma/tests/README.md`
 - `validation/captures/pl13/benchlab-plasma-gdi.txt`
 - `validation/captures/pl13/benchlab-plasma-gl11.txt`
 - `validation/captures/pl13/benchlab-plasma-gl21.txt`
@@ -54,6 +64,7 @@ Proof and capture sources:
 - `validation/captures/pl13/benchlab-plasma-journey-gl11.txt`
 - `validation/captures/px40/README.md`
 - `validation/captures/px41/README.md`
+- `validation/captures/px50/README.md`
 
 Current metadata and contract sources:
 
@@ -78,7 +89,10 @@ Commands run while preparing the recut:
 - `python tools/scripts/plasma_lab.py integration-report`
 - `python tools/scripts/plasma_lab.py control-report --profile deterministic_classic`
 - `python tools/scripts/plasma_lab.py curation-report`
+- `python tools/scripts/plasma_lab.py preset-audit`
 - `python tools/scripts/check_sdk_surface.py products/savers/plasma/packs/lava_remix`
+- `MSBuild.exe build/msvc/vs2022/ScreenSave.sln /p:PlatformToolset=v141_xp /t:plasma;benchlab`
+- manual `plasma_smoke.exe` rebuild and run on MSVC `v141_xp`
 - `git diff --check`
 
 ## Evidence Classes Used
@@ -88,6 +102,7 @@ Validated for current recut decisions:
 - lower-band stable runtime proof on `gdi` and `gl11`
 - current stable default routing and classic/default invariants
 - current BenchLab reporting surface
+- current deterministic smoke influence harness for the shipped settings subset
 - current stable PX40 read-only tooling surface
 - current stable PX41 metadata and report surface when restricted to stable collections and stable pack truth
 
@@ -140,6 +155,7 @@ Actual evidence in this tranche is:
 
 - the cited proof notes
 - the cited BenchLab text captures
+- the cited deterministic smoke influence checks and preset-signature audit outputs
 - the current checked-in metadata files
 - the commands listed above and their successful outputs in this checkout
 
@@ -151,5 +167,5 @@ Narrative summary only:
 
 ## Scope Boundary
 
-There is no dedicated PX50 recut harness.
-`PX50` is a decision pass over existing evidence plus current read-only report commands, not a new runtime validation phase.
+`PX50` now leans on the salvage-phase proof harness rather than only on older proof notes.
+It is still a decision pass over current evidence, but that evidence now includes deterministic smoke render signatures and preset-signature audits in addition to the earlier report and capture surfaces.
