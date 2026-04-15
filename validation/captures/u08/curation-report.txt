@@ -1,0 +1,14 @@
+PX41 Plasma Lab curation report
+- curated collections: 3
+  classic_core_featured: visibility=stable channel=stable featured=true sdk_reference=true pack=lava_remix
+    preset_set=classic_core theme_set=classic_core journey=none
+    preset_keys=none theme_keys=none
+  dark_room_support: visibility=stable channel=stable featured=false sdk_reference=false pack=lava_remix
+    preset_set=dark_room_classics theme_set=dark_room_classics journey=none
+    preset_keys=none theme_keys=none
+  wave3_experimental_sampler: visibility=experimental channel=experimental featured=true sdk_reference=false pack=lava_remix
+    preset_set=none theme_set=none journey=none
+    preset_keys=ascii_reactor,matrix_lattice,cellular_bloom,quasi_crystal_bands,caustic_waterlight,ribbon_aurora theme_keys=aurora_cool,oceanic_blue,museum_phosphor
+- provenance index entries: 1
+  lava_remix_builtin: pack=lava_remix channel=stable support_tier=bounded_supported source_kind=built_in trust_tier=product_curated
+    featured_collection=classic_core_featured sdk_reference=true

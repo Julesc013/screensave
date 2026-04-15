@@ -1,0 +1,10 @@
+PX41 Plasma Lab control report: dark_room_support
+- visibility: stable
+- preset: quiet_darkroom
+- theme: quiet_darkroom
+- preset_set: dark_room_classics
+- theme_set: dark_room_classics
+- journey: none
+- seed and detail: seed_mode=deterministic deterministic_seed=8080 detail_level=low randomization_mode=off
+- favorites and exclusions: favorites=quiet_darkroom excluded=none
+- clamp posture: allow_experimental=false runtime bypass=none validation=report_first

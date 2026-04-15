@@ -81,7 +81,9 @@ They live with the product so later `PL` work can extend them without rewriting 
 - [U07 Stable Combination Matrix](./u07-stable-combination-matrix.md): records the real reachable stable preset/theme/lane matrix now exhaustively exercised by the U07 harness
 - [U07 Experimental Coverage](./u07-experimental-coverage.md): records the bounded experimental coverage strategy and the surfaces it does and does not claim to prove
 - [U07 Proof Result Taxonomy](./u07-proof-result-taxonomy.md): freezes the shared result language that later proof and QA work must consume consistently
-- [U08 Visual QA Bar](./u08-visual-qa-bar.md): records the salvage-phase acceptance bar for stable and experimental surfaces
+- [U08 Visual QA Bar](./u08-visual-qa-bar.md): records the formal acceptance bar now applied to the surviving Plasma surface
+- [U08 Surface Evaluation](./u08-surface-evaluation.md): records the major surviving surfaces, the evidence consumed, and the resulting U08 evaluation classes
+- [U08 Acceptance Decisions](./u08-acceptance-decisions.md): freezes which major surfaces pass stable, stay experimental, remain caveated, or leave the claim surface before U09
 
 ## PL00-PL14 Program Record
 

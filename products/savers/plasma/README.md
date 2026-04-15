@@ -22,6 +22,7 @@ The current release cut is recorded in the `PX50` recut docs and remains lower-b
 
 - Stable Plasma now means one unified runtime, a preserved classic default path, a narrower stable built-in slice, truthful Basic settings, and explicit requested/resolved/degraded reporting.
 - Richer lanes, broader non-raster grammar, premium presentation, transitions, capture-backed compare, and the wider Wave 3 study slice remain explicit opt-in experimental surfaces.
+- Stable curated collections and stable support profiles no longer imply journey-backed transition stability; that surface remains bounded and experimental after the U08 gate.
 - The stable support surface includes BenchLab reporting, PX40 read-only authoring and ops reports, `preset-audit`, and the stable PX41 metadata-report slice that only restates already-stable product truth.
 - The current ship gate remains `GO WITH CAVEATS` and is documented in [`docs/px50-ship-posture.md`](./docs/px50-ship-posture.md).
 
@@ -55,6 +56,10 @@ influence now has explicit validated-versus-partial classification, the stable
 first-class preset and theme surface is enumerated as a real matrix, the
 experimental surface has a bounded coverage strategy, and near-duplicate
 signatures now have a repeatable generated audit path.
+The current `U08` QA-gate tranche is frozen in the `U08` docs: the product now
+has a formal acceptance bar, evidence-backed surface decisions, and a narrow
+metadata cleanup so stable-visible collections and support profiles do not
+overclaim transition stability.
 New breadth work should not bypass that diagnostic baseline, the U00 settings
 and uniqueness audits, or the corrective backlog that keeps coherence work ahead
 of feature expansion.

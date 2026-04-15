@@ -1,0 +1,37 @@
+U08 Plasma acceptance decisions
+- purpose: freeze which surviving surfaces are stable-worthy, experimental-only, hidden, or removed from claim language before the final U09 recut
+- pass_stable: implemented, evidence-backed, lower-band-honest, and acceptable to keep inside the stable claim surface
+  - settings_surface / Basic dialog surface: Basic only keeps preset, theme, speed, detail, and safe-default selections that now have stable proof and lower-band-safe behavior.
+  - default_path / plasma_lava plus plasma_lava on gdi and gl11: The preserved default path remains the strongest evidence-backed stable entry surface and still honors the gdi floor with gl11 as the preferred stable uplift.
+  - preset_pool / classic_core preset set: The five-member stable preset pool is small enough to prove, visibly distinct enough to keep, and still preserves the classic Plasma identity.
+  - theme_pool / classic_core theme set: The stable theme pool remains supportable, but its coolest pair stays on the watch list even though the current palette separation clears the bounded threshold.
+  - collection / classic_core_featured: The featured stable collection remains acceptable once it stops implying transition stability through a journey key.
+  - collection / dark_room_support: The dark-room collection remains acceptable as a calmer stable support slice after the transition implication is removed from the stable claim surface.
+  - control_profile / deterministic_classic: The deterministic support profile remains a stable support tool once it no longer advertises a journey-backed transition path.
+  - control_profile / dark_room_support: The dark-room support profile remains a stable support tool for preview and long-run review after the transition implication is removed.
+  - output_family / raster and native_raster: Raster remains the lower-band-safe default grammar and the only output family admitted directly inside the stable claim surface.
+  - presentation_surface / flat presentation: Flat presentation remains the only stable-worthy presentation claim because it is the default, lower-band-honest path.
+- pass_experimental: implemented and evidence-backed enough to stay exposed, but still admitted only as opt-in experimental product breadth
+  - settings_surface / Advanced dialog surface: Advanced controls are real and influence the plan or render, but they still sit outside the narrow stable product promise.
+  - output_family / banded and contour families: These families are now real enough to keep, but they remain broader-than-stable grammar studies rather than default product promises.
+  - treatment_surface / direct filter, emulation, and accent controls: Direct treatment controls materially change the supported subset, but they remain outside the narrow stable promise even when stable presets bundle some of them indirectly.
+  - experimental_collection / wave3_experimental_sampler: The sampler remains a bounded experimental gallery for the surviving Wave 3 studies and stays outside stable claims by design.
+- keep_experimental_with_caveat: implemented and worth preserving experimentally, but still bounded by partial proof, tighter gating, or support caveats
+  - settings_surface / Author/Lab dialog surface: Author and support controls stay useful, but several remain plan-only or bounded and should not be read as mainstream stable UX.
+  - output_family / glyph families: Glyph output remains bounded to small ASCII and Matrix subsets and should stay experimental with explicit breadth caveats.
+  - presentation_surface / heightfield and ribbon presentation: Premium and contour-aware presentation paths remain real but still bounded by premium availability and lower-lane degrade caveats.
+  - transition_surface / transitions, journeys, and timing controls: Transition and journey controls remain implemented, but the current proof is still partial and should not silently hitchhike into stable collections or stable control profiles.
+- demote_hide: implemented but no longer suitable as a first-class visible promise and should stay hidden, lab-only, or support-only
+  - support_surface / diagnostics overlay: Diagnostics remain useful for support and proof work, but they do not belong in the product claim surface or stable user story.
+- remove_from_claim_surface: still preserved for compatibility or internal routing, but no longer part of the surfaced product claim language
+  - compatibility_surface / favorites_only hidden compatibility state: Favorites-only no longer belongs in claim language because it survives only as a hidden compatibility state.
+  - compatibility_surface / compatibility-only preset and theme aliases: Preserved aliases and compatibility-only keys still matter for migration and identity, but they are not first-class shipped variety anymore.
+- blocked_insufficient_evidence: not rejected forever, but currently lacking enough direct evidence to promote or even keep exposed honestly
+  - none
+- narrow honesty adjustments:
+  - stable curated collections should not carry journey keys once transitions remain only experimental with caveated proof
+  - stable control profiles should mirror that same posture so support tooling does not silently overclaim journey stability
+- U09 handoff:
+  - stable recut may now treat only pass_stable rows as stable-worthy by default
+  - pass_experimental and keep_experimental_with_caveat rows remain opt-in surfaces, not stable promises
+  - demote_hide and remove_from_claim_surface rows should stay out of ship-language except where compatibility notes require them

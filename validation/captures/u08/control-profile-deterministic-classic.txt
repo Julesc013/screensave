@@ -1,0 +1,10 @@
+PX41 Plasma Lab control report: deterministic_classic
+- visibility: stable
+- preset: plasma_lava
+- theme: plasma_lava
+- preset_set: classic_core
+- theme_set: classic_core
+- journey: none
+- seed and detail: seed_mode=deterministic deterministic_seed=424242 detail_level=standard randomization_mode=off
+- favorites and exclusions: favorites=none excluded=none
+- clamp posture: allow_experimental=false runtime bypass=none validation=report_first
