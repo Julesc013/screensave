@@ -46,6 +46,10 @@ premium-lane and incompatible requests.
 The current `U05` simplification cut is frozen in the `U05` docs: weaker
 surfaces are now hidden, demoted, or kept compatibility-only instead of being
 presented as first-class product breadth.
+The current `U06` retuning tranche is frozen in the `U06` docs: the surviving
+preset and theme catalogue was rebuilt, preview-safe and dark-room support
+profiles were refreshed, transition pacing moved to calmer defaults, and the
+stable default path was strengthened without widening scope.
 New breadth work should not bypass that diagnostic baseline, the U00 settings
 and uniqueness audits, or the corrective backlog that keeps coherence work ahead
 of feature expansion.

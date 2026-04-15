@@ -34,7 +34,9 @@ Wave evidence and posture sources:
 - `products/savers/plasma/docs/u03-settings-model.md`
 - `products/savers/plasma/docs/u04-output-treatment-presentation-truth.md`
 - `products/savers/plasma/docs/u05-destructive-simplification.md`
-- `products/savers/plasma/docs/u06-preset-theme-tuning-notes.md`
+- `products/savers/plasma/docs/u06-preset-retuning.md`
+- `products/savers/plasma/docs/u06-theme-retuning.md`
+- `products/savers/plasma/docs/u06-default-and-preview-behavior.md`
 - `products/savers/plasma/docs/u07-proof-harness.md`
 - `products/savers/plasma/docs/u08-visual-qa-bar.md`
 - `products/savers/plasma/docs/u00-corrective-backlog.md`

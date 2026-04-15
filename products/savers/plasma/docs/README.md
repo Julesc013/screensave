@@ -72,7 +72,11 @@ They live with the product so later `PL` work can extend them without rewriting 
 - [U05 Simplification Decisions](./u05-simplification-decisions.md): records the keep, hide, demote, and compatibility-only decisions made during the U05 cut
 - [U05 Dead Surface Cut](./u05-dead-surface-cut.md): records the controls, grammar surfaces, presets, and themes cut from first-class exposure
 - [U05 Post-Simplification Invariants](./u05-post-simplification-invariants.md): freezes the smaller first-class surface and the preserved compatibility invariants after U05
-- [U06 Preset And Theme Tuning Notes](./u06-preset-theme-tuning-notes.md): records the first aggressive retune of built-in presets and palettes
+- [U06 Preset Retuning](./u06-preset-retuning.md): records the rebuilt preset catalogue, distinctness gains, and authored-set follow-through after the U05 cut
+- [U06 Theme Retuning](./u06-theme-retuning.md): records the palette, contrast, and dark-room identity retune for the surviving theme catalogue
+- [U06 Default And Preview Behavior](./u06-default-and-preview-behavior.md): records the strengthened default path, calmer preview and long-run pacing, and retuned transition timing
+- [U06 Post-Retuning Invariants](./u06-post-retuning-invariants.md): freezes the default-path, retuned-content, and lower-band invariants that later proof and QA work may assume
+- [U06 Preset And Theme Tuning Notes](./u06-preset-theme-tuning-notes.md): historical umbrella note kept for older references; use the canonical U06 docs above for current truth
 - [U07 Proof Harness](./u07-proof-harness.md): records the deterministic influence checks, preset-signature audit, and current dead-setting detection boundary
 - [U08 Visual QA Bar](./u08-visual-qa-bar.md): records the salvage-phase acceptance bar for stable and experimental surfaces
 

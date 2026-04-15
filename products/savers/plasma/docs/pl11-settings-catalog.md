@@ -131,8 +131,8 @@ It does leave a real seam for it through:
 | `journey_key` | `author_lab` | `transition` | `content_key` | empty | `user` | requires enabled journey-capable transitions | plan, transition |
 | `transition_fallback_policy` | `author_lab` | `transition` | `enum` | `hard_cut` | `user` | requires enabled transitions | plan, transition |
 | `transition_seed_policy` | `author_lab` | `transition` | `enum` | `keep_stream` | `user` | requires enabled transitions | plan, transition |
-| `transition_interval_millis` | `author_lab` | `transition` | `unsigned` | `12000` | `user` | requires enabled transitions | plan, transition |
-| `transition_duration_millis` | `author_lab` | `transition` | `unsigned` | `1600` | `user` | requires enabled transitions | plan, transition |
+| `transition_interval_millis` | `author_lab` | `transition` | `unsigned` | `14000` | `user` | requires enabled transitions | plan, transition |
+| `transition_duration_millis` | `author_lab` | `transition` | `unsigned` | `1800` | `user` | requires enabled transitions | plan, transition |
 | `deterministic_seed` | `author_lab` | `seed` | `unsigned` | `0` | `user` | requires deterministic seed mode | plan, execution |
 | `diagnostics_overlay_enabled` | `author_lab` | `diagnostics` | `bool` | `false` | `user` | always | diagnostics |
 

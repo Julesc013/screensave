@@ -1,0 +1,15 @@
+Plasma capture diff: validation\captures\u06\benchlab-plasma-default-gdi.txt -> validation\captures\u06\benchlab-plasma-default-gl11.txt
+- mode: semantic BenchLab text-capture comparison
+- compared keys: requested renderer, policy target, active renderer, selected band, degraded path, selection path, fallback cause, renderer backend, renderer status, requested lane, resolved lane, degraded from, degraded to, preset key, theme key, preset set key, theme set key, journey key, profile class, quality class, preset source, preset channel, theme source, theme channel, generator family, output family, output mode, sampling treatment, filter treatment, emulation treatment, accent treatment, presentation mode, transition requested, transition enabled, transition policy, transition type, transition fallback, settings surface, content filter, favorites requested, favorites applied, benchlab forcing active, clamp summary, requested/resolved/degraded
+- unchanged keys: degraded path, fallback cause, degraded from, degraded to, preset key, theme key, preset set key, theme set key, journey key, profile class, quality class, preset source, preset channel, theme source, theme channel, generator family, output family, output mode, sampling treatment, filter treatment, emulation treatment, accent treatment, presentation mode, transition requested, transition enabled, transition policy, transition type, transition fallback, settings surface, content filter, favorites requested, favorites applied, benchlab forcing active, clamp summary
+- changed keys:
+  requested renderer: GDI -> OpenGL 1.1
+  policy target: GDI -> OpenGL 1.1
+  active renderer: GDI -> OpenGL 1.1
+  selected band: universal -> compat
+  selection path: Requested GDI within saver policy -> Requested OpenGL 1.1 within saver policy
+  renderer backend: gdi -> gl11
+  renderer status: Presented -> Presented with OpenGL buffer swap
+  requested lane: universal -> compat
+  resolved lane: universal -> compat
+  requested/resolved/degraded: universal / universal / none -> compat / compat / none

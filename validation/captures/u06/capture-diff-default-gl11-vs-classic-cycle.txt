@@ -1,0 +1,10 @@
+Plasma capture diff: validation\captures\u06\benchlab-plasma-default-gl11.txt -> validation\captures\u06\benchlab-plasma-classic-cycle-gl11.txt
+- mode: semantic BenchLab text-capture comparison
+- compared keys: requested renderer, policy target, active renderer, selected band, degraded path, selection path, fallback cause, renderer backend, renderer status, requested lane, resolved lane, degraded from, degraded to, preset key, theme key, preset set key, theme set key, journey key, profile class, quality class, preset source, preset channel, theme source, theme channel, generator family, output family, output mode, sampling treatment, filter treatment, emulation treatment, accent treatment, presentation mode, transition requested, transition enabled, transition policy, transition type, transition fallback, settings surface, content filter, favorites requested, favorites applied, benchlab forcing active, clamp summary, requested/resolved/degraded
+- unchanged keys: requested renderer, policy target, active renderer, selected band, degraded path, selection path, fallback cause, renderer backend, renderer status, requested lane, resolved lane, degraded from, degraded to, preset key, theme key, preset set key, theme set key, profile class, quality class, preset source, preset channel, theme source, theme channel, generator family, output family, output mode, sampling treatment, filter treatment, emulation treatment, accent treatment, presentation mode, transition type, transition fallback, settings surface, content filter, favorites requested, favorites applied, clamp summary, requested/resolved/degraded
+- changed keys:
+  journey key: none -> classic_cycle
+  transition requested: no -> yes
+  transition enabled: no -> yes
+  transition policy: disabled -> journey
+  benchlab forcing active: no -> yes
