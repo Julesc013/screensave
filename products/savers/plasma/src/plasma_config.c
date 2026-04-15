@@ -58,18 +58,18 @@ static const plasma_combo_item g_plasma_smoothing_items[] = {
 
 static const plasma_combo_item g_plasma_output_family_items[] = {
     { PLASMA_OUTPUT_FAMILY_RASTER, "Raster" },
-    { PLASMA_OUTPUT_FAMILY_BANDED, "Banded" },
-    { PLASMA_OUTPUT_FAMILY_CONTOUR, "Contour" },
-    { PLASMA_OUTPUT_FAMILY_GLYPH, "Glyph" }
+    { PLASMA_OUTPUT_FAMILY_BANDED, "Banded (Experimental)" },
+    { PLASMA_OUTPUT_FAMILY_CONTOUR, "Contour (Experimental)" },
+    { PLASMA_OUTPUT_FAMILY_GLYPH, "Glyph (Experimental)" }
 };
 
 static const plasma_combo_item g_plasma_output_mode_items[] = {
     { PLASMA_OUTPUT_MODE_NATIVE_RASTER, "Native Raster" },
-    { PLASMA_OUTPUT_MODE_POSTERIZED_BANDS, "Posterized Bands" },
-    { PLASMA_OUTPUT_MODE_CONTOUR_ONLY, "Contour Only" },
-    { PLASMA_OUTPUT_MODE_CONTOUR_BANDS, "Contour Bands" },
-    { PLASMA_OUTPUT_MODE_ASCII_GLYPH, "ASCII Glyph" },
-    { PLASMA_OUTPUT_MODE_MATRIX_GLYPH, "Matrix Glyph" }
+    { PLASMA_OUTPUT_MODE_POSTERIZED_BANDS, "Posterized Bands (Experimental)" },
+    { PLASMA_OUTPUT_MODE_CONTOUR_ONLY, "Contour Only (Experimental)" },
+    { PLASMA_OUTPUT_MODE_CONTOUR_BANDS, "Contour Bands (Experimental)" },
+    { PLASMA_OUTPUT_MODE_ASCII_GLYPH, "ASCII Glyph (Experimental)" },
+    { PLASMA_OUTPUT_MODE_MATRIX_GLYPH, "Matrix Glyph (Experimental)" }
 };
 
 static const plasma_combo_item g_plasma_filter_treatment_items[] = {
@@ -94,11 +94,11 @@ static const plasma_combo_item g_plasma_accent_treatment_items[] = {
 
 static const plasma_combo_item g_plasma_presentation_mode_items[] = {
     { PLASMA_PRESENTATION_MODE_FLAT, "Flat" },
-    { PLASMA_PRESENTATION_MODE_HEIGHTFIELD, "Heightfield" },
-    { PLASMA_PRESENTATION_MODE_CURTAIN, "Curtain" },
-    { PLASMA_PRESENTATION_MODE_RIBBON, "Ribbon" },
-    { PLASMA_PRESENTATION_MODE_CONTOUR_EXTRUSION, "Contour Extrusion" },
-    { PLASMA_PRESENTATION_MODE_BOUNDED_SURFACE, "Bounded Surface" }
+    { PLASMA_PRESENTATION_MODE_HEIGHTFIELD, "Heightfield (Premium)" },
+    { PLASMA_PRESENTATION_MODE_CURTAIN, "Curtain (Premium)" },
+    { PLASMA_PRESENTATION_MODE_RIBBON, "Ribbon (Premium)" },
+    { PLASMA_PRESENTATION_MODE_CONTOUR_EXTRUSION, "Contour Extrusion (Premium)" },
+    { PLASMA_PRESENTATION_MODE_BOUNDED_SURFACE, "Bounded Surface (Premium)" }
 };
 
 static const plasma_combo_item g_plasma_surface_items[] = {
@@ -170,6 +170,39 @@ static const plasma_dialog_binding g_plasma_dialog_bindings[] = {
 
 static int plasma_parse_ulong_text(const char *text, unsigned long *value_out);
 static const char *plasma_format_ulong_text(unsigned long value, char *buffer, unsigned int buffer_size);
+static void plasma_config_clamp_runtime_fields(plasma_config *config);
+static unsigned int plasma_output_mode_choice_count_for_family(plasma_output_family family);
+static int plasma_has_non_empty_text(const char *text);
+static void plasma_append_dialog_info_text(char *buffer, unsigned int buffer_size, const char *text);
+static void plasma_append_dialog_info_line(char *buffer, unsigned int buffer_size, const char *text);
+static const char *plasma_surface_summary_text(plasma_settings_surface surface);
+static void plasma_format_active_identity_line(
+    const plasma_settings_context *settings_context,
+    char *buffer,
+    unsigned int buffer_size
+);
+static int plasma_config_has_hidden_advanced_overrides(const plasma_settings_context *settings_context);
+static int plasma_config_has_hidden_author_lab_state(const plasma_settings_context *settings_context);
+static int plasma_config_requests_lane_sensitive_grammar(const plasma_settings_context *settings_context);
+static void plasma_capture_basic_surface(
+    HWND dialog,
+    const screensave_saver_module *module,
+    screensave_common_config *common_config,
+    plasma_config *product_config
+);
+static void plasma_capture_advanced_surface(
+    HWND dialog,
+    screensave_common_config *common_config,
+    plasma_config *product_config
+);
+static void plasma_capture_author_lab_surface(
+    HWND dialog,
+    screensave_common_config *common_config,
+    plasma_config *product_config
+);
+static void plasma_capture_current_surface(HWND dialog, plasma_dialog_state *dialog_state);
+static void plasma_change_dialog_surface(HWND dialog, plasma_dialog_state *dialog_state);
+static void plasma_apply_settings_to_dialog(HWND dialog, plasma_dialog_state *dialog_state);
 
 static void plasma_emit_config_diag(
     screensave_diag_context *diagnostics,
@@ -343,53 +376,10 @@ static void plasma_config_set_product_defaults(plasma_config *config)
     plasma_benchlab_forcing_set_defaults(&config->benchlab);
 }
 
-void plasma_config_set_defaults(
-    screensave_common_config *common_config,
-    void *product_config,
-    unsigned int product_config_size
-)
+static void plasma_config_clamp_runtime_fields(plasma_config *config)
 {
-    plasma_config *config;
-
-    config = plasma_as_config(product_config, product_config_size);
-    if (common_config == NULL || config == NULL) {
+    if (config == NULL) {
         return;
-    }
-
-    screensave_common_config_set_defaults(common_config);
-    plasma_config_set_product_defaults(config);
-    plasma_apply_preset_bundle_to_config(PLASMA_DEFAULT_PRESET_KEY, common_config, config);
-}
-
-void plasma_config_clamp(
-    screensave_common_config *common_config,
-    void *product_config,
-    unsigned int product_config_size
-)
-{
-    plasma_config *config;
-    plasma_selection_state selection_state;
-
-    config = plasma_as_config(product_config, product_config_size);
-    if (common_config == NULL || config == NULL) {
-        return;
-    }
-
-    screensave_common_config_clamp(common_config);
-    plasma_settings_config_clamp(config);
-
-    if (
-        common_config->preset_key != NULL &&
-        plasma_find_preset_values(common_config->preset_key) == NULL
-    ) {
-        common_config->preset_key = NULL;
-    }
-
-    if (
-        common_config->theme_key == NULL ||
-        plasma_find_theme_descriptor(common_config->theme_key) == NULL
-    ) {
-        common_config->theme_key = NULL;
     }
 
     if (config->effect_mode < PLASMA_EFFECT_PLASMA || config->effect_mode > PLASMA_EFFECT_ARC) {
@@ -482,6 +472,58 @@ void plasma_config_clamp(
     ) {
         config->presentation_mode = PLASMA_PRESENTATION_MODE_FLAT;
     }
+}
+
+void plasma_config_set_defaults(
+    screensave_common_config *common_config,
+    void *product_config,
+    unsigned int product_config_size
+)
+{
+    plasma_config *config;
+
+    config = plasma_as_config(product_config, product_config_size);
+    if (common_config == NULL || config == NULL) {
+        return;
+    }
+
+    screensave_common_config_set_defaults(common_config);
+    plasma_config_set_product_defaults(config);
+    plasma_apply_preset_bundle_to_config(PLASMA_DEFAULT_PRESET_KEY, common_config, config);
+}
+
+void plasma_config_clamp(
+    screensave_common_config *common_config,
+    void *product_config,
+    unsigned int product_config_size
+)
+{
+    plasma_config *config;
+    plasma_selection_state selection_state;
+
+    config = plasma_as_config(product_config, product_config_size);
+    if (common_config == NULL || config == NULL) {
+        return;
+    }
+
+    screensave_common_config_clamp(common_config);
+    plasma_settings_config_clamp(config);
+
+    if (
+        common_config->preset_key != NULL &&
+        plasma_find_preset_values(common_config->preset_key) == NULL
+    ) {
+        common_config->preset_key = NULL;
+    }
+
+    if (
+        common_config->theme_key == NULL ||
+        plasma_find_theme_descriptor(common_config->theme_key) == NULL
+    ) {
+        common_config->theme_key = NULL;
+    }
+
+    plasma_config_clamp_runtime_fields(config);
 
     plasma_selection_preferences_clamp(&config->selection);
     plasma_transition_preferences_clamp(&config->transition);
@@ -1113,6 +1155,26 @@ static int plasma_output_mode_is_visible_for_family(
     }
 }
 
+static unsigned int plasma_output_mode_choice_count_for_family(plasma_output_family family)
+{
+    unsigned int count;
+    unsigned int index;
+
+    count = 0U;
+    for (index = 0U; index < (unsigned int)(sizeof(g_plasma_output_mode_items) / sizeof(g_plasma_output_mode_items[0])); ++index) {
+        if (
+            plasma_output_mode_is_visible_for_family(
+                family,
+                (plasma_output_mode)g_plasma_output_mode_items[index].value
+            )
+        ) {
+            ++count;
+        }
+    }
+
+    return count;
+}
+
 static void plasma_populate_output_mode_combo(
     HWND dialog,
     plasma_output_family family
@@ -1297,40 +1359,87 @@ static void plasma_update_dialog_info(
     const plasma_settings_context *settings_context
 )
 {
-    char info[640];
+    char info[1024];
+    char line[256];
     const screensave_version_info *version_info;
 
     version_info = screensave_version_get_info();
     info[0] = '\0';
-    lstrcpyA(info, "Plasma\r\n");
-    lstrcatA(info, version_info->version_text);
-    lstrcatA(info, "\r\n");
-    if (surface == PLASMA_SETTINGS_SURFACE_BASIC) {
-        lstrcatA(
-            info,
-            "Basic keeps the first-pass controls honest: preset, theme, speed, visual intensity, content pool, and transitions."
-        );
-    } else if (surface == PLASMA_SETTINGS_SURFACE_ADVANCED) {
-        lstrcatA(
-            info,
-            "Advanced adds the real visual grammar: generator family, output family and mode, detail, smoothing, treatments, presentation, and deterministic seed mode."
-        );
+    if (version_info != NULL && plasma_has_non_empty_text(version_info->version_text)) {
+        wsprintfA(line, "Plasma %s", version_info->version_text);
     } else {
-        lstrcatA(
-            info,
-            "Author/Lab keeps curation, journeys, fallback policy, deterministic seed value, and diagnostics in one bounded author-facing layer."
-        );
+        lstrcpyA(line, "Plasma");
     }
+    plasma_append_dialog_info_line(info, (unsigned int)sizeof(info), line);
+    plasma_append_dialog_info_line(info, (unsigned int)sizeof(info), plasma_surface_summary_text(surface));
 
     if (settings_context != NULL) {
+        plasma_format_active_identity_line(settings_context, line, (unsigned int)sizeof(line));
+        plasma_append_dialog_info_line(info, (unsigned int)sizeof(info), line);
+
+        if (surface != PLASMA_SETTINGS_SURFACE_ADVANCED && plasma_config_has_hidden_advanced_overrides(settings_context)) {
+            plasma_append_dialog_info_line(
+                info,
+                (unsigned int)sizeof(info),
+                "Advanced overrides are active; switch to Advanced to inspect or reset them."
+            );
+        }
+        if (surface != PLASMA_SETTINGS_SURFACE_AUTHOR_LAB && plasma_config_has_hidden_author_lab_state(settings_context)) {
+            plasma_append_dialog_info_line(
+                info,
+                (unsigned int)sizeof(info),
+                "Author/Lab state is active; switch to Author/Lab to inspect transition, curation, or diagnostics settings."
+            );
+        }
         if (!settings_context->experimental_content_available) {
-            lstrcatA(info, "\r\nExperimental pool controls stay disabled because the current registry has no experimental content.");
+            plasma_append_dialog_info_line(
+                info,
+                (unsigned int)sizeof(info),
+                "Experimental pool requests stay unavailable because no experimental content is currently registered."
+            );
         }
-        if (!settings_context->favorites_configured) {
-            lstrcatA(info, "\r\nFavorites-only stays disabled until favorite keys are configured through product settings import or export.");
+        if (
+            surface == PLASMA_SETTINGS_SURFACE_AUTHOR_LAB &&
+            settings_context->product_config != NULL &&
+            !settings_context->product_config->transition.enabled
+        ) {
+            plasma_append_dialog_info_line(
+                info,
+                (unsigned int)sizeof(info),
+                "Transition policy, journey, and timing controls stay disabled until Allow Transitions is turned on in Basic."
+            );
         }
-        if (!settings_context->journeys_available) {
-            lstrcatA(info, "\r\nJourney controls stay unavailable until a product-local journey surface exists.");
+        if (surface == PLASMA_SETTINGS_SURFACE_AUTHOR_LAB && !settings_context->favorites_configured) {
+            plasma_append_dialog_info_line(
+                info,
+                (unsigned int)sizeof(info),
+                "Favorites Only stays disabled until favorite preset or theme keys are configured through imported product settings."
+            );
+        }
+        if (surface == PLASMA_SETTINGS_SURFACE_AUTHOR_LAB && !settings_context->journeys_available) {
+            plasma_append_dialog_info_line(
+                info,
+                (unsigned int)sizeof(info),
+                "Journey selection stays unavailable because no authored journeys are registered for this build."
+            );
+        }
+        if (
+            surface == PLASMA_SETTINGS_SURFACE_ADVANCED &&
+            settings_context->product_config != NULL &&
+            plasma_output_mode_choice_count_for_family(settings_context->product_config->output_family) <= 1U
+        ) {
+            plasma_append_dialog_info_line(
+                info,
+                (unsigned int)sizeof(info),
+                "Output mode follows the selected family whenever only one supported mode exists for that family."
+            );
+        }
+        if (plasma_config_requests_lane_sensitive_grammar(settings_context)) {
+            plasma_append_dialog_info_line(
+                info,
+                (unsigned int)sizeof(info),
+                "Some current grammar requests are experimental or lane-sensitive and may clamp back on GDI or GL11."
+            );
         }
     }
 
@@ -1367,8 +1476,15 @@ static void plasma_update_dialog_surface(HWND dialog, plasma_dialog_state *dialo
 
         binding = &g_plasma_dialog_bindings[index];
         descriptor = plasma_settings_find_descriptor(binding->setting_key);
-        visible = descriptor != NULL && descriptor->surface <= surface;
+        visible = plasma_settings_surface_contains_setting(surface, descriptor);
         enabled = visible && plasma_settings_is_available(descriptor, &settings_context);
+        if (
+            enabled &&
+            binding->control_id == IDC_PLASMA_OUTPUT_MODE &&
+            plasma_output_mode_choice_count_for_family(dialog_state->working_product_config.output_family) <= 1U
+        ) {
+            enabled = 0;
+        }
 
         if (binding->label_id != 0) {
             plasma_set_control_visibility(dialog, binding->label_id, visible);
@@ -1380,7 +1496,187 @@ static void plasma_update_dialog_surface(HWND dialog, plasma_dialog_state *dialo
     plasma_update_dialog_info(dialog, surface, &settings_context);
 }
 
-static void plasma_read_dialog_settings(
+static int plasma_has_non_empty_text(const char *text)
+{
+    return text != NULL && text[0] != '\0';
+}
+
+static void plasma_append_dialog_info_text(char *buffer, unsigned int buffer_size, const char *text)
+{
+    unsigned int used;
+
+    if (
+        buffer == NULL ||
+        buffer_size == 0U ||
+        text == NULL ||
+        text[0] == '\0'
+    ) {
+        return;
+    }
+
+    used = (unsigned int)lstrlenA(buffer);
+    if (used + 1U >= buffer_size) {
+        return;
+    }
+    lstrcpynA(buffer + used, text, (int)(buffer_size - used));
+}
+
+static void plasma_append_dialog_info_line(char *buffer, unsigned int buffer_size, const char *text)
+{
+    if (!plasma_has_non_empty_text(text)) {
+        return;
+    }
+
+    if (buffer != NULL && buffer[0] != '\0') {
+        plasma_append_dialog_info_text(buffer, buffer_size, "\r\n");
+    }
+    plasma_append_dialog_info_text(buffer, buffer_size, text);
+}
+
+static const char *plasma_surface_summary_text(plasma_settings_surface surface)
+{
+    switch (surface) {
+    case PLASMA_SETTINGS_SURFACE_BASIC:
+        return "Basic keeps only the stable first-pass controls: preset, theme, speed, intensity, content pool, and transitions.";
+
+    case PLASMA_SETTINGS_SURFACE_ADVANCED:
+        return "Advanced owns the real visual grammar: generator, output, resolution, treatments, presentation, and deterministic mode.";
+
+    case PLASMA_SETTINGS_SURFACE_AUTHOR_LAB:
+        return "Author/Lab keeps curation, transition policy, journeys, fixed seed value, and diagnostics in one bounded surface.";
+
+    default:
+        return "Basic keeps only the stable first-pass controls: preset, theme, speed, intensity, content pool, and transitions.";
+    }
+}
+
+static void plasma_format_active_identity_line(
+    const plasma_settings_context *settings_context,
+    char *buffer,
+    unsigned int buffer_size
+)
+{
+    const char *preset_name;
+    const char *theme_name;
+    const screensave_preset_descriptor *preset_descriptor;
+    const screensave_theme_descriptor *theme_descriptor;
+
+    if (buffer == NULL || buffer_size == 0U) {
+        return;
+    }
+
+    buffer[0] = '\0';
+    preset_name = "None";
+    theme_name = "None";
+    preset_descriptor = NULL;
+    theme_descriptor = NULL;
+
+    if (
+        settings_context != NULL &&
+        settings_context->common_config != NULL &&
+        plasma_has_non_empty_text(settings_context->common_config->preset_key)
+    ) {
+        preset_descriptor = plasma_find_preset_descriptor(settings_context->common_config->preset_key);
+        preset_name = preset_descriptor != NULL
+            ? preset_descriptor->display_name
+            : settings_context->common_config->preset_key;
+    }
+    if (
+        settings_context != NULL &&
+        settings_context->common_config != NULL &&
+        plasma_has_non_empty_text(settings_context->common_config->theme_key)
+    ) {
+        theme_descriptor = plasma_find_theme_descriptor(settings_context->common_config->theme_key);
+        theme_name = theme_descriptor != NULL
+            ? theme_descriptor->display_name
+            : settings_context->common_config->theme_key;
+    }
+
+    wsprintfA(buffer, "Preset: %s   Theme: %s", preset_name, theme_name);
+}
+
+static int plasma_config_has_hidden_advanced_overrides(const plasma_settings_context *settings_context)
+{
+    screensave_common_config bundle_common_config;
+    plasma_config bundle_product_config;
+    const char *preset_key;
+
+    if (
+        settings_context == NULL ||
+        settings_context->common_config == NULL ||
+        settings_context->product_config == NULL
+    ) {
+        return 0;
+    }
+
+    screensave_common_config_set_defaults(&bundle_common_config);
+    plasma_config_set_product_defaults(&bundle_product_config);
+    preset_key = settings_context->common_config->preset_key;
+    if (!plasma_has_non_empty_text(preset_key) || plasma_find_preset_values(preset_key) == NULL) {
+        preset_key = PLASMA_DEFAULT_PRESET_KEY;
+    }
+    plasma_apply_preset_bundle_to_config(preset_key, &bundle_common_config, &bundle_product_config);
+
+    return
+        settings_context->product_config->effect_mode != bundle_product_config.effect_mode ||
+        settings_context->product_config->resolution_mode != bundle_product_config.resolution_mode ||
+        settings_context->product_config->smoothing_mode != bundle_product_config.smoothing_mode ||
+        settings_context->product_config->output_family != bundle_product_config.output_family ||
+        settings_context->product_config->output_mode != bundle_product_config.output_mode ||
+        settings_context->product_config->filter_treatment != bundle_product_config.filter_treatment ||
+        settings_context->product_config->emulation_treatment != bundle_product_config.emulation_treatment ||
+        settings_context->product_config->accent_treatment != bundle_product_config.accent_treatment ||
+        settings_context->product_config->presentation_mode != bundle_product_config.presentation_mode ||
+        settings_context->common_config->use_deterministic_seed != bundle_common_config.use_deterministic_seed;
+}
+
+static int plasma_config_has_hidden_author_lab_state(const plasma_settings_context *settings_context)
+{
+    plasma_selection_preferences selection_defaults;
+    plasma_transition_preferences transition_defaults;
+
+    if (
+        settings_context == NULL ||
+        settings_context->common_config == NULL ||
+        settings_context->product_config == NULL
+    ) {
+        return 0;
+    }
+
+    plasma_selection_preferences_set_defaults(&selection_defaults);
+    plasma_transition_preferences_set_defaults(&transition_defaults);
+
+    return
+        settings_context->product_config->selection.favorites_only != selection_defaults.favorites_only ||
+        settings_context->product_config->selection.preset_set_key[0] != '\0' ||
+        settings_context->product_config->selection.theme_set_key[0] != '\0' ||
+        settings_context->product_config->transition.policy != transition_defaults.policy ||
+        settings_context->product_config->transition.fallback_policy != transition_defaults.fallback_policy ||
+        settings_context->product_config->transition.seed_policy != transition_defaults.seed_policy ||
+        settings_context->product_config->transition.interval_millis != transition_defaults.interval_millis ||
+        settings_context->product_config->transition.duration_millis != transition_defaults.duration_millis ||
+        settings_context->product_config->transition.journey_key[0] != '\0' ||
+        settings_context->common_config->deterministic_seed != 0UL ||
+        settings_context->common_config->diagnostics_overlay_enabled;
+}
+
+static int plasma_config_requests_lane_sensitive_grammar(const plasma_settings_context *settings_context)
+{
+    const plasma_config *product_config;
+
+    if (settings_context == NULL || settings_context->product_config == NULL) {
+        return 0;
+    }
+
+    product_config = settings_context->product_config;
+    return
+        product_config->effect_mode >= PLASMA_EFFECT_CHEMICAL ||
+        product_config->output_family != PLASMA_OUTPUT_FAMILY_RASTER ||
+        product_config->output_mode != PLASMA_OUTPUT_MODE_NATIVE_RASTER ||
+        product_config->presentation_mode != PLASMA_PRESENTATION_MODE_FLAT;
+}
+
+static void plasma_capture_basic_surface(
     HWND dialog,
     const screensave_saver_module *module,
     screensave_common_config *common_config,
@@ -1389,35 +1685,21 @@ static void plasma_read_dialog_settings(
 {
     LRESULT preset_index;
     LRESULT theme_index;
-    screensave_common_config saved_common_config;
-    plasma_config saved_product_config;
-    const char *selected_key;
 
-    saved_common_config = *common_config;
-    saved_product_config = *product_config;
-
-    plasma_config_set_defaults(common_config, product_config, sizeof(*product_config));
-    product_config->selection = saved_product_config.selection;
-    product_config->transition = saved_product_config.transition;
-    product_config->settings_surface = plasma_get_combo_value(
-        dialog,
-        IDC_PLASMA_SURFACE,
-        saved_product_config.settings_surface
-    );
-    common_config->randomization_mode = saved_common_config.randomization_mode;
-    common_config->randomization_scope = saved_common_config.randomization_scope;
-
-    preset_index = SendDlgItemMessageA(dialog, IDC_PLASMA_PRESET, CB_GETCURSEL, 0U, 0L);
-    if (preset_index != CB_ERR && (unsigned int)preset_index < module->preset_count) {
-        plasma_apply_preset_bundle_to_config(module->presets[preset_index].preset_key, common_config, product_config);
-    } else {
-        common_config->preset_key = saved_common_config.preset_key;
-        common_config->theme_key = saved_common_config.theme_key;
+    if (dialog == NULL || common_config == NULL || product_config == NULL) {
+        return;
     }
 
-    theme_index = SendDlgItemMessageA(dialog, IDC_PLASMA_THEME, CB_GETCURSEL, 0U, 0L);
-    if (theme_index != CB_ERR && (unsigned int)theme_index < module->theme_count) {
-        common_config->theme_key = module->themes[theme_index].theme_key;
+    if (module != NULL) {
+        preset_index = SendDlgItemMessageA(dialog, IDC_PLASMA_PRESET, CB_GETCURSEL, 0U, 0L);
+        if (preset_index != CB_ERR && (unsigned int)preset_index < module->preset_count) {
+            common_config->preset_key = module->presets[preset_index].preset_key;
+        }
+
+        theme_index = SendDlgItemMessageA(dialog, IDC_PLASMA_THEME, CB_GETCURSEL, 0U, 0L);
+        if (theme_index != CB_ERR && (unsigned int)theme_index < module->theme_count) {
+            common_config->theme_key = module->themes[theme_index].theme_key;
+        }
     }
 
     common_config->detail_level = (screensave_detail_level)plasma_get_combo_value(
@@ -1426,6 +1708,26 @@ static void plasma_read_dialog_settings(
         common_config->detail_level
     );
     product_config->speed_mode = plasma_get_combo_value(dialog, IDC_PLASMA_SPEED, product_config->speed_mode);
+    product_config->selection.content_filter = (plasma_content_filter)plasma_get_combo_value(
+        dialog,
+        IDC_PLASMA_CONTENT_FILTER,
+        product_config->selection.content_filter
+    );
+    product_config->transition.enabled =
+        IsDlgButtonChecked(dialog, IDC_PLASMA_TRANSITIONS_ENABLED) == BST_CHECKED;
+}
+
+static void plasma_capture_advanced_surface(
+    HWND dialog,
+    screensave_common_config *common_config,
+    plasma_config *product_config
+)
+{
+    if (dialog == NULL || common_config == NULL || product_config == NULL) {
+        return;
+    }
+    (void)common_config;
+
     product_config->effect_mode = plasma_get_combo_value(dialog, IDC_PLASMA_EFFECT, product_config->effect_mode);
     product_config->output_family = (plasma_output_family)plasma_get_combo_value(
         dialog,
@@ -1467,17 +1769,27 @@ static void plasma_read_dialog_settings(
         IDC_PLASMA_PRESENTATION_MODE,
         product_config->presentation_mode
     );
-    product_config->selection.content_filter = (plasma_content_filter)plasma_get_combo_value(
-        dialog,
-        IDC_PLASMA_CONTENT_FILTER,
-        product_config->selection.content_filter
-    );
+    common_config->use_deterministic_seed = IsDlgButtonChecked(dialog, IDC_PLASMA_DETERMINISTIC) == BST_CHECKED;
+}
+
+static void plasma_capture_author_lab_surface(
+    HWND dialog,
+    screensave_common_config *common_config,
+    plasma_config *product_config
+)
+{
+    const char *selected_key;
+
+    if (dialog == NULL || common_config == NULL || product_config == NULL) {
+        return;
+    }
+
     product_config->selection.favorites_only =
         IsDlgButtonChecked(dialog, IDC_PLASMA_FAVORITES_ONLY) == BST_CHECKED;
     selected_key = plasma_get_combo_string_value(
         dialog,
         IDC_PLASMA_PRESET_SET,
-        saved_product_config.selection.preset_set_key
+        product_config->selection.preset_set_key
     );
     plasma_copy_key_text(
         product_config->selection.preset_set_key,
@@ -1487,15 +1799,13 @@ static void plasma_read_dialog_settings(
     selected_key = plasma_get_combo_string_value(
         dialog,
         IDC_PLASMA_THEME_SET,
-        saved_product_config.selection.theme_set_key
+        product_config->selection.theme_set_key
     );
     plasma_copy_key_text(
         product_config->selection.theme_set_key,
         (unsigned int)sizeof(product_config->selection.theme_set_key),
         selected_key
     );
-    product_config->transition.enabled =
-        IsDlgButtonChecked(dialog, IDC_PLASMA_TRANSITIONS_ENABLED) == BST_CHECKED;
     product_config->transition.policy = (plasma_transition_policy)plasma_get_combo_value(
         dialog,
         IDC_PLASMA_TRANSITION_POLICY,
@@ -1526,24 +1836,80 @@ static void plasma_read_dialog_settings(
     selected_key = plasma_get_combo_string_value(
         dialog,
         IDC_PLASMA_JOURNEY,
-        saved_product_config.transition.journey_key
+        product_config->transition.journey_key
     );
     plasma_copy_key_text(
         product_config->transition.journey_key,
         (unsigned int)sizeof(product_config->transition.journey_key),
         selected_key
     );
-    common_config->use_deterministic_seed = IsDlgButtonChecked(dialog, IDC_PLASMA_DETERMINISTIC) == BST_CHECKED;
     common_config->deterministic_seed = plasma_get_edit_ulong(
         dialog,
         IDC_PLASMA_DETERMINISTIC_SEED_VALUE,
-        saved_common_config.deterministic_seed
+        common_config->deterministic_seed
     );
     common_config->diagnostics_overlay_enabled = IsDlgButtonChecked(dialog, IDC_PLASMA_DIAGNOSTICS) == BST_CHECKED;
+}
 
-    plasma_settings_config_clamp(product_config);
-    plasma_selection_preferences_clamp(&product_config->selection);
-    plasma_transition_preferences_clamp(&product_config->transition);
+static void plasma_capture_current_surface(HWND dialog, plasma_dialog_state *dialog_state)
+{
+    plasma_settings_surface surface;
+
+    if (dialog == NULL || dialog_state == NULL) {
+        return;
+    }
+
+    surface = (plasma_settings_surface)dialog_state->working_product_config.settings_surface;
+    switch (surface) {
+    case PLASMA_SETTINGS_SURFACE_BASIC:
+        plasma_capture_basic_surface(
+            dialog,
+            dialog_state->module,
+            &dialog_state->working_common_config,
+            &dialog_state->working_product_config
+        );
+        break;
+
+    case PLASMA_SETTINGS_SURFACE_ADVANCED:
+        plasma_capture_advanced_surface(
+            dialog,
+            &dialog_state->working_common_config,
+            &dialog_state->working_product_config
+        );
+        break;
+
+    case PLASMA_SETTINGS_SURFACE_AUTHOR_LAB:
+        plasma_capture_author_lab_surface(
+            dialog,
+            &dialog_state->working_common_config,
+            &dialog_state->working_product_config
+        );
+        break;
+
+    default:
+        break;
+    }
+
+    plasma_settings_config_clamp(&dialog_state->working_product_config);
+    plasma_config_clamp_runtime_fields(&dialog_state->working_product_config);
+    plasma_selection_preferences_clamp(&dialog_state->working_product_config.selection);
+    plasma_transition_preferences_clamp(&dialog_state->working_product_config.transition);
+}
+
+static void plasma_change_dialog_surface(HWND dialog, plasma_dialog_state *dialog_state)
+{
+    if (dialog == NULL || dialog_state == NULL) {
+        return;
+    }
+
+    plasma_capture_current_surface(dialog, dialog_state);
+    dialog_state->working_product_config.settings_surface = plasma_get_combo_value(
+        dialog,
+        IDC_PLASMA_SURFACE,
+        dialog_state->working_product_config.settings_surface
+    );
+    plasma_settings_config_clamp(&dialog_state->working_product_config);
+    plasma_apply_settings_to_dialog(dialog, dialog_state);
 }
 
 static void plasma_apply_settings_to_dialog(HWND dialog, plasma_dialog_state *dialog_state)
@@ -1652,12 +2018,7 @@ static void plasma_apply_preset_selection(HWND dialog, plasma_dialog_state *dial
         return;
     }
 
-    plasma_read_dialog_settings(
-        dialog,
-        dialog_state->module,
-        &dialog_state->working_common_config,
-        &dialog_state->working_product_config
-    );
+    plasma_capture_current_surface(dialog, dialog_state);
 
     preset_index = SendDlgItemMessageA(dialog, IDC_PLASMA_PRESET, CB_GETCURSEL, 0U, 0L);
     if (preset_index == CB_ERR || (unsigned int)preset_index >= dialog_state->module->preset_count) {
@@ -1698,12 +2059,7 @@ static void plasma_refresh_dialog_from_controls(HWND dialog, plasma_dialog_state
         return;
     }
 
-    plasma_read_dialog_settings(
-        dialog,
-        dialog_state->module,
-        &dialog_state->working_common_config,
-        &dialog_state->working_product_config
-    );
+    plasma_capture_current_surface(dialog, dialog_state);
     plasma_apply_settings_to_dialog(dialog, dialog_state);
 }
 
@@ -1744,8 +2100,12 @@ static INT_PTR CALLBACK plasma_config_dialog_proc(HWND dialog, UINT message, WPA
             return TRUE;
         }
 
+        if (LOWORD(wParam) == IDC_PLASMA_SURFACE && HIWORD(wParam) == CBN_SELCHANGE) {
+            plasma_change_dialog_surface(dialog, dialog_state);
+            return TRUE;
+        }
+
         if (
-            (LOWORD(wParam) == IDC_PLASMA_SURFACE && HIWORD(wParam) == CBN_SELCHANGE) ||
             (LOWORD(wParam) == IDC_PLASMA_THEME && HIWORD(wParam) == CBN_SELCHANGE) ||
             (LOWORD(wParam) == IDC_PLASMA_SPEED && HIWORD(wParam) == CBN_SELCHANGE) ||
             (LOWORD(wParam) == IDC_PLASMA_DETAIL_LEVEL && HIWORD(wParam) == CBN_SELCHANGE) ||
@@ -1793,12 +2153,7 @@ static INT_PTR CALLBACK plasma_config_dialog_proc(HWND dialog, UINT message, WPA
         }
 
         if (LOWORD(wParam) == IDOK) {
-            plasma_read_dialog_settings(
-                dialog,
-                dialog_state->module,
-                &dialog_state->working_common_config,
-                &dialog_state->working_product_config
-            );
+            plasma_capture_current_surface(dialog, dialog_state);
             plasma_config_clamp(
                 &dialog_state->working_common_config,
                 &dialog_state->working_product_config,
