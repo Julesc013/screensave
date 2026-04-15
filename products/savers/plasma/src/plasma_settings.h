@@ -98,6 +98,14 @@ typedef struct plasma_settings_resolution_tag {
 const char *plasma_settings_surface_name(plasma_settings_surface surface);
 const char *plasma_settings_surface_display_name(plasma_settings_surface surface);
 int plasma_settings_parse_surface(const char *text, plasma_settings_surface *surface_out);
+int plasma_settings_surface_contains_setting(
+    plasma_settings_surface surface,
+    const plasma_settings_descriptor *descriptor
+);
+int plasma_settings_surface_contains_setting_key(
+    plasma_settings_surface surface,
+    const char *setting_key
+);
 
 void plasma_settings_context_init(
     plasma_settings_context *context,

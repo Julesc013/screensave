@@ -1173,6 +1173,23 @@ int main(void)
     ) {
         return 435;
     }
+    if (
+        !plasma_settings_surface_contains_setting_key(PLASMA_SETTINGS_SURFACE_BASIC, "preset_key") ||
+        !plasma_settings_surface_contains_setting_key(PLASMA_SETTINGS_SURFACE_BASIC, "theme_key") ||
+        !plasma_settings_surface_contains_setting_key(PLASMA_SETTINGS_SURFACE_BASIC, "transitions_enabled") ||
+        plasma_settings_surface_contains_setting_key(PLASMA_SETTINGS_SURFACE_BASIC, "output_family") ||
+        !plasma_settings_surface_contains_setting_key(PLASMA_SETTINGS_SURFACE_ADVANCED, "effect_mode") ||
+        !plasma_settings_surface_contains_setting_key(PLASMA_SETTINGS_SURFACE_ADVANCED, "output_family") ||
+        !plasma_settings_surface_contains_setting_key(PLASMA_SETTINGS_SURFACE_ADVANCED, "use_deterministic_seed") ||
+        plasma_settings_surface_contains_setting_key(PLASMA_SETTINGS_SURFACE_ADVANCED, "preset_key") ||
+        plasma_settings_surface_contains_setting_key(PLASMA_SETTINGS_SURFACE_ADVANCED, "transition_policy") ||
+        !plasma_settings_surface_contains_setting_key(PLASMA_SETTINGS_SURFACE_AUTHOR_LAB, "preset_set_key") ||
+        !plasma_settings_surface_contains_setting_key(PLASMA_SETTINGS_SURFACE_AUTHOR_LAB, "transition_policy") ||
+        !plasma_settings_surface_contains_setting_key(PLASMA_SETTINGS_SURFACE_AUTHOR_LAB, "deterministic_seed") ||
+        plasma_settings_surface_contains_setting_key(PLASMA_SETTINGS_SURFACE_AUTHOR_LAB, "use_deterministic_seed")
+    ) {
+        return 436;
+    }
 
     plasma_settings_context_init(
         &settings_context,

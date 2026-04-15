@@ -57,7 +57,7 @@ static const plasma_settings_descriptor g_plasma_settings_catalog[] = {
     },
     {
         "effect_mode",
-        "Effect Family",
+        "Generator Family",
         "Selects the current Plasma effect family, including the bounded experimental PX31 and PX32 field-family studies.",
         PLASMA_SETTINGS_SURFACE_ADVANCED,
         "generator",
@@ -70,7 +70,7 @@ static const plasma_settings_descriptor g_plasma_settings_catalog[] = {
     },
     {
         "resolution_mode",
-        "Field Resolution",
+        "Resolution",
         "Controls the internal Plasma field density.",
         PLASMA_SETTINGS_SURFACE_ADVANCED,
         "render",
@@ -200,7 +200,7 @@ static const plasma_settings_descriptor g_plasma_settings_catalog[] = {
     },
     {
         "transitions_enabled",
-        "Transitions Enabled",
+        "Allow Transitions",
         "Enables the bounded PL10 transition engine when a valid transition surface exists.",
         PLASMA_SETTINGS_SURFACE_BASIC,
         "transition",
@@ -226,7 +226,7 @@ static const plasma_settings_descriptor g_plasma_settings_catalog[] = {
     },
     {
         "use_deterministic_seed",
-        "Deterministic Seed",
+        "Deterministic Mode",
         "Locks Plasma to deterministic seed continuity instead of inheriting a session stream.",
         PLASMA_SETTINGS_SURFACE_ADVANCED,
         "seed",
@@ -441,6 +441,22 @@ int plasma_settings_parse_surface(const char *text, plasma_settings_surface *sur
     }
 
     return 0;
+}
+
+int plasma_settings_surface_contains_setting(
+    plasma_settings_surface surface,
+    const plasma_settings_descriptor *descriptor
+)
+{
+    return descriptor != NULL && descriptor->surface == surface;
+}
+
+int plasma_settings_surface_contains_setting_key(
+    plasma_settings_surface surface,
+    const char *setting_key
+)
+{
+    return plasma_settings_surface_contains_setting(surface, plasma_settings_find_descriptor(setting_key));
 }
 
 void plasma_settings_context_init(
