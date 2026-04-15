@@ -426,7 +426,7 @@ static const plasma_content_preset_set_entry g_preset_sets[] = {
     {
         "classic_core",
         "Classic Core",
-        "All preserved built-in Plasma Classic presets.",
+        "First-class stable Plasma Classic presets; compatibility-only classics remain explicit-key only.",
         PLASMA_CONTENT_CHANNEL_STABLE,
         g_classic_core_preset_members,
         (unsigned int)(sizeof(g_classic_core_preset_members) / sizeof(g_classic_core_preset_members[0]))
@@ -485,7 +485,7 @@ static const plasma_content_theme_set_entry g_theme_sets[] = {
     {
         "classic_core",
         "Classic Core",
-        "All preserved built-in Plasma Classic themes.",
+        "First-class stable Plasma Classic themes; compatibility-only classics remain explicit-key only.",
         PLASMA_CONTENT_CHANNEL_STABLE,
         g_classic_core_theme_members,
         (unsigned int)(sizeof(g_classic_core_theme_members) / sizeof(g_classic_core_theme_members[0]))
