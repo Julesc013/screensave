@@ -13,7 +13,7 @@ static void plasma_apply_shared_preset(
         return;
     }
 
-    plasma_apply_preset_to_config(preset_key, common_config, (plasma_config *)product_config);
+    plasma_apply_preset_bundle_to_config(preset_key, common_config, (plasma_config *)product_config);
 }
 
 static const screensave_saver_config_hooks g_plasma_config_hooks = {

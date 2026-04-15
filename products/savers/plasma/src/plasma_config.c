@@ -320,20 +320,12 @@ static LONG plasma_write_string(HKEY key, const char *value_name, const char *va
     );
 }
 
-void plasma_config_set_defaults(
-    screensave_common_config *common_config,
-    void *product_config,
-    unsigned int product_config_size
-)
+static void plasma_config_set_product_defaults(plasma_config *config)
 {
-    plasma_config *config;
-
-    config = plasma_as_config(product_config, product_config_size);
-    if (common_config == NULL || config == NULL) {
+    if (config == NULL) {
         return;
     }
 
-    screensave_common_config_set_defaults(common_config);
     plasma_settings_config_set_defaults(config);
     config->effect_mode = PLASMA_EFFECT_FIRE;
     config->speed_mode = PLASMA_SPEED_GENTLE;
@@ -349,7 +341,24 @@ void plasma_config_set_defaults(
     plasma_selection_preferences_set_defaults(&config->selection);
     plasma_transition_preferences_set_defaults(&config->transition);
     plasma_benchlab_forcing_set_defaults(&config->benchlab);
-    plasma_apply_preset_to_config(PLASMA_DEFAULT_PRESET_KEY, common_config, config);
+}
+
+void plasma_config_set_defaults(
+    screensave_common_config *common_config,
+    void *product_config,
+    unsigned int product_config_size
+)
+{
+    plasma_config *config;
+
+    config = plasma_as_config(product_config, product_config_size);
+    if (common_config == NULL || config == NULL) {
+        return;
+    }
+
+    screensave_common_config_set_defaults(common_config);
+    plasma_config_set_product_defaults(config);
+    plasma_apply_preset_bundle_to_config(PLASMA_DEFAULT_PRESET_KEY, common_config, config);
 }
 
 void plasma_config_clamp(
@@ -536,7 +545,7 @@ int plasma_config_load(
 
     preset_key[0] = '\0';
     if (plasma_read_string(key, "PresetKey", preset_key, sizeof(preset_key))) {
-        plasma_apply_preset_to_config(preset_key, common_config, config);
+        plasma_apply_preset_bundle_to_config(preset_key, common_config, config);
     }
 
     if (plasma_read_string(key, "ThemeKey", theme_key, sizeof(theme_key))) {
@@ -1400,7 +1409,7 @@ static void plasma_read_dialog_settings(
 
     preset_index = SendDlgItemMessageA(dialog, IDC_PLASMA_PRESET, CB_GETCURSEL, 0U, 0L);
     if (preset_index != CB_ERR && (unsigned int)preset_index < module->preset_count) {
-        plasma_apply_preset_to_config(module->presets[preset_index].preset_key, common_config, product_config);
+        plasma_apply_preset_bundle_to_config(module->presets[preset_index].preset_key, common_config, product_config);
     } else {
         common_config->preset_key = saved_common_config.preset_key;
         common_config->theme_key = saved_common_config.theme_key;
@@ -1665,7 +1674,7 @@ static void plasma_apply_preset_selection(HWND dialog, plasma_dialog_state *dial
         &dialog_state->working_product_config,
         sizeof(dialog_state->working_product_config)
     );
-    plasma_apply_preset_to_config(
+    plasma_apply_preset_bundle_to_config(
         dialog_state->module->presets[preset_index].preset_key,
         &dialog_state->working_common_config,
         &dialog_state->working_product_config

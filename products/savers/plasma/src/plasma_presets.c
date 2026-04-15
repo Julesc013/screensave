@@ -662,7 +662,7 @@ const char *plasma_smoothing_mode_name(int smoothing_mode)
     }
 }
 
-void plasma_apply_preset_to_config(
+void plasma_apply_preset_bundle_to_config(
     const char *preset_key,
     screensave_common_config *common_config,
     plasma_config *product_config
@@ -698,4 +698,13 @@ void plasma_apply_preset_to_config(
     product_config->emulation_treatment = preset_values->emulation_treatment;
     product_config->accent_treatment = preset_values->accent_treatment;
     product_config->presentation_mode = preset_values->presentation_mode;
+}
+
+void plasma_apply_preset_to_config(
+    const char *preset_key,
+    screensave_common_config *common_config,
+    plasma_config *product_config
+)
+{
+    plasma_apply_preset_bundle_to_config(preset_key, common_config, product_config);
 }

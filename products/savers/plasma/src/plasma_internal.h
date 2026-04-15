@@ -221,6 +221,11 @@ const char *plasma_speed_mode_name(int speed_mode);
 const char *plasma_resolution_mode_name(int resolution_mode);
 const char *plasma_smoothing_mode_name(int smoothing_mode);
 
+void plasma_apply_preset_bundle_to_config(
+    const char *preset_key,
+    screensave_common_config *common_config,
+    plasma_config *product_config
+);
 void plasma_apply_preset_to_config(
     const char *preset_key,
     screensave_common_config *common_config,

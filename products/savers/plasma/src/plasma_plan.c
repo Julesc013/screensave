@@ -56,6 +56,57 @@ void plasma_plan_bind_renderer_kind(
     plasma_transition_bind_plan(plan, module);
 }
 
+static void plasma_plan_apply_settings_resolution(
+    plasma_plan *plan,
+    const plasma_settings_resolution *settings_resolution,
+    const screensave_saver_environment *environment
+)
+{
+    if (plan == NULL || settings_resolution == NULL || environment == NULL) {
+        return;
+    }
+
+    plan->requested_detail_level = settings_resolution->detail_level;
+    plan->requested_effect_mode = settings_resolution->effect_mode;
+    plan->requested_speed_mode = settings_resolution->speed_mode;
+    plan->requested_resolution_mode = settings_resolution->resolution_mode;
+    plan->requested_smoothing_mode = settings_resolution->smoothing_mode;
+    plan->requested_output_family = settings_resolution->output_family;
+    plan->requested_output_mode = settings_resolution->output_mode;
+    plan->requested_sampling_treatment = settings_resolution->sampling_treatment;
+    plan->requested_filter_treatment = settings_resolution->filter_treatment;
+    plan->requested_emulation_treatment = settings_resolution->emulation_treatment;
+    plan->requested_accent_treatment = settings_resolution->accent_treatment;
+    plan->requested_presentation_mode = settings_resolution->presentation_mode;
+    plan->detail_level = plan->requested_detail_level;
+    plan->effect_mode = plan->requested_effect_mode;
+    plan->speed_mode = plan->requested_speed_mode;
+    plan->resolution_mode = plan->requested_resolution_mode;
+    plan->smoothing_mode = plan->requested_smoothing_mode;
+    plan->output_family = plan->requested_output_family;
+    plan->output_mode = plan->requested_output_mode;
+    plan->sampling_treatment = plan->requested_sampling_treatment;
+    plan->filter_treatment = plan->requested_filter_treatment;
+    plan->emulation_treatment = plan->requested_emulation_treatment;
+    plan->accent_treatment = plan->requested_accent_treatment;
+    plan->presentation_mode = plan->requested_presentation_mode;
+    plan->seed_policy = settings_resolution->use_deterministic_seed
+        ? PLASMA_PLAN_SEED_POLICY_FIXED
+        : PLASMA_PLAN_SEED_POLICY_INHERIT;
+    plan->configured_seed = settings_resolution->deterministic_seed;
+    plan->base_seed = environment->seed.base_seed;
+    plan->stream_seed = environment->seed.stream_seed;
+    plan->resolved_rng_seed = environment->seed.base_seed ^ environment->seed.stream_seed;
+    plan->deterministic = environment->seed.deterministic;
+    plan->transition_requested = settings_resolution->transitions_enabled;
+    plan->transition_policy = settings_resolution->transition_policy;
+    plan->transition_fallback_policy = settings_resolution->transition_fallback_policy;
+    plan->transition_seed_policy = settings_resolution->transition_seed_policy;
+    plan->transition_interval_millis = settings_resolution->transition_interval_millis;
+    plan->transition_duration_millis = settings_resolution->transition_duration_millis;
+    plan->journey = plasma_transition_find_journey(settings_resolution->journey_key);
+}
+
 int plasma_plan_compile(
     plasma_plan *plan,
     const screensave_saver_module *module,
@@ -119,45 +170,7 @@ int plasma_plan_compile(
     plan->preset = plan->selection.selected_preset->descriptor;
     plan->theme_key = plan->selection.selected_theme->theme_key;
     plan->theme = plan->selection.selected_theme->descriptor;
-    plan->requested_detail_level = settings_resolution.detail_level;
-    plan->requested_effect_mode = settings_resolution.effect_mode;
-    plan->requested_speed_mode = settings_resolution.speed_mode;
-    plan->requested_resolution_mode = settings_resolution.resolution_mode;
-    plan->requested_smoothing_mode = settings_resolution.smoothing_mode;
-    plan->requested_output_family = settings_resolution.output_family;
-    plan->requested_output_mode = settings_resolution.output_mode;
-    plan->requested_sampling_treatment = settings_resolution.sampling_treatment;
-    plan->requested_filter_treatment = settings_resolution.filter_treatment;
-    plan->requested_emulation_treatment = settings_resolution.emulation_treatment;
-    plan->requested_accent_treatment = settings_resolution.accent_treatment;
-    plan->requested_presentation_mode = settings_resolution.presentation_mode;
-    plan->detail_level = plan->requested_detail_level;
-    plan->effect_mode = settings_resolution.effect_mode;
-    plan->speed_mode = settings_resolution.speed_mode;
-    plan->resolution_mode = settings_resolution.resolution_mode;
-    plan->smoothing_mode = settings_resolution.smoothing_mode;
-    plan->output_family = settings_resolution.output_family;
-    plan->output_mode = settings_resolution.output_mode;
-    plan->sampling_treatment = settings_resolution.sampling_treatment;
-    plan->filter_treatment = settings_resolution.filter_treatment;
-    plan->emulation_treatment = settings_resolution.emulation_treatment;
-    plan->accent_treatment = settings_resolution.accent_treatment;
-    plan->presentation_mode = settings_resolution.presentation_mode;
-    plan->seed_policy = settings_resolution.use_deterministic_seed
-        ? PLASMA_PLAN_SEED_POLICY_FIXED
-        : PLASMA_PLAN_SEED_POLICY_INHERIT;
-    plan->configured_seed = settings_resolution.deterministic_seed;
-    plan->base_seed = environment->seed.base_seed;
-    plan->stream_seed = environment->seed.stream_seed;
-    plan->resolved_rng_seed = environment->seed.base_seed ^ environment->seed.stream_seed;
-    plan->deterministic = environment->seed.deterministic;
-    plan->transition_requested = settings_resolution.transitions_enabled;
-    plan->transition_policy = settings_resolution.transition_policy;
-    plan->transition_fallback_policy = settings_resolution.transition_fallback_policy;
-    plan->transition_seed_policy = settings_resolution.transition_seed_policy;
-    plan->transition_interval_millis = settings_resolution.transition_interval_millis;
-    plan->transition_duration_millis = settings_resolution.transition_duration_millis;
-    plan->journey = plasma_transition_find_journey(settings_resolution.journey_key);
+    plasma_plan_apply_settings_resolution(plan, &settings_resolution, environment);
 
     if (module != NULL) {
         plan->minimum_kind = module->routing_policy.minimum_kind;
