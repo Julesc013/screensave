@@ -58,8 +58,11 @@ They live with the product so later `PL` work can extend them without rewriting 
 - [U02 Settings Resolution Model](./u02-settings-resolution-model.md): freezes the canonical defaults, preset-bundle, persisted-value, override, clamp, and plan-binding order after the settings-authority rewrite
 - [U02 Preset Compatibility And Defaults](./u02-preset-compatibility-and-defaults.md): records how presets remain curated defaults and compatibility surfaces without staying hidden runtime masters
 - [U02 Post-Settings Invariants](./u02-post-settings-invariants.md): freezes the settings-authority, reporting, and compatibility guarantees that later salvage phases may now assume
-- [U03 Settings Model](./u03-settings-model.md): records the recut of Plasma's user-facing, advanced, and author-facing settings layers
-- [U03 Settings Surfaces](./u03-settings-surfaces.md): records the dialog-side control mapping and hidden non-claim surfaces after the UI recut
+- [U03 Settings Model](./u03-settings-model.md): short compatibility summary for older U03 references after the surface recut
+- [U03 Settings Surfaces](./u03-settings-surfaces.md): records the exact Basic, Advanced, and Author/Lab split after the dialog recut
+- [U03 Control Inventory](./u03-control-inventory.md): records every surviving control, its surface assignment, and every hidden or deferred surface after the UI cleanup
+- [U03 UI And Runtime Truth](./u03-ui-and-runtime-truth.md): records how the dialog now maps to runtime truth, degraded states, and hidden deeper state
+- [U03 Post-UI Invariants](./u03-post-ui-invariants.md): freezes the invariants later corrective phases may now assume after the UI recut
 - [U04 Output, Treatment, And Presentation Truth](./u04-output-treatment-presentation-truth.md): records the surviving visual grammar surfaces and the stronger treatment and output separation
 - [U05 Destructive Simplification](./u05-destructive-simplification.md): records the keep, hide, retune, and non-claim decisions made during the salvage pass
 - [U06 Preset And Theme Tuning Notes](./u06-preset-theme-tuning-notes.md): records the first aggressive retune of built-in presets and palettes

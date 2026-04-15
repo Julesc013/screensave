@@ -1,54 +1,21 @@
 # U03 Settings Model
 
-`U03` recuts Plasma's settings model into three truthful layers.
+This short note remains as a compatibility summary for older `U03` references.
 
-## Basic
+The canonical `U03` surface truth now lives in:
 
-Basic now keeps only the controls that are both meaningful and end-user-safe:
+- [`u03-settings-surfaces.md`](./u03-settings-surfaces.md)
+- [`u03-control-inventory.md`](./u03-control-inventory.md)
+- [`u03-ui-and-runtime-truth.md`](./u03-ui-and-runtime-truth.md)
+- [`u03-post-ui-invariants.md`](./u03-post-ui-invariants.md)
 
-- preset
-- theme
-- speed
-- visual intensity
-- content pool
-- transitions enabled
+## Current Summary
 
-That keeps the first surface focused on identity, pace, and stable-versus-experimental breadth without exposing half-real lab plumbing.
+- `Basic` is now the stable first-pass surface only.
+- `Advanced` is now the exact grammar surface only.
+- `Author/Lab` is now the exact curation and diagnostics surface only.
+- higher surfaces no longer act like cumulative copies of lower ones.
+- routine dialog refreshes no longer reread hidden controls back into the
+  working config.
 
-## Advanced
-
-Advanced now adds the controls that directly own the visual grammar:
-
-- generator family
-- output family
-- output mode
-- field resolution
-- smoothing
-- filter treatment
-- emulation treatment
-- accent treatment
-- presentation mode
-- deterministic seed mode
-
-These controls now map to persisted config fields and compiled plan fields, so the surface matches runtime truth.
-
-## Author/Lab
-
-Author/Lab now carries the curation and transition controls that are useful but not first-pass:
-
-- preset set
-- theme set
-- favorites only
-- transition policy
-- journey
-- transition fallback
-- transition seed continuity
-- transition interval and duration
-- deterministic seed value
-- diagnostics overlay
-
-## Explicit Non-Claims
-
-- `sampling_treatment` remains hidden because it still clamps to `none`.
-- favorites and exclusion key lists remain file-first and import/export-first; the dialog exposes the bounded `favorites_only` gate but not a new list editor.
-- no extra broad feature family was added for this UI pass.
+`U03` is a UI and surface-truth recut, not a deeper visual-grammar rewrite.
