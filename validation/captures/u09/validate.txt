@@ -1,0 +1,30 @@
+PX40 Plasma Lab validate: OK
+- validated preset set classic_core
+- validated preset set dark_room_classics
+- validated preset set fire_classics
+- validated preset set plasma_classics
+- validated preset set interference_classics
+- validated preset set warm_bridge_classics
+- validated preset set cool_bridge_classics
+- validated theme set classic_core
+- validated theme set dark_room_classics
+- validated theme set warm_classics
+- validated theme set cool_classics
+- validated journey classic_cycle
+- validated journey dark_room_cycle
+- validated journey warm_bridge_cycle
+- validated journey cool_bridge_cycle
+- validated lava_remix pack provenance
+- validated lava_remix against the shared SDK pack shell
+- validated curated collection classic_core_featured
+- validated curated collection dark_room_support
+- validated curated collection wave3_experimental_sampler
+- validated projection bridge anthology_stable_core
+- validated projection bridge anthology_experimental_studies
+- validated projection bridge suite_stable_dark_room
+- validated projection bridge suite_experimental_sampler
+- validated control profile deterministic_classic
+- validated control profile dark_room_support
+- validated control profile experimental_matrix
+- validated sdk reference bridge surface
+- validated provenance index entry lava_remix_builtin

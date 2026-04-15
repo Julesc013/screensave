@@ -1,0 +1,24 @@
+U08 Plasma visual QA bar
+- scope: define and apply the acceptance bar for the surviving product surface
+- not in scope: final stable or experimental recut, broad retuning, or feature expansion
+- stable threshold: a surface must be evidence-backed, lower-band-honest, distinct enough to matter, supportable in preview and long-run use, and free of hidden transition or premium-only caveats
+- experimental threshold: a surface may stay broader than stable, but it still needs real identity, explicit gating, explicit requested or resolved or degraded truth, and bounded proof coverage
+- demote or hide threshold: implemented is not enough; weak, support-hostile, hidden-master, or poorly proved surfaces should be narrowed instead of waved through
+- result classes:
+  - pass_stable: implemented, evidence-backed, lower-band-honest, and acceptable to keep inside the stable claim surface
+  - pass_experimental: implemented and evidence-backed enough to stay exposed, but still admitted only as opt-in experimental product breadth
+  - keep_experimental_with_caveat: implemented and worth preserving experimentally, but still bounded by partial proof, tighter gating, or support caveats
+  - demote_hide: implemented but no longer suitable as a first-class visible promise and should stay hidden, lab-only, or support-only
+  - remove_from_claim_surface: still preserved for compatibility or internal routing, but no longer part of the surfaced product claim language
+  - blocked_insufficient_evidence: not rejected forever, but currently lacking enough direct evidence to promote or even keep exposed honestly
+- evaluation dimensions:
+  - distinctness: the surface reads as a materially different visual identity rather than a weak alias or palette nudge
+  - legibility: structure remains readable in motion and under the admitted treatment stack
+  - motion_quality: motion cadence looks deliberate instead of noisy, jittery, or stalled
+  - dark_room_behavior: bright-area handling stays supportable for darker rooms and longer unattended runs
+  - preview_behavior: the surface still reads in the smaller preview and settings-preview host paths
+  - long_run_behavior: the surface remains watchable beyond the first novelty minute
+  - lower_band_honesty: gdi and gl11 truth remains explicit and no richer-lane parity is implied
+  - graceful_degradation: requested richer behavior clamps or falls back explicitly instead of collapsing silently
+  - supportability: the repo can explain, prove, and support the surface without hand-waving
+- later-phase handoff: U09 should consume this bar as an acceptance doctrine input rather than re-argue which evidence classes count

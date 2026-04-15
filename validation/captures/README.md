@@ -5,5 +5,5 @@ Belongs here: video captures, logs intended as evidence, or supporting capture m
 Does not belong here: throwaway scratch files or fake records.
 Type: validation evidence.
 
-Plasma's salvage proof now combines these checked-in text captures with deterministic smoke render-signature checks, an explicit U07 stable combination matrix, bounded experimental coverage reports, requested-versus-resolved settings reports, CLI preset-signature audits, and the U08 acceptance-bar and surface-evaluation reports.
+Plasma's salvage proof now combines these checked-in text captures with deterministic smoke render-signature checks, an explicit U07 stable combination matrix, bounded experimental coverage reports, requested-versus-resolved settings reports, CLI preset-signature audits, the U08 acceptance-bar and surface-evaluation reports, and the U09 final recut evidence index.
 Not every truthful proof artifact lives as a checked-in capture file.

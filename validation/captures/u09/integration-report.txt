@@ -1,0 +1,18 @@
+PX41 Plasma Lab integration report
+- shared contracts consumed: sy40_suite_and_anthology, sy40_sdk_reference
+- anthology and suite bridges: 4
+  anthology_stable_core: consumer=anthology visibility=stable collection=classic_core_featured featured=true curated=true
+    favorite_behavior=product_local_only exclusion_behavior=product_local_only journey_behavior=curated_local_only settings_handoff=not_applicable preview_visibility=not_applicable
+  anthology_experimental_studies: consumer=anthology visibility=experimental collection=wave3_experimental_sampler featured=false curated=true
+    favorite_behavior=product_local_only exclusion_behavior=product_local_only journey_behavior=unsupported settings_handoff=not_applicable preview_visibility=not_applicable
+  suite_stable_dark_room: consumer=suite visibility=stable collection=dark_room_support featured=false curated=true
+    favorite_behavior=product_local_only exclusion_behavior=product_local_only journey_behavior=curated_local_only settings_handoff=product_owned_dialog preview_visibility=stable_only
+  suite_experimental_sampler: consumer=suite visibility=experimental collection=wave3_experimental_sampler featured=true curated=true
+    favorite_behavior=product_local_only exclusion_behavior=product_local_only journey_behavior=unsupported settings_handoff=product_owned_dialog preview_visibility=explicit_opt_in
+- sdk reference surface:
+  class=complex_saver example_pack=lava_remix default_collection=classic_core_featured experimental_collection=wave3_experimental_sampler
+  routing=gdi->gl11 quality_class=safe authoring_entrypoint=python tools/scripts/plasma_lab.py
+- control profiles: 3
+  deterministic_classic: visibility=stable preset=plasma_lava theme=plasma_lava journey=none allow_experimental=false
+  dark_room_support: visibility=stable preset=quiet_darkroom theme=quiet_darkroom journey=none allow_experimental=false
+  experimental_matrix: visibility=experimental preset=matrix_lattice theme=aurora_cool journey=none allow_experimental=true

@@ -4,6 +4,10 @@
 
 This note records the evidence surface used for the `PX50` stable, experimental, and deferred recut.
 
+Historical note:
+after `U09`, this remains the earlier post-PL/Wave-4 recut proof note kept for
+comparison.
+
 ## Exact Evidence Sources Used
 
 Core recut and posture sources:
