@@ -474,112 +474,35 @@ static const char *plasma_benchlab_sampling_treatment_name(
     plasma_sampling_treatment treatment
 )
 {
-    switch (treatment) {
-    case PLASMA_SAMPLING_TREATMENT_NEAREST:
-        return "nearest";
-
-    case PLASMA_SAMPLING_TREATMENT_SOFT:
-        return "soft";
-
-    case PLASMA_SAMPLING_TREATMENT_DITHER:
-        return "dither";
-
-    case PLASMA_SAMPLING_TREATMENT_NONE:
-    default:
-        return "none";
-    }
+    return plasma_sampling_treatment_token(treatment);
 }
 
 static const char *plasma_benchlab_filter_treatment_name(
     plasma_filter_treatment treatment
 )
 {
-    switch (treatment) {
-    case PLASMA_FILTER_TREATMENT_BLUR:
-        return "blur";
-
-    case PLASMA_FILTER_TREATMENT_GLOW_EDGE:
-        return "glow_edge";
-
-    case PLASMA_FILTER_TREATMENT_HALFTONE_STIPPLE:
-        return "halftone_stipple";
-
-    case PLASMA_FILTER_TREATMENT_KALEIDOSCOPE_MIRROR:
-        return "kaleidoscope_mirror";
-
-    case PLASMA_FILTER_TREATMENT_RESTRAINED_GLITCH:
-        return "restrained_glitch";
-
-    case PLASMA_FILTER_TREATMENT_EMBOSS_EDGE:
-        return "emboss_edge";
-
-    case PLASMA_FILTER_TREATMENT_NONE:
-    default:
-        return "none";
-    }
+    return plasma_filter_treatment_token(treatment);
 }
 
 static const char *plasma_benchlab_emulation_treatment_name(
     plasma_emulation_treatment treatment
 )
 {
-    switch (treatment) {
-    case PLASMA_EMULATION_TREATMENT_PHOSPHOR:
-        return "phosphor";
-
-    case PLASMA_EMULATION_TREATMENT_CRT:
-        return "crt";
-
-    case PLASMA_EMULATION_TREATMENT_NONE:
-    default:
-        return "none";
-    }
+    return plasma_emulation_treatment_token(treatment);
 }
 
 static const char *plasma_benchlab_accent_treatment_name(
     plasma_accent_treatment treatment
 )
 {
-    switch (treatment) {
-    case PLASMA_ACCENT_TREATMENT_OVERLAY_PASS:
-        return "overlay_pass";
-
-    case PLASMA_ACCENT_TREATMENT_ACCENT_PASS:
-        return "accent_pass";
-
-    case PLASMA_ACCENT_TREATMENT_NONE:
-    default:
-        return "none";
-    }
+    return plasma_accent_treatment_token(treatment);
 }
 
 static const char *plasma_benchlab_presentation_mode_name(
     plasma_presentation_mode mode
 )
 {
-    switch (mode) {
-    case PLASMA_PRESENTATION_MODE_HEIGHTFIELD:
-        return "heightfield";
-
-    case PLASMA_PRESENTATION_MODE_CURTAIN:
-        return "curtain";
-
-    case PLASMA_PRESENTATION_MODE_RIBBON:
-        return "ribbon";
-
-    case PLASMA_PRESENTATION_MODE_CONTOUR_EXTRUSION:
-        return "contour_extrusion";
-
-    case PLASMA_PRESENTATION_MODE_BOUNDED_SURFACE:
-        return "bounded_surface";
-
-    case PLASMA_PRESENTATION_MODE_BOUNDED_BILLBOARD_VOLUME:
-        return "bounded_billboard_volume";
-
-    case PLASMA_PRESENTATION_MODE_FLAT:
-    default:
-        return "flat";
-    }
+    return plasma_presentation_mode_token(mode);
 }
 
 static const char *plasma_benchlab_preset_morph_class_name(
@@ -873,22 +796,16 @@ static int plasma_benchlab_plan_supports_requested_presentation(
     }
 
     requested_mode = plasma_benchlab_requested_presentation_mode(request);
-    if (!plan->premium_enabled) {
-        return 0;
-    }
     if (
-        requested_mode != PLASMA_PRESENTATION_MODE_HEIGHTFIELD &&
-        requested_mode != PLASMA_PRESENTATION_MODE_CURTAIN &&
-        requested_mode != PLASMA_PRESENTATION_MODE_RIBBON &&
-        requested_mode != PLASMA_PRESENTATION_MODE_CONTOUR_EXTRUSION &&
-        requested_mode != PLASMA_PRESENTATION_MODE_BOUNDED_SURFACE
+        plasma_presentation_mode_requires_premium(requested_mode) &&
+        !plan->premium_enabled
     ) {
         return 0;
     }
-    if (
-        requested_mode == PLASMA_PRESENTATION_MODE_CONTOUR_EXTRUSION &&
-        plan->output_family != PLASMA_OUTPUT_FAMILY_CONTOUR
-    ) {
+    if (!plasma_presentation_mode_is_supported(requested_mode)) {
+        return 0;
+    }
+    if (!plasma_presentation_mode_supports_output_family(requested_mode, plan->output_family)) {
         return 0;
     }
 
@@ -1548,6 +1465,7 @@ void plasma_benchlab_apply_plan_forcing(
             plan->presentation_mode = requested_mode;
         }
     }
+    plasma_presentation_bind_plan(plan);
 }
 
 static unsigned long plasma_benchlab_build_clamp_flags(

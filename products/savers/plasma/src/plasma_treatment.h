@@ -43,6 +43,16 @@ typedef struct plasma_treated_frame_tag {
     const screensave_visual_buffer *visual_buffer;
 } plasma_treated_frame;
 
+int plasma_sampling_treatment_is_supported(plasma_sampling_treatment treatment);
+int plasma_filter_treatment_is_supported(plasma_filter_treatment treatment);
+int plasma_filter_treatment_requires_advanced(plasma_filter_treatment treatment);
+int plasma_emulation_treatment_is_supported(plasma_emulation_treatment treatment);
+int plasma_accent_treatment_is_supported(plasma_accent_treatment treatment);
+int plasma_accent_treatment_requires_advanced(plasma_accent_treatment treatment);
+const char *plasma_sampling_treatment_token(plasma_sampling_treatment treatment);
+const char *plasma_filter_treatment_token(plasma_filter_treatment treatment);
+const char *plasma_emulation_treatment_token(plasma_emulation_treatment treatment);
+const char *plasma_accent_treatment_token(plasma_accent_treatment treatment);
 int plasma_treatment_validate_plan(const struct plasma_plan_tag *plan);
 int plasma_treatment_apply(
     const struct plasma_plan_tag *plan,

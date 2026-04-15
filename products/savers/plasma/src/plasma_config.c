@@ -172,6 +172,14 @@ static int plasma_parse_ulong_text(const char *text, unsigned long *value_out);
 static const char *plasma_format_ulong_text(unsigned long value, char *buffer, unsigned int buffer_size);
 static void plasma_config_clamp_runtime_fields(plasma_config *config);
 static unsigned int plasma_output_mode_choice_count_for_family(plasma_output_family family);
+static int plasma_presentation_mode_is_visible_for_output_family(
+    plasma_output_family family,
+    plasma_presentation_mode mode
+);
+static void plasma_populate_presentation_mode_combo(
+    HWND dialog,
+    plasma_output_family family
+);
 static int plasma_has_non_empty_text(const char *text);
 static void plasma_append_dialog_info_text(char *buffer, unsigned int buffer_size, const char *text);
 static void plasma_append_dialog_info_line(char *buffer, unsigned int buffer_size, const char *text);
@@ -403,39 +411,19 @@ static void plasma_config_clamp_runtime_fields(plasma_config *config)
     if (!plasma_output_family_supports_mode(config->output_family, config->output_mode)) {
         config->output_mode = plasma_output_default_mode_for_family(config->output_family);
     }
-    if (config->sampling_treatment != PLASMA_SAMPLING_TREATMENT_NONE) {
+    if (!plasma_sampling_treatment_is_supported(config->sampling_treatment)) {
         config->sampling_treatment = PLASMA_SAMPLING_TREATMENT_NONE;
     }
-    switch (config->filter_treatment) {
-    case PLASMA_FILTER_TREATMENT_NONE:
-    case PLASMA_FILTER_TREATMENT_BLUR:
-    case PLASMA_FILTER_TREATMENT_GLOW_EDGE:
-    case PLASMA_FILTER_TREATMENT_HALFTONE_STIPPLE:
-    case PLASMA_FILTER_TREATMENT_EMBOSS_EDGE:
-        break;
-
-    default:
+    if (!plasma_filter_treatment_is_supported(config->filter_treatment)) {
         config->filter_treatment = PLASMA_FILTER_TREATMENT_NONE;
-        break;
     }
-    if (
-        config->emulation_treatment != PLASMA_EMULATION_TREATMENT_NONE &&
-        config->emulation_treatment != PLASMA_EMULATION_TREATMENT_PHOSPHOR &&
-        config->emulation_treatment != PLASMA_EMULATION_TREATMENT_CRT
-    ) {
+    if (!plasma_emulation_treatment_is_supported(config->emulation_treatment)) {
         config->emulation_treatment = PLASMA_EMULATION_TREATMENT_NONE;
     }
-    if (
-        config->accent_treatment != PLASMA_ACCENT_TREATMENT_NONE &&
-        config->accent_treatment != PLASMA_ACCENT_TREATMENT_OVERLAY_PASS &&
-        config->accent_treatment != PLASMA_ACCENT_TREATMENT_ACCENT_PASS
-    ) {
+    if (!plasma_accent_treatment_is_supported(config->accent_treatment)) {
         config->accent_treatment = PLASMA_ACCENT_TREATMENT_NONE;
     }
-    if (
-        config->presentation_mode < PLASMA_PRESENTATION_MODE_FLAT ||
-        config->presentation_mode > PLASMA_PRESENTATION_MODE_BOUNDED_SURFACE
-    ) {
+    if (!plasma_presentation_mode_is_supported(config->presentation_mode)) {
         config->presentation_mode = PLASMA_PRESENTATION_MODE_FLAT;
     }
 }
@@ -1124,6 +1112,16 @@ static unsigned int plasma_output_mode_choice_count_for_family(plasma_output_fam
     return count;
 }
 
+static int plasma_presentation_mode_is_visible_for_output_family(
+    plasma_output_family family,
+    plasma_presentation_mode mode
+)
+{
+    return
+        plasma_presentation_mode_is_supported(mode) &&
+        plasma_presentation_mode_supports_output_family(mode, family);
+}
+
 static void plasma_populate_output_mode_combo(
     HWND dialog,
     plasma_output_family family
@@ -1144,6 +1142,35 @@ static void plasma_populate_output_mode_combo(
                 IDC_PLASMA_OUTPUT_MODE,
                 g_plasma_output_mode_items[index].display_name,
                 (LPARAM)g_plasma_output_mode_items[index].value
+            );
+        }
+    }
+}
+
+static void plasma_populate_presentation_mode_combo(
+    HWND dialog,
+    plasma_output_family family
+)
+{
+    unsigned int index;
+
+    SendDlgItemMessageA(dialog, IDC_PLASMA_PRESENTATION_MODE, CB_RESETCONTENT, 0U, 0L);
+    for (
+        index = 0U;
+        index < (unsigned int)(sizeof(g_plasma_presentation_mode_items) / sizeof(g_plasma_presentation_mode_items[0]));
+        ++index
+    ) {
+        if (
+            plasma_presentation_mode_is_visible_for_output_family(
+                family,
+                (plasma_presentation_mode)g_plasma_presentation_mode_items[index].value
+            )
+        ) {
+            plasma_add_combo_item(
+                dialog,
+                IDC_PLASMA_PRESENTATION_MODE,
+                g_plasma_presentation_mode_items[index].display_name,
+                (LPARAM)g_plasma_presentation_mode_items[index].value
             );
         }
     }
@@ -1213,6 +1240,7 @@ static void plasma_populate_dialog_lists(HWND dialog, const screensave_saver_mod
         (unsigned int)(sizeof(g_plasma_output_family_items) / sizeof(g_plasma_output_family_items[0]))
     );
     plasma_populate_output_mode_combo(dialog, PLASMA_OUTPUT_FAMILY_RASTER);
+    plasma_populate_presentation_mode_combo(dialog, PLASMA_OUTPUT_FAMILY_RASTER);
     plasma_populate_named_combo(
         dialog,
         IDC_PLASMA_FILTER_TREATMENT,
@@ -1230,12 +1258,6 @@ static void plasma_populate_dialog_lists(HWND dialog, const screensave_saver_mod
         IDC_PLASMA_ACCENT_TREATMENT,
         g_plasma_accent_treatment_items,
         (unsigned int)(sizeof(g_plasma_accent_treatment_items) / sizeof(g_plasma_accent_treatment_items[0]))
-    );
-    plasma_populate_named_combo(
-        dialog,
-        IDC_PLASMA_PRESENTATION_MODE,
-        g_plasma_presentation_mode_items,
-        (unsigned int)(sizeof(g_plasma_presentation_mode_items) / sizeof(g_plasma_presentation_mode_items[0]))
     );
     plasma_populate_named_combo(
         dialog,
@@ -1867,6 +1889,9 @@ static void plasma_apply_settings_to_dialog(HWND dialog, plasma_dialog_state *di
     const screensave_saver_module *module;
     const screensave_common_config *common_config;
     const plasma_config *product_config;
+    plasma_output_family effective_output_family;
+    plasma_output_mode effective_output_mode;
+    plasma_presentation_mode effective_presentation_mode;
 
     if (dialog_state == NULL) {
         return;
@@ -1896,12 +1921,32 @@ static void plasma_apply_settings_to_dialog(HWND dialog, plasma_dialog_state *di
         }
     }
 
+    effective_output_family = product_config->output_family;
+    if (!plasma_output_family_is_supported(effective_output_family)) {
+        effective_output_family = PLASMA_OUTPUT_FAMILY_RASTER;
+    }
+    effective_output_mode = product_config->output_mode;
+    if (!plasma_output_family_supports_mode(effective_output_family, effective_output_mode)) {
+        effective_output_mode = plasma_output_default_mode_for_family(effective_output_family);
+    }
+    effective_presentation_mode = product_config->presentation_mode;
+    if (
+        !plasma_presentation_mode_is_visible_for_output_family(
+            effective_output_family,
+            effective_presentation_mode
+        )
+    ) {
+        effective_presentation_mode = PLASMA_PRESENTATION_MODE_FLAT;
+    }
+
     plasma_select_combo_value(dialog, IDC_PLASMA_SPEED, (LPARAM)product_config->speed_mode);
     plasma_select_combo_value(dialog, IDC_PLASMA_DETAIL_LEVEL, (LPARAM)common_config->detail_level);
     plasma_select_combo_value(dialog, IDC_PLASMA_EFFECT, (LPARAM)product_config->effect_mode);
-    plasma_select_combo_value(dialog, IDC_PLASMA_OUTPUT_FAMILY, (LPARAM)product_config->output_family);
-    plasma_populate_output_mode_combo(dialog, product_config->output_family);
-    plasma_select_combo_value(dialog, IDC_PLASMA_OUTPUT_MODE, (LPARAM)product_config->output_mode);
+    plasma_select_combo_value(dialog, IDC_PLASMA_OUTPUT_FAMILY, (LPARAM)effective_output_family);
+    plasma_populate_output_mode_combo(dialog, effective_output_family);
+    plasma_select_combo_value(dialog, IDC_PLASMA_OUTPUT_MODE, (LPARAM)effective_output_mode);
+    plasma_populate_presentation_mode_combo(dialog, effective_output_family);
+    plasma_select_combo_value(dialog, IDC_PLASMA_PRESENTATION_MODE, (LPARAM)effective_presentation_mode);
     plasma_select_combo_value(dialog, IDC_PLASMA_RESOLUTION, (LPARAM)product_config->resolution_mode);
     plasma_select_combo_value(dialog, IDC_PLASMA_SMOOTHING, (LPARAM)product_config->smoothing_mode);
     plasma_select_combo_value(dialog, IDC_PLASMA_FILTER_TREATMENT, (LPARAM)product_config->filter_treatment);
@@ -1911,7 +1956,6 @@ static void plasma_apply_settings_to_dialog(HWND dialog, plasma_dialog_state *di
         (LPARAM)product_config->emulation_treatment
     );
     plasma_select_combo_value(dialog, IDC_PLASMA_ACCENT_TREATMENT, (LPARAM)product_config->accent_treatment);
-    plasma_select_combo_value(dialog, IDC_PLASMA_PRESENTATION_MODE, (LPARAM)product_config->presentation_mode);
     plasma_select_combo_value(dialog, IDC_PLASMA_CONTENT_FILTER, (LPARAM)product_config->selection.content_filter);
     plasma_select_combo_string(dialog, IDC_PLASMA_PRESET_SET, product_config->selection.preset_set_key);
     plasma_select_combo_string(dialog, IDC_PLASMA_THEME_SET, product_config->selection.theme_set_key);
@@ -2327,8 +2371,7 @@ static int plasma_parse_output_mode(const char *text, int *value_out)
 
 static const char *plasma_sampling_treatment_name(plasma_sampling_treatment treatment)
 {
-    (void)treatment;
-    return "none";
+    return plasma_sampling_treatment_token(treatment);
 }
 
 static int plasma_parse_sampling_treatment(const char *text, int *value_out)
@@ -2346,23 +2389,7 @@ static int plasma_parse_sampling_treatment(const char *text, int *value_out)
 
 static const char *plasma_filter_treatment_name(plasma_filter_treatment treatment)
 {
-    switch (treatment) {
-    case PLASMA_FILTER_TREATMENT_BLUR:
-        return "blur";
-
-    case PLASMA_FILTER_TREATMENT_GLOW_EDGE:
-        return "glow_edge";
-
-    case PLASMA_FILTER_TREATMENT_HALFTONE_STIPPLE:
-        return "halftone_stipple";
-
-    case PLASMA_FILTER_TREATMENT_EMBOSS_EDGE:
-        return "emboss_edge";
-
-    case PLASMA_FILTER_TREATMENT_NONE:
-    default:
-        return "none";
-    }
+    return plasma_filter_treatment_token(treatment);
 }
 
 static int plasma_parse_filter_treatment(const char *text, int *value_out)
@@ -2396,17 +2423,7 @@ static int plasma_parse_filter_treatment(const char *text, int *value_out)
 
 static const char *plasma_emulation_treatment_name(plasma_emulation_treatment treatment)
 {
-    switch (treatment) {
-    case PLASMA_EMULATION_TREATMENT_PHOSPHOR:
-        return "phosphor";
-
-    case PLASMA_EMULATION_TREATMENT_CRT:
-        return "crt";
-
-    case PLASMA_EMULATION_TREATMENT_NONE:
-    default:
-        return "none";
-    }
+    return plasma_emulation_treatment_token(treatment);
 }
 
 static int plasma_parse_emulation_treatment(const char *text, int *value_out)
@@ -2432,17 +2449,7 @@ static int plasma_parse_emulation_treatment(const char *text, int *value_out)
 
 static const char *plasma_accent_treatment_name(plasma_accent_treatment treatment)
 {
-    switch (treatment) {
-    case PLASMA_ACCENT_TREATMENT_OVERLAY_PASS:
-        return "overlay_pass";
-
-    case PLASMA_ACCENT_TREATMENT_ACCENT_PASS:
-        return "accent_pass";
-
-    case PLASMA_ACCENT_TREATMENT_NONE:
-    default:
-        return "none";
-    }
+    return plasma_accent_treatment_token(treatment);
 }
 
 static int plasma_parse_accent_treatment(const char *text, int *value_out)
@@ -2468,26 +2475,7 @@ static int plasma_parse_accent_treatment(const char *text, int *value_out)
 
 static const char *plasma_presentation_mode_name(plasma_presentation_mode mode)
 {
-    switch (mode) {
-    case PLASMA_PRESENTATION_MODE_HEIGHTFIELD:
-        return "heightfield";
-
-    case PLASMA_PRESENTATION_MODE_CURTAIN:
-        return "curtain";
-
-    case PLASMA_PRESENTATION_MODE_RIBBON:
-        return "ribbon";
-
-    case PLASMA_PRESENTATION_MODE_CONTOUR_EXTRUSION:
-        return "contour_extrusion";
-
-    case PLASMA_PRESENTATION_MODE_BOUNDED_SURFACE:
-        return "bounded_surface";
-
-    case PLASMA_PRESENTATION_MODE_FLAT:
-    default:
-        return "flat";
-    }
+    return plasma_presentation_mode_token(mode);
 }
 
 static int plasma_parse_presentation_mode(const char *text, int *value_out)

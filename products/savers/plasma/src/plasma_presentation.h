@@ -22,6 +22,14 @@ typedef struct plasma_presentation_target_tag {
     screensave_recti destination_rect;
 } plasma_presentation_target;
 
+int plasma_presentation_mode_is_supported(plasma_presentation_mode mode);
+int plasma_presentation_mode_requires_premium(plasma_presentation_mode mode);
+int plasma_presentation_mode_supports_output_family(
+    plasma_presentation_mode mode,
+    plasma_output_family family
+);
+const char *plasma_presentation_mode_token(plasma_presentation_mode mode);
+void plasma_presentation_bind_plan(struct plasma_plan_tag *plan);
 int plasma_presentation_validate_plan(const struct plasma_plan_tag *plan);
 int plasma_presentation_prepare(
     const struct plasma_plan_tag *plan,

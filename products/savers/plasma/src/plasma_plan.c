@@ -53,6 +53,7 @@ void plasma_plan_bind_renderer_kind(
     plasma_advanced_bind_plan(plan, module, requested_kind, active_kind);
     plasma_modern_bind_plan(plan, module, requested_kind, active_kind);
     plasma_premium_bind_plan(plan, module, requested_kind, active_kind);
+    plasma_presentation_bind_plan(plan);
     plasma_transition_bind_plan(plan, module);
 }
 

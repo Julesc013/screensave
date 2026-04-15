@@ -3235,6 +3235,38 @@ int main(void)
     ) {
         return 463;
     }
+    if (
+        !plasma_sampling_treatment_is_supported(PLASMA_SAMPLING_TREATMENT_NONE) ||
+        plasma_sampling_treatment_is_supported(PLASMA_SAMPLING_TREATMENT_NEAREST) ||
+        !plasma_filter_treatment_is_supported(PLASMA_FILTER_TREATMENT_BLUR) ||
+        !plasma_filter_treatment_is_supported(PLASMA_FILTER_TREATMENT_GLOW_EDGE) ||
+        !plasma_filter_treatment_is_supported(PLASMA_FILTER_TREATMENT_HALFTONE_STIPPLE) ||
+        !plasma_filter_treatment_is_supported(PLASMA_FILTER_TREATMENT_EMBOSS_EDGE) ||
+        plasma_filter_treatment_is_supported(PLASMA_FILTER_TREATMENT_KALEIDOSCOPE_MIRROR) ||
+        plasma_filter_treatment_is_supported(PLASMA_FILTER_TREATMENT_RESTRAINED_GLITCH) ||
+        !plasma_filter_treatment_requires_advanced(PLASMA_FILTER_TREATMENT_BLUR) ||
+        plasma_filter_treatment_requires_advanced(PLASMA_FILTER_TREATMENT_GLOW_EDGE) ||
+        !plasma_emulation_treatment_is_supported(PLASMA_EMULATION_TREATMENT_PHOSPHOR) ||
+        !plasma_emulation_treatment_is_supported(PLASMA_EMULATION_TREATMENT_CRT) ||
+        !plasma_accent_treatment_is_supported(PLASMA_ACCENT_TREATMENT_OVERLAY_PASS) ||
+        !plasma_accent_treatment_is_supported(PLASMA_ACCENT_TREATMENT_ACCENT_PASS) ||
+        !plasma_accent_treatment_requires_advanced(PLASMA_ACCENT_TREATMENT_OVERLAY_PASS) ||
+        plasma_accent_treatment_requires_advanced(PLASMA_ACCENT_TREATMENT_ACCENT_PASS) ||
+        !plasma_presentation_mode_is_supported(PLASMA_PRESENTATION_MODE_RIBBON) ||
+        !plasma_presentation_mode_supports_output_family(
+            PLASMA_PRESENTATION_MODE_CONTOUR_EXTRUSION,
+            PLASMA_OUTPUT_FAMILY_CONTOUR
+        ) ||
+        plasma_presentation_mode_supports_output_family(
+            PLASMA_PRESENTATION_MODE_CONTOUR_EXTRUSION,
+            PLASMA_OUTPUT_FAMILY_RASTER
+        ) ||
+        strcmp(plasma_filter_treatment_token(PLASMA_FILTER_TREATMENT_KALEIDOSCOPE_MIRROR), "unsupported") != 0 ||
+        strcmp(plasma_sampling_treatment_token(PLASMA_SAMPLING_TREATMENT_DITHER), "unsupported") != 0 ||
+        strcmp(plasma_presentation_mode_token(PLASMA_PRESENTATION_MODE_BOUNDED_BILLBOARD_VOLUME), "unsupported") != 0
+    ) {
+        return 466;
+    }
     plasma_destroy_session(session);
 
     plasma_config_set_defaults(&common_config, &product_config, sizeof(product_config));
@@ -3607,6 +3639,55 @@ int main(void)
     ) {
         return 415;
     }
+    plasma_config_set_defaults(&common_config, &product_config, sizeof(product_config));
+    plasma_apply_preset_to_config("substrate_relief", &common_config, &product_config);
+    common_config.preset_key = "substrate_relief";
+    common_config.theme_key = "quiet_darkroom";
+    product_config.selection.content_filter = PLASMA_CONTENT_FILTER_STABLE_AND_EXPERIMENTAL;
+    product_config.presentation_mode = PLASMA_PRESENTATION_MODE_CONTOUR_EXTRUSION;
+    screensave_config_binding_init(&binding, &common_config, &product_config, sizeof(product_config));
+    ZeroMemory(&environment, sizeof(environment));
+    fake_size.width = 320;
+    fake_size.height = 240;
+    plasma_smoke_init_fake_renderer(
+        &fake_renderer,
+        SCREENSAVE_RENDERER_KIND_GL46,
+        SCREENSAVE_RENDERER_KIND_GL46,
+        &fake_size
+    );
+    environment.mode = SCREENSAVE_SESSION_MODE_WINDOWED;
+    environment.drawable_size = fake_size;
+    environment.seed.base_seed = 0x71727374UL;
+    environment.seed.stream_seed = 0x75767778UL;
+    environment.seed.deterministic = common_config.use_deterministic_seed;
+    environment.config_binding = &binding;
+    environment.renderer = &fake_renderer;
+    session = NULL;
+    if (!plasma_create_session(module, &session, &environment) || session == NULL) {
+        return 467;
+    }
+    benchlab_config_state.common = common_config;
+    benchlab_config_state.product_config = &product_config;
+    benchlab_config_state.product_config_size = sizeof(product_config);
+    if (
+        !session->plan.premium_enabled ||
+        session->plan.requested_presentation_mode != PLASMA_PRESENTATION_MODE_CONTOUR_EXTRUSION ||
+        session->plan.presentation_mode != PLASMA_PRESENTATION_MODE_FLAT ||
+        !plasma_presentation_validate_plan(&session->plan) ||
+        !plasma_benchlab_build_report_section(
+            session,
+            &benchlab_config_state,
+            SCREENSAVE_RENDERER_KIND_GL46,
+            benchlab_report,
+            (unsigned int)sizeof(benchlab_report)
+        ) ||
+        strstr(benchlab_report, "Requested presentation mode: contour_extrusion") == NULL ||
+        strstr(benchlab_report, "Presentation mode: flat") == NULL
+    ) {
+        plasma_destroy_session(session);
+        return 468;
+    }
+    plasma_destroy_session(session);
 
     plasma_config_set_defaults(&common_config, &product_config, sizeof(product_config));
     plasma_apply_preset_to_config("filament_extrusion", &common_config, &product_config);
@@ -5624,6 +5705,56 @@ int main(void)
         plasma_smoke_render_signature_release(&baseline_render_signature);
         plasma_smoke_render_signature_release(&variant_render_signature);
         return 449;
+    }
+    plasma_smoke_render_signature_release(&variant_render_signature);
+
+    product_config.emulation_treatment = PLASMA_EMULATION_TREATMENT_NONE;
+    product_config.filter_treatment = PLASMA_FILTER_TREATMENT_HALFTONE_STIPPLE;
+    if (
+        !plasma_smoke_capture_render_signature(
+            module,
+            &common_config,
+            &product_config,
+            SCREENSAVE_RENDERER_KIND_GDI,
+            SCREENSAVE_RENDERER_KIND_GDI,
+            250UL,
+            &variant_render_signature
+        ) ||
+        !plasma_smoke_signatures_meaningfully_different(
+            &baseline_render_signature,
+            &variant_render_signature,
+            0,
+            128U
+        )
+    ) {
+        plasma_smoke_render_signature_release(&baseline_render_signature);
+        plasma_smoke_render_signature_release(&variant_render_signature);
+        return 469;
+    }
+    plasma_smoke_render_signature_release(&variant_render_signature);
+
+    product_config.filter_treatment = PLASMA_FILTER_TREATMENT_NONE;
+    product_config.emulation_treatment = PLASMA_EMULATION_TREATMENT_CRT;
+    if (
+        !plasma_smoke_capture_render_signature(
+            module,
+            &common_config,
+            &product_config,
+            SCREENSAVE_RENDERER_KIND_GDI,
+            SCREENSAVE_RENDERER_KIND_GDI,
+            250UL,
+            &variant_render_signature
+        ) ||
+        !plasma_smoke_signatures_meaningfully_different(
+            &baseline_render_signature,
+            &variant_render_signature,
+            0,
+            64U
+        )
+    ) {
+        plasma_smoke_render_signature_release(&baseline_render_signature);
+        plasma_smoke_render_signature_release(&variant_render_signature);
+        return 470;
     }
     plasma_smoke_render_signature_release(&variant_render_signature);
 
