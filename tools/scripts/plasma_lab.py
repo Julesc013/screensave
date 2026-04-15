@@ -242,6 +242,216 @@ U07_EXPERIMENTAL_GRAMMAR_SLICES = (
     "transition subset: bounded classic-cycle journey behavior on the surviving stable core",
 )
 
+U08_ACCEPTANCE_RESULT_MEANINGS = (
+    (
+        "pass_stable",
+        "implemented, evidence-backed, lower-band-honest, and acceptable to keep inside the stable claim surface",
+    ),
+    (
+        "pass_experimental",
+        "implemented and evidence-backed enough to stay exposed, but still admitted only as opt-in experimental product breadth",
+    ),
+    (
+        "keep_experimental_with_caveat",
+        "implemented and worth preserving experimentally, but still bounded by partial proof, tighter gating, or support caveats",
+    ),
+    (
+        "demote_hide",
+        "implemented but no longer suitable as a first-class visible promise and should stay hidden, lab-only, or support-only",
+    ),
+    (
+        "remove_from_claim_surface",
+        "still preserved for compatibility or internal routing, but no longer part of the surfaced product claim language",
+    ),
+    (
+        "blocked_insufficient_evidence",
+        "not rejected forever, but currently lacking enough direct evidence to promote or even keep exposed honestly",
+    ),
+)
+
+U08_EVALUATION_DIMENSIONS = (
+    ("distinctness", "the surface reads as a materially different visual identity rather than a weak alias or palette nudge"),
+    ("legibility", "structure remains readable in motion and under the admitted treatment stack"),
+    ("motion_quality", "motion cadence looks deliberate instead of noisy, jittery, or stalled"),
+    ("dark_room_behavior", "bright-area handling stays supportable for darker rooms and longer unattended runs"),
+    ("preview_behavior", "the surface still reads in the smaller preview and settings-preview host paths"),
+    ("long_run_behavior", "the surface remains watchable beyond the first novelty minute"),
+    ("lower_band_honesty", "gdi and gl11 truth remains explicit and no richer-lane parity is implied"),
+    ("graceful_degradation", "requested richer behavior clamps or falls back explicitly instead of collapsing silently"),
+    ("supportability", "the repo can explain, prove, and support the surface without hand-waving"),
+)
+
+U08_SURFACE_EVALUATIONS = (
+    (
+        "settings_surface",
+        "Basic dialog surface",
+        "stable_candidate",
+        "pass_stable",
+        "u03-settings-surfaces + u07-settings-influence-proof + stable smoke matrix",
+        "Basic only keeps preset, theme, speed, detail, and safe-default selections that now have stable proof and lower-band-safe behavior.",
+    ),
+    (
+        "settings_surface",
+        "Advanced dialog surface",
+        "experimental_candidate",
+        "pass_experimental",
+        "u03-control-inventory + u04 grammar proof + u07 settings influence",
+        "Advanced controls are real and influence the plan or render, but they still sit outside the narrow stable product promise.",
+    ),
+    (
+        "settings_surface",
+        "Author/Lab dialog surface",
+        "experimental_candidate",
+        "keep_experimental_with_caveat",
+        "u03-control-inventory + u07 settings influence",
+        "Author and support controls stay useful, but several remain plan-only or bounded and should not be read as mainstream stable UX.",
+    ),
+    (
+        "default_path",
+        "plasma_lava plus plasma_lava on gdi and gl11",
+        "stable_candidate",
+        "pass_stable",
+        "u06-retuning-proof + u07-combination-proof + BenchLab default captures",
+        "The preserved default path remains the strongest evidence-backed stable entry surface and still honors the gdi floor with gl11 as the preferred stable uplift.",
+    ),
+    (
+        "preset_pool",
+        "classic_core preset set",
+        "stable_candidate",
+        "pass_stable",
+        "u06-preset-retuning + u07 stable matrix + u07 duplicate audit",
+        "The five-member stable preset pool is small enough to prove, visibly distinct enough to keep, and still preserves the classic Plasma identity.",
+    ),
+    (
+        "theme_pool",
+        "classic_core theme set",
+        "stable_candidate",
+        "pass_stable",
+        "u06-theme-retuning + u07 stable matrix + palette-distance audit",
+        "The stable theme pool remains supportable, but its coolest pair stays on the watch list even though the current palette separation clears the bounded threshold.",
+    ),
+    (
+        "collection",
+        "classic_core_featured",
+        "stable_candidate",
+        "pass_stable",
+        "u07 stable matrix + u08 control and curation reports",
+        "The featured stable collection remains acceptable once it stops implying transition stability through a journey key.",
+    ),
+    (
+        "collection",
+        "dark_room_support",
+        "stable_candidate",
+        "pass_stable",
+        "u06 default-and-preview behavior + u07 stable matrix + u08 curation report",
+        "The dark-room collection remains acceptable as a calmer stable support slice after the transition implication is removed from the stable claim surface.",
+    ),
+    (
+        "control_profile",
+        "deterministic_classic",
+        "stable_candidate",
+        "pass_stable",
+        "u06-retuning-proof + u07-combination-proof + u08 control report",
+        "The deterministic support profile remains a stable support tool once it no longer advertises a journey-backed transition path.",
+    ),
+    (
+        "control_profile",
+        "dark_room_support",
+        "stable_candidate",
+        "pass_stable",
+        "u06-retuning-proof + u07-combination-proof + u08 control report",
+        "The dark-room support profile remains a stable support tool for preview and long-run review after the transition implication is removed.",
+    ),
+    (
+        "output_family",
+        "raster and native_raster",
+        "stable_candidate",
+        "pass_stable",
+        "u04-visual-grammar-proof + u07 stable matrix",
+        "Raster remains the lower-band-safe default grammar and the only output family admitted directly inside the stable claim surface.",
+    ),
+    (
+        "output_family",
+        "banded and contour families",
+        "experimental_candidate",
+        "pass_experimental",
+        "u04-visual-grammar-proof + u07 experimental coverage",
+        "These families are now real enough to keep, but they remain broader-than-stable grammar studies rather than default product promises.",
+    ),
+    (
+        "output_family",
+        "glyph families",
+        "experimental_candidate",
+        "keep_experimental_with_caveat",
+        "u04-visual-grammar-proof + u07 experimental coverage + known limits",
+        "Glyph output remains bounded to small ASCII and Matrix subsets and should stay experimental with explicit breadth caveats.",
+    ),
+    (
+        "treatment_surface",
+        "direct filter, emulation, and accent controls",
+        "experimental_candidate",
+        "pass_experimental",
+        "u04-treatment-truth + u07 settings influence + bounded degrade captures",
+        "Direct treatment controls materially change the supported subset, but they remain outside the narrow stable promise even when stable presets bundle some of them indirectly.",
+    ),
+    (
+        "presentation_surface",
+        "flat presentation",
+        "stable_candidate",
+        "pass_stable",
+        "u04-presentation-truth + u07 stable matrix",
+        "Flat presentation remains the only stable-worthy presentation claim because it is the default, lower-band-honest path.",
+    ),
+    (
+        "presentation_surface",
+        "heightfield and ribbon presentation",
+        "experimental_candidate",
+        "keep_experimental_with_caveat",
+        "u04-presentation-truth + u07 experimental coverage + BenchLab degrade captures",
+        "Premium and contour-aware presentation paths remain real but still bounded by premium availability and lower-lane degrade caveats.",
+    ),
+    (
+        "transition_surface",
+        "transitions, journeys, and timing controls",
+        "experimental_candidate",
+        "keep_experimental_with_caveat",
+        "u06 default-and-preview behavior + u07 settings influence + known limits",
+        "Transition and journey controls remain implemented, but the current proof is still partial and should not silently hitchhike into stable collections or stable control profiles.",
+    ),
+    (
+        "experimental_collection",
+        "wave3_experimental_sampler",
+        "experimental_candidate",
+        "pass_experimental",
+        "u07-experimental-coverage + u07 duplicate audit",
+        "The sampler remains a bounded experimental gallery for the surviving Wave 3 studies and stays outside stable claims by design.",
+    ),
+    (
+        "compatibility_surface",
+        "favorites_only hidden compatibility state",
+        "compatibility_only",
+        "remove_from_claim_surface",
+        "u03-control-inventory + u07 settings influence",
+        "Favorites-only no longer belongs in claim language because it survives only as a hidden compatibility state.",
+    ),
+    (
+        "compatibility_surface",
+        "compatibility-only preset and theme aliases",
+        "compatibility_only",
+        "remove_from_claim_surface",
+        "u01 classic compatibility + u05 dead-surface cut + u07 duplicate audit",
+        "Preserved aliases and compatibility-only keys still matter for migration and identity, but they are not first-class shipped variety anymore.",
+    ),
+    (
+        "support_surface",
+        "diagnostics overlay",
+        "support_only",
+        "demote_hide",
+        "u03-control-inventory + u07 settings influence",
+        "Diagnostics remain useful for support and proof work, but they do not belong in the product claim surface or stable user story.",
+    ),
+)
+
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Bounded Plasma Lab shell")
@@ -338,6 +548,18 @@ def build_parser() -> argparse.ArgumentParser:
     subparsers.add_parser(
         "proof-result-taxonomy",
         help="Print the current U07 proof-result taxonomy",
+    )
+    subparsers.add_parser(
+        "qa-bar",
+        help="Print the current U08 visual QA bar and result thresholds",
+    )
+    subparsers.add_parser(
+        "surface-evaluation",
+        help="Print the current U08 surface-by-surface evaluation table",
+    )
+    subparsers.add_parser(
+        "acceptance-decisions",
+        help="Print the current U08 acceptance decisions and honesty adjustments",
     )
 
     return parser
@@ -1618,7 +1840,7 @@ def authoring_report() -> int:
         f"- canonical aliases: {', '.join(f'{alias}->{canonical}' for alias, canonical in sorted(aliases.items())) or 'none'}"
     )
     print(
-        "- author workflow entry points: validate, authoring-report, compare, compat-report, migration-report, integration-report, control-report, curation-report, degrade-report, capture-diff, influence-report, combination-matrix, experimental-coverage, proof-result-taxonomy"
+        "- author workflow entry points: validate, authoring-report, compare, compat-report, migration-report, integration-report, control-report, curation-report, degrade-report, capture-diff, influence-report, combination-matrix, experimental-coverage, proof-result-taxonomy, qa-bar, surface-evaluation, acceptance-decisions"
     )
     print("- current authored boundary: set files, journey files, and pack provenance are on disk; built-in preset and theme descriptors remain compiled and legacy-INI anchored")
     print(
@@ -2147,6 +2369,85 @@ def proof_result_taxonomy() -> int:
     return 0
 
 
+def qa_bar() -> int:
+    print("U08 Plasma visual QA bar")
+    print("- scope: define and apply the acceptance bar for the surviving product surface")
+    print("- not in scope: final stable or experimental recut, broad retuning, or feature expansion")
+    print("- stable threshold: a surface must be evidence-backed, lower-band-honest, distinct enough to matter, supportable in preview and long-run use, and free of hidden transition or premium-only caveats")
+    print("- experimental threshold: a surface may stay broader than stable, but it still needs real identity, explicit gating, explicit requested or resolved or degraded truth, and bounded proof coverage")
+    print("- demote or hide threshold: implemented is not enough; weak, support-hostile, hidden-master, or poorly proved surfaces should be narrowed instead of waved through")
+    print("- result classes:")
+    for result, meaning in U08_ACCEPTANCE_RESULT_MEANINGS:
+        print(f"  - {result}: {meaning}")
+    print("- evaluation dimensions:")
+    for dimension, meaning in U08_EVALUATION_DIMENSIONS:
+        print(f"  - {dimension}: {meaning}")
+    print("- later-phase handoff: U09 should consume this bar as an acceptance doctrine input rather than re-argue which evidence classes count")
+    return 0
+
+
+def surface_evaluation() -> int:
+    repo_surface = load_authored_repo_surface()
+    stable_presets = get_preset_set_member_keys(repo_surface, U07_STABLE_PRESET_SET_KEY)
+    stable_themes = get_theme_set_member_keys(repo_surface, U07_STABLE_THEME_SET_KEY)
+    dark_room_presets = get_preset_set_member_keys(repo_surface, "dark_room_classics")
+    dark_room_themes = get_theme_set_member_keys(repo_surface, "dark_room_classics")
+    sampler = get_curated_collection(repo_surface, U07_EXPERIMENTAL_COLLECTION_KEY)
+
+    print("U08 Plasma surface evaluation")
+    print("- evidence sources consumed: U03 surface inventory, U04 grammar-truth notes, U05 simplification cut, U06 retuning proof, U07 influence and matrix proof, deterministic signature audits, and current control or curation reports")
+    print(
+        f"- stable preset pool ({U07_STABLE_PRESET_SET_KEY}): "
+        + ", ".join(stable_presets)
+    )
+    print(
+        f"- stable theme pool ({U07_STABLE_THEME_SET_KEY}): "
+        + ", ".join(stable_themes)
+    )
+    print("- stable dark-room support pool: presets=" + ", ".join(dark_room_presets) + " themes=" + ", ".join(dark_room_themes))
+    print("- experimental sampler presets: " + ", ".join(sampler["preset_keys"]))
+    print("- experimental sampler themes: " + ", ".join(sampler["theme_keys"]))
+    print("- result columns: category, surface, candidate posture, U08 decision, evidence, rationale")
+    print("")
+    print("| category | surface | candidate | decision | evidence | rationale |")
+    print("| --- | --- | --- | --- | --- | --- |")
+    for category, surface, candidate, decision, evidence, rationale in U08_SURFACE_EVALUATIONS:
+        print(
+            f"| {category} | {surface} | {candidate} | {decision} | {evidence} | {rationale} |"
+        )
+    print("")
+    print("- blocked or partial note:")
+    print("  - transitions, journeys, deterministic seed replay identity, and premium presentation remain bounded by partial or caveated proof rather than screenshot-grade universal acceptance")
+    return 0
+
+
+def acceptance_decisions() -> int:
+    grouped: Dict[str, List[Tuple[str, str, str]]] = {
+        result: [] for result, _ in U08_ACCEPTANCE_RESULT_MEANINGS
+    }
+    for category, surface, _candidate, decision, _evidence, rationale in U08_SURFACE_EVALUATIONS:
+        grouped[decision].append((category, surface, rationale))
+
+    print("U08 Plasma acceptance decisions")
+    print("- purpose: freeze which surviving surfaces are stable-worthy, experimental-only, hidden, or removed from claim language before the final U09 recut")
+    for result, meaning in U08_ACCEPTANCE_RESULT_MEANINGS:
+        rows = grouped[result]
+        print(f"- {result}: {meaning}")
+        if not rows:
+            print("  - none")
+            continue
+        for category, surface, rationale in rows:
+            print(f"  - {category} / {surface}: {rationale}")
+    print("- narrow honesty adjustments:")
+    print("  - stable curated collections should not carry journey keys once transitions remain only experimental with caveated proof")
+    print("  - stable control profiles should mirror that same posture so support tooling does not silently overclaim journey stability")
+    print("- U09 handoff:")
+    print("  - stable recut may now treat only pass_stable rows as stable-worthy by default")
+    print("  - pass_experimental and keep_experimental_with_caveat rows remain opt-in surfaces, not stable promises")
+    print("  - demote_hide and remove_from_claim_surface rows should stay out of ship-language except where compatibility notes require them")
+    return 0
+
+
 def preset_audit(threshold: int, stable_preset_set: str, stable_theme_set: str) -> int:
     signatures = load_compiled_preset_signatures()
     palettes = load_compiled_theme_palettes()
@@ -2317,6 +2618,12 @@ def main(argv: Sequence[str]) -> int:
         return experimental_coverage()
     if args.command == "proof-result-taxonomy":
         return proof_result_taxonomy()
+    if args.command == "qa-bar":
+        return qa_bar()
+    if args.command == "surface-evaluation":
+        return surface_evaluation()
+    if args.command == "acceptance-decisions":
+        return acceptance_decisions()
     if args.command == "preset-audit":
         return preset_audit(args.threshold, args.stable_preset_set, args.stable_theme_set)
     return capture_diff(args.left, args.right)
