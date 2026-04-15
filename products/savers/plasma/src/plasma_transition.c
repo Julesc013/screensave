@@ -3,20 +3,20 @@
 #include "plasma_internal.h"
 
 static const plasma_content_journey_step g_classic_cycle_steps[] = {
-    { "fire_classics", "warm_classics", PLASMA_TRANSITION_POLICY_PRESET_SET, 9000UL },
-    { "dark_room_classics", "warm_classics", PLASMA_TRANSITION_POLICY_PRESET_SET, 12000UL }
+    { "fire_classics", "warm_classics", PLASMA_TRANSITION_POLICY_PRESET_SET, 12000UL },
+    { "dark_room_classics", "warm_classics", PLASMA_TRANSITION_POLICY_PRESET_SET, 16000UL }
 };
 
 static const plasma_content_journey_step g_dark_room_cycle_steps[] = {
-    { "dark_room_classics", "warm_classics", PLASMA_TRANSITION_POLICY_PRESET_SET, 12000UL }
+    { "dark_room_classics", "warm_classics", PLASMA_TRANSITION_POLICY_PRESET_SET, 18000UL }
 };
 
 static const plasma_content_journey_step g_warm_bridge_cycle_steps[] = {
-    { "warm_bridge_classics", "warm_classics", PLASMA_TRANSITION_POLICY_PRESET_SET, 9000UL }
+    { "warm_bridge_classics", "warm_classics", PLASMA_TRANSITION_POLICY_PRESET_SET, 12000UL }
 };
 
 static const plasma_content_journey_step g_cool_bridge_cycle_steps[] = {
-    { "cool_bridge_classics", "cool_classics", PLASMA_TRANSITION_POLICY_PRESET_SET, 9000UL }
+    { "cool_bridge_classics", "cool_classics", PLASMA_TRANSITION_POLICY_PRESET_SET, 12000UL }
 };
 
 static const plasma_content_journey_entry g_transition_journeys[] = {
@@ -958,8 +958,8 @@ void plasma_transition_preferences_set_defaults(plasma_transition_preferences *p
     preferences->policy = PLASMA_TRANSITION_POLICY_DISABLED;
     preferences->fallback_policy = PLASMA_TRANSITION_FALLBACK_THEME_MORPH;
     preferences->seed_policy = PLASMA_TRANSITION_SEED_CONTINUITY_KEEP_STREAM;
-    preferences->interval_millis = 12000UL;
-    preferences->duration_millis = 2400UL;
+    preferences->interval_millis = 14000UL;
+    preferences->duration_millis = 1800UL;
 }
 
 void plasma_transition_preferences_clamp(plasma_transition_preferences *preferences)
@@ -1044,8 +1044,8 @@ void plasma_transition_plan_init(struct plasma_plan_tag *plan)
     plan->transition_fallback_policy = PLASMA_TRANSITION_FALLBACK_THEME_MORPH;
     plan->transition_seed_policy = PLASMA_TRANSITION_SEED_CONTINUITY_KEEP_STREAM;
     plan->transition_supported_types = 0UL;
-    plan->transition_interval_millis = 12000UL;
-    plan->transition_duration_millis = 2400UL;
+    plan->transition_interval_millis = 14000UL;
+    plan->transition_duration_millis = 1800UL;
     plan->journey = NULL;
 }
 

@@ -8,63 +8,63 @@ static const plasma_content_pack_asset g_lava_remix_assets[] = {
 };
 
 static const plasma_content_weighted_key g_classic_core_preset_members[] = {
-    { "plasma_lava", 4U },
-    { "aurora_plasma", 2U },
-    { "ocean_interference", 2U },
+    { "plasma_lava", 5U },
+    { "aurora_plasma", 3U },
+    { "ocean_interference", 3U },
     { "museum_phosphor", 2U },
-    { "quiet_darkroom", 3U }
+    { "quiet_darkroom", 2U }
 };
 
 static const plasma_content_weighted_key g_dark_room_preset_members[] = {
-    { "quiet_darkroom", 4U },
-    { "museum_phosphor", 3U }
+    { "quiet_darkroom", 5U },
+    { "museum_phosphor", 2U }
 };
 
 static const plasma_content_weighted_key g_fire_classics_preset_members[] = {
-    { "plasma_lava", 3U },
+    { "plasma_lava", 4U },
     { "quiet_darkroom", 2U }
 };
 
 static const plasma_content_weighted_key g_plasma_classics_preset_members[] = {
-    { "aurora_plasma", 3U },
+    { "aurora_plasma", 4U },
     { "museum_phosphor", 2U }
 };
 
 static const plasma_content_weighted_key g_interference_classics_preset_members[] = {
-    { "ocean_interference", 3U }
+    { "ocean_interference", 4U }
 };
 
 static const plasma_content_weighted_key g_warm_bridge_classics_preset_members[] = {
-    { "plasma_lava", 3U },
-    { "quiet_darkroom", 3U },
-    { "museum_phosphor", 2U }
+    { "plasma_lava", 4U },
+    { "quiet_darkroom", 2U },
+    { "museum_phosphor", 1U }
 };
 
 static const plasma_content_weighted_key g_cool_bridge_classics_preset_members[] = {
-    { "aurora_plasma", 3U },
+    { "aurora_plasma", 4U },
     { "ocean_interference", 3U }
 };
 
 static const plasma_content_weighted_key g_classic_core_theme_members[] = {
     { "plasma_lava", 4U },
-    { "aurora_cool", 2U },
-    { "oceanic_blue", 2U },
+    { "aurora_cool", 3U },
+    { "oceanic_blue", 3U },
     { "museum_phosphor", 2U },
-    { "quiet_darkroom", 3U }
+    { "quiet_darkroom", 2U }
 };
 
 static const plasma_content_weighted_key g_dark_room_theme_members[] = {
-    { "museum_phosphor", 3U },
-    { "quiet_darkroom", 4U }
+    { "museum_phosphor", 2U },
+    { "quiet_darkroom", 5U }
 };
 
 static const plasma_content_weighted_key g_warm_classics_theme_members[] = {
-    { "plasma_lava", 3U },
+    { "plasma_lava", 4U },
     { "quiet_darkroom", 2U }
 };
 
 static const plasma_content_weighted_key g_cool_classics_theme_members[] = {
-    { "aurora_cool", 3U },
+    { "aurora_cool", 4U },
     { "oceanic_blue", 3U }
 };
 

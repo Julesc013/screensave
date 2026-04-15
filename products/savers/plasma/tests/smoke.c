@@ -1428,8 +1428,8 @@ int main(void)
             (PLASMA_TRANSITION_SUPPORTED_THEME_MORPH |
                 PLASMA_TRANSITION_SUPPORTED_PRESET_MORPH |
                 PLASMA_TRANSITION_SUPPORTED_FALLBACK) ||
-        plan.transition_interval_millis != 12000UL ||
-        plan.transition_duration_millis != 2400UL ||
+        plan.transition_interval_millis != 14000UL ||
+        plan.transition_duration_millis != 1800UL ||
         plan.journey != NULL ||
         !plasma_output_validate_plan(&plan) ||
         !plasma_treatment_validate_plan(&plan) ||
@@ -2320,8 +2320,8 @@ int main(void)
             &selection_preferences,
             &plan
         ) ||
-        strcmp(plan.preset_key, "quiet_darkroom") != 0 ||
-        strcmp(plan.theme_key, "quiet_darkroom") != 0
+        strcmp(plan.preset_key, "aurora_plasma") != 0 ||
+        strcmp(plan.theme_key, "aurora_cool") != 0
     ) {
         fprintf(
             stderr,
@@ -2622,7 +2622,7 @@ int main(void)
         strcmp(plan.preset_key, "lava_isolines") != 0 ||
         !plan.selection.explicit_preset_preserved ||
         plan.output_family != PLASMA_OUTPUT_FAMILY_CONTOUR ||
-        plan.output_mode != PLASMA_OUTPUT_MODE_CONTOUR_ONLY
+        plan.output_mode != PLASMA_OUTPUT_MODE_CONTOUR_BANDS
     ) {
         return 361;
     }
@@ -2638,7 +2638,7 @@ int main(void)
         ) ||
         strcmp(plan.preset_key, "lava_isolines") != 0 ||
         plan.output_family != PLASMA_OUTPUT_FAMILY_CONTOUR ||
-        plan.output_mode != PLASMA_OUTPUT_MODE_CONTOUR_ONLY
+        plan.output_mode != PLASMA_OUTPUT_MODE_CONTOUR_BANDS
     ) {
         return 362;
     }
@@ -2665,8 +2665,8 @@ int main(void)
         product_config.transition.policy != PLASMA_TRANSITION_POLICY_DISABLED ||
         product_config.transition.fallback_policy != PLASMA_TRANSITION_FALLBACK_THEME_MORPH ||
         product_config.transition.seed_policy != PLASMA_TRANSITION_SEED_CONTINUITY_KEEP_STREAM ||
-        product_config.transition.interval_millis != 12000UL ||
-        product_config.transition.duration_millis != 2400UL ||
+        product_config.transition.interval_millis != 14000UL ||
+        product_config.transition.duration_millis != 1800UL ||
         product_config.transition.journey_key[0] != '\0'
     ) {
         return 141;
@@ -3078,7 +3078,7 @@ int main(void)
         ) ||
         strcmp(plan.preset_key, "lava_isolines") != 0 ||
         plan.output_family != PLASMA_OUTPUT_FAMILY_CONTOUR ||
-        plan.output_mode != PLASMA_OUTPUT_MODE_CONTOUR_ONLY ||
+        plan.output_mode != PLASMA_OUTPUT_MODE_CONTOUR_BANDS ||
         plan.filter_treatment != PLASMA_FILTER_TREATMENT_NONE ||
         plan.emulation_treatment != PLASMA_EMULATION_TREATMENT_NONE ||
         plan.accent_treatment != PLASMA_ACCENT_TREATMENT_NONE ||
@@ -3452,7 +3452,8 @@ int main(void)
         plan.effect_mode != PLASMA_EFFECT_CHEMICAL ||
         plan.output_family != PLASMA_OUTPUT_FAMILY_RASTER ||
         plan.output_mode != PLASMA_OUTPUT_MODE_NATIVE_RASTER ||
-        plan.filter_treatment != PLASMA_FILTER_TREATMENT_GLOW_EDGE
+        plan.filter_treatment != PLASMA_FILTER_TREATMENT_GLOW_EDGE ||
+        plan.accent_treatment != PLASMA_ACCENT_TREATMENT_ACCENT_PASS
     ) {
         return 389;
     }
@@ -3539,7 +3540,8 @@ int main(void)
         plan.effect_mode != PLASMA_EFFECT_AURORA ||
         plan.output_family != PLASMA_OUTPUT_FAMILY_RASTER ||
         plan.output_mode != PLASMA_OUTPUT_MODE_NATIVE_RASTER ||
-        plan.filter_treatment != PLASMA_FILTER_TREATMENT_GLOW_EDGE ||
+        plan.filter_treatment != PLASMA_FILTER_TREATMENT_NONE ||
+        plan.accent_treatment != PLASMA_ACCENT_TREATMENT_ACCENT_PASS ||
         plan.presentation_mode != PLASMA_PRESENTATION_MODE_CURTAIN ||
         !plan.premium_requested ||
         !plan.premium_enabled ||
@@ -3665,6 +3667,7 @@ int main(void)
         plan.output_mode != PLASMA_OUTPUT_MODE_NATIVE_RASTER ||
         plan.filter_treatment != PLASMA_FILTER_TREATMENT_EMBOSS_EDGE ||
         plan.emulation_treatment != PLASMA_EMULATION_TREATMENT_PHOSPHOR ||
+        plan.accent_treatment != PLASMA_ACCENT_TREATMENT_ACCENT_PASS ||
         plan.presentation_mode != PLASMA_PRESENTATION_MODE_BOUNDED_SURFACE ||
         !plan.premium_enabled ||
         !plasma_output_validate_plan(&plan) ||
@@ -4223,7 +4226,7 @@ int main(void)
         fprintf(stderr, "smoke: failed to create warm bridge journey session\n");
         return 243;
     }
-    plasma_smoke_step_session_delta(session, &environment, 9000UL);
+    plasma_smoke_step_session_delta(session, &environment, 12000UL);
     if (
         !session->state.transition.active ||
         session->state.transition.active_type != PLASMA_TRANSITION_TYPE_BRIDGE_MORPH ||
@@ -4324,7 +4327,7 @@ int main(void)
     if (!plasma_create_session(module, &session, &environment) || session == NULL) {
         return 248;
     }
-    plasma_smoke_step_session_delta(session, &environment, 9000UL);
+    plasma_smoke_step_session_delta(session, &environment, 12000UL);
     if (
         !session->state.transition.active ||
         session->state.transition.active_type != PLASMA_TRANSITION_TYPE_FALLBACK ||
@@ -4414,7 +4417,7 @@ int main(void)
     if (!plasma_create_session(module, &session, &environment) || session == NULL) {
         return 166;
     }
-    plasma_smoke_step_session_delta(session, &environment, 9000UL);
+    plasma_smoke_step_session_delta(session, &environment, 12000UL);
     if (!session->state.transition.active) {
         plasma_destroy_session(session);
         return 253;
@@ -5018,7 +5021,7 @@ int main(void)
             (unsigned int)sizeof(benchlab_report)
         ) ||
         strstr(benchlab_report, "Profile class: experimental") == NULL ||
-        strstr(benchlab_report, "Requested generator family: plasma") == NULL ||
+        strstr(benchlab_report, "Requested generator family: aurora_curtain_ribbon") == NULL ||
         strstr(benchlab_report, "Requested output family: banded") == NULL ||
         strstr(benchlab_report, "Output family: banded") == NULL ||
         strstr(benchlab_report, "Requested output mode: posterized_bands") == NULL ||

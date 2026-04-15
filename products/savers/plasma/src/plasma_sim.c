@@ -85,7 +85,7 @@ static int plasma_resolution_divisor(
         divisor -= 1;
     }
     if (state->preview_mode) {
-        divisor += 2;
+        divisor += 1;
     }
     if (plan->advanced_enabled && divisor > 2) {
         divisor -= 1;
@@ -396,37 +396,37 @@ static unsigned long plasma_variation_interval_millis(
 )
 {
     if (plan == NULL || state == NULL) {
-        return 12000UL;
+        return 14000UL;
     }
 
     if (state->preview_mode) {
-        return 7000UL;
+        return 9000UL;
     }
     if (plan->effect_mode == PLASMA_EFFECT_INTERFERENCE) {
-        return 11000UL;
-    }
-    if (plan->effect_mode == PLASMA_EFFECT_LATTICE) {
-        return 10500UL;
-    }
-    if (plan->effect_mode == PLASMA_EFFECT_CHEMICAL) {
         return 12500UL;
     }
-    if (plan->effect_mode == PLASMA_EFFECT_CAUSTIC) {
+    if (plan->effect_mode == PLASMA_EFFECT_LATTICE) {
+        return 12000UL;
+    }
+    if (plan->effect_mode == PLASMA_EFFECT_CHEMICAL) {
         return 14000UL;
     }
+    if (plan->effect_mode == PLASMA_EFFECT_CAUSTIC) {
+        return 16500UL;
+    }
     if (plan->effect_mode == PLASMA_EFFECT_AURORA) {
-        return 11200UL;
+        return 13500UL;
     }
     if (plan->effect_mode == PLASMA_EFFECT_SUBSTRATE) {
-        return 14600UL;
+        return 17500UL;
     }
     if (plan->effect_mode == PLASMA_EFFECT_ARC) {
-        return 9200UL;
+        return 10500UL;
     }
     if (plan->effect_mode == PLASMA_EFFECT_FIRE) {
-        return 15000UL;
+        return 18000UL;
     }
-    return 13000UL;
+    return 14500UL;
 }
 
 static unsigned int plasma_fire_floor(
@@ -436,15 +436,15 @@ static unsigned int plasma_fire_floor(
 {
     unsigned int base_value;
 
-    base_value = 180U;
+    base_value = 172U;
     if (plan->speed_mode == PLASMA_SPEED_GENTLE) {
-        base_value = 156U;
+        base_value = 150U;
     } else if (plan->speed_mode == PLASMA_SPEED_LIVELY) {
-        base_value = 208U;
+        base_value = 198U;
     }
 
-    if (state->preview_mode && base_value > 20U) {
-        base_value -= 20U;
+    if (state->preview_mode && base_value > 16U) {
+        base_value -= 16U;
     }
 
     return base_value;
@@ -933,8 +933,8 @@ static void plasma_apply_smoothing(
     if (!smoothing_enabled) {
         return;
     }
-    if (state->preview_mode && blend_amount > 64U) {
-        blend_amount = 64U;
+    if (state->preview_mode && blend_amount > 80U) {
+        blend_amount = 80U;
     }
 
     width = state->field_size.width;
