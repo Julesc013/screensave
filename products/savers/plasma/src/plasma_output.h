@@ -35,6 +35,15 @@ typedef struct plasma_output_frame_tag {
     const unsigned char *scalar_values;
 } plasma_output_frame;
 
+int plasma_output_family_is_supported(plasma_output_family family);
+int plasma_output_mode_is_supported(plasma_output_mode mode);
+int plasma_output_family_supports_mode(
+    plasma_output_family family,
+    plasma_output_mode mode
+);
+plasma_output_mode plasma_output_default_mode_for_family(plasma_output_family family);
+const char *plasma_output_family_token(plasma_output_family family);
+const char *plasma_output_mode_token(plasma_output_mode mode);
 int plasma_output_validate_plan(const struct plasma_plan_tag *plan);
 int plasma_output_build(
     const struct plasma_plan_tag *plan,

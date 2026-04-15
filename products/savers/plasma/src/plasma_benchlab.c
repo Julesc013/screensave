@@ -460,64 +460,14 @@ static const char *plasma_benchlab_output_family_name(
     plasma_output_family family
 )
 {
-    switch (family) {
-    case PLASMA_OUTPUT_FAMILY_BANDED:
-        return "banded";
-
-    case PLASMA_OUTPUT_FAMILY_CONTOUR:
-        return "contour";
-
-    case PLASMA_OUTPUT_FAMILY_GLYPH:
-        return "glyph";
-
-    case PLASMA_OUTPUT_FAMILY_SURFACE:
-        return "surface";
-
-    case PLASMA_OUTPUT_FAMILY_RASTER:
-    default:
-        return "raster";
-    }
+    return plasma_output_family_token(family);
 }
 
 static const char *plasma_benchlab_output_mode_name(
     plasma_output_mode mode
 )
 {
-    switch (mode) {
-    case PLASMA_OUTPUT_MODE_DITHERED_RASTER:
-        return "dithered_raster";
-
-    case PLASMA_OUTPUT_MODE_CONTOUR_ONLY:
-        return "contour_only";
-
-    case PLASMA_OUTPUT_MODE_CONTOUR_BANDS:
-        return "contour_bands";
-
-    case PLASMA_OUTPUT_MODE_ASCII_GLYPH:
-        return "ascii_glyph";
-
-    case PLASMA_OUTPUT_MODE_MATRIX_GLYPH:
-        return "matrix_glyph";
-
-    case PLASMA_OUTPUT_MODE_HEIGHTFIELD_SURFACE:
-        return "heightfield_surface";
-
-    case PLASMA_OUTPUT_MODE_CURTAIN_SURFACE:
-        return "curtain_surface";
-
-    case PLASMA_OUTPUT_MODE_RIBBON_SURFACE:
-        return "ribbon_surface";
-
-    case PLASMA_OUTPUT_MODE_EXTRUDED_CONTOUR_SURFACE:
-        return "extruded_contour_surface";
-
-    case PLASMA_OUTPUT_MODE_POSTERIZED_BANDS:
-        return "posterized_bands";
-
-    case PLASMA_OUTPUT_MODE_NATIVE_RASTER:
-    default:
-        return "native_raster";
-    }
+    return plasma_output_mode_token(mode);
 }
 
 static const char *plasma_benchlab_sampling_treatment_name(

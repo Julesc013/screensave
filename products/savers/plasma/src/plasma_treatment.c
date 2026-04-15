@@ -151,9 +151,9 @@ static unsigned int plasma_treatment_band_count(const struct plasma_plan_tag *pl
         return 6U;
     }
 
-    band_count = 6U;
+    band_count = 5U;
     if (plan->output_mode == PLASMA_OUTPUT_MODE_CONTOUR_ONLY) {
-        band_count = 9U;
+        band_count = 10U;
     } else if (plan->output_mode == PLASMA_OUTPUT_MODE_CONTOUR_BANDS) {
         band_count = 7U;
     }
@@ -537,15 +537,16 @@ static int plasma_theme_map_output(
             ) {
                 color = plasma_treatment_palette_color(plan, state, band_value);
                 if ((band_index & 1U) != 0U) {
-                    color = screensave_color_lerp(color, plan->theme->accent_color, 68U);
+                    color = screensave_color_lerp(color, plan->theme->accent_color, 112U);
+                } else {
+                    color = screensave_color_lerp(color, background_color, 28U);
                 }
             } else if (
                 output->family == PLASMA_OUTPUT_FAMILY_CONTOUR &&
                 output->mode == PLASMA_OUTPUT_MODE_CONTOUR_ONLY
             ) {
                 if (contour_edge) {
-                    color = plasma_treatment_palette_color(plan, state, band_value);
-                    color = screensave_color_lerp(color, white_color, 120U);
+                    color = screensave_color_lerp(plan->theme->accent_color, white_color, 160U);
                 } else {
                     color = background_color;
                 }
@@ -555,9 +556,11 @@ static int plasma_theme_map_output(
             ) {
                 color = plasma_treatment_palette_color(plan, state, band_value);
                 if (contour_edge) {
-                    color = screensave_color_lerp(plan->theme->accent_color, white_color, 96U);
+                    color = screensave_color_lerp(plan->theme->accent_color, white_color, 136U);
                 } else if ((band_index & 1U) != 0U) {
-                    color = screensave_color_lerp(color, plan->theme->accent_color, 44U);
+                    color = screensave_color_lerp(color, plan->theme->accent_color, 72U);
+                } else {
+                    color = screensave_color_lerp(color, background_color, 18U);
                 }
             } else if (
                 output->family == PLASMA_OUTPUT_FAMILY_GLYPH &&

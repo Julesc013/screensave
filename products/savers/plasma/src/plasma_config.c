@@ -397,45 +397,11 @@ static void plasma_config_clamp_runtime_fields(plasma_config *config)
     if (config->smoothing_mode < PLASMA_SMOOTHING_OFF || config->smoothing_mode > PLASMA_SMOOTHING_GLOW) {
         config->smoothing_mode = PLASMA_SMOOTHING_SOFT;
     }
-    if (
-        config->output_family < PLASMA_OUTPUT_FAMILY_RASTER ||
-        config->output_family > PLASMA_OUTPUT_FAMILY_GLYPH
-    ) {
+    if (!plasma_output_family_is_supported(config->output_family)) {
         config->output_family = PLASMA_OUTPUT_FAMILY_RASTER;
     }
-    switch (config->output_family) {
-    case PLASMA_OUTPUT_FAMILY_RASTER:
-        config->output_mode = PLASMA_OUTPUT_MODE_NATIVE_RASTER;
-        break;
-
-    case PLASMA_OUTPUT_FAMILY_BANDED:
-        if (config->output_mode != PLASMA_OUTPUT_MODE_POSTERIZED_BANDS) {
-            config->output_mode = PLASMA_OUTPUT_MODE_POSTERIZED_BANDS;
-        }
-        break;
-
-    case PLASMA_OUTPUT_FAMILY_CONTOUR:
-        if (
-            config->output_mode != PLASMA_OUTPUT_MODE_CONTOUR_ONLY &&
-            config->output_mode != PLASMA_OUTPUT_MODE_CONTOUR_BANDS
-        ) {
-            config->output_mode = PLASMA_OUTPUT_MODE_CONTOUR_ONLY;
-        }
-        break;
-
-    case PLASMA_OUTPUT_FAMILY_GLYPH:
-        if (
-            config->output_mode != PLASMA_OUTPUT_MODE_ASCII_GLYPH &&
-            config->output_mode != PLASMA_OUTPUT_MODE_MATRIX_GLYPH
-        ) {
-            config->output_mode = PLASMA_OUTPUT_MODE_ASCII_GLYPH;
-        }
-        break;
-
-    default:
-        config->output_family = PLASMA_OUTPUT_FAMILY_RASTER;
-        config->output_mode = PLASMA_OUTPUT_MODE_NATIVE_RASTER;
-        break;
+    if (!plasma_output_family_supports_mode(config->output_family, config->output_mode)) {
+        config->output_mode = plasma_output_default_mode_for_family(config->output_family);
     }
     if (config->sampling_treatment != PLASMA_SAMPLING_TREATMENT_NONE) {
         config->sampling_treatment = PLASMA_SAMPLING_TREATMENT_NONE;
@@ -1135,24 +1101,7 @@ static int plasma_output_mode_is_visible_for_family(
     plasma_output_mode mode
 )
 {
-    switch (family) {
-    case PLASMA_OUTPUT_FAMILY_BANDED:
-        return mode == PLASMA_OUTPUT_MODE_POSTERIZED_BANDS;
-
-    case PLASMA_OUTPUT_FAMILY_CONTOUR:
-        return
-            mode == PLASMA_OUTPUT_MODE_CONTOUR_ONLY ||
-            mode == PLASMA_OUTPUT_MODE_CONTOUR_BANDS;
-
-    case PLASMA_OUTPUT_FAMILY_GLYPH:
-        return
-            mode == PLASMA_OUTPUT_MODE_ASCII_GLYPH ||
-            mode == PLASMA_OUTPUT_MODE_MATRIX_GLYPH;
-
-    case PLASMA_OUTPUT_FAMILY_RASTER:
-    default:
-        return mode == PLASMA_OUTPUT_MODE_NATIVE_RASTER;
-    }
+    return plasma_output_family_supports_mode(family, mode);
 }
 
 static unsigned int plasma_output_mode_choice_count_for_family(plasma_output_family family)
@@ -2310,20 +2259,7 @@ static int plasma_parse_speed_mode(const char *text, int *value_out)
 
 static const char *plasma_output_family_name(plasma_output_family family)
 {
-    switch (family) {
-    case PLASMA_OUTPUT_FAMILY_BANDED:
-        return "banded";
-
-    case PLASMA_OUTPUT_FAMILY_CONTOUR:
-        return "contour";
-
-    case PLASMA_OUTPUT_FAMILY_GLYPH:
-        return "glyph";
-
-    case PLASMA_OUTPUT_FAMILY_RASTER:
-    default:
-        return "raster";
-    }
+    return plasma_output_family_token(family);
 }
 
 static int plasma_parse_output_family(const char *text, int *value_out)
@@ -2353,26 +2289,7 @@ static int plasma_parse_output_family(const char *text, int *value_out)
 
 static const char *plasma_output_mode_name(plasma_output_mode mode)
 {
-    switch (mode) {
-    case PLASMA_OUTPUT_MODE_POSTERIZED_BANDS:
-        return "posterized_bands";
-
-    case PLASMA_OUTPUT_MODE_CONTOUR_ONLY:
-        return "contour_only";
-
-    case PLASMA_OUTPUT_MODE_CONTOUR_BANDS:
-        return "contour_bands";
-
-    case PLASMA_OUTPUT_MODE_ASCII_GLYPH:
-        return "ascii_glyph";
-
-    case PLASMA_OUTPUT_MODE_MATRIX_GLYPH:
-        return "matrix_glyph";
-
-    case PLASMA_OUTPUT_MODE_NATIVE_RASTER:
-    default:
-        return "native_raster";
-    }
+    return plasma_output_mode_token(mode);
 }
 
 static int plasma_parse_output_mode(const char *text, int *value_out)
