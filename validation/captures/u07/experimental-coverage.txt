@@ -1,0 +1,18 @@
+U07 Plasma experimental coverage
+- coverage model: bounded covering slices rather than exhaustive cross-product proof
+- experimental collection: wave3_experimental_sampler
+- preset slice: ascii_reactor, matrix_lattice, cellular_bloom, quasi_crystal_bands, caustic_waterlight, ribbon_aurora
+- theme slice: aurora_cool, oceanic_blue, museum_phosphor
+- lane slice: gdi, gl11, gl46, auto
+- result posture: experimental coverage is allowed to stay partial as long as the boundary is explicit
+- coverage slices:
+  - output families and modes: banded/posterized_bands, contour/contour_only, contour/contour_bands, glyph/ascii_glyph, glyph/matrix_glyph
+  - filter treatments: glow_edge, halftone_stipple, emboss_edge
+  - emulation treatments: phosphor, crt
+  - accent treatments: accent_pass
+  - presentation modes: heightfield and ribbon on premium plus explicit lower-lane degrade captures
+  - transition subset: bounded classic-cycle journey behavior on the surviving stable core
+- deliberate non-coverage:
+  - no exhaustive experimental preset/theme/output/treatment/presentation cross-product
+  - no claim of screenshot-grade perceptual coverage on every renderer path
+  - no claim that compatibility-only or hidden controls are first-class experimental proof targets

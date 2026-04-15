@@ -50,6 +50,11 @@ The current `U06` retuning tranche is frozen in the `U06` docs: the surviving
 preset and theme catalogue was rebuilt, preview-safe and dark-room support
 profiles were refreshed, transition pacing moved to calmer defaults, and the
 stable default path was strengthened without widening scope.
+The current `U07` proof-harness tranche is frozen in the `U07` docs: settings
+influence now has explicit validated-versus-partial classification, the stable
+first-class preset and theme surface is enumerated as a real matrix, the
+experimental surface has a bounded coverage strategy, and near-duplicate
+signatures now have a repeatable generated audit path.
 New breadth work should not bypass that diagnostic baseline, the U00 settings
 and uniqueness audits, or the corrective backlog that keeps coherence work ahead
 of feature expansion.

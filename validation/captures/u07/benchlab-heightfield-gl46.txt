@@ -1,0 +1,155 @@
+BenchLab SX09 report
+Product key: plasma
+Display name: Plasma
+Requested renderer: OpenGL 4.6
+Policy target: OpenGL 4.6
+Active renderer: OpenGL 4.6
+Selected band: premium
+Degraded path: None
+Selection path: Requested OpenGL 4.6 within saver policy
+Fallback cause: None
+Renderer backend: gl46
+Renderer status: Presented with OpenGL buffer swap
+Backend vendor: NVIDIA Corporation
+Backend renderer: NVIDIA GeForce RTX 2070/PCIe/SSE2
+Backend detail: gl=4.6 pf=10 rgba=32 depth=24 dbl=1 req=1 tex=1 samp=1 bsto=1 fbo=1 p=4 s=4 f=0
+Deterministic mode: yes
+Base seed: 0x000002E7
+Stream seed: 0x8626231A
+Frames exercised: 4
+Final frame: 4
+Command line: /deterministic /seed:743 /saver:plasma /frames:4 /report:validation\captures\u07\benchlab-heightfield-gl46.txt /renderer:gl46 /plasma-presentation:heightfield
+
+Overlay snapshot
+----------------
+BenchLab
+Saver: Plasma
+Runtime: 0.15.0
+Renderer preference: OpenGL 4.6
+Routing profile: min GDI pref OpenGL 1.1 quality safe
+Active renderer: OpenGL 4.6
+Policy target: OpenGL 4.6
+Selected band: premium
+Degraded path: None
+Renderer backend: gl46
+Selection path: Requested OpenGL 4.6 within saver policy
+Fallback cause: None
+Backend vendor: NVIDIA Corporation
+Backend renderer: NVIDIA GeForce RTX 2070/PCIe/SSE2
+Backend detail: gl=4.6 pf=10 rgba=32 depth=24 dbl=1 req=1 tex=1 samp=1 bsto=1 fbo=1 p=4 s=4 f=0
+Drawable: 640x480
+Renderer status: Presented with OpenGL buffer swap
+Run mode: deterministic running
+Seed: 0x000002E7
+Stream seed: 0x8626231A
+Frame: 4 elapsed=132ms delta=33ms
+Detail level: Standard
+Preset key: plasma_lava
+Theme key: plasma_lava
+Randomization mode: Off
+Plasma BenchLab
+Requested lane: premium
+Resolved lane: premium
+Degrade: none
+Preset: plasma_lava
+Theme: plasma_lava
+Preset set: none
+Theme set: none
+Journey: none
+Profile: stable / safe
+Output: raster / native_raster
+Treatments: none | none | none | none
+Presentation: heightfield
+Transition: disabled / none
+Settings surface: basic
+Content filter: stable_only
+Forcing active: yes
+Clamps: none
+
+Diag: emitted=8 dropped=0
+debug/renderer 7073 gl=4.6 pf=10 rgba=32 depth=24 dbl=1 req=1 tex=1 samp=1 bsto=1 fbo=1 p=4 s=4 f=0
+debug/renderer 7073 gl=4.6 pf=10 rgba=32 depth=24 dbl=1 req=1 tex=1 samp=1 bsto=1 fbo=1 p=3 s=3 f=0
+debug/renderer 7073 gl=4.6 pf=10 rgba=32 depth=24 dbl=1 req=1 tex=1 samp=1 bsto=1 fbo=1 p=2 s=2 f=0
+Keys: F5 restart F6 reseed F7 deterministic F8 pause F9 step
+
+Recent diagnostics
+------------------
+- debug/renderer 7073 gl=4.6 pf=10 rgba=32 depth=24 dbl=1 req=1 tex=1 samp=1 bsto=1 fbo=1 p=4 s=4 f=0
+- debug/renderer 7073 gl=4.6 pf=10 rgba=32 depth=24 dbl=1 req=1 tex=1 samp=1 bsto=1 fbo=1 p=3 s=3 f=0
+- debug/renderer 7073 gl=4.6 pf=10 rgba=32 depth=24 dbl=1 req=1 tex=1 samp=1 bsto=1 fbo=1 p=2 s=2 f=0
+- debug/renderer 7073 gl=4.6 pf=10 rgba=32 depth=24 dbl=1 req=1 tex=1 samp=1 bsto=1 fbo=1 p=1 s=1 f=0
+- info/app 7205 BenchLab attached the active saver module to the windowed harness.
+- info/renderer 7063 The GL46 premium renderer backend is active.
+
+
+Plasma BenchLab
+----------------
+Requested lane: premium
+Resolved lane: premium
+Degraded from: none
+Degraded to: none
+Preset key: plasma_lava
+Theme key: plasma_lava
+Preset set key: none
+Theme set key: none
+Journey key: none
+Profile class: stable
+Quality class: safe
+Preset source: built_in
+Preset channel: stable
+Theme source: built_in
+Theme channel: stable
+Requested detail level: standard
+Detail level: standard
+Requested generator family: fire
+Generator family: fire
+Requested speed mode: gentle
+Speed mode: gentle
+Requested resolution mode: standard
+Resolution mode: standard
+Requested smoothing mode: soft
+Smoothing mode: soft
+Requested output family: raster
+Output family: raster
+Requested output mode: native_raster
+Output mode: native_raster
+Requested sampling treatment: none
+Sampling treatment: none
+Requested filter treatment: none
+Filter treatment: none
+Requested emulation treatment: none
+Emulation treatment: none
+Requested accent treatment: none
+Accent treatment: none
+Requested presentation mode: heightfield
+Presentation mode: heightfield
+Transition requested: no
+Transition enabled: no
+Transition policy: disabled
+Transition type: none
+Transition requested type: none
+Transition resolved type: none
+Transition fallback type: none
+Transition fallback: theme_morph
+Transition seed policy: keep_stream
+Transition source preset: plasma_lava
+Transition target preset: none
+Transition source theme: plasma_lava
+Transition target theme: none
+Preset morph class: fire
+Theme morph class: warm
+Bridge class: warm_classic
+Seed policy: inherit
+Configured seed: 0x00000000
+Base seed: 0x000002E7
+Stream seed: 0x8626231A
+Resolved RNG seed: 0x862621FD
+Settings surface: basic
+Content filter: stable_only
+Favorites requested: no
+Favorites applied: no
+BenchLab forcing active: yes
+Clamp flags: 0x00000000
+Clamp summary: none
+Requested/resolved/degraded: premium / premium / none
+

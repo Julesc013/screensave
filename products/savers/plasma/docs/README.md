@@ -77,7 +77,10 @@ They live with the product so later `PL` work can extend them without rewriting 
 - [U06 Default And Preview Behavior](./u06-default-and-preview-behavior.md): records the strengthened default path, calmer preview and long-run pacing, and retuned transition timing
 - [U06 Post-Retuning Invariants](./u06-post-retuning-invariants.md): freezes the default-path, retuned-content, and lower-band invariants that later proof and QA work may assume
 - [U06 Preset And Theme Tuning Notes](./u06-preset-theme-tuning-notes.md): historical umbrella note kept for older references; use the canonical U06 docs above for current truth
-- [U07 Proof Harness](./u07-proof-harness.md): records the deterministic influence checks, preset-signature audit, and current dead-setting detection boundary
+- [U07 Proof Harness](./u07-proof-harness.md): records the mixed structural, render-signature, capture, and audit substrate that now underpins later Plasma QA work
+- [U07 Stable Combination Matrix](./u07-stable-combination-matrix.md): records the real reachable stable preset/theme/lane matrix now exhaustively exercised by the U07 harness
+- [U07 Experimental Coverage](./u07-experimental-coverage.md): records the bounded experimental coverage strategy and the surfaces it does and does not claim to prove
+- [U07 Proof Result Taxonomy](./u07-proof-result-taxonomy.md): freezes the shared result language that later proof and QA work must consume consistently
 - [U08 Visual QA Bar](./u08-visual-qa-bar.md): records the salvage-phase acceptance bar for stable and experimental surfaces
 
 ## PL00-PL14 Program Record

@@ -1,0 +1,139 @@
+U07 Plasma settings influence report
+- proof posture: mixed model
+- status vocabulary: blocked, documented_only, partial, unsupported, validated
+- note: render-visible proof is stronger than plan-only proof and is reported separately
+- preset_key
+  surface=basic category=content benchlab_exposable=true
+  affects=content_selection,runtime_plan default=plasma_lava
+  plan_result=validated render_result=validated proof_method=structural_plan+render_signature
+  note=selection identity is proved through the stable matrix and deterministic signature deltas
+- theme_key
+  surface=basic category=content benchlab_exposable=true
+  affects=content_selection,runtime_plan default=plasma_lava
+  plan_result=validated render_result=validated proof_method=structural_plan+render_signature+palette_distance
+  note=theme identity is proved through deterministic signature deltas and compiled palette separation
+- speed_mode
+  surface=basic category=motion benchlab_exposable=true
+  affects=runtime_plan,execution_state default=gentle
+  plan_result=validated render_result=validated proof_method=render_signature
+  note=pace changes are part of the shipped smoke signature subset
+- detail_level
+  surface=basic category=render benchlab_exposable=true
+  affects=runtime_plan default=standard
+  plan_result=validated render_result=validated proof_method=render_signature
+  note=detail level remains part of the shipped smoke signature subset
+- effect_mode
+  surface=advanced category=generator benchlab_exposable=true
+  affects=runtime_plan,execution_state default=fire
+  plan_result=validated render_result=validated proof_method=render_signature
+  note=generator family selection remains part of the shipped smoke signature subset
+- resolution_mode
+  surface=advanced category=render benchlab_exposable=true
+  affects=runtime_plan,execution_state default=standard
+  plan_result=validated render_result=validated proof_method=render_signature
+  note=resolution changes are part of the shipped smoke signature subset
+- smoothing_mode
+  surface=advanced category=treatment benchlab_exposable=true
+  affects=runtime_plan,presentation default=soft
+  plan_result=validated render_result=validated proof_method=render_signature
+  note=smoothing changes are part of the shipped smoke signature subset
+- output_family
+  surface=advanced category=output benchlab_exposable=true
+  affects=runtime_plan,presentation default=raster
+  plan_result=validated render_result=validated proof_method=render_signature
+  note=admitted first-class output-family changes are part of the shipped smoke signature subset
+- output_mode
+  surface=advanced category=output benchlab_exposable=true
+  affects=runtime_plan,presentation default=native_raster
+  plan_result=validated render_result=validated proof_method=render_signature
+  note=admitted first-class output-mode changes are part of the shipped smoke signature subset
+- filter_treatment
+  surface=advanced category=treatment benchlab_exposable=true
+  affects=runtime_plan,presentation default=none
+  plan_result=validated render_result=validated proof_method=render_signature
+  note=first-class filter treatments remain part of the shipped smoke signature subset
+- emulation_treatment
+  surface=advanced category=treatment benchlab_exposable=true
+  affects=runtime_plan,presentation default=none
+  plan_result=validated render_result=validated proof_method=render_signature
+  note=first-class emulation treatments remain part of the shipped smoke signature subset
+- accent_treatment
+  surface=advanced category=treatment benchlab_exposable=true
+  affects=runtime_plan,presentation default=none
+  plan_result=validated render_result=validated proof_method=render_signature
+  note=first-class accent treatments remain part of the shipped smoke signature subset
+- presentation_mode
+  surface=advanced category=presentation benchlab_exposable=true
+  affects=runtime_plan,presentation default=flat
+  plan_result=validated render_result=validated proof_method=render_signature+benchlab_capture
+  note=first-class presentation changes rely on premium-lane signatures plus explicit degrade captures
+- preset_set_key
+  surface=author_lab category=selection benchlab_exposable=true
+  affects=content_selection,transition default=empty
+  plan_result=validated render_result=partial proof_method=structural_plan+benchlab_capture
+  note=set routing is selection and journey truth, not a single-frame visual proof
+- theme_set_key
+  surface=author_lab category=selection benchlab_exposable=true
+  affects=content_selection,transition default=empty
+  plan_result=validated render_result=partial proof_method=structural_plan+benchlab_capture
+  note=set routing is selection and journey truth, not a single-frame visual proof
+- transitions_enabled
+  surface=advanced category=transition benchlab_exposable=true
+  affects=runtime_plan,transition default=false
+  plan_result=validated render_result=partial proof_method=structural_plan+benchlab_capture
+  note=transition enablement affects runtime behavior over time rather than one static frame
+- transition_policy
+  surface=author_lab category=transition benchlab_exposable=true
+  affects=runtime_plan,transition default=disabled
+  plan_result=validated render_result=partial proof_method=structural_plan+benchlab_capture
+  note=policy proof remains journey and fallback oriented rather than screenshot-grade
+- use_deterministic_seed
+  surface=advanced category=seed benchlab_exposable=true
+  affects=runtime_plan,execution_state default=false
+  plan_result=validated render_result=partial proof_method=structural_plan
+  note=deterministic mode changes seed policy and replay posture more directly than a single-frame diff
+- content_filter
+  surface=advanced category=selection benchlab_exposable=true
+  affects=content_selection default=stable_only
+  plan_result=validated render_result=partial proof_method=structural_plan+benchlab_capture
+  note=content pool filtering changes selection truth more directly than a single-frame diff
+- favorites_only
+  surface=author_lab category=selection benchlab_exposable=true
+  affects=content_selection default=false
+  plan_result=partial render_result=documented_only proof_method=structural_plan
+  note=favorites-only survives as hidden compatibility state rather than a first-class U07 proof target
+- journey_key
+  surface=author_lab category=transition benchlab_exposable=true
+  affects=runtime_plan,transition default=empty
+  plan_result=validated render_result=partial proof_method=structural_plan+benchlab_capture
+  note=journey choice affects transition routing over time
+- transition_fallback_policy
+  surface=author_lab category=transition benchlab_exposable=true
+  affects=runtime_plan,transition default=hard_cut
+  plan_result=validated render_result=partial proof_method=structural_plan+benchlab_capture
+  note=fallback behavior is proved through plan and capture truth rather than a single-frame delta
+- transition_seed_policy
+  surface=author_lab category=transition benchlab_exposable=true
+  affects=runtime_plan,transition default=keep_stream
+  plan_result=validated render_result=partial proof_method=structural_plan+benchlab_capture
+  note=seed continuity policy is runtime-state truth rather than a single-frame delta
+- transition_interval_millis
+  surface=author_lab category=transition benchlab_exposable=true
+  affects=runtime_plan,transition default=14000
+  plan_result=validated render_result=partial proof_method=structural_plan+benchlab_capture
+  note=interval retunes dwell timing rather than the first still frame
+- transition_duration_millis
+  surface=author_lab category=transition benchlab_exposable=true
+  affects=runtime_plan,transition default=1800
+  plan_result=validated render_result=partial proof_method=structural_plan+benchlab_capture
+  note=duration retunes morph timing rather than the first still frame
+- deterministic_seed
+  surface=author_lab category=seed benchlab_exposable=true
+  affects=runtime_plan,execution_state default=0
+  plan_result=validated render_result=partial proof_method=structural_plan
+  note=seed value is resolved-runtime truth and only indirectly a first-frame visual proof
+- diagnostics_overlay_enabled
+  surface=author_lab category=diagnostics benchlab_exposable=true
+  affects=diagnostics default=false
+  plan_result=partial render_result=partial proof_method=structural_plan
+  note=diagnostics overlay remains a support-facing surface rather than a stable visual-identity proof target

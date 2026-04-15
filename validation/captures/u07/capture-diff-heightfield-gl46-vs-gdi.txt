@@ -1,0 +1,19 @@
+Plasma capture diff: validation\captures\u07\benchlab-heightfield-gl46.txt -> validation\captures\u07\benchlab-heightfield-gdi.txt
+- mode: semantic BenchLab text-capture comparison
+- compared keys: requested renderer, policy target, active renderer, selected band, degraded path, selection path, fallback cause, renderer backend, renderer status, requested lane, resolved lane, degraded from, degraded to, preset key, theme key, preset set key, theme set key, journey key, profile class, quality class, preset source, preset channel, theme source, theme channel, generator family, output family, output mode, sampling treatment, filter treatment, emulation treatment, accent treatment, presentation mode, transition requested, transition enabled, transition policy, transition type, transition fallback, settings surface, content filter, favorites requested, favorites applied, benchlab forcing active, clamp summary, requested/resolved/degraded
+- unchanged keys: degraded path, fallback cause, preset key, theme key, preset set key, theme set key, journey key, profile class, quality class, preset source, preset channel, theme source, theme channel, generator family, output family, output mode, sampling treatment, filter treatment, emulation treatment, accent treatment, transition requested, transition enabled, transition policy, transition type, transition fallback, settings surface, content filter, favorites requested, favorites applied, benchlab forcing active
+- changed keys:
+  requested renderer: OpenGL 4.6 -> GDI
+  policy target: OpenGL 4.6 -> GDI
+  active renderer: OpenGL 4.6 -> GDI
+  selected band: premium -> universal
+  selection path: Requested OpenGL 4.6 within saver policy -> Requested GDI within saver policy
+  renderer backend: gl46 -> gdi
+  renderer status: Presented with OpenGL buffer swap -> Presented
+  requested lane: premium -> universal
+  resolved lane: premium -> universal
+  degraded from: none -> premium
+  degraded to: none -> universal
+  presentation mode: heightfield -> flat
+  clamp summary: none -> presentation
+  requested/resolved/degraded: premium / premium / none -> universal / universal / universal

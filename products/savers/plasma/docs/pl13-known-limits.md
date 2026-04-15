@@ -25,7 +25,7 @@ It is factual, current-state documentation, not a wishlist.
 - Environment safety support is bounded to current preview-safe, long-run-stable, descriptive dark-room content, and truthful clamp or fallback behavior.
 - The authored substrate is still partial: sets, journeys, and pack provenance are on disk, but built-in preset and theme descriptors are still primarily compiled and legacy-INI anchored.
 - The PX40 Plasma Lab surface is now a stronger CLI-first authoring and ops toolchain, but it is still report-first rather than a live editor or suite-grade workstation.
-- Deterministic visual proof now combines semantic BenchLab text-capture reports with smoke render signatures and preset-signature audits, but the repo still does not ship a universal screenshot diff framework.
+- Deterministic visual proof now combines semantic BenchLab text-capture reports, smoke render signatures, an explicit stable combination matrix, bounded experimental coverage reports, and preset-signature audits, but the repo still does not ship a universal screenshot diff framework.
 - The PX41 local integration, control, and curation surfaces are now real, but they remain metadata-first and report-first rather than live `suite`, live `anthology`, or remote-automation proof.
 - Selection intelligence is still bounded to weighted authored fallback, existing favorites/exclusions, and current set or journey hooks.
 
@@ -39,7 +39,7 @@ It is factual, current-state documentation, not a wishlist.
 
 - The current repo now ships a bounded experimental preset slice for PX30 and PX31 output, treatment, glyph, and field-family studies, but the default pool remains stable-only and the broader experimental catalog is still absent.
 - Settings surfaces are real and validated for the shipped subset, but PL13 does not claim a complete future catalog of every eventual product control.
-- Settings influence is now backed by deterministic smoke render-signature checks for the shipped subset, but the thresholds remain a bounded dead-setting detector rather than a perceptual gold-standard lab.
+- Settings influence is now backed by deterministic smoke render-signature checks for the shipped subset plus explicit stable-matrix and experimental-coverage reports, but the thresholds remain a bounded dead-setting detector rather than a perceptual gold-standard lab.
 - BenchLab reporting and forcing are real for the implemented subset, but PL13 does not claim a full product debugger or unrestricted forcing console.
 - PX40 capture-backed degrade inspection and capture diff are real for the current BenchLab text surface, but PL13 does not claim universal deterministic replay or rendered capture parity across every lane.
 - PX41 local projection, control, and curation reports are real for the implemented subset, but PL13 does not claim live consumer ingestion, cross-product favorites behavior, remote automation, or a community platform.
@@ -79,8 +79,8 @@ It is factual, current-state documentation, not a wishlist.
 | `environment_safety_bounded` | Partial | Current safety claims are limited to preview-safe, long-run-stable posture, descriptive dark-room content, and truthful clamp or fallback behavior. |
 | `authored_registry_partial` | Partial | `PX20` moves sets, journeys, and pack provenance into real files, but the built-in preset and theme descriptor inventory still remains partially code-anchored. |
 | `lab_shell_cli_only` | Partial | `PX40` broadens the Lab shell into a stronger CLI-first authoring and ops surface, but it is still report-first rather than a live editor, gallery, or suite-grade workstation. |
-| `capture_diff_bounded` | Partial | `PX40` adds semantic BenchLab text-capture comparison and capture-backed degrade inspection, but it does not claim raw-text identity or pixel-perfect determinism across every lane. |
-| `render_signature_harness_bounded` | Partial | U07 adds deterministic smoke render-signature and pixel-difference checks for the shipped settings subset, but it does not claim a universal screenshot diff framework or perceptual gold-standard QA across every lane. |
+| `capture_diff_bounded` | Partial | `PX40` adds semantic BenchLab text-capture comparison and capture-backed degrade inspection, while U07 layers stable-matrix and experimental-coverage reporting on top of deterministic smoke render signatures; the repo still does not claim raw screenshot identity or universal pixel-perfect determinism across every lane or renderer path. |
+| `render_signature_harness_bounded` | Partial | U07 adds deterministic smoke render-signature and pixel-difference checks for the shipped settings subset plus an explicit stable combination matrix and bounded experimental coverage reports, but the repo still lacks a universal screenshot diff framework or perceptual gold-standard lab. |
 | `integration_metadata_first` | Partial | `PX41` adds local projection, control, and curation metadata plus report surfaces, but it does not claim live `suite` or `anthology` ingestion or remote automation behavior. |
 | `curation_surface_local_bounded` | Partial | `PX41` adds local curated collections and a one-pack provenance index, but it does not claim ratings, dislikes, broad provenance discovery, or a community platform. |
 | `output_family_subset_bounded` | Partial | `PX30` and `PX31` make bounded contour, banded, and glyph output subsets real, but surface output and broader output breadth remain later work. |

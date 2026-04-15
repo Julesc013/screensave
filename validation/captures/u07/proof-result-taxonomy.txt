@@ -1,0 +1,13 @@
+U07 Plasma proof-result taxonomy
+- validated: backed by real smoke, capture, or generated audit evidence in the current repo
+- partial: implemented and exercised for a bounded subset or by a weaker proof method
+- documented_only: recorded in docs or source but not backed here by direct generated evidence
+- unsupported: explicitly outside the current admitted or first-class surface
+- blocked: would require environments or capture surfaces that the repo does not currently have
+- proof methods:
+  - render_signature: deterministic smoke treated or presented buffer difference
+  - structural_plan: resolved settings, selection, and compiled plan truth without claiming screenshot proof
+  - benchlab_capture: requested/resolved/degraded report proof on the BenchLab text surface
+  - palette_distance: compiled theme-palette separation proof
+  - smoke_matrix_compile: exhaustive stable matrix compile and validation coverage
+- interpretation rule: U08 should treat validated rows as evidence-backed, partial rows as bounded, documented_only rows as non-proof, unsupported rows as non-claims, and blocked rows as environment gaps

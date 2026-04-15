@@ -1,0 +1,10 @@
+Plasma degrade report for capture validation\captures\u07\benchlab-heightfield-gdi.txt
+- renderer path: requested=GDI active=GDI backend=gdi
+- lane path: requested=universal resolved=universal
+- degraded path: from=premium to=universal
+- visual result: output=raster / native_raster presentation=flat
+- treatment slots: none | none | none | none
+- content filter: stable_only
+- forcing active: yes
+- clamp summary: presentation
+- requested/resolved/degraded: universal / universal / universal

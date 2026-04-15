@@ -2,62 +2,111 @@
 
 ## Purpose
 
-This note records the salvage-phase proof harness added to catch fake controls, dead settings, and near-duplicate preset signatures before they ship.
+This note records the formal proof substrate added in `U07`.
 
-## Deterministic Smoke Influence Checks
+It exists to prove that the surviving Plasma surface after `U01` through `U06`
+is not just better structured and better tuned, but measurably real.
 
-The smoke surface now includes deterministic render-signature checks that:
+## Why U07 Exists Now
 
-- lock the seed path
-- render the same config on the same lane
-- hash the treated and presented buffers
-- compare bounded pixel-difference counts between a baseline and a one-setting variant
+The earlier corrective tranches unified the runtime, made settings more
+authoritative, narrowed the shipped surface, and retuned the remaining content.
 
-The smoke harness currently proves material influence for:
+`U07` turns that work into a repeatable proof model:
 
-- generator family
-- visual intensity through `detail_level`
-- speed
-- resolution
-- smoothing
-- output family and mode
-- filter treatment
-- emulation treatment
-- accent treatment
-- presentation mode on the premium lane
+- settings influence can now be classified as plan-visible, render-visible,
+  bounded, or unsupported
+- the stable reachable preset and theme surface is now explicitly enumerated
+- the broader experimental surface now has an honest bounded coverage strategy
+- near-duplicate preset or theme content can now be flagged by generated audits
+- lower-band degrade truth can now be backed by capture diffs instead of only
+  by prose
 
-This is not a perceptual gold-standard image-diff system.
-It is an honest bounded dead-setting detector that fails if those settings stop moving enough pixels to matter.
+## What The Harness Proves
 
-## Preset Signature Audit
+The current U07 harness proves:
 
-`plasma_lab.py preset-audit` now audits the compiled preset table directly and reports:
+- first-class stable preset and theme combinations compile and validate across
+  the truthful `gdi` floor and the truthful `gl11` preferred stable lane
+- the surviving first-class grammar controls materially change the compiled plan
+  and, for the shipped smoke subset, materially change the rendered result
+- the experimental surface is not exhaustive, but it is no longer undefined:
+  it has a named bounded coverage slice
+- near-duplicate preset signatures and near-neighbor theme palettes can now be
+  reported from the compiled product truth
+- degrade and clamp behavior can now be compared semantically from BenchLab
+  captures
 
-- exact duplicate preset signatures
-- near-duplicate pairs at a chosen Hamming-distance threshold
-- closest stable-preset pair
-- stable treatment-slot coverage
-- nearest theme-palette pairs
+## What The Harness Does Not Prove
 
-The audit is intentionally signature-first rather than screenshot-first.
-It is meant to catch authoring collapse early, even on machines where a full render-capture workflow is unavailable.
+The current harness still does not prove:
 
-## Existing Invalid-Combination Proof
+- screenshot-grade visual acceptance across every renderer path
+- universal pixel-perfect determinism across every lane and driver stack
+- exhaustive proof for the full experimental cross-product
+- final stable-versus-experimental promotion decisions
+- the later `U08` visual QA bar
 
-The salvage harness builds on the existing smoke and BenchLab proof that already checks:
+`U07` builds the proof substrate. It is not the final quality gate.
 
-- requested versus resolved versus degraded truth
-- unsupported richer-lane treatment degrade
-- unsupported presentation degrade back to `flat`
-- invalid output-family and output-mode rejection
-- stable versus experimental content gating
+## Proof Methods Used
 
-## Current Boundary
+The current harness uses a mixed proof model.
 
-Plasma still does not ship a universal screenshot diff framework or a gallery browser.
-The truthful proof harness is therefore:
+- `render_signature`: deterministic smoke renders compare treated and presented
+  buffers and fail if a shipped setting stops moving enough pixels to matter
+- `smoke_matrix_compile`: deterministic smoke exhaustively validates the stable
+  preset and theme matrix across `gdi` and `gl11`
+- `structural_plan`: resolved settings, selection routing, and compiled-plan
+  truth are checked without pretending that every control should be judged by a
+  single still frame
+- `benchlab_capture`: requested, resolved, and degraded text captures prove
+  routing, clamp, and fallback truth
+- `palette_distance`: compiled theme palette separation is reported directly
+- `preset_signature_distance`: compiled preset signatures are audited directly
+  for exact duplicates and near-duplicate crowding
 
-- deterministic smoke render signatures
-- BenchLab text captures
-- compiled preset signature audits
-- explicit known-limit notes where broader visual QA remains human-reviewed
+## Structural Versus Rendered Proof
+
+The harness makes an explicit distinction:
+
+- render-visible proof is stronger and is used wherever a deterministic smoke
+  frame can honestly prove that a setting changes the visual result
+- structural proof is used for surfaces whose truth is mostly about routing,
+  transitions, selection pools, timing, seed continuity, or other runtime state
+  that is not honestly reducible to one still frame
+
+This means some U07 rows are intentionally `partial`.
+That is an honest boundary, not a hidden failure.
+
+## Current Evidence Surfaces
+
+The current U07 artifact tree lives under `validation/captures/u07/` and
+includes:
+
+- settings influence and result-taxonomy reports
+- the stable combination matrix report
+- the bounded experimental coverage report
+- a thresholded preset-signature and palette audit
+- BenchLab default-lane and degrade captures
+- capture-diff and degrade-report outputs for lane and presentation-clamp truth
+
+The deterministic smoke harness in `products/savers/plasma/tests/smoke.c`
+provides the executable proof path for stable-matrix validation and shipped
+render-signature deltas.
+
+## How Later Phases Should Consume The Harness
+
+Later phases should treat U07 output this way:
+
+- `validated`: current evidence-backed proof
+- `partial`: real bounded proof exists, but not to the level of a later full QA
+  gate
+- `documented_only`: recorded source or doctrine truth without direct generated
+  evidence in this phase
+- `unsupported`: outside the currently admitted surface
+- `blocked`: would need an environment or capture surface the repo does not yet
+  have
+
+`U08` should consume this harness as a prerequisite substrate, not as a
+substitute for human visual review or final recut decisions.

@@ -1,0 +1,67 @@
+U07 Plasma stable combination matrix
+- scope: actual reachable stable first-class preset/theme selections only
+- stable preset set: classic_core (5 members)
+- stable theme set: classic_core (5 members)
+- lanes: gdi, gl11
+- exhaustive rows: 50
+- result classes used here: validated, partial, blocked
+- row meaning: each row is a real reachable stable preset/theme/lane combination, not an idealized grammar cross-product
+
+| preset_key | theme_key | lane | result | proof_method | note |
+| --- | --- | --- | --- | --- | --- |
+| plasma_lava | plasma_lava | gdi | validated | smoke_matrix_compile | exhaustively exercised by the U07 stable matrix harness |
+| plasma_lava | aurora_cool | gdi | validated | smoke_matrix_compile | exhaustively exercised by the U07 stable matrix harness |
+| plasma_lava | oceanic_blue | gdi | validated | smoke_matrix_compile | exhaustively exercised by the U07 stable matrix harness |
+| plasma_lava | museum_phosphor | gdi | validated | smoke_matrix_compile | exhaustively exercised by the U07 stable matrix harness |
+| plasma_lava | quiet_darkroom | gdi | validated | smoke_matrix_compile | exhaustively exercised by the U07 stable matrix harness |
+| aurora_plasma | plasma_lava | gdi | validated | smoke_matrix_compile | exhaustively exercised by the U07 stable matrix harness |
+| aurora_plasma | aurora_cool | gdi | validated | smoke_matrix_compile | exhaustively exercised by the U07 stable matrix harness |
+| aurora_plasma | oceanic_blue | gdi | validated | smoke_matrix_compile | exhaustively exercised by the U07 stable matrix harness |
+| aurora_plasma | museum_phosphor | gdi | validated | smoke_matrix_compile | exhaustively exercised by the U07 stable matrix harness |
+| aurora_plasma | quiet_darkroom | gdi | validated | smoke_matrix_compile | exhaustively exercised by the U07 stable matrix harness |
+| ocean_interference | plasma_lava | gdi | validated | smoke_matrix_compile | exhaustively exercised by the U07 stable matrix harness |
+| ocean_interference | aurora_cool | gdi | validated | smoke_matrix_compile | exhaustively exercised by the U07 stable matrix harness |
+| ocean_interference | oceanic_blue | gdi | validated | smoke_matrix_compile | exhaustively exercised by the U07 stable matrix harness |
+| ocean_interference | museum_phosphor | gdi | validated | smoke_matrix_compile | exhaustively exercised by the U07 stable matrix harness |
+| ocean_interference | quiet_darkroom | gdi | validated | smoke_matrix_compile | exhaustively exercised by the U07 stable matrix harness |
+| museum_phosphor | plasma_lava | gdi | validated | smoke_matrix_compile | exhaustively exercised by the U07 stable matrix harness |
+| museum_phosphor | aurora_cool | gdi | validated | smoke_matrix_compile | exhaustively exercised by the U07 stable matrix harness |
+| museum_phosphor | oceanic_blue | gdi | validated | smoke_matrix_compile | exhaustively exercised by the U07 stable matrix harness |
+| museum_phosphor | museum_phosphor | gdi | validated | smoke_matrix_compile | exhaustively exercised by the U07 stable matrix harness |
+| museum_phosphor | quiet_darkroom | gdi | validated | smoke_matrix_compile | exhaustively exercised by the U07 stable matrix harness |
+| quiet_darkroom | plasma_lava | gdi | validated | smoke_matrix_compile | exhaustively exercised by the U07 stable matrix harness |
+| quiet_darkroom | aurora_cool | gdi | validated | smoke_matrix_compile | exhaustively exercised by the U07 stable matrix harness |
+| quiet_darkroom | oceanic_blue | gdi | validated | smoke_matrix_compile | exhaustively exercised by the U07 stable matrix harness |
+| quiet_darkroom | museum_phosphor | gdi | validated | smoke_matrix_compile | exhaustively exercised by the U07 stable matrix harness |
+| quiet_darkroom | quiet_darkroom | gdi | validated | smoke_matrix_compile | exhaustively exercised by the U07 stable matrix harness |
+| plasma_lava | plasma_lava | gl11 | validated | smoke_matrix_compile | exhaustively exercised by the U07 stable matrix harness |
+| plasma_lava | aurora_cool | gl11 | validated | smoke_matrix_compile | exhaustively exercised by the U07 stable matrix harness |
+| plasma_lava | oceanic_blue | gl11 | validated | smoke_matrix_compile | exhaustively exercised by the U07 stable matrix harness |
+| plasma_lava | museum_phosphor | gl11 | validated | smoke_matrix_compile | exhaustively exercised by the U07 stable matrix harness |
+| plasma_lava | quiet_darkroom | gl11 | validated | smoke_matrix_compile | exhaustively exercised by the U07 stable matrix harness |
+| aurora_plasma | plasma_lava | gl11 | validated | smoke_matrix_compile | exhaustively exercised by the U07 stable matrix harness |
+| aurora_plasma | aurora_cool | gl11 | validated | smoke_matrix_compile | exhaustively exercised by the U07 stable matrix harness |
+| aurora_plasma | oceanic_blue | gl11 | validated | smoke_matrix_compile | exhaustively exercised by the U07 stable matrix harness |
+| aurora_plasma | museum_phosphor | gl11 | validated | smoke_matrix_compile | exhaustively exercised by the U07 stable matrix harness |
+| aurora_plasma | quiet_darkroom | gl11 | validated | smoke_matrix_compile | exhaustively exercised by the U07 stable matrix harness |
+| ocean_interference | plasma_lava | gl11 | validated | smoke_matrix_compile | exhaustively exercised by the U07 stable matrix harness |
+| ocean_interference | aurora_cool | gl11 | validated | smoke_matrix_compile | exhaustively exercised by the U07 stable matrix harness |
+| ocean_interference | oceanic_blue | gl11 | validated | smoke_matrix_compile | exhaustively exercised by the U07 stable matrix harness |
+| ocean_interference | museum_phosphor | gl11 | validated | smoke_matrix_compile | exhaustively exercised by the U07 stable matrix harness |
+| ocean_interference | quiet_darkroom | gl11 | validated | smoke_matrix_compile | exhaustively exercised by the U07 stable matrix harness |
+| museum_phosphor | plasma_lava | gl11 | validated | smoke_matrix_compile | exhaustively exercised by the U07 stable matrix harness |
+| museum_phosphor | aurora_cool | gl11 | validated | smoke_matrix_compile | exhaustively exercised by the U07 stable matrix harness |
+| museum_phosphor | oceanic_blue | gl11 | validated | smoke_matrix_compile | exhaustively exercised by the U07 stable matrix harness |
+| museum_phosphor | museum_phosphor | gl11 | validated | smoke_matrix_compile | exhaustively exercised by the U07 stable matrix harness |
+| museum_phosphor | quiet_darkroom | gl11 | validated | smoke_matrix_compile | exhaustively exercised by the U07 stable matrix harness |
+| quiet_darkroom | plasma_lava | gl11 | validated | smoke_matrix_compile | exhaustively exercised by the U07 stable matrix harness |
+| quiet_darkroom | aurora_cool | gl11 | validated | smoke_matrix_compile | exhaustively exercised by the U07 stable matrix harness |
+| quiet_darkroom | oceanic_blue | gl11 | validated | smoke_matrix_compile | exhaustively exercised by the U07 stable matrix harness |
+| quiet_darkroom | museum_phosphor | gl11 | validated | smoke_matrix_compile | exhaustively exercised by the U07 stable matrix harness |
+| quiet_darkroom | quiet_darkroom | gl11 | validated | smoke_matrix_compile | exhaustively exercised by the U07 stable matrix harness |
+
+- deliberate exclusions:
+  - advanced grammar cross-products are not treated as stable matrix rows
+  - premium-only presentation requests are not treated as stable rows
+  - compatibility-only preset and theme keys remain outside the first-class stable matrix
+  - broader experimental content stays in the experimental coverage report rather than this stable matrix
