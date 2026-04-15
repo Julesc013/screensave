@@ -4,6 +4,10 @@
 
 `PX50` records the current post-Wave-4 ship-posture decision for Plasma.
 
+Historical note:
+after `U09`, this remains the earlier post-PL/Wave-4 ship-posture record.
+The current living corrective decision now lives in the `U09` docs.
+
 ## Maintainer Executive Summary
 
 Decision: **GO WITH CAVEATS**

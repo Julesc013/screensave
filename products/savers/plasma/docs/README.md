@@ -86,6 +86,8 @@ They live with the product so later `PL` work can extend them without rewriting 
 - [U08 Acceptance Decisions](./u08-acceptance-decisions.md): freezes which major surfaces pass stable, stay experimental, remain caveated, or leave the claim surface before U09
 - [U09 Stable Recut](./u09-stable-recut.md): records the final evidence-backed stable cut after the full corrective program
 - [U09 Experimental And Deferred](./u09-experimental-and-deferred.md): records the final experimental, hidden, deferred, and non-claim cut after the corrective program
+- [U09 Ship Posture](./u09-ship-posture.md): records the final corrective-program ship decision and the strongest remaining caveats
+- [U09 Release Notes Draft](./u09-release-notes-draft.md): provides the truthful release-note-grade summary for the final corrective recut
 
 ## PL00-PL14 Program Record
 

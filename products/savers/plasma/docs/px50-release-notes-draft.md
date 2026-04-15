@@ -2,6 +2,10 @@
 
 ## Scope Of The Current Release Posture
 
+Historical note:
+after `U09`, this remains the earlier post-PL/Wave-4 release-note draft kept
+for comparison.
+
 This Plasma cut ships as a preserved Classic-first product on one unified runtime with a truthful lower-band baseline, an explicit experimental breadth slice, stronger read-only authoring and support tooling, and bounded local ecosystem metadata that does not redefine suite or platform law.
 
 ## What Is Preserved

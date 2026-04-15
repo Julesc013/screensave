@@ -4,6 +4,10 @@
 
 `PX50` records the current experimental cut and the current deferred, non-ship, and non-claim cut after the completed Waves 1 through 4 work now present in the repo.
 
+Historical note:
+after `U09`, this remains the earlier post-PL/Wave-4 comparison cut.
+The current living corrective classification now lives in the `U09` docs.
+
 ## Experimental Cut
 
 Experimental remains real, implemented, and ship-adjacent.

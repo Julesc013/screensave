@@ -4,6 +4,10 @@
 
 `PX50` records the current evidence-backed stable cut for Plasma after the completed post-`PL14` waves now present in the repo.
 
+Historical note:
+after `U09`, this remains the earlier post-PL/Wave-4 comparison recut.
+The current living corrective recut now lives in the `U09` docs.
+
 ## Why PX50 Exists Now
 
 `PL14` froze the original stable, experimental, and deferred cut at the end of the core Plasma program.
