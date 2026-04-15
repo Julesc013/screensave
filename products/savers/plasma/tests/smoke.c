@@ -1525,8 +1525,8 @@ int main(void)
             &plan
         ) ||
         plan.filter_treatment != PLASMA_FILTER_TREATMENT_EMBOSS_EDGE ||
-        plan.emulation_treatment != PLASMA_EMULATION_TREATMENT_NONE ||
-        plan.accent_treatment != PLASMA_ACCENT_TREATMENT_NONE
+        plan.emulation_treatment != PLASMA_EMULATION_TREATMENT_CRT ||
+        plan.accent_treatment != PLASMA_ACCENT_TREATMENT_ACCENT_PASS
     ) {
         return 439;
     }
@@ -1540,7 +1540,7 @@ int main(void)
             SCREENSAVE_RENDERER_KIND_GDI,
             &plan
         ) ||
-        plan.filter_treatment != PLASMA_FILTER_TREATMENT_NONE ||
+        plan.filter_treatment != PLASMA_FILTER_TREATMENT_GLOW_EDGE ||
         plan.emulation_treatment != PLASMA_EMULATION_TREATMENT_PHOSPHOR ||
         plan.accent_treatment != PLASMA_ACCENT_TREATMENT_ACCENT_PASS
     ) {
