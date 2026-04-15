@@ -37,10 +37,10 @@ They live with the product so later `PL` work can extend them without rewriting 
 - [PX41 SDK And Automation](./px41-sdk-and-automation.md): records the bounded Plasma-local SDK/reference and control-profile surface
 - [PX41 Community And Curation](./px41-community-and-curation.md): records the bounded Plasma-local curation and provenance surface
 - [PX41 Stable Vs Experimental Notes](./px41-stable-vs-experimental-notes.md): records the stable-versus-experimental posture for the new PX41 metadata and report surfaces
-- [PX50 Stable Recut](./px50-stable-recut.md): records the current evidence-backed stable cut after Waves 1 through 4
-- [PX50 Experimental And Deferred](./px50-experimental-and-deferred.md): records the current experimental and deferred or non-claim cut after Waves 1 through 4
-- [PX50 Ship Posture](./px50-ship-posture.md): records the current ship decision and strongest remaining caveats
-- [PX50 Release Notes Draft](./px50-release-notes-draft.md): provides the current truthful release-note-grade summary of the recut
+- [PX50 Stable Recut](./px50-stable-recut.md): records the earlier post-PL/Wave-4 stable cut kept for comparison after the later U09 corrective recut
+- [PX50 Experimental And Deferred](./px50-experimental-and-deferred.md): records the earlier post-PL/Wave-4 experimental and deferred cut kept for comparison after U09
+- [PX50 Ship Posture](./px50-ship-posture.md): records the earlier post-PL/Wave-4 ship decision kept for comparison after U09
+- [PX50 Release Notes Draft](./px50-release-notes-draft.md): preserves the earlier pre-U09 truthful release-note draft for comparison
 
 ## Salvage Program Docs
 
@@ -84,6 +84,8 @@ They live with the product so later `PL` work can extend them without rewriting 
 - [U08 Visual QA Bar](./u08-visual-qa-bar.md): records the formal acceptance bar now applied to the surviving Plasma surface
 - [U08 Surface Evaluation](./u08-surface-evaluation.md): records the major surviving surfaces, the evidence consumed, and the resulting U08 evaluation classes
 - [U08 Acceptance Decisions](./u08-acceptance-decisions.md): freezes which major surfaces pass stable, stay experimental, remain caveated, or leave the claim surface before U09
+- [U09 Stable Recut](./u09-stable-recut.md): records the final evidence-backed stable cut after the full corrective program
+- [U09 Experimental And Deferred](./u09-experimental-and-deferred.md): records the final experimental, hidden, deferred, and non-claim cut after the corrective program
 
 ## PL00-PL14 Program Record
 
