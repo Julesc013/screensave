@@ -152,29 +152,29 @@ static const plasma_validation_matrix_entry g_plasma_validation_matrix[] = {
         "contour_output_subset",
         "product",
         PLASMA_VALIDATION_STATUS_PARTIAL,
-        "products/savers/plasma/tests/px30-output-proof.md",
-        "PX30 makes contour-only and contour-bands real on the bounded implemented subset while keeping unsupported combinations explicit."
+        "products/savers/plasma/tests/u04-visual-grammar-proof.md",
+        "U04 freezes contour-only and contour-bands as the admitted contour subset, proves signature separation from raster, and keeps unsupported output claims explicit."
     },
     {
         "banded_output_subset",
         "product",
         PLASMA_VALIDATION_STATUS_PARTIAL,
-        "products/savers/plasma/tests/px30-output-proof.md",
-        "PX30 makes posterized banded output a real first-class grammar on the bounded implemented subset instead of leaving banding as taxonomy only."
+        "products/savers/plasma/tests/u04-visual-grammar-proof.md",
+        "U04 freezes posterized banded output as the admitted banded subset and proves it remains materially distinct from the raster baseline."
     },
     {
         "treatment_family_subset",
         "product",
         PLASMA_VALIDATION_STATUS_PARTIAL,
-        "products/savers/plasma/tests/px30-treatment-proof.md",
-        "PX30 makes a bounded treatment subset real with explicit slot placement, degrade policy, and experimental posture."
+        "products/savers/plasma/tests/u04-visual-grammar-proof.md",
+        "U04 freezes the admitted treatment-slot subset, strengthens the visible treatment read, and proves representative treatment signatures differ from the untreated baseline."
     },
     {
         "glyph_output_subset",
         "product",
         PLASMA_VALIDATION_STATUS_PARTIAL,
-        "products/savers/plasma/tests/px31-glyph-proof.md",
-        "PX31 makes a bounded glyph output subset real with explicit ASCII and Matrix modes, output-family truth, and no silent raster fallback."
+        "products/savers/plasma/tests/u04-visual-grammar-proof.md",
+        "U04 keeps the admitted glyph subset bounded to ASCII and Matrix modes, reports unsupported output claims honestly, and proves glyph signatures remain distinct from raster."
     },
     {
         "field_family_i_subset",
@@ -194,8 +194,8 @@ static const plasma_validation_matrix_entry g_plasma_validation_matrix[] = {
         "dimensional_presentation_subset",
         "gl46",
         PLASMA_VALIDATION_STATUS_PARTIAL,
-        "products/savers/plasma/tests/px32-dimensional-proof.md",
-        "PX32 broadens the premium dimensional subset beyond heightfield to bounded curtain, ribbon, contour extrusion, and bounded surface modes while keeping unsupported breadth explicit."
+        "products/savers/plasma/tests/u04-visual-grammar-proof.md",
+        "U04 keeps the premium presentation subset bounded, proves ribbon forcing resolves honestly on GL46, and clamps incompatible contour extrusion requests back to flat explicitly."
     },
     {
         "cross_driver_ladder",
@@ -300,33 +300,33 @@ static const plasma_performance_envelope_entry g_plasma_performance_envelopes[] 
         "product",
         PLASMA_VALIDATION_STATUS_PARTIAL,
         "bounded_qualitative",
-        "PX30 compiles and renders a bounded contour and banded output subset through the normal product path.",
-        "The truthful output subset remains lower-band-safe and uses explicit output-family and output-mode reporting rather than silent raster fallback.",
-        "No claim is made for glyph, surface, or exhaustive output-mode coverage in this tranche.",
-        "Fresh compiled reruns remain bounded by the current local toolchain blocker in this checkout.",
-        "products/savers/plasma/tests/px30-output-proof.md"
+        "U04 compiles and renders the admitted contour and banded output subset through the normal product path.",
+        "The truthful output subset remains lower-band-safe and uses explicit supported-family and supported-mode reporting rather than silent raster fallback.",
+        "No claim is made for surface output or broader unsupported output-mode breadth in this tranche.",
+        "Fresh compiled reruns now exist through the U04 smoke rebuild and proof note.",
+        "products/savers/plasma/tests/u04-visual-grammar-proof.md"
     },
     {
         "treatment_subset",
         "product",
         PLASMA_VALIDATION_STATUS_PARTIAL,
         "bounded_qualitative",
-        "PX30 compiles and reports a bounded treatment subset across filter, emulation, and accent slots.",
+        "U04 compiles and reports the admitted treatment subset across filter, emulation, and accent slots.",
         "The truthful treatment subset is limited to glow-edge, halftone-stipple, emboss-edge, phosphor, crt, and accent-pass plus existing advanced-only blur and overlay behavior.",
         "No broad effect-zoo or exhaustive lane-by-lane treatment guarantee is claimed.",
-        "Fresh compiled reruns remain bounded by the current local toolchain blocker in this checkout.",
-        "products/savers/plasma/tests/px30-treatment-proof.md"
+        "Fresh compiled reruns now exist through the U04 smoke rebuild and proof note.",
+        "products/savers/plasma/tests/u04-visual-grammar-proof.md"
     },
     {
         "glyph_subset",
         "product",
         PLASMA_VALIDATION_STATUS_PARTIAL,
         "bounded_qualitative",
-        "PX31 compiles and renders a bounded glyph subset through the normal product path with explicit ASCII and Matrix output-mode truth.",
+        "U04 compiles and renders the admitted glyph subset through the normal product path with explicit ASCII and Matrix output-mode truth.",
         "The truthful glyph subset is preset-driven and experimental-first rather than a broad generic glyph rendering system.",
         "No claim is made for glyph-specific transitions, rich Unicode coverage, or broader output-family breadth beyond the admitted ASCII and Matrix modes.",
-        "Fresh compiled reruns remain bounded by the current local toolchain blocker in this checkout.",
-        "products/savers/plasma/tests/px31-glyph-proof.md"
+        "Fresh compiled reruns now exist through the U04 smoke rebuild and proof note.",
+        "products/savers/plasma/tests/u04-visual-grammar-proof.md"
     },
     {
         "field_family_i_subset",
@@ -355,11 +355,11 @@ static const plasma_performance_envelope_entry g_plasma_performance_envelopes[] 
         "gl46",
         PLASMA_VALIDATION_STATUS_PARTIAL,
         "bounded_qualitative",
-        "PX32 compiles and presents a bounded dimensional subset on the premium lane beyond the original heightfield path.",
-        "The truthful dimensional subset is limited to heightfield, curtain, ribbon, contour extrusion, and bounded surface while keeping billboard-volume and scenic breadth out of scope.",
-        "Dimensional degrade remains explicit back to flat presentation on lower lanes instead of silent fake premium behavior.",
-        "Fresh compiled reruns remain bounded by the current local toolchain blocker in this checkout.",
-        "products/savers/plasma/tests/px32-dimensional-proof.md"
+        "U04 compiles and presents the admitted premium presentation subset on the premium lane beyond the original flat path.",
+        "The truthful dimensional subset remains limited to heightfield, curtain, ribbon, contour extrusion, and bounded surface while keeping billboard-volume and scenic breadth out of scope.",
+        "Presentation degrade remains explicit back to flat on lower lanes or incompatible output families instead of silent fake premium behavior.",
+        "Fresh compiled reruns now exist through the U04 smoke rebuild and focused BenchLab captures.",
+        "products/savers/plasma/tests/u04-visual-grammar-proof.md"
     }
 };
 
@@ -373,8 +373,8 @@ static const plasma_known_limit_entry g_plasma_known_limits[] = {
     {
         "dimensional_presentation_subset_bounded",
         PLASMA_VALIDATION_STATUS_PARTIAL,
-        "PX32 broadens the dimensional subset to heightfield, curtain, ribbon, contour extrusion, and bounded surface, but billboard-style volume and broader scenic presentation remain unsupported.",
-        "products/savers/plasma/docs/pl13-known-limits.md"
+        "U04 keeps the admitted presentation subset bounded to heightfield, curtain, ribbon, contour extrusion, and bounded surface; billboard-style volume and broader scenic presentation remain unsupported.",
+        "products/savers/plasma/docs/u04-presentation-truth.md"
     },
     {
         "transition_pair_coverage_bounded",
@@ -439,20 +439,20 @@ static const plasma_known_limit_entry g_plasma_known_limits[] = {
     {
         "output_family_subset_bounded",
         PLASMA_VALIDATION_STATUS_PARTIAL,
-        "PX30 and PX31 make bounded contour, banded, and glyph output subsets real, but surface output and broader non-raster coverage remain later-wave work.",
-        "products/savers/plasma/docs/pl13-known-limits.md"
+        "U04 freezes the admitted non-raster output subset at contour, banded, and glyph; surface output and broader unsupported output-mode coverage remain explicit non-claims.",
+        "products/savers/plasma/docs/u04-output-truth.md"
     },
     {
         "treatment_family_subset_bounded",
         PLASMA_VALIDATION_STATUS_PARTIAL,
-        "PX30 lands a curated treatment subset with explicit slot and degrade policy, but it does not implement every named treatment family or every theoretical combination.",
-        "products/savers/plasma/docs/pl13-known-limits.md"
+        "U04 freezes a curated treatment subset with explicit slot and degrade policy, but it still does not implement every named treatment family or every theoretical combination.",
+        "products/savers/plasma/docs/u04-treatment-truth.md"
     },
     {
         "glyph_output_subset_bounded",
         PLASMA_VALIDATION_STATUS_PARTIAL,
-        "PX31 lands a bounded ASCII and Matrix glyph subset, but it does not implement a broad text renderer, richer glyph alphabets, or every treatment and transition combination.",
-        "products/savers/plasma/docs/pl13-known-limits.md"
+        "U04 keeps the glyph subset bounded to ASCII and Matrix modes; it does not implement a broad text renderer, richer glyph alphabets, or every treatment and transition combination.",
+        "products/savers/plasma/docs/u04-output-truth.md"
     },
     {
         "field_family_i_subset_bounded",

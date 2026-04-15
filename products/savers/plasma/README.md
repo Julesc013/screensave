@@ -39,6 +39,10 @@ The current `U03` dialog recut is frozen in the `U03` docs: exact Basic,
 Advanced, and Author/Lab surfaces, exact-surface capture instead of
 hidden-control rereads, and explicit UI truth around hidden deeper state and
 gated controls.
+The current `U04` grammar checkpoint is frozen in the `U04` docs: a narrower
+admitted output, treatment, and presentation subset, stronger deterministic
+distinctness proof for that subset, and explicit presentation clamp truth for
+premium-lane and incompatible requests.
 New breadth work should not bypass that diagnostic baseline, the U00 settings
 and uniqueness audits, or the corrective backlog that keeps coherence work ahead
 of feature expansion.

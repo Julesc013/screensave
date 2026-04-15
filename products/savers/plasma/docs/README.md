@@ -63,7 +63,11 @@ They live with the product so later `PL` work can extend them without rewriting 
 - [U03 Control Inventory](./u03-control-inventory.md): records every surviving control, its surface assignment, and every hidden or deferred surface after the UI cleanup
 - [U03 UI And Runtime Truth](./u03-ui-and-runtime-truth.md): records how the dialog now maps to runtime truth, degraded states, and hidden deeper state
 - [U03 Post-UI Invariants](./u03-post-ui-invariants.md): freezes the invariants later corrective phases may now assume after the UI recut
-- [U04 Output, Treatment, And Presentation Truth](./u04-output-treatment-presentation-truth.md): records the surviving visual grammar surfaces and the stronger treatment and output separation
+- [U04 Output, Treatment, And Presentation Truth](./u04-output-treatment-presentation-truth.md): umbrella summary and compatibility entry point for the U04 grammar-truth tranche
+- [U04 Output Truth](./u04-output-truth.md): freezes the admitted output-family subset, its clamp rules, and the surfaces that remain explicit non-claims
+- [U04 Treatment Truth](./u04-treatment-truth.md): freezes the admitted treatment-slot subset, stronger slot behavior, and the unsupported treatment names that remain outside current truth
+- [U04 Presentation Truth](./u04-presentation-truth.md): freezes the admitted presentation subset, premium and contour-output gating, and the explicit degrade ladder
+- [U04 Post-Grammar Invariants](./u04-post-grammar-invariants.md): freezes the exact grammar, reporting, and degrade invariants that later corrective phases may now assume
 - [U05 Destructive Simplification](./u05-destructive-simplification.md): records the keep, hide, retune, and non-claim decisions made during the salvage pass
 - [U06 Preset And Theme Tuning Notes](./u06-preset-theme-tuning-notes.md): records the first aggressive retune of built-in presets and palettes
 - [U07 Proof Harness](./u07-proof-harness.md): records the deterministic influence checks, preset-signature audit, and current dead-setting detection boundary
