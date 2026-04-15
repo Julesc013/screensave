@@ -61,15 +61,15 @@ static const plasma_validation_matrix_entry g_plasma_validation_matrix[] = {
         "settings_subset",
         "product",
         PLASMA_VALIDATION_STATUS_VALIDATED,
-        "products/savers/plasma/tests/pl11-settings-proof.md",
-        "Layered settings surfaces, current gating rules, and the salvage-phase settings influence checks are backed by smoke coverage and recorded proof notes."
+        "products/savers/plasma/tests/u02-settings-proof.md",
+        "Resolved-settings authority, preset-bundle demotion, and the current requested-versus-resolved grammar checks are backed by smoke coverage and recorded U02 proof notes."
     },
     {
         "benchlab_surface",
         "product",
         PLASMA_VALIDATION_STATUS_VALIDATED,
-        "products/savers/plasma/tests/pl12-benchlab-proof.md",
-        "BenchLab field export, bounded forcing, clamp reporting, and requested-versus-resolved-versus-degraded truth are backed by smoke coverage and PL12 captures."
+        "products/savers/plasma/tests/u02-settings-proof.md",
+        "BenchLab field export, bounded forcing, clamp reporting, and requested-versus-resolved grammar truth for the current settings-owned subset are backed by smoke coverage and U02 proof notes."
     },
     {
         "hardware_matrix",

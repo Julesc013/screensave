@@ -55,6 +55,9 @@ They live with the product so later `PL` work can extend them without rewriting 
 - [U01 Classic Compatibility](./u01-classic-compatibility.md): records the preserved Classic keys, aliases, content identity, and legacy proof lookups that still survive after runtime unification
 - [U01 Post-Unification Invariants](./u01-post-unification-invariants.md): freezes the runtime and compatibility invariants that later corrective phases may now assume
 - [U02 Settings Authority Rewrite](./u02-settings-authority.md): records the move from preset-hidden grammar authority to resolved settings-owned runtime grammar
+- [U02 Settings Resolution Model](./u02-settings-resolution-model.md): freezes the canonical defaults, preset-bundle, persisted-value, override, clamp, and plan-binding order after the settings-authority rewrite
+- [U02 Preset Compatibility And Defaults](./u02-preset-compatibility-and-defaults.md): records how presets remain curated defaults and compatibility surfaces without staying hidden runtime masters
+- [U02 Post-Settings Invariants](./u02-post-settings-invariants.md): freezes the settings-authority, reporting, and compatibility guarantees that later salvage phases may now assume
 - [U03 Settings Model](./u03-settings-model.md): records the recut of Plasma's user-facing, advanced, and author-facing settings layers
 - [U03 Settings Surfaces](./u03-settings-surfaces.md): records the dialog-side control mapping and hidden non-claim surfaces after the UI recut
 - [U04 Output, Treatment, And Presentation Truth](./u04-output-treatment-presentation-truth.md): records the surviving visual grammar surfaces and the stronger treatment and output separation

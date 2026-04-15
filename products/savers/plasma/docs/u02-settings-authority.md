@@ -1,40 +1,138 @@
-# U02 Settings Authority Rewrite
+# Plasma U02 Settings Authority
 
-`U02` moves Plasma's visual grammar authority out of runtime-side preset lookup and into resolved settings state.
+## Purpose
 
-## What Changed
+This note records the `U02` settings-authority correction for Plasma.
 
-- `plasma_config`, settings resolution, and `plasma_plan` now carry explicit output-family, output-mode, treatment-slot, and presentation-mode fields.
-- `plasma_plan_compile` now resolves generator family, output family, output mode, filter treatment, emulation treatment, accent treatment, presentation mode, speed, detail, resolution, and smoothing from resolved settings instead of re-reading preset defaults as the final authority.
-- preset application still seeds the config with a curated bundle, but that bundle is now just the starting settings state rather than a hidden second runtime plan.
-- transition target commits now preserve real user overrides when moving from one preset identity to another, instead of resetting the runtime grammar to the target preset bundle unconditionally.
-- advanced-lane bind no longer silently adds `blur` and `overlay_pass`, and premium-lane bind no longer silently promotes `flat` into `heightfield`.
+`U02` exists to make one thing explicit and enforceable:
+the compiled runtime grammar must come from one resolved settings model, not
+from preset identity quietly acting as a second hidden plan.
 
-## Runtime Truth
+This is a settings and runtime authority rewrite.
+It is not the later UI redesign.
 
-After `U02`, the runtime truth is:
+## Why U02 Exists Now
 
-1. preset selection chooses identity, default theme pairing, and a starting bundle
-2. resolved settings decide the compiled visual grammar
-3. lane binders may degrade unsupported requests, but they do not invent new grammar behind the user's back
-4. requested-versus-resolved state remains visible in the plan
+`U00` and `U01` left the product with one runtime, but the authority chain was
+still too blurry.
 
-That keeps `Plasma Classic` alive as preserved content identity and compatibility surface without keeping a separate Classic-only execution regime.
+Before this checkpoint:
 
-## Current Limits
+- preset application still looked like the place where the real grammar became
+  "true"
+- product defaults and preset-default seeding were fused together
+- the runtime plan consumed resolved settings, but that canonical handoff was
+  not named as the single settings-to-plan authority boundary
+- BenchLab mostly showed resolved grammar, which made it too easy to miss where
+  a request had been clamped or degraded
 
-- `sampling_treatment` still clamps to `none`; it remains a non-claim surface and should stay hidden from end-user UI until a real second sampling path exists.
-- the dialog surface is still pre-salvage and will be rebuilt in `U03`; the runtime is now ahead of the UI.
-- BenchLab already reports the resolved grammar fields, but richer requested-versus-resolved reporting for each setting family is still part of the later salvage phases.
+`U02` turns that fuzzy middle into a named, documented, and reported authority
+chain.
 
-## Proof
+## Pre-U02 Settings Truth
 
-The `plasma` smoke harness now covers:
+Before this corrective pass, the repo already had material settings work in
+place:
 
-- import/export round-tripping for the new product grammar fields
-- direct settings-to-plan authority for generator, output, treatment, and presentation choices
-- honest premium degradation with requested presentation preserved and resolved presentation flattened on lower lanes
-- honest advanced-treatment degradation for explicit `blur` and `overlay_pass` requests
-- transition commit behavior that preserves user overrides across preset morphs
+- `plasma_config` carried the major visual grammar fields
+- `plasma_settings_resolve` already assembled those fields into one resolved
+  settings record
+- `plasma_plan_compile` already consumed that resolved record rather than
+  looking the preset up again at compile time
 
-Build and smoke proof for this phase was run with Visual Studio 2022 using the installed MSVC `v141_xp` toolset.
+What still remained was ambiguity:
+
+- "apply preset" still sounded like runtime authority instead of curated bundle
+  seeding
+- product defaults and preset defaults were not described as separate layers
+- requested-versus-resolved reporting for the full grammar subset was still too
+  thin
+- BenchLab presentation forcing could change the resolved plan without updating
+  the requested presentation field that proof notes should inspect
+
+## Post-U02 Settings Truth
+
+After `U02`, Plasma has one explicit settings-authority chain:
+
+1. shared and product defaults establish the floor
+2. the active preset contributes a curated default bundle
+3. persisted or imported values override the bundle field by field
+4. session-local overrides and BenchLab config forcing override the persisted
+   state where supported
+5. `plasma_settings_resolve` produces the canonical requested settings record
+6. `plasma_plan_apply_settings_resolution` copies that resolved settings record
+   into the compiled plan
+7. lane and capability binders may degrade unsupported requests, but the
+   requested fields remain visible
+
+That means the runtime no longer behaves like "preset identity plus whatever the
+settings happened to change."
+It behaves like one resolved settings model, with presets acting as curated
+starting bundles.
+
+## What It Means For Settings To Own The Visual Grammar
+
+Concretely, `U02` now means all of the following:
+
+- generator or effect family, output family, output mode, sampling treatment,
+  filter treatment, emulation treatment, accent treatment, presentation mode,
+  speed, detail, resolution, smoothing, and transition policy all pass through
+  the same resolved-settings boundary before plan binding
+- preset loading, dialog preset selection, and default-product startup all use
+  an explicitly named preset-bundle helper instead of pretending that preset
+  application is the final runtime grammar decision
+- BenchLab snapshots and reports now export requested and resolved truth for the
+  shipped grammar subset instead of only showing the final resolved state
+- presentation forcing keeps the requested presentation visible even when the
+  resolved lower-lane plan must fall back to `flat`
+
+## What Preset Authority Was Removed Or Reduced
+
+This checkpoint reduces preset-hidden authority by:
+
+- splitting product defaults from preset-bundle seeding in
+  `plasma_config_set_defaults`
+- renaming the preset application helper to
+  `plasma_apply_preset_bundle_to_config`, while preserving the older helper name
+  as a compatibility wrapper
+- routing module, config-load, and dialog preset-selection paths through that
+  explicit bundle helper
+- centralizing the settings-to-plan copy step in
+  `plasma_plan_apply_settings_resolution`
+- making BenchLab report the requested and resolved grammar side by side
+
+Presets still matter.
+They still choose identity, theme pairing, seed defaults, and a starting visual
+bundle.
+They no longer get to masquerade as the final compiled grammar authority.
+
+## What Remains Intentionally Deferred To U03+
+
+`U02` does not claim that later salvage work is finished.
+
+It leaves these areas explicitly deferred:
+
+- the user-facing settings-surface redesign in `U03`
+- stronger keep, hide, or lab-only control decisions for weak settings surfaces
+- broader output, treatment, and presentation strengthening
+- preset and theme retuning
+- later visual distinctness proof and recut work
+
+Current bounded caveats still matter:
+
+- `sampling_treatment` still resolves to `none` and remains a non-claim surface
+- BenchLab `/plasma-preset:` forcing still overrides selection identity rather
+  than reapplying the full preset bundle
+- the current dialog still predates the salvage recut, so the runtime is now
+  ahead of the UI
+
+## Scope Boundary
+
+`U02` is the settings-authority rewrite and preset-authority demotion phase.
+
+It should not be read as:
+
+- a UI redesign
+- a broad output, treatment, or presentation retune
+- a stable-widening decision
+- a new feature tranche

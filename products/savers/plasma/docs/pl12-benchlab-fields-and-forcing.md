@@ -26,14 +26,18 @@ The current implemented field catalog is intentionally runtime-grounded.
 | `preset_channel` | Stable or experimental preset channel | Content registry |
 | `theme_source` | Built-in, pack, portable, or user theme origin | Content registry |
 | `theme_channel` | Stable or experimental theme channel | Content registry |
-| `generator_family` | Active field generator family | Compiled runtime plan |
-| `output_family` | Active output family | Compiled runtime plan |
-| `output_mode` | Active output mode | Compiled runtime plan |
-| `sampling_treatment` | Active sampling treatment slot value | Compiled runtime plan |
-| `filter_treatment` | Active filter/post treatment slot value | Compiled runtime plan |
-| `emulation_treatment` | Active emulation treatment slot value | Compiled runtime plan |
-| `accent_treatment` | Active accent/overlay treatment slot value | Compiled runtime plan |
-| `presentation_mode` | Active presentation mode | Compiled runtime plan |
+| `requested_detail_level` / `detail_level` | Requested and resolved detail levels | Requested and resolved plan fields |
+| `requested_generator_family` / `generator_family` | Requested and resolved field generator families | Requested and resolved plan fields |
+| `requested_speed_mode` / `speed_mode` | Requested and resolved speed modes | Requested and resolved plan fields |
+| `requested_resolution_mode` / `resolution_mode` | Requested and resolved resolution modes | Requested and resolved plan fields |
+| `requested_smoothing_mode` / `smoothing_mode` | Requested and resolved smoothing modes | Requested and resolved plan fields |
+| `requested_output_family` / `output_family` | Requested and resolved output families | Requested and resolved plan fields |
+| `requested_output_mode` / `output_mode` | Requested and resolved output modes | Requested and resolved plan fields |
+| `requested_sampling_treatment` / `sampling_treatment` | Requested and resolved sampling treatment slot values | Requested and resolved plan fields |
+| `requested_filter_treatment` / `filter_treatment` | Requested and resolved filter or post treatment slot values | Requested and resolved plan fields |
+| `requested_emulation_treatment` / `emulation_treatment` | Requested and resolved emulation treatment slot values | Requested and resolved plan fields |
+| `requested_accent_treatment` / `accent_treatment` | Requested and resolved accent or overlay treatment slot values | Requested and resolved plan fields |
+| `requested_presentation_mode` / `presentation_mode` | Requested and resolved presentation modes | Requested and resolved plan fields |
 | `transition_requested` | Whether transitions were requested | Compiled runtime plan |
 | `transition_enabled` | Whether transitions are actually active | Compiled runtime plan |
 | `transition_policy` | Active transition policy | Transition plan |
@@ -67,10 +71,14 @@ Current export surfaces:
 - overlay summary: short operator-facing state snapshot
 - report section: longer proof-facing product section
 
-Both surfaces report resolved truth, not just requested values.
+Both surfaces now report the shipped grammar subset as requested and resolved
+truth, not just as one final resolved state.
 `PX30` extends that truth surface so `profile_class`, output-family, output-mode, and treatment-slot fields now carry a bounded experimental contour, banded, and treatment subset rather than only the classic raster default.
 `PX31` extends it further so `generator_family`, `output_family`, and `output_mode` now also carry a bounded experimental glyph subset and bounded field-family-I studies rather than leaving those names taxonomy only.
 `PX32` extends it again so `generator_family` and `presentation_mode` now also carry bounded field-family-II and dimensional-subset truth instead of leaving those names taxonomy only.
+`U02` adds the requested-versus-resolved detail, generator, speed, resolution,
+smoothing, output, treatment-slot, and presentation lines needed to audit
+settings authority and honest degradation.
 
 ## Forcing And Override Catalog
 
@@ -78,7 +86,7 @@ Implemented forcing subset:
 
 | Forcing key | Effect | Availability rule |
 | --- | --- | --- |
-| `/plasma-preset:` | Overrides preset selection by key | key must resolve after canonicalization |
+| `/plasma-preset:` | Overrides preset selection by key | key must resolve after canonicalization; this changes selection identity rather than reapplying the full preset bundle |
 | `/plasma-theme:` | Overrides theme selection by key | key must resolve after canonicalization |
 | `/plasma-preset-set:` | Overrides preset-set selection | set key must exist |
 | `/plasma-theme-set:` | Overrides theme-set selection | set key must exist |
@@ -112,7 +120,8 @@ Key availability rules in the current implementation:
 
 Reporting follows these rules:
 
-- requested values are kept visible when they matter to the proof surface
+- requested values are kept visible when they matter to the proof surface,
+  including the shipped grammar subset added in `U02`
 - resolved values describe what Plasma actually executed
 - `degraded_from` and `degraded_to` identify lane degrade outcomes
 - clamp flags and clamp summary identify invalid or unsupported forcing outcomes

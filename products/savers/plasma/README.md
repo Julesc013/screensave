@@ -32,6 +32,9 @@ docs.
 The runtime-side completion of that first corrective tranche is frozen in the
 `U01` docs: one runtime, preserved Classic content identity, and no separate
 Classic execution regime.
+The settings-authority completion of the next tranche is frozen in the `U02`
+docs: canonical settings resolution order, explicit preset-bundle seeding, and
+requested-versus-resolved grammar truth in the runtime plan and BenchLab.
 New breadth work should not bypass that diagnostic baseline, the U00 settings
 and uniqueness audits, or the corrective backlog that keeps coherence work ahead
 of feature expansion.
