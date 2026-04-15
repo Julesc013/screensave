@@ -15,8 +15,8 @@ surface recut and names its disposition explicitly.
 | Theme | `theme_key` | Basic | Keep | First-pass palette identity control. |
 | Speed | `speed_mode` | Basic | Keep | Meaningful stable motion control. |
 | Visual Intensity | `detail_level` | Basic | Keep | Safe high-level density and activity control. |
-| Content Pool | `content_filter` | Basic | Keep | Honest stable-versus-experimental pool control; disabled when no experimental content exists. |
-| Allow Transitions | `transitions_enabled` | Basic | Keep | Real coarse transition gate; later transition controls depend on it. |
+| Content Pool | `content_filter` | Advanced | Move | Honest stable-versus-experimental pool control, but no longer part of the small stable Basic surface after U05. |
+| Allow Transitions | `transitions_enabled` | Advanced | Move | Real coarse transition gate, but now grouped with the rest of the non-basic grammar and motion controls. |
 | Generator | `effect_mode` | Advanced | Keep | Real runtime grammar field. |
 | Output Family | `output_family` | Advanced | Keep | Real runtime grammar field; broader families are now marked experimental in the UI. |
 | Output Mode | `output_mode` | Advanced | Keep | Real runtime grammar field; disabled when the chosen family only has one supported mode. |
@@ -29,7 +29,6 @@ surface recut and names its disposition explicitly.
 | Deterministic Mode | `use_deterministic_seed` | Advanced | Keep | Real execution-state control; fixed seed stays in Author/Lab. |
 | Preset Set | `preset_set_key` | Author/Lab | Keep | Real curated selection surface. |
 | Theme Set | `theme_set_key` | Author/Lab | Keep | Real curated selection surface. |
-| Favorites Only | `favorites_only` | Author/Lab | Keep | Real bounded filter; disabled until favorites exist. |
 | Transition Policy | `transition_policy` | Author/Lab | Keep | Real transition control; disabled until transitions are enabled. |
 | Journey | `journey_key` | Author/Lab | Keep | Real authored journey selection; disabled unless journeys exist and policy allows it. |
 | Fallback Policy | `transition_fallback_policy` | Author/Lab | Keep | Real bounded transition behavior. |
@@ -44,6 +43,7 @@ surface recut and names its disposition explicitly.
 | Control / Surface | Disposition | Rationale |
 | --- | --- | --- |
 | `sampling_treatment` | Hide | Still clamps to `none`; not honest enough to surface. |
+| `favorites_only` | Hide | The filter still works for imported config and BenchLab, but U05 removes it from the first-class dialog surface until a truthful favorites editor exists. |
 | Favorite preset/theme key-list editors | Hide | The underlying list state is real, but the dialog does not yet have a bounded honest editor. |
 | Exclusion key-list editors | Hide | Same reason as favorites lists. |
 | Renderer-lane forcing | Hide | Product-local dialog should not impersonate BenchLab or future lab tooling. |

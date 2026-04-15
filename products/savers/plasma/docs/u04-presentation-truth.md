@@ -26,10 +26,10 @@ The canonical admitted presentation subset is now:
 | --- | --- | --- |
 | `flat` | always admitted | stable lower-band and compat baseline |
 | `heightfield` | premium only | bounded dimensional uplift |
-| `curtain` | premium only | bounded premium presentation subset |
+| `curtain` | premium only | bounded premium presentation subset, compatibility-only after U05 |
 | `ribbon` | premium only | bounded premium presentation subset |
-| `contour_extrusion` | premium only and contour output only | bounded contour-only dimensional variant |
-| `bounded_surface` | premium only | bounded premium presentation subset |
+| `contour_extrusion` | premium only and contour output only | bounded contour-only dimensional variant, compatibility-only after U05 |
+| `bounded_surface` | premium only | bounded premium presentation subset, compatibility-only after U05 |
 
 `bounded_billboard_volume` remains outside the admitted current subset and now
 resolves to `"unsupported"` in the canonical token helper.
@@ -64,6 +64,12 @@ It keeps a bounded presentation subset and makes its truth tighter:
 
 The deterministic smoke harness now requires a premium presentation variant to
 produce a materially different presented signature from its `flat` baseline.
+
+`U05` narrows the first-class dialog subset to `flat`, `heightfield`, and
+`ribbon`.
+`curtain`, `contour_extrusion`, and `bounded_surface` remain real compatibility
+paths for explicit imported settings and preset compatibility, but they are no
+longer promoted as first-class product breadth.
 
 ## Degrade And Clamp Behavior
 

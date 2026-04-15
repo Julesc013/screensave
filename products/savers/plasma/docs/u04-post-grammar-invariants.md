@@ -40,6 +40,14 @@ After `U04`, all of the following must remain true:
   - `none`
   - `overlay_pass`
   - `accent_pass`
+- the first-class user-facing filter subset after `U05` is:
+  - `none`
+  - `glow_edge`
+  - `halftone_stipple`
+  - `emboss_edge`
+- the first-class user-facing accent subset after `U05` is:
+  - `none`
+  - `accent_pass`
 - unsupported sampling, novelty filters, and unsupported presentation names are
   not treated as silently supported grammar
 - the admitted presentation subset is exactly:
@@ -49,6 +57,10 @@ After `U04`, all of the following must remain true:
   - `ribbon`
   - `contour_extrusion`
   - `bounded_surface`
+- the first-class user-facing presentation subset after `U05` is exactly:
+  - `flat`
+  - `heightfield`
+  - `ribbon`
 - `contour_extrusion` is only valid when the resolved output family is
   `contour`
 
@@ -76,6 +88,9 @@ After `U04`, degrade behavior must stay explicit:
 - unsupported treatments clamp to `none`
 - advanced-only `blur` and `overlay_pass` clamp to `none` outside advanced
   lanes
+- compatibility-only `blur`, `overlay_pass`, `curtain`, `contour_extrusion`,
+  and `bounded_surface` remain importable or preset-resolvable, but they are
+  no longer first-class dialog choices after `U05`
 - unsupported presentation modes clamp to `flat`
 - premium-only presentation modes clamp to `flat` outside premium
 - `contour_extrusion` clamps to `flat` whenever the resolved output family is

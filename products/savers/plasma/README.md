@@ -8,8 +8,8 @@ It provides:
 
 - a preserved stable classic slice anchored by `plasma_lava` and the truthful `gdi` floor plus `gl11` stable lane
 - settings-owned generator, output, treatment, and presentation grammar with explicit requested, resolved, and degraded truth
-- a retuned stable preset family that stays lower-band-safe without collapsing into weak palette-only variations
-- an explicit experimental study slice for broader contour, banded, glyph, field-family, and premium-presentation work
+- a narrower stable preset family that stays lower-band-safe without pretending every preserved classic variant is still first-class
+- an explicit experimental study slice for contour, banded, glyph, field-family, and premium-presentation work, with weaker surfaces kept compatibility-only instead of promoted
 - BenchLab reporting, deterministic smoke influence checks, and bounded Plasma Lab audits that help keep the product honest
 - preview-safe and long-run-stable behavior through the shared saver and renderer contracts
 
@@ -20,7 +20,7 @@ It is not a general pixel-effects lab, shader showcase, or scenic 3D world produ
 
 The current release cut is recorded in the `PX50` recut docs and remains lower-band-first even after the salvage unification pass.
 
-- Stable Plasma now means one unified runtime, a preserved classic default path, retuned stable built-ins, truthful Basic settings, and explicit requested/resolved/degraded reporting.
+- Stable Plasma now means one unified runtime, a preserved classic default path, a narrower stable built-in slice, truthful Basic settings, and explicit requested/resolved/degraded reporting.
 - Richer lanes, broader non-raster grammar, premium presentation, transitions, capture-backed compare, and the wider Wave 3 study slice remain explicit opt-in experimental surfaces.
 - The stable support surface includes BenchLab reporting, PX40 read-only authoring and ops reports, `preset-audit`, and the stable PX41 metadata-report slice that only restates already-stable product truth.
 - The current ship gate remains `GO WITH CAVEATS` and is documented in [`docs/px50-ship-posture.md`](./docs/px50-ship-posture.md).
@@ -43,6 +43,9 @@ The current `U04` grammar checkpoint is frozen in the `U04` docs: a narrower
 admitted output, treatment, and presentation subset, stronger deterministic
 distinctness proof for that subset, and explicit presentation clamp truth for
 premium-lane and incompatible requests.
+The current `U05` simplification cut is frozen in the `U05` docs: weaker
+surfaces are now hidden, demoted, or kept compatibility-only instead of being
+presented as first-class product breadth.
 New breadth work should not bypass that diagnostic baseline, the U00 settings
 and uniqueness audits, or the corrective backlog that keeps coherence work ahead
 of feature expansion.

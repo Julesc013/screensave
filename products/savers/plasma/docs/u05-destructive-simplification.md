@@ -4,52 +4,32 @@
 
 This note records the keep, hide, and non-claim decisions made during the salvage pass.
 
-## Keep
+## Current U05 Notes
 
-The following surfaces survive as first-class because they are now supportable and visually distinct enough to defend:
+The detailed U05 records now live in:
 
-- preserved classic preset and theme identity
-- the unified single Plasma runtime
-- Basic, Advanced, and Author/Lab settings layers
-- `raster`, `banded`, `contour`, and `glyph` output families
-- the bounded supported treatment subset
-- the bounded premium presentation subset already proven by PX32
+- [`u05-simplification-decisions.md`](./u05-simplification-decisions.md)
+- [`u05-dead-surface-cut.md`](./u05-dead-surface-cut.md)
+- [`u05-post-simplification-invariants.md`](./u05-post-simplification-invariants.md)
+- [`../tests/u05-simplification-proof.md`](../tests/u05-simplification-proof.md)
 
-## Retune Instead Of Remove
+## Summary
 
-The salvage pass keeps the built-in preset roster, but it stops treating the stable classic slice as a collection of nearly identical raster-flat palette swaps.
+`U05` turns the wider admitted runtime grammar into a smaller first-class
+product surface:
 
-Stable built-ins now divide more honestly across:
+- Basic now keeps only preset, theme, speed, intensity, and safe defaults
+- content pool and transition gating move to Advanced
+- `favorites_only` remains compatibility-real but stops pretending to be a
+  supportable dialog toggle
+- blur, overlay-pass, curtain, contour-extrusion, bounded-surface, substrate,
+  and arc paths remain compatibility-only instead of first-class product
+  breadth
+- `midnight_interference`, `amber_terminal`, `aurora_curtain`,
+  `substrate_relief`, and `filament_extrusion` remain resolvable but no longer
+  sit in the first-class stable or experimental pools
 
-- preserved lava baseline
-- edge-lit cool plasma
-- crest-lit interference
-- green phosphor monochrome
-- CRT-darkened warm fire
-- embossed dark interference
-- amber phosphor with warm highlight lift
+## Boundary
 
-Experimental presets remain the wider grammar laboratory, but the closest near-duplicates were retuned so their output and treatment signatures diverge more clearly.
-
-## Hidden Or Non-Claim Surfaces
-
-The following surfaces remain removed from the user-facing truth because the current runtime still does not support them honestly enough:
-
-- sampling treatments beyond `none`
-- `surface` output family work
-- unsupported later filter enums
-- unsupported billboard-volume presentation
-
-Those surfaces may still exist in taxonomy or enum history, but they are not promoted as current product breadth.
-
-## Why This Is Smaller And More Honest
-
-The salvage goal is not to make Plasma look broader.
-It is to stop claiming breadth that collapses under inspection.
-
-The result is a narrower but more defensible product story:
-
-- one runtime
-- fewer fake controls
-- stronger differences inside the surfaces that still ship
-- explicit non-claim posture for the rest
+`U05` is subtractive correction, not broad retuning.
+It cuts the surface down to something worth tuning in `U06+`.

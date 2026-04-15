@@ -35,8 +35,6 @@ It owns:
 - theme
 - speed
 - visual intensity
-- content pool
-- allow transitions
 - safe defaults
 
 Basic no longer leaks generator, output, treatment, or authoring controls into
@@ -49,6 +47,8 @@ current runtime plan.
 
 It owns:
 
+- content pool
+- allow transitions
 - generator family
 - output family
 - output mode
@@ -71,7 +71,6 @@ It owns:
 
 - preset set
 - theme set
-- favorites only
 - transition policy
 - journey
 - fallback policy
@@ -98,6 +97,8 @@ It does not act like a superset of Basic and Advanced.
 The following surfaces remain intentionally hidden or deferred after `U03`:
 
 - `sampling_treatment`, because it still clamps to `none`
+- `favorites_only`, because the filter survives only as a hidden
+  compatibility-first import surface until a truthful favorites editor exists
 - favorite and exclusion key-list editors
 - direct renderer-lane forcing
 - BenchLab forcing controls

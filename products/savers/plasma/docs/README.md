@@ -68,7 +68,10 @@ They live with the product so later `PL` work can extend them without rewriting 
 - [U04 Treatment Truth](./u04-treatment-truth.md): freezes the admitted treatment-slot subset, stronger slot behavior, and the unsupported treatment names that remain outside current truth
 - [U04 Presentation Truth](./u04-presentation-truth.md): freezes the admitted presentation subset, premium and contour-output gating, and the explicit degrade ladder
 - [U04 Post-Grammar Invariants](./u04-post-grammar-invariants.md): freezes the exact grammar, reporting, and degrade invariants that later corrective phases may now assume
-- [U05 Destructive Simplification](./u05-destructive-simplification.md): records the keep, hide, retune, and non-claim decisions made during the salvage pass
+- [U05 Destructive Simplification](./u05-destructive-simplification.md): umbrella summary for the destructive simplification cut and the detailed U05 notes below
+- [U05 Simplification Decisions](./u05-simplification-decisions.md): records the keep, hide, demote, and compatibility-only decisions made during the U05 cut
+- [U05 Dead Surface Cut](./u05-dead-surface-cut.md): records the controls, grammar surfaces, presets, and themes cut from first-class exposure
+- [U05 Post-Simplification Invariants](./u05-post-simplification-invariants.md): freezes the smaller first-class surface and the preserved compatibility invariants after U05
 - [U06 Preset And Theme Tuning Notes](./u06-preset-theme-tuning-notes.md): records the first aggressive retune of built-in presets and palettes
 - [U07 Proof Harness](./u07-proof-harness.md): records the deterministic influence checks, preset-signature audit, and current dead-setting detection boundary
 - [U08 Visual QA Bar](./u08-visual-qa-bar.md): records the salvage-phase acceptance bar for stable and experimental surfaces

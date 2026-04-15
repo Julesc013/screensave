@@ -25,9 +25,9 @@ The canonical admitted treatment subset is now:
 | Slot | Admitted subset | Notes |
 | --- | --- | --- |
 | sampling | `none` | current shipped sampling treatments remain intentionally non-claim beyond no-op |
-| filter | `none`, `blur`, `glow_edge`, `halftone_stipple`, `emboss_edge` | `blur` remains advanced-only |
+| filter | `none`, `blur`, `glow_edge`, `halftone_stipple`, `emboss_edge` | `blur` remains compatibility-only after U05 |
 | emulation | `none`, `phosphor`, `crt` | lower-band-safe bounded display identities |
-| accent | `none`, `overlay_pass`, `accent_pass` | `overlay_pass` remains advanced-only |
+| accent | `none`, `overlay_pass`, `accent_pass` | `overlay_pass` remains compatibility-only after U05 |
 
 These slot claims are now frozen behind shared helper functions:
 
@@ -55,6 +55,15 @@ The concrete changes are:
 
 The deterministic smoke harness now requires representative treatment variants
 to differ materially from the untreated baseline.
+
+`U05` narrows the first-class dialog subset further:
+
+- `glow_edge`, `halftone_stipple`, and `emboss_edge` remain first-class filter
+  treatments
+- `phosphor` and `crt` remain first-class emulation treatments
+- `accent_pass` remains the only first-class accent treatment
+- `blur` and `overlay_pass` remain supported compatibility paths, but they are
+  hidden from the normal first-class control surface
 
 ## Unsupported Or Bounded Treatment Claims
 

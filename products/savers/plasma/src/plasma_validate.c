@@ -312,7 +312,7 @@ static const plasma_performance_envelope_entry g_plasma_performance_envelopes[] 
         PLASMA_VALIDATION_STATUS_PARTIAL,
         "bounded_qualitative",
         "U04 compiles and reports the admitted treatment subset across filter, emulation, and accent slots.",
-        "The truthful treatment subset is limited to glow-edge, halftone-stipple, emboss-edge, phosphor, crt, and accent-pass plus existing advanced-only blur and overlay behavior.",
+        "The truthful treatment subset keeps glow-edge, halftone-stipple, emboss-edge, phosphor, crt, and accent-pass first-class; blur and overlay remain compatibility-only hidden paths.",
         "No broad effect-zoo or exhaustive lane-by-lane treatment guarantee is claimed.",
         "Fresh compiled reruns now exist through the U04 smoke rebuild and proof note.",
         "products/savers/plasma/tests/u04-visual-grammar-proof.md"
@@ -345,7 +345,7 @@ static const plasma_performance_envelope_entry g_plasma_performance_envelopes[] 
         PLASMA_VALIDATION_STATUS_PARTIAL,
         "bounded_qualitative",
         "PX32 compiles and steps a bounded subset of later experimental field families through the existing Plasma simulation path.",
-        "The truthful subset is limited to aurora or curtain-ribbon studies, substrate or vein-coral studies, and arc or discharge studies on the existing engine seams.",
+        "The implemented engine paths still cover aurora, substrate, and arc studies, but U05 keeps aurora first-class while substrate and arc remain compatibility-only hidden paths.",
         "No claim is made for scenic world behavior, broader ecosystem work, or exhaustive lane sweeps in this tranche.",
         "Fresh compiled reruns remain bounded by the current local toolchain blocker in this checkout.",
         "products/savers/plasma/tests/px32-field-families-ii-proof.md"
@@ -356,7 +356,7 @@ static const plasma_performance_envelope_entry g_plasma_performance_envelopes[] 
         PLASMA_VALIDATION_STATUS_PARTIAL,
         "bounded_qualitative",
         "U04 compiles and presents the admitted premium presentation subset on the premium lane beyond the original flat path.",
-        "The truthful dimensional subset remains limited to heightfield, curtain, ribbon, contour extrusion, and bounded surface while keeping billboard-volume and scenic breadth out of scope.",
+        "The truthful dimensional subset still covers heightfield, curtain, ribbon, contour extrusion, and bounded surface, but U05 keeps only heightfield and ribbon first-class while the rest stay compatibility-only.",
         "Presentation degrade remains explicit back to flat on lower lanes or incompatible output families instead of silent fake premium behavior.",
         "Fresh compiled reruns now exist through the U04 smoke rebuild and focused BenchLab captures.",
         "products/savers/plasma/tests/u04-visual-grammar-proof.md"
@@ -373,7 +373,7 @@ static const plasma_known_limit_entry g_plasma_known_limits[] = {
     {
         "dimensional_presentation_subset_bounded",
         PLASMA_VALIDATION_STATUS_PARTIAL,
-        "U04 keeps the admitted presentation subset bounded to heightfield, curtain, ribbon, contour extrusion, and bounded surface; billboard-style volume and broader scenic presentation remain unsupported.",
+        "The admitted presentation subset remains bounded to heightfield, curtain, ribbon, contour extrusion, and bounded surface, but U05 keeps only heightfield and ribbon first-class while billboard-style and scenic breadth remain unsupported.",
         "products/savers/plasma/docs/u04-presentation-truth.md"
     },
     {
@@ -445,7 +445,7 @@ static const plasma_known_limit_entry g_plasma_known_limits[] = {
     {
         "treatment_family_subset_bounded",
         PLASMA_VALIDATION_STATUS_PARTIAL,
-        "U04 freezes a curated treatment subset with explicit slot and degrade policy, but it still does not implement every named treatment family or every theoretical combination.",
+        "U04 freezes a curated treatment subset with explicit slot and degrade policy, and U05 further narrows the first-class surface to the stronger non-compatibility treatments only.",
         "products/savers/plasma/docs/u04-treatment-truth.md"
     },
     {
@@ -463,7 +463,7 @@ static const plasma_known_limit_entry g_plasma_known_limits[] = {
     {
         "field_family_ii_subset_bounded",
         PLASMA_VALIDATION_STATUS_PARTIAL,
-        "PX32 lands bounded aurora, substrate, and arc studies, but it does not implement richer ecological or scenic behavior, exhaustive lane proof, or broader later-wave ecosystem work.",
+        "PX32 lands bounded aurora, substrate, and arc studies, but U05 keeps substrate and arc compatibility-only and still does not claim richer ecological, scenic, or exhaustive lane proof breadth.",
         "products/savers/plasma/docs/pl13-known-limits.md"
     },
     {

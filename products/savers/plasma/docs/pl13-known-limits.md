@@ -17,8 +17,8 @@ It is factual, current-state documentation, not a wishlist.
 - Contour, banded, and glyph output are now real for bounded subsets rather than taxonomy only, but broader non-raster breadth remains partial.
 - Treatment-family support is now real for a curated subset rather than `none` only, but the broader treatment taxonomy remains intentionally partial.
 - Field-families I support is now real for bounded chemical, lattice, and caustic studies, but broader field-family-II breadth remains intentionally later work.
-- Field-families II support is now real for bounded aurora, substrate, and arc studies, but the subset remains experimental and intentionally narrow.
-- The dimensional subset now extends beyond `heightfield` to bounded `curtain`, `ribbon`, `contour_extrusion`, and `bounded_surface`, but broader scenic or billboard-style presentation remains unsupported.
+- Field-families II support is now real for bounded aurora, substrate, and arc studies, but U05 keeps substrate and arc compatibility-only while the remaining subset stays experimental and intentionally narrow.
+- The dimensional subset still extends beyond `heightfield` to bounded `curtain`, `ribbon`, `contour_extrusion`, and `bounded_surface`, but U05 keeps only `heightfield` and `ribbon` first-class while broader scenic or billboard-style presentation remains unsupported.
 - BenchLab forcing is bounded to the implemented Plasma-specific forcing subset, not every imaginable future knob.
 - Performance envelopes are bounded qualitatively rather than with hard numeric SLAs.
 - Multi-monitor support is bounded to the shared one-window virtual-desktop baseline rather than independent per-monitor Plasma behavior.
@@ -70,7 +70,7 @@ It is factual, current-state documentation, not a wishlist.
 | Limit Key | Status | Meaning |
 | --- | --- | --- |
 | `experimental_pool_bounded` | Partial | `PX30` and `PX31` add a bounded built-in experimental preset slice, but it is not a broad experimental content catalog and the default pool remains stable-only. |
-| `dimensional_presentation_subset_bounded` | Partial | `PX32` broadens the dimensional subset to `heightfield`, `curtain`, `ribbon`, `contour_extrusion`, and `bounded_surface`, but broader scenic or billboard-style presentation remains unsupported. |
+| `dimensional_presentation_subset_bounded` | Partial | The admitted dimensional subset still covers `heightfield`, `curtain`, `ribbon`, `contour_extrusion`, and `bounded_surface`, but U05 keeps only `heightfield` and `ribbon` first-class while broader scenic or billboard-style presentation remains unsupported. |
 | `transition_pair_coverage_bounded` | Partial | Transition proof covers the shipped supported subset, named compatibility classes, and curated bridge-cycle journeys, not every theoretical pair. |
 | `benchlab_forcing_bounded` | Partial | BenchLab forcing covers the implemented subset only. |
 | `cross_hardware_gap` | Blocked | Proof comes from one capable validation machine rather than a wider hardware sweep. |
@@ -87,7 +87,7 @@ It is factual, current-state documentation, not a wishlist.
 | `treatment_family_subset_bounded` | Partial | `PX30` lands a curated treatment subset with explicit slot and degrade rules, but it does not implement every named treatment family or every theoretical combination. |
 | `glyph_output_subset_bounded` | Partial | `PX31` lands bounded `ascii_glyph` and `matrix_glyph` modes, but it does not implement a broad text renderer, larger glyph alphabets, or every treatment and transition combination. |
 | `field_family_i_subset_bounded` | Partial | `PX31` lands bounded `chemical_cellular_growth`, `lattice_quasi_crystal`, and `caustic_marbling` studies, but it does not implement field-families II, broader dimensional work, or exhaustive lane proof for those families. |
-| `field_family_ii_subset_bounded` | Partial | `PX32` lands bounded `aurora_curtain_ribbon`, `substrate_vein_coral`, and `arc_discharge` studies, but it does not implement scenic breadth, broader ecosystem work, or exhaustive lane proof for those families. |
+| `field_family_ii_subset_bounded` | Partial | `PX32` lands bounded `aurora_curtain_ribbon`, `substrate_vein_coral`, and `arc_discharge` studies, but U05 keeps substrate and arc compatibility-only and does not implement scenic breadth, broader ecosystem work, or exhaustive lane proof for those families. |
 | `selection_foundation_bounded` | Partial | Selection now honors authored set weights for bounded fallback behavior, but richer anti-repeat, semantic grouping, and safety-aware logic remain later work. |
 
 ## Scope Boundary

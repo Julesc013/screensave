@@ -26,6 +26,10 @@ The detailed canonical notes now live in:
 The proof note for this checkpoint is
 [`../tests/u04-visual-grammar-proof.md`](../tests/u04-visual-grammar-proof.md).
 
+`U05` later narrows the first-class user-facing subset further.
+These U04 notes still describe the supported runtime grammar, while the U05
+notes name which supported values remain first-class versus compatibility-only.
+
 The focused BenchLab captures for this checkpoint live in
 [`../../../../validation/captures/u04/README.md`](../../../../validation/captures/u04/README.md).
 

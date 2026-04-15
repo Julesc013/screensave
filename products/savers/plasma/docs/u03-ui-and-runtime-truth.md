@@ -32,10 +32,12 @@ the preset bundle every time a visible control changes.
 
 The dialog now exposes current truth more honestly:
 
-- `Content Pool` stays visible in `Basic` but is disabled when the current
-  registry has no experimental content
-- `Favorites Only` stays visible in `Author/Lab` but is disabled until favorite
-  keys exist
+- `Content Pool` and `Allow Transitions` now stay on `Advanced`, not `Basic`,
+  because they materially alter selection and motion policy rather than acting
+  like simple stable defaults
+- `favorites_only` is now hidden from the dialog entirely; the filter remains
+  real for imported config and BenchLab forcing, but the UI no longer pretends
+  it is supportable without a truthful favorites editor
 - transition policy, journey, fallback, seed continuity, and timing controls
   stay disabled until transitions are enabled and the transition surface exists
 - `Journey` stays disabled unless authored journeys exist and the current policy
