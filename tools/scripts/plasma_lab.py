@@ -183,6 +183,65 @@ CAPTURE_BENCHLAB_KEYS = [
     "requested/resolved/degraded",
 ]
 
+SETTINGS_SURFACE_NAMES = {
+    "PLASMA_SETTINGS_SURFACE_BASIC": "basic",
+    "PLASMA_SETTINGS_SURFACE_ADVANCED": "advanced",
+    "PLASMA_SETTINGS_SURFACE_AUTHOR_LAB": "author_lab",
+}
+
+RESULT_STATUS_MEANINGS = {
+    "validated": "backed by real smoke, capture, or generated audit evidence in the current repo",
+    "partial": "implemented and exercised for a bounded subset or by a weaker proof method",
+    "documented_only": "recorded in docs or source but not backed here by direct generated evidence",
+    "unsupported": "explicitly outside the current admitted or first-class surface",
+    "blocked": "would require environments or capture surfaces that the repo does not currently have",
+}
+
+U07_STABLE_LANES = ("gdi", "gl11")
+U07_PREMIUM_LANES = ("gdi", "gl11", "gl46", "auto")
+U07_STABLE_PRESET_SET_KEY = "classic_core"
+U07_STABLE_THEME_SET_KEY = "classic_core"
+U07_EXPERIMENTAL_COLLECTION_KEY = "wave3_experimental_sampler"
+
+U07_INFLUENCE_NOTES = {
+    "preset_key": ("validated", "validated", "structural_plan+render_signature", "selection identity is proved through the stable matrix and deterministic signature deltas"),
+    "theme_key": ("validated", "validated", "structural_plan+render_signature+palette_distance", "theme identity is proved through deterministic signature deltas and compiled palette separation"),
+    "speed_mode": ("validated", "validated", "render_signature", "pace changes are part of the shipped smoke signature subset"),
+    "detail_level": ("validated", "validated", "render_signature", "detail level remains part of the shipped smoke signature subset"),
+    "effect_mode": ("validated", "validated", "render_signature", "generator family selection remains part of the shipped smoke signature subset"),
+    "resolution_mode": ("validated", "validated", "render_signature", "resolution changes are part of the shipped smoke signature subset"),
+    "smoothing_mode": ("validated", "validated", "render_signature", "smoothing changes are part of the shipped smoke signature subset"),
+    "output_family": ("validated", "validated", "render_signature", "admitted first-class output-family changes are part of the shipped smoke signature subset"),
+    "output_mode": ("validated", "validated", "render_signature", "admitted first-class output-mode changes are part of the shipped smoke signature subset"),
+    "filter_treatment": ("validated", "validated", "render_signature", "first-class filter treatments remain part of the shipped smoke signature subset"),
+    "emulation_treatment": ("validated", "validated", "render_signature", "first-class emulation treatments remain part of the shipped smoke signature subset"),
+    "accent_treatment": ("validated", "validated", "render_signature", "first-class accent treatments remain part of the shipped smoke signature subset"),
+    "presentation_mode": ("validated", "validated", "render_signature+benchlab_capture", "first-class presentation changes rely on premium-lane signatures plus explicit degrade captures"),
+    "preset_set_key": ("validated", "partial", "structural_plan+benchlab_capture", "set routing is selection and journey truth, not a single-frame visual proof"),
+    "theme_set_key": ("validated", "partial", "structural_plan+benchlab_capture", "set routing is selection and journey truth, not a single-frame visual proof"),
+    "transitions_enabled": ("validated", "partial", "structural_plan+benchlab_capture", "transition enablement affects runtime behavior over time rather than one static frame"),
+    "transition_policy": ("validated", "partial", "structural_plan+benchlab_capture", "policy proof remains journey and fallback oriented rather than screenshot-grade"),
+    "use_deterministic_seed": ("validated", "partial", "structural_plan", "deterministic mode changes seed policy and replay posture more directly than a single-frame diff"),
+    "content_filter": ("validated", "partial", "structural_plan+benchlab_capture", "content pool filtering changes selection truth more directly than a single-frame diff"),
+    "favorites_only": ("partial", "documented_only", "structural_plan", "favorites-only survives as hidden compatibility state rather than a first-class U07 proof target"),
+    "journey_key": ("validated", "partial", "structural_plan+benchlab_capture", "journey choice affects transition routing over time"),
+    "transition_fallback_policy": ("validated", "partial", "structural_plan+benchlab_capture", "fallback behavior is proved through plan and capture truth rather than a single-frame delta"),
+    "transition_seed_policy": ("validated", "partial", "structural_plan+benchlab_capture", "seed continuity policy is runtime-state truth rather than a single-frame delta"),
+    "transition_interval_millis": ("validated", "partial", "structural_plan+benchlab_capture", "interval retunes dwell timing rather than the first still frame"),
+    "transition_duration_millis": ("validated", "partial", "structural_plan+benchlab_capture", "duration retunes morph timing rather than the first still frame"),
+    "deterministic_seed": ("validated", "partial", "structural_plan", "seed value is resolved-runtime truth and only indirectly a first-frame visual proof"),
+    "diagnostics_overlay_enabled": ("partial", "partial", "structural_plan", "diagnostics overlay remains a support-facing surface rather than a stable visual-identity proof target"),
+}
+
+U07_EXPERIMENTAL_GRAMMAR_SLICES = (
+    "output families and modes: banded/posterized_bands, contour/contour_only, contour/contour_bands, glyph/ascii_glyph, glyph/matrix_glyph",
+    "filter treatments: glow_edge, halftone_stipple, emboss_edge",
+    "emulation treatments: phosphor, crt",
+    "accent treatments: accent_pass",
+    "presentation modes: heightfield and ribbon on premium plus explicit lower-lane degrade captures",
+    "transition subset: bounded classic-cycle journey behavior on the surviving stable core",
+)
+
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Bounded Plasma Lab shell")
@@ -252,6 +311,29 @@ def build_parser() -> argparse.ArgumentParser:
         type=int,
         default=2,
         help="Report preset pairs whose signature distance is at or below this threshold",
+    )
+    preset_audit_parser.add_argument(
+        "--stable-preset-set",
+        default=U07_STABLE_PRESET_SET_KEY,
+        help="Use this authored preset set as the current first-class stable preset pool",
+    )
+    preset_audit_parser.add_argument(
+        "--stable-theme-set",
+        default=U07_STABLE_THEME_SET_KEY,
+        help="Use this authored theme set as the current first-class stable theme pool",
+    )
+
+    subparsers.add_parser(
+        "influence-report",
+        help="Print the current U07 settings-influence proof catalog",
+    )
+    subparsers.add_parser(
+        "combination-matrix",
+        help="Print the current U07 stable combination matrix definition",
+    )
+    subparsers.add_parser(
+        "experimental-coverage",
+        help="Print the current U07 experimental coverage strategy",
     )
 
     return parser
@@ -865,6 +947,73 @@ def load_compiled_theme_palettes() -> Dict[str, Dict[str, object]]:
     return palettes
 
 
+def strip_c_string(token: str) -> str:
+    stripped = token.strip()
+    if len(stripped) >= 2 and stripped[0] == '"' and stripped[-1] == '"':
+        return stripped[1:-1]
+    return stripped
+
+
+def parse_affects_mask(mask_text: str) -> List[str]:
+    parts: List[str] = []
+    for token in mask_text.split("|"):
+        stripped = token.strip()
+        if not stripped:
+            continue
+        if stripped.startswith("PLASMA_SETTINGS_AFFECTS_"):
+            stripped = stripped[len("PLASMA_SETTINGS_AFFECTS_"):]
+        parts.append(stripped.lower())
+    return parts
+
+
+def load_settings_catalog_entries() -> List[Dict[str, object]]:
+    settings_path = PLASMA_ROOT / "src" / "plasma_settings.c"
+    body = extract_c_array_body(settings_path, "g_plasma_settings_catalog")
+    entries = extract_struct_entries(body)
+    descriptors: List[Dict[str, object]] = []
+
+    for entry_text in entries:
+        tokens = parse_struct_tokens(entry_text)
+        if len(tokens) != 11:
+            raise ValueError(f"unexpected settings descriptor width: {tokens!r}")
+        descriptors.append({
+            "setting_key": strip_c_string(tokens[0]),
+            "display_name": strip_c_string(tokens[1]),
+            "summary": strip_c_string(tokens[2]),
+            "surface": SETTINGS_SURFACE_NAMES.get(tokens[3].strip(), tokens[3].strip().lower()),
+            "category_key": strip_c_string(tokens[4]),
+            "value_type": tokens[5].strip(),
+            "default_value_text": strip_c_string(tokens[6]),
+            "domain_summary": strip_c_string(tokens[7]),
+            "persistence_scope": tokens[8].strip().replace("PLASMA_SETTINGS_PERSIST_", "").lower(),
+            "affects": parse_affects_mask(tokens[9]),
+            "benchlab_exposable": tokens[10].strip() == "1",
+        })
+
+    if not descriptors:
+        raise ValueError("could not parse settings catalog")
+    return descriptors
+
+
+def get_preset_set_member_keys(repo_surface: Dict[str, Dict[str, Dict[str, object]]], set_key: str) -> List[str]:
+    if set_key not in repo_surface["preset_sets"]:
+        raise ValueError(f"unknown preset set {set_key}")
+    return [member_key for member_key, _ in repo_surface["preset_sets"][set_key]["members"]]
+
+
+def get_theme_set_member_keys(repo_surface: Dict[str, Dict[str, Dict[str, object]]], set_key: str) -> List[str]:
+    if set_key not in repo_surface["theme_sets"]:
+        raise ValueError(f"unknown theme set {set_key}")
+    return [member_key for member_key, _ in repo_surface["theme_sets"][set_key]["members"]]
+
+
+def get_curated_collection(repo_surface: Dict[str, Dict[str, Dict[str, object]]], collection_key: str) -> Dict[str, object]:
+    for collection in repo_surface["curated_collections"]["collections"]:
+        if collection["collection_key"] == collection_key:
+            return collection
+    raise ValueError(f"unknown curated collection {collection_key}")
+
+
 def preset_signature_distance(left: Sequence[str], right: Sequence[str]) -> int:
     return sum(1 for left_value, right_value in zip(left, right) if left_value != right_value)
 
@@ -1465,7 +1614,7 @@ def authoring_report() -> int:
         f"- canonical aliases: {', '.join(f'{alias}->{canonical}' for alias, canonical in sorted(aliases.items())) or 'none'}"
     )
     print(
-        "- author workflow entry points: validate, authoring-report, compare, compat-report, migration-report, integration-report, control-report, curation-report, degrade-report, capture-diff"
+        "- author workflow entry points: validate, authoring-report, compare, compat-report, migration-report, integration-report, control-report, curation-report, degrade-report, capture-diff, influence-report, combination-matrix, experimental-coverage"
     )
     print("- current authored boundary: set files, journey files, and pack provenance are on disk; built-in preset and theme descriptors remain compiled and legacy-INI anchored")
     print(
@@ -1891,13 +2040,106 @@ def capture_diff(left_path_text: str, right_path_text: str) -> int:
     return 0
 
 
-def preset_audit(threshold: int) -> int:
+def influence_report() -> int:
+    descriptors = load_settings_catalog_entries()
+
+    print("U07 Plasma settings influence report")
+    print("- proof posture: mixed model")
+    print("- status vocabulary: " + ", ".join(sorted(RESULT_STATUS_MEANINGS)))
+    print("- note: render-visible proof is stronger than plan-only proof and is reported separately")
+
+    for descriptor in descriptors:
+        setting_key = str(descriptor["setting_key"])
+        plan_status, render_status, method, notes = U07_INFLUENCE_NOTES.get(
+            setting_key,
+            ("documented_only", "documented_only", "documented_only", "no explicit U07 mapping exists yet"),
+        )
+        print(f"- {setting_key}")
+        print(
+            f"  surface={descriptor['surface']} category={descriptor['category_key']} "
+            f"benchlab_exposable={str(descriptor['benchlab_exposable']).lower()}"
+        )
+        print(
+            f"  affects={','.join(descriptor['affects']) if descriptor['affects'] else 'none'} "
+            f"default={descriptor['default_value_text'] or 'empty'}"
+        )
+        print(
+            f"  plan_result={plan_status} render_result={render_status} "
+            f"proof_method={method}"
+        )
+        print(f"  note={notes}")
+    return 0
+
+
+def combination_matrix() -> int:
+    repo_surface = load_authored_repo_surface()
+    stable_presets = get_preset_set_member_keys(repo_surface, U07_STABLE_PRESET_SET_KEY)
+    stable_themes = get_theme_set_member_keys(repo_surface, U07_STABLE_THEME_SET_KEY)
+
+    print("U07 Plasma stable combination matrix")
+    print("- scope: actual reachable stable first-class preset/theme selections only")
+    print(
+        f"- stable preset set: {U07_STABLE_PRESET_SET_KEY} ({len(stable_presets)} members)"
+    )
+    print(
+        f"- stable theme set: {U07_STABLE_THEME_SET_KEY} ({len(stable_themes)} members)"
+    )
+    print("- lanes: " + ", ".join(U07_STABLE_LANES))
+    print("- exhaustive rows: " + str(len(stable_presets) * len(stable_themes) * len(U07_STABLE_LANES)))
+    print("- result classes used here: validated, partial, blocked")
+    print("- row meaning: each row is a real reachable stable preset/theme/lane combination, not an idealized grammar cross-product")
+    print("")
+    print("| preset_key | theme_key | lane | result | proof_method | note |")
+    print("| --- | --- | --- | --- | --- | --- |")
+    for lane in U07_STABLE_LANES:
+        for preset_key in stable_presets:
+            for theme_key in stable_themes:
+                print(
+                    f"| {preset_key} | {theme_key} | {lane} | validated | "
+                    "smoke_matrix_compile | exhaustively exercised by the U07 stable matrix harness |"
+                )
+
+    print("")
+    print("- deliberate exclusions:")
+    print("  - advanced grammar cross-products are not treated as stable matrix rows")
+    print("  - premium-only presentation requests are not treated as stable rows")
+    print("  - compatibility-only preset and theme keys remain outside the first-class stable matrix")
+    print("  - broader experimental content stays in the experimental coverage report rather than this stable matrix")
+    return 0
+
+
+def experimental_coverage() -> int:
+    repo_surface = load_authored_repo_surface()
+    sampler = get_curated_collection(repo_surface, U07_EXPERIMENTAL_COLLECTION_KEY)
+
+    print("U07 Plasma experimental coverage")
+    print("- coverage model: bounded covering slices rather than exhaustive cross-product proof")
+    print(f"- experimental collection: {sampler['collection_key']}")
+    print("- preset slice: " + ", ".join(sampler["preset_keys"]))
+    print("- theme slice: " + ", ".join(sampler["theme_keys"]))
+    print("- lane slice: " + ", ".join(U07_PREMIUM_LANES))
+    print("- result posture: experimental coverage is allowed to stay partial as long as the boundary is explicit")
+    print("- coverage slices:")
+    for slice_text in U07_EXPERIMENTAL_GRAMMAR_SLICES:
+        print(f"  - {slice_text}")
+    print("- deliberate non-coverage:")
+    print("  - no exhaustive experimental preset/theme/output/treatment/presentation cross-product")
+    print("  - no claim of screenshot-grade perceptual coverage on every renderer path")
+    print("  - no claim that compatibility-only or hidden controls are first-class experimental proof targets")
+    return 0
+
+
+def preset_audit(threshold: int, stable_preset_set: str, stable_theme_set: str) -> int:
     signatures = load_compiled_preset_signatures()
     palettes = load_compiled_theme_palettes()
+    repo_surface = load_authored_repo_surface()
+    stable_preset_members = set(get_preset_set_member_keys(repo_surface, stable_preset_set))
+    stable_theme_members = set(get_theme_set_member_keys(repo_surface, stable_theme_set))
     keys = sorted(signatures)
     exact_duplicates: List[Tuple[str, str]] = []
     near_duplicates: List[Tuple[int, str, str]] = []
     stable_pairs: List[Tuple[int, str, str]] = []
+    stable_focus_pairs: List[Tuple[int, str, str]] = []
 
     for index, left_key in enumerate(keys):
         for right_key in keys[index + 1:]:
@@ -1914,8 +2156,11 @@ def preset_audit(threshold: int) -> int:
                 signatures[right_key]["channel"] == "stable"
             ):
                 stable_pairs.append((distance, left_key, right_key))
+            if left_key in stable_preset_members and right_key in stable_preset_members:
+                stable_focus_pairs.append((distance, left_key, right_key))
 
     stable_pairs.sort()
+    stable_focus_pairs.sort()
     near_duplicates.sort()
 
     stable_filter_coverage = Counter(
@@ -1944,6 +2189,11 @@ def preset_audit(threshold: int) -> int:
                 right_key,
             ))
     theme_pairs.sort()
+    stable_theme_pairs = [
+        (distance, left_key, right_key)
+        for distance, left_key, right_key in theme_pairs
+        if left_key in stable_theme_members and right_key in stable_theme_members
+    ]
 
     print("PX40 Plasma Lab preset audit")
     print(f"- compiled presets audited: {len(keys)}")
@@ -1962,6 +2212,15 @@ def preset_audit(threshold: int) -> int:
         )
     else:
         print("- closest stable pair: none")
+
+    if stable_focus_pairs:
+        min_distance, left_key, right_key = stable_focus_pairs[0]
+        print(
+            f"- closest first-class stable pair ({stable_preset_set}): {left_key} <-> {right_key} "
+            f"(distance={min_distance}; {render_signature_deltas(signatures[left_key]['values'], signatures[right_key]['values'])})"
+        )
+    else:
+        print(f"- closest first-class stable pair ({stable_preset_set}): none")
 
     if near_duplicates:
         print(f"- near-duplicate pairs at threshold <= {threshold}:")
@@ -1990,6 +2249,15 @@ def preset_audit(threshold: int) -> int:
         print(f"- closest theme palette pair: {left_key} <-> {right_key} (distance={distance})")
     else:
         print("- closest theme palette pair: none")
+
+    if stable_theme_pairs:
+        distance, left_key, right_key = stable_theme_pairs[0]
+        print(
+            f"- closest first-class stable theme pair ({stable_theme_set}): "
+            f"{left_key} <-> {right_key} (distance={distance})"
+        )
+    else:
+        print(f"- closest first-class stable theme pair ({stable_theme_set}): none")
 
     print("- theme palette nearest pairs:")
     for distance, left_key, right_key in theme_pairs[:5]:
@@ -2023,8 +2291,14 @@ def main(argv: Sequence[str]) -> int:
         if args.pack:
             return degrade_report_for_pack(args.pack)
         return degrade_report_for_capture(args.capture)
+    if args.command == "influence-report":
+        return influence_report()
+    if args.command == "combination-matrix":
+        return combination_matrix()
+    if args.command == "experimental-coverage":
+        return experimental_coverage()
     if args.command == "preset-audit":
-        return preset_audit(args.threshold)
+        return preset_audit(args.threshold, args.stable_preset_set, args.stable_theme_set)
     return capture_diff(args.left, args.right)
 
 
