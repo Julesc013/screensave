@@ -23,6 +23,7 @@ typedef struct plasma_presentation_target_tag {
 } plasma_presentation_target;
 
 int plasma_presentation_mode_is_supported(plasma_presentation_mode mode);
+int plasma_presentation_mode_is_primary_visible(plasma_presentation_mode mode);
 int plasma_presentation_mode_requires_premium(plasma_presentation_mode mode);
 int plasma_presentation_mode_supports_output_family(
     plasma_presentation_mode mode,

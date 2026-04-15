@@ -45,9 +45,11 @@ typedef struct plasma_treated_frame_tag {
 
 int plasma_sampling_treatment_is_supported(plasma_sampling_treatment treatment);
 int plasma_filter_treatment_is_supported(plasma_filter_treatment treatment);
+int plasma_filter_treatment_is_primary_visible(plasma_filter_treatment treatment);
 int plasma_filter_treatment_requires_advanced(plasma_filter_treatment treatment);
 int plasma_emulation_treatment_is_supported(plasma_emulation_treatment treatment);
 int plasma_accent_treatment_is_supported(plasma_accent_treatment treatment);
+int plasma_accent_treatment_is_primary_visible(plasma_accent_treatment treatment);
 int plasma_accent_treatment_requires_advanced(plasma_accent_treatment treatment);
 const char *plasma_sampling_treatment_token(plasma_sampling_treatment treatment);
 const char *plasma_filter_treatment_token(plasma_filter_treatment treatment);

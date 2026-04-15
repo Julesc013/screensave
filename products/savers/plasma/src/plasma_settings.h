@@ -119,6 +119,10 @@ void plasma_settings_context_init(
 const plasma_settings_descriptor *plasma_settings_get_catalog(unsigned int *count_out);
 const plasma_settings_descriptor *plasma_settings_find_descriptor(const char *setting_key);
 int plasma_settings_catalog_validate(void);
+int plasma_settings_is_exposed(
+    const plasma_settings_descriptor *descriptor,
+    const plasma_settings_context *context
+);
 int plasma_settings_is_available(
     const plasma_settings_descriptor *descriptor,
     const plasma_settings_context *context

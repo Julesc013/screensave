@@ -662,6 +662,11 @@ int plasma_filter_treatment_is_supported(plasma_filter_treatment treatment)
         treatment == PLASMA_FILTER_TREATMENT_EMBOSS_EDGE;
 }
 
+int plasma_filter_treatment_is_primary_visible(plasma_filter_treatment treatment)
+{
+    return treatment != PLASMA_FILTER_TREATMENT_BLUR;
+}
+
 int plasma_filter_treatment_requires_advanced(plasma_filter_treatment treatment)
 {
     return treatment == PLASMA_FILTER_TREATMENT_BLUR;
@@ -681,6 +686,11 @@ int plasma_accent_treatment_is_supported(plasma_accent_treatment treatment)
         treatment == PLASMA_ACCENT_TREATMENT_NONE ||
         treatment == PLASMA_ACCENT_TREATMENT_OVERLAY_PASS ||
         treatment == PLASMA_ACCENT_TREATMENT_ACCENT_PASS;
+}
+
+int plasma_accent_treatment_is_primary_visible(plasma_accent_treatment treatment)
+{
+    return treatment != PLASMA_ACCENT_TREATMENT_OVERLAY_PASS;
 }
 
 int plasma_accent_treatment_requires_advanced(plasma_accent_treatment treatment)

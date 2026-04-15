@@ -171,14 +171,60 @@ static const plasma_dialog_binding g_plasma_dialog_bindings[] = {
 static int plasma_parse_ulong_text(const char *text, unsigned long *value_out);
 static const char *plasma_format_ulong_text(unsigned long value, char *buffer, unsigned int buffer_size);
 static void plasma_config_clamp_runtime_fields(plasma_config *config);
+static int plasma_content_filter_allows_channel(
+    plasma_content_filter filter,
+    plasma_content_channel channel
+);
+static int plasma_effect_mode_is_primary_visible(int effect_mode);
+static unsigned int plasma_output_mode_choice_count_for_family(plasma_output_family family);
+static int plasma_preset_is_visible_in_picker(
+    const plasma_content_preset_entry *entry,
+    plasma_content_filter filter
+);
+static int plasma_theme_is_visible_in_picker(
+    const plasma_content_theme_entry *entry,
+    plasma_content_filter filter
+);
+static void plasma_format_combo_compatibility_label(
+    const char *base_text,
+    const char *suffix,
+    char *buffer,
+    unsigned int buffer_size
+);
+static void plasma_populate_preset_combo(
+    HWND dialog,
+    const screensave_saver_module *module,
+    const screensave_common_config *common_config,
+    const plasma_config *product_config
+);
+static void plasma_populate_theme_combo(
+    HWND dialog,
+    const screensave_saver_module *module,
+    const screensave_common_config *common_config,
+    const plasma_config *product_config
+);
+static void plasma_populate_effect_combo(HWND dialog, int current_effect_mode);
+static void plasma_populate_filter_treatment_combo(
+    HWND dialog,
+    plasma_filter_treatment current_treatment
+);
+static void plasma_populate_accent_treatment_combo(
+    HWND dialog,
+    plasma_accent_treatment current_treatment
+);
 static unsigned int plasma_output_mode_choice_count_for_family(plasma_output_family family);
 static int plasma_presentation_mode_is_visible_for_output_family(
     plasma_output_family family,
     plasma_presentation_mode mode
 );
+static int plasma_presentation_mode_is_user_visible_for_output_family(
+    plasma_output_family family,
+    plasma_presentation_mode mode
+);
 static void plasma_populate_presentation_mode_combo(
     HWND dialog,
-    plasma_output_family family
+    plasma_output_family family,
+    plasma_presentation_mode current_mode
 );
 static int plasma_has_non_empty_text(const char *text);
 static void plasma_append_dialog_info_text(char *buffer, unsigned int buffer_size, const char *text);
@@ -1069,6 +1115,77 @@ static void plasma_set_control_visibility(HWND dialog, int control_id, int visib
     }
 }
 
+static int plasma_content_filter_allows_channel(
+    plasma_content_filter filter,
+    plasma_content_channel channel
+)
+{
+    switch (filter) {
+    case PLASMA_CONTENT_FILTER_STABLE_AND_EXPERIMENTAL:
+        return 1;
+
+    case PLASMA_CONTENT_FILTER_EXPERIMENTAL_ONLY:
+        return channel == PLASMA_CONTENT_CHANNEL_EXPERIMENTAL;
+
+    case PLASMA_CONTENT_FILTER_STABLE_ONLY:
+    default:
+        return channel == PLASMA_CONTENT_CHANNEL_STABLE;
+    }
+}
+
+static int plasma_effect_mode_is_primary_visible(int effect_mode)
+{
+    return effect_mode != PLASMA_EFFECT_SUBSTRATE && effect_mode != PLASMA_EFFECT_ARC;
+}
+
+static int plasma_preset_is_visible_in_picker(
+    const plasma_content_preset_entry *entry,
+    plasma_content_filter filter
+)
+{
+    return
+        entry != NULL &&
+        plasma_content_preset_is_primary_visible(entry) &&
+        plasma_content_filter_allows_channel(filter, entry->channel);
+}
+
+static int plasma_theme_is_visible_in_picker(
+    const plasma_content_theme_entry *entry,
+    plasma_content_filter filter
+)
+{
+    return
+        entry != NULL &&
+        plasma_content_theme_is_primary_visible(entry) &&
+        plasma_content_filter_allows_channel(filter, entry->channel);
+}
+
+static void plasma_format_combo_compatibility_label(
+    const char *base_text,
+    const char *suffix,
+    char *buffer,
+    unsigned int buffer_size
+)
+{
+    if (buffer == NULL || buffer_size == 0U) {
+        return;
+    }
+
+    buffer[0] = '\0';
+    if (!plasma_has_non_empty_text(base_text)) {
+        return;
+    }
+
+    lstrcpynA(buffer, base_text, (int)buffer_size);
+    if (plasma_has_non_empty_text(suffix)) {
+        lstrcpynA(
+            buffer + lstrlenA(buffer),
+            suffix,
+            (int)(buffer_size - (unsigned int)lstrlenA(buffer))
+        );
+    }
+}
+
 static void plasma_populate_named_combo(
     HWND dialog,
     int control_id,
@@ -1081,6 +1198,230 @@ static void plasma_populate_named_combo(
     SendDlgItemMessageA(dialog, control_id, CB_RESETCONTENT, 0U, 0L);
     for (index = 0U; index < item_count; ++index) {
         plasma_add_combo_item(dialog, control_id, items[index].display_name, (LPARAM)items[index].value);
+    }
+}
+
+static void plasma_populate_preset_combo(
+    HWND dialog,
+    const screensave_saver_module *module,
+    const screensave_common_config *common_config,
+    const plasma_config *product_config
+)
+{
+    plasma_content_filter filter;
+    unsigned int index;
+
+    filter = product_config != NULL
+        ? product_config->selection.content_filter
+        : PLASMA_CONTENT_FILTER_STABLE_ONLY;
+
+    SendDlgItemMessageA(dialog, IDC_PLASMA_PRESET, CB_RESETCONTENT, 0U, 0L);
+    if (module == NULL) {
+        return;
+    }
+
+    for (index = 0U; index < module->preset_count; ++index) {
+        const screensave_preset_descriptor *descriptor;
+        const plasma_content_preset_entry *entry;
+        int visible;
+        int current_hidden;
+        char label[128];
+
+        descriptor = &module->presets[index];
+        entry = plasma_content_find_preset_entry(descriptor->preset_key);
+        visible = plasma_preset_is_visible_in_picker(entry, filter);
+        current_hidden =
+            common_config != NULL &&
+            common_config->preset_key != NULL &&
+            lstrcmpiA(common_config->preset_key, descriptor->preset_key) == 0 &&
+            !visible;
+        if (!visible && !current_hidden) {
+            continue;
+        }
+
+        if (!visible && !plasma_content_preset_is_primary_visible(entry)) {
+            plasma_format_combo_compatibility_label(
+                descriptor->display_name,
+                " (Compatibility)",
+                label,
+                (unsigned int)sizeof(label)
+            );
+            plasma_add_combo_item(dialog, IDC_PLASMA_PRESET, label, (LPARAM)index);
+        } else if (!visible) {
+            plasma_format_combo_compatibility_label(
+                descriptor->display_name,
+                " (Current)",
+                label,
+                (unsigned int)sizeof(label)
+            );
+            plasma_add_combo_item(dialog, IDC_PLASMA_PRESET, label, (LPARAM)index);
+        } else {
+            plasma_add_combo_item(dialog, IDC_PLASMA_PRESET, descriptor->display_name, (LPARAM)index);
+        }
+    }
+}
+
+static void plasma_populate_theme_combo(
+    HWND dialog,
+    const screensave_saver_module *module,
+    const screensave_common_config *common_config,
+    const plasma_config *product_config
+)
+{
+    plasma_content_filter filter;
+    unsigned int index;
+
+    filter = product_config != NULL
+        ? product_config->selection.content_filter
+        : PLASMA_CONTENT_FILTER_STABLE_ONLY;
+
+    SendDlgItemMessageA(dialog, IDC_PLASMA_THEME, CB_RESETCONTENT, 0U, 0L);
+    if (module == NULL) {
+        return;
+    }
+
+    for (index = 0U; index < module->theme_count; ++index) {
+        const screensave_theme_descriptor *descriptor;
+        const plasma_content_theme_entry *entry;
+        int visible;
+        int current_hidden;
+        char label[128];
+
+        descriptor = &module->themes[index];
+        entry = plasma_content_find_theme_entry(descriptor->theme_key);
+        visible = plasma_theme_is_visible_in_picker(entry, filter);
+        current_hidden =
+            common_config != NULL &&
+            common_config->theme_key != NULL &&
+            lstrcmpiA(common_config->theme_key, descriptor->theme_key) == 0 &&
+            !visible;
+        if (!visible && !current_hidden) {
+            continue;
+        }
+
+        if (!visible && !plasma_content_theme_is_primary_visible(entry)) {
+            plasma_format_combo_compatibility_label(
+                descriptor->display_name,
+                " (Compatibility)",
+                label,
+                (unsigned int)sizeof(label)
+            );
+            plasma_add_combo_item(dialog, IDC_PLASMA_THEME, label, (LPARAM)index);
+        } else if (!visible) {
+            plasma_format_combo_compatibility_label(
+                descriptor->display_name,
+                " (Current)",
+                label,
+                (unsigned int)sizeof(label)
+            );
+            plasma_add_combo_item(dialog, IDC_PLASMA_THEME, label, (LPARAM)index);
+        } else {
+            plasma_add_combo_item(dialog, IDC_PLASMA_THEME, descriptor->display_name, (LPARAM)index);
+        }
+    }
+}
+
+static void plasma_populate_effect_combo(HWND dialog, int current_effect_mode)
+{
+    unsigned int index;
+
+    SendDlgItemMessageA(dialog, IDC_PLASMA_EFFECT, CB_RESETCONTENT, 0U, 0L);
+    for (index = 0U; index < (unsigned int)(sizeof(g_plasma_effect_items) / sizeof(g_plasma_effect_items[0])); ++index) {
+        const plasma_combo_item *item;
+        int visible;
+        char label[128];
+
+        item = &g_plasma_effect_items[index];
+        visible = plasma_effect_mode_is_primary_visible(item->value);
+        if (!visible && item->value != current_effect_mode) {
+            continue;
+        }
+
+        if (!visible) {
+            plasma_format_combo_compatibility_label(
+                item->display_name,
+                " (Compatibility)",
+                label,
+                (unsigned int)sizeof(label)
+            );
+            plasma_add_combo_item(dialog, IDC_PLASMA_EFFECT, label, (LPARAM)item->value);
+        } else {
+            plasma_add_combo_item(dialog, IDC_PLASMA_EFFECT, item->display_name, (LPARAM)item->value);
+        }
+    }
+}
+
+static void plasma_populate_filter_treatment_combo(
+    HWND dialog,
+    plasma_filter_treatment current_treatment
+)
+{
+    unsigned int index;
+
+    SendDlgItemMessageA(dialog, IDC_PLASMA_FILTER_TREATMENT, CB_RESETCONTENT, 0U, 0L);
+    for (
+        index = 0U;
+        index < (unsigned int)(sizeof(g_plasma_filter_treatment_items) / sizeof(g_plasma_filter_treatment_items[0]));
+        ++index
+    ) {
+        const plasma_combo_item *item;
+        int visible;
+        char label[128];
+
+        item = &g_plasma_filter_treatment_items[index];
+        visible = plasma_filter_treatment_is_primary_visible((plasma_filter_treatment)item->value);
+        if (!visible && item->value != current_treatment) {
+            continue;
+        }
+
+        if (!visible) {
+            plasma_format_combo_compatibility_label(
+                item->display_name,
+                " (Compatibility)",
+                label,
+                (unsigned int)sizeof(label)
+            );
+            plasma_add_combo_item(dialog, IDC_PLASMA_FILTER_TREATMENT, label, (LPARAM)item->value);
+        } else {
+            plasma_add_combo_item(dialog, IDC_PLASMA_FILTER_TREATMENT, item->display_name, (LPARAM)item->value);
+        }
+    }
+}
+
+static void plasma_populate_accent_treatment_combo(
+    HWND dialog,
+    plasma_accent_treatment current_treatment
+)
+{
+    unsigned int index;
+
+    SendDlgItemMessageA(dialog, IDC_PLASMA_ACCENT_TREATMENT, CB_RESETCONTENT, 0U, 0L);
+    for (
+        index = 0U;
+        index < (unsigned int)(sizeof(g_plasma_accent_treatment_items) / sizeof(g_plasma_accent_treatment_items[0]));
+        ++index
+    ) {
+        const plasma_combo_item *item;
+        int visible;
+        char label[128];
+
+        item = &g_plasma_accent_treatment_items[index];
+        visible = plasma_accent_treatment_is_primary_visible((plasma_accent_treatment)item->value);
+        if (!visible && item->value != current_treatment) {
+            continue;
+        }
+
+        if (!visible) {
+            plasma_format_combo_compatibility_label(
+                item->display_name,
+                " (Compatibility)",
+                label,
+                (unsigned int)sizeof(label)
+            );
+            plasma_add_combo_item(dialog, IDC_PLASMA_ACCENT_TREATMENT, label, (LPARAM)item->value);
+        } else {
+            plasma_add_combo_item(dialog, IDC_PLASMA_ACCENT_TREATMENT, item->display_name, (LPARAM)item->value);
+        }
     }
 }
 
@@ -1122,6 +1463,16 @@ static int plasma_presentation_mode_is_visible_for_output_family(
         plasma_presentation_mode_supports_output_family(mode, family);
 }
 
+static int plasma_presentation_mode_is_user_visible_for_output_family(
+    plasma_output_family family,
+    plasma_presentation_mode mode
+)
+{
+    return
+        plasma_presentation_mode_is_primary_visible(mode) &&
+        plasma_presentation_mode_is_visible_for_output_family(family, mode);
+}
+
 static void plasma_populate_output_mode_combo(
     HWND dialog,
     plasma_output_family family
@@ -1149,7 +1500,8 @@ static void plasma_populate_output_mode_combo(
 
 static void plasma_populate_presentation_mode_combo(
     HWND dialog,
-    plasma_output_family family
+    plasma_output_family family,
+    plasma_presentation_mode current_mode
 )
 {
     unsigned int index;
@@ -1161,7 +1513,7 @@ static void plasma_populate_presentation_mode_combo(
         ++index
     ) {
         if (
-            plasma_presentation_mode_is_visible_for_output_family(
+            plasma_presentation_mode_is_user_visible_for_output_family(
                 family,
                 (plasma_presentation_mode)g_plasma_presentation_mode_items[index].value
             )
@@ -1170,6 +1522,28 @@ static void plasma_populate_presentation_mode_combo(
                 dialog,
                 IDC_PLASMA_PRESENTATION_MODE,
                 g_plasma_presentation_mode_items[index].display_name,
+                (LPARAM)g_plasma_presentation_mode_items[index].value
+            );
+        } else if (
+            g_plasma_presentation_mode_items[index].value == current_mode &&
+            plasma_presentation_mode_is_supported((plasma_presentation_mode)current_mode) &&
+            plasma_presentation_mode_supports_output_family(
+                (plasma_presentation_mode)current_mode,
+                family
+            )
+        ) {
+            char label[128];
+
+            plasma_format_combo_compatibility_label(
+                g_plasma_presentation_mode_items[index].display_name,
+                " (Compatibility)",
+                label,
+                (unsigned int)sizeof(label)
+            );
+            plasma_add_combo_item(
+                dialog,
+                IDC_PLASMA_PRESENTATION_MODE,
+                label,
                 (LPARAM)g_plasma_presentation_mode_items[index].value
             );
         }
@@ -1183,6 +1557,8 @@ static void plasma_populate_dialog_lists(HWND dialog, const screensave_saver_mod
     unsigned int journey_count;
     unsigned int index;
 
+    (void)module;
+
     registry = plasma_content_get_registry();
     journeys = plasma_transition_get_journeys(&journey_count);
 
@@ -1194,14 +1570,7 @@ static void plasma_populate_dialog_lists(HWND dialog, const screensave_saver_mod
     );
 
     SendDlgItemMessageA(dialog, IDC_PLASMA_PRESET, CB_RESETCONTENT, 0U, 0L);
-    for (index = 0U; index < module->preset_count; ++index) {
-        plasma_add_combo_item(dialog, IDC_PLASMA_PRESET, module->presets[index].display_name, (LPARAM)index);
-    }
-
     SendDlgItemMessageA(dialog, IDC_PLASMA_THEME, CB_RESETCONTENT, 0U, 0L);
-    for (index = 0U; index < module->theme_count; ++index) {
-        plasma_add_combo_item(dialog, IDC_PLASMA_THEME, module->themes[index].display_name, (LPARAM)index);
-    }
 
     plasma_populate_named_combo(
         dialog,
@@ -1215,12 +1584,7 @@ static void plasma_populate_dialog_lists(HWND dialog, const screensave_saver_mod
         g_plasma_detail_level_items,
         (unsigned int)(sizeof(g_plasma_detail_level_items) / sizeof(g_plasma_detail_level_items[0]))
     );
-    plasma_populate_named_combo(
-        dialog,
-        IDC_PLASMA_EFFECT,
-        g_plasma_effect_items,
-        (unsigned int)(sizeof(g_plasma_effect_items) / sizeof(g_plasma_effect_items[0]))
-    );
+    SendDlgItemMessageA(dialog, IDC_PLASMA_EFFECT, CB_RESETCONTENT, 0U, 0L);
     plasma_populate_named_combo(
         dialog,
         IDC_PLASMA_RESOLUTION,
@@ -1240,25 +1604,19 @@ static void plasma_populate_dialog_lists(HWND dialog, const screensave_saver_mod
         (unsigned int)(sizeof(g_plasma_output_family_items) / sizeof(g_plasma_output_family_items[0]))
     );
     plasma_populate_output_mode_combo(dialog, PLASMA_OUTPUT_FAMILY_RASTER);
-    plasma_populate_presentation_mode_combo(dialog, PLASMA_OUTPUT_FAMILY_RASTER);
-    plasma_populate_named_combo(
+    plasma_populate_presentation_mode_combo(
         dialog,
-        IDC_PLASMA_FILTER_TREATMENT,
-        g_plasma_filter_treatment_items,
-        (unsigned int)(sizeof(g_plasma_filter_treatment_items) / sizeof(g_plasma_filter_treatment_items[0]))
+        PLASMA_OUTPUT_FAMILY_RASTER,
+        PLASMA_PRESENTATION_MODE_FLAT
     );
+    SendDlgItemMessageA(dialog, IDC_PLASMA_FILTER_TREATMENT, CB_RESETCONTENT, 0U, 0L);
     plasma_populate_named_combo(
         dialog,
         IDC_PLASMA_EMULATION_TREATMENT,
         g_plasma_emulation_treatment_items,
         (unsigned int)(sizeof(g_plasma_emulation_treatment_items) / sizeof(g_plasma_emulation_treatment_items[0]))
     );
-    plasma_populate_named_combo(
-        dialog,
-        IDC_PLASMA_ACCENT_TREATMENT,
-        g_plasma_accent_treatment_items,
-        (unsigned int)(sizeof(g_plasma_accent_treatment_items) / sizeof(g_plasma_accent_treatment_items[0]))
-    );
+    SendDlgItemMessageA(dialog, IDC_PLASMA_ACCENT_TREATMENT, CB_RESETCONTENT, 0U, 0L);
     plasma_populate_named_combo(
         dialog,
         IDC_PLASMA_CONTENT_FILTER,
@@ -1384,7 +1742,14 @@ static void plasma_update_dialog_info(
             plasma_append_dialog_info_line(
                 info,
                 (unsigned int)sizeof(info),
-                "Favorites Only stays disabled until favorite preset or theme keys are configured through imported product settings."
+                "Favorite and exclusion lists remain file-first in U05; the dialog no longer exposes a separate favorites-only toggle."
+            );
+        }
+        if (surface == PLASMA_SETTINGS_SURFACE_AUTHOR_LAB && settings_context->favorites_configured) {
+            plasma_append_dialog_info_line(
+                info,
+                (unsigned int)sizeof(info),
+                "Favorite and exclusion lists are active through imported settings, but they remain hidden here until a truthful editor exists."
             );
         }
         if (surface == PLASMA_SETTINGS_SURFACE_AUTHOR_LAB && !settings_context->journeys_available) {
@@ -1447,7 +1812,9 @@ static void plasma_update_dialog_surface(HWND dialog, plasma_dialog_state *dialo
 
         binding = &g_plasma_dialog_bindings[index];
         descriptor = plasma_settings_find_descriptor(binding->setting_key);
-        visible = plasma_settings_surface_contains_setting(surface, descriptor);
+        visible =
+            plasma_settings_surface_contains_setting(surface, descriptor) &&
+            plasma_settings_is_exposed(descriptor, &settings_context);
         enabled = visible && plasma_settings_is_available(descriptor, &settings_context);
         if (
             enabled &&
@@ -1508,16 +1875,16 @@ static const char *plasma_surface_summary_text(plasma_settings_surface surface)
 {
     switch (surface) {
     case PLASMA_SETTINGS_SURFACE_BASIC:
-        return "Basic keeps only the stable first-pass controls: preset, theme, speed, intensity, content pool, and transitions.";
+        return "Basic keeps only the calm stable core: preset, theme, speed, and intensity.";
 
     case PLASMA_SETTINGS_SURFACE_ADVANCED:
-        return "Advanced owns the real visual grammar: generator, output, resolution, treatments, presentation, and deterministic mode.";
+        return "Advanced owns the real visual grammar plus experimental pool and transition gate: generator, output, resolution, treatments, presentation, deterministic mode, and coarse breadth controls.";
 
     case PLASMA_SETTINGS_SURFACE_AUTHOR_LAB:
-        return "Author/Lab keeps curation, transition policy, journeys, fixed seed value, and diagnostics in one bounded surface.";
+        return "Author/Lab keeps sets, journey policy, fixed seed value, and diagnostics in one bounded surface while favorites remain file-first.";
 
     default:
-        return "Basic keeps only the stable first-pass controls: preset, theme, speed, intensity, content pool, and transitions.";
+        return "Basic keeps only the calm stable core: preset, theme, speed, and intensity.";
     }
 }
 
@@ -1598,6 +1965,9 @@ static int plasma_config_has_hidden_advanced_overrides(const plasma_settings_con
         settings_context->product_config->emulation_treatment != bundle_product_config.emulation_treatment ||
         settings_context->product_config->accent_treatment != bundle_product_config.accent_treatment ||
         settings_context->product_config->presentation_mode != bundle_product_config.presentation_mode ||
+        settings_context->product_config->selection.content_filter !=
+            bundle_product_config.selection.content_filter ||
+        settings_context->product_config->transition.enabled != bundle_product_config.transition.enabled ||
         settings_context->common_config->use_deterministic_seed != bundle_common_config.use_deterministic_seed;
 }
 
@@ -1662,13 +2032,13 @@ static void plasma_capture_basic_surface(
     }
 
     if (module != NULL) {
-        preset_index = SendDlgItemMessageA(dialog, IDC_PLASMA_PRESET, CB_GETCURSEL, 0U, 0L);
-        if (preset_index != CB_ERR && (unsigned int)preset_index < module->preset_count) {
+        preset_index = (LRESULT)plasma_get_combo_value(dialog, IDC_PLASMA_PRESET, -1);
+        if (preset_index >= 0L && (unsigned int)preset_index < module->preset_count) {
             common_config->preset_key = module->presets[preset_index].preset_key;
         }
 
-        theme_index = SendDlgItemMessageA(dialog, IDC_PLASMA_THEME, CB_GETCURSEL, 0U, 0L);
-        if (theme_index != CB_ERR && (unsigned int)theme_index < module->theme_count) {
+        theme_index = (LRESULT)plasma_get_combo_value(dialog, IDC_PLASMA_THEME, -1);
+        if (theme_index >= 0L && (unsigned int)theme_index < module->theme_count) {
             common_config->theme_key = module->themes[theme_index].theme_key;
         }
     }
@@ -1679,13 +2049,6 @@ static void plasma_capture_basic_surface(
         common_config->detail_level
     );
     product_config->speed_mode = plasma_get_combo_value(dialog, IDC_PLASMA_SPEED, product_config->speed_mode);
-    product_config->selection.content_filter = (plasma_content_filter)plasma_get_combo_value(
-        dialog,
-        IDC_PLASMA_CONTENT_FILTER,
-        product_config->selection.content_filter
-    );
-    product_config->transition.enabled =
-        IsDlgButtonChecked(dialog, IDC_PLASMA_TRANSITIONS_ENABLED) == BST_CHECKED;
 }
 
 static void plasma_capture_advanced_surface(
@@ -1740,6 +2103,13 @@ static void plasma_capture_advanced_surface(
         IDC_PLASMA_PRESENTATION_MODE,
         product_config->presentation_mode
     );
+    product_config->selection.content_filter = (plasma_content_filter)plasma_get_combo_value(
+        dialog,
+        IDC_PLASMA_CONTENT_FILTER,
+        product_config->selection.content_filter
+    );
+    product_config->transition.enabled =
+        IsDlgButtonChecked(dialog, IDC_PLASMA_TRANSITIONS_ENABLED) == BST_CHECKED;
     common_config->use_deterministic_seed = IsDlgButtonChecked(dialog, IDC_PLASMA_DETERMINISTIC) == BST_CHECKED;
 }
 
@@ -1902,11 +2272,16 @@ static void plasma_apply_settings_to_dialog(HWND dialog, plasma_dialog_state *di
     product_config = &dialog_state->working_product_config;
 
     plasma_select_combo_value(dialog, IDC_PLASMA_SURFACE, (LPARAM)product_config->settings_surface);
+    plasma_populate_preset_combo(dialog, module, common_config, product_config);
+    plasma_populate_theme_combo(dialog, module, common_config, product_config);
+    plasma_populate_effect_combo(dialog, product_config->effect_mode);
+    plasma_populate_filter_treatment_combo(dialog, product_config->filter_treatment);
+    plasma_populate_accent_treatment_combo(dialog, product_config->accent_treatment);
 
     if (common_config->preset_key != NULL) {
         for (index = 0U; index < module->preset_count; ++index) {
             if (lstrcmpiA(module->presets[index].preset_key, common_config->preset_key) == 0) {
-                SendDlgItemMessageA(dialog, IDC_PLASMA_PRESET, CB_SETCURSEL, (WPARAM)index, 0L);
+                plasma_select_combo_value(dialog, IDC_PLASMA_PRESET, (LPARAM)index);
                 break;
             }
         }
@@ -1915,7 +2290,7 @@ static void plasma_apply_settings_to_dialog(HWND dialog, plasma_dialog_state *di
     if (common_config->theme_key != NULL) {
         for (index = 0U; index < module->theme_count; ++index) {
             if (lstrcmpiA(module->themes[index].theme_key, common_config->theme_key) == 0) {
-                SendDlgItemMessageA(dialog, IDC_PLASMA_THEME, CB_SETCURSEL, (WPARAM)index, 0L);
+                plasma_select_combo_value(dialog, IDC_PLASMA_THEME, (LPARAM)index);
                 break;
             }
         }
@@ -1945,7 +2320,11 @@ static void plasma_apply_settings_to_dialog(HWND dialog, plasma_dialog_state *di
     plasma_select_combo_value(dialog, IDC_PLASMA_OUTPUT_FAMILY, (LPARAM)effective_output_family);
     plasma_populate_output_mode_combo(dialog, effective_output_family);
     plasma_select_combo_value(dialog, IDC_PLASMA_OUTPUT_MODE, (LPARAM)effective_output_mode);
-    plasma_populate_presentation_mode_combo(dialog, effective_output_family);
+    plasma_populate_presentation_mode_combo(
+        dialog,
+        effective_output_family,
+        effective_presentation_mode
+    );
     plasma_select_combo_value(dialog, IDC_PLASMA_PRESENTATION_MODE, (LPARAM)effective_presentation_mode);
     plasma_select_combo_value(dialog, IDC_PLASMA_RESOLUTION, (LPARAM)product_config->resolution_mode);
     plasma_select_combo_value(dialog, IDC_PLASMA_SMOOTHING, (LPARAM)product_config->smoothing_mode);
@@ -2013,8 +2392,8 @@ static void plasma_apply_preset_selection(HWND dialog, plasma_dialog_state *dial
 
     plasma_capture_current_surface(dialog, dialog_state);
 
-    preset_index = SendDlgItemMessageA(dialog, IDC_PLASMA_PRESET, CB_GETCURSEL, 0U, 0L);
-    if (preset_index == CB_ERR || (unsigned int)preset_index >= dialog_state->module->preset_count) {
+    preset_index = (LRESULT)plasma_get_combo_value(dialog, IDC_PLASMA_PRESET, -1);
+    if (preset_index < 0L || (unsigned int)preset_index >= dialog_state->module->preset_count) {
         return;
     }
 

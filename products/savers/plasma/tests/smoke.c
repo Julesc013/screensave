@@ -1165,8 +1165,8 @@ int main(void)
     if (
         settings_descriptor == NULL ||
         settings_descriptor->surface != PLASMA_SETTINGS_SURFACE_BASIC ||
-        plasma_settings_find_descriptor("content_filter")->surface != PLASMA_SETTINGS_SURFACE_BASIC ||
-        plasma_settings_find_descriptor("transitions_enabled")->surface != PLASMA_SETTINGS_SURFACE_BASIC ||
+        plasma_settings_find_descriptor("content_filter")->surface != PLASMA_SETTINGS_SURFACE_ADVANCED ||
+        plasma_settings_find_descriptor("transitions_enabled")->surface != PLASMA_SETTINGS_SURFACE_ADVANCED ||
         plasma_settings_find_descriptor("output_family")->surface != PLASMA_SETTINGS_SURFACE_ADVANCED ||
         plasma_settings_find_descriptor("transition_policy")->surface != PLASMA_SETTINGS_SURFACE_AUTHOR_LAB ||
         plasma_settings_find_descriptor("preset_set_key")->surface != PLASMA_SETTINGS_SURFACE_AUTHOR_LAB
@@ -1176,9 +1176,12 @@ int main(void)
     if (
         !plasma_settings_surface_contains_setting_key(PLASMA_SETTINGS_SURFACE_BASIC, "preset_key") ||
         !plasma_settings_surface_contains_setting_key(PLASMA_SETTINGS_SURFACE_BASIC, "theme_key") ||
-        !plasma_settings_surface_contains_setting_key(PLASMA_SETTINGS_SURFACE_BASIC, "transitions_enabled") ||
+        plasma_settings_surface_contains_setting_key(PLASMA_SETTINGS_SURFACE_BASIC, "content_filter") ||
+        plasma_settings_surface_contains_setting_key(PLASMA_SETTINGS_SURFACE_BASIC, "transitions_enabled") ||
         plasma_settings_surface_contains_setting_key(PLASMA_SETTINGS_SURFACE_BASIC, "output_family") ||
         !plasma_settings_surface_contains_setting_key(PLASMA_SETTINGS_SURFACE_ADVANCED, "effect_mode") ||
+        !plasma_settings_surface_contains_setting_key(PLASMA_SETTINGS_SURFACE_ADVANCED, "content_filter") ||
+        !plasma_settings_surface_contains_setting_key(PLASMA_SETTINGS_SURFACE_ADVANCED, "transitions_enabled") ||
         !plasma_settings_surface_contains_setting_key(PLASMA_SETTINGS_SURFACE_ADVANCED, "output_family") ||
         !plasma_settings_surface_contains_setting_key(PLASMA_SETTINGS_SURFACE_ADVANCED, "use_deterministic_seed") ||
         plasma_settings_surface_contains_setting_key(PLASMA_SETTINGS_SURFACE_ADVANCED, "preset_key") ||
@@ -1254,6 +1257,10 @@ int main(void)
         plasma_content_find_preset_entry("quasi_crystal_bands")->channel != PLASMA_CONTENT_CHANNEL_EXPERIMENTAL ||
         plasma_content_find_preset_entry("caustic_waterlight") == NULL ||
         plasma_content_find_preset_entry("caustic_waterlight")->channel != PLASMA_CONTENT_CHANNEL_EXPERIMENTAL ||
+        plasma_content_find_preset_entry("midnight_interference") == NULL ||
+        plasma_content_find_preset_entry("midnight_interference")->channel != PLASMA_CONTENT_CHANNEL_EXPERIMENTAL ||
+        plasma_content_find_preset_entry("amber_terminal") == NULL ||
+        plasma_content_find_preset_entry("amber_terminal")->channel != PLASMA_CONTENT_CHANNEL_EXPERIMENTAL ||
         plasma_content_find_preset_entry("aurora_curtain") == NULL ||
         plasma_content_find_preset_entry("aurora_curtain")->channel != PLASMA_CONTENT_CHANNEL_EXPERIMENTAL ||
         plasma_content_find_preset_entry("ribbon_aurora") == NULL ||
@@ -1261,7 +1268,21 @@ int main(void)
         plasma_content_find_preset_entry("substrate_relief") == NULL ||
         plasma_content_find_preset_entry("substrate_relief")->channel != PLASMA_CONTENT_CHANNEL_EXPERIMENTAL ||
         plasma_content_find_preset_entry("filament_extrusion") == NULL ||
-        plasma_content_find_preset_entry("filament_extrusion")->channel != PLASMA_CONTENT_CHANNEL_EXPERIMENTAL
+        plasma_content_find_preset_entry("filament_extrusion")->channel != PLASMA_CONTENT_CHANNEL_EXPERIMENTAL ||
+        plasma_content_find_theme_entry("midnight_interference") == NULL ||
+        plasma_content_find_theme_entry("midnight_interference")->channel != PLASMA_CONTENT_CHANNEL_EXPERIMENTAL ||
+        plasma_content_find_theme_entry("amber_terminal") == NULL ||
+        plasma_content_find_theme_entry("amber_terminal")->channel != PLASMA_CONTENT_CHANNEL_EXPERIMENTAL ||
+        plasma_content_preset_is_primary_visible(plasma_content_find_preset_entry("plasma_lava")) == 0 ||
+        plasma_content_preset_is_primary_visible(plasma_content_find_preset_entry("ribbon_aurora")) == 0 ||
+        plasma_content_preset_is_primary_visible(plasma_content_find_preset_entry("midnight_interference")) != 0 ||
+        plasma_content_preset_is_primary_visible(plasma_content_find_preset_entry("amber_terminal")) != 0 ||
+        plasma_content_preset_is_primary_visible(plasma_content_find_preset_entry("aurora_curtain")) != 0 ||
+        plasma_content_preset_is_primary_visible(plasma_content_find_preset_entry("substrate_relief")) != 0 ||
+        plasma_content_preset_is_primary_visible(plasma_content_find_preset_entry("filament_extrusion")) != 0 ||
+        plasma_content_theme_is_primary_visible(plasma_content_find_theme_entry("plasma_lava")) == 0 ||
+        plasma_content_theme_is_primary_visible(plasma_content_find_theme_entry("midnight_interference")) != 0 ||
+        plasma_content_theme_is_primary_visible(plasma_content_find_theme_entry("amber_terminal")) != 0
     ) {
         return 360;
     }
@@ -1282,6 +1303,7 @@ int main(void)
     settings_descriptor = plasma_settings_find_descriptor("favorites_only");
     if (
         settings_descriptor == NULL ||
+        plasma_settings_is_exposed(settings_descriptor, &settings_context) ||
         plasma_settings_is_available(settings_descriptor, &settings_context)
     ) {
         return 180;
@@ -1297,6 +1319,9 @@ int main(void)
     );
     if (!plasma_settings_is_available(settings_descriptor, &settings_context)) {
         return 181;
+    }
+    if (plasma_settings_is_exposed(settings_descriptor, &settings_context)) {
+        return 453;
     }
     lstrcpyA(product_config.selection.favorite_preset_keys, "");
 
@@ -3261,6 +3286,16 @@ int main(void)
             PLASMA_PRESENTATION_MODE_CONTOUR_EXTRUSION,
             PLASMA_OUTPUT_FAMILY_RASTER
         ) ||
+        !plasma_filter_treatment_is_primary_visible(PLASMA_FILTER_TREATMENT_GLOW_EDGE) ||
+        plasma_filter_treatment_is_primary_visible(PLASMA_FILTER_TREATMENT_BLUR) ||
+        !plasma_accent_treatment_is_primary_visible(PLASMA_ACCENT_TREATMENT_ACCENT_PASS) ||
+        plasma_accent_treatment_is_primary_visible(PLASMA_ACCENT_TREATMENT_OVERLAY_PASS) ||
+        !plasma_presentation_mode_is_primary_visible(PLASMA_PRESENTATION_MODE_FLAT) ||
+        !plasma_presentation_mode_is_primary_visible(PLASMA_PRESENTATION_MODE_HEIGHTFIELD) ||
+        !plasma_presentation_mode_is_primary_visible(PLASMA_PRESENTATION_MODE_RIBBON) ||
+        plasma_presentation_mode_is_primary_visible(PLASMA_PRESENTATION_MODE_CURTAIN) ||
+        plasma_presentation_mode_is_primary_visible(PLASMA_PRESENTATION_MODE_CONTOUR_EXTRUSION) ||
+        plasma_presentation_mode_is_primary_visible(PLASMA_PRESENTATION_MODE_BOUNDED_SURFACE) ||
         strcmp(plasma_filter_treatment_token(PLASMA_FILTER_TREATMENT_KALEIDOSCOPE_MIRROR), "unsupported") != 0 ||
         strcmp(plasma_sampling_treatment_token(PLASMA_SAMPLING_TREATMENT_DITHER), "unsupported") != 0 ||
         strcmp(plasma_presentation_mode_token(PLASMA_PRESENTATION_MODE_BOUNDED_BILLBOARD_VOLUME), "unsupported") != 0
@@ -3999,7 +4034,7 @@ int main(void)
         session->state.transition.target_preset == NULL ||
         session->state.transition.target_theme == NULL ||
         strcmp(session->state.transition.target_preset->preset_key, "museum_phosphor") != 0 ||
-        strcmp(session->state.transition.target_theme->theme_key, "amber_terminal") != 0
+        strcmp(session->state.transition.target_theme->theme_key, "plasma_lava") != 0
     ) {
         plasma_destroy_session(session);
         return 157;
@@ -4014,7 +4049,7 @@ int main(void)
     if (
         session->state.transition.active ||
         strcmp(session->plan.preset_key, "museum_phosphor") != 0 ||
-        strcmp(session->plan.theme_key, "amber_terminal") != 0
+        strcmp(session->plan.theme_key, "plasma_lava") != 0
     ) {
         plasma_destroy_session(session);
         return 159;
@@ -4091,7 +4126,7 @@ int main(void)
         session->state.transition.active_type != PLASMA_TRANSITION_TYPE_HARD_CUT ||
         session->state.transition.requested_type != PLASMA_TRANSITION_TYPE_PRESET_MORPH ||
         strcmp(session->plan.preset_key, "museum_phosphor") != 0 ||
-        strcmp(session->plan.theme_key, "amber_terminal") != 0
+        strcmp(session->plan.theme_key, "plasma_lava") != 0
     ) {
         plasma_destroy_session(session);
         return 242;
@@ -4197,7 +4232,7 @@ int main(void)
         session->state.transition.target_preset == NULL ||
         session->state.transition.target_theme == NULL ||
         strcmp(session->state.transition.target_preset->preset_key, "museum_phosphor") != 0 ||
-        strcmp(session->state.transition.target_theme->theme_key, "amber_terminal") != 0
+        strcmp(session->state.transition.target_theme->theme_key, "plasma_lava") != 0
     ) {
         plasma_destroy_session(session);
         return 244;
@@ -4243,7 +4278,7 @@ int main(void)
     if (
         session->state.transition.active ||
         strcmp(session->plan.preset_key, "museum_phosphor") != 0 ||
-        strcmp(session->plan.theme_key, "amber_terminal") != 0
+        strcmp(session->plan.theme_key, "plasma_lava") != 0
     ) {
         fprintf(
             stderr,

@@ -118,5 +118,7 @@ int plasma_content_theme_in_set(
     const plasma_content_theme_entry *entry
 );
 int plasma_content_registry_has_channel(plasma_content_channel channel);
+int plasma_content_preset_is_primary_visible(const plasma_content_preset_entry *entry);
+int plasma_content_theme_is_primary_visible(const plasma_content_theme_entry *entry);
 
 #endif /* PLASMA_CONTENT_H */

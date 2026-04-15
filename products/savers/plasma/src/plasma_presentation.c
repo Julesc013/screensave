@@ -11,6 +11,14 @@ int plasma_presentation_mode_is_supported(plasma_presentation_mode mode)
         mode == PLASMA_PRESENTATION_MODE_BOUNDED_SURFACE;
 }
 
+int plasma_presentation_mode_is_primary_visible(plasma_presentation_mode mode)
+{
+    return
+        mode == PLASMA_PRESENTATION_MODE_FLAT ||
+        mode == PLASMA_PRESENTATION_MODE_HEIGHTFIELD ||
+        mode == PLASMA_PRESENTATION_MODE_RIBBON;
+}
+
 int plasma_presentation_mode_requires_premium(plasma_presentation_mode mode)
 {
     return mode != PLASMA_PRESENTATION_MODE_FLAT;

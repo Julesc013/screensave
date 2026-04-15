@@ -202,7 +202,7 @@ static const plasma_settings_descriptor g_plasma_settings_catalog[] = {
         "transitions_enabled",
         "Allow Transitions",
         "Enables the bounded PL10 transition engine when a valid transition surface exists.",
-        PLASMA_SETTINGS_SURFACE_BASIC,
+        PLASMA_SETTINGS_SURFACE_ADVANCED,
         "transition",
         PLASMA_SETTINGS_VALUE_BOOL,
         "false",
@@ -241,7 +241,7 @@ static const plasma_settings_descriptor g_plasma_settings_catalog[] = {
         "content_filter",
         "Content Pool",
         "Controls the stable-versus-experimental content pool for selection.",
-        PLASMA_SETTINGS_SURFACE_BASIC,
+        PLASMA_SETTINGS_SURFACE_ADVANCED,
         "selection",
         PLASMA_SETTINGS_VALUE_ENUM,
         "stable_only",
@@ -565,6 +565,24 @@ int plasma_settings_catalog_validate(void)
                 return 0;
             }
         }
+    }
+
+    return 1;
+}
+
+int plasma_settings_is_exposed(
+    const plasma_settings_descriptor *descriptor,
+    const plasma_settings_context *context
+)
+{
+    (void)context;
+
+    if (descriptor == NULL) {
+        return 0;
+    }
+
+    if (strcmp(descriptor->setting_key, "favorites_only") == 0) {
+        return 0;
     }
 
     return 1;

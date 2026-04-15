@@ -12,16 +12,12 @@ static const plasma_content_weighted_key g_classic_core_preset_members[] = {
     { "aurora_plasma", 2U },
     { "ocean_interference", 2U },
     { "museum_phosphor", 2U },
-    { "quiet_darkroom", 3U },
-    { "midnight_interference", 1U },
-    { "amber_terminal", 2U }
+    { "quiet_darkroom", 3U }
 };
 
 static const plasma_content_weighted_key g_dark_room_preset_members[] = {
     { "quiet_darkroom", 4U },
-    { "museum_phosphor", 3U },
-    { "midnight_interference", 2U },
-    { "amber_terminal", 2U }
+    { "museum_phosphor", 3U }
 };
 
 static const plasma_content_weighted_key g_fire_classics_preset_members[] = {
@@ -31,26 +27,22 @@ static const plasma_content_weighted_key g_fire_classics_preset_members[] = {
 
 static const plasma_content_weighted_key g_plasma_classics_preset_members[] = {
     { "aurora_plasma", 3U },
-    { "museum_phosphor", 2U },
-    { "amber_terminal", 2U }
+    { "museum_phosphor", 2U }
 };
 
 static const plasma_content_weighted_key g_interference_classics_preset_members[] = {
-    { "ocean_interference", 3U },
-    { "midnight_interference", 2U }
+    { "ocean_interference", 3U }
 };
 
 static const plasma_content_weighted_key g_warm_bridge_classics_preset_members[] = {
     { "plasma_lava", 3U },
     { "quiet_darkroom", 3U },
-    { "museum_phosphor", 2U },
-    { "amber_terminal", 2U }
+    { "museum_phosphor", 2U }
 };
 
 static const plasma_content_weighted_key g_cool_bridge_classics_preset_members[] = {
     { "aurora_plasma", 3U },
-    { "ocean_interference", 3U },
-    { "midnight_interference", 2U }
+    { "ocean_interference", 3U }
 };
 
 static const plasma_content_weighted_key g_classic_core_theme_members[] = {
@@ -58,28 +50,22 @@ static const plasma_content_weighted_key g_classic_core_theme_members[] = {
     { "aurora_cool", 2U },
     { "oceanic_blue", 2U },
     { "museum_phosphor", 2U },
-    { "quiet_darkroom", 3U },
-    { "midnight_interference", 1U },
-    { "amber_terminal", 2U }
+    { "quiet_darkroom", 3U }
 };
 
 static const plasma_content_weighted_key g_dark_room_theme_members[] = {
     { "museum_phosphor", 3U },
-    { "quiet_darkroom", 4U },
-    { "midnight_interference", 2U },
-    { "amber_terminal", 2U }
+    { "quiet_darkroom", 4U }
 };
 
 static const plasma_content_weighted_key g_warm_classics_theme_members[] = {
     { "plasma_lava", 3U },
-    { "quiet_darkroom", 2U },
-    { "amber_terminal", 2U }
+    { "quiet_darkroom", 2U }
 };
 
 static const plasma_content_weighted_key g_cool_classics_theme_members[] = {
     { "aurora_cool", 3U },
-    { "oceanic_blue", 3U },
-    { "midnight_interference", 2U }
+    { "oceanic_blue", 3U }
 };
 
 static const plasma_content_preset_entry g_preset_entries[] = {
@@ -147,7 +133,7 @@ static const plasma_content_preset_entry g_preset_entries[] = {
         "midnight_interference",
         &g_plasma_presets[5],
         PLASMA_CONTENT_SOURCE_BUILT_IN,
-        PLASMA_CONTENT_CHANNEL_STABLE,
+        PLASMA_CONTENT_CHANNEL_EXPERIMENTAL,
         PLASMA_PRESET_MORPH_CLASS_INTERFERENCE,
         PLASMA_TRANSITION_BRIDGE_CLASS_COOL_FIELD,
         1,
@@ -159,7 +145,7 @@ static const plasma_content_preset_entry g_preset_entries[] = {
         "amber_terminal",
         &g_plasma_presets[6],
         PLASMA_CONTENT_SOURCE_BUILT_IN,
-        PLASMA_CONTENT_CHANNEL_STABLE,
+        PLASMA_CONTENT_CHANNEL_EXPERIMENTAL,
         PLASMA_PRESET_MORPH_CLASS_PLASMA,
         PLASMA_TRANSITION_BRIDGE_CLASS_WARM_CLASSIC,
         1,
@@ -406,7 +392,7 @@ static const plasma_content_theme_entry g_theme_entries[] = {
         "midnight_interference",
         &g_plasma_themes[5],
         PLASMA_CONTENT_SOURCE_BUILT_IN,
-        PLASMA_CONTENT_CHANNEL_STABLE,
+        PLASMA_CONTENT_CHANNEL_EXPERIMENTAL,
         PLASMA_THEME_MORPH_CLASS_COOL,
         NULL
     },
@@ -414,7 +400,7 @@ static const plasma_content_theme_entry g_theme_entries[] = {
         "amber_terminal",
         &g_plasma_themes[6],
         PLASMA_CONTENT_SOURCE_BUILT_IN,
-        PLASMA_CONTENT_CHANNEL_STABLE,
+        PLASMA_CONTENT_CHANNEL_EXPERIMENTAL,
         PLASMA_THEME_MORPH_CLASS_WARM,
         NULL
     }
@@ -909,4 +895,29 @@ int plasma_content_registry_has_channel(plasma_content_channel channel)
     }
 
     return 0;
+}
+
+int plasma_content_preset_is_primary_visible(const plasma_content_preset_entry *entry)
+{
+    if (entry == NULL || entry->preset_key == NULL) {
+        return 0;
+    }
+
+    return
+        strcmp(entry->preset_key, "midnight_interference") != 0 &&
+        strcmp(entry->preset_key, "amber_terminal") != 0 &&
+        strcmp(entry->preset_key, "aurora_curtain") != 0 &&
+        strcmp(entry->preset_key, "substrate_relief") != 0 &&
+        strcmp(entry->preset_key, "filament_extrusion") != 0;
+}
+
+int plasma_content_theme_is_primary_visible(const plasma_content_theme_entry *entry)
+{
+    if (entry == NULL || entry->theme_key == NULL) {
+        return 0;
+    }
+
+    return
+        strcmp(entry->theme_key, "midnight_interference") != 0 &&
+        strcmp(entry->theme_key, "amber_terminal") != 0;
 }
