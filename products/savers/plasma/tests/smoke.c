@@ -1031,7 +1031,7 @@ int main(void)
     unsigned long windowed_phase_before;
     unsigned long windowed_phase_after;
     char benchlab_overlay[2048];
-    char benchlab_report[4096];
+    char benchlab_report[8192];
     char authoring_message[260];
     char repo_root[MAX_PATH];
     unsigned int settings_count;
@@ -1968,6 +1968,62 @@ int main(void)
     ) {
         return 432;
     }
+    screensave_config_binding_init(&binding, &common_config, &product_config, sizeof(product_config));
+    ZeroMemory(&environment, sizeof(environment));
+    fake_size.width = 320;
+    fake_size.height = 240;
+    plasma_smoke_init_fake_renderer(
+        &fake_renderer,
+        SCREENSAVE_RENDERER_KIND_GL21,
+        SCREENSAVE_RENDERER_KIND_GL11,
+        &fake_size
+    );
+    environment.mode = SCREENSAVE_SESSION_MODE_WINDOWED;
+    environment.drawable_size = fake_size;
+    environment.seed.base_seed = 0x51525354UL;
+    environment.seed.stream_seed = 0x55565758UL;
+    environment.seed.deterministic = common_config.use_deterministic_seed;
+    environment.config_binding = &binding;
+    environment.renderer = &fake_renderer;
+    session = NULL;
+    if (!plasma_create_session(module, &session, &environment) || session == NULL) {
+        return 459;
+    }
+    benchlab_config_state.common = common_config;
+    benchlab_config_state.product_config = &product_config;
+    benchlab_config_state.product_config_size = sizeof(product_config);
+    if (
+        !plasma_benchlab_build_snapshot(
+            session,
+            &benchlab_config_state,
+            SCREENSAVE_RENDERER_KIND_GL21,
+            &benchlab_snapshot
+        ) ||
+        strcmp(benchlab_snapshot.requested_filter_treatment, "blur") != 0 ||
+        strcmp(benchlab_snapshot.filter_treatment, "none") != 0 ||
+        strcmp(benchlab_snapshot.requested_accent_treatment, "overlay_pass") != 0 ||
+        strcmp(benchlab_snapshot.accent_treatment, "none") != 0
+    ) {
+        plasma_destroy_session(session);
+        return 460;
+    }
+    if (
+        !plasma_benchlab_build_report_section(
+            session,
+            &benchlab_config_state,
+            SCREENSAVE_RENDERER_KIND_GL21,
+            benchlab_report,
+            (unsigned int)sizeof(benchlab_report)
+        ) ||
+        strstr(benchlab_report, "Requested filter treatment: blur") == NULL ||
+        strstr(benchlab_report, "Filter treatment: none") == NULL ||
+        strstr(benchlab_report, "Requested accent treatment: overlay_pass") == NULL ||
+        strstr(benchlab_report, "Accent treatment: none") == NULL
+    ) {
+        plasma_destroy_session(session);
+        return 461;
+    }
+    plasma_destroy_session(session);
 
     for (index = 0U; index < (unsigned int)(sizeof(g_required_preset_keys) / sizeof(g_required_preset_keys[0])); ++index) {
         if (!plasma_compile_direct_plan(module, g_required_preset_keys[index], NULL, &plan)) {
@@ -4726,6 +4782,7 @@ int main(void)
         ) ||
         strstr(benchlab_report, "Plasma BenchLab") == NULL ||
         strstr(benchlab_report, "Requested lane: premium") == NULL ||
+        strstr(benchlab_report, "Requested presentation mode: heightfield") == NULL ||
         strstr(benchlab_report, "Presentation mode: heightfield") == NULL ||
         strstr(benchlab_report, "BenchLab forcing active: yes") == NULL
     ) {
@@ -4805,8 +4862,12 @@ int main(void)
             (unsigned int)sizeof(benchlab_report)
         ) ||
         strstr(benchlab_report, "Profile class: experimental") == NULL ||
+        strstr(benchlab_report, "Requested generator family: plasma") == NULL ||
+        strstr(benchlab_report, "Requested output family: banded") == NULL ||
         strstr(benchlab_report, "Output family: banded") == NULL ||
+        strstr(benchlab_report, "Requested output mode: posterized_bands") == NULL ||
         strstr(benchlab_report, "Output mode: posterized_bands") == NULL ||
+        strstr(benchlab_report, "Requested filter treatment: glow_edge") == NULL ||
         strstr(benchlab_report, "Filter treatment: glow_edge") == NULL ||
         strstr(benchlab_report, "Accent treatment: none") == NULL
     ) {
@@ -4861,6 +4922,20 @@ int main(void)
     ) {
         plasma_destroy_session(session);
         return 147;
+    }
+    if (
+        !plasma_benchlab_build_report_section(
+            session,
+            &benchlab_config_state,
+            SCREENSAVE_RENDERER_KIND_GL46,
+            benchlab_report,
+            (unsigned int)sizeof(benchlab_report)
+        ) ||
+        strstr(benchlab_report, "Requested presentation mode: heightfield") == NULL ||
+        strstr(benchlab_report, "Presentation mode: flat") == NULL
+    ) {
+        plasma_destroy_session(session);
+        return 462;
     }
     plasma_destroy_session(session);
 

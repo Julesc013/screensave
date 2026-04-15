@@ -380,13 +380,9 @@ static const char *plasma_benchlab_value_or_none(const char *text)
     return text;
 }
 
-static const char *plasma_benchlab_generator_family_name(const plasma_plan *plan)
+static const char *plasma_benchlab_generator_family_name_for_effect_mode(int effect_mode)
 {
-    if (plan == NULL) {
-        return "unknown";
-    }
-
-    switch (plan->effect_mode) {
+    switch (effect_mode) {
     case PLASMA_EFFECT_PLASMA:
         return "plasma";
 
@@ -415,6 +411,15 @@ static const char *plasma_benchlab_generator_family_name(const plasma_plan *plan
     default:
         return "fire";
     }
+}
+
+static const char *plasma_benchlab_generator_family_name(const plasma_plan *plan)
+{
+    if (plan == NULL) {
+        return "unknown";
+    }
+
+    return plasma_benchlab_generator_family_name_for_effect_mode(plan->effect_mode);
 }
 
 static const char *plasma_benchlab_content_source_name(
@@ -1576,19 +1581,22 @@ void plasma_benchlab_apply_plan_forcing(
     const plasma_benchlab_forcing *forcing
 )
 {
+    plasma_presentation_mode requested_mode;
+
     (void)module;
 
     if (plan == NULL || forcing == NULL || !forcing->active) {
         return;
     }
 
-    if (
-        forcing->presentation_request != PLASMA_BENCHLAB_PRESENTATION_AUTO &&
-        plasma_benchlab_plan_supports_requested_presentation(plan, forcing->presentation_request)
-    ) {
-        plan->presentation_mode = plasma_benchlab_requested_presentation_mode(
+    if (forcing->presentation_request != PLASMA_BENCHLAB_PRESENTATION_AUTO) {
+        requested_mode = plasma_benchlab_requested_presentation_mode(
             forcing->presentation_request
         );
+        plan->requested_presentation_mode = requested_mode;
+        if (plasma_benchlab_plan_supports_requested_presentation(plan, forcing->presentation_request)) {
+            plan->presentation_mode = requested_mode;
+        }
     }
 }
 
@@ -1844,17 +1852,48 @@ int plasma_benchlab_build_snapshot(
     snapshot_out->theme_channel = theme_entry != NULL
         ? plasma_benchlab_content_channel_name(theme_entry->channel)
         : "unknown";
+    snapshot_out->requested_detail_level =
+        screensave_detail_level_name(session->plan.requested_detail_level);
+    snapshot_out->detail_level =
+        screensave_detail_level_name(session->plan.detail_level);
+    snapshot_out->requested_generator_family =
+        plasma_benchlab_generator_family_name_for_effect_mode(session->plan.requested_effect_mode);
     snapshot_out->generator_family = plasma_benchlab_generator_family_name(&session->plan);
+    snapshot_out->requested_speed_mode =
+        plasma_speed_mode_name(session->plan.requested_speed_mode);
+    snapshot_out->speed_mode = plasma_speed_mode_name(session->plan.speed_mode);
+    snapshot_out->requested_resolution_mode =
+        plasma_resolution_mode_name(session->plan.requested_resolution_mode);
+    snapshot_out->resolution_mode =
+        plasma_resolution_mode_name(session->plan.resolution_mode);
+    snapshot_out->requested_smoothing_mode =
+        plasma_smoothing_mode_name(session->plan.requested_smoothing_mode);
+    snapshot_out->smoothing_mode =
+        plasma_smoothing_mode_name(session->plan.smoothing_mode);
+    snapshot_out->requested_output_family =
+        plasma_benchlab_output_family_name(session->plan.requested_output_family);
     snapshot_out->output_family = plasma_benchlab_output_family_name(session->plan.output_family);
+    snapshot_out->requested_output_mode =
+        plasma_benchlab_output_mode_name(session->plan.requested_output_mode);
     snapshot_out->output_mode = plasma_benchlab_output_mode_name(session->plan.output_mode);
+    snapshot_out->requested_sampling_treatment =
+        plasma_benchlab_sampling_treatment_name(session->plan.requested_sampling_treatment);
     snapshot_out->sampling_treatment =
         plasma_benchlab_sampling_treatment_name(session->plan.sampling_treatment);
+    snapshot_out->requested_filter_treatment =
+        plasma_benchlab_filter_treatment_name(session->plan.requested_filter_treatment);
     snapshot_out->filter_treatment =
         plasma_benchlab_filter_treatment_name(session->plan.filter_treatment);
+    snapshot_out->requested_emulation_treatment =
+        plasma_benchlab_emulation_treatment_name(session->plan.requested_emulation_treatment);
     snapshot_out->emulation_treatment =
         plasma_benchlab_emulation_treatment_name(session->plan.emulation_treatment);
+    snapshot_out->requested_accent_treatment =
+        plasma_benchlab_accent_treatment_name(session->plan.requested_accent_treatment);
     snapshot_out->accent_treatment =
         plasma_benchlab_accent_treatment_name(session->plan.accent_treatment);
+    snapshot_out->requested_presentation_mode =
+        plasma_benchlab_presentation_mode_name(session->plan.requested_presentation_mode);
     snapshot_out->presentation_mode =
         plasma_benchlab_presentation_mode_name(session->plan.presentation_mode);
     snapshot_out->transition_policy =
@@ -2101,25 +2140,73 @@ int plasma_benchlab_build_report_section(
     if (!plasma_benchlab_append_label_text(buffer, buffer_size, "Theme channel: ", snapshot.theme_channel)) {
         return 0;
     }
+    if (!plasma_benchlab_append_label_text(buffer, buffer_size, "Requested detail level: ", snapshot.requested_detail_level)) {
+        return 0;
+    }
+    if (!plasma_benchlab_append_label_text(buffer, buffer_size, "Detail level: ", snapshot.detail_level)) {
+        return 0;
+    }
+    if (!plasma_benchlab_append_label_text(buffer, buffer_size, "Requested generator family: ", snapshot.requested_generator_family)) {
+        return 0;
+    }
     if (!plasma_benchlab_append_label_text(buffer, buffer_size, "Generator family: ", snapshot.generator_family)) {
+        return 0;
+    }
+    if (!plasma_benchlab_append_label_text(buffer, buffer_size, "Requested speed mode: ", snapshot.requested_speed_mode)) {
+        return 0;
+    }
+    if (!plasma_benchlab_append_label_text(buffer, buffer_size, "Speed mode: ", snapshot.speed_mode)) {
+        return 0;
+    }
+    if (!plasma_benchlab_append_label_text(buffer, buffer_size, "Requested resolution mode: ", snapshot.requested_resolution_mode)) {
+        return 0;
+    }
+    if (!plasma_benchlab_append_label_text(buffer, buffer_size, "Resolution mode: ", snapshot.resolution_mode)) {
+        return 0;
+    }
+    if (!plasma_benchlab_append_label_text(buffer, buffer_size, "Requested smoothing mode: ", snapshot.requested_smoothing_mode)) {
+        return 0;
+    }
+    if (!plasma_benchlab_append_label_text(buffer, buffer_size, "Smoothing mode: ", snapshot.smoothing_mode)) {
+        return 0;
+    }
+    if (!plasma_benchlab_append_label_text(buffer, buffer_size, "Requested output family: ", snapshot.requested_output_family)) {
         return 0;
     }
     if (!plasma_benchlab_append_label_text(buffer, buffer_size, "Output family: ", snapshot.output_family)) {
         return 0;
     }
+    if (!plasma_benchlab_append_label_text(buffer, buffer_size, "Requested output mode: ", snapshot.requested_output_mode)) {
+        return 0;
+    }
     if (!plasma_benchlab_append_label_text(buffer, buffer_size, "Output mode: ", snapshot.output_mode)) {
+        return 0;
+    }
+    if (!plasma_benchlab_append_label_text(buffer, buffer_size, "Requested sampling treatment: ", snapshot.requested_sampling_treatment)) {
         return 0;
     }
     if (!plasma_benchlab_append_label_text(buffer, buffer_size, "Sampling treatment: ", snapshot.sampling_treatment)) {
         return 0;
     }
+    if (!plasma_benchlab_append_label_text(buffer, buffer_size, "Requested filter treatment: ", snapshot.requested_filter_treatment)) {
+        return 0;
+    }
     if (!plasma_benchlab_append_label_text(buffer, buffer_size, "Filter treatment: ", snapshot.filter_treatment)) {
+        return 0;
+    }
+    if (!plasma_benchlab_append_label_text(buffer, buffer_size, "Requested emulation treatment: ", snapshot.requested_emulation_treatment)) {
         return 0;
     }
     if (!plasma_benchlab_append_label_text(buffer, buffer_size, "Emulation treatment: ", snapshot.emulation_treatment)) {
         return 0;
     }
+    if (!plasma_benchlab_append_label_text(buffer, buffer_size, "Requested accent treatment: ", snapshot.requested_accent_treatment)) {
+        return 0;
+    }
     if (!plasma_benchlab_append_label_text(buffer, buffer_size, "Accent treatment: ", snapshot.accent_treatment)) {
+        return 0;
+    }
+    if (!plasma_benchlab_append_label_text(buffer, buffer_size, "Requested presentation mode: ", snapshot.requested_presentation_mode)) {
         return 0;
     }
     if (!plasma_benchlab_append_label_text(buffer, buffer_size, "Presentation mode: ", snapshot.presentation_mode)) {

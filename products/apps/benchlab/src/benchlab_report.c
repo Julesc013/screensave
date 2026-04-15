@@ -278,10 +278,10 @@ int benchlab_write_report(benchlab_app *app)
     char degraded_path[128];
     char overlay[4096];
     char policy_target[64];
-    char plasma_report[4096];
+    char plasma_report[8192];
     char reason_text[128];
     char status_text[128];
-    char report_text[16384];
+    char report_text[20480];
     char default_path[MAX_PATH];
     unsigned int diag_index;
 
