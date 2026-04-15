@@ -427,13 +427,13 @@ static const plasma_known_limit_entry g_plasma_known_limits[] = {
     {
         "capture_diff_bounded",
         PLASMA_VALIDATION_STATUS_PARTIAL,
-        "PX40 adds semantic BenchLab text-capture comparison and capture-backed degrade inspection, and U07 adds deterministic smoke render signatures, but the product still does not claim raw screenshot identity or universal pixel-perfect determinism across every lane or renderer path.",
+        "PX40 adds semantic BenchLab text-capture comparison and capture-backed degrade inspection, while U07 layers stable-matrix and experimental-coverage reporting on top of deterministic smoke render signatures; the product still does not claim raw screenshot identity or universal pixel-perfect determinism across every lane or renderer path.",
         "products/savers/plasma/docs/pl13-known-limits.md"
     },
     {
         "render_signature_harness_bounded",
         PLASMA_VALIDATION_STATUS_PARTIAL,
-        "U07 adds deterministic smoke render-signature and pixel-difference checks for the shipped settings subset, but the repo still lacks a universal screenshot diff framework or perceptual gold-standard lab.",
+        "U07 adds deterministic smoke render-signature and pixel-difference checks for the shipped settings subset plus an explicit stable combination matrix and bounded experimental coverage reports, but the repo still lacks a universal screenshot diff framework or perceptual gold-standard lab.",
         "products/savers/plasma/docs/pl13-known-limits.md"
     },
     {

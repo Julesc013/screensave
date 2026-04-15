@@ -335,6 +335,10 @@ def build_parser() -> argparse.ArgumentParser:
         "experimental-coverage",
         help="Print the current U07 experimental coverage strategy",
     )
+    subparsers.add_parser(
+        "proof-result-taxonomy",
+        help="Print the current U07 proof-result taxonomy",
+    )
 
     return parser
 
@@ -1614,7 +1618,7 @@ def authoring_report() -> int:
         f"- canonical aliases: {', '.join(f'{alias}->{canonical}' for alias, canonical in sorted(aliases.items())) or 'none'}"
     )
     print(
-        "- author workflow entry points: validate, authoring-report, compare, compat-report, migration-report, integration-report, control-report, curation-report, degrade-report, capture-diff, influence-report, combination-matrix, experimental-coverage"
+        "- author workflow entry points: validate, authoring-report, compare, compat-report, migration-report, integration-report, control-report, curation-report, degrade-report, capture-diff, influence-report, combination-matrix, experimental-coverage, proof-result-taxonomy"
     )
     print("- current authored boundary: set files, journey files, and pack provenance are on disk; built-in preset and theme descriptors remain compiled and legacy-INI anchored")
     print(
@@ -2129,6 +2133,20 @@ def experimental_coverage() -> int:
     return 0
 
 
+def proof_result_taxonomy() -> int:
+    print("U07 Plasma proof-result taxonomy")
+    for status, meaning in RESULT_STATUS_MEANINGS.items():
+        print(f"- {status}: {meaning}")
+    print("- proof methods:")
+    print("  - render_signature: deterministic smoke treated or presented buffer difference")
+    print("  - structural_plan: resolved settings, selection, and compiled plan truth without claiming screenshot proof")
+    print("  - benchlab_capture: requested/resolved/degraded report proof on the BenchLab text surface")
+    print("  - palette_distance: compiled theme-palette separation proof")
+    print("  - smoke_matrix_compile: exhaustive stable matrix compile and validation coverage")
+    print("- interpretation rule: U08 should treat validated rows as evidence-backed, partial rows as bounded, documented_only rows as non-proof, unsupported rows as non-claims, and blocked rows as environment gaps")
+    return 0
+
+
 def preset_audit(threshold: int, stable_preset_set: str, stable_theme_set: str) -> int:
     signatures = load_compiled_preset_signatures()
     palettes = load_compiled_theme_palettes()
@@ -2297,6 +2315,8 @@ def main(argv: Sequence[str]) -> int:
         return combination_matrix()
     if args.command == "experimental-coverage":
         return experimental_coverage()
+    if args.command == "proof-result-taxonomy":
+        return proof_result_taxonomy()
     if args.command == "preset-audit":
         return preset_audit(args.threshold, args.stable_preset_set, args.stable_theme_set)
     return capture_diff(args.left, args.right)
