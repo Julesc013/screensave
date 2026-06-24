@@ -33,9 +33,9 @@ This register records the main risks at the start of the post-PL program.
 
 ## PX50 Recut Disposition
 
-The current `PX50` recut treats the risk register as follows:
+The earlier `PX50` recut treated the risk register as follows:
 
-- accepted into the current narrow ship posture:
+- accepted into that narrow ship posture:
   - `lab_shell_bounded`
   - `capture_diff_bounded`
   - `integration_surface_report_first`

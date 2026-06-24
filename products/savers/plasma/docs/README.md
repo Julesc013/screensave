@@ -121,8 +121,8 @@ They live with the product so later `PL` work can extend them without rewriting 
 ## Intended Follow-On
 
 `PL00` through `PL14` are complete.
-The later post-PL waves now route through the `PX00` control docs and the master `MX` control plane, with `PX50` acting as the current closure-point recut for the implemented Waves 1 through 4.
-No later post-`PX50` implementation phase is claimed as implemented until it lands explicitly.
+The later post-PL waves are recorded through the `PX00` control docs and the master `MX` control-plane lineage, with `PX50` retained as the earlier post-Wave-4 recut.
+The current living Plasma recut is `U09`, and `PROJECT_STATE.toml` is now the live repo-level current-state authority.
 
 Future Plasma work should also treat the canonical U00 diagnostic baseline and
 corrective backlog as a hard guardrail.

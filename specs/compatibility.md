@@ -2,12 +2,24 @@
 
 This document is normative.
 
-## Supported Windows Band
+## Target Windows Band
 
 The platform support goal is Windows 95, 98, and ME plus Windows NT 4.0 through Windows 11.
 
-This is a compatibility band, not a claim that every later feature will behave identically on every system revision.
+This is a compatibility target band, not a claim that every artifact is certified on every system revision.
 The repository must preserve a baseline execution path that remains viable on the earliest supported systems.
+
+## Evidence Classes
+
+Public operating-system, binary, and renderer claims must use explicit evidence classes:
+
+- `certified`: executed successfully on the named OS, hardware, or renderer profile with stored evidence.
+- `binary-audited`: PE headers, architecture, subsystem, imports, runtime dependencies, and required APIs pass the named profile, but the artifact has not been run there.
+- `targeted`: architectural goal only; not a public support promise.
+- `unsupported`: known not to work or deliberately excluded.
+
+The broad Windows band is the preservation target.
+It must not be worded as certified coverage until the matching artifact and runtime evidence exists.
 
 ## Excluded Targets
 

@@ -158,14 +158,15 @@ They are not live shared-platform behavior, not broad automation, and not a comm
 
 ## PX50 Recut Outcome
 
-`PX50` makes the current classification explicit:
+`PX50` made the earlier post-Wave-4 classification explicit:
 
 - the stable runtime cut remains narrow and Classic-first
 - stable support widens only narrowly through the PX40 read-only tooling surface and the stable PX41 metadata-report slice
 - richer lanes, transitions, Wave 3 visual-language breadth, and experimental PX41 sampler surfaces remain experimental
 - live integration, broad automation, community-platform behavior, broad hardware guarantees, and numeric performance claims remain deferred or non-claim
 
-The ship posture after the recut remains `GO WITH CAVEATS`.
+The ship posture after that recut remained `GO WITH CAVEATS`.
+The current living corrective classification now lives in the `U09` docs.
 
 ## Areas Most Likely To Be Reviewed For Later Promotion
 

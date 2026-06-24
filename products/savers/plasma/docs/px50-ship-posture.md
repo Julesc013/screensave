@@ -2,7 +2,7 @@
 
 ## Purpose
 
-`PX50` records the current post-Wave-4 ship-posture decision for Plasma.
+`PX50` records the earlier post-Wave-4 ship-posture decision for Plasma.
 
 Historical note:
 after `U09`, this remains the earlier post-PL/Wave-4 ship-posture record.

@@ -1,7 +1,9 @@
 wave_id = "wave3"
-status = "blocked"
+status = "historical-superseded"
 gate_ref = "docs/roadmap/mx-wave-gates.md#wave-3-gate"
 summary = "Land the product-local authoring, Lab, and selection substrate before larger expressive expansion."
+superseded_by = "PROJECT_STATE.toml#truth-proof-baseline-00"
+superseded_note = "U09 and the truth/proof baseline supersede this as live queue state; retained as lineage."
 
 [[epics]]
 id = "PX30"

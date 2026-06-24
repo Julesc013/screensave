@@ -1,6 +1,13 @@
 # MX Program
 
-This document defines the master control plane for post-PL Plasma and later shared ScreenSave follow-on work.
+This document preserves the master control plane for post-PL Plasma and later shared ScreenSave follow-on work.
+
+Current note:
+after the Plasma `U09` corrective recut, live project-state authority now lives
+in [`../../PROJECT_STATE.toml`](../../PROJECT_STATE.toml) and
+[`truth-proof-baseline.md`](./truth-proof-baseline.md).
+The MX wave map remains the lineage and governance context that explains how
+the post-PL work was admitted.
 
 ## Purpose
 
@@ -16,7 +23,9 @@ It exists to:
 
 ## Current Post-PL Baseline
 
-Current repo reality is the authority baseline for this program.
+Current repo reality at the time of the MX program was the authority baseline for this program.
+For the current living state, use `PROJECT_STATE.toml` and the Plasma `U09`
+recut docs.
 
 - Plasma is already post-`PL14`.
 - Plasma's current ship posture is `GO WITH CAVEATS`.

@@ -2,7 +2,7 @@
 
 ## Purpose
 
-`PX50` records the current experimental cut and the current deferred, non-ship, and non-claim cut after the completed Waves 1 through 4 work now present in the repo.
+`PX50` records the earlier experimental cut and the earlier deferred, non-ship, and non-claim cut after the completed Waves 1 through 4 work present at that time.
 
 Historical note:
 after `U09`, this remains the earlier post-PL/Wave-4 comparison cut.

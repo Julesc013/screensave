@@ -2,7 +2,7 @@
 
 ## Purpose
 
-`PX50` records the current evidence-backed stable cut for Plasma after the completed post-`PL14` waves now present in the repo.
+`PX50` records the earlier evidence-backed stable cut for Plasma after the completed post-`PL14` waves present at that time.
 
 Historical note:
 after `U09`, this remains the earlier post-PL/Wave-4 comparison recut.
@@ -13,7 +13,7 @@ The current living corrective recut now lives in the `U09` docs.
 `PL14` froze the original stable, experimental, and deferred cut at the end of the core Plasma program.
 `PX10` through `PX41` then added stronger proof, bounded visual-language widening, stronger authoring and ops tooling, and bounded local integration metadata.
 The later U00 through U08 salvage pass then unified the runtime, made settings semantics truthful, retuned the shipped presets, and added a real influence-check harness.
-`PX50` exists to turn that accumulated repo reality into one current recut without adding new feature scope.
+`PX50` existed to turn that accumulated repo reality into one recut without adding new feature scope.
 
 ## Relationship To PL14 And The Post-PL/PX Program
 
@@ -21,8 +21,9 @@ The later U00 through U08 salvage pass then unified the runtime, made settings s
 - `PX10` and `PX11` hardened support and transition proof without widening stable scope.
 - `PX20` through `PX32` widened the product model and visual language, but kept those wider surfaces bounded and experimental.
 - `PX40` and `PX41` added stronger stable support surfaces without widening the stable runtime default.
-- `PX50` is the current recut point.
-  It curates what is stably shippable now, what remains experimental, and what remains deferred or non-claim.
+- `PX50` was the post-Wave-4 recut point.
+  It curated what was stably shippable then, what remained experimental, and what remained deferred or non-claim.
+- `U09` now supersedes it as the living corrective recut.
 
 ## Stable Cut
 

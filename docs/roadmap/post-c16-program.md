@@ -2,8 +2,8 @@
 
 This document records the post-`C16` lineage that admitted the closed `SS` bridge, the completed `SX` substrate series, and the later `PL` flagship program.
 
-Current repo reality has since moved through the completed Plasma `PL00` through `PL14` line.
-The active post-PL control plane now lives in [mx-program.md](./mx-program.md).
+Current repo reality has since moved through the completed Plasma `PL00` through `PL14` line, the post-PL `PX` waves, and the Plasma `U09` corrective recut.
+The current state authority now lives in [../../PROJECT_STATE.toml](../../PROJECT_STATE.toml) and [truth-proof-baseline.md](./truth-proof-baseline.md), with [mx-program.md](./mx-program.md) preserved as post-PL control-plane lineage.
 
 ## Closed Baseline
 
@@ -13,15 +13,17 @@ The active post-PL control plane now lives in [mx-program.md](./mx-program.md).
 - `anthology` is a real saver product, not the `suite` app.
 - `Installer`, `Suite`, `BenchLab`, `SDK`, and `Extras` remain separate secondary companion channels.
 
-## Active Sequence
+## Historical Sequence
 
-Post-`C16` work now proceeds in this order:
+Post-`C16` work proceeded through this lineage:
 
 | Program | Role | Scope |
 | --- | --- | --- |
 | `SS` | closed release-closure bridge | normalize doctrine, surface the Core release clearly, refresh release evidence, and optionally reserve later maintenance policy work |
-| `SX` | active substrate-hardening and capability-expansion series | harden the private substrate, define stable internal bands and backend policy, and prepare future capability expansion without replacing the public ladder |
-| `PL` | later flagship expansion program | take `plasma` forward as the first deeper post-`SX` flagship expansion without destabilizing Core |
+| `SX` | closed substrate-hardening and capability-expansion series | harden the private substrate, define stable internal bands and backend policy, and prepare future capability expansion without replacing the public ladder |
+| `PL` | closed flagship expansion program | take `plasma` forward as the first deeper post-`SX` flagship expansion without destabilizing Core |
+| `PX` / `U09` | closed post-PL and corrective Plasma lineage | classify what is stable, experimental, deferred, and caveated after the broader Plasma work |
+| Truth and proof baseline | active state-reconciliation milestone | make release, development-head, queue, compatibility, and artifact truth machine-readable |
 
 Do not extend the `C` line further.
 Do not revive a vague generic post-release `S` line.

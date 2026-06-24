@@ -4,8 +4,8 @@ This document records the `SX` program that sat after the closed `SS` bridge and
 
 `SX` exists to harden the private renderer substrate and capability-expansion model without reopening the public product doctrine that was already frozen through `C16` and normalized through `SS`.
 
-Current repo reality has since moved through the completed Plasma `PL00` through `PL14` line.
-The active post-PL control plane now lives in [mx-program.md](./mx-program.md).
+Current repo reality has since moved through the completed Plasma `PL00` through `PL14` line, the post-PL `PX` waves, and the Plasma `U09` corrective recut.
+The live project-state authority now lives in [`../../PROJECT_STATE.toml`](../../PROJECT_STATE.toml) and [`truth-proof-baseline.md`](./truth-proof-baseline.md); [mx-program.md](./mx-program.md) remains post-PL control-plane lineage.
 
 ## Current Status
 

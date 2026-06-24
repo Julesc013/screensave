@@ -1,0 +1,578 @@
+ScreenSave PE Artifact Audit
+===========================
+
+This report records binary facts. Notes and violations are evidence, not release approval.
+
+Artifact: out\installer\screensave-installer-c16-baseline\PAYLOAD\SAVERS\anthology.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\installer\screensave-installer-c16-baseline\PAYLOAD\SAVERS\atlas.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\installer\screensave-installer-c16-baseline\PAYLOAD\SAVERS\city.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\installer\screensave-installer-c16-baseline\PAYLOAD\SAVERS\deepfield.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\installer\screensave-installer-c16-baseline\PAYLOAD\SAVERS\ecosystems.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\installer\screensave-installer-c16-baseline\PAYLOAD\SAVERS\explorer.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\installer\screensave-installer-c16-baseline\PAYLOAD\SAVERS\gallery.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\installer\screensave-installer-c16-baseline\PAYLOAD\SAVERS\lifeforms.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\installer\screensave-installer-c16-baseline\PAYLOAD\SAVERS\mechanize.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\installer\screensave-installer-c16-baseline\PAYLOAD\SAVERS\nocturne.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\installer\screensave-installer-c16-baseline\PAYLOAD\SAVERS\observatory.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\installer\screensave-installer-c16-baseline\PAYLOAD\SAVERS\phosphor.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\installer\screensave-installer-c16-baseline\PAYLOAD\SAVERS\pipeworks.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\installer\screensave-installer-c16-baseline\PAYLOAD\SAVERS\plasma.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\installer\screensave-installer-c16-baseline\PAYLOAD\SAVERS\ricochet.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\installer\screensave-installer-c16-baseline\PAYLOAD\SAVERS\signals.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\installer\screensave-installer-c16-baseline\PAYLOAD\SAVERS\stormglass.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\installer\screensave-installer-c16-baseline\PAYLOAD\SAVERS\transit.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\installer\screensave-installer-c16-baseline\PAYLOAD\SAVERS\vector.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\mingw\i686\debug\anthology\anthology.scr
+  machine: x64
+  format: PE32+
+  subsystem: 2 (5.2)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-environment-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-multibyte-l1-1-0.dll, api-ms-win-crt-private-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll
+  flags: VIOLATION: mingw/i686 artifact is not x86, VIOLATION: .scr artifact is not PE32, NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\mingw\i686\debug\atlas\atlas.scr
+  machine: x64
+  format: PE32+
+  subsystem: 2 (5.2)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-environment-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-multibyte-l1-1-0.dll, api-ms-win-crt-private-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll
+  flags: VIOLATION: mingw/i686 artifact is not x86, VIOLATION: .scr artifact is not PE32, NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\mingw\i686\debug\benchlab\benchlab.exe
+  machine: x64
+  format: PE32+
+  subsystem: 2 (5.2)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-environment-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-multibyte-l1-1-0.dll, api-ms-win-crt-private-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll
+  flags: VIOLATION: mingw/i686 artifact is not x86, NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\mingw\i686\debug\city\city.scr
+  machine: x64
+  format: PE32+
+  subsystem: 2 (5.2)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-environment-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-multibyte-l1-1-0.dll, api-ms-win-crt-private-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll
+  flags: VIOLATION: mingw/i686 artifact is not x86, VIOLATION: .scr artifact is not PE32, NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\mingw\i686\debug\deepfield\deepfield.scr
+  machine: x64
+  format: PE32+
+  subsystem: 2 (5.2)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-environment-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-multibyte-l1-1-0.dll, api-ms-win-crt-private-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll
+  flags: VIOLATION: mingw/i686 artifact is not x86, VIOLATION: .scr artifact is not PE32, NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\mingw\i686\debug\ecosystems\ecosystems.scr
+  machine: x64
+  format: PE32+
+  subsystem: 2 (5.2)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-environment-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-multibyte-l1-1-0.dll, api-ms-win-crt-private-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll
+  flags: VIOLATION: mingw/i686 artifact is not x86, VIOLATION: .scr artifact is not PE32, NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\mingw\i686\debug\explorer\explorer.scr
+  machine: x64
+  format: PE32+
+  subsystem: 2 (5.2)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-environment-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-multibyte-l1-1-0.dll, api-ms-win-crt-private-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll
+  flags: VIOLATION: mingw/i686 artifact is not x86, VIOLATION: .scr artifact is not PE32, NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\mingw\i686\debug\gallery\gallery.scr
+  machine: x64
+  format: PE32+
+  subsystem: 2 (5.2)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-environment-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-multibyte-l1-1-0.dll, api-ms-win-crt-private-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll
+  flags: VIOLATION: mingw/i686 artifact is not x86, VIOLATION: .scr artifact is not PE32, NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\mingw\i686\debug\lifeforms\lifeforms.scr
+  machine: x64
+  format: PE32+
+  subsystem: 2 (5.2)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-environment-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-multibyte-l1-1-0.dll, api-ms-win-crt-private-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll
+  flags: VIOLATION: mingw/i686 artifact is not x86, VIOLATION: .scr artifact is not PE32, NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\mingw\i686\debug\mechanize\mechanize.scr
+  machine: x64
+  format: PE32+
+  subsystem: 2 (5.2)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-environment-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-multibyte-l1-1-0.dll, api-ms-win-crt-private-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll
+  flags: VIOLATION: mingw/i686 artifact is not x86, VIOLATION: .scr artifact is not PE32, NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\mingw\i686\debug\nocturne\nocturne.scr
+  machine: x64
+  format: PE32+
+  subsystem: 2 (5.2)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-environment-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-multibyte-l1-1-0.dll, api-ms-win-crt-private-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll
+  flags: VIOLATION: mingw/i686 artifact is not x86, VIOLATION: .scr artifact is not PE32, NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\mingw\i686\debug\observatory\observatory.scr
+  machine: x64
+  format: PE32+
+  subsystem: 2 (5.2)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-environment-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-multibyte-l1-1-0.dll, api-ms-win-crt-private-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll
+  flags: VIOLATION: mingw/i686 artifact is not x86, VIOLATION: .scr artifact is not PE32, NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\mingw\i686\debug\phosphor\phosphor.scr
+  machine: x64
+  format: PE32+
+  subsystem: 2 (5.2)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-environment-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-multibyte-l1-1-0.dll, api-ms-win-crt-private-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll
+  flags: VIOLATION: mingw/i686 artifact is not x86, VIOLATION: .scr artifact is not PE32, NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\mingw\i686\debug\pipeworks\pipeworks.scr
+  machine: x64
+  format: PE32+
+  subsystem: 2 (5.2)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-environment-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-multibyte-l1-1-0.dll, api-ms-win-crt-private-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll
+  flags: VIOLATION: mingw/i686 artifact is not x86, VIOLATION: .scr artifact is not PE32, NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\mingw\i686\debug\plasma\benchlab_parse_debug.exe
+  machine: x64
+  format: PE32+
+  subsystem: 3 (5.2)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-environment-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-private-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll
+  flags: VIOLATION: mingw/i686 artifact is not x86, NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\mingw\i686\debug\plasma\plasma.scr
+  machine: x64
+  format: PE32+
+  subsystem: 2 (5.2)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-environment-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-multibyte-l1-1-0.dll, api-ms-win-crt-private-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll
+  flags: VIOLATION: mingw/i686 artifact is not x86, VIOLATION: .scr artifact is not PE32, NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\mingw\i686\debug\plasma\plasma_smoke.exe
+  machine: x64
+  format: PE32+
+  subsystem: 3 (5.2)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-environment-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-private-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll
+  flags: VIOLATION: mingw/i686 artifact is not x86, NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\mingw\i686\debug\ricochet\ricochet.scr
+  machine: x64
+  format: PE32+
+  subsystem: 2 (5.2)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-environment-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-multibyte-l1-1-0.dll, api-ms-win-crt-private-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll
+  flags: VIOLATION: mingw/i686 artifact is not x86, VIOLATION: .scr artifact is not PE32, NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\mingw\i686\debug\signals\signals.scr
+  machine: x64
+  format: PE32+
+  subsystem: 2 (5.2)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-environment-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-multibyte-l1-1-0.dll, api-ms-win-crt-private-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll
+  flags: VIOLATION: mingw/i686 artifact is not x86, VIOLATION: .scr artifact is not PE32, NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\mingw\i686\debug\stormglass\stormglass.scr
+  machine: x64
+  format: PE32+
+  subsystem: 2 (5.2)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-environment-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-multibyte-l1-1-0.dll, api-ms-win-crt-private-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll
+  flags: VIOLATION: mingw/i686 artifact is not x86, VIOLATION: .scr artifact is not PE32, NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\mingw\i686\debug\suite\suite.exe
+  machine: x64
+  format: PE32+
+  subsystem: 2 (5.2)
+  imports: ADVAPI32.dll, api-ms-win-crt-environment-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-multibyte-l1-1-0.dll, api-ms-win-crt-private-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll
+  flags: VIOLATION: mingw/i686 artifact is not x86, NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\mingw\i686\debug\transit\transit.scr
+  machine: x64
+  format: PE32+
+  subsystem: 2 (5.2)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-environment-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-multibyte-l1-1-0.dll, api-ms-win-crt-private-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll
+  flags: VIOLATION: mingw/i686 artifact is not x86, VIOLATION: .scr artifact is not PE32, NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\mingw\i686\debug\vector\vector.scr
+  machine: x64
+  format: PE32+
+  subsystem: 2 (5.2)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-environment-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-multibyte-l1-1-0.dll, api-ms-win-crt-private-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll
+  flags: VIOLATION: mingw/i686 artifact is not x86, VIOLATION: .scr artifact is not PE32, NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\msvc\vs2022\Release\anthology\anthology.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\msvc\vs2022\Release\atlas\atlas.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\msvc\vs2022\Release\benchlab\benchlab.exe
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\msvc\vs2022\Release\city\city.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\msvc\vs2022\Release\deepfield\deepfield.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\msvc\vs2022\Release\ecosystems\ecosystems.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\msvc\vs2022\Release\explorer\explorer.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\msvc\vs2022\Release\gallery\gallery.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\msvc\vs2022\Release\lifeforms\lifeforms.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\msvc\vs2022\Release\mechanize\mechanize.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\msvc\vs2022\Release\nocturne\nocturne.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\msvc\vs2022\Release\observatory\observatory.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\msvc\vs2022\Release\phosphor\phosphor.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\msvc\vs2022\Release\pipeworks\pipeworks.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\msvc\vs2022\Release\plasma\plasma.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\msvc\vs2022\Release\ricochet\ricochet.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\msvc\vs2022\Release\signals\signals.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\msvc\vs2022\Release\stormglass\stormglass.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\msvc\vs2022\Release\suite\suite.exe
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\msvc\vs2022\Release\transit\transit.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\msvc\vs2022\Release\vector\vector.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\portable\screensave-core-c16-baseline\SAVERS\anthology.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\portable\screensave-core-c16-baseline\SAVERS\atlas.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\portable\screensave-core-c16-baseline\SAVERS\city.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\portable\screensave-core-c16-baseline\SAVERS\deepfield.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\portable\screensave-core-c16-baseline\SAVERS\ecosystems.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\portable\screensave-core-c16-baseline\SAVERS\explorer.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\portable\screensave-core-c16-baseline\SAVERS\gallery.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\portable\screensave-core-c16-baseline\SAVERS\lifeforms.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\portable\screensave-core-c16-baseline\SAVERS\mechanize.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\portable\screensave-core-c16-baseline\SAVERS\nocturne.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\portable\screensave-core-c16-baseline\SAVERS\observatory.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\portable\screensave-core-c16-baseline\SAVERS\phosphor.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\portable\screensave-core-c16-baseline\SAVERS\pipeworks.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\portable\screensave-core-c16-baseline\SAVERS\plasma.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\portable\screensave-core-c16-baseline\SAVERS\ricochet.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\portable\screensave-core-c16-baseline\SAVERS\signals.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\portable\screensave-core-c16-baseline\SAVERS\stormglass.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\portable\screensave-core-c16-baseline\SAVERS\transit.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value
+
+Artifact: out\portable\screensave-core-c16-baseline\SAVERS\vector.scr
+  machine: x86
+  format: PE32
+  subsystem: 2 (6.0)
+  imports: ADVAPI32.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, GDI32.dll, KERNEL32.dll, OPENGL32.dll, USER32.dll, VCRUNTIME140.dll
+  flags: NOTE: dynamic VC/UCRT dependency present, NOTE: subsystem is not a preservation-floor value

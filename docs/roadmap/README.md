@@ -1,6 +1,6 @@
 # Roadmap Docs
 
-This directory explains the completed continuation bridge, the `SS` and `SX` lineage, and the current post-PL control plane.
+This directory explains the completed continuation bridge, the `SS` and `SX` lineage, the post-PL control plane, and the current truth/proof reset.
 
 Belongs here:
 - Series planning.
@@ -16,8 +16,9 @@ Type: explanatory roadmap.
 
 ## Active Doctrine
 
-- [mx-program.md](./mx-program.md) defines the current post-PL master control plane and canonical wave sequence.
-- [mx-owner-map.md](./mx-owner-map.md), [mx-system-dependency-board.md](./mx-system-dependency-board.md), [mx-wave-gates.md](./mx-wave-gates.md), [mx-shared-promotion-rules.md](./mx-shared-promotion-rules.md), [mx-codex-queue-contract.md](./mx-codex-queue-contract.md), and [mx-proof-surface-map.md](./mx-proof-surface-map.md) freeze the governing post-PL execution substrate.
+- [truth-proof-baseline.md](./truth-proof-baseline.md) defines the current post-`U09` state reconciliation milestone and points at `PROJECT_STATE.toml`.
+- [mx-program.md](./mx-program.md) preserves the post-PL master control plane and canonical wave sequence as lineage context.
+- [mx-owner-map.md](./mx-owner-map.md), [mx-system-dependency-board.md](./mx-system-dependency-board.md), [mx-wave-gates.md](./mx-wave-gates.md), [mx-shared-promotion-rules.md](./mx-shared-promotion-rules.md), [mx-codex-queue-contract.md](./mx-codex-queue-contract.md), and [mx-proof-surface-map.md](./mx-proof-surface-map.md) preserve the post-PL execution substrate.
 - [release-channels.md](./release-channels.md) defines the durable Core-versus-companion channel doctrine.
 - [core-zip-doctrine.md](./core-zip-doctrine.md) defines what belongs in the primary Core saver ZIP.
 
@@ -34,5 +35,5 @@ Type: explanatory roadmap.
 - [backlog-routing.md](./backlog-routing.md), [backlog-inventory.md](./backlog-inventory.md), and [refinement-threads.md](./refinement-threads.md) retain the `C11` through `C16` planning context as historical material.
 
 The `C00` through `C16` continuation bridge is complete and closed.
-`SS` and `SX` remain part of the lineage record.
-The current active execution doctrine is the post-PL `MX` control plane.
+`SS`, `SX`, `PL`, `PX`, and the Plasma `U09` corrective recut remain part of the lineage record.
+The current active authority is the truth/proof baseline, with the MX wave queue preserved as historical-superseded control-plane context.

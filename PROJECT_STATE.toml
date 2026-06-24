@@ -1,0 +1,105 @@
+schema_version = 1
+state_id = "truth-proof-baseline-00"
+as_of = "2026-06-25"
+
+[authority]
+current_truth = "truth-proof-baseline"
+public_release = "c16-core-baseline"
+development_head = "plasma-u09-corrective-recut"
+active_program = "truth-proof-baseline"
+release_candidate = "none"
+queue_authority = "historical-mx-queue-superseded"
+product_catalog = "catalog/products.toml"
+
+[release]
+tag = "c16-core-baseline"
+status = "released-frozen"
+primary_channel = "core"
+artifact_manifest = "releases/c16-core-baseline-manifest.ini"
+checksums = "releases/c16-core-baseline-sha256.txt"
+notes = "docs/releases/c16-core-baseline.md"
+known_limits = "validation/notes/c16-known-issues.md"
+artifact_currency = "frozen-release-artifacts-do-not-represent-u09-development-head"
+
+[development]
+status = "post-c16-development-head"
+current_product_truth = "products/savers/plasma/docs/u09-stable-recut.md"
+ship_posture = "GO_WITH_CAVEATS"
+ship_posture_source = "products/savers/plasma/docs/u09-ship-posture.md"
+proof_record = "products/savers/plasma/tests/u09-recut-proof.md"
+proof_captures = "validation/captures/u09/README.md"
+
+[compatibility]
+policy = "evidence-classed"
+target_windows_band = "Windows 95/98/ME and Windows NT 4.0 through Windows 11"
+baseline_contract = "C89, x86 PE32 .scr, ANSI Win32 host path, mandatory gdi"
+public_claim_rule = "Use certified, binary-audited, targeted, or unsupported status for OS and artifact claims."
+default_os_status = "targeted-until-runtime-evidence-exists"
+binary_audit = "validation/captures/truth-proof-baseline/pe-audit-current.txt"
+
+[queues]
+status = "historical-superseded"
+superseded_by = "truth-proof-baseline-00"
+note = "The MX wave files remain lineage records. They are not the live execution queue after U09 and this truth reset."
+wave_files = [
+  ".codex/queues/wave0.toml",
+  ".codex/queues/wave1.toml",
+  ".codex/queues/wave2.toml",
+  ".codex/queues/wave3.toml",
+  ".codex/queues/wave4.toml",
+  ".codex/queues/wave5.toml",
+]
+
+[plasma.stable]
+source = "products/savers/plasma/docs/u09-stable-recut.md"
+runtime_core = "unified-runtime-classic-first"
+default_preset = "plasma_lava"
+default_theme = "plasma_lava"
+minimum_kind = "gdi"
+preferred_kind = "gl11"
+quality_class = "safe"
+stable_output = "raster/native_raster"
+stable_presentation = "flat"
+
+[plasma.experimental]
+source = "products/savers/plasma/docs/u09-experimental-and-deferred.md"
+surfaces = [
+  "gl21",
+  "gl33",
+  "gl46",
+  "advanced-settings",
+  "author-lab",
+  "banded-contour-output",
+  "glyph-output",
+  "premium-presentation",
+  "transitions-and-journeys",
+  "capture-backed-compare",
+]
+
+[build_profiles.preservation_x86]
+status = "targeted"
+artifact_class = "future-preservation-profile"
+rules = [
+  "PE32 x86",
+  "conservative subsystem and import allowlist",
+  "no mandatory external CRT",
+  "GDI floor",
+  "legacy-toolchain validation",
+]
+
+[build_profiles.current_x86]
+status = "development-profile"
+artifact_class = "current Windows x86 build lane"
+rules = [
+  "same product semantics as preservation_x86",
+  "modern compiler allowed",
+  "qualified renderer tiers allowed",
+  "binary and runtime evidence required before public support claims",
+]
+
+[validators]
+state = "tools/scripts/check_project_state.py"
+pe_audit = "tools/scripts/audit_pe_artifacts.py"
+docs = "tools/scripts/check_docs_basics.py"
+build = "tools/scripts/check_build_layout.py"
+codex = "tools/scripts/check_codex_config.py"

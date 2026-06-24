@@ -2,10 +2,27 @@
 
 ScreenSave is a retro-compatible Windows screensaver platform and product monorepo. Its primary public release is `ScreenSave Core`, a ZIP of standalone `.scr` savers built around a conservative baseline: C89, x86 Win32, the classic ANSI Win32 screensaver host path, mandatory `gdi`, and optional capability-gated OpenGL tiers.
 
-The frozen public baseline is `c16-core-baseline`. `SS00` through `SS02` and `SX00` through `SX08` are complete, `SX09` closes the substrate series with the finished proof recorded in [`validation/notes/sx09-substrate-validation-summary.md`](validation/notes/sx09-substrate-validation-summary.md), active post-`C16` planning now lives under [`docs/roadmap/`](docs/roadmap/), and current release limits remain tracked in [`validation/notes/c16-known-issues.md`](validation/notes/c16-known-issues.md).
+The frozen public baseline is `c16-core-baseline`. The current development truth is the Truth And Proof Baseline recorded in [`PROJECT_STATE.toml`](PROJECT_STATE.toml) as `truth-proof-baseline-00`: `ScreenSave Core` remains the released artifact, Plasma's living product posture is the `U09` corrective recut with `GO WITH CAVEATS`, and compatibility claims are now evidence-classed rather than treated as one undifferentiated promise.
 
 Implementation currently exists through `S15` plus continuation `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, `C13` Wave A, Wave B, and Wave C, `C14`, `C15`, and `C16`.
-Post-`SS` work now proceeds in the bounded `SX` substrate series.
+`SS`, `SX`, Plasma `PL`, post-PL `PX`, and the Plasma `U09` corrective recut now exist as lineage and product-truth records. The MX queue files are preserved as historical control-plane records, while the active current-state authority is the truth/proof reset.
+
+## Current Project State
+
+- State authority: [`PROJECT_STATE.toml`](PROJECT_STATE.toml)
+- Product catalog: [`catalog/products.toml`](catalog/products.toml)
+- Active milestone: [`docs/roadmap/truth-proof-baseline.md`](docs/roadmap/truth-proof-baseline.md)
+- Released public artifact: `c16-core-baseline`
+- Development-head product truth: Plasma [`U09 Stable Recut`](products/savers/plasma/docs/u09-stable-recut.md) and [`U09 Ship Posture`](products/savers/plasma/docs/u09-ship-posture.md)
+- Plasma ship posture: `GO WITH CAVEATS`
+- Queue status: `.codex/queues/wave0.toml` through `.codex/queues/wave5.toml` are historical-superseded lineage records
+- Compatibility policy: evidence-classed with `certified`, `binary-audited`, `targeted`, and `unsupported` statuses
+
+Use this command for the current machine-readable summary:
+
+```powershell
+python tools\scripts\check_project_state.py --summary
+```
 
 ## Download ScreenSave Core
 
@@ -41,7 +58,7 @@ Companion channels stay separate from Core:
 
 ## Compatibility Baseline
 
-- Supported Windows band: Windows 95, 98, and ME plus Windows NT 4.0 through Windows 11
+- Target Windows band: Windows 95, 98, and ME plus Windows NT 4.0 through Windows 11
 - Language and binary baseline: C89 and x86 PE32 GUI `.scr` saver artifacts
 - Host model: classic ANSI Win32 screensaver command-line and message path
 - Guaranteed renderer floor: `gdi`
@@ -50,7 +67,7 @@ Companion channels stay separate from Core:
 - Optional premium tier: OpenGL 4.6 (`gl46`), capability-gated above the modern tier without redefining the baseline
 - Internal-only safety tier: `null`
 
-Universal behavior ships first. If an optional capability is absent, ScreenSave must fall back cleanly or keep that behavior out of the universal saver set. For validated coverage and known limits, see [`validation/notes/ss02-support-matrix.md`](validation/notes/ss02-support-matrix.md) and [`validation/notes/c16-known-issues.md`](validation/notes/c16-known-issues.md).
+Universal behavior ships first. If an optional capability is absent, ScreenSave must fall back cleanly or keep that behavior out of the universal saver set. Public OS and artifact claims now use evidence classes: `certified`, `binary-audited`, `targeted`, or `unsupported`. For validated coverage, known limits, and the current binary audit, see [`validation/notes/ss02-support-matrix.md`](validation/notes/ss02-support-matrix.md), [`validation/notes/c16-known-issues.md`](validation/notes/c16-known-issues.md), and [`validation/captures/truth-proof-baseline/pe-audit-current.txt`](validation/captures/truth-proof-baseline/pe-audit-current.txt).
 
 ## Repository Map
 
@@ -95,6 +112,7 @@ Repository-health and release-support validation lives under [`tools/scripts/`](
 ## Further Reading
 
 - Release baseline: [`docs/releases/c16-core-baseline.md`](docs/releases/c16-core-baseline.md)
+- Current state authority: [`PROJECT_STATE.toml`](PROJECT_STATE.toml) and [`docs/roadmap/truth-proof-baseline.md`](docs/roadmap/truth-proof-baseline.md)
 - Release doctrine: [`docs/roadmap/release-channels.md`](docs/roadmap/release-channels.md) and [`docs/roadmap/core-zip-doctrine.md`](docs/roadmap/core-zip-doctrine.md)
 - Architecture: [`docs/architecture/overview.md`](docs/architecture/overview.md) and [`docs/architecture/repo-structure.md`](docs/architecture/repo-structure.md)
 - Product lineup: [`docs/roadmap/products-and-lineup.md`](docs/roadmap/products-and-lineup.md)
@@ -104,4 +122,4 @@ Repository-health and release-support validation lives under [`tools/scripts/`](
 
 ## Project History
 
-The repository has a long implemented history from `S00` through `S15` and a completed `C00` through `C16` continuation bridge, but the root README is no longer the full chronology ledger. Historical milestones such as Series 09, which established the first true multi-product saver family with `ricochet` and `deepfield`, now live in the roadmap docs instead of the front page. For the historical baseline, see [`docs/roadmap/prompt-program.md`](docs/roadmap/prompt-program.md) and [`docs/roadmap/series-map.md`](docs/roadmap/series-map.md). For the active post-`C16` handoff, see [`docs/roadmap/post-c16-program.md`](docs/roadmap/post-c16-program.md) and [`docs/roadmap/sx-series.md`](docs/roadmap/sx-series.md).
+The repository has a long implemented history from `S00` through `S15` and a completed `C00` through `C16` continuation bridge, but the root README is no longer the full chronology ledger. Historical milestones such as Series 09, which established the first true multi-product saver family with `ricochet` and `deepfield`, now live in the roadmap docs instead of the front page. For the historical baseline, see [`docs/roadmap/prompt-program.md`](docs/roadmap/prompt-program.md) and [`docs/roadmap/series-map.md`](docs/roadmap/series-map.md). For the current post-`U09` authority, start with [`PROJECT_STATE.toml`](PROJECT_STATE.toml), [`docs/roadmap/truth-proof-baseline.md`](docs/roadmap/truth-proof-baseline.md), and the Plasma `U09` docs.
