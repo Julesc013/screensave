@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import pathlib
 import sys
+import tomllib
 import xml.etree.ElementTree as ET
 
 
@@ -16,34 +17,26 @@ SAVER_COMMON_PROPS = ROOT / "build" / "msvc" / "vs2022" / "saver_target_common.p
 ANTHOLOGY_TARGET_SOURCES_PROPS = ROOT / "build" / "msvc" / "vs2022" / "anthology_target_sources.props"
 SUITE_TARGET_SOURCES_PROPS = ROOT / "build" / "msvc" / "vs2022" / "suite_target_sources.props"
 MINGW_MAKEFILE = ROOT / "build" / "mingw" / "i686" / "Makefile"
+CATALOG = ROOT / "catalog" / "products.toml"
 
 NS = {"msb": "http://schemas.microsoft.com/developer/msbuild/2003"}
-SAVER_UNITS = ("config", "module", "presets", "render", "sim", "themes")
-BENCHLAB_APP_UNITS = ("app", "config", "diag", "main", "overlay", "session")
+BENCHLAB_APP_UNITS = ("app", "config", "diag", "main", "overlay", "report", "session")
 SUITE_APP_UNITS = ("app", "browser", "config", "launch", "main", "manifest", "state")
 
-INNER_SAVERS = (
-    ("nocturne", "Nocturne"),
-    ("ricochet", "Ricochet"),
-    ("deepfield", "Deepfield"),
-    ("plasma", "Plasma"),
-    ("phosphor", "Phosphor"),
-    ("pipeworks", "Pipeworks"),
-    ("lifeforms", "Lifeforms"),
-    ("signals", "Signals"),
-    ("mechanize", "Mechanize"),
-    ("ecosystems", "Ecosystems"),
-    ("stormglass", "Stormglass"),
-    ("transit", "Transit"),
-    ("observatory", "Observatory"),
-    ("vector", "Vector"),
-    ("explorer", "Explorer"),
-    ("city", "City"),
-    ("atlas", "Atlas"),
-    ("gallery", "Gallery"),
-)
-META_SAVER = ("anthology", "Anthology")
-SAVERS = INNER_SAVERS + (META_SAVER,)
+
+def load_toml(path: pathlib.Path) -> dict:
+    with path.open("rb") as handle:
+        return tomllib.load(handle)
+
+
+CATALOG_DATA = load_toml(CATALOG)
+DEFAULT_SAVER_UNITS = tuple(CATALOG_DATA["defaults"]["saver"]["source_units"])
+DEFAULT_PRESETS = tuple(CATALOG_DATA["defaults"]["saver"]["required_presets"])
+PRODUCTS = tuple(CATALOG_DATA["products"])
+PRODUCTS_BY_KEY = {product["key"]: product for product in PRODUCTS}
+SAVERS = tuple((product["key"], product["name"]) for product in PRODUCTS if product.get("kind") == "saver")
+INNER_SAVERS = tuple((key, name) for key, name in SAVERS if not PRODUCTS_BY_KEY[key].get("meta_saver"))
+META_SAVER = next((key, name) for key, name in SAVERS if PRODUCTS_BY_KEY[key].get("meta_saver"))
 
 
 def require(condition: bool, message: str, errors: list[str]) -> None:
@@ -65,7 +58,8 @@ def saver_project_path(saver_key: str) -> pathlib.Path:
 
 def saver_source_paths(saver_key: str) -> list[str]:
     base = f"..\\..\\..\\products\\savers\\{saver_key}\\src"
-    return [f"{base}\\{saver_key}_{unit}.c" for unit in SAVER_UNITS] + [f"{base}\\{saver_key}_entry.c"]
+    units = tuple(PRODUCTS_BY_KEY[saver_key].get("source_units", DEFAULT_SAVER_UNITS))
+    return [f"{base}\\{saver_key}_{unit}.c" for unit in units] + [f"{base}\\{saver_key}_entry.c"]
 
 
 def saver_resource_paths(saver_key: str) -> list[str]:
@@ -79,11 +73,7 @@ def saver_resource_paths(saver_key: str) -> list[str]:
 
 def saver_required_paths(saver_key: str) -> list[pathlib.Path]:
     base = ROOT / "products" / "savers" / saver_key
-    preset_names = {
-        "nocturne": ("defaults.ini", "museum.ini", "night_modes.ini"),
-        "ricochet": ("defaults.ini", "themed.ini"),
-        "anthology": ("defaults.ini", "weighted.ini", "families.ini"),
-    }.get(saver_key, ("defaults.ini", "themed.ini", "performance.ini"))
+    preset_names = tuple(PRODUCTS_BY_KEY[saver_key].get("required_presets", DEFAULT_PRESETS))
     paths = [
         base / "manifest.ini",
         base / "README.md",
@@ -116,6 +106,7 @@ def required_paths() -> list[pathlib.Path]:
         ROOT / "build" / "mingw" / "README.md",
         ROOT / "build" / "mingw" / "i686" / "README.md",
         ROOT / "build" / "ci" / "README.md",
+        CATALOG,
         SOLUTION,
         PLATFORM_PROJECT,
         BENCHLAB_PROJECT,

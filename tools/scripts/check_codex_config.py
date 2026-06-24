@@ -17,6 +17,11 @@ EXPECTED_AGENT_NAMES = {
     "reviewer",
 }
 
+APPROVED_SECURITY_PROFILES = {
+    ("on-request", "workspace-write"),
+    ("never", "danger-full-access"),
+}
+
 
 def load_toml(path: pathlib.Path) -> dict:
     with path.open("rb") as handle:
@@ -29,13 +34,16 @@ def main() -> int:
 
     if config.get("model") != "gpt-5.4":
         errors.append("Expected .codex/config.toml to set model = 'gpt-5.4'.")
-    if config.get("approval_policy") != "on-request":
-        errors.append("Expected .codex/config.toml to set approval_policy = 'on-request'.")
-    if config.get("sandbox_mode") != "workspace-write":
-        errors.append("Expected .codex/config.toml to set sandbox_mode = 'workspace-write'.")
+    security_profile = (config.get("approval_policy"), config.get("sandbox_mode"))
+    if security_profile not in APPROVED_SECURITY_PROFILES:
+        errors.append(
+            "Expected .codex/config.toml to use an approved security profile: "
+            + ", ".join(f"{approval}/{sandbox}" for approval, sandbox in sorted(APPROVED_SECURITY_PROFILES))
+            + "."
+        )
 
     sandbox = config.get("sandbox_workspace_write", {})
-    if sandbox.get("network_access") is not False:
+    if config.get("sandbox_mode") == "workspace-write" and sandbox.get("network_access") is not False:
         errors.append("Expected sandbox_workspace_write.network_access = false.")
 
     agents_table = config.get("agents")

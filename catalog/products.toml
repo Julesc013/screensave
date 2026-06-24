@@ -1,0 +1,181 @@
+schema_version = 1
+
+[defaults.saver]
+release_channel = "core"
+maturity = "c16-core"
+compatibility_status = "targeted"
+source_units = ["config", "module", "presets", "render", "sim", "themes"]
+required_presets = ["defaults.ini", "themed.ini", "performance.ini"]
+
+[defaults.routing]
+minimum_kind = "gdi"
+preferred_kind = "gl11"
+quality_class = "safe"
+
+[[products]]
+key = "nocturne"
+name = "Nocturne"
+kind = "saver"
+family = "quiet-utility-ambient"
+required_presets = ["defaults.ini", "museum.ini", "night_modes.ini"]
+
+[[products]]
+key = "ricochet"
+name = "Ricochet"
+kind = "saver"
+family = "motion"
+required_presets = ["defaults.ini", "themed.ini"]
+
+[[products]]
+key = "deepfield"
+name = "Deepfield"
+kind = "saver"
+family = "motion"
+
+[[products]]
+key = "plasma"
+name = "Plasma"
+kind = "saver"
+family = "framebuffer-vector"
+maturity = "u09-go-with-caveats"
+current_truth = "products/savers/plasma/docs/u09-stable-recut.md"
+ship_posture = "GO_WITH_CAVEATS"
+source_units = [
+  "advanced",
+  "authoring",
+  "benchlab",
+  "config",
+  "content",
+  "modern",
+  "module",
+  "output",
+  "plan",
+  "premium",
+  "presentation",
+  "presets",
+  "render",
+  "selection",
+  "settings",
+  "sim",
+  "themes",
+  "transition",
+  "treatment",
+  "validate",
+]
+
+[[products]]
+key = "phosphor"
+name = "Phosphor"
+kind = "saver"
+family = "framebuffer-vector"
+
+[[products]]
+key = "pipeworks"
+name = "Pipeworks"
+kind = "saver"
+family = "grid-simulation"
+
+[[products]]
+key = "lifeforms"
+name = "Lifeforms"
+kind = "saver"
+family = "grid-simulation"
+
+[[products]]
+key = "signals"
+name = "Signals"
+kind = "saver"
+family = "systems-ambient"
+
+[[products]]
+key = "mechanize"
+name = "Mechanize"
+kind = "saver"
+family = "systems-ambient"
+
+[[products]]
+key = "ecosystems"
+name = "Ecosystems"
+kind = "saver"
+family = "systems-ambient"
+
+[[products]]
+key = "stormglass"
+name = "Stormglass"
+kind = "saver"
+family = "places-atmosphere"
+
+[[products]]
+key = "transit"
+name = "Transit"
+kind = "saver"
+family = "places-atmosphere"
+
+[[products]]
+key = "observatory"
+name = "Observatory"
+kind = "saver"
+family = "places-atmosphere"
+
+[[products]]
+key = "vector"
+name = "Vector"
+kind = "saver"
+family = "heavyweight-worlds"
+
+[[products]]
+key = "explorer"
+name = "Explorer"
+kind = "saver"
+family = "heavyweight-worlds"
+
+[[products]]
+key = "city"
+name = "City"
+kind = "saver"
+family = "heavyweight-worlds"
+
+[[products]]
+key = "atlas"
+name = "Atlas"
+kind = "saver"
+family = "heavyweight-worlds"
+
+[[products]]
+key = "gallery"
+name = "Gallery"
+kind = "saver"
+family = "heavyweight-worlds"
+role = "renderer-proof-surface"
+
+[[products]]
+key = "anthology"
+name = "Anthology"
+kind = "saver"
+family = "suite-meta-saver"
+meta_saver = true
+required_presets = ["defaults.ini", "weighted.ini", "families.ini"]
+
+[[products]]
+key = "suite"
+name = "ScreenSave Suite"
+kind = "app"
+role = "optional-manager-companion"
+release_channel = "suite"
+maturity = "companion"
+
+[[products]]
+key = "benchlab"
+name = "BenchLab"
+kind = "app"
+role = "diagnostics-and-proof-harness"
+release_channel = "benchlab"
+maturity = "companion"
+
+[[products]]
+key = "sdk"
+name = "ScreenSave SDK"
+kind = "sdk"
+role = "contributor-surface"
+release_channel = "sdk"
+maturity = "source-only"
