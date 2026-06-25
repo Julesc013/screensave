@@ -76,6 +76,7 @@ REQUIRED_TEXT = {
         "def lifecycle_nocturne",
         "def proof_from_profile",
         "compile_ricochet_runner",
+        "lifecycle_ricochet",
         "proof_ricochet_from_profile",
         "RICOCHET_RUNNER_SOURCES",
         "def compare_captures",
@@ -97,6 +98,7 @@ REQUIRED_TEXT = {
         "ricochet_step_session",
         "ricochet_render_session",
         "sslab_write_raw_rgba",
+        "screensave-product-lifecycle-v0",
         "frame-%04lu.rgba",
         "sizeof(unsigned long) != 4U",
     ],
@@ -357,10 +359,15 @@ def validate_ricochet_profile_proof(errors: list[str]) -> None:
         require(receipt.get("status") == "pass", "ricochet.reference.v1 profile proof must pass.", errors)
         require(receipt.get("profile") == "ricochet.reference.v1", "Ricochet profile proof must record the profile key.", errors)
         require(receipt.get("comparison_status") == "pass", "Ricochet repeated exact comparison must pass.", errors)
-        require(receipt.get("lifecycle_status") == "not-run", "Ricochet lifecycle must remain explicit follow-up until generalized lifecycle lands.", errors)
+        require(receipt.get("lifecycle_status") == "pass", "Ricochet lifecycle proof must pass.", errors)
+        require(receipt.get("lifecycle_create_destroy_cycles") == 32, "Ricochet lifecycle proof must record 32 create/destroy cycles.", errors)
         require(capture_frames == [0, 4, 8, 32], "Ricochet proof must capture frames 0, 4, 8, and 32.", errors)
         require(len(captures) == 4, "Ricochet proof must record four primary captures.", errors)
         require(len(repeat_captures) == 4, "Ricochet proof must record four repeated captures.", errors)
+        lifecycle_ref = receipt.get("lifecycle_ref")
+        require(bool(lifecycle_ref), "Ricochet profile proof must record a lifecycle receipt reference.", errors)
+        if lifecycle_ref:
+            require((ROOT / lifecycle_ref).exists() or pathlib.Path(lifecycle_ref).exists(), f"Ricochet lifecycle path must exist: {lifecycle_ref}", errors)
 
         for capture, repeat_capture in zip(captures, repeat_captures):
             require(

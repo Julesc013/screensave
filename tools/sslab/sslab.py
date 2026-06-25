@@ -320,6 +320,66 @@ def lifecycle_nocturne(args: argparse.Namespace) -> dict:
     return lifecycle
 
 
+def lifecycle_ricochet(args: argparse.Namespace) -> dict[str, Any]:
+    output_dir = pathlib.Path(args.output_dir)
+    if not output_dir.is_absolute():
+        output_dir = ROOT / output_dir
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    capture_frame = int(args.frames)
+    lifecycle_path = output_dir / "lifecycle.json"
+
+    with tempfile.TemporaryDirectory() as temp_root:
+        runner_exe = pathlib.Path(temp_root) / "ricochet_canary_runner.exe"
+        compile_ricochet_runner(runner_exe)
+        runner = subprocess.run(
+            [
+                str(runner_exe),
+                "--width",
+                str(args.width),
+                "--height",
+                str(args.height),
+                "--seed",
+                str(args.seed),
+                "--delta-ms",
+                str(args.delta_ms),
+                "--capture-frames",
+                str(capture_frame),
+                "--output-dir",
+                str(output_dir),
+                "--exercise-resize",
+                "--resize-width",
+                str(args.resize_width),
+                "--resize-height",
+                str(args.resize_height),
+                "--create-destroy-cycles",
+                str(args.create_destroy_cycles),
+                "--lifecycle-output",
+                str(lifecycle_path),
+            ],
+            cwd=ROOT,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=False,
+        )
+        if runner.returncode != 0:
+            raise RuntimeError(f"compiled Ricochet lifecycle runner failed: {runner.stderr.strip()}")
+
+    lifecycle = json.loads(lifecycle_path.read_text(encoding="utf-8"))
+    lifecycle["path"] = display_path(lifecycle_path)
+    lifecycle["capture_path"] = display_path(output_dir / f"frame-{capture_frame:04d}.ppm")
+    lifecycle["runner_mode"] = "compiled-product-session"
+    lifecycle["runner_stdout"] = runner.stdout.strip()
+    return lifecycle
+
+
+def lifecycle_product(args: argparse.Namespace) -> dict[str, Any]:
+    if args.product == "ricochet":
+        return lifecycle_ricochet(args)
+    return lifecycle_nocturne(args)
+
+
 def run_ricochet_capture_pass(profile: dict[str, Any], output_dir: pathlib.Path) -> dict[str, Any]:
     output_dir.mkdir(parents=True, exist_ok=True)
     capture_frames = [int(frame) for frame in profile.get("capture_frames", [])]
@@ -374,7 +434,22 @@ def proof_ricochet_from_profile(profile: dict[str, Any], output_dir: pathlib.Pat
     second = run_ricochet_capture_pass(profile, output_dir / "run-b")
     first_hashes = [capture["raw_rgba_sha256"] for capture in first["captures"]]
     second_hashes = [capture["raw_rgba_sha256"] for capture in second["captures"]]
-    status = "pass" if first_hashes == second_hashes else "fail"
+    comparison_status = "pass" if first_hashes == second_hashes else "fail"
+    lifecycle_args = argparse.Namespace(
+        product=profile["product"],
+        preset=profile["preset"],
+        width=int(profile["width"]),
+        height=int(profile["height"]),
+        resize_width=int(profile.get("resize_width", profile["width"])),
+        resize_height=int(profile.get("resize_height", profile["height"])),
+        seed=int(profile["seed"]),
+        frames=max(int(frame) for frame in profile.get("capture_frames", [])),
+        delta_ms=int(profile["delta_ms"]),
+        create_destroy_cycles=int(profile.get("create_destroy_cycles", 32)),
+        output_dir=str(output_dir / "lifecycle"),
+    )
+    lifecycle = lifecycle_ricochet(lifecycle_args)
+    status = "pass" if comparison_status == "pass" and lifecycle.get("status") == "pass" else "fail"
     receipt = {
         "profile_proof_schema": "sslab-profile-proof-v0",
         "status": status,
@@ -385,12 +460,14 @@ def proof_ricochet_from_profile(profile: dict[str, Any], output_dir: pathlib.Pat
         "capture_frames": [int(frame) for frame in profile.get("capture_frames", [])],
         "captures": first["captures"],
         "repeat_captures": second["captures"],
-        "comparison_status": status,
+        "comparison_status": comparison_status,
         "comparison_class": "exact",
-        "lifecycle_status": "not-run",
+        "lifecycle_ref": lifecycle.get("path", ""),
+        "lifecycle_status": lifecycle.get("status"),
+        "lifecycle_create_destroy_cycles": lifecycle.get("create_destroy_cycles"),
         "runner_mode": "compiled-product-session",
         "runner_stdout": first["runner_stdout"],
-        "claim_boundary": "Ricochet multi-frame deterministic proof only; lifecycle, performance, compatibility, and artistic acceptance are separate axes.",
+        "claim_boundary": "Ricochet multi-frame deterministic and lifecycle proof only; performance, compatibility, release promotion, and artistic acceptance are separate axes.",
     }
     (output_dir / "profile-proof.json").write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     return receipt
@@ -625,8 +702,8 @@ def add_compare_parser(subparsers: argparse._SubParsersAction[argparse.ArgumentP
 
 
 def add_lifecycle_parser(subparsers: argparse._SubParsersAction[argparse.ArgumentParser]) -> None:
-    parser = subparsers.add_parser("lifecycle", help="Run a Nocturne create/resize/step/render/destroy lifecycle proof.")
-    parser.add_argument("--product", default="nocturne", choices=["nocturne"])
+    parser = subparsers.add_parser("lifecycle", help="Run a create/resize/step/render/destroy lifecycle proof.")
+    parser.add_argument("--product", default="nocturne", choices=["nocturne", "ricochet"])
     parser.add_argument("--preset", default="observatory_night")
     parser.add_argument("--width", type=int, default=96)
     parser.add_argument("--height", type=int, default=54)
@@ -635,8 +712,9 @@ def add_lifecycle_parser(subparsers: argparse._SubParsersAction[argparse.Argumen
     parser.add_argument("--seed", type=int, default=1536)
     parser.add_argument("--frames", type=int, default=8)
     parser.add_argument("--delta-ms", type=int, default=100)
+    parser.add_argument("--create-destroy-cycles", type=int, default=32)
     parser.add_argument("--output-dir", default=str((ROOT / "out" / "proof" / "sslab-lifecycle").relative_to(ROOT)))
-    parser.set_defaults(func=lifecycle_nocturne)
+    parser.set_defaults(func=lifecycle_product)
 
 
 def add_proof_parser(subparsers: argparse._SubParsersAction[argparse.ArgumentParser]) -> None:
@@ -676,12 +754,13 @@ def print_result(result: dict) -> None:
             f"max_delta={metrics['max_abs_delta']}"
         )
         return
-    if result.get("lifecycle_schema") == "screensave-nocturne-canary-lifecycle-v0":
+    if result.get("lifecycle_schema") in ("screensave-nocturne-canary-lifecycle-v0", "screensave-product-lifecycle-v0"):
         print(
             "lifecycle "
             f"{result['status']} "
             f"resize={result['resize_session']} "
             f"steps={result['step_count']} "
+            f"cycles={result.get('create_destroy_cycles', 1)} "
             f"checksum={result['checksum']}"
         )
         return

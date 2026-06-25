@@ -118,6 +118,7 @@ def validate_proof_profiles(
         if key == "ricochet.reference.v1":
             require(item.get("preset") == "classic_clean", "ricochet.reference.v1 must use admitted preset classic_clean.", errors)
             require(item.get("capture_frames") == [0, 4, 8, 32], "ricochet.reference.v1 must freeze frames 0, 4, 8, and 32.", errors)
+            require(item.get("create_destroy_cycles") == 32, "ricochet.reference.v1 must require 32 create/destroy lifecycle cycles.", errors)
             require(item.get("comparison_class") == "exact", "ricochet.reference.v1 must remain exact.", errors)
 
 

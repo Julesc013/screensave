@@ -16,6 +16,7 @@ typedef struct screensave_generated_proof_profile_tag {
     unsigned long resize_height;
     unsigned long seed;
     unsigned long delta_ms;
+    unsigned long create_destroy_cycles;
     unsigned int capture_frame_count;
     unsigned long capture_frames[SCREENSAVE_PROOF_CAPTURE_FRAME_MAX];
     const char *comparison_class;

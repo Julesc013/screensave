@@ -120,6 +120,51 @@ static unsigned long runner_max_frame(const unsigned long *frames, unsigned int 
     return max_frame;
 }
 
+static int runner_write_lifecycle_json(
+    const char *path,
+    int width,
+    int height,
+    int resize_width,
+    int resize_height,
+    int resize_session,
+    unsigned long frames,
+    unsigned long create_destroy_cycles,
+    unsigned long checksum,
+    int destroy_session
+)
+{
+    FILE *file;
+
+    if (path == NULL) {
+        return 1;
+    }
+
+    file = fopen(path, "w");
+    if (file == NULL) {
+        return 0;
+    }
+
+    fprintf(file, "{\n");
+    fprintf(file, "  \"lifecycle_schema\": \"screensave-product-lifecycle-v0\",\n");
+    fprintf(file, "  \"product\": \"ricochet\",\n");
+    fprintf(file, "  \"status\": \"pass\",\n");
+    fprintf(file, "  \"create_session\": true,\n");
+    fprintf(file, "  \"resize_session\": %s,\n", resize_session ? "true" : "false");
+    fprintf(file, "  \"step_count\": %lu,\n", frames);
+    fprintf(file, "  \"render_session\": true,\n");
+    fprintf(file, "  \"destroy_session\": %s,\n", destroy_session ? "true" : "false");
+    fprintf(file, "  \"create_destroy_cycles\": %lu,\n", create_destroy_cycles);
+    fprintf(file, "  \"width\": %d,\n", width);
+    fprintf(file, "  \"height\": %d,\n", height);
+    fprintf(file, "  \"resize_width\": %d,\n", resize_width);
+    fprintf(file, "  \"resize_height\": %d,\n", resize_height);
+    fprintf(file, "  \"checksum\": %lu\n", checksum);
+    fprintf(file, "}\n");
+
+    fclose(file);
+    return 1;
+}
+
 static void runner_make_environment(
     screensave_saver_environment *environment,
     screensave_config_binding *binding,
@@ -149,6 +194,79 @@ static void runner_make_environment(
     environment->config_binding = binding;
     environment->renderer = renderer;
     environment->diagnostics = NULL;
+}
+
+static int runner_run_lifecycle_cycles(
+    int width,
+    int height,
+    int resize_width,
+    int resize_height,
+    int exercise_resize,
+    unsigned long seed,
+    unsigned long delta_ms,
+    unsigned long frames,
+    unsigned long create_destroy_cycles,
+    unsigned long *checksum_out
+)
+{
+    unsigned long cycle_index;
+    unsigned long frame_index;
+    unsigned long elapsed_ms;
+    unsigned long checksum;
+    screensave_rgba8_surface surface;
+    screensave_renderer renderer;
+    screensave_saver_environment environment;
+    screensave_config_binding binding;
+    screensave_common_config common_config;
+    ricochet_config product_config;
+    screensave_saver_session *session;
+
+    if (checksum_out == NULL || create_destroy_cycles == 0UL) {
+        return 0;
+    }
+
+    checksum = 0UL;
+    for (cycle_index = 0UL; cycle_index < create_destroy_cycles; ++cycle_index) {
+        session = NULL;
+        if (!screensave_rgba8_surface_init(&surface, width, height)) {
+            return 0;
+        }
+        sslab_rgba8_renderer_init(&renderer, &surface);
+        runner_make_environment(&environment, &binding, &common_config, &product_config, &renderer, width, height, seed);
+
+        if (!ricochet_create_session(NULL, &session, &environment)) {
+            screensave_rgba8_surface_dispose(&surface);
+            return 0;
+        }
+
+        if (exercise_resize) {
+            screensave_rgba8_surface_dispose(&surface);
+            if (!screensave_rgba8_surface_init(&surface, resize_width, resize_height)) {
+                ricochet_destroy_session(session);
+                return 0;
+            }
+            sslab_rgba8_renderer_init(&renderer, &surface);
+            environment.drawable_size.width = resize_width;
+            environment.drawable_size.height = resize_height;
+            ricochet_resize_session(session, &environment);
+        }
+
+        elapsed_ms = 0UL;
+        for (frame_index = 0UL; frame_index < frames; ++frame_index) {
+            elapsed_ms += delta_ms;
+            environment.clock.delta_millis = delta_ms;
+            environment.clock.elapsed_millis = elapsed_ms;
+            environment.clock.frame_index = frame_index;
+            ricochet_step_session(session, &environment);
+        }
+        ricochet_render_session(session, &environment);
+        checksum ^= screensave_rgba8_surface_checksum(&surface) + (cycle_index * 2654435761UL);
+        ricochet_destroy_session(session);
+        screensave_rgba8_surface_dispose(&surface);
+    }
+
+    *checksum_out = checksum;
+    return 1;
 }
 
 static int runner_capture_frame(
@@ -182,13 +300,21 @@ int main(int argc, char **argv)
     unsigned long seed;
     unsigned long delta_ms;
     const char *output_dir;
+    const char *lifecycle_output_path;
     const char *capture_frame_text;
     unsigned long capture_frames[RICOCHET_RUNNER_MAX_CAPTURE_FRAMES];
     unsigned int capture_frame_count;
     unsigned long max_frame;
     unsigned long frame_index;
     unsigned long elapsed_ms;
+    unsigned long lifecycle_checksum;
+    unsigned long create_destroy_cycles;
     int index;
+    int exercise_resize;
+    int resize_width;
+    int resize_height;
+    int original_width;
+    int original_height;
     screensave_rgba8_surface surface;
     screensave_renderer renderer;
     screensave_saver_environment environment;
@@ -202,8 +328,14 @@ int main(int argc, char **argv)
     seed = 2048UL;
     delta_ms = 100UL;
     output_dir = ".";
+    lifecycle_output_path = NULL;
     capture_frame_text = "0,4,8,32";
     capture_frame_count = 0U;
+    lifecycle_checksum = 0UL;
+    create_destroy_cycles = 1UL;
+    exercise_resize = 0;
+    resize_width = 0;
+    resize_height = 0;
     session = NULL;
 
     if (sizeof(unsigned long) != 4U) {
@@ -238,10 +370,43 @@ int main(int argc, char **argv)
         } else if (strcmp(argv[index], "--output-dir") == 0 && index + 1 < argc) {
             ++index;
             output_dir = argv[index];
+        } else if (strcmp(argv[index], "--lifecycle-output") == 0 && index + 1 < argc) {
+            ++index;
+            lifecycle_output_path = argv[index];
+        } else if (strcmp(argv[index], "--exercise-resize") == 0) {
+            exercise_resize = 1;
+        } else if (strcmp(argv[index], "--resize-width") == 0 && index + 1 < argc) {
+            ++index;
+            if (!runner_parse_int_arg(argv[index], &resize_width)) {
+                return 2;
+            }
+        } else if (strcmp(argv[index], "--resize-height") == 0 && index + 1 < argc) {
+            ++index;
+            if (!runner_parse_int_arg(argv[index], &resize_height)) {
+                return 2;
+            }
+        } else if (strcmp(argv[index], "--create-destroy-cycles") == 0 && index + 1 < argc) {
+            ++index;
+            if (!runner_parse_ulong_arg(argv[index], &create_destroy_cycles)) {
+                return 2;
+            }
         } else {
             fprintf(stderr, "unknown or incomplete argument: %s\n", argv[index]);
             return 2;
         }
+    }
+
+    if (resize_width <= 0) {
+        resize_width = width;
+    }
+    if (resize_height <= 0) {
+        resize_height = height;
+    }
+    original_width = width;
+    original_height = height;
+    if (create_destroy_cycles == 0UL) {
+        fprintf(stderr, "invalid create/destroy cycle count\n");
+        return 2;
     }
 
     if (!runner_parse_capture_frames(capture_frame_text, capture_frames, &capture_frame_count)) {
@@ -261,6 +426,21 @@ int main(int argc, char **argv)
         screensave_rgba8_surface_dispose(&surface);
         fprintf(stderr, "could not create Ricochet product session\n");
         return 1;
+    }
+
+    if (exercise_resize) {
+        screensave_rgba8_surface_dispose(&surface);
+        if (!screensave_rgba8_surface_init(&surface, resize_width, resize_height)) {
+            ricochet_destroy_session(session);
+            fprintf(stderr, "could not allocate resized rgba8 surface\n");
+            return 1;
+        }
+        sslab_rgba8_renderer_init(&renderer, &surface);
+        environment.drawable_size.width = resize_width;
+        environment.drawable_size.height = resize_height;
+        width = resize_width;
+        height = resize_height;
+        ricochet_resize_session(session, &environment);
     }
 
     max_frame = runner_max_frame(capture_frames, capture_frame_count);
@@ -296,5 +476,37 @@ int main(int argc, char **argv)
 
     ricochet_destroy_session(session);
     screensave_rgba8_surface_dispose(&surface);
+    if (lifecycle_output_path != NULL) {
+        if (!runner_run_lifecycle_cycles(
+                original_width,
+                original_height,
+                resize_width,
+                resize_height,
+                exercise_resize,
+                seed,
+                delta_ms,
+                max_frame,
+                create_destroy_cycles,
+                &lifecycle_checksum
+            )) {
+            fprintf(stderr, "could not run Ricochet lifecycle cycles\n");
+            return 1;
+        }
+        if (!runner_write_lifecycle_json(
+                lifecycle_output_path,
+                original_width,
+                original_height,
+                resize_width,
+                resize_height,
+                exercise_resize,
+                max_frame,
+                create_destroy_cycles,
+                lifecycle_checksum,
+                1
+            )) {
+            fprintf(stderr, "could not write lifecycle output\n");
+            return 1;
+        }
+    }
     return 0;
 }
