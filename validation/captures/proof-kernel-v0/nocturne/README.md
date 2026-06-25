@@ -15,7 +15,10 @@ Scope:
 - preset: `observatory_night`
 - surface: RGBA8, top-left origin, sRGB bytes
 - renderer: `soft-reference-v0`
+- runner: compiled product-session proof runner
 - status: informational canary, not compatibility certification
 
 The validator `tools/scripts/check_proof_kernel.py` reruns the same canary in
-temporary directories and checks the committed capture hash.
+temporary directories, checks the committed capture hash, and verifies that the
+committed proof records clean-source provenance and Nocturne product-source
+digests.

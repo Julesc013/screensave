@@ -1,13 +1,44 @@
 {
   "capture": {
+    "canonical_hash_source": "rgba8-bytes",
     "format": "ppm-p3-rgb-from-rgba8",
     "path": "validation/captures/proof-kernel-v0/nocturne/capture.ppm",
     "sha256": "5394a14b6622c17bfb10cd5721c08a4c92cdbddfb12f55c954ef1d5f6ef878b2"
   },
   "claim_boundary": "deterministic canary capture; not compatibility certification",
+  "implementation": [
+    {
+      "path": "tools/sslab/nocturne_canary_runner.c",
+      "sha256": "fde9df82aef7448f810531895cbf4376b169b9d3da4e3856efc383a6fd8c4cac"
+    },
+    {
+      "path": "products/savers/nocturne/src/nocturne_sim.c",
+      "sha256": "88e76cfdaf556a2e6ea9dfe36fdb72120671803eb1ec23f16d3468e2d6957d0d"
+    },
+    {
+      "path": "products/savers/nocturne/src/nocturne_render.c",
+      "sha256": "b578eee385081fb1fe7ee98596a6cf2491d8f77335455e84d789028398a43c93"
+    },
+    {
+      "path": "products/savers/nocturne/src/nocturne_themes.c",
+      "sha256": "aa8c91bee6eb8d58fb1ef2e83ce6dc715cbc58d2a239f96058a4cffe961b1e05"
+    },
+    {
+      "path": "products/savers/nocturne/src/nocturne_presets.c",
+      "sha256": "895efcff73c3a598e7f2f986c1946615db7017477bbe91fdab87de7b0be3e13c"
+    },
+    {
+      "path": "platform/src/surface/rgba8/surface_rgba8.c",
+      "sha256": "4102d9bb0920c3edbb82af44d15f4b2dc9ae6f1a10b55f994e9a1223cc2b05e5"
+    },
+    {
+      "path": "platform/src/render/soft/soft_renderer.c",
+      "sha256": "d90ff547ac7802d120796fafcb41cf8797fddb0d3b43410f921b518be6279390"
+    }
+  ],
   "limits": [
     "Nocturne canary only",
-    "Python proof runner mirrors the current Nocturne monolith path; it is not a public runtime ABI",
+    "Compiled runner drives the real Nocturne product session and render functions",
     "No operating-system compatibility claim is certified by this proof"
   ],
   "proof_kernel": "proof-kernel-v0",
@@ -19,15 +50,17 @@
     "preset": "observatory_night",
     "product": "nocturne",
     "renderer": "soft-reference-v0",
-    "runner": "tools/sslab/sslab.py",
+    "runner": "tools/sslab/nocturne_canary_runner.c",
+    "runner_mode": "compiled-product-session",
+    "runner_stdout": "compiled-nocturne product-session width=96 height=54 seed=1536 frames=8 delta_ms=100 checksum=1366065189 output=D:\\Projects\\ScreenSave\\screensave\\validation\\captures\\proof-kernel-v0\\nocturne\\capture.ppm",
     "seed": 1536,
     "surface": "rgba8-top-left-srgb",
     "theme": "gray_black",
     "width": 96
   },
   "source": {
-    "commit": "3fb007e08d838635d3af6b5b5d4d3e63b43901f9",
-    "dirty": true
+    "commit": "6e9567217256279dcd16e5eb97f64148f739c28e",
+    "dirty": false
   },
   "status": "informational"
 }

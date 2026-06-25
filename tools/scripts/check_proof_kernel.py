@@ -140,6 +140,30 @@ def validate_determinism(errors: list[str]) -> None:
         require(comparison.get("metrics", {}).get("changed_pixels") == 0, "Exact repeated Nocturne comparison must have zero changed pixels.", errors)
 
 
+def validate_committed_proof(errors: list[str]) -> None:
+    proof_path = EVIDENCE_DIR / "proof.json"
+    if not proof_path.exists():
+        return
+    proof = json.loads(proof_path.read_text(encoding="utf-8"))
+    implementation_paths = {item.get("path") for item in proof.get("implementation", [])}
+    require(proof.get("source", {}).get("dirty") is False, "Committed Nocturne proof must record a clean source state.", errors)
+    require(
+        proof.get("runtime", {}).get("runner_mode") == "compiled-product-session",
+        "Committed Nocturne proof must use the compiled product-session runner.",
+        errors,
+    )
+    require(
+        "products/savers/nocturne/src/nocturne_sim.c" in implementation_paths,
+        "Committed Nocturne proof must record the Nocturne simulation source digest.",
+        errors,
+    )
+    require(
+        "products/savers/nocturne/src/nocturne_render.c" in implementation_paths,
+        "Committed Nocturne proof must record the Nocturne render source digest.",
+        errors,
+    )
+
+
 def main() -> int:
     errors: list[str] = []
 
@@ -152,6 +176,9 @@ def main() -> int:
         text = path.read_text(encoding="utf-8")
         for needle in needles:
             require(needle in text, f"{path.relative_to(ROOT)} is missing expected text: {needle!r}", errors)
+
+    if not errors:
+        validate_committed_proof(errors)
 
     if not errors:
         validate_determinism(errors)
