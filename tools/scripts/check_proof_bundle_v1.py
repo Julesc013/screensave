@@ -17,6 +17,9 @@ OUTPUT = ROOT / "out" / "proof" / "proof-bundle-v1" / "check-nocturne.json"
 LIFECYCLE_DIR = ROOT / "out" / "proof" / "proof-bundle-v1" / "check-lifecycle"
 LIFECYCLE_RECEIPT = LIFECYCLE_DIR / "lifecycle.json"
 PERFORMANCE_RECEIPT = ROOT / "out" / "proof" / "proof-bundle-v1" / "check-performance.json"
+RICOCHET_PROOF_DIR = ROOT / "out" / "proof" / "proof-bundle-v1" / "check-ricochet-proof"
+RICOCHET_PROFILE_DIR = ROOT / "out" / "proof" / "proof-bundle-v1" / "check-ricochet-profile"
+RICOCHET_BUNDLE = ROOT / "out" / "proof" / "proof-bundle-v1" / "check-ricochet.json"
 
 REQUIRED_AXES = {
     "execution",
@@ -169,6 +172,84 @@ def main() -> int:
         require(
             axes.get("release_promotion", {}).get("status") == "blocked",
             "release promotion must remain blocked without approval.",
+            errors,
+        )
+
+        subprocess.check_call(
+            [
+                sys.executable,
+                str(ROOT / "tools" / "sslab" / "sslab.py"),
+                "proof",
+                "--profile",
+                "ricochet.reference.v1",
+                "--output-dir",
+                str(RICOCHET_PROOF_DIR),
+            ],
+            cwd=ROOT,
+        )
+        subprocess.check_call(
+            [
+                sys.executable,
+                str(ROOT / "tools" / "sslab" / "sslab.py"),
+                "profile",
+                "--product",
+                "ricochet",
+                "--preset",
+                "classic_clean",
+                "--width",
+                "128",
+                "--height",
+                "72",
+                "--seed",
+                "2048",
+                "--frames",
+                "32",
+                "--delta-ms",
+                "100",
+                "--iterations",
+                "2",
+                "--short-soak-cycles",
+                "2",
+                "--output-dir",
+                str(RICOCHET_PROFILE_DIR),
+            ],
+            cwd=ROOT,
+        )
+        subprocess.check_call(
+            [
+                sys.executable,
+                str(TOOL),
+                "normalize",
+                "--proof",
+                str(RICOCHET_PROOF_DIR / "profile-proof.json"),
+                "--performance",
+                str(RICOCHET_PROFILE_DIR / "profile.json"),
+                "--output",
+                str(RICOCHET_BUNDLE),
+            ],
+            cwd=ROOT,
+        )
+        ricochet_bundle = json.loads(RICOCHET_BUNDLE.read_text(encoding="utf-8"))
+        ricochet_axes = ricochet_bundle.get("result_axes", {})
+        require(ricochet_bundle.get("subject", {}).get("product") == "ricochet", "Ricochet bundle must record the product key.", errors)
+        require(ricochet_bundle.get("subject", {}).get("profile") == "ricochet.reference.v1", "Ricochet bundle must record the proof profile.", errors)
+        require(ricochet_axes.get("capture", {}).get("status") == "pass", "Ricochet bundle capture axis must pass from profile captures.", errors)
+        require(ricochet_axes.get("capture", {}).get("capture_count") == 4, "Ricochet bundle must retain four profile captures.", errors)
+        require(ricochet_axes.get("comparison", {}).get("status") == "pass", "Ricochet bundle comparison axis must pass from profile proof.", errors)
+        require(ricochet_axes.get("lifecycle", {}).get("status") == "pass", "Ricochet bundle lifecycle axis must pass from profile proof.", errors)
+        require(
+            ricochet_axes.get("lifecycle", {}).get("create_destroy_cycles") == 32,
+            "Ricochet bundle lifecycle axis must retain 32 create/destroy cycles.",
+            errors,
+        )
+        require(
+            ricochet_axes.get("performance", {}).get("status") == "informational",
+            "Ricochet bundle performance axis must consume informational profile evidence.",
+            errors,
+        )
+        require(
+            ricochet_axes.get("performance", {}).get("soak", {}).get("status") == "pass",
+            "Ricochet bundle performance axis must retain short-soak status.",
             errors,
         )
 

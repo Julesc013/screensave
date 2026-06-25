@@ -68,6 +68,63 @@ def status_from_input(payload: dict[str, Any], default: str = "informational") -
     return default
 
 
+def is_profile_proof(payload: dict[str, Any]) -> bool:
+    return payload.get("profile_proof_schema") == "sslab-profile-proof-v0"
+
+
+def capture_axis_from_proof(proof: dict[str, Any], proof_ref: str) -> dict[str, Any]:
+    if is_profile_proof(proof):
+        captures = proof.get("captures", [])
+        capture_hashes = [capture.get("raw_rgba_sha256") for capture in captures if capture.get("raw_rgba_sha256")]
+        return axis(
+            "pass" if capture_hashes else "blocked",
+            "Profile proof captures are present." if capture_hashes else "No profile proof captures were supplied.",
+            [proof_ref] if proof_ref else [],
+            capture_count=len(captures),
+            capture_refs=[capture.get("raw_rgba_path") for capture in captures if capture.get("raw_rgba_path")],
+            review_refs=[capture.get("review_ppm_path") for capture in captures if capture.get("review_ppm_path")],
+            capture_sha256_values=capture_hashes,
+            canonical_hash_source="rgba8-bytes",
+        )
+
+    capture = proof.get("capture", {})
+    return axis(
+        "pass" if capture.get("sha256") else "blocked",
+        "Capture hash is present." if capture.get("sha256") else "No capture hash was supplied.",
+        [proof_ref] if proof_ref else [],
+        capture_ref=capture.get("path"),
+        capture_sha256=capture.get("sha256"),
+        canonical_hash_source=capture.get("canonical_hash_source"),
+    )
+
+
+def performance_axis_payload(performance: dict[str, Any], performance_ref: str) -> dict[str, Any]:
+    frame_time_ms = performance.get("frame_time_ms", {})
+    if performance.get("profile_schema") == "sslab-profile-v0":
+        frame_time_ms = {
+            "p50": performance.get("frame_time_ms_p50"),
+            "p95": performance.get("frame_time_ms_p95"),
+            "p99": performance.get("frame_time_ms_p99"),
+        }
+    return axis(
+        status_from_input(performance) if performance else "informational",
+        "Performance receipt was supplied." if performance else "No performance receipt was supplied.",
+        [performance_ref] if performance_ref else [],
+        performance_schema=performance.get("performance_schema") or performance.get("profile_schema") or performance.get("schema"),
+        frame_count=performance.get("frame_count") or performance.get("measured_frames"),
+        frame_time_ms=frame_time_ms,
+        memory=performance.get("memory", {}),
+        handles=performance.get("handles", {}),
+        soak=performance.get("soak", {})
+        or {
+            "status": performance.get("short_soak_status"),
+            "cycles": performance.get("short_soak_cycles"),
+            "hashes": performance.get("short_soak_hashes", []),
+        },
+        limits=performance.get("limits", {}),
+    )
+
+
 def normalize(args: argparse.Namespace) -> dict[str, Any]:
     proof_path = resolve_input(args.proof)
     comparison_path = resolve_input(args.comparison)
@@ -102,9 +159,8 @@ def normalize(args: argparse.Namespace) -> dict[str, Any]:
     if artifact_count > 0 and pe_audit_status in {"pass", "informational"}:
         compatibility_class = "binary-audited"
 
-    comparison_status = status_from_input(comparison) if comparison else "informational"
-    lifecycle_status = status_from_input(lifecycle) if lifecycle else "informational"
-    performance_status = status_from_input(performance) if performance else "informational"
+    comparison_status = status_from_input(comparison) if comparison else status_from_input({"status": proof.get("comparison_status")})
+    lifecycle_status = status_from_input(lifecycle) if lifecycle else status_from_input({"status": proof.get("lifecycle_status")})
     build_status = status_from_input(build_receipt) if build_receipt else "informational"
     execution_status = "fail" if proof.get("status") == "fail" or build_status == "fail" else "informational"
     if build_status == "blocked":
@@ -115,9 +171,9 @@ def normalize(args: argparse.Namespace) -> dict[str, Any]:
         "status": "informational",
         "source": source_payload(proof),
         "subject": {
-            "product": product,
-            "preset": runtime.get("preset"),
-            "profile": build_receipt.get("profile"),
+            "product": proof.get("product") if is_profile_proof(proof) else product,
+            "preset": proof.get("preset") if is_profile_proof(proof) else runtime.get("preset"),
+            "profile": proof.get("profile") if is_profile_proof(proof) else build_receipt.get("profile"),
             "proof_kernel": proof.get("proof_kernel"),
         },
         "inputs": {
@@ -138,47 +194,30 @@ def normalize(args: argparse.Namespace) -> dict[str, Any]:
                 runner_mode=runtime.get("runner_mode"),
                 build_status=build_status,
             ),
-            "capture": axis(
-                "pass" if capture.get("sha256") else "blocked",
-                "Capture hash is present." if capture.get("sha256") else "No capture hash was supplied.",
-                [proof_ref] if proof_ref else [],
-                capture_ref=capture.get("path"),
-                capture_sha256=capture.get("sha256"),
-                canonical_hash_source=capture.get("canonical_hash_source"),
-            ),
+            "capture": capture_axis_from_proof(proof, proof_ref),
             "comparison": axis(
                 comparison_status,
-                "Comparison receipt was supplied." if comparison else "No comparison receipt was supplied.",
-                [comparison_ref] if comparison_ref else [],
-                comparison_class=comparison.get("class"),
+                "Comparison receipt was supplied." if comparison else "Comparison status was supplied by profile proof." if is_profile_proof(proof) else "No comparison receipt was supplied.",
+                [comparison_ref or proof_ref] if (comparison_ref or is_profile_proof(proof)) else [],
+                comparison_class=comparison.get("class") or proof.get("comparison_class"),
                 metrics=comparison.get("metrics", {}),
             ),
             "lifecycle": axis(
                 lifecycle_status,
-                "Lifecycle receipt was supplied." if lifecycle else "No lifecycle receipt was supplied.",
-                [lifecycle_ref] if lifecycle_ref else [],
+                "Lifecycle receipt was supplied." if lifecycle else "Lifecycle status was supplied by profile proof." if is_profile_proof(proof) else "No lifecycle receipt was supplied.",
+                [lifecycle_ref or proof.get("lifecycle_ref", "")] if (lifecycle_ref or proof.get("lifecycle_ref")) else [],
                 lifecycle_schema=lifecycle.get("lifecycle_schema") or lifecycle.get("schema"),
                 create_session=lifecycle.get("create_session"),
                 resize_session=lifecycle.get("resize_session"),
                 step_count=lifecycle.get("step_count"),
                 render_session=lifecycle.get("render_session"),
                 destroy_session=lifecycle.get("destroy_session"),
+                create_destroy_cycles=lifecycle.get("create_destroy_cycles") or proof.get("lifecycle_create_destroy_cycles"),
                 width=lifecycle.get("width"),
                 height=lifecycle.get("height"),
                 checksum=lifecycle.get("checksum"),
             ),
-            "performance": axis(
-                performance_status,
-                "Performance receipt was supplied." if performance else "No performance receipt was supplied.",
-                [performance_ref] if performance_ref else [],
-                performance_schema=performance.get("performance_schema") or performance.get("schema"),
-                frame_count=performance.get("frame_count"),
-                frame_time_ms=performance.get("frame_time_ms", {}),
-                memory=performance.get("memory", {}),
-                handles=performance.get("handles", {}),
-                soak=performance.get("soak", {}),
-                limits=performance.get("limits", {}),
-            ),
+            "performance": performance_axis_payload(performance, performance_ref),
             "artifact_audit": axis(
                 pe_audit_status,
                 "PE audit facts were supplied." if pe_audit else "No PE audit facts were supplied.",

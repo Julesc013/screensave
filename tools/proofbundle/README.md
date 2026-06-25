@@ -25,4 +25,13 @@ python tools\proofbundle\proofbundle.py normalize `
   --output out\proof\proof-bundle-v1\nocturne-complete.json
 ```
 
+Profile-proof example:
+
+```powershell
+python tools\proofbundle\proofbundle.py normalize `
+  --proof out\proof\ricochet-profile\profile-proof.json `
+  --performance out\proof\ricochet-profile-run\profile.json `
+  --output out\proof\proof-bundle-v1\ricochet-complete.json
+```
+
 Type: repository proof tooling.
