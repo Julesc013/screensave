@@ -1,6 +1,7 @@
 # PAW-01 Product Acceleration Wave
 
-Status: planned umbrella program after Proof Kernel v0 truth reconciliation.
+Status: active umbrella program; Gate A closed and Gate B
+`proof-kernel-v1-ricochet` is active.
 
 ## Purpose
 
@@ -24,8 +25,8 @@ execution, proof, compatibility status, and promotion.
 
 ## PAW-00 Reconciliation Checkpoint
 
-Before `PAW-01` begins, the repository must close the truth drift created by
-recent proof-kernel implementation work.
+Complete. The repository closed the truth drift created by recent
+proof-kernel implementation work.
 
 Required checkpoint outputs:
 
@@ -38,6 +39,8 @@ Required checkpoint outputs:
   refuses stale proof-relevant baseline metadata.
 
 ## Gate A - Native Build And Artifact Truth
+
+Status: closed.
 
 Objective: a clean Windows build produces an exact, profile-bound artifact set
 and a complete proof receipt.
@@ -64,7 +67,18 @@ Exit:
 - proof bundle integrity validates
 - Proof Kernel v0 is formally closed
 
+Closeout evidence:
+
+- clean local `windows-current-x86` receipt at source
+  `cb77a40166325f80b834d33ab61d290ab1d4aeb9`
+- clean local `windows-current-tools` receipt at the same source revision
+- adapter proof and normalized Proof Bundle v1 closeout evidence
+- hosted Windows CI configured to regenerate native build/audit, adapter proof,
+  and normalized Proof Bundle v1 outputs after building
+
 ## Gate B - libsslab And Ricochet
+
+Status: active.
 
 Objective: replace the Nocturne-specific proof runner with reusable compiled
 proof infrastructure and a second structurally different canary.

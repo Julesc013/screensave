@@ -82,7 +82,7 @@ REQUIRED_CONTRACTS = {
         "No primitive may delegate proof output to unspecified platform rasterization.",
     ],
     ROOT / "contracts" / "proof_kernel_v0.md": [
-        "Status: active implementation milestone.",
+        "Status: complete implementation milestone.",
         "canonical catalog authority",
         "minimal software/reference renderer",
         "compiled Nocturne canary runner",
@@ -90,6 +90,7 @@ REQUIRED_CONTRACTS = {
         "fixed-step headless canary host",
         "exact repeatability comparison",
         "Proof Kernel v1 is the target for",
+        "The next active program is `proof-kernel-v1-ricochet`.",
         "The first canary is `nocturne`.",
         "AIDE remains an optional evidence consumer",
     ],

@@ -6,7 +6,7 @@ as_of = "2026-06-25"
 current_truth = "truth-proof-baseline"
 public_release = "c16-core-baseline"
 development_head = "plasma-u09-corrective-recut"
-active_program = "proof-kernel-v0"
+active_program = "proof-kernel-v1-ricochet"
 release_candidate = "none"
 queue_authority = "historical-mx-queue-superseded"
 product_catalog = "catalog/products.toml"
@@ -51,12 +51,14 @@ default_os_status = "targeted-until-runtime-evidence-exists"
 binary_audit = "validation/captures/truth-proof-baseline/pe-audit-current.txt"
 
 [proof_kernel]
-status = "active"
+status = "complete"
 milestone = "proof-kernel-v0"
 contract = "contracts/proof_kernel_v0.md"
 surface_contract = "contracts/surface_rgba8_v0.md"
 canary_product = "nocturne"
 canary_evidence = "validation/captures/proof-kernel-v0/nocturne/proof.json"
+completed_on = "2026-06-25"
+closed_by = "proof-kernel-v1-ricochet"
 scope = [
   "generated catalog inventory",
   "private RGBA8 surface",
@@ -72,15 +74,29 @@ scope = [
   "non-vacuous artifact-profile PE audit JSON facts",
   "exact artifact-set manifests and proof profiles",
   "fixed current-Windows build controller",
-  "local current Windows x86 saver/tool build evidence with dirty-source caveat",
+  "local current Windows x86 saver/tool build evidence from clean source",
   "adapter proof receipt includes nonempty artifact-profile PE audit facts",
-  "GitHub Actions proof-kernel compile, render, compare, lifecycle, and adapter receipt lanes",
+  "Proof Bundle v1 lifecycle and performance/profile receipt inputs",
+  "GitHub Actions proof-kernel compile, render, compare, lifecycle, adapter receipt, native Windows build/audit, adapter proof, and normalized bundle lanes",
 ]
 non_goals = [
   "public API rewrite",
   "all-saver migration",
   "AIDE autonomous merge",
   "new compatibility certification",
+]
+
+[proof_kernel_v1]
+status = "active"
+milestone = "proof-kernel-v1-ricochet"
+gate = "PAW-B"
+objective = "Extract generic libsslab proof runtime and add Ricochet as the second deterministic canary before portable v2 or Plasma runtime work."
+canary_products = ["nocturne", "ricochet"]
+required_boundaries = [
+  "current Windows/32-bit v1 proof only",
+  "no portable v2 claim before Gate B exit",
+  "no Plasma runtime implementation before Ricochet proof passes",
+  "Python may orchestrate profiles but must not own product simulation or rendering semantics",
 ]
 
 [doctrine]

@@ -99,7 +99,7 @@ Current state summary:
 
 - released public artifact: `c16-core-baseline`
 - development head: `plasma-u09-corrective-recut`
-- active program: `proof-kernel-v0`
+- active program: `proof-kernel-v1-ricochet`
 - release candidate: none
 - queue authority: historical-superseded MX queues
 - compatibility policy: evidence-classed
@@ -195,7 +195,8 @@ The post-C16 lineage then continued through:
 - `PX` and `U01` through `U09`: Plasma corrective, curation, and ship-posture
   line
 - Truth and Proof Baseline: current authority convergence milestone
-- Proof Kernel v0: current execution and proof milestone
+- Proof Kernel v0: completed Nocturne execution and proof milestone
+- Proof Kernel v1/Ricochet: current generic proof-runtime milestone
 
 The most recent implemented authority/proof work added:
 
@@ -286,7 +287,9 @@ Implemented:
 - adapter proof receipts that include nonempty artifact-profile PE audit JSON
   facts
 - exact artifact-set manifests and fixed build-controller receipts
-- local current Windows x86 saver/tool build evidence with dirty-source caveat
+- clean-source local current Windows x86 saver/tool build evidence
+- native Windows CI configured for build, audit, adapter proof, and normalized
+  Proof Bundle v1 output
 - validator for deterministic repeatability, exact comparison, lifecycle, and
   baseline provenance
 - GitHub Actions proof-kernel compile, render, compare, lifecycle, and bounded
@@ -299,10 +302,12 @@ Caveats:
 - Nocturne is the only proof-kernel product canary
 - tolerant/perceptual comparison classes exist as report helpers, not accepted
   validation gates
-- soak, resource, and performance proof are not yet in Proof Kernel v0
-- native Windows build receipts are now represented by a fixed build controller,
-  local dirty-source development evidence, and a Windows CI lane, but hosted CI
-  evidence has not been reviewed here
+- soak and resource proof are not yet generic
+- performance/profile evidence is accepted by Proof Bundle v1 but remains
+  informational until Gate B adds real profiling and short-soak surfaces
+- native Windows build receipts are represented by a fixed build controller,
+  clean local development evidence, and a hosted Windows CI lane configured to
+  regenerate build/audit, adapter proof, and normalized bundle outputs
 
 ### Project Adapter
 

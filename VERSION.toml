@@ -11,7 +11,7 @@ status = "released-frozen"
 [development]
 current_state = "truth-proof-baseline-00"
 development_head = "plasma-u09-corrective-recut"
-active_milestone = "truth-proof-baseline"
+active_milestone = "proof-kernel-v1-ricochet"
 release_candidate = "none"
 
 [abi]

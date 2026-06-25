@@ -1,6 +1,6 @@
 # Proof Kernel v0
 
-Status: active implementation milestone.
+Status: complete implementation milestone.
 
 ## Purpose
 
@@ -84,6 +84,20 @@ Proof Kernel v0 is intentionally narrow:
 - CI proof-kernel compile, render, compare, lifecycle, and bounded adapter
   receipt checks
 - proof-bundle v0
+
+## Completion Closeout
+
+Proof Kernel v0 is closed as the Nocturne vertical slice. The closed scope
+includes real product-session execution, canonical RGBA8 hashing, exact
+comparison, lifecycle evidence, implementation digest validation,
+non-vacuous PE audit behavior, exact artifact-set manifests, fixed current
+Windows build receipts, lifecycle/performance inputs for Proof Bundle v1, and
+CI lanes for proof-kernel, project-adapter, native Windows build/audit,
+adapter proof, and normalized Proof Bundle v1 evidence.
+
+The next active program is `proof-kernel-v1-ricochet`. It must extract the
+generic `libsslab` proof runtime and add Ricochet as the second canary before
+portable v2 or Plasma runtime work begins.
 
 Proof Kernel v1 is the target for:
 

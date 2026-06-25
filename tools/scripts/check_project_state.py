@@ -22,6 +22,8 @@ REQUIRED_TOP_LEVEL = {
     "release",
     "development",
     "compatibility",
+    "proof_kernel",
+    "proof_kernel_v1",
     "queues",
     "doctrine",
     "catalog",
@@ -63,6 +65,8 @@ def validate_state(state: dict) -> list[str]:
     release = state.get("release", {})
     development = state.get("development", {})
     compatibility = state.get("compatibility", {})
+    proof_kernel = state.get("proof_kernel", {})
+    proof_kernel_v1 = state.get("proof_kernel_v1", {})
     queues = state.get("queues", {})
     doctrine = state.get("doctrine", {})
     catalog_state = state.get("catalog", {})
@@ -78,6 +82,24 @@ def validate_state(state: dict) -> list[str]:
     require(development.get("ship_posture") == "GO_WITH_CAVEATS", "development.ship_posture must preserve GO_WITH_CAVEATS.", errors)
     require(compatibility.get("policy") == "evidence-classed", "compatibility.policy must be evidence-classed.", errors)
     require(authority.get("version_manifest") == "VERSION.toml", "authority.version_manifest must point to VERSION.toml.", errors)
+    require(
+        authority.get("active_program") == "proof-kernel-v1-ricochet",
+        "authority.active_program must be proof-kernel-v1-ricochet.",
+        errors,
+    )
+    require(proof_kernel.get("status") == "complete", "proof_kernel.status must be complete.", errors)
+    require(proof_kernel.get("milestone") == "proof-kernel-v0", "proof_kernel.milestone must remain proof-kernel-v0.", errors)
+    require(proof_kernel_v1.get("status") == "active", "proof_kernel_v1.status must be active.", errors)
+    require(
+        proof_kernel_v1.get("milestone") == "proof-kernel-v1-ricochet",
+        "proof_kernel_v1.milestone must be proof-kernel-v1-ricochet.",
+        errors,
+    )
+    require(
+        "ricochet" in set(proof_kernel_v1.get("canary_products", [])),
+        "proof_kernel_v1.canary_products must include ricochet.",
+        errors,
+    )
 
     for label, value in (
         ("authority.product_catalog", authority.get("product_catalog")),
@@ -103,6 +125,9 @@ def validate_state(state: dict) -> list[str]:
         ("development.proof_record", development.get("proof_record")),
         ("development.proof_captures", development.get("proof_captures")),
         ("compatibility.binary_audit", compatibility.get("binary_audit")),
+        ("proof_kernel.contract", proof_kernel.get("contract")),
+        ("proof_kernel.surface_contract", proof_kernel.get("surface_contract")),
+        ("proof_kernel.canary_evidence", proof_kernel.get("canary_evidence")),
         ("plasma.stable.source", plasma.get("stable", {}).get("source")),
         ("plasma.experimental.source", plasma.get("experimental", {}).get("source")),
     ):
@@ -216,6 +241,11 @@ def validate_version_manifest(state: dict, version: dict, catalog: dict, errors:
     require(version_release.get("status") == release.get("status"), "VERSION.toml release.status must match PROJECT_STATE release.status.", errors)
     require(version_development.get("current_state") == state.get("state_id"), "VERSION.toml development.current_state must match PROJECT_STATE state_id.", errors)
     require(version_development.get("development_head") == authority.get("development_head"), "VERSION.toml development.development_head must match PROJECT_STATE authority.", errors)
+    require(
+        version_development.get("active_milestone") == authority.get("active_program"),
+        "VERSION.toml development.active_milestone must match PROJECT_STATE authority.active_program.",
+        errors,
+    )
     require(version_schemas.get("product_catalog") == catalog.get("schema_version"), "VERSION.toml schemas.product_catalog must match catalog schema_version.", errors)
     require(version_schemas.get("screensave_doctrine") == 1, "VERSION.toml schemas.screensave_doctrine must be 1.", errors)
     require(version_schemas.get("product_architecture") == 1, "VERSION.toml schemas.product_architecture must be 1.", errors)
