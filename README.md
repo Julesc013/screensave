@@ -77,6 +77,7 @@ Universal behavior ships first. If an optional capability is absent, ScreenSave 
 - [`platform/`](platform/): shared runtime, public headers, Win32 host, and renderer implementation
 - [`products/`](products/): standalone savers, companion apps, and SDK material
 - [`specs/`](specs/): normative repository law and platform contracts
+- [`contracts/`](contracts/): versioned portability, renderer-alias, and proof-bundle contracts
 - [`docs/`](docs/): architecture notes, release docs, and roadmap material
 - [`.github/`](.github/): repository governance, community-health metadata, and stage-appropriate automation
 - [`build/`](build/): checked-in toolchain lanes and build coordination docs
@@ -117,6 +118,7 @@ Repository-health and release-support validation lives under [`tools/scripts/`](
 
 - Release baseline: [`docs/releases/c16-core-baseline.md`](docs/releases/c16-core-baseline.md)
 - Current state authority: [`PROJECT_STATE.toml`](PROJECT_STATE.toml), [`VERSION.toml`](VERSION.toml), and [`docs/roadmap/truth-proof-baseline.md`](docs/roadmap/truth-proof-baseline.md)
+- Contracts: [`contracts/portable_semantics_v2.md`](contracts/portable_semantics_v2.md), [`contracts/renderer_aliases_v1.md`](contracts/renderer_aliases_v1.md), and [`contracts/proof_bundle_v0.md`](contracts/proof_bundle_v0.md)
 - Release doctrine: [`docs/roadmap/release-channels.md`](docs/roadmap/release-channels.md) and [`docs/roadmap/core-zip-doctrine.md`](docs/roadmap/core-zip-doctrine.md)
 - Architecture: [`docs/architecture/overview.md`](docs/architecture/overview.md) and [`docs/architecture/repo-structure.md`](docs/architecture/repo-structure.md)
 - Product lineup: [`docs/roadmap/products-and-lineup.md`](docs/roadmap/products-and-lineup.md)

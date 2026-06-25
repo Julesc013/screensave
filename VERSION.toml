@@ -33,6 +33,11 @@ aide_pilot = 1
 
 [proof]
 policy = "evidence-classed"
-bundle_schema = "planned-proof-bundle-v0"
+bundle_schema = "proof-bundle-v0"
 binary_audit_tool = "tools/scripts/audit_pe_artifacts.py"
 state_validator = "tools/scripts/check_project_state.py"
+
+[contracts]
+portable_semantics = "contracts/portable_semantics_v2.md"
+renderer_aliases = "contracts/renderer_aliases_v1.md"
+proof_bundle = "contracts/proof_bundle_v0.md"
