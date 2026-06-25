@@ -285,6 +285,8 @@ Implemented:
 - lifecycle create, resize, step, render, and destroy evidence
 - adapter proof receipts that include nonempty artifact-profile PE audit JSON
   facts
+- exact artifact-set manifests and fixed build-controller receipts
+- local current Windows x86 saver/tool build evidence with dirty-source caveat
 - validator for deterministic repeatability, exact comparison, lifecycle, and
   baseline provenance
 - GitHub Actions proof-kernel compile, render, compare, lifecycle, and bounded
@@ -298,8 +300,9 @@ Caveats:
 - tolerant/perceptual comparison classes exist as report helpers, not accepted
   validation gates
 - soak, resource, and performance proof are not yet in Proof Kernel v0
-- native Windows build receipts are now represented by a fixed build controller
-  and a Windows CI lane, but hosted CI evidence has not been reviewed here
+- native Windows build receipts are now represented by a fixed build controller,
+  local dirty-source development evidence, and a Windows CI lane, but hosted CI
+  evidence has not been reviewed here
 
 ### Project Adapter
 

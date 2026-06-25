@@ -4,7 +4,9 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import pathlib
+import shutil
 import subprocess
 import sys
 from typing import Any
@@ -60,9 +62,43 @@ def source_payload() -> dict[str, Any]:
     }
 
 
-def profile_command(profile: dict[str, Any]) -> list[str]:
+def resolve_msbuild() -> str:
+    from_path = shutil.which("msbuild")
+    if from_path:
+        return from_path
+
+    program_files_x86 = os.environ.get("ProgramFiles(x86)")
+    if program_files_x86:
+        vswhere = pathlib.Path(program_files_x86) / "Microsoft Visual Studio" / "Installer" / "vswhere.exe"
+        if vswhere.exists():
+            try:
+                output = subprocess.check_output(
+                    [
+                        str(vswhere),
+                        "-latest",
+                        "-requires",
+                        "Microsoft.Component.MSBuild",
+                        "-find",
+                        "MSBuild\\**\\Bin\\MSBuild.exe",
+                    ],
+                    cwd=ROOT,
+                    text=True,
+                    stderr=subprocess.DEVNULL,
+                ).strip()
+            except Exception:
+                output = ""
+            if output:
+                first = output.splitlines()[0].strip()
+                if first:
+                    return first
+
+    return "msbuild"
+
+
+def profile_command(profile: dict[str, Any], resolve_tool: bool = False) -> list[str]:
+    msbuild = resolve_msbuild() if resolve_tool else "msbuild"
     return [
-        "msbuild",
+        msbuild,
         str(profile["solution"]),
         "/m",
         f"/p:Configuration={profile['configuration']}",
@@ -170,7 +206,7 @@ def command_build(args: argparse.Namespace) -> int:
     output_dir = (ROOT / args.output_dir).resolve() if args.output_dir else (OUTPUT_ROOT / args.profile).resolve()
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    build_command = profile_command(profile)
+    build_command = profile_command(profile, resolve_tool=not args.dry_run)
     build_run = None
     if not args.dry_run:
         build_run = run_process(build_command, int(profile["timeout_seconds"]), output_dir / "build.log")

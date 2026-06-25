@@ -70,6 +70,9 @@ scope = [
   "committed clean-source baseline provenance",
   "implementation source digests in the committed proof bundle",
   "non-vacuous artifact-profile PE audit JSON facts",
+  "exact artifact-set manifests and proof profiles",
+  "fixed current-Windows build controller",
+  "local current Windows x86 saver/tool build evidence with dirty-source caveat",
   "adapter proof receipt includes nonempty artifact-profile PE audit facts",
   "GitHub Actions proof-kernel compile, render, compare, lifecycle, and adapter receipt lanes",
 ]
