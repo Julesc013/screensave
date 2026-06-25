@@ -64,7 +64,7 @@ SCREENSAVE_ANTHOLOGY_RESOURCES := products/savers/anthology/src/anthology_config
 SCREENSAVE_SUITE_SOURCES := products/apps/suite/src/suite_app.c products/apps/suite/src/suite_browser.c products/apps/suite/src/suite_config.c products/apps/suite/src/suite_launch.c products/apps/suite/src/suite_main.c products/apps/suite/src/suite_manifest.c products/apps/suite/src/suite_state.c
 SCREENSAVE_SUITE_RESOURCES :=
 
-SCREENSAVE_BENCHLAB_SOURCES := products/apps/benchlab/src/benchlab_app.c products/apps/benchlab/src/benchlab_config.c products/apps/benchlab/src/benchlab_diag.c products/apps/benchlab/src/benchlab_main.c products/apps/benchlab/src/benchlab_overlay.c products/apps/benchlab/src/benchlab_report.c products/apps/benchlab/src/benchlab_session.c
+SCREENSAVE_BENCHLAB_SOURCES := products/apps/benchlab/src/benchlab_app.c products/apps/benchlab/src/benchlab_config.c products/apps/benchlab/src/benchlab_diag.c products/apps/benchlab/src/benchlab_main.c products/apps/benchlab/src/benchlab_overlay.c products/apps/benchlab/src/benchlab_report.c products/apps/benchlab/src/benchlab_session.c products/apps/benchlab/src/benchlab_workbench_shell.c
 SCREENSAVE_BENCHLAB_RESOURCES :=
 
 SCREENSAVE_SDK_SOURCES :=

@@ -12,5 +12,6 @@ Key files:
 - `benchlab_diag.c` captures shared diagnostics into a small app-local ring buffer
 - `benchlab_overlay.c` renders the developer-facing info panel
 - `benchlab_config.c` owns app-local persistence and command-line overrides
+- `benchlab_workbench_shell.c` defines the first minimal Workbench workspace shell over `sslab` proof profiles
 
 Type: product runtime source.

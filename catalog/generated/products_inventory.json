@@ -1384,7 +1384,8 @@
       "family": "",
       "files": {
         "headers": [
-          "products/apps/benchlab/src/benchlab_internal.h"
+          "products/apps/benchlab/src/benchlab_internal.h",
+          "products/apps/benchlab/src/benchlab_workbench_shell.h"
         ],
         "presets": [],
         "resources": [],
@@ -1395,11 +1396,13 @@
           "products/apps/benchlab/src/benchlab_main.c",
           "products/apps/benchlab/src/benchlab_overlay.c",
           "products/apps/benchlab/src/benchlab_report.c",
-          "products/apps/benchlab/src/benchlab_session.c"
+          "products/apps/benchlab/src/benchlab_session.c",
+          "products/apps/benchlab/src/benchlab_workbench_shell.c"
         ],
         "tests": [
           "products/apps/benchlab/tests/README.md",
-          "products/apps/benchlab/tests/smoke.c"
+          "products/apps/benchlab/tests/smoke.c",
+          "products/apps/benchlab/tests/workbench_shell_smoke.c"
         ]
       },
       "key": "benchlab",

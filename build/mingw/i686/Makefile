@@ -121,7 +121,9 @@ BENCHLAB_APP_OBJS := \
 	$(BENCHLAB_DIR)/benchlab_main.o \
 	$(BENCHLAB_DIR)/benchlab_overlay.o \
 	$(BENCHLAB_DIR)/benchlab_report.o \
-	$(BENCHLAB_DIR)/benchlab_session.o
+	$(BENCHLAB_DIR)/benchlab_session.o \
+	$(BENCHLAB_DIR)/benchlab_workbench_shell.o \
+	$(BENCHLAB_DIR)/proof_registry.o
 C_DEP_FILES := \
 	$(PLATFORM_OBJS:.o=.d) \
 	$(INNER_SAVER_OBJS:.o=.d) \
@@ -251,9 +253,9 @@ $(INT_ROOT)/anthology/screensave_host_res.o: $(ROOT)/platform/src/host/win32_scr
 	mkdir -p $(INT_ROOT)/anthology
 	$(RC) $(RCFLAGS_COMMON) -i $< -o $@
 
-$(BENCHLAB_TARGET): $(PLATFORM_LIB) $(benchlab_saver_objs) $(benchlab_resource_objs) $(BENCHLAB_DIR)/benchlab_app.o $(BENCHLAB_DIR)/benchlab_config.o $(BENCHLAB_DIR)/benchlab_diag.o $(BENCHLAB_DIR)/benchlab_main.o $(BENCHLAB_DIR)/benchlab_overlay.o $(BENCHLAB_DIR)/benchlab_report.o $(BENCHLAB_DIR)/benchlab_session.o
+$(BENCHLAB_TARGET): $(PLATFORM_LIB) $(benchlab_saver_objs) $(benchlab_resource_objs) $(BENCHLAB_APP_OBJS)
 	mkdir -p $(OUTROOT)/mingw/i686/$(PROFILE)/benchlab
-	$(CC) $(CFLAGS) -mwindows -o $@ $(benchlab_saver_objs) $(benchlab_resource_objs) $(BENCHLAB_DIR)/benchlab_app.o $(BENCHLAB_DIR)/benchlab_config.o $(BENCHLAB_DIR)/benchlab_diag.o $(BENCHLAB_DIR)/benchlab_main.o $(BENCHLAB_DIR)/benchlab_overlay.o $(BENCHLAB_DIR)/benchlab_report.o $(BENCHLAB_DIR)/benchlab_session.o $(PLATFORM_LIB) $(LDLIBS_COMMON)
+	$(CC) $(CFLAGS) -mwindows -o $@ $(benchlab_saver_objs) $(benchlab_resource_objs) $(BENCHLAB_APP_OBJS) $(PLATFORM_LIB) $(LDLIBS_COMMON)
 
 $(BENCHLAB_DIR)/benchlab_app.o: $(ROOT)/products/apps/benchlab/src/benchlab_app.c
 	mkdir -p $(BENCHLAB_DIR)
@@ -280,6 +282,14 @@ $(BENCHLAB_DIR)/benchlab_report.o: $(ROOT)/products/apps/benchlab/src/benchlab_r
 	$(CC) $(CFLAGS) -MMD -MP -MF $(@:.o=.d) -c $< -o $@
 
 $(BENCHLAB_DIR)/benchlab_session.o: $(ROOT)/products/apps/benchlab/src/benchlab_session.c
+	mkdir -p $(BENCHLAB_DIR)
+	$(CC) $(CFLAGS) -MMD -MP -MF $(@:.o=.d) -c $< -o $@
+
+$(BENCHLAB_DIR)/benchlab_workbench_shell.o: $(ROOT)/products/apps/benchlab/src/benchlab_workbench_shell.c
+	mkdir -p $(BENCHLAB_DIR)
+	$(CC) $(CFLAGS) -MMD -MP -MF $(@:.o=.d) -c $< -o $@
+
+$(BENCHLAB_DIR)/proof_registry.o: $(ROOT)/catalog/generated/proof_registry.c
 	mkdir -p $(BENCHLAB_DIR)
 	$(CC) $(CFLAGS) -MMD -MP -MF $(@:.o=.d) -c $< -o $@
 

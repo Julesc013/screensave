@@ -84,6 +84,13 @@ Continuation `C12` keeps BenchLab diagnostics-focused while normalizing its shar
 - deterministic `/report` captures can record a bounded multi-frame run without turning BenchLab into the real product shell
 - hidden report runs now keep the GDI floor honest by presenting through an offscreen compatible target instead of depending on a visible child-window blit
 
+`PAW-B` starts the future Workbench shell without turning BenchLab into a second runner:
+
+- the initial workspace model is limited to Catalog, Run, Inspect, and Compare
+- the shell binds to the private `sslab` ABI v0 and generated proof registry
+- Nocturne and Ricochet proof profiles are the required canary profiles for this shell
+- authoring, release, and Plasma execution remain deferred until the proof runtime and portable seam are ready
+
 BenchLab is intentionally narrow. It is a validation harness for developers, not the end-user `suite` app.
 C03 leaves that boundary intact: the standalone saver `.scr` line now ships as one saver binary per product, while BenchLab continues to run the saver modules directly as a diagnostics harness instead of becoming a launcher for distributed saver binaries.
 Continuation `C09` keeps that boundary intact: Suite now owns the bounded end-user browse, preview, launch, and saver-settings surface, while BenchLab remains the renderer, runtime, and deterministic diagnostics harness.
