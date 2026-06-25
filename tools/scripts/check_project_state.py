@@ -128,6 +128,8 @@ def validate_state(state: dict) -> list[str]:
         ("proof_kernel.contract", proof_kernel.get("contract")),
         ("proof_kernel.surface_contract", proof_kernel.get("surface_contract")),
         ("proof_kernel.canary_evidence", proof_kernel.get("canary_evidence")),
+        ("proof_kernel_v1.libsslab_abi", proof_kernel_v1.get("libsslab_abi")),
+        ("proof_kernel_v1.libsslab_header", proof_kernel_v1.get("libsslab_header")),
         ("plasma.stable.source", plasma.get("stable", {}).get("source")),
         ("plasma.experimental.source", plasma.get("experimental", {}).get("source")),
     ):
@@ -254,9 +256,11 @@ def validate_version_manifest(state: dict, version: dict, catalog: dict, errors:
     require(version_schemas.get("artifact_sets") == 1, "VERSION.toml schemas.artifact_sets must be 1.", errors)
     require(version_schemas.get("proof_profiles") == 1, "VERSION.toml schemas.proof_profiles must be 1.", errors)
     require(version_schemas.get("proof_bundle_normalized") == 1, "VERSION.toml schemas.proof_bundle_normalized must be 1.", errors)
+    require(version_schemas.get("libsslab_abi") == 0, "VERSION.toml schemas.libsslab_abi must be 0 for private ABI v0.", errors)
     require_path(version.get("contracts", {}).get("product_architecture"), "VERSION.toml contracts.product_architecture", errors)
     require_path(version.get("contracts", {}).get("visual_intent"), "VERSION.toml contracts.visual_intent", errors)
     require_path(version.get("contracts", {}).get("proof_bundle_v1"), "VERSION.toml contracts.proof_bundle_v1", errors)
+    require_path(version.get("contracts", {}).get("libsslab_abi"), "VERSION.toml contracts.libsslab_abi", errors)
     require(version_proof.get("policy") == compatibility.get("policy"), "VERSION.toml proof.policy must match PROJECT_STATE compatibility.policy.", errors)
     require(version_proof.get("bundle_schema") == "proof-bundle-v0", "VERSION.toml proof.bundle_schema must preserve raw proof-bundle-v0.", errors)
     require(version_proof.get("normalized_bundle_schema") == "proof-bundle-v1", "VERSION.toml proof.normalized_bundle_schema must be proof-bundle-v1.", errors)

@@ -91,6 +91,8 @@ status = "active"
 milestone = "proof-kernel-v1-ricochet"
 gate = "PAW-B"
 objective = "Extract generic libsslab proof runtime and add Ricochet as the second deterministic canary before portable v2 or Plasma runtime work."
+libsslab_abi = "contracts/libsslab_abi_v0.md"
+libsslab_header = "tools/sslab/include/screensave/sslab.h"
 canary_products = ["nocturne", "ricochet"]
 required_boundaries = [
   "current Windows/32-bit v1 proof only",

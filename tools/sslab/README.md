@@ -8,6 +8,12 @@ small: it compiles and runs the Nocturne proof-kernel canary through the real
 Nocturne product session and render functions, using a deterministic private
 RGBA8/software path, then emits a proof-bundle v0 JSON record.
 
+PAW-B introduces the private `libsslab` ABI v0 at
+`tools/sslab/include/screensave/sslab.h`. That ABI is a current
+Windows/32-bit v1 proof-runtime boundary for Nocturne and Ricochet. It is not
+the portable v2 seam and must block proof promotion on hosts where
+`sizeof(unsigned long) != 4`.
+
 Current commands:
 
 ```powershell

@@ -16,7 +16,8 @@ Current contracts:
 - [`proof_bundle_v0.md`](proof_bundle_v0.md): initial proof-bundle shape for future Lab Runner, Workbench, CI, and AIDE evidence packets.
 - [`proof_bundle_v1.md`](proof_bundle_v1.md): normalized proof envelope with separate execution, capture, comparison, lifecycle, performance, audit, compatibility, artistic-review, and release-promotion axes.
 - [`surface_rgba8_v0.md`](surface_rgba8_v0.md): private proof-kernel pixel-surface contract.
-- [`proof_kernel_v0.md`](proof_kernel_v0.md): active ScreenSave-owned proof-kernel milestone.
+- [`proof_kernel_v0.md`](proof_kernel_v0.md): completed ScreenSave-owned Nocturne proof-kernel milestone.
+- [`libsslab_abi_v0.md`](libsslab_abi_v0.md): active private proof-runtime ABI for PAW-B generic lab execution.
 - [`project_adapter_v0.md`](project_adapter_v0.md): ScreenSave-owned status, capability, validation, proof, fixed capability binding, and receipt schema surface for external coordinators.
 - [`visual_intent_v1.md`](visual_intent_v1.md): draft descriptive authoring-intent contract for future resolver and pack-generation work.
 
