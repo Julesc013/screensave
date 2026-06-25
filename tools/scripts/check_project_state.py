@@ -144,8 +144,8 @@ def validate_state(state: dict) -> list[str]:
     require(project_adapter.get("schema_version") == 1, "project_adapter.schema_version must be 1.", errors)
     require(project_adapter.get("status") == "active", "project_adapter.status must be active.", errors)
     require(
-        {"status", "capabilities", "validate", "proof"} <= set(project_adapter.get("commands", [])),
-        "project_adapter.commands must include status, capabilities, validate, and proof.",
+        {"status", "capabilities", "catalog", "validate", "render", "compare", "audit", "proof"} <= set(project_adapter.get("commands", [])),
+        "project_adapter.commands must include status, capabilities, catalog, validate, render, compare, audit, and proof.",
         errors,
     )
     for label, value in (

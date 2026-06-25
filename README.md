@@ -34,6 +34,15 @@ Use this command for the current machine-readable summary:
 python tools\scripts\check_project_state.py --summary
 ```
 
+Use this command surface for external coordinators such as CI or AIDE:
+
+```powershell
+python tools\project_adapter\screensave_project.py status
+python tools\project_adapter\screensave_project.py catalog
+python tools\project_adapter\screensave_project.py validate
+python tools\project_adapter\screensave_project.py proof
+```
+
 The next implementation track is `ScreenSave Proof Kernel v0`: a private RGBA8
 surface, minimal software/reference renderer, fixed-step headless Nocturne
 canary, and proof-bundle output. It is ScreenSave-owned; AIDE may consume its

@@ -16,7 +16,11 @@ The v0 adapter command set is:
 - `status`: report current project state, source revision, dirty state, active
   program, release posture, and proof-kernel location.
 - `capabilities`: report admitted adapter operations and their boundaries.
+- `catalog`: report the committed generated product inventory.
 - `validate`: run a bounded ScreenSave-owned validation ladder.
+- `render`: run the Proof Kernel v0 Nocturne canary render.
+- `compare`: compare proof-kernel captures using `sslab`.
+- `audit`: run the ScreenSave PE artifact audit and report binary facts.
 - `proof`: run the Proof Kernel v0 Nocturne canary and exact comparison.
 
 ## Boundaries
@@ -25,6 +29,7 @@ The adapter may:
 
 - invoke repository validators
 - invoke `sslab`
+- invoke the PE artifact audit
 - emit JSON receipts
 - write generated proof artifacts under `out/`
 - expose limitations and refusal reasons
@@ -61,3 +66,6 @@ The initial proof command renders the Nocturne `observatory_night` canary using
 
 This is deterministic proof-kernel evidence. It is not a public compatibility
 certification and not a visual-artistic acceptance decision.
+
+The `audit` command records binary facts only. It is informational by default
+and does not certify compatibility.

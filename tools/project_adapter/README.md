@@ -8,7 +8,11 @@ Commands:
 ```powershell
 python tools\project_adapter\screensave_project.py status
 python tools\project_adapter\screensave_project.py capabilities
+python tools\project_adapter\screensave_project.py catalog
 python tools\project_adapter\screensave_project.py validate
+python tools\project_adapter\screensave_project.py render --output-dir out\proof\project-adapter\render\nocturne
+python tools\project_adapter\screensave_project.py compare --actual validation\captures\proof-kernel-v0\nocturne\capture.ppm
+python tools\project_adapter\screensave_project.py audit
 python tools\project_adapter\screensave_project.py proof --output-dir out\proof\project-adapter\nocturne
 ```
 
