@@ -14,6 +14,7 @@ Current stage:
 - `check_aide_pilot.py` validates the report-only `.aide/` pilot, ignored local state, linked work-unit/evidence paths, and the no-product-runtime-dependency boundary.
 - `check_contracts.py` validates the ScreenSave doctrine, portable-semantics, renderer-alias, proof-bundle, proof-kernel, and project-adapter contract scaffolding.
 - `check_proof_kernel.py` validates the Proof Kernel v0 private surface, software-renderer scaffolding, `sslab` canary command, and deterministic proof output.
+- `check_compiled_nocturne_runner.py` builds the compiled Proof Kernel v0 Nocturne canary and exact-compares it with committed evidence.
 - `check_project_adapter.py` validates the ScreenSave project adapter status, capabilities, catalog, validation, render, compare, audit, and proof command surface.
 - `audit_pe_artifacts.py` records PE architecture, subsystem, and import facts for checked-out `.scr` and `.exe` artifacts.
 - `check_shared_settings_layout.py` validates the C04 shared settings, preset, randomization, and pack scaffold.

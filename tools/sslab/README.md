@@ -14,6 +14,17 @@ python tools\sslab\sslab.py render --product nocturne --output-dir validation\ca
 python tools\sslab\sslab.py compare --actual out\proof\run-a\capture.ppm --expected validation\captures\proof-kernel-v0\nocturne\capture.ppm --class exact
 ```
 
+Proof Kernel v0 also includes a compiled Nocturne canary runner. It is built
+and checked by:
+
+```powershell
+python tools\scripts\check_compiled_nocturne_runner.py
+```
+
+The validator compiles `tools\sslab\nocturne_canary_runner.c` with GCC against
+the private RGBA8 surface and soft renderer, runs the fixed Nocturne canary,
+and exact-compares the result with the committed capture.
+
 This is not a public saver runtime API and not a compatibility certification.
 It is the first ScreenSave-owned visual proof spine. Proof Kernel v0 uses
 `exact` comparison as its gate. `tolerant`, `perceptual`, and `observational`

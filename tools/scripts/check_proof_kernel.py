@@ -22,6 +22,8 @@ REQUIRED_PATHS = [
     ROOT / "platform" / "src" / "render" / "soft" / "soft_renderer.c",
     ROOT / "tools" / "sslab" / "README.md",
     SSLAB,
+    ROOT / "tools" / "sslab" / "nocturne_canary_runner.c",
+    ROOT / "tools" / "scripts" / "check_compiled_nocturne_runner.py",
     EVIDENCE_DIR / "README.md",
     EVIDENCE_DIR / "capture.ppm",
     EVIDENCE_DIR / "capture.sha256",
@@ -47,6 +49,11 @@ REQUIRED_TEXT = {
         "surface = Surface",
         "def render_nocturne",
         "def compare_captures",
+    ],
+    ROOT / "tools" / "sslab" / "nocturne_canary_runner.c": [
+        "compiled-nocturne",
+        "screensave/private/soft_renderer.h",
+        "RUNNER_MOTION_MONOLITH",
     ],
 }
 

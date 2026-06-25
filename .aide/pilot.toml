@@ -43,6 +43,7 @@ catalog = "tools/scripts/check_catalog_profiles.py"
 pe_audit = "tools/scripts/audit_pe_artifacts.py"
 aide_pilot = "tools/scripts/check_aide_pilot.py"
 contracts = "tools/scripts/check_contracts.py"
+compiled_nocturne_runner = "tools/scripts/check_compiled_nocturne_runner.py"
 
 [[work_units]]
 id = "SS-TRUTH-000"

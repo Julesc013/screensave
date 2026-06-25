@@ -411,7 +411,8 @@ run arbitrary ScreenSave commands or choose arbitrary output paths.
 - public headers still expose Win32-specific types
 - no v1 compatibility adapter wraps a new v2 semantic contract
 - product-local IRs are not formalized across canaries
-- Nocturne proof path is not yet a compiled `libsslab` runner path
+- Nocturne now has a compiled proof-kernel canary, but not yet a reusable
+  compiled `libsslab` runner path
 - Ricochet and Plasma are not yet proof-kernel canaries
 - native macOS/Linux hosts do not exist
 - WebAssembly preview does not exist

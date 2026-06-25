@@ -21,6 +21,7 @@ Proof Kernel v0 consists of:
 - private RGBA8 surface contract
 - minimal software/reference renderer
 - fixed-step headless canary host
+- compiled Nocturne canary runner
 - `sslab` command surface
 - exact repeatability comparison
 - proof-bundle v0 output
@@ -66,6 +67,7 @@ Proof Kernel v0 is intentionally narrow:
 - fixed-step headless execution
 - RGBA8 surface
 - deterministic software realization
+- compiled Nocturne canary runner
 - frame capture
 - exact repeatability comparison
 - proof-bundle v0
@@ -99,3 +101,7 @@ Proof Kernel v0 does not:
 - implement Workbench UI
 - generate new saver C code from prompts
 - make AIDE mandatory
+
+The compiled Nocturne runner is a proof-kernel tool. It does not create a
+public runtime ABI, does not replace the standalone `.scr` host, and does not
+certify operating-system compatibility.

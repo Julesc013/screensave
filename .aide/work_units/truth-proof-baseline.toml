@@ -31,6 +31,7 @@ build = "python tools\\scripts\\check_build_layout.py"
 aide = "python tools\\scripts\\check_aide_pilot.py"
 contracts = "python tools\\scripts\\check_contracts.py"
 project_adapter = "python tools\\scripts\\check_project_adapter.py"
+compiled_nocturne_runner = "python tools\\scripts\\check_compiled_nocturne_runner.py"
 pe_audit = "python tools\\scripts\\audit_pe_artifacts.py --output validation\\captures\\truth-proof-baseline\\pe-audit-current.txt"
 
 [exit_condition]

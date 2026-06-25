@@ -55,6 +55,7 @@ scope = [
   "private RGBA8 surface",
   "minimal software/reference renderer",
   "fixed-step headless canary host",
+  "compiled Nocturne canary runner",
   "sslab render/proof command",
   "deterministic capture hash",
   "exact repeatability comparison",
@@ -165,4 +166,5 @@ catalog_generated = "tools/scripts/check_catalog_generated.py"
 aide = "tools/scripts/check_aide_pilot.py"
 contracts = "tools/scripts/check_contracts.py"
 proof_kernel = "tools/scripts/check_proof_kernel.py"
+compiled_nocturne_runner = "tools/scripts/check_compiled_nocturne_runner.py"
 project_adapter = "tools/scripts/check_project_adapter.py"

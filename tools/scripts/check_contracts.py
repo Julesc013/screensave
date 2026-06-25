@@ -63,6 +63,7 @@ REQUIRED_CONTRACTS = {
         "Status: active implementation milestone.",
         "canonical catalog authority",
         "minimal software/reference renderer",
+        "compiled Nocturne canary runner",
         "fixed-step headless canary host",
         "exact repeatability comparison",
         "Proof Kernel v1 is the target for",
