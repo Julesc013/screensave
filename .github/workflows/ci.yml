@@ -46,7 +46,7 @@ jobs:
           python tools/scripts/check_visual_intent_contract.py
 
   proof-kernel:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -56,11 +56,14 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install proof compiler
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y build-essential
-          gcc --version
+      - name: Set up proof compiler
+        uses: msys2/setup-msys2@v2
+        with:
+          update: true
+          install: mingw-w64-x86_64-gcc
+
+      - name: Add proof compiler to PATH
+        run: echo "C:\msys64\mingw64\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
       - name: Build compiled Nocturne proof runner
         run: python tools/scripts/check_compiled_nocturne_runner.py
@@ -101,6 +104,20 @@ jobs:
           --frames 8
           --delta-ms 100
           --output-dir out/ci/proof-kernel/nocturne-lifecycle
+
+      - name: Run CI proof-profile matrix
+        run: |
+          python tools\sslab\sslab.py proof --profile nocturne.reference.v0 --output-dir out\ci\proof-kernel\matrix\nocturne
+          python tools\sslab\sslab.py proof --profile ricochet.reference.v1 --output-dir out\ci\proof-kernel\matrix\ricochet
+          python tools\sslab\sslab.py profile --product nocturne --preset observatory_night --width 96 --height 54 --seed 1536 --frames 8 --delta-ms 100 --iterations 3 --short-soak-cycles 2 --output-dir out\ci\proof-kernel\matrix\nocturne-profile
+          python tools\sslab\sslab.py profile --product ricochet --preset classic_clean --width 128 --height 72 --seed 2048 --frames 32 --delta-ms 100 --iterations 3 --short-soak-cycles 2 --output-dir out\ci\proof-kernel\matrix\ricochet-profile
+
+      - name: Compose CI Ricochet Proof Bundle v1
+        run: >
+          python tools\proofbundle\proofbundle.py normalize
+          --proof out\ci\proof-kernel\matrix\ricochet\profile-proof.json
+          --performance out\ci\proof-kernel\matrix\ricochet-profile\profile.json
+          --output out\ci\proof-kernel\matrix\ricochet-proof-bundle-v1.json
 
       - name: Upload proof-kernel evidence
         if: always()
