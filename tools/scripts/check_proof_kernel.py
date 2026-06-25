@@ -35,6 +35,7 @@ REQUIRED_PATHS = [
     ROOT / "platform" / "src" / "render" / "soft" / "soft_renderer.c",
     ROOT / "tools" / "sslab" / "README.md",
     SSLAB,
+    ROOT / "catalog" / "generated" / "proof_registry.json",
     ROOT / "tools" / "sslab" / "nocturne_canary_runner.c",
     ROOT / "tools" / "sslab" / "src" / "capture.c",
     ROOT / "tools" / "sslab" / "src" / "capture.h",
@@ -64,12 +65,15 @@ REQUIRED_TEXT = {
         "sslab-comparison-v0",
         "screensave-nocturne-canary-lifecycle-v0",
         "proof-kernel-v0",
+        "PROOF_REGISTRY",
+        "sslab-profile-proof-v0",
         "compile_nocturne_runner",
         "compiled-product-session",
         "RUNNER_SOURCES",
         "sha256_file",
         "def render_nocturne",
         "def lifecycle_nocturne",
+        "def proof_from_profile",
         "def compare_captures",
     ],
     ROOT / "tools" / "sslab" / "nocturne_canary_runner.c": [
@@ -286,6 +290,35 @@ def validate_lifecycle(errors: list[str]) -> None:
         require((lifecycle_dir / "lifecycle-capture.ppm").exists(), "Nocturne lifecycle proof must write a capture.", errors)
 
 
+def validate_profile_proof(errors: list[str]) -> None:
+    with tempfile.TemporaryDirectory() as output_root:
+        profile_dir = pathlib.Path(output_root)
+        subprocess.check_call(
+            [
+                sys.executable,
+                str(SSLAB),
+                "proof",
+                "--profile",
+                "nocturne.reference.v0",
+                "--output-dir",
+                str(profile_dir),
+            ],
+            cwd=ROOT,
+            stdout=subprocess.DEVNULL,
+        )
+        receipt = json.loads((profile_dir / "profile-proof.json").read_text(encoding="utf-8"))
+        require(receipt.get("profile_proof_schema") == "sslab-profile-proof-v0", "sslab proof must emit profile proof schema.", errors)
+        require(receipt.get("status") == "pass", "nocturne.reference.v0 profile proof must pass.", errors)
+        require(receipt.get("profile") == "nocturne.reference.v0", "profile proof must record the profile key.", errors)
+        require(receipt.get("comparison_status") == "pass", "profile proof comparison must pass.", errors)
+        require(receipt.get("lifecycle_status") == "pass", "profile proof lifecycle must pass.", errors)
+        require(
+            receipt.get("render_sha256") == (EVIDENCE_DIR / "capture.sha256").read_text(encoding="ascii").strip(),
+            "profile proof must preserve the established Nocturne capture hash.",
+            errors,
+        )
+
+
 def main() -> int:
     errors: list[str] = []
 
@@ -307,6 +340,9 @@ def main() -> int:
 
     if not errors:
         validate_lifecycle(errors)
+
+    if not errors:
+        validate_profile_proof(errors)
 
     if errors:
         for error in errors:

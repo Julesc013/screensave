@@ -10,11 +10,13 @@ import subprocess
 import sys
 import tempfile
 from dataclasses import dataclass
+from typing import Any
 
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 DEFAULT_OUTPUT = ROOT / "validation" / "captures" / "proof-kernel-v0" / "nocturne"
 DEFAULT_COMPARISON = ROOT / "out" / "proof" / "sslab-compare" / "comparison.json"
+PROOF_REGISTRY = ROOT / "catalog" / "generated" / "proof_registry.json"
 RUNNER = ROOT / "tools" / "sslab" / "nocturne_canary_runner.c"
 SURFACE = ROOT / "platform" / "src" / "surface" / "rgba8" / "surface_rgba8.c"
 SOFT_RENDERER = ROOT / "platform" / "src" / "render" / "soft" / "soft_renderer.c"
@@ -59,6 +61,18 @@ def sha256_file(path: pathlib.Path) -> str:
         for chunk in iter(lambda: handle.read(65536), b""):
             digest.update(chunk)
     return digest.hexdigest()
+
+
+def load_proof_registry() -> dict[str, Any]:
+    return json.loads(PROOF_REGISTRY.read_text(encoding="utf-8"))
+
+
+def find_proof_profile(profile_key: str) -> dict[str, Any]:
+    registry = load_proof_registry()
+    for profile in registry.get("proof_profiles", []):
+        if profile.get("key") == profile_key:
+            return profile
+    raise ValueError(f"unknown proof profile: {profile_key}")
 
 
 def compile_nocturne_runner(output_exe: pathlib.Path) -> None:
@@ -265,6 +279,98 @@ def lifecycle_nocturne(args: argparse.Namespace) -> dict:
     return lifecycle
 
 
+def proof_from_profile(args: argparse.Namespace) -> dict:
+    profile = find_proof_profile(args.profile)
+    output_dir = pathlib.Path(args.output_dir)
+    if not output_dir.is_absolute():
+        output_dir = ROOT / output_dir
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    if profile.get("product") != "nocturne":
+        return {
+            "profile_proof_schema": "sslab-profile-proof-v0",
+            "status": "blocked",
+            "profile": profile.get("key"),
+            "product": profile.get("product"),
+            "reason": "Only nocturne.reference.v0 is implemented on the profile-driven path before Ricochet lands.",
+        }
+
+    capture_frames = [int(frame) for frame in profile.get("capture_frames", [])]
+    if not capture_frames:
+        return {
+            "profile_proof_schema": "sslab-profile-proof-v0",
+            "status": "blocked",
+            "profile": profile.get("key"),
+            "product": profile.get("product"),
+            "reason": "Proof profile does not define capture frames.",
+        }
+
+    render_args = argparse.Namespace(
+        product=profile["product"],
+        preset=profile["preset"],
+        width=int(profile["width"]),
+        height=int(profile["height"]),
+        seed=int(profile["seed"]),
+        frames=max(capture_frames),
+        delta_ms=int(profile["delta_ms"]),
+        output_dir=str(output_dir),
+    )
+    render = render_nocturne(render_args)
+
+    comparison = {}
+    baseline_capture = str(profile.get("baseline_capture", ""))
+    if baseline_capture:
+        comparison_args = argparse.Namespace(
+            actual=str(output_dir / "capture.ppm"),
+            expected=baseline_capture,
+            comparison_class=str(profile.get("comparison_class", "exact")),
+            tolerance=0,
+            mean_tolerance=0.0,
+            output_json=str(output_dir / "comparison.json"),
+        )
+        comparison = compare_captures(comparison_args)
+
+    lifecycle_args = argparse.Namespace(
+        product=profile["product"],
+        preset=profile["preset"],
+        width=int(profile["width"]),
+        height=int(profile["height"]),
+        resize_width=int(profile.get("resize_width", profile["width"])),
+        resize_height=int(profile.get("resize_height", profile["height"])),
+        seed=int(profile["seed"]),
+        frames=max(capture_frames),
+        delta_ms=int(profile["delta_ms"]),
+        output_dir=str(output_dir / "lifecycle"),
+    )
+    lifecycle = lifecycle_nocturne(lifecycle_args)
+
+    status = "pass"
+    if comparison and comparison.get("status") != "pass":
+        status = "fail"
+    if lifecycle.get("status") != "pass":
+        status = "fail"
+
+    receipt = {
+        "profile_proof_schema": "sslab-profile-proof-v0",
+        "status": status,
+        "profile": profile.get("key"),
+        "product": profile.get("product"),
+        "preset": profile.get("preset"),
+        "profile_source": display_path(PROOF_REGISTRY),
+        "capture_frames": capture_frames,
+        "render_ref": render.get("capture", {}).get("path"),
+        "render_sha256": render.get("capture", {}).get("sha256"),
+        "proof_ref": display_path(output_dir / "proof.json"),
+        "comparison_ref": comparison.get("path", display_path(output_dir / "comparison.json")) if comparison else "",
+        "comparison_status": comparison.get("status", "not-run") if comparison else "not-run",
+        "lifecycle_ref": lifecycle.get("path", ""),
+        "lifecycle_status": lifecycle.get("status"),
+        "claim_boundary": "profile-driven mechanical proof only; not compatibility certification or artistic acceptance",
+    }
+    (output_dir / "profile-proof.json").write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    return receipt
+
+
 def compare_pixels(actual: PpmImage, expected: PpmImage) -> dict:
     if actual.width != expected.width or actual.height != expected.height:
         return {
@@ -413,7 +519,24 @@ def add_lifecycle_parser(subparsers: argparse._SubParsersAction[argparse.Argumen
     parser.set_defaults(func=lifecycle_nocturne)
 
 
+def add_proof_parser(subparsers: argparse._SubParsersAction[argparse.ArgumentParser]) -> None:
+    parser = subparsers.add_parser("proof", help="Run a generated proof-profile orchestration.")
+    parser.add_argument("--profile", default="nocturne.reference.v0")
+    parser.add_argument("--output-dir", default=str((ROOT / "out" / "proof" / "sslab-profile").relative_to(ROOT)))
+    parser.set_defaults(func=proof_from_profile)
+
+
 def print_result(result: dict) -> None:
+    if result.get("profile_proof_schema") == "sslab-profile-proof-v0":
+        print(
+            "profile-proof "
+            f"{result['status']} "
+            f"{result['profile']} "
+            f"capture={result.get('render_sha256', '')} "
+            f"comparison={result.get('comparison_status', '')} "
+            f"lifecycle={result.get('lifecycle_status', '')}"
+        )
+        return
     if "capture" in result:
         print(f"{result['runtime']['product']} {result['capture']['sha256']} {result['capture']['path']}")
         return
@@ -445,6 +568,7 @@ def main() -> int:
     add_render_parser(subparsers)
     add_compare_parser(subparsers)
     add_lifecycle_parser(subparsers)
+    add_proof_parser(subparsers)
     args = parser.parse_args()
 
     result = args.func(args)
