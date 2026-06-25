@@ -30,6 +30,8 @@ pack_manifest = 1
 artifact_profiles = 1
 proof_bundle = 0
 aide_pilot = 1
+proof_kernel = 1
+surface_rgba8 = 1
 
 [proof]
 policy = "evidence-classed"
@@ -41,3 +43,5 @@ state_validator = "tools/scripts/check_project_state.py"
 portable_semantics = "contracts/portable_semantics_v2.md"
 renderer_aliases = "contracts/renderer_aliases_v1.md"
 proof_bundle = "contracts/proof_bundle_v0.md"
+proof_kernel = "contracts/proof_kernel_v0.md"
+surface_rgba8 = "contracts/surface_rgba8_v0.md"

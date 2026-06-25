@@ -6,7 +6,7 @@ as_of = "2026-06-25"
 current_truth = "truth-proof-baseline"
 public_release = "c16-core-baseline"
 development_head = "plasma-u09-corrective-recut"
-active_program = "truth-proof-baseline"
+active_program = "proof-kernel-v0"
 release_candidate = "none"
 queue_authority = "historical-mx-queue-superseded"
 product_catalog = "catalog/products.toml"
@@ -39,6 +39,27 @@ baseline_contract = "C89, x86 PE32 .scr, ANSI Win32 host path, mandatory gdi"
 public_claim_rule = "Use certified, binary-audited, buildable, targeted, experimental, unsupported, or retired status for OS and artifact claims. Only certified is an ordinary public support promise."
 default_os_status = "targeted-until-runtime-evidence-exists"
 binary_audit = "validation/captures/truth-proof-baseline/pe-audit-current.txt"
+
+[proof_kernel]
+status = "active"
+milestone = "proof-kernel-v0"
+contract = "contracts/proof_kernel_v0.md"
+surface_contract = "contracts/surface_rgba8_v0.md"
+canary_product = "nocturne"
+canary_evidence = "validation/captures/proof-kernel-v0/nocturne/proof.json"
+scope = [
+  "private RGBA8 surface",
+  "minimal software/reference renderer",
+  "fixed-step headless canary host",
+  "sslab render/proof command",
+  "deterministic capture hash",
+]
+non_goals = [
+  "public API rewrite",
+  "all-saver migration",
+  "AIDE autonomous merge",
+  "new compatibility certification",
+]
 
 [queues]
 status = "historical-superseded"
@@ -109,3 +130,4 @@ codex = "tools/scripts/check_codex_config.py"
 catalog = "tools/scripts/check_catalog_profiles.py"
 aide = "tools/scripts/check_aide_pilot.py"
 contracts = "tools/scripts/check_contracts.py"
+proof_kernel = "tools/scripts/check_proof_kernel.py"

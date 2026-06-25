@@ -5,6 +5,8 @@ ScreenSave is a retro-compatible Windows screensaver platform and product monore
 The frozen public baseline is `c16-core-baseline`. The current development truth is the Truth And Proof Baseline recorded in [`PROJECT_STATE.toml`](PROJECT_STATE.toml) as `truth-proof-baseline-00`: `ScreenSave Core` remains the released artifact, Plasma's living product posture is the `U09` corrective recut with `GO WITH CAVEATS`, and compatibility claims are now evidence-classed rather than treated as one undifferentiated promise.
 
 Implementation currently exists through `S15` plus continuation `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, `C13` Wave A, Wave B, and Wave C, `C14`, `C15`, and `C16`.
+Post-`SS` work now proceeds in the bounded `SX` substrate series.
+`SS00` through `SS02` and `SX00` through `SX08` are complete.
 `SS`, `SX`, Plasma `PL`, post-PL `PX`, and the Plasma `U09` corrective recut now exist as lineage and product-truth records. The MX queue files are preserved as historical control-plane records, while the active current-state authority is the truth/proof reset.
 
 ## Current Project State
@@ -15,6 +17,7 @@ Implementation currently exists through `S15` plus continuation `C00`, `C01`, `C
 - Artifact profiles: [`catalog/artifact_profiles.toml`](catalog/artifact_profiles.toml)
 - AIDE pilot: [`.aide/pilot.toml`](.aide/pilot.toml)
 - Active milestone: [`docs/roadmap/truth-proof-baseline.md`](docs/roadmap/truth-proof-baseline.md)
+- Active implementation track: [`contracts/proof_kernel_v0.md`](contracts/proof_kernel_v0.md)
 - Released public artifact: `c16-core-baseline`
 - Development-head product truth: Plasma [`U09 Stable Recut`](products/savers/plasma/docs/u09-stable-recut.md) and [`U09 Ship Posture`](products/savers/plasma/docs/u09-ship-posture.md)
 - Plasma ship posture: `GO WITH CAVEATS`
@@ -26,6 +29,11 @@ Use this command for the current machine-readable summary:
 ```powershell
 python tools\scripts\check_project_state.py --summary
 ```
+
+The next implementation track is `ScreenSave Proof Kernel v0`: a private RGBA8
+surface, minimal software/reference renderer, fixed-step headless Nocturne
+canary, and proof-bundle output. It is ScreenSave-owned; AIDE may consume its
+evidence but must not define its product truth.
 
 ## Download ScreenSave Core
 
@@ -119,6 +127,7 @@ Repository-health and release-support validation lives under [`tools/scripts/`](
 - Release baseline: [`docs/releases/c16-core-baseline.md`](docs/releases/c16-core-baseline.md)
 - Current state authority: [`PROJECT_STATE.toml`](PROJECT_STATE.toml), [`VERSION.toml`](VERSION.toml), and [`docs/roadmap/truth-proof-baseline.md`](docs/roadmap/truth-proof-baseline.md)
 - Contracts: [`contracts/portable_semantics_v2.md`](contracts/portable_semantics_v2.md), [`contracts/renderer_aliases_v1.md`](contracts/renderer_aliases_v1.md), and [`contracts/proof_bundle_v0.md`](contracts/proof_bundle_v0.md)
+- Proof Kernel: [`contracts/proof_kernel_v0.md`](contracts/proof_kernel_v0.md) and [`contracts/surface_rgba8_v0.md`](contracts/surface_rgba8_v0.md)
 - Release doctrine: [`docs/roadmap/release-channels.md`](docs/roadmap/release-channels.md) and [`docs/roadmap/core-zip-doctrine.md`](docs/roadmap/core-zip-doctrine.md)
 - Architecture: [`docs/architecture/overview.md`](docs/architecture/overview.md) and [`docs/architecture/repo-structure.md`](docs/architecture/repo-structure.md)
 - Product lineup: [`docs/roadmap/products-and-lineup.md`](docs/roadmap/products-and-lineup.md)

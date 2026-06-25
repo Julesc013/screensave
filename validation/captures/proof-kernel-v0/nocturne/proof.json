@@ -1,0 +1,33 @@
+{
+  "capture": {
+    "format": "ppm-p3-rgb-from-rgba8",
+    "path": "validation/captures/proof-kernel-v0/nocturne/capture.ppm",
+    "sha256": "5394a14b6622c17bfb10cd5721c08a4c92cdbddfb12f55c954ef1d5f6ef878b2"
+  },
+  "claim_boundary": "deterministic canary capture; not compatibility certification",
+  "limits": [
+    "Nocturne canary only",
+    "Python proof runner mirrors the current Nocturne monolith path; it is not a public runtime ABI",
+    "No operating-system compatibility claim is certified by this proof"
+  ],
+  "proof_kernel": "proof-kernel-v0",
+  "proof_schema": "proof-bundle-v0",
+  "runtime": {
+    "delta_ms": 100,
+    "frames": 8,
+    "height": 54,
+    "preset": "observatory_night",
+    "product": "nocturne",
+    "renderer": "soft-reference-v0",
+    "runner": "tools/sslab/sslab.py",
+    "seed": 1536,
+    "surface": "rgba8-top-left-srgb",
+    "theme": "gray_black",
+    "width": 96
+  },
+  "source": {
+    "commit": "3fb007e08d838635d3af6b5b5d4d3e63b43901f9",
+    "dirty": true
+  },
+  "status": "informational"
+}

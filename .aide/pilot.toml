@@ -23,6 +23,7 @@ allowed = [
   "PE audit",
   "catalog design",
   "validator repair",
+  "proof-kernel evidence ingestion",
 ]
 excluded = [
   "automatic merging",
@@ -31,6 +32,7 @@ excluded = [
   "Plasma v2 rewrite",
   "renderer v2 rewrite",
   "public compatibility widening without evidence",
+  "ScreenSave proof-kernel ownership transfer",
 ]
 
 [validators]
