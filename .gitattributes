@@ -1,0 +1,51 @@
+# Default text handling.
+* text=auto
+
+# Source, contracts, manifests, and validation records are normalized text.
+*.c text eol=lf
+*.h text eol=lf
+*.rc text eol=lf
+*.def text eol=lf
+*.ini text eol=lf
+*.toml text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.txt text eol=lf
+*.csv text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.py text eol=lf
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# Visual Studio solution files are conventionally CRLF.
+*.sln text eol=crlf
+*.vcxproj text eol=lf
+*.props text eol=lf
+*.filters text eol=lf
+
+# Generated or release binary artifacts must never be line-ending rewritten.
+*.aps binary
+*.bmp binary
+*.dll binary
+*.exe binary
+*.gif binary
+*.ico binary
+*.jpg binary
+*.jpeg binary
+*.lib binary
+*.obj binary
+*.pdb binary
+*.png binary
+*.res binary
+*.scr binary
+*.tga binary
+*.tif binary
+*.tiff binary
+*.webp binary
+*.zip binary
+
+# Preserve release archives and captured binary evidence as opaque artifacts.
+releases/** -text
+validation/screenshots/** -text
