@@ -47,6 +47,20 @@ Each capability has a declared argv shape, decoder schema, mutation policy,
 output policy, timeout, and state probe. Changes to this file are project
 contract changes and must be reviewed as such.
 
+## Admission Model
+
+The ScreenSave-side admission classes are:
+
+- read-only fixed commands: `status`, `capabilities`, `catalog`, and
+  `validate`
+- contained generated-output commands: `render`, `compare`, `audit`, and
+  `proof`
+- blocked worker sessions: source patching, data-pack worker proposals,
+  autonomous coding sessions, automatic merge, and release promotion
+
+This adapter admits fixed command execution only. It does not admit AIDE
+worker-host sessions or generic command execution.
+
 ## Boundaries
 
 The adapter may:

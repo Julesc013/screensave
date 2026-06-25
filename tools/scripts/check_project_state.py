@@ -88,6 +88,7 @@ def validate_state(state: dict) -> list[str]:
         ("authority.project_adapter", authority.get("project_adapter")),
         ("authority.aide_pilot", authority.get("aide_pilot")),
         ("authority.aide_lite_lock", authority.get("aide_lite_lock")),
+        ("authority.aide_integration_plan", authority.get("aide_integration_plan")),
         ("authority.visual_intent_contract", authority.get("visual_intent_contract")),
         ("release.artifact_manifest", release.get("artifact_manifest")),
         ("release.checksums", release.get("checksums")),

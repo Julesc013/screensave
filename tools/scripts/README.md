@@ -11,7 +11,7 @@ Current stage:
 - `check_project_state.py` validates `PROJECT_STATE.toml`, `VERSION.toml`, linked authority files, and prints the current released/development/queue/compatibility state with `--summary`.
 - `check_catalog_profiles.py` validates `catalog/products.toml`, `catalog/artifact_profiles.toml`, product artifact-profile references, and evidence-status vocabulary.
 - `check_catalog_generated.py` verifies that committed `catalog/generated/` inventory outputs match `tools/cataloggen/cataloggen.py`.
-- `check_aide_pilot.py` validates the report-only `.aide/` pilot, ignored local state, linked work-unit/evidence paths, and the no-product-runtime-dependency boundary.
+- `check_aide_pilot.py` validates the report-only `.aide/` pilot, fixed-command bridge admission plan, ignored local state, linked work-unit/evidence paths, and the no-product-runtime-dependency boundary.
 - `check_contracts.py` validates the ScreenSave doctrine, portable-semantics, renderer-alias, proof-bundle, proof-kernel, and project-adapter contract scaffolding.
 - `check_visual_intent_contract.py` validates the draft VisualIntent v1 contract and example authoring intent.
 - `check_proof_kernel.py` validates the Proof Kernel v0 private surface, software-renderer scaffolding, `sslab` canary command, and deterministic proof output.

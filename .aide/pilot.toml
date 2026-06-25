@@ -14,6 +14,7 @@ product_catalog = "catalog/products.toml"
 artifact_profiles = "catalog/artifact_profiles.toml"
 aide_lite_lock = ".aide/aide_lite.lock.toml"
 project_bridge_profile = ".aide/project_bridge_profile.toml"
+integration_plan = "docs/roadmap/aide-to-screensave-integration-plan.md"
 historical_codex_queues = ".codex/queues"
 
 [scope]

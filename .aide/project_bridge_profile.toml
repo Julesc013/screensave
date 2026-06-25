@@ -8,6 +8,7 @@ owner = "ScreenSave"
 project_state = "PROJECT_STATE.toml"
 aide_lite_lock = ".aide/aide_lite.lock.toml"
 adapter_contract = "contracts/project_adapter_v0.md"
+integration_plan = "docs/roadmap/aide-to-screensave-integration-plan.md"
 adapter_command = "tools/project_adapter/screensave_project.py"
 capability_bindings = "tools/project_adapter/capability_bindings.json"
 receipt_schemas = "tools/project_adapter/receipt_schemas.json"
@@ -24,44 +25,54 @@ artistic_acceptance_allowed = false
 worker_runtime_required = false
 local_process_worker_required = false
 
+[readiness]
+report_only_aide_pilot = "ready-now"
+pinned_aide_lite_profile = "ready-now"
+read_only_deterministic_commands = "screensave-side-admitted"
+contained_generated_proof_commands = "screensave-side-admitted"
+coding_agent_data_pack_proposal = "later"
+source_patch_preview_apply = "substantially-later"
+automatic_product_promotion_or_release = "deliberately-excluded"
+external_aide_runtime_admission = "outside-this-repository"
+
 [[capabilities]]
 name = "screensave.project.status"
-status = "admittable-now"
+status = "screensave-side-admitted-read-only"
 command = ["python", "tools/project_adapter/screensave_project.py", "status"]
 
 [[capabilities]]
 name = "screensave.project.capabilities"
-status = "admittable-now"
+status = "screensave-side-admitted-read-only"
 command = ["python", "tools/project_adapter/screensave_project.py", "capabilities"]
 
 [[capabilities]]
 name = "screensave.catalog.read"
-status = "admittable-now"
+status = "screensave-side-admitted-read-only"
 command = ["python", "tools/project_adapter/screensave_project.py", "catalog"]
 
 [[capabilities]]
 name = "screensave.validation.core"
-status = "admittable-now"
+status = "screensave-side-admitted-read-only"
 command = ["python", "tools/project_adapter/screensave_project.py", "validate"]
 
 [[capabilities]]
 name = "screensave.proof.nocturne.render"
-status = "admittable-after-independent-check"
+status = "screensave-side-admitted-contained-output"
 command = ["python", "tools/project_adapter/screensave_project.py", "render", "--invocation-id", "<safe-id>"]
 
 [[capabilities]]
 name = "screensave.proof.capture.compare"
-status = "admittable-after-independent-check"
+status = "screensave-side-admitted-contained-output"
 command = ["python", "tools/project_adapter/screensave_project.py", "compare", "--invocation-id", "<safe-id>"]
 
 [[capabilities]]
 name = "screensave.artifact.pe.audit"
-status = "admittable-after-independent-check"
+status = "screensave-side-admitted-contained-output"
 command = ["python", "tools/project_adapter/screensave_project.py", "audit", "--invocation-id", "<safe-id>"]
 
 [[capabilities]]
 name = "screensave.proof.nocturne.exact"
-status = "admittable-after-independent-check"
+status = "screensave-side-admitted-contained-output"
 command = ["python", "tools/project_adapter/screensave_project.py", "proof", "--invocation-id", "<safe-id>"]
 
 [refusals]

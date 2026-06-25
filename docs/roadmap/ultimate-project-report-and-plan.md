@@ -788,6 +788,9 @@ Exit:
 
 ## AIDE Plan
 
+Detailed supporting plan:
+[aide-to-screensave-integration-plan.md](./aide-to-screensave-integration-plan.md).
+
 AIDE should remain:
 
 - external

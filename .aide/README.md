@@ -19,6 +19,8 @@ It must not become:
 
 The current pilot is [`pilot.toml`](pilot.toml).
 The current report-only AIDE Lite pin is [`aide_lite.lock.toml`](aide_lite.lock.toml).
+The current AIDE-to-ScreenSave integration plan is
+[`../docs/roadmap/aide-to-screensave-integration-plan.md`](../docs/roadmap/aide-to-screensave-integration-plan.md).
 The current deterministic project bridge profile is
 [`project_bridge_profile.toml`](project_bridge_profile.toml).
 Local transient state belongs in `.aide.local/`, which is ignored.

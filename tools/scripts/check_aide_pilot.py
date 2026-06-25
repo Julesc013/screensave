@@ -12,6 +12,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 PILOT_PATH = ROOT / ".aide" / "pilot.toml"
 BRIDGE_PROFILE_PATH = ROOT / ".aide" / "project_bridge_profile.toml"
 AIDE_LITE_LOCK_PATH = ROOT / ".aide" / "aide_lite.lock.toml"
+INTEGRATION_PLAN_PATH = ROOT / "docs" / "roadmap" / "aide-to-screensave-integration-plan.md"
 CAPABILITY_BINDINGS = ROOT / "tools" / "project_adapter" / "capability_bindings.json"
 ARTIFACT_PROFILE_AUDIT_ROOTS = ROOT / "tools" / "project_adapter" / "artifact_profile_audit_roots.json"
 GITIGNORE_PATH = ROOT / ".gitignore"
@@ -21,6 +22,7 @@ REQUIRED_PATHS = [
     PILOT_PATH,
     AIDE_LITE_LOCK_PATH,
     BRIDGE_PROFILE_PATH,
+    INTEGRATION_PLAN_PATH,
     ROOT / ".aide" / "work_units" / "truth-proof-baseline.toml",
     ROOT / ".aide" / "evidence_packets" / "README.md",
     ROOT / ".aide" / "guidance" / "codex.md",
@@ -122,9 +124,67 @@ def main() -> int:
     require(bridge.get("mutation_allowed") is False, "ScreenSave bridge must not allow mutation.", errors)
     require(bridge.get("automatic_merge_allowed") is False, "ScreenSave bridge must not allow automatic merge.", errors)
     require(bridge.get("worker_runtime_required") is False, "ScreenSave bridge must not require AIDE worker runtime.", errors)
+    readiness = bridge_profile.get("readiness", {})
+    require(readiness.get("report_only_aide_pilot") == "ready-now", "report-only AIDE pilot must remain ready-now.", errors)
+    require(readiness.get("pinned_aide_lite_profile") == "ready-now", "pinned AIDE Lite profile must remain ready-now.", errors)
+    require(
+        readiness.get("read_only_deterministic_commands") == "screensave-side-admitted",
+        "read-only deterministic commands must be ScreenSave-side admitted.",
+        errors,
+    )
+    require(
+        readiness.get("contained_generated_proof_commands") == "screensave-side-admitted",
+        "contained generated proof commands must be ScreenSave-side admitted.",
+        errors,
+    )
+    require(readiness.get("coding_agent_data_pack_proposal") == "later", "coding-agent data-pack proposal must remain later.", errors)
+    require(
+        readiness.get("source_patch_preview_apply") == "substantially-later",
+        "source patch preview/apply must remain substantially-later.",
+        errors,
+    )
+    require(
+        readiness.get("automatic_product_promotion_or_release") == "deliberately-excluded",
+        "automatic product promotion/release must remain deliberately-excluded.",
+        errors,
+    )
+    require(
+        readiness.get("external_aide_runtime_admission") == "outside-this-repository",
+        "external AIDE runtime admission must stay outside this repository.",
+        errors,
+    )
     profile_names = {item.get("name") for item in bridge_profile.get("capabilities", [])}
     binding_names = {item.get("name") for item in bindings.get("capabilities", [])}
     require(profile_names == binding_names, "ScreenSave bridge profile capabilities must match capability bindings.", errors)
+    forbidden_generic_capabilities = {"screensave.command", "screensave.run", "screensave.exec"}
+    require(
+        not (profile_names | binding_names) & forbidden_generic_capabilities,
+        "ScreenSave bridge must not expose a generic command/run/exec capability.",
+        errors,
+    )
+    capability_status = {item.get("name"): item.get("status") for item in bridge_profile.get("capabilities", [])}
+    for name in {
+        "screensave.project.status",
+        "screensave.project.capabilities",
+        "screensave.catalog.read",
+        "screensave.validation.core",
+    }:
+        require(
+            capability_status.get(name) == "screensave-side-admitted-read-only",
+            f"{name} must remain ScreenSave-side admitted as read-only.",
+            errors,
+        )
+    for name in {
+        "screensave.proof.nocturne.render",
+        "screensave.proof.capture.compare",
+        "screensave.artifact.pe.audit",
+        "screensave.proof.nocturne.exact",
+    }:
+        require(
+            capability_status.get(name) == "screensave-side-admitted-contained-output",
+            f"{name} must remain ScreenSave-side admitted only as contained generated output.",
+            errors,
+        )
     require(
         bindings.get("output_root") == "out/aide/screensave-project-adapter/invocations",
         "ScreenSave bridge capability bindings must use the out/aide output root.",
@@ -138,6 +198,17 @@ def main() -> int:
 
     gitignore = GITIGNORE_PATH.read_text(encoding="utf-8")
     require(".aide.local/" in gitignore, ".gitignore must ignore .aide.local/.", errors)
+
+    integration_plan = INTEGRATION_PLAN_PATH.read_text(encoding="utf-8") if INTEGRATION_PLAN_PATH.exists() else ""
+    for needle in (
+        "ScreenSave does not need to become an AIDE project.",
+        "Deterministic fixed command",
+        "Worker session",
+        "screensave.command",
+        "Automatic product promotion or release",
+        "deliberately-excluded",
+    ):
+        require(needle in integration_plan, f"AIDE integration plan must preserve: {needle}", errors)
 
     scan_runtime_dependency_references(errors)
 

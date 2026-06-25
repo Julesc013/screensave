@@ -16,6 +16,8 @@ scope = [
   "audit",
   "proof",
   "proof includes Nocturne render, exact compare, and artifact-profile PE audit facts",
+  "read-only deterministic commands are ScreenSave-side admitted",
+  "generated proof commands are ScreenSave-side admitted only through contained output roots",
 ]
 non_claims = [
   "not an AIDE worker-host acceptance",
@@ -27,6 +29,7 @@ non_claims = [
 ]
 
 [authority]
+integration_plan = "docs/roadmap/aide-to-screensave-integration-plan.md"
 project_bridge_profile = ".aide/project_bridge_profile.toml"
 capability_bindings = "tools/project_adapter/capability_bindings.json"
 receipt_schemas = "tools/project_adapter/receipt_schemas.json"
