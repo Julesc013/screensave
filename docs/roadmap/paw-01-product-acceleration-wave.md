@@ -95,12 +95,20 @@ Deliverables:
 - profile-driven Proof Bundle v1 composition is present
 - CI runs the Nocturne and Ricochet proof/profile matrix
 - a minimal BenchLab/Workbench shell binds to `sslab` and the generated proof registry
+- private static `libsslab` ABI v0 core now owns context, product, and session execution
+- Nocturne and Ricochet have product adapters inside the `libsslab` tranche
+- Workbench smoke executes both canaries through in-process `libsslab` calls
+- capture, lifecycle, profile, and short-soak receipt operations are implemented in compiled C
 
-Remaining Gate B question:
+Remaining Gate B extraction:
 
-- whether to accept the current runner-backed proof-runtime slice as the
-  `libsslab` v1 foundation or require a deeper compiled library extraction
-  before opening portable v2
+- replace runner-specific compilation paths with one generic runner built over
+  private `libsslab`
+- remove remaining product-specific execution dispatch from `sslab.py` where
+  practical
+- commit Ricochet exact baselines and promote its proof profile from planned to
+  implemented
+- keep portable v2 closed until this Gate B extraction is accepted
 
 Exit:
 

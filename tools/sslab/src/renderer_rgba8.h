@@ -1,9 +1,8 @@
 #ifndef SCREENSAVE_SSLAB_RENDERER_RGBA8_H
 #define SCREENSAVE_SSLAB_RENDERER_RGBA8_H
 
+#include "screensave/renderer_api.h"
 #include "screensave/private/surface_rgba8.h"
-
-typedef struct screensave_renderer_tag screensave_renderer;
 
 struct screensave_renderer_tag {
     screensave_rgba8_surface *surface;

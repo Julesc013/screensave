@@ -108,11 +108,15 @@ implemented = [
   "profile-driven Proof Bundle v1 composition for Ricochet",
   "Windows CI proof-profile matrix for Nocturne and Ricochet",
   "minimal BenchLab/Workbench shell bound to sslab ABI and generated proof profiles",
+  "private static libsslab runtime core with opaque context, product, and session handles",
+  "Nocturne and Ricochet libsslab product adapters",
+  "Workbench smoke execution through libsslab context, product, session, step, and render calls",
+  "compiled capture, lifecycle, profile, and short-soak receipt operations in libsslab ABI v0",
 ]
 remaining = [
-  "fully extracted reusable compiled libsslab implementation instead of runner-specific compilation paths",
+  "replace runner-specific compilation paths with one generic sslab runner built over libsslab",
   "remove remaining product-specific orchestration branches from sslab.py where practical",
-  "decide whether Gate B accepts the current runner-backed library slice or requires deeper C library extraction",
+  "commit Ricochet exact baselines and promote its proof profile from planned to implemented",
   "only then open portable-v2 work",
 ]
 required_boundaries = [

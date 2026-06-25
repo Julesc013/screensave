@@ -4,9 +4,6 @@
 
 #include <stddef.h>
 
-typedef struct screensave_frame_info_tag screensave_frame_info;
-typedef struct screensave_bitmap_view_tag screensave_bitmap_view;
-
 void sslab_rgba8_renderer_init(screensave_renderer *renderer, screensave_rgba8_surface *surface)
 {
     if (renderer == NULL) {
