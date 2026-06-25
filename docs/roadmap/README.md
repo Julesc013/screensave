@@ -18,6 +18,7 @@ Type: explanatory roadmap.
 
 - [ultimate-project-report-and-plan.md](./ultimate-project-report-and-plan.md) is the current full project synthesis, implementation report, and end-state roadmap.
 - [truth-proof-baseline.md](./truth-proof-baseline.md) defines the current post-`U09` state reconciliation milestone and points at `PROJECT_STATE.toml`.
+- [paw-01-product-acceleration-wave.md](./paw-01-product-acceleration-wave.md) defines the next umbrella execution wave after Proof Kernel v0 reconciliation.
 - [aide-to-screensave-integration-plan.md](./aide-to-screensave-integration-plan.md) defines the supporting AIDE bridge plan and fixed-command admission boundary.
 - [mx-program.md](./mx-program.md) preserves the post-PL master control plane and canonical wave sequence as lineage context.
 - [mx-owner-map.md](./mx-owner-map.md), [mx-system-dependency-board.md](./mx-system-dependency-board.md), [mx-wave-gates.md](./mx-wave-gates.md), [mx-shared-promotion-rules.md](./mx-shared-promotion-rules.md), [mx-codex-queue-contract.md](./mx-codex-queue-contract.md), and [mx-proof-surface-map.md](./mx-proof-surface-map.md) preserve the post-PL execution substrate.

@@ -22,8 +22,11 @@ Proof Kernel v0 consists of:
 - minimal software/reference renderer
 - fixed-step headless canary host
 - compiled Nocturne canary runner
-- `sslab` command surface
+- `sslab` render, compare, and lifecycle command surface
 - exact repeatability comparison
+- lifecycle create, resize, fixed-step, render, and destroy evidence
+- GitHub Actions proof-kernel compile, render, compare, lifecycle, and adapter
+  receipt lanes
 - proof-bundle v0 output
 
 The compiled Nocturne canary runner must call the real Nocturne product session and render functions.
@@ -76,16 +79,19 @@ Proof Kernel v0 is intentionally narrow:
 - compiled Nocturne canary runner
 - frame capture
 - exact repeatability comparison
+- lifecycle create, resize, step, render, and destroy evidence
+- CI proof-kernel compile, render, compare, lifecycle, and bounded adapter
+  receipt checks
 - proof-bundle v0
 
 Proof Kernel v1 is the target for:
 
 - Ricochet or another stateful non-field canary
 - tolerant and perceptual comparison gates
-- lifecycle create, destroy, resize, and repeated-run checks
+- repeated lifecycle cycling across multiple products
 - frame-time, resource, handle, and soak evidence
 - renderer comparison
-- CI integration
+- release-grade native Windows build and artifact-proof integration
 
 Proof Kernel v2 is the target for:
 

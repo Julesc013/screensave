@@ -274,20 +274,30 @@ Implemented:
   `5394a14b6622c17bfb10cd5721c08a4c92cdbddfb12f55c954ef1d5f6ef878b2`
 - `sslab render`
 - `sslab compare`
+- `sslab lifecycle`
 - proof-bundle v0 JSON for the canary
-- compiled Nocturne canary runner over the private C proof primitives
-- adapter proof receipts that include artifact-profile PE audit facts
-- validator for deterministic repeatability and exact comparison
+- compiled Nocturne canary runner over the real Nocturne product session and
+  render functions
+- canonical RGBA8 hash source with PPM as a review derivative
+- clean-source committed baseline provenance
+- implementation source digests in the committed proof bundle
+- lifecycle create, resize, step, render, and destroy evidence
+- adapter proof receipts that include nonempty artifact-profile PE audit JSON
+  facts
+- validator for deterministic repeatability, exact comparison, lifecycle, and
+  baseline provenance
+- GitHub Actions proof-kernel compile, render, compare, lifecycle, and bounded
+  adapter receipt lanes
 
 Caveats:
 
-- `sslab.py` remains the current proof CLI; the compiled canary validates the
-  private C primitives but is not yet a reusable `libsslab`
+- `sslab.py` remains the current proof CLI and compiles the Nocturne-specific
+  product-session runner per invocation; this is not yet a reusable `libsslab`
 - Nocturne is the only proof-kernel product canary
 - tolerant/perceptual comparison classes exist as report helpers, not accepted
   validation gates
-- lifecycle, resize, soak, resource, and performance proof are not yet in
-  Proof Kernel v0
+- soak, resource, and performance proof are not yet in Proof Kernel v0
+- native Windows release builds are not yet produced in CI
 
 ### Project Adapter
 
@@ -407,10 +417,10 @@ surface.
 | `validate` | implemented by project adapter | broader validation ladder |
 | `render` | implemented for Nocturne canary | product-generic headless rendering |
 | `compare` | implemented for PPM captures | exact, tolerant, perceptual, observational proof classes |
-| `audit` | implemented for PE facts | artifact-profile aware audit gates |
+| `audit` | implemented for structured non-vacuous PE facts | exact artifact-manifest aware audit gates |
 | `proof` | implemented for Nocturne exact canary | full proof-bundle exporter |
 | `build` | not yet implemented | profile-aware build command |
-| `lifecycle` | not yet implemented | create/destroy/resize/suspend/resume proof |
+| `lifecycle` | implemented for Nocturne proof-kernel canary | product-generic lifecycle proof |
 | `profile` | not yet implemented | frame-time/resource/handle metrics |
 | `package` | not yet implemented | Core, Manager, Workbench, SDK, Preservation packaging |
 
@@ -440,15 +450,14 @@ run arbitrary ScreenSave commands or choose arbitrary output paths.
 ### Proof Gaps
 
 - no general headless runner library
-- no lifecycle test command
 - no performance percentile metrics
 - no resource/handle monitoring
 - no soak runner
-- no artifact-profile-aware PE gate beyond fact reporting
+- no exact artifact-set manifest gate for built PE artifacts
 - no PNG/raw-frame formal capture profile beyond current PPM canary
 - no visual proof bundles for all savers
 - no cross-renderer equivalence policy
-- no CI integration for proof bundles
+- no native Windows artifact build/proof lane in CI
 
 ### Manager And Workbench Gaps
 
@@ -547,17 +556,19 @@ Done:
 - `sslab render`
 - `sslab compare`
 - deterministic PPM capture and hash
-- compiled C canary over private proof primitives
-- artifact-profile PE audit facts in adapter proof receipts
+- compiled C canary over the real Nocturne product session and render path
+- canonical RGBA8 capture hash
+- lifecycle create, resize, step, render, and destroy proof
+- non-vacuous artifact-profile PE audit JSON facts in adapter proof receipts
 - adapter `render`, `compare`, and `proof`
+- CI proof-kernel compile, render, compare, lifecycle, and adapter receipt lanes
 
 Remaining:
 
 - extract a reusable compiled `libsslab` path from the canary-grade primitives
 - decide final v0 capture format policy: PPM, raw RGBA, PNG, or multiple
-- add basic lifecycle smoke for Nocturne without widening v0 too far
 - update proof-bundle schema from draft to implemented v0 if needed
-- make CI run the v0 proof command
+- add release-grade native Windows artifact build/proof CI
 
 Exit:
 
@@ -575,12 +586,12 @@ Required:
 
 - Ricochet or equivalent stateful non-field saver headless canary
 - resize behavior
-- create/destroy lifecycle cycling
+- create/destroy lifecycle cycling across repeated runs
 - fixed-step replay
 - frame-time statistics
 - resource and handle metrics
 - tolerant/perceptual comparison admission rules
-- CI integration
+- reusable compiled proof library used by CI and Workbench
 
 Exit:
 
@@ -857,14 +868,19 @@ Do not:
 
 The next bounded implementation packets should be:
 
-1. `proof: add minimal lifecycle smoke for Nocturne`
-2. `proof: extract reusable libsslab boundary from canary-grade primitives`
-3. `proof: add Ricochet fixed-step canary`
-4. `contracts: define first product-specific authoring schema slice`
-5. `packc: introduce safe pack compiler skeleton`
-6. `visual-intent: add resolver prototype that emits bounded candidates`
-7. `workbench: extract libsslab boundary`
-8. `aide: add EvidencePacket export from project adapter receipts`
+1. `state: reconcile achieved Proof Kernel v0 truth`
+2. `proof: verify committed implementation digests`
+3. `catalog: define exact artifact sets and proof profiles`
+4. `build: add fixed current-Windows build controller`
+5. `ci: build audit and prove Win32 Release`
+6. `proof: extract reusable libsslab boundary from canary-grade primitives`
+7. `proof: add Ricochet fixed-step canary`
+8. `contracts: introduce portable v2 semantic seam after Ricochet`
+9. `plasma: define v2 specification and migration`
+10. `packc: introduce safe pack compiler skeleton`
+11. `visual-intent: add resolver prototype that emits bounded candidates`
+12. `workbench: extract libsslab boundary`
+13. `aide: add EvidencePacket export from project adapter receipts`
 
 Each packet should state:
 

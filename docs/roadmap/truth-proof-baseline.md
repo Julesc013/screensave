@@ -35,6 +35,7 @@ It records:
 - current Plasma stable and experimental surfaces
 - compatibility evidence policy
 - build-profile posture
+- achieved Proof Kernel v0 scope
 - validator entry points
 
 The product catalog entry point is [`../../catalog/products.toml`](../../catalog/products.toml).
@@ -74,13 +75,17 @@ they no longer answer the live execution question after `U09`.
 
 ## Immediate Proof Surface
 
-The first captured evidence for this milestone is:
+The current captured evidence for this milestone is:
 
 - [`../../validation/captures/truth-proof-baseline/README.md`](../../validation/captures/truth-proof-baseline/README.md)
 - [`../../validation/captures/truth-proof-baseline/pe-audit-current.txt`](../../validation/captures/truth-proof-baseline/pe-audit-current.txt)
+- [`../../validation/captures/proof-kernel-v0/nocturne/proof.json`](../../validation/captures/proof-kernel-v0/nocturne/proof.json)
 
-That audit is intentionally allowed to record violations.
-The point is to make artifact truth visible before support claims are widened.
+The truth-baseline PE audit is intentionally allowed to record violations.
+The proof-kernel Nocturne evidence is deterministic visual evidence, not
+compatibility certification. It now records the compiled product-session runner,
+canonical RGBA8 hash source, clean baseline provenance, implementation source
+digests, and lifecycle evidence through the same proof-kernel surface.
 
 ## Current Exit Condition
 
@@ -90,6 +95,8 @@ The active exit command is:
 python tools\scripts\check_project_state.py --summary
 python tools\scripts\check_catalog_profiles.py
 python tools\scripts\check_aide_pilot.py
+python tools\scripts\check_proof_kernel.py
+python tools\scripts\check_project_adapter.py
 ```
 
 That command must be able to report what is released, what is current in
@@ -98,7 +105,7 @@ governs public claims.
 
 ## Scope Boundary
 
-This milestone does not build Workbench, refactor the semantic core, rewrite
-Plasma, or change runtime behavior.
+This milestone does not build Workbench, refactor the portable semantic core,
+rewrite Plasma, ship a new Core release, or certify broad OS compatibility.
 
 It creates the authority and proof spine those later changes must use.

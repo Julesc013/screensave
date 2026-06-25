@@ -43,10 +43,12 @@ python tools\project_adapter\screensave_project.py validate
 python tools\project_adapter\screensave_project.py proof
 ```
 
-The next implementation track is `ScreenSave Proof Kernel v0`: a private RGBA8
-surface, minimal software/reference renderer, fixed-step headless Nocturne
-canary, and proof-bundle output. It is ScreenSave-owned; AIDE may consume its
-evidence but must not define its product truth.
+The active implementation track is `ScreenSave Proof Kernel v0`: a private
+RGBA8 surface, minimal software/reference renderer, fixed-step headless
+Nocturne canary, compiled product-session proof path, canonical RGBA8 capture
+hash, exact comparison, lifecycle evidence, non-vacuous PE audit facts, and CI
+proof-kernel lanes. It is ScreenSave-owned; AIDE may consume its evidence but
+must not define its product truth.
 
 ## Download ScreenSave Core
 
