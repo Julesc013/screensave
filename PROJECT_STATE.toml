@@ -113,6 +113,7 @@ implemented = [
   "Workbench smoke execution through libsslab context, product, session, step, and render calls",
   "compiled capture, lifecycle, profile, and short-soak receipt operations in libsslab ABI v0",
   "generic sslab_runner proof command built over one private static libsslab artifact",
+  "CI validation for the generic libsslab runner proof path",
   "committed Ricochet exact baselines for frames 0, 4, 8, and 32",
   "Ricochet proof profile promoted to implemented with baseline capture and proof references",
 ]

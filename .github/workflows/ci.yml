@@ -71,6 +71,9 @@ jobs:
       - name: Validate Proof Kernel v0
         run: python tools/scripts/check_proof_kernel.py
 
+      - name: Validate generic libsslab runner
+        run: python tools/scripts/check_sslab_runner.py
+
       - name: Render CI Nocturne proof capture
         run: >
           python tools/sslab/sslab.py render
