@@ -166,6 +166,15 @@ jobs:
       - name: Set up MSBuild
         uses: microsoft/setup-msbuild@v2
 
+      - name: Set up proof compiler
+        uses: msys2/setup-msys2@v2
+        with:
+          update: true
+          install: mingw-w64-x86_64-gcc
+
+      - name: Add proof compiler to PATH
+        run: echo "C:\msys64\mingw64\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
       - name: Validate build controller
         run: python tools\scripts\check_build_controller.py
 
@@ -181,6 +190,21 @@ jobs:
           --profile windows-current-tools
           --output-dir out\ci\windows-current-tools
 
+      - name: Run Windows adapter proof
+        run: |
+          New-Item -ItemType Directory -Force out\ci\windows-current-proof | Out-Null
+          python tools\project_adapter\screensave_project.py proof --invocation-id windows-current-nocturne > out\ci\windows-current-proof\adapter-proof-receipt.json
+
+      - name: Normalize Windows Proof Bundle v1
+        run: >
+          python tools\proofbundle\proofbundle.py normalize
+          --proof out\aide\screensave-project-adapter\invocations\proof\windows-current-nocturne\proof.json
+          --comparison out\aide\screensave-project-adapter\invocations\proof\windows-current-nocturne\comparison.json
+          --pe-audit-json out\aide\screensave-project-adapter\invocations\proof\windows-current-nocturne\pe-audit.json
+          --build-receipt out\ci\windows-current-x86\build-receipt.json
+          --adapter-receipt out\aide\screensave-project-adapter\invocations\proof\windows-current-nocturne\adapter-proof.json
+          --output out\ci\windows-current-proof\proof-bundle-v1.json
+
       - name: Upload native Windows build evidence
         if: always()
         uses: actions/upload-artifact@v4
@@ -189,5 +213,7 @@ jobs:
           path: |
             out\ci\windows-current-x86
             out\ci\windows-current-tools
+            out\ci\windows-current-proof
+            out\aide\screensave-project-adapter\invocations\proof\windows-current-nocturne
             out\msvc\vs2022\Release
           if-no-files-found: error
