@@ -11,6 +11,7 @@ release_candidate = "none"
 queue_authority = "historical-mx-queue-superseded"
 product_catalog = "catalog/products.toml"
 artifact_profiles = "catalog/artifact_profiles.toml"
+generated_catalog_inventory = "catalog/generated/products_inventory.json"
 version_manifest = "VERSION.toml"
 aide_pilot = ".aide/pilot.toml"
 
@@ -60,6 +61,16 @@ non_goals = [
   "AIDE autonomous merge",
   "new compatibility certification",
 ]
+
+[catalog]
+schema_version = 1
+source = "catalog/products.toml"
+artifact_profiles = "catalog/artifact_profiles.toml"
+generator = "tools/cataloggen/cataloggen.py"
+generated_inventory = "catalog/generated/products_inventory.json"
+generated_sources = "catalog/generated/products_sources.mk"
+generated_table = "catalog/generated/products_table.md"
+policy = "reviewed TOML authority with committed deterministic generated outputs"
 
 [queues]
 status = "historical-superseded"
@@ -128,6 +139,7 @@ docs = "tools/scripts/check_docs_basics.py"
 build = "tools/scripts/check_build_layout.py"
 codex = "tools/scripts/check_codex_config.py"
 catalog = "tools/scripts/check_catalog_profiles.py"
+catalog_generated = "tools/scripts/check_catalog_generated.py"
 aide = "tools/scripts/check_aide_pilot.py"
 contracts = "tools/scripts/check_contracts.py"
 proof_kernel = "tools/scripts/check_proof_kernel.py"

@@ -12,6 +12,9 @@ The catalog is the source of truth for:
 `products.toml` records product identity and source/catalog metadata.
 `artifact_profiles.toml` records the artifact lanes that may receive compatibility evidence.
 
-Generated files may be added later, but the checked-in catalog remains the reviewed authority.
+`catalog/generated/` contains deterministic outputs produced by
+`tools/cataloggen/cataloggen.py`. These generated files are committed so legacy
+and preservation-oriented lanes can consume inventory data without requiring
+Python at build time.
 
 Type: repository control data.

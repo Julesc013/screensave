@@ -1,0 +1,1459 @@
+{
+  "artifact_profile_count": 4,
+  "artifact_profiles": [
+    {
+      "artifact_extension": ".scr",
+      "evidence_status": "targeted",
+      "host": "win32_scr_ansi",
+      "key": "windows_preservation_x86_ansi",
+      "machine": "x86",
+      "name": "Windows Preservation x86 ANSI",
+      "product_classes": [
+        "saver"
+      ],
+      "public_claim": "targeted"
+    },
+    {
+      "artifact_extension": ".scr",
+      "evidence_status": "targeted",
+      "host": "win32_scr_ansi",
+      "key": "windows_current_x86_scr",
+      "machine": "x86",
+      "name": "Windows Current x86 Saver",
+      "product_classes": [
+        "saver"
+      ],
+      "public_claim": "targeted"
+    },
+    {
+      "artifact_extension": ".exe",
+      "evidence_status": "targeted",
+      "host": "win32_gui_app",
+      "key": "windows_current_tool",
+      "machine": "x86",
+      "name": "Windows Current Tool",
+      "product_classes": [
+        "app"
+      ],
+      "public_claim": "targeted"
+    },
+    {
+      "artifact_extension": "",
+      "evidence_status": "targeted",
+      "host": "source_only",
+      "key": "source_sdk",
+      "machine": "source",
+      "name": "Source SDK",
+      "product_classes": [
+        "sdk"
+      ],
+      "public_claim": "targeted"
+    }
+  ],
+  "generated_by": "tools/cataloggen/cataloggen.py",
+  "product_count": 22,
+  "products": [
+    {
+      "artifact_profiles": [
+        "windows_preservation_x86_ansi",
+        "windows_current_x86_scr"
+      ],
+      "compatibility_status": "targeted",
+      "family": "quiet-utility-ambient",
+      "files": {
+        "headers": [
+          "products/savers/nocturne/src/nocturne_internal.h",
+          "products/savers/nocturne/src/nocturne_resource.h"
+        ],
+        "presets": [
+          "products/savers/nocturne/presets/defaults.ini",
+          "products/savers/nocturne/presets/museum.ini",
+          "products/savers/nocturne/presets/night_modes.ini"
+        ],
+        "resources": [
+          "products/savers/nocturne/src/nocturne_config.rc",
+          "products/savers/nocturne/src/nocturne_version.rc"
+        ],
+        "sources": [
+          "products/savers/nocturne/src/nocturne_config.c",
+          "products/savers/nocturne/src/nocturne_entry.c",
+          "products/savers/nocturne/src/nocturne_module.c",
+          "products/savers/nocturne/src/nocturne_presets.c",
+          "products/savers/nocturne/src/nocturne_render.c",
+          "products/savers/nocturne/src/nocturne_sim.c",
+          "products/savers/nocturne/src/nocturne_themes.c"
+        ],
+        "tests": [
+          "products/savers/nocturne/tests/README.md",
+          "products/savers/nocturne/tests/smoke.c"
+        ]
+      },
+      "key": "nocturne",
+      "kind": "saver",
+      "maturity": "c16-core",
+      "name": "Nocturne",
+      "reference_path_required": true,
+      "release_channel": "core",
+      "required_presets": [
+        "defaults.ini",
+        "museum.ini",
+        "night_modes.ini"
+      ],
+      "role": "",
+      "root": "products/savers/nocturne",
+      "routing": {
+        "minimum_kind": "gdi",
+        "preferred_kind": "gl11",
+        "quality_class": "safe"
+      },
+      "semantic_contract": "product-local-ir",
+      "source_units": [
+        "config",
+        "module",
+        "presets",
+        "render",
+        "sim",
+        "themes"
+      ]
+    },
+    {
+      "artifact_profiles": [
+        "windows_preservation_x86_ansi",
+        "windows_current_x86_scr"
+      ],
+      "compatibility_status": "targeted",
+      "family": "motion",
+      "files": {
+        "headers": [
+          "products/savers/ricochet/src/ricochet_internal.h",
+          "products/savers/ricochet/src/ricochet_resource.h"
+        ],
+        "presets": [
+          "products/savers/ricochet/presets/defaults.ini",
+          "products/savers/ricochet/presets/themed.ini"
+        ],
+        "resources": [
+          "products/savers/ricochet/src/ricochet_config.rc",
+          "products/savers/ricochet/src/ricochet_version.rc"
+        ],
+        "sources": [
+          "products/savers/ricochet/src/ricochet_config.c",
+          "products/savers/ricochet/src/ricochet_entry.c",
+          "products/savers/ricochet/src/ricochet_module.c",
+          "products/savers/ricochet/src/ricochet_presets.c",
+          "products/savers/ricochet/src/ricochet_render.c",
+          "products/savers/ricochet/src/ricochet_sim.c",
+          "products/savers/ricochet/src/ricochet_themes.c"
+        ],
+        "tests": [
+          "products/savers/ricochet/tests/README.md",
+          "products/savers/ricochet/tests/smoke.c"
+        ]
+      },
+      "key": "ricochet",
+      "kind": "saver",
+      "maturity": "c16-core",
+      "name": "Ricochet",
+      "reference_path_required": true,
+      "release_channel": "core",
+      "required_presets": [
+        "defaults.ini",
+        "themed.ini"
+      ],
+      "role": "",
+      "root": "products/savers/ricochet",
+      "routing": {
+        "minimum_kind": "gdi",
+        "preferred_kind": "gl11",
+        "quality_class": "safe"
+      },
+      "semantic_contract": "product-local-ir",
+      "source_units": [
+        "config",
+        "module",
+        "presets",
+        "render",
+        "sim",
+        "themes"
+      ]
+    },
+    {
+      "artifact_profiles": [
+        "windows_preservation_x86_ansi",
+        "windows_current_x86_scr"
+      ],
+      "compatibility_status": "targeted",
+      "family": "motion",
+      "files": {
+        "headers": [
+          "products/savers/deepfield/src/deepfield_internal.h",
+          "products/savers/deepfield/src/deepfield_resource.h"
+        ],
+        "presets": [
+          "products/savers/deepfield/presets/defaults.ini",
+          "products/savers/deepfield/presets/performance.ini",
+          "products/savers/deepfield/presets/themed.ini"
+        ],
+        "resources": [
+          "products/savers/deepfield/src/deepfield_config.rc",
+          "products/savers/deepfield/src/deepfield_version.rc"
+        ],
+        "sources": [
+          "products/savers/deepfield/src/deepfield_config.c",
+          "products/savers/deepfield/src/deepfield_entry.c",
+          "products/savers/deepfield/src/deepfield_module.c",
+          "products/savers/deepfield/src/deepfield_presets.c",
+          "products/savers/deepfield/src/deepfield_render.c",
+          "products/savers/deepfield/src/deepfield_sim.c",
+          "products/savers/deepfield/src/deepfield_themes.c"
+        ],
+        "tests": [
+          "products/savers/deepfield/tests/README.md",
+          "products/savers/deepfield/tests/smoke.c"
+        ]
+      },
+      "key": "deepfield",
+      "kind": "saver",
+      "maturity": "c16-core",
+      "name": "Deepfield",
+      "reference_path_required": true,
+      "release_channel": "core",
+      "required_presets": [
+        "defaults.ini",
+        "themed.ini",
+        "performance.ini"
+      ],
+      "role": "",
+      "root": "products/savers/deepfield",
+      "routing": {
+        "minimum_kind": "gdi",
+        "preferred_kind": "gl11",
+        "quality_class": "safe"
+      },
+      "semantic_contract": "product-local-ir",
+      "source_units": [
+        "config",
+        "module",
+        "presets",
+        "render",
+        "sim",
+        "themes"
+      ]
+    },
+    {
+      "artifact_profiles": [
+        "windows_preservation_x86_ansi",
+        "windows_current_x86_scr"
+      ],
+      "compatibility_status": "targeted",
+      "family": "framebuffer-vector",
+      "files": {
+        "headers": [
+          "products/savers/plasma/src/plasma_advanced.h",
+          "products/savers/plasma/src/plasma_authoring.h",
+          "products/savers/plasma/src/plasma_benchlab.h",
+          "products/savers/plasma/src/plasma_classic.h",
+          "products/savers/plasma/src/plasma_content.h",
+          "products/savers/plasma/src/plasma_internal.h",
+          "products/savers/plasma/src/plasma_modern.h",
+          "products/savers/plasma/src/plasma_output.h",
+          "products/savers/plasma/src/plasma_plan.h",
+          "products/savers/plasma/src/plasma_premium.h",
+          "products/savers/plasma/src/plasma_presentation.h",
+          "products/savers/plasma/src/plasma_resource.h",
+          "products/savers/plasma/src/plasma_selection.h",
+          "products/savers/plasma/src/plasma_settings.h",
+          "products/savers/plasma/src/plasma_transition.h",
+          "products/savers/plasma/src/plasma_treatment.h",
+          "products/savers/plasma/src/plasma_validate.h"
+        ],
+        "presets": [
+          "products/savers/plasma/presets/defaults.ini",
+          "products/savers/plasma/presets/performance.ini",
+          "products/savers/plasma/presets/themed.ini"
+        ],
+        "resources": [
+          "products/savers/plasma/src/plasma_config.rc",
+          "products/savers/plasma/src/plasma_version.rc"
+        ],
+        "sources": [
+          "products/savers/plasma/src/plasma_advanced.c",
+          "products/savers/plasma/src/plasma_authoring.c",
+          "products/savers/plasma/src/plasma_benchlab.c",
+          "products/savers/plasma/src/plasma_config.c",
+          "products/savers/plasma/src/plasma_content.c",
+          "products/savers/plasma/src/plasma_entry.c",
+          "products/savers/plasma/src/plasma_modern.c",
+          "products/savers/plasma/src/plasma_module.c",
+          "products/savers/plasma/src/plasma_output.c",
+          "products/savers/plasma/src/plasma_plan.c",
+          "products/savers/plasma/src/plasma_premium.c",
+          "products/savers/plasma/src/plasma_presentation.c",
+          "products/savers/plasma/src/plasma_presets.c",
+          "products/savers/plasma/src/plasma_render.c",
+          "products/savers/plasma/src/plasma_selection.c",
+          "products/savers/plasma/src/plasma_settings.c",
+          "products/savers/plasma/src/plasma_sim.c",
+          "products/savers/plasma/src/plasma_themes.c",
+          "products/savers/plasma/src/plasma_transition.c",
+          "products/savers/plasma/src/plasma_treatment.c",
+          "products/savers/plasma/src/plasma_validate.c"
+        ],
+        "tests": [
+          "products/savers/plasma/tests/README.md",
+          "products/savers/plasma/tests/pl05-lower-band-proof.md",
+          "products/savers/plasma/tests/pl06-content-proof.md",
+          "products/savers/plasma/tests/pl07-advanced-proof.md",
+          "products/savers/plasma/tests/pl08-modern-proof.md",
+          "products/savers/plasma/tests/pl09-premium-proof.md",
+          "products/savers/plasma/tests/pl10-transition-proof.md",
+          "products/savers/plasma/tests/pl11-settings-proof.md",
+          "products/savers/plasma/tests/pl12-benchlab-proof.md",
+          "products/savers/plasma/tests/pl13-soak-and-proof.md",
+          "products/savers/plasma/tests/pl13-transition-validation.md",
+          "products/savers/plasma/tests/px10-hardware-proof.md",
+          "products/savers/plasma/tests/px10-soak-proof.md",
+          "products/savers/plasma/tests/px11-promotion-review-proof.md",
+          "products/savers/plasma/tests/px11-transition-proof.md",
+          "products/savers/plasma/tests/px20-authoring-substrate-proof.md",
+          "products/savers/plasma/tests/px20-content-validation-proof.md",
+          "products/savers/plasma/tests/px20-lab-shell-proof.md",
+          "products/savers/plasma/tests/px20-selection-foundation-proof.md",
+          "products/savers/plasma/tests/px30-output-proof.md",
+          "products/savers/plasma/tests/px30-treatment-proof.md",
+          "products/savers/plasma/tests/px31-field-families-i-proof.md",
+          "products/savers/plasma/tests/px31-glyph-proof.md",
+          "products/savers/plasma/tests/px32-dimensional-proof.md",
+          "products/savers/plasma/tests/px32-field-families-ii-proof.md",
+          "products/savers/plasma/tests/px40-authoring-proof.md",
+          "products/savers/plasma/tests/px40-ops-tools-proof.md",
+          "products/savers/plasma/tests/px41-curation-proof.md",
+          "products/savers/plasma/tests/px41-integration-proof.md",
+          "products/savers/plasma/tests/px50-recut-proof.md",
+          "products/savers/plasma/tests/smoke.c",
+          "products/savers/plasma/tests/u00-diagnostic-notes.md",
+          "products/savers/plasma/tests/u01-runtime-proof.md",
+          "products/savers/plasma/tests/u02-settings-proof.md",
+          "products/savers/plasma/tests/u03-ui-proof.md",
+          "products/savers/plasma/tests/u04-visual-grammar-proof.md",
+          "products/savers/plasma/tests/u05-simplification-proof.md",
+          "products/savers/plasma/tests/u06-retuning-proof.md",
+          "products/savers/plasma/tests/u07-combination-proof.md",
+          "products/savers/plasma/tests/u07-diff-and-duplicate-proof.md",
+          "products/savers/plasma/tests/u07-settings-influence-proof.md",
+          "products/savers/plasma/tests/u08-qa-proof.md",
+          "products/savers/plasma/tests/u09-recut-proof.md"
+        ]
+      },
+      "key": "plasma",
+      "kind": "saver",
+      "maturity": "u09-go-with-caveats",
+      "name": "Plasma",
+      "reference_path_required": true,
+      "release_channel": "core",
+      "required_presets": [
+        "defaults.ini",
+        "themed.ini",
+        "performance.ini"
+      ],
+      "role": "",
+      "root": "products/savers/plasma",
+      "routing": {
+        "minimum_kind": "gdi",
+        "preferred_kind": "gl11",
+        "quality_class": "safe"
+      },
+      "semantic_contract": "product-local-ir",
+      "source_units": [
+        "advanced",
+        "authoring",
+        "benchlab",
+        "config",
+        "content",
+        "modern",
+        "module",
+        "output",
+        "plan",
+        "premium",
+        "presentation",
+        "presets",
+        "render",
+        "selection",
+        "settings",
+        "sim",
+        "themes",
+        "transition",
+        "treatment",
+        "validate"
+      ]
+    },
+    {
+      "artifact_profiles": [
+        "windows_preservation_x86_ansi",
+        "windows_current_x86_scr"
+      ],
+      "compatibility_status": "targeted",
+      "family": "framebuffer-vector",
+      "files": {
+        "headers": [
+          "products/savers/phosphor/src/phosphor_internal.h",
+          "products/savers/phosphor/src/phosphor_resource.h"
+        ],
+        "presets": [
+          "products/savers/phosphor/presets/defaults.ini",
+          "products/savers/phosphor/presets/performance.ini",
+          "products/savers/phosphor/presets/themed.ini"
+        ],
+        "resources": [
+          "products/savers/phosphor/src/phosphor_config.rc",
+          "products/savers/phosphor/src/phosphor_version.rc"
+        ],
+        "sources": [
+          "products/savers/phosphor/src/phosphor_config.c",
+          "products/savers/phosphor/src/phosphor_entry.c",
+          "products/savers/phosphor/src/phosphor_module.c",
+          "products/savers/phosphor/src/phosphor_presets.c",
+          "products/savers/phosphor/src/phosphor_render.c",
+          "products/savers/phosphor/src/phosphor_sim.c",
+          "products/savers/phosphor/src/phosphor_themes.c"
+        ],
+        "tests": [
+          "products/savers/phosphor/tests/README.md",
+          "products/savers/phosphor/tests/smoke.c"
+        ]
+      },
+      "key": "phosphor",
+      "kind": "saver",
+      "maturity": "c16-core",
+      "name": "Phosphor",
+      "reference_path_required": true,
+      "release_channel": "core",
+      "required_presets": [
+        "defaults.ini",
+        "themed.ini",
+        "performance.ini"
+      ],
+      "role": "",
+      "root": "products/savers/phosphor",
+      "routing": {
+        "minimum_kind": "gdi",
+        "preferred_kind": "gl11",
+        "quality_class": "safe"
+      },
+      "semantic_contract": "product-local-ir",
+      "source_units": [
+        "config",
+        "module",
+        "presets",
+        "render",
+        "sim",
+        "themes"
+      ]
+    },
+    {
+      "artifact_profiles": [
+        "windows_preservation_x86_ansi",
+        "windows_current_x86_scr"
+      ],
+      "compatibility_status": "targeted",
+      "family": "grid-simulation",
+      "files": {
+        "headers": [
+          "products/savers/pipeworks/src/pipeworks_internal.h",
+          "products/savers/pipeworks/src/pipeworks_resource.h"
+        ],
+        "presets": [
+          "products/savers/pipeworks/presets/defaults.ini",
+          "products/savers/pipeworks/presets/performance.ini",
+          "products/savers/pipeworks/presets/themed.ini"
+        ],
+        "resources": [
+          "products/savers/pipeworks/src/pipeworks_config.rc",
+          "products/savers/pipeworks/src/pipeworks_version.rc"
+        ],
+        "sources": [
+          "products/savers/pipeworks/src/pipeworks_config.c",
+          "products/savers/pipeworks/src/pipeworks_entry.c",
+          "products/savers/pipeworks/src/pipeworks_module.c",
+          "products/savers/pipeworks/src/pipeworks_presets.c",
+          "products/savers/pipeworks/src/pipeworks_render.c",
+          "products/savers/pipeworks/src/pipeworks_sim.c",
+          "products/savers/pipeworks/src/pipeworks_themes.c"
+        ],
+        "tests": [
+          "products/savers/pipeworks/tests/README.md",
+          "products/savers/pipeworks/tests/smoke.c"
+        ]
+      },
+      "key": "pipeworks",
+      "kind": "saver",
+      "maturity": "c16-core",
+      "name": "Pipeworks",
+      "reference_path_required": true,
+      "release_channel": "core",
+      "required_presets": [
+        "defaults.ini",
+        "themed.ini",
+        "performance.ini"
+      ],
+      "role": "",
+      "root": "products/savers/pipeworks",
+      "routing": {
+        "minimum_kind": "gdi",
+        "preferred_kind": "gl11",
+        "quality_class": "safe"
+      },
+      "semantic_contract": "product-local-ir",
+      "source_units": [
+        "config",
+        "module",
+        "presets",
+        "render",
+        "sim",
+        "themes"
+      ]
+    },
+    {
+      "artifact_profiles": [
+        "windows_preservation_x86_ansi",
+        "windows_current_x86_scr"
+      ],
+      "compatibility_status": "targeted",
+      "family": "grid-simulation",
+      "files": {
+        "headers": [
+          "products/savers/lifeforms/src/lifeforms_internal.h",
+          "products/savers/lifeforms/src/lifeforms_resource.h"
+        ],
+        "presets": [
+          "products/savers/lifeforms/presets/defaults.ini",
+          "products/savers/lifeforms/presets/performance.ini",
+          "products/savers/lifeforms/presets/themed.ini"
+        ],
+        "resources": [
+          "products/savers/lifeforms/src/lifeforms_config.rc",
+          "products/savers/lifeforms/src/lifeforms_version.rc"
+        ],
+        "sources": [
+          "products/savers/lifeforms/src/lifeforms_config.c",
+          "products/savers/lifeforms/src/lifeforms_entry.c",
+          "products/savers/lifeforms/src/lifeforms_module.c",
+          "products/savers/lifeforms/src/lifeforms_presets.c",
+          "products/savers/lifeforms/src/lifeforms_render.c",
+          "products/savers/lifeforms/src/lifeforms_sim.c",
+          "products/savers/lifeforms/src/lifeforms_themes.c"
+        ],
+        "tests": [
+          "products/savers/lifeforms/tests/README.md",
+          "products/savers/lifeforms/tests/smoke.c"
+        ]
+      },
+      "key": "lifeforms",
+      "kind": "saver",
+      "maturity": "c16-core",
+      "name": "Lifeforms",
+      "reference_path_required": true,
+      "release_channel": "core",
+      "required_presets": [
+        "defaults.ini",
+        "themed.ini",
+        "performance.ini"
+      ],
+      "role": "",
+      "root": "products/savers/lifeforms",
+      "routing": {
+        "minimum_kind": "gdi",
+        "preferred_kind": "gl11",
+        "quality_class": "safe"
+      },
+      "semantic_contract": "product-local-ir",
+      "source_units": [
+        "config",
+        "module",
+        "presets",
+        "render",
+        "sim",
+        "themes"
+      ]
+    },
+    {
+      "artifact_profiles": [
+        "windows_preservation_x86_ansi",
+        "windows_current_x86_scr"
+      ],
+      "compatibility_status": "targeted",
+      "family": "systems-ambient",
+      "files": {
+        "headers": [
+          "products/savers/signals/src/signals_internal.h",
+          "products/savers/signals/src/signals_resource.h"
+        ],
+        "presets": [
+          "products/savers/signals/presets/defaults.ini",
+          "products/savers/signals/presets/performance.ini",
+          "products/savers/signals/presets/themed.ini"
+        ],
+        "resources": [
+          "products/savers/signals/src/signals_config.rc",
+          "products/savers/signals/src/signals_version.rc"
+        ],
+        "sources": [
+          "products/savers/signals/src/signals_config.c",
+          "products/savers/signals/src/signals_entry.c",
+          "products/savers/signals/src/signals_module.c",
+          "products/savers/signals/src/signals_presets.c",
+          "products/savers/signals/src/signals_render.c",
+          "products/savers/signals/src/signals_sim.c",
+          "products/savers/signals/src/signals_themes.c"
+        ],
+        "tests": [
+          "products/savers/signals/tests/README.md",
+          "products/savers/signals/tests/smoke.c"
+        ]
+      },
+      "key": "signals",
+      "kind": "saver",
+      "maturity": "c16-core",
+      "name": "Signals",
+      "reference_path_required": true,
+      "release_channel": "core",
+      "required_presets": [
+        "defaults.ini",
+        "themed.ini",
+        "performance.ini"
+      ],
+      "role": "",
+      "root": "products/savers/signals",
+      "routing": {
+        "minimum_kind": "gdi",
+        "preferred_kind": "gl11",
+        "quality_class": "safe"
+      },
+      "semantic_contract": "product-local-ir",
+      "source_units": [
+        "config",
+        "module",
+        "presets",
+        "render",
+        "sim",
+        "themes"
+      ]
+    },
+    {
+      "artifact_profiles": [
+        "windows_preservation_x86_ansi",
+        "windows_current_x86_scr"
+      ],
+      "compatibility_status": "targeted",
+      "family": "systems-ambient",
+      "files": {
+        "headers": [
+          "products/savers/mechanize/src/mechanize_internal.h",
+          "products/savers/mechanize/src/mechanize_resource.h"
+        ],
+        "presets": [
+          "products/savers/mechanize/presets/defaults.ini",
+          "products/savers/mechanize/presets/performance.ini",
+          "products/savers/mechanize/presets/themed.ini"
+        ],
+        "resources": [
+          "products/savers/mechanize/src/mechanize_config.rc",
+          "products/savers/mechanize/src/mechanize_version.rc"
+        ],
+        "sources": [
+          "products/savers/mechanize/src/mechanize_config.c",
+          "products/savers/mechanize/src/mechanize_entry.c",
+          "products/savers/mechanize/src/mechanize_module.c",
+          "products/savers/mechanize/src/mechanize_presets.c",
+          "products/savers/mechanize/src/mechanize_render.c",
+          "products/savers/mechanize/src/mechanize_sim.c",
+          "products/savers/mechanize/src/mechanize_themes.c"
+        ],
+        "tests": [
+          "products/savers/mechanize/tests/README.md",
+          "products/savers/mechanize/tests/smoke.c"
+        ]
+      },
+      "key": "mechanize",
+      "kind": "saver",
+      "maturity": "c16-core",
+      "name": "Mechanize",
+      "reference_path_required": true,
+      "release_channel": "core",
+      "required_presets": [
+        "defaults.ini",
+        "themed.ini",
+        "performance.ini"
+      ],
+      "role": "",
+      "root": "products/savers/mechanize",
+      "routing": {
+        "minimum_kind": "gdi",
+        "preferred_kind": "gl11",
+        "quality_class": "safe"
+      },
+      "semantic_contract": "product-local-ir",
+      "source_units": [
+        "config",
+        "module",
+        "presets",
+        "render",
+        "sim",
+        "themes"
+      ]
+    },
+    {
+      "artifact_profiles": [
+        "windows_preservation_x86_ansi",
+        "windows_current_x86_scr"
+      ],
+      "compatibility_status": "targeted",
+      "family": "systems-ambient",
+      "files": {
+        "headers": [
+          "products/savers/ecosystems/src/ecosystems_internal.h",
+          "products/savers/ecosystems/src/ecosystems_resource.h"
+        ],
+        "presets": [
+          "products/savers/ecosystems/presets/defaults.ini",
+          "products/savers/ecosystems/presets/performance.ini",
+          "products/savers/ecosystems/presets/themed.ini"
+        ],
+        "resources": [
+          "products/savers/ecosystems/src/ecosystems_config.rc",
+          "products/savers/ecosystems/src/ecosystems_version.rc"
+        ],
+        "sources": [
+          "products/savers/ecosystems/src/ecosystems_config.c",
+          "products/savers/ecosystems/src/ecosystems_entry.c",
+          "products/savers/ecosystems/src/ecosystems_module.c",
+          "products/savers/ecosystems/src/ecosystems_presets.c",
+          "products/savers/ecosystems/src/ecosystems_render.c",
+          "products/savers/ecosystems/src/ecosystems_sim.c",
+          "products/savers/ecosystems/src/ecosystems_themes.c"
+        ],
+        "tests": [
+          "products/savers/ecosystems/tests/README.md",
+          "products/savers/ecosystems/tests/smoke.c"
+        ]
+      },
+      "key": "ecosystems",
+      "kind": "saver",
+      "maturity": "c16-core",
+      "name": "Ecosystems",
+      "reference_path_required": true,
+      "release_channel": "core",
+      "required_presets": [
+        "defaults.ini",
+        "themed.ini",
+        "performance.ini"
+      ],
+      "role": "",
+      "root": "products/savers/ecosystems",
+      "routing": {
+        "minimum_kind": "gdi",
+        "preferred_kind": "gl11",
+        "quality_class": "safe"
+      },
+      "semantic_contract": "product-local-ir",
+      "source_units": [
+        "config",
+        "module",
+        "presets",
+        "render",
+        "sim",
+        "themes"
+      ]
+    },
+    {
+      "artifact_profiles": [
+        "windows_preservation_x86_ansi",
+        "windows_current_x86_scr"
+      ],
+      "compatibility_status": "targeted",
+      "family": "places-atmosphere",
+      "files": {
+        "headers": [
+          "products/savers/stormglass/src/stormglass_internal.h",
+          "products/savers/stormglass/src/stormglass_resource.h"
+        ],
+        "presets": [
+          "products/savers/stormglass/presets/defaults.ini",
+          "products/savers/stormglass/presets/performance.ini",
+          "products/savers/stormglass/presets/themed.ini"
+        ],
+        "resources": [
+          "products/savers/stormglass/src/stormglass_config.rc",
+          "products/savers/stormglass/src/stormglass_version.rc"
+        ],
+        "sources": [
+          "products/savers/stormglass/src/stormglass_config.c",
+          "products/savers/stormglass/src/stormglass_entry.c",
+          "products/savers/stormglass/src/stormglass_module.c",
+          "products/savers/stormglass/src/stormglass_presets.c",
+          "products/savers/stormglass/src/stormglass_render.c",
+          "products/savers/stormglass/src/stormglass_sim.c",
+          "products/savers/stormglass/src/stormglass_themes.c"
+        ],
+        "tests": [
+          "products/savers/stormglass/tests/README.md",
+          "products/savers/stormglass/tests/smoke.c"
+        ]
+      },
+      "key": "stormglass",
+      "kind": "saver",
+      "maturity": "c16-core",
+      "name": "Stormglass",
+      "reference_path_required": true,
+      "release_channel": "core",
+      "required_presets": [
+        "defaults.ini",
+        "themed.ini",
+        "performance.ini"
+      ],
+      "role": "",
+      "root": "products/savers/stormglass",
+      "routing": {
+        "minimum_kind": "gdi",
+        "preferred_kind": "gl11",
+        "quality_class": "safe"
+      },
+      "semantic_contract": "product-local-ir",
+      "source_units": [
+        "config",
+        "module",
+        "presets",
+        "render",
+        "sim",
+        "themes"
+      ]
+    },
+    {
+      "artifact_profiles": [
+        "windows_preservation_x86_ansi",
+        "windows_current_x86_scr"
+      ],
+      "compatibility_status": "targeted",
+      "family": "places-atmosphere",
+      "files": {
+        "headers": [
+          "products/savers/transit/src/transit_internal.h",
+          "products/savers/transit/src/transit_resource.h"
+        ],
+        "presets": [
+          "products/savers/transit/presets/defaults.ini",
+          "products/savers/transit/presets/performance.ini",
+          "products/savers/transit/presets/themed.ini"
+        ],
+        "resources": [
+          "products/savers/transit/src/transit_config.rc",
+          "products/savers/transit/src/transit_version.rc"
+        ],
+        "sources": [
+          "products/savers/transit/src/transit_config.c",
+          "products/savers/transit/src/transit_entry.c",
+          "products/savers/transit/src/transit_module.c",
+          "products/savers/transit/src/transit_presets.c",
+          "products/savers/transit/src/transit_render.c",
+          "products/savers/transit/src/transit_sim.c",
+          "products/savers/transit/src/transit_themes.c"
+        ],
+        "tests": [
+          "products/savers/transit/tests/README.md",
+          "products/savers/transit/tests/smoke.c"
+        ]
+      },
+      "key": "transit",
+      "kind": "saver",
+      "maturity": "c16-core",
+      "name": "Transit",
+      "reference_path_required": true,
+      "release_channel": "core",
+      "required_presets": [
+        "defaults.ini",
+        "themed.ini",
+        "performance.ini"
+      ],
+      "role": "",
+      "root": "products/savers/transit",
+      "routing": {
+        "minimum_kind": "gdi",
+        "preferred_kind": "gl11",
+        "quality_class": "safe"
+      },
+      "semantic_contract": "product-local-ir",
+      "source_units": [
+        "config",
+        "module",
+        "presets",
+        "render",
+        "sim",
+        "themes"
+      ]
+    },
+    {
+      "artifact_profiles": [
+        "windows_preservation_x86_ansi",
+        "windows_current_x86_scr"
+      ],
+      "compatibility_status": "targeted",
+      "family": "places-atmosphere",
+      "files": {
+        "headers": [
+          "products/savers/observatory/src/observatory_internal.h",
+          "products/savers/observatory/src/observatory_resource.h"
+        ],
+        "presets": [
+          "products/savers/observatory/presets/defaults.ini",
+          "products/savers/observatory/presets/performance.ini",
+          "products/savers/observatory/presets/themed.ini"
+        ],
+        "resources": [
+          "products/savers/observatory/src/observatory_config.rc",
+          "products/savers/observatory/src/observatory_version.rc"
+        ],
+        "sources": [
+          "products/savers/observatory/src/observatory_config.c",
+          "products/savers/observatory/src/observatory_entry.c",
+          "products/savers/observatory/src/observatory_module.c",
+          "products/savers/observatory/src/observatory_presets.c",
+          "products/savers/observatory/src/observatory_render.c",
+          "products/savers/observatory/src/observatory_sim.c",
+          "products/savers/observatory/src/observatory_themes.c"
+        ],
+        "tests": [
+          "products/savers/observatory/tests/README.md",
+          "products/savers/observatory/tests/smoke.c"
+        ]
+      },
+      "key": "observatory",
+      "kind": "saver",
+      "maturity": "c16-core",
+      "name": "Observatory",
+      "reference_path_required": true,
+      "release_channel": "core",
+      "required_presets": [
+        "defaults.ini",
+        "themed.ini",
+        "performance.ini"
+      ],
+      "role": "",
+      "root": "products/savers/observatory",
+      "routing": {
+        "minimum_kind": "gdi",
+        "preferred_kind": "gl11",
+        "quality_class": "safe"
+      },
+      "semantic_contract": "product-local-ir",
+      "source_units": [
+        "config",
+        "module",
+        "presets",
+        "render",
+        "sim",
+        "themes"
+      ]
+    },
+    {
+      "artifact_profiles": [
+        "windows_preservation_x86_ansi",
+        "windows_current_x86_scr"
+      ],
+      "compatibility_status": "targeted",
+      "family": "heavyweight-worlds",
+      "files": {
+        "headers": [
+          "products/savers/vector/src/vector_internal.h",
+          "products/savers/vector/src/vector_resource.h"
+        ],
+        "presets": [
+          "products/savers/vector/presets/defaults.ini",
+          "products/savers/vector/presets/performance.ini",
+          "products/savers/vector/presets/themed.ini"
+        ],
+        "resources": [
+          "products/savers/vector/src/vector_config.rc",
+          "products/savers/vector/src/vector_version.rc"
+        ],
+        "sources": [
+          "products/savers/vector/src/vector_config.c",
+          "products/savers/vector/src/vector_entry.c",
+          "products/savers/vector/src/vector_module.c",
+          "products/savers/vector/src/vector_presets.c",
+          "products/savers/vector/src/vector_render.c",
+          "products/savers/vector/src/vector_sim.c",
+          "products/savers/vector/src/vector_themes.c"
+        ],
+        "tests": [
+          "products/savers/vector/tests/README.md",
+          "products/savers/vector/tests/smoke.c"
+        ]
+      },
+      "key": "vector",
+      "kind": "saver",
+      "maturity": "c16-core",
+      "name": "Vector",
+      "reference_path_required": true,
+      "release_channel": "core",
+      "required_presets": [
+        "defaults.ini",
+        "themed.ini",
+        "performance.ini"
+      ],
+      "role": "",
+      "root": "products/savers/vector",
+      "routing": {
+        "minimum_kind": "gdi",
+        "preferred_kind": "gl11",
+        "quality_class": "safe"
+      },
+      "semantic_contract": "product-local-ir",
+      "source_units": [
+        "config",
+        "module",
+        "presets",
+        "render",
+        "sim",
+        "themes"
+      ]
+    },
+    {
+      "artifact_profiles": [
+        "windows_preservation_x86_ansi",
+        "windows_current_x86_scr"
+      ],
+      "compatibility_status": "targeted",
+      "family": "heavyweight-worlds",
+      "files": {
+        "headers": [
+          "products/savers/explorer/src/explorer_internal.h",
+          "products/savers/explorer/src/explorer_resource.h"
+        ],
+        "presets": [
+          "products/savers/explorer/presets/defaults.ini",
+          "products/savers/explorer/presets/performance.ini",
+          "products/savers/explorer/presets/themed.ini"
+        ],
+        "resources": [
+          "products/savers/explorer/src/explorer_config.rc",
+          "products/savers/explorer/src/explorer_version.rc"
+        ],
+        "sources": [
+          "products/savers/explorer/src/explorer_config.c",
+          "products/savers/explorer/src/explorer_entry.c",
+          "products/savers/explorer/src/explorer_module.c",
+          "products/savers/explorer/src/explorer_presets.c",
+          "products/savers/explorer/src/explorer_render.c",
+          "products/savers/explorer/src/explorer_sim.c",
+          "products/savers/explorer/src/explorer_themes.c"
+        ],
+        "tests": [
+          "products/savers/explorer/tests/README.md",
+          "products/savers/explorer/tests/smoke.c"
+        ]
+      },
+      "key": "explorer",
+      "kind": "saver",
+      "maturity": "c16-core",
+      "name": "Explorer",
+      "reference_path_required": true,
+      "release_channel": "core",
+      "required_presets": [
+        "defaults.ini",
+        "themed.ini",
+        "performance.ini"
+      ],
+      "role": "",
+      "root": "products/savers/explorer",
+      "routing": {
+        "minimum_kind": "gdi",
+        "preferred_kind": "gl11",
+        "quality_class": "safe"
+      },
+      "semantic_contract": "product-local-ir",
+      "source_units": [
+        "config",
+        "module",
+        "presets",
+        "render",
+        "sim",
+        "themes"
+      ]
+    },
+    {
+      "artifact_profiles": [
+        "windows_preservation_x86_ansi",
+        "windows_current_x86_scr"
+      ],
+      "compatibility_status": "targeted",
+      "family": "heavyweight-worlds",
+      "files": {
+        "headers": [
+          "products/savers/city/src/city_internal.h",
+          "products/savers/city/src/city_resource.h"
+        ],
+        "presets": [
+          "products/savers/city/presets/defaults.ini",
+          "products/savers/city/presets/performance.ini",
+          "products/savers/city/presets/themed.ini"
+        ],
+        "resources": [
+          "products/savers/city/src/city_config.rc",
+          "products/savers/city/src/city_version.rc"
+        ],
+        "sources": [
+          "products/savers/city/src/city_config.c",
+          "products/savers/city/src/city_entry.c",
+          "products/savers/city/src/city_module.c",
+          "products/savers/city/src/city_presets.c",
+          "products/savers/city/src/city_render.c",
+          "products/savers/city/src/city_sim.c",
+          "products/savers/city/src/city_themes.c"
+        ],
+        "tests": [
+          "products/savers/city/tests/README.md",
+          "products/savers/city/tests/smoke.c"
+        ]
+      },
+      "key": "city",
+      "kind": "saver",
+      "maturity": "c16-core",
+      "name": "City",
+      "reference_path_required": true,
+      "release_channel": "core",
+      "required_presets": [
+        "defaults.ini",
+        "themed.ini",
+        "performance.ini"
+      ],
+      "role": "",
+      "root": "products/savers/city",
+      "routing": {
+        "minimum_kind": "gdi",
+        "preferred_kind": "gl11",
+        "quality_class": "safe"
+      },
+      "semantic_contract": "product-local-ir",
+      "source_units": [
+        "config",
+        "module",
+        "presets",
+        "render",
+        "sim",
+        "themes"
+      ]
+    },
+    {
+      "artifact_profiles": [
+        "windows_preservation_x86_ansi",
+        "windows_current_x86_scr"
+      ],
+      "compatibility_status": "targeted",
+      "family": "heavyweight-worlds",
+      "files": {
+        "headers": [
+          "products/savers/atlas/src/atlas_internal.h",
+          "products/savers/atlas/src/atlas_resource.h"
+        ],
+        "presets": [
+          "products/savers/atlas/presets/defaults.ini",
+          "products/savers/atlas/presets/performance.ini",
+          "products/savers/atlas/presets/themed.ini"
+        ],
+        "resources": [
+          "products/savers/atlas/src/atlas_config.rc",
+          "products/savers/atlas/src/atlas_version.rc"
+        ],
+        "sources": [
+          "products/savers/atlas/src/atlas_config.c",
+          "products/savers/atlas/src/atlas_entry.c",
+          "products/savers/atlas/src/atlas_module.c",
+          "products/savers/atlas/src/atlas_presets.c",
+          "products/savers/atlas/src/atlas_render.c",
+          "products/savers/atlas/src/atlas_sim.c",
+          "products/savers/atlas/src/atlas_themes.c"
+        ],
+        "tests": [
+          "products/savers/atlas/tests/README.md",
+          "products/savers/atlas/tests/smoke.c"
+        ]
+      },
+      "key": "atlas",
+      "kind": "saver",
+      "maturity": "c16-core",
+      "name": "Atlas",
+      "reference_path_required": true,
+      "release_channel": "core",
+      "required_presets": [
+        "defaults.ini",
+        "themed.ini",
+        "performance.ini"
+      ],
+      "role": "",
+      "root": "products/savers/atlas",
+      "routing": {
+        "minimum_kind": "gdi",
+        "preferred_kind": "gl11",
+        "quality_class": "safe"
+      },
+      "semantic_contract": "product-local-ir",
+      "source_units": [
+        "config",
+        "module",
+        "presets",
+        "render",
+        "sim",
+        "themes"
+      ]
+    },
+    {
+      "artifact_profiles": [
+        "windows_preservation_x86_ansi",
+        "windows_current_x86_scr"
+      ],
+      "compatibility_status": "targeted",
+      "family": "heavyweight-worlds",
+      "files": {
+        "headers": [
+          "products/savers/gallery/src/gallery_internal.h",
+          "products/savers/gallery/src/gallery_resource.h"
+        ],
+        "presets": [
+          "products/savers/gallery/presets/defaults.ini",
+          "products/savers/gallery/presets/performance.ini",
+          "products/savers/gallery/presets/themed.ini"
+        ],
+        "resources": [
+          "products/savers/gallery/src/gallery_config.rc",
+          "products/savers/gallery/src/gallery_version.rc"
+        ],
+        "sources": [
+          "products/savers/gallery/src/gallery_config.c",
+          "products/savers/gallery/src/gallery_entry.c",
+          "products/savers/gallery/src/gallery_module.c",
+          "products/savers/gallery/src/gallery_presets.c",
+          "products/savers/gallery/src/gallery_render.c",
+          "products/savers/gallery/src/gallery_sim.c",
+          "products/savers/gallery/src/gallery_themes.c"
+        ],
+        "tests": [
+          "products/savers/gallery/tests/README.md",
+          "products/savers/gallery/tests/smoke.c"
+        ]
+      },
+      "key": "gallery",
+      "kind": "saver",
+      "maturity": "c16-core",
+      "name": "Gallery",
+      "reference_path_required": true,
+      "release_channel": "core",
+      "required_presets": [
+        "defaults.ini",
+        "themed.ini",
+        "performance.ini"
+      ],
+      "role": "renderer-proof-surface",
+      "root": "products/savers/gallery",
+      "routing": {
+        "minimum_kind": "gdi",
+        "preferred_kind": "gl11",
+        "quality_class": "safe"
+      },
+      "semantic_contract": "product-local-ir",
+      "source_units": [
+        "config",
+        "module",
+        "presets",
+        "render",
+        "sim",
+        "themes"
+      ]
+    },
+    {
+      "artifact_profiles": [
+        "windows_preservation_x86_ansi",
+        "windows_current_x86_scr"
+      ],
+      "compatibility_status": "targeted",
+      "family": "suite-meta-saver",
+      "files": {
+        "headers": [
+          "products/savers/anthology/src/anthology_internal.h",
+          "products/savers/anthology/src/anthology_resource.h"
+        ],
+        "presets": [
+          "products/savers/anthology/presets/defaults.ini",
+          "products/savers/anthology/presets/families.ini",
+          "products/savers/anthology/presets/themed.ini",
+          "products/savers/anthology/presets/weighted.ini"
+        ],
+        "resources": [
+          "products/savers/anthology/src/anthology_config.rc",
+          "products/savers/anthology/src/anthology_version.rc"
+        ],
+        "sources": [
+          "products/savers/anthology/src/anthology_config.c",
+          "products/savers/anthology/src/anthology_entry.c",
+          "products/savers/anthology/src/anthology_module.c",
+          "products/savers/anthology/src/anthology_presets.c",
+          "products/savers/anthology/src/anthology_render.c",
+          "products/savers/anthology/src/anthology_sim.c",
+          "products/savers/anthology/src/anthology_themes.c"
+        ],
+        "tests": [
+          "products/savers/anthology/tests/README.md",
+          "products/savers/anthology/tests/smoke.c"
+        ]
+      },
+      "key": "anthology",
+      "kind": "saver",
+      "maturity": "c16-core",
+      "name": "Anthology",
+      "reference_path_required": true,
+      "release_channel": "core",
+      "required_presets": [
+        "defaults.ini",
+        "weighted.ini",
+        "families.ini"
+      ],
+      "role": "",
+      "root": "products/savers/anthology",
+      "routing": {
+        "minimum_kind": "gdi",
+        "preferred_kind": "gl11",
+        "quality_class": "safe"
+      },
+      "semantic_contract": "product-local-ir",
+      "source_units": [
+        "config",
+        "module",
+        "presets",
+        "render",
+        "sim",
+        "themes"
+      ]
+    },
+    {
+      "artifact_profiles": [
+        "windows_current_tool"
+      ],
+      "compatibility_status": "targeted",
+      "family": "",
+      "files": {
+        "headers": [
+          "products/apps/suite/src/suite_internal.h"
+        ],
+        "presets": [],
+        "resources": [],
+        "sources": [
+          "products/apps/suite/src/suite_app.c",
+          "products/apps/suite/src/suite_browser.c",
+          "products/apps/suite/src/suite_config.c",
+          "products/apps/suite/src/suite_launch.c",
+          "products/apps/suite/src/suite_main.c",
+          "products/apps/suite/src/suite_manifest.c",
+          "products/apps/suite/src/suite_state.c"
+        ],
+        "tests": [
+          "products/apps/suite/tests/README.md",
+          "products/apps/suite/tests/smoke.c"
+        ]
+      },
+      "key": "suite",
+      "kind": "app",
+      "maturity": "companion",
+      "name": "ScreenSave Manager",
+      "reference_path_required": false,
+      "release_channel": "manager",
+      "required_presets": [],
+      "role": "optional-manager-companion",
+      "root": "products/apps/suite",
+      "routing": {
+        "minimum_kind": "gdi",
+        "preferred_kind": "gl11",
+        "quality_class": "safe"
+      },
+      "semantic_contract": "",
+      "source_units": []
+    },
+    {
+      "artifact_profiles": [
+        "windows_current_tool"
+      ],
+      "compatibility_status": "targeted",
+      "family": "",
+      "files": {
+        "headers": [
+          "products/apps/benchlab/src/benchlab_internal.h"
+        ],
+        "presets": [],
+        "resources": [],
+        "sources": [
+          "products/apps/benchlab/src/benchlab_app.c",
+          "products/apps/benchlab/src/benchlab_config.c",
+          "products/apps/benchlab/src/benchlab_diag.c",
+          "products/apps/benchlab/src/benchlab_main.c",
+          "products/apps/benchlab/src/benchlab_overlay.c",
+          "products/apps/benchlab/src/benchlab_report.c",
+          "products/apps/benchlab/src/benchlab_session.c"
+        ],
+        "tests": [
+          "products/apps/benchlab/tests/README.md",
+          "products/apps/benchlab/tests/smoke.c"
+        ]
+      },
+      "key": "benchlab",
+      "kind": "app",
+      "maturity": "companion",
+      "name": "ScreenSave Workbench Lab Runner",
+      "reference_path_required": false,
+      "release_channel": "workbench",
+      "required_presets": [],
+      "role": "diagnostics-and-proof-harness",
+      "root": "products/apps/benchlab",
+      "routing": {
+        "minimum_kind": "gdi",
+        "preferred_kind": "gl11",
+        "quality_class": "safe"
+      },
+      "semantic_contract": "",
+      "source_units": []
+    },
+    {
+      "artifact_profiles": [
+        "source_sdk"
+      ],
+      "compatibility_status": "targeted",
+      "family": "",
+      "files": {
+        "headers": [],
+        "presets": [],
+        "resources": [],
+        "sources": [],
+        "tests": []
+      },
+      "key": "sdk",
+      "kind": "sdk",
+      "maturity": "source-only",
+      "name": "ScreenSave SDK",
+      "reference_path_required": false,
+      "release_channel": "sdk",
+      "required_presets": [],
+      "role": "contributor-surface",
+      "root": "products/sdk",
+      "routing": {
+        "minimum_kind": "gdi",
+        "preferred_kind": "gl11",
+        "quality_class": "safe"
+      },
+      "semantic_contract": "",
+      "source_units": []
+    }
+  ],
+  "saver_count": 19,
+  "schema_version": 1,
+  "sources": [
+    "catalog/products.toml",
+    "catalog/artifact_profiles.toml"
+  ]
+}

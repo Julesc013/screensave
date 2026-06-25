@@ -126,6 +126,7 @@ Repository-health and release-support validation lives under [`tools/scripts/`](
 
 - Release baseline: [`docs/releases/c16-core-baseline.md`](docs/releases/c16-core-baseline.md)
 - Current state authority: [`PROJECT_STATE.toml`](PROJECT_STATE.toml), [`VERSION.toml`](VERSION.toml), and [`docs/roadmap/truth-proof-baseline.md`](docs/roadmap/truth-proof-baseline.md)
+- Generated catalog inventory: [`catalog/generated/products_inventory.json`](catalog/generated/products_inventory.json), [`catalog/generated/products_sources.mk`](catalog/generated/products_sources.mk), and [`catalog/generated/products_table.md`](catalog/generated/products_table.md)
 - Contracts: [`contracts/portable_semantics_v2.md`](contracts/portable_semantics_v2.md), [`contracts/renderer_aliases_v1.md`](contracts/renderer_aliases_v1.md), and [`contracts/proof_bundle_v0.md`](contracts/proof_bundle_v0.md)
 - Proof Kernel: [`contracts/proof_kernel_v0.md`](contracts/proof_kernel_v0.md) and [`contracts/surface_rgba8_v0.md`](contracts/surface_rgba8_v0.md)
 - Release doctrine: [`docs/roadmap/release-channels.md`](docs/roadmap/release-channels.md) and [`docs/roadmap/core-zip-doctrine.md`](docs/roadmap/core-zip-doctrine.md)

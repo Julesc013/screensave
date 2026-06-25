@@ -23,6 +23,7 @@ REQUIRED_TOP_LEVEL = {
     "development",
     "compatibility",
     "queues",
+    "catalog",
     "plasma",
     "build_profiles",
     "validators",
@@ -61,6 +62,7 @@ def validate_state(state: dict) -> list[str]:
     development = state.get("development", {})
     compatibility = state.get("compatibility", {})
     queues = state.get("queues", {})
+    catalog_state = state.get("catalog", {})
     validators = state.get("validators", {})
     plasma = state.get("plasma", {})
     version = load_toml(VERSION_PATH)
@@ -76,6 +78,7 @@ def validate_state(state: dict) -> list[str]:
     for label, value in (
         ("authority.product_catalog", authority.get("product_catalog")),
         ("authority.artifact_profiles", authority.get("artifact_profiles")),
+        ("authority.generated_catalog_inventory", authority.get("generated_catalog_inventory")),
         ("authority.version_manifest", authority.get("version_manifest")),
         ("authority.aide_pilot", authority.get("aide_pilot")),
         ("release.artifact_manifest", release.get("artifact_manifest")),
@@ -101,6 +104,17 @@ def validate_state(state: dict) -> list[str]:
             if isinstance(value, str):
                 wave = load_toml(ROOT / value)
                 require(wave.get("status") == REQUIRED_QUEUE_STATUS, f"{value} must have status {REQUIRED_QUEUE_STATUS!r}.", errors)
+
+    require(catalog_state.get("schema_version") == 1, "catalog.schema_version must be 1.", errors)
+    for label, value in (
+        ("catalog.source", catalog_state.get("source")),
+        ("catalog.artifact_profiles", catalog_state.get("artifact_profiles")),
+        ("catalog.generator", catalog_state.get("generator")),
+        ("catalog.generated_inventory", catalog_state.get("generated_inventory")),
+        ("catalog.generated_sources", catalog_state.get("generated_sources")),
+        ("catalog.generated_table", catalog_state.get("generated_table")),
+    ):
+        require_path(value, label, errors)
 
     for name, value in validators.items():
         require_path(value, f"validators.{name}", errors)
@@ -163,6 +177,8 @@ def print_summary(state: dict) -> None:
     print(f"Queue authority: {queues['status']} ({queues['superseded_by']})")
     print(f"Compatibility policy: {compatibility['policy']} / default OS status: {compatibility['default_os_status']}")
     print(f"Version authority: {authority['version_manifest']}")
+    if "generated_catalog_inventory" in authority:
+        print(f"Generated catalog inventory: {authority['generated_catalog_inventory']}")
     print(
         "Plasma stable center: "
         f"{plasma['default_preset']} + {plasma['default_theme']}, "
