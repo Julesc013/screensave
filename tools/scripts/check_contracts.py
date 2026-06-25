@@ -59,6 +59,14 @@ REQUIRED_CONTRACTS = {
         "The first canary is `nocturne`.",
         "AIDE remains an optional evidence consumer",
     ],
+    ROOT / "contracts" / "project_adapter_v0.md": [
+        "Status: active ScreenSave development protocol.",
+        "status",
+        "capabilities",
+        "validate",
+        "proof",
+        "AIDE may consume receipts",
+    ],
 }
 
 
@@ -88,6 +96,7 @@ def main() -> int:
     require(version.get("proof", {}).get("bundle_schema") == "proof-bundle-v0", "VERSION.toml must point at proof-bundle-v0.", errors)
     require(version.get("schemas", {}).get("proof_kernel") == 1, "VERSION.toml schemas.proof_kernel must be 1.", errors)
     require(version.get("schemas", {}).get("surface_rgba8") == 1, "VERSION.toml schemas.surface_rgba8 must be 1.", errors)
+    require(version.get("schemas", {}).get("project_adapter") == 1, "VERSION.toml schemas.project_adapter must be 1.", errors)
 
     if errors:
         for error in errors:

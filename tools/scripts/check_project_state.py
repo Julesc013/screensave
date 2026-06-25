@@ -24,6 +24,7 @@ REQUIRED_TOP_LEVEL = {
     "compatibility",
     "queues",
     "catalog",
+    "project_adapter",
     "plasma",
     "build_profiles",
     "validators",
@@ -63,6 +64,7 @@ def validate_state(state: dict) -> list[str]:
     compatibility = state.get("compatibility", {})
     queues = state.get("queues", {})
     catalog_state = state.get("catalog", {})
+    project_adapter = state.get("project_adapter", {})
     validators = state.get("validators", {})
     plasma = state.get("plasma", {})
     version = load_toml(VERSION_PATH)
@@ -80,6 +82,7 @@ def validate_state(state: dict) -> list[str]:
         ("authority.artifact_profiles", authority.get("artifact_profiles")),
         ("authority.generated_catalog_inventory", authority.get("generated_catalog_inventory")),
         ("authority.version_manifest", authority.get("version_manifest")),
+        ("authority.project_adapter", authority.get("project_adapter")),
         ("authority.aide_pilot", authority.get("aide_pilot")),
         ("release.artifact_manifest", release.get("artifact_manifest")),
         ("release.checksums", release.get("checksums")),
@@ -113,6 +116,19 @@ def validate_state(state: dict) -> list[str]:
         ("catalog.generated_inventory", catalog_state.get("generated_inventory")),
         ("catalog.generated_sources", catalog_state.get("generated_sources")),
         ("catalog.generated_table", catalog_state.get("generated_table")),
+    ):
+        require_path(value, label, errors)
+
+    require(project_adapter.get("schema_version") == 1, "project_adapter.schema_version must be 1.", errors)
+    require(project_adapter.get("status") == "active", "project_adapter.status must be active.", errors)
+    require(
+        {"status", "capabilities", "validate", "proof"} <= set(project_adapter.get("commands", [])),
+        "project_adapter.commands must include status, capabilities, validate, and proof.",
+        errors,
+    )
+    for label, value in (
+        ("project_adapter.contract", project_adapter.get("contract")),
+        ("project_adapter.command", project_adapter.get("command")),
     ):
         require_path(value, label, errors)
 
@@ -150,6 +166,7 @@ def validate_version_manifest(state: dict, version: dict, catalog: dict, errors:
     require(version_development.get("current_state") == state.get("state_id"), "VERSION.toml development.current_state must match PROJECT_STATE state_id.", errors)
     require(version_development.get("development_head") == authority.get("development_head"), "VERSION.toml development.development_head must match PROJECT_STATE authority.", errors)
     require(version_schemas.get("product_catalog") == catalog.get("schema_version"), "VERSION.toml schemas.product_catalog must match catalog schema_version.", errors)
+    require(version_schemas.get("project_adapter") == 1, "VERSION.toml schemas.project_adapter must be 1.", errors)
     require(version_proof.get("policy") == compatibility.get("policy"), "VERSION.toml proof.policy must match PROJECT_STATE compatibility.policy.", errors)
     require_path(version_proof.get("binary_audit_tool"), "VERSION.toml proof.binary_audit_tool", errors)
     require_path(version_proof.get("state_validator"), "VERSION.toml proof.state_validator", errors)
@@ -179,6 +196,8 @@ def print_summary(state: dict) -> None:
     print(f"Version authority: {authority['version_manifest']}")
     if "generated_catalog_inventory" in authority:
         print(f"Generated catalog inventory: {authority['generated_catalog_inventory']}")
+    if "project_adapter" in authority:
+        print(f"Project adapter: {authority['project_adapter']}")
     print(
         "Plasma stable center: "
         f"{plasma['default_preset']} + {plasma['default_theme']}, "

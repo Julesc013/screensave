@@ -18,6 +18,7 @@ Post-`SS` work now proceeds in the bounded `SX` substrate series.
 - AIDE pilot: [`.aide/pilot.toml`](.aide/pilot.toml)
 - Active milestone: [`docs/roadmap/truth-proof-baseline.md`](docs/roadmap/truth-proof-baseline.md)
 - Active implementation track: [`contracts/proof_kernel_v0.md`](contracts/proof_kernel_v0.md)
+- Project adapter: [`contracts/project_adapter_v0.md`](contracts/project_adapter_v0.md) and [`tools/project_adapter/screensave_project.py`](tools/project_adapter/screensave_project.py)
 - Released public artifact: `c16-core-baseline`
 - Development-head product truth: Plasma [`U09 Stable Recut`](products/savers/plasma/docs/u09-stable-recut.md) and [`U09 Ship Posture`](products/savers/plasma/docs/u09-ship-posture.md)
 - Plasma ship posture: `GO WITH CAVEATS`
@@ -129,6 +130,7 @@ Repository-health and release-support validation lives under [`tools/scripts/`](
 - Generated catalog inventory: [`catalog/generated/products_inventory.json`](catalog/generated/products_inventory.json), [`catalog/generated/products_sources.mk`](catalog/generated/products_sources.mk), and [`catalog/generated/products_table.md`](catalog/generated/products_table.md)
 - Contracts: [`contracts/portable_semantics_v2.md`](contracts/portable_semantics_v2.md), [`contracts/renderer_aliases_v1.md`](contracts/renderer_aliases_v1.md), and [`contracts/proof_bundle_v0.md`](contracts/proof_bundle_v0.md)
 - Proof Kernel: [`contracts/proof_kernel_v0.md`](contracts/proof_kernel_v0.md) and [`contracts/surface_rgba8_v0.md`](contracts/surface_rgba8_v0.md)
+- Project adapter: [`contracts/project_adapter_v0.md`](contracts/project_adapter_v0.md) and [`tools/project_adapter/README.md`](tools/project_adapter/README.md)
 - Release doctrine: [`docs/roadmap/release-channels.md`](docs/roadmap/release-channels.md) and [`docs/roadmap/core-zip-doctrine.md`](docs/roadmap/core-zip-doctrine.md)
 - Architecture: [`docs/architecture/overview.md`](docs/architecture/overview.md) and [`docs/architecture/repo-structure.md`](docs/architecture/repo-structure.md)
 - Product lineup: [`docs/roadmap/products-and-lineup.md`](docs/roadmap/products-and-lineup.md)

@@ -32,6 +32,7 @@ proof_bundle = 0
 aide_pilot = 1
 proof_kernel = 1
 surface_rgba8 = 1
+project_adapter = 1
 
 [proof]
 policy = "evidence-classed"
@@ -45,3 +46,4 @@ renderer_aliases = "contracts/renderer_aliases_v1.md"
 proof_bundle = "contracts/proof_bundle_v0.md"
 proof_kernel = "contracts/proof_kernel_v0.md"
 surface_rgba8 = "contracts/surface_rgba8_v0.md"
+project_adapter = "contracts/project_adapter_v0.md"
