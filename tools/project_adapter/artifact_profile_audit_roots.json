@@ -11,8 +11,7 @@
       "key": "windows_preservation_x86_ansi",
       "artifact_extension": ".scr",
       "roots": [
-        "out/portable/screensave-core-c16-baseline",
-        "out/mingw/i686/debug"
+        "out/portable/screensave-core-c16-baseline"
       ],
       "claim_boundary": "binary facts only; not preservation certification"
     },
@@ -20,8 +19,7 @@
       "key": "windows_current_x86_scr",
       "artifact_extension": ".scr",
       "roots": [
-        "out/msvc/vs2022/Release",
-        "out/mingw/i686/debug"
+        "out/msvc/vs2022/Release"
       ],
       "claim_boundary": "binary facts only; not current-Windows certification"
     },

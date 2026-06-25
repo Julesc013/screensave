@@ -15,6 +15,7 @@ CAPABILITY_BINDINGS = ROOT / "tools" / "project_adapter" / "capability_bindings.
 RECEIPT_SCHEMAS = ROOT / "tools" / "project_adapter" / "receipt_schemas.json"
 ARTIFACT_PROFILE_AUDIT_ROOTS = ROOT / "tools" / "project_adapter" / "artifact_profile_audit_roots.json"
 ARTIFACT_PROFILES = ROOT / "catalog" / "artifact_profiles.toml"
+PE_AUDIT = ROOT / "tools" / "scripts" / "audit_pe_artifacts.py"
 
 REQUIRED_PATHS = [
     ROOT / "contracts" / "project_adapter_v0.md",
@@ -23,6 +24,7 @@ REQUIRED_PATHS = [
     CAPABILITY_BINDINGS,
     RECEIPT_SCHEMAS,
     ARTIFACT_PROFILE_AUDIT_ROOTS,
+    PE_AUDIT,
     ADAPTER,
 ]
 
@@ -201,11 +203,15 @@ def main() -> int:
         audit = run_adapter(["audit", "--invocation-id", "check-audit", "--artifact-profile", "windows_current_x86_scr"])
         require(audit.get("status") == "informational", "adapter audit must report informational facts by default.", errors)
         require(repo_ref_to_path(audit.get("payload", {}).get("audit_ref", "")).exists(), "adapter audit must write a report.", errors)
+        require(repo_ref_to_path(audit.get("payload", {}).get("audit_json_ref", "")).exists(), "adapter audit must write a JSON report.", errors)
         require(
             audit.get("payload", {}).get("artifact_profiles") == ["windows_current_x86_scr"],
             "adapter audit must report selected artifact profiles.",
             errors,
         )
+        require(audit.get("payload", {}).get("artifact_count", 0) > 0, "adapter audit must report a nonzero artifact count.", errors)
+        require(audit.get("payload", {}).get("audit_status") == "informational", "adapter audit must preserve PE audit status.", errors)
+        require(audit.get("payload", {}).get("missing_inputs") == [], "adapter audit must report no missing inputs for the current profile.", errors)
 
         proof = run_adapter(["proof", "--invocation-id", "check-proof"])
         require(proof.get("status") == "pass", "adapter proof must pass.", errors)
@@ -225,6 +231,21 @@ def main() -> int:
             "adapter proof must include a numeric PE audit violation count.",
             errors,
         )
+        require(
+            proof.get("payload", {}).get("pe_audit_artifact_count", 0) > 0,
+            "adapter proof must include a nonzero PE artifact count.",
+            errors,
+        )
+        require(
+            proof.get("payload", {}).get("pe_audit_status") == "informational",
+            "adapter proof must preserve the structured PE audit status.",
+            errors,
+        )
+        require(
+            proof.get("payload", {}).get("pe_audit_missing_inputs") == [],
+            "adapter proof must report no missing PE audit inputs for the current profile.",
+            errors,
+        )
         proof_dir = repo_ref_to_path(proof.get("payload", {}).get("output_dir", ""))
         require((proof_dir / "adapter-proof.json").exists(), "adapter proof must write adapter-proof.json.", errors)
         require((proof_dir / "artifact-manifest.json").exists(), "adapter proof must write artifact-manifest.json.", errors)
@@ -233,6 +254,33 @@ def main() -> int:
             "adapter proof must write a PE audit report.",
             errors,
         )
+        require(
+            repo_ref_to_path(proof.get("payload", {}).get("pe_audit_json_ref", "")).exists(),
+            "adapter proof must write a PE audit JSON report.",
+            errors,
+        )
+
+        missing_audit_json = ROOT / "out" / "aide" / "screensave-project-adapter" / "check-missing-pe-audit.json"
+        missing_audit_txt = ROOT / "out" / "aide" / "screensave-project-adapter" / "check-missing-pe-audit.txt"
+        missing_audit = subprocess.run(
+            [
+                sys.executable,
+                str(PE_AUDIT),
+                "--output",
+                str(missing_audit_txt),
+                "--json-output",
+                str(missing_audit_json),
+                "out/definitely-missing-pe-audit-root",
+            ],
+            cwd=ROOT,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        missing_payload = json.loads(missing_audit_json.read_text(encoding="utf-8")) if missing_audit_json.exists() else {}
+        require(missing_audit.returncode != 0, "PE audit must fail closed for a missing artifact root.", errors)
+        require(missing_payload.get("status") == "blocked", "missing PE audit root must produce blocked status.", errors)
+        require(missing_payload.get("artifact_count") == 0, "missing PE audit root must report zero artifacts.", errors)
 
         refusal_code, refusal = run_adapter_result(["render", "--invocation-id", "..\\escape"])
         require(refusal_code != 0, "invalid invocation ids must be refused.", errors)

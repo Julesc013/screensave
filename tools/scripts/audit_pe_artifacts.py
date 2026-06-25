@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
+import json
 import pathlib
 import struct
 import sys
@@ -41,6 +43,8 @@ class Section:
 @dataclass
 class PeFacts:
     path: pathlib.Path
+    size_bytes: int
+    sha256: str
     machine: str
     optional_format: str
     subsystem: int
@@ -151,6 +155,8 @@ def audit_pe(path: pathlib.Path) -> PeFacts:
 
     return PeFacts(
         path=path,
+        size_bytes=len(data),
+        sha256=hashlib.sha256(data).hexdigest(),
         machine=machine,
         optional_format=optional_format,
         subsystem=subsystem,
@@ -170,17 +176,110 @@ def iter_artifacts(roots: list[pathlib.Path]) -> list[pathlib.Path]:
     return sorted(paths)
 
 
-def format_report(facts: list[PeFacts]) -> str:
+def display_path(path: pathlib.Path) -> str:
+    resolved = path.resolve()
+    try:
+        return str(resolved.relative_to(ROOT)).replace("\\", "/")
+    except ValueError:
+        return str(resolved)
+
+
+def collect_artifacts(inputs: list[pathlib.Path]) -> tuple[list[pathlib.Path], list[pathlib.Path]]:
+    artifacts: list[pathlib.Path] = []
+    missing_inputs: list[pathlib.Path] = []
+    for path in inputs:
+        if not path.exists():
+            missing_inputs.append(path)
+        elif path.is_dir():
+            artifacts.extend(iter_artifacts([path]))
+        else:
+            artifacts.append(path)
+    return sorted(artifacts), missing_inputs
+
+
+def status_for_audit(facts: list[PeFacts], errors: list[str], missing_inputs: list[pathlib.Path], fail_on_violation: bool) -> str:
+    violation_count = sum(1 for item in facts for flag in item.flags if flag.startswith("VIOLATION:"))
+    if missing_inputs:
+        return "blocked"
+    if not facts:
+        return "blocked"
+    if errors:
+        return "fail"
+    if fail_on_violation and violation_count:
+        return "fail"
+    return "informational"
+
+
+def json_payload(
+    facts: list[PeFacts],
+    errors: list[str],
+    missing_inputs: list[pathlib.Path],
+    input_paths: list[pathlib.Path],
+    fail_on_violation: bool,
+) -> dict:
+    violation_count = sum(1 for item in facts for flag in item.flags if flag.startswith("VIOLATION:"))
+    note_count = sum(1 for item in facts for flag in item.flags if flag.startswith("NOTE:"))
+    status = status_for_audit(facts, errors, missing_inputs, fail_on_violation)
+    return {
+        "audit_schema": "screensave-pe-audit-v0",
+        "status": status,
+        "claim_boundary": "binary facts only; not compatibility certification",
+        "input_paths": [display_path(path) for path in input_paths],
+        "missing_inputs": [display_path(path) for path in missing_inputs],
+        "artifact_count": len(facts),
+        "parse_error_count": len(errors),
+        "violation_count": violation_count,
+        "note_count": note_count,
+        "fail_on_violation": bool(fail_on_violation),
+        "artifacts": [
+            {
+                "path": display_path(item.path),
+                "bytes": item.size_bytes,
+                "sha256": item.sha256,
+                "machine": item.machine,
+                "format": item.optional_format,
+                "subsystem": item.subsystem,
+                "subsystem_version": item.subsystem_version,
+                "imports": item.imports,
+                "flags": item.flags,
+            }
+            for item in facts
+        ],
+        "parse_errors": errors,
+        "limits": [
+            "A nonempty PE audit records binary facts only.",
+            "Missing roots or zero discovered artifacts block proof promotion.",
+            "Runtime compatibility still requires separate execution evidence.",
+        ],
+    }
+
+
+def format_report(facts: list[PeFacts], errors: list[str], missing_inputs: list[pathlib.Path], input_paths: list[pathlib.Path], status: str) -> str:
+    violation_count = sum(1 for item in facts for flag in item.flags if flag.startswith("VIOLATION:"))
     lines = [
         "ScreenSave PE Artifact Audit",
         "===========================",
         "",
         "This report records binary facts. Notes and violations are evidence, not release approval.",
         "",
+        f"Status: {status}",
+        f"Input count: {len(input_paths)}",
+        f"Artifact count: {len(facts)}",
+        f"Missing input count: {len(missing_inputs)}",
+        f"Parse error count: {len(errors)}",
+        f"Violation count: {violation_count}",
+        "",
     ]
+    if missing_inputs:
+        lines.append("Missing inputs:")
+        for path in missing_inputs:
+            lines.append(f"  {display_path(path)}")
+        lines.append("")
     for item in facts:
-        rel = item.path.relative_to(ROOT)
+        rel = display_path(item.path)
         lines.append(f"Artifact: {rel}")
+        lines.append(f"  bytes: {item.size_bytes}")
+        lines.append(f"  sha256: {item.sha256}")
         lines.append(f"  machine: {item.machine}")
         lines.append(f"  format: {item.optional_format}")
         lines.append(f"  subsystem: {item.subsystem} ({item.subsystem_version})")
@@ -194,19 +293,15 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("paths", nargs="*", help="Optional artifact roots or files. Defaults to known out/ artifact roots.")
     parser.add_argument("--output", help="Write the report to this path instead of stdout.")
+    parser.add_argument("--json-output", help="Write a machine-readable audit result to this path.")
     parser.add_argument("--fail-on-violation", action="store_true", help="Return nonzero when a VIOLATION flag is found.")
     args = parser.parse_args()
 
     if args.paths:
-        roots = [(ROOT / value).resolve() if not pathlib.Path(value).is_absolute() else pathlib.Path(value) for value in args.paths]
-        artifacts: list[pathlib.Path] = []
-        for path in roots:
-            if path.is_dir():
-                artifacts.extend(iter_artifacts([path]))
-            else:
-                artifacts.append(path)
+        inputs = [(ROOT / value).resolve() if not pathlib.Path(value).is_absolute() else pathlib.Path(value) for value in args.paths]
     else:
-        artifacts = iter_artifacts(DEFAULT_ROOTS)
+        inputs = DEFAULT_ROOTS
+    artifacts, missing_inputs = collect_artifacts(inputs)
 
     facts: list[PeFacts] = []
     errors: list[str] = []
@@ -216,7 +311,8 @@ def main() -> int:
         except Exception as exc:  # noqa: BLE001 - reports binary parse failures as audit facts.
             errors.append(f"{path}: {exc}")
 
-    report = format_report(facts)
+    status = status_for_audit(facts, errors, missing_inputs, args.fail_on_violation)
+    report = format_report(facts, errors, missing_inputs, inputs, status)
     if errors:
         report += "\nParse errors:\n" + "\n".join(f"  {error}" for error in errors) + "\n"
 
@@ -227,7 +323,17 @@ def main() -> int:
     else:
         print(report)
 
-    if args.fail_on_violation and any(any(flag.startswith("VIOLATION:") for flag in item.flags) for item in facts):
+    if args.json_output:
+        json_path = (ROOT / args.json_output).resolve() if not pathlib.Path(args.json_output).is_absolute() else pathlib.Path(args.json_output)
+        json_path.parent.mkdir(parents=True, exist_ok=True)
+        json_path.write_text(
+            json.dumps(json_payload(facts, errors, missing_inputs, inputs, args.fail_on_violation), indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
+
+    if status == "blocked":
+        return 2
+    if status == "fail":
         return 1
     return 0
 

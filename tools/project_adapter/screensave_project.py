@@ -540,21 +540,28 @@ def command_audit(args: argparse.Namespace) -> int:
         return blocked("audit", exc)
     before_source = source_payload()
     output_path = output_dir / "pe-audit.txt"
-    command = [str(PE_AUDIT.relative_to(ROOT)), "--output", str(output_path)]
+    json_path = output_dir / "pe-audit.json"
+    command = [str(PE_AUDIT.relative_to(ROOT)), "--output", str(output_path), "--json-output", str(json_path)]
     if args.fail_on_violation:
         command.append("--fail-on-violation")
     command.extend(str(path) for path in audit_paths)
     audit_run = run_command(command, timeout_seconds=60)
     report = output_path.read_text(encoding="utf-8") if output_path.exists() else ""
-    violation_count = report.count("VIOLATION:")
+    audit_result = load_json(json_path) if json_path.exists() else {}
+    violation_count = int(audit_result.get("violation_count", report.count("VIOLATION:")))
+    artifact_count = int(audit_result.get("artifact_count", 0))
+    audit_status = str(audit_result.get("status", "fail"))
     manifest_path = write_artifact_manifest(
         output_dir,
         "audit",
         [
             ("pe_audit", output_path, "text-report"),
+            ("pe_audit_json", json_path, "pe-audit-json"),
         ],
     )
-    if audit_run["returncode"] != 0:
+    if audit_status == "blocked" or artifact_count <= 0:
+        status = "blocked"
+    elif audit_run["returncode"] != 0 or audit_status == "fail":
         status = "fail"
     elif args.fail_on_violation:
         status = "pass"
@@ -565,6 +572,7 @@ def command_audit(args: argparse.Namespace) -> int:
         "invocation_id": args.invocation_id,
         "output_dir": repo_path(output_dir),
         "audit_ref": repo_path(output_path),
+        "audit_json_ref": repo_path(json_path),
         "artifact_manifest_ref": repo_path(manifest_path),
         "before_source": before_source,
         "after_source": source_payload(),
@@ -573,6 +581,10 @@ def command_audit(args: argparse.Namespace) -> int:
         "artifact_profile_audit_roots_ref": repo_path(ARTIFACT_PROFILE_AUDIT_ROOTS),
         "input_paths": [repo_path(path) for path in audit_paths],
         "run": audit_run,
+        "audit_status": audit_status,
+        "artifact_count": artifact_count,
+        "missing_inputs": audit_result.get("missing_inputs", []),
+        "parse_error_count": int(audit_result.get("parse_error_count", 0)),
         "violation_count": violation_count,
         "fail_on_violation": bool(args.fail_on_violation),
         "claim_boundary": "binary facts only; not compatibility certification",
@@ -590,6 +602,7 @@ def command_proof(args: argparse.Namespace) -> int:
     comparison_path = output_dir / "comparison.json"
     receipt_path = output_dir / "adapter-proof.json"
     pe_audit_path = output_dir / "pe-audit.txt"
+    pe_audit_json_path = output_dir / "pe-audit.json"
 
     render_command = [
         str(SSLAB.relative_to(ROOT)),
@@ -628,6 +641,9 @@ def command_proof(args: argparse.Namespace) -> int:
         str(PE_AUDIT.relative_to(ROOT)),
         "--output",
         str(pe_audit_path),
+        "--json-output",
+        str(pe_audit_json_path),
+        "--fail-on-violation",
     ]
     audit_command.extend(str(path) for path in audit_paths)
     render_run = run_command(render_command, timeout_seconds=30)
@@ -642,9 +658,19 @@ def command_proof(args: argparse.Namespace) -> int:
     if proof_path.exists():
         proof = json.loads(proof_path.read_text(encoding="utf-8"))
     pe_audit_report = pe_audit_path.read_text(encoding="utf-8") if pe_audit_path.exists() else ""
-    pe_audit_violation_count = pe_audit_report.count("VIOLATION:")
+    pe_audit_json = load_json(pe_audit_json_path) if pe_audit_json_path.exists() else {}
+    pe_audit_status = str(pe_audit_json.get("status", "fail"))
+    pe_audit_artifact_count = int(pe_audit_json.get("artifact_count", 0))
+    pe_audit_violation_count = int(pe_audit_json.get("violation_count", pe_audit_report.count("VIOLATION:")))
 
-    status = "pass" if render_run["returncode"] == 0 and compare_run["returncode"] == 0 and audit_run["returncode"] == 0 else "fail"
+    if render_run["returncode"] != 0 or compare_run["returncode"] != 0:
+        status = "fail"
+    elif pe_audit_status == "blocked" or pe_audit_artifact_count <= 0:
+        status = "blocked"
+    elif audit_run["returncode"] != 0 or pe_audit_status == "fail":
+        status = "fail"
+    else:
+        status = "pass"
     manifest_path = output_dir / "artifact-manifest.json"
     payload = {
         "capability": "screensave.proof.nocturne.exact",
@@ -663,6 +689,11 @@ def command_proof(args: argparse.Namespace) -> int:
         "compare": compare_run,
         "pe_audit": audit_run,
         "pe_audit_ref": repo_path(pe_audit_path),
+        "pe_audit_json_ref": repo_path(pe_audit_json_path),
+        "pe_audit_status": pe_audit_status,
+        "pe_audit_artifact_count": pe_audit_artifact_count,
+        "pe_audit_missing_inputs": pe_audit_json.get("missing_inputs", []),
+        "pe_audit_parse_error_count": int(pe_audit_json.get("parse_error_count", 0)),
         "pe_audit_violation_count": pe_audit_violation_count,
         "pe_audit_artifact_profiles": audit_profiles,
         "pe_audit_claim_boundary": "binary facts only; not compatibility certification",
@@ -684,6 +715,7 @@ def command_proof(args: argparse.Namespace) -> int:
             ("proof", proof_path, "proof-json"),
             ("comparison", comparison_path, "comparison-json"),
             ("pe_audit", pe_audit_path, "text-report"),
+            ("pe_audit_json", pe_audit_json_path, "pe-audit-json"),
             ("adapter_receipt", receipt_path, "adapter-receipt-json"),
         ],
     )

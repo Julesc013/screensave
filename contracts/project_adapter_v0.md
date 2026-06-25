@@ -121,6 +121,9 @@ paths, sizes, and SHA-256 digests for generated artifacts.
 The `audit` command accepts named `--artifact-profile` selections, not
 free-form filesystem paths. Those names are resolved through the committed
 artifact-profile audit-root map and remain binary-fact evidence only.
+The audit tool emits both a human-readable report and a JSON result. Missing
+artifact roots or zero discovered PE artifacts produce `blocked`, not a passing
+empty audit.
 
 ## Initial Proof
 
@@ -128,6 +131,10 @@ The initial proof command renders the Nocturne `observatory_night` canary using
 `sslab render`, compares it with the committed canary capture using
 `sslab compare --class exact`, runs the named artifact-profile PE audit, and
 writes an adapter receipt plus artifact manifest.
+The proof receipt must preserve the PE audit JSON reference, structured audit
+status, artifact count, missing inputs, parse-error count, and violation count.
+It may not pass if the selected PE artifact profile resolves to no audited
+artifacts.
 
 This is deterministic proof-kernel evidence. It is not a public compatibility
 certification and not a visual-artistic acceptance decision.

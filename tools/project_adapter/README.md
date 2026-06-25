@@ -24,6 +24,9 @@ The `proof` command is a combined Nocturne v0 receipt: deterministic render,
 exact capture comparison, artifact-profile PE audit facts, and an artifact
 manifest. The PE audit facts are binary evidence only; they are not operating
 system compatibility certification.
+Proof receipts include the PE audit JSON result and require a nonzero audited
+artifact count. Missing artifact roots or zero discovered binaries are reported
+as `blocked` rather than as an empty passing proof.
 
 Generated-output commands use contained invocation roots under
 `out/aide/screensave-project-adapter/invocations/`. Callers provide a sanitized
