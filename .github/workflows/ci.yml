@@ -27,3 +27,108 @@ jobs:
 
       - name: Validate build scaffold layout
         run: python tools/scripts/check_build_layout.py
+
+      - name: Validate project state
+        run: python tools/scripts/check_project_state.py --summary
+
+      - name: Validate catalog authority
+        run: |
+          python tools/scripts/check_catalog_profiles.py
+          python tools/scripts/check_catalog_generated.py
+
+      - name: Validate contracts and product architecture
+        run: |
+          python tools/scripts/check_contracts.py
+          python tools/scripts/check_product_architecture.py
+          python tools/scripts/check_visual_intent_contract.py
+
+  proof-kernel:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install proof compiler
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential
+          gcc --version
+
+      - name: Build compiled Nocturne proof runner
+        run: python tools/scripts/check_compiled_nocturne_runner.py
+
+      - name: Validate Proof Kernel v0
+        run: python tools/scripts/check_proof_kernel.py
+
+      - name: Render CI Nocturne proof capture
+        run: >
+          python tools/sslab/sslab.py render
+          --product nocturne
+          --preset observatory_night
+          --width 96
+          --height 54
+          --seed 1536
+          --frames 8
+          --delta-ms 100
+          --output-dir out/ci/proof-kernel/nocturne
+
+      - name: Compare CI capture to committed baseline
+        run: >
+          python tools/sslab/sslab.py compare
+          --actual out/ci/proof-kernel/nocturne/capture.ppm
+          --expected validation/captures/proof-kernel-v0/nocturne/capture.ppm
+          --class exact
+          --output-json out/ci/proof-kernel/nocturne/comparison.json
+
+      - name: Upload proof-kernel evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: proof-kernel-nocturne
+          path: out/ci/proof-kernel/nocturne
+          if-no-files-found: error
+
+  project-adapter:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install proof compiler
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential
+
+      - name: Run read-only adapter commands
+        run: |
+          mkdir -p out/ci/project-adapter
+          python tools/project_adapter/screensave_project.py status > out/ci/project-adapter/status.json
+          python tools/project_adapter/screensave_project.py capabilities > out/ci/project-adapter/capabilities.json
+          python tools/project_adapter/screensave_project.py catalog > out/ci/project-adapter/catalog.json
+          python tools/project_adapter/screensave_project.py validate > out/ci/project-adapter/validate.json
+
+      - name: Run contained render and compare adapter commands
+        run: |
+          python tools/project_adapter/screensave_project.py render --invocation-id ci-render > out/ci/project-adapter/render.json
+          python tools/project_adapter/screensave_project.py compare --invocation-id ci-compare --actual out/aide/screensave-project-adapter/invocations/render/ci-render/capture.ppm > out/ci/project-adapter/compare.json
+
+      - name: Upload adapter receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: project-adapter-receipts
+          path: |
+            out/ci/project-adapter
+            out/aide/screensave-project-adapter/invocations/render/ci-render
+            out/aide/screensave-project-adapter/invocations/compare/ci-compare
+          if-no-files-found: error
