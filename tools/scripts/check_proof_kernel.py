@@ -42,9 +42,11 @@ REQUIRED_TEXT = {
     ],
     ROOT / "tools" / "sslab" / "sslab.py": [
         "proof-bundle-v0",
+        "sslab-comparison-v0",
         "proof-kernel-v0",
         "surface = Surface",
         "def render_nocturne",
+        "def compare_captures",
     ],
 }
 
@@ -101,6 +103,29 @@ def validate_determinism(errors: list[str]) -> None:
         require(first_proof.get("proof_kernel") == "proof-kernel-v0", "sslab proof must identify proof-kernel-v0.", errors)
         require(first_proof.get("runtime", {}).get("renderer") == "soft-reference-v0", "sslab proof must record soft-reference-v0.", errors)
         require(first_proof.get("status") == "informational", "sslab proof must remain informational at v0.", errors)
+
+        comparison_path = pathlib.Path(first) / "comparison.json"
+        subprocess.check_call(
+            [
+                sys.executable,
+                str(SSLAB),
+                "compare",
+                "--actual",
+                str(pathlib.Path(first) / "capture.ppm"),
+                "--expected",
+                str(pathlib.Path(second) / "capture.ppm"),
+                "--class",
+                "exact",
+                "--output-json",
+                str(comparison_path),
+            ],
+            cwd=ROOT,
+            stdout=subprocess.DEVNULL,
+        )
+        comparison = json.loads(comparison_path.read_text(encoding="utf-8"))
+        require(comparison.get("comparison_schema") == "sslab-comparison-v0", "sslab compare must emit sslab-comparison-v0.", errors)
+        require(comparison.get("status") == "pass", "Repeated Nocturne captures must compare exactly.", errors)
+        require(comparison.get("metrics", {}).get("changed_pixels") == 0, "Exact repeated Nocturne comparison must have zero changed pixels.", errors)
 
 
 def main() -> int:

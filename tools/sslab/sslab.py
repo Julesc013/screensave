@@ -13,6 +13,7 @@ from dataclasses import dataclass
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 DEFAULT_OUTPUT = ROOT / "validation" / "captures" / "proof-kernel-v0" / "nocturne"
+DEFAULT_COMPARISON = ROOT / "out" / "proof" / "sslab-compare" / "comparison.json"
 
 FIXED_ONE = 65536
 FIXED_HALF = 32768
@@ -158,6 +159,16 @@ class Surface:
                 row.append(str(self.pixels[offset + 2]))
             lines.append(" ".join(row))
         path.write_text("\n".join(lines) + "\n", encoding="ascii")
+
+
+@dataclass
+class PpmImage:
+    width: int
+    height: int
+    pixels: bytes
+
+    def sha256(self) -> str:
+        return hashlib.sha256(self.pixels).hexdigest()
 
 
 @dataclass
@@ -419,6 +430,129 @@ def render_nocturne(args: argparse.Namespace) -> dict:
     return proof
 
 
+def read_ppm(path: pathlib.Path) -> PpmImage:
+    tokens = path.read_text(encoding="ascii").split()
+    if len(tokens) < 4 or tokens[0] != "P3":
+        raise ValueError(f"{path} is not an ASCII P3 PPM file")
+    width = int(tokens[1])
+    height = int(tokens[2])
+    max_value = int(tokens[3])
+    if width <= 0 or height <= 0:
+        raise ValueError(f"{path} has invalid dimensions")
+    if max_value != 255:
+        raise ValueError(f"{path} must use max value 255")
+    values = [int(token) for token in tokens[4:]]
+    expected_values = width * height * 3
+    if len(values) != expected_values:
+        raise ValueError(f"{path} has {len(values)} values; expected {expected_values}")
+    for value in values:
+        if value < 0 or value > 255:
+            raise ValueError(f"{path} contains out-of-range color value {value}")
+    return PpmImage(width=width, height=height, pixels=bytes(values))
+
+
+def compare_pixels(actual: PpmImage, expected: PpmImage) -> dict:
+    if actual.width != expected.width or actual.height != expected.height:
+        return {
+            "dimension_match": False,
+            "pixel_count": 0,
+            "changed_channels": 0,
+            "changed_pixels": 0,
+            "max_abs_delta": None,
+            "mean_abs_delta": None,
+        }
+
+    total_delta = 0
+    max_delta = 0
+    changed_channels = 0
+    changed_pixels = 0
+    pixel_count = actual.width * actual.height
+    for index in range(0, len(actual.pixels), 3):
+        pixel_changed = False
+        for channel in range(3):
+            delta = abs(actual.pixels[index + channel] - expected.pixels[index + channel])
+            total_delta += delta
+            if delta:
+                changed_channels += 1
+                pixel_changed = True
+            if delta > max_delta:
+                max_delta = delta
+        if pixel_changed:
+            changed_pixels += 1
+
+    return {
+        "dimension_match": True,
+        "pixel_count": pixel_count,
+        "changed_channels": changed_channels,
+        "changed_pixels": changed_pixels,
+        "max_abs_delta": max_delta,
+        "mean_abs_delta": total_delta / float(pixel_count * 3),
+    }
+
+
+def comparison_status(metrics: dict, comparison_class: str, tolerance: int, mean_tolerance: float) -> str:
+    if not metrics["dimension_match"]:
+        return "fail"
+    if comparison_class == "observational":
+        return "informational"
+    if comparison_class == "exact":
+        return "pass" if metrics["changed_channels"] == 0 else "fail"
+    if comparison_class == "tolerant":
+        return "pass" if metrics["max_abs_delta"] <= tolerance else "fail"
+    if comparison_class == "perceptual":
+        return "pass" if metrics["mean_abs_delta"] <= mean_tolerance else "fail"
+    return "fail"
+
+
+def compare_captures(args: argparse.Namespace) -> dict:
+    actual_path = pathlib.Path(args.actual)
+    expected_path = pathlib.Path(args.expected)
+    output_json = pathlib.Path(args.output_json) if args.output_json else None
+    if not actual_path.is_absolute():
+        actual_path = ROOT / actual_path
+    if not expected_path.is_absolute():
+        expected_path = ROOT / expected_path
+    if output_json is not None and not output_json.is_absolute():
+        output_json = ROOT / output_json
+
+    actual = read_ppm(actual_path)
+    expected = read_ppm(expected_path)
+    metrics = compare_pixels(actual, expected)
+    status = comparison_status(metrics, args.comparison_class, args.tolerance, args.mean_tolerance)
+    result = {
+        "comparison_schema": "sslab-comparison-v0",
+        "status": status,
+        "class": args.comparison_class,
+        "claim_boundary": "pixel comparison aid; not artistic acceptance",
+        "actual": {
+            "path": display_path(actual_path),
+            "sha256": actual.sha256(),
+            "width": actual.width,
+            "height": actual.height,
+        },
+        "expected": {
+            "path": display_path(expected_path),
+            "sha256": expected.sha256(),
+            "width": expected.width,
+            "height": expected.height,
+        },
+        "thresholds": {
+            "tolerance": args.tolerance,
+            "mean_tolerance": args.mean_tolerance,
+        },
+        "metrics": metrics,
+        "limits": [
+            "Exact and tolerant comparisons are mechanical.",
+            "Perceptual comparison currently uses mean absolute channel delta only.",
+            "Observational comparisons record metrics without promotion authority.",
+        ],
+    }
+    if output_json is not None:
+        output_json.parent.mkdir(parents=True, exist_ok=True)
+        output_json.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    return result
+
+
 def add_render_parser(subparsers: argparse._SubParsersAction[argparse.ArgumentParser]) -> None:
     parser = subparsers.add_parser("render", help="Render a deterministic proof-kernel canary capture.")
     parser.add_argument("--product", default="nocturne", choices=["nocturne"])
@@ -432,14 +566,50 @@ def add_render_parser(subparsers: argparse._SubParsersAction[argparse.ArgumentPa
     parser.set_defaults(func=render_nocturne)
 
 
+def add_compare_parser(subparsers: argparse._SubParsersAction[argparse.ArgumentParser]) -> None:
+    parser = subparsers.add_parser("compare", help="Compare two proof-kernel PPM captures.")
+    parser.add_argument("--actual", required=True)
+    parser.add_argument("--expected", required=True)
+    parser.add_argument(
+        "--class",
+        dest="comparison_class",
+        default="exact",
+        choices=["exact", "tolerant", "perceptual", "observational"],
+    )
+    parser.add_argument("--tolerance", type=int, default=0)
+    parser.add_argument("--mean-tolerance", type=float, default=0.0)
+    parser.add_argument("--output-json", default=str(DEFAULT_COMPARISON.relative_to(ROOT)))
+    parser.set_defaults(func=compare_captures)
+
+
+def print_result(result: dict) -> None:
+    if "capture" in result:
+        print(f"{result['runtime']['product']} {result['capture']['sha256']} {result['capture']['path']}")
+        return
+    if "comparison_schema" in result:
+        metrics = result["metrics"]
+        print(
+            "comparison "
+            f"{result['status']} "
+            f"{result['class']} "
+            f"changed_pixels={metrics['changed_pixels']} "
+            f"max_delta={metrics['max_abs_delta']}"
+        )
+        return
+    print(json.dumps(result, sort_keys=True))
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     subparsers = parser.add_subparsers(dest="command", required=True)
     add_render_parser(subparsers)
+    add_compare_parser(subparsers)
     args = parser.parse_args()
 
-    proof = args.func(args)
-    print(f"{proof['runtime']['product']} {proof['capture']['sha256']} {proof['capture']['path']}")
+    result = args.func(args)
+    print_result(result)
+    if result.get("status") == "fail":
+        return 1
     return 0
 
 

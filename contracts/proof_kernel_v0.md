@@ -21,6 +21,7 @@ Proof Kernel v0 consists of:
 - minimal software/reference renderer
 - fixed-step headless canary host
 - `sslab` command surface
+- exact, tolerant, perceptual, and observational comparison classes
 - proof-bundle v0 output
 
 ## Canary
@@ -28,12 +29,18 @@ Proof Kernel v0 consists of:
 The first canary is `nocturne`.
 
 This is deliberate. Nocturne exercises a small set of primitives while avoiding
-Plasma's larger semantic surface:
+Plasma's larger semantic surface. The private software renderer provides:
 
 - clear
 - filled rectangle
 - frame rectangle
 - line/polyline
+
+The initial `observatory_night` canary exercises:
+
+- clear
+- filled rectangle
+- frame rectangle
 - deterministic seed
 - fixed resolution
 - fixed timeline
@@ -43,6 +50,7 @@ Plasma's larger semantic surface:
 Given the same product, preset, seed, resolution, frame count, and fixed delta:
 
 - two headless runs produce the same capture hash
+- the repeated captures compare exactly through `sslab compare`
 - a proof bundle records source, runtime, seed, renderer, captures, and limits
 - the existing Win32 `.scr` path remains unchanged
 - no public compatibility claim is widened
