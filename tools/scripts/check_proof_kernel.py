@@ -77,8 +77,10 @@ REQUIRED_TEXT = {
         "def proof_from_profile",
         "compile_ricochet_runner",
         "lifecycle_ricochet",
+        "profile_product",
         "proof_ricochet_from_profile",
         "RICOCHET_RUNNER_SOURCES",
+        "sslab-profile-v0",
         "def compare_captures",
     ],
     ROOT / "tools" / "sslab" / "nocturne_canary_runner.c": [
@@ -382,6 +384,78 @@ def validate_ricochet_profile_proof(errors: list[str]) -> None:
                     require((ROOT / path_text).exists() or pathlib.Path(path_text).exists(), f"Ricochet capture path must exist: {path_text}", errors)
 
 
+def validate_profile_receipts(errors: list[str]) -> None:
+    profile_cases = [
+        (
+            "nocturne",
+            [
+                "--product",
+                "nocturne",
+                "--preset",
+                "observatory_night",
+                "--width",
+                "96",
+                "--height",
+                "54",
+                "--seed",
+                "1536",
+                "--frames",
+                "8",
+                "--delta-ms",
+                "100",
+            ],
+        ),
+        (
+            "ricochet",
+            [
+                "--product",
+                "ricochet",
+                "--preset",
+                "classic_clean",
+                "--width",
+                "128",
+                "--height",
+                "72",
+                "--seed",
+                "2048",
+                "--frames",
+                "32",
+                "--delta-ms",
+                "100",
+            ],
+        ),
+    ]
+    with tempfile.TemporaryDirectory() as output_root:
+        for product, args in profile_cases:
+            profile_dir = pathlib.Path(output_root) / product
+            subprocess.check_call(
+                [
+                    sys.executable,
+                    str(SSLAB),
+                    "profile",
+                    *args,
+                    "--iterations",
+                    "2",
+                    "--short-soak-cycles",
+                    "2",
+                    "--output-dir",
+                    str(profile_dir),
+                ],
+                cwd=ROOT,
+                stdout=subprocess.DEVNULL,
+            )
+            receipt = json.loads((profile_dir / "profile.json").read_text(encoding="utf-8"))
+            require(receipt.get("profile_schema") == "sslab-profile-v0", f"{product} profile must emit sslab-profile-v0.", errors)
+            require(receipt.get("status") == "informational", f"{product} profile must remain informational when short soak passes.", errors)
+            require(receipt.get("product") == product, f"{product} profile must record product key.", errors)
+            require(receipt.get("short_soak_status") == "pass", f"{product} short soak must repeat exactly.", errors)
+            require(receipt.get("measurement_iterations") == 2, f"{product} profile must record measurement iterations.", errors)
+            require(receipt.get("short_soak_cycles") == 2, f"{product} profile must record short soak cycles.", errors)
+            require(float(receipt.get("frame_time_ms_p50", 0.0)) >= 0.0, f"{product} profile p50 must be non-negative.", errors)
+            require(float(receipt.get("frame_time_ms_p95", 0.0)) >= 0.0, f"{product} profile p95 must be non-negative.", errors)
+            require(float(receipt.get("frame_time_ms_p99", 0.0)) >= 0.0, f"{product} profile p99 must be non-negative.", errors)
+
+
 def main() -> int:
     errors: list[str] = []
 
@@ -409,6 +483,9 @@ def main() -> int:
 
     if not errors:
         validate_ricochet_profile_proof(errors)
+
+    if not errors:
+        validate_profile_receipts(errors)
 
     if errors:
         for error in errors:

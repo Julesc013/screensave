@@ -5,10 +5,12 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 import pathlib
 import subprocess
 import sys
 import tempfile
+import time
 from dataclasses import dataclass
 from typing import Any
 
@@ -380,6 +382,128 @@ def lifecycle_product(args: argparse.Namespace) -> dict[str, Any]:
     return lifecycle_nocturne(args)
 
 
+def percentile(values: list[float], percent: float) -> float:
+    if not values:
+        return 0.0
+    ordered = sorted(values)
+    index = int(math.ceil((percent / 100.0) * len(ordered))) - 1
+    if index < 0:
+        index = 0
+    if index >= len(ordered):
+        index = len(ordered) - 1
+    return ordered[index]
+
+
+def profile_product(args: argparse.Namespace) -> dict[str, Any]:
+    output_dir = pathlib.Path(args.output_dir)
+    if not output_dir.is_absolute():
+        output_dir = ROOT / output_dir
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    measured_samples: list[float] = []
+    soak_hashes: list[str] = []
+    if int(args.iterations) <= 0:
+        raise ValueError("profile iterations must be positive")
+    if int(args.short_soak_cycles) <= 0:
+        raise ValueError("short soak cycles must be positive")
+    run_count = int(args.iterations) + int(args.short_soak_cycles)
+    frames = max(1, int(args.frames))
+
+    with tempfile.TemporaryDirectory() as temp_root:
+        runner_exe = pathlib.Path(temp_root) / f"{args.product}_profile_runner.exe"
+        if args.product == "ricochet":
+            compile_ricochet_runner(runner_exe)
+        else:
+            compile_nocturne_runner(runner_exe)
+
+        for run_index in range(run_count):
+            run_dir = output_dir / f"run-{run_index:02d}"
+            run_dir.mkdir(parents=True, exist_ok=True)
+            start = time.perf_counter()
+            if args.product == "ricochet":
+                command = [
+                    str(runner_exe),
+                    "--width",
+                    str(args.width),
+                    "--height",
+                    str(args.height),
+                    "--seed",
+                    str(args.seed),
+                    "--delta-ms",
+                    str(args.delta_ms),
+                    "--capture-frames",
+                    str(frames),
+                    "--output-dir",
+                    str(run_dir),
+                ]
+            else:
+                command = [
+                    str(runner_exe),
+                    "--width",
+                    str(args.width),
+                    "--height",
+                    str(args.height),
+                    "--seed",
+                    str(args.seed),
+                    "--frames",
+                    str(frames),
+                    "--delta-ms",
+                    str(args.delta_ms),
+                    "--preset",
+                    args.preset,
+                    "--output",
+                    str(run_dir / "capture.ppm"),
+                ]
+            runner = subprocess.run(
+                command,
+                cwd=ROOT,
+                text=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                check=False,
+            )
+            elapsed_ms = (time.perf_counter() - start) * 1000.0
+            if runner.returncode != 0:
+                raise RuntimeError(f"compiled {args.product} profile runner failed: {runner.stderr.strip()}")
+
+            if run_index < int(args.iterations):
+                measured_samples.append(elapsed_ms / float(frames))
+
+            if args.product == "ricochet":
+                capture_hash = sha256_file(run_dir / f"frame-{frames:04d}.rgba")
+            else:
+                capture_hash = read_ppm(run_dir / "capture.ppm").rgba_sha256()
+            soak_hashes.append(capture_hash)
+
+    short_soak_hashes = soak_hashes[-int(args.short_soak_cycles) :] if int(args.short_soak_cycles) > 0 else []
+    short_soak_status = "pass"
+    if short_soak_hashes and len(set(short_soak_hashes)) != 1:
+        short_soak_status = "fail"
+
+    receipt = {
+        "profile_schema": "sslab-profile-v0",
+        "status": "informational" if short_soak_status == "pass" else "fail",
+        "product": args.product,
+        "preset": args.preset,
+        "runner_mode": "compiled-product-session",
+        "width": int(args.width),
+        "height": int(args.height),
+        "seed": int(args.seed),
+        "delta_ms": int(args.delta_ms),
+        "measured_frames": frames,
+        "measurement_iterations": int(args.iterations),
+        "short_soak_cycles": int(args.short_soak_cycles),
+        "short_soak_status": short_soak_status,
+        "short_soak_hashes": short_soak_hashes,
+        "frame_time_ms_p50": percentile(measured_samples, 50.0),
+        "frame_time_ms_p95": percentile(measured_samples, 95.0),
+        "frame_time_ms_p99": percentile(measured_samples, 99.0),
+        "claim_boundary": "informational process-level profile and bounded short-soak receipt; not a performance qualification gate",
+    }
+    (output_dir / "profile.json").write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    return receipt
+
+
 def run_ricochet_capture_pass(profile: dict[str, Any], output_dir: pathlib.Path) -> dict[str, Any]:
     output_dir.mkdir(parents=True, exist_ok=True)
     capture_frames = [int(frame) for frame in profile.get("capture_frames", [])]
@@ -717,6 +841,21 @@ def add_lifecycle_parser(subparsers: argparse._SubParsersAction[argparse.Argumen
     parser.set_defaults(func=lifecycle_product)
 
 
+def add_profile_parser(subparsers: argparse._SubParsersAction[argparse.ArgumentParser]) -> None:
+    parser = subparsers.add_parser("profile", help="Run an informational profile and bounded short-soak receipt.")
+    parser.add_argument("--product", default="nocturne", choices=["nocturne", "ricochet"])
+    parser.add_argument("--preset", default="observatory_night")
+    parser.add_argument("--width", type=int, default=96)
+    parser.add_argument("--height", type=int, default=54)
+    parser.add_argument("--seed", type=int, default=1536)
+    parser.add_argument("--frames", type=int, default=8)
+    parser.add_argument("--delta-ms", type=int, default=100)
+    parser.add_argument("--iterations", type=int, default=5)
+    parser.add_argument("--short-soak-cycles", type=int, default=3)
+    parser.add_argument("--output-dir", default=str((ROOT / "out" / "proof" / "sslab-profile-run").relative_to(ROOT)))
+    parser.set_defaults(func=profile_product)
+
+
 def add_proof_parser(subparsers: argparse._SubParsersAction[argparse.ArgumentParser]) -> None:
     parser = subparsers.add_parser("proof", help="Run a generated proof-profile orchestration.")
     parser.add_argument("--profile", default="nocturne.reference.v0")
@@ -764,6 +903,17 @@ def print_result(result: dict) -> None:
             f"checksum={result['checksum']}"
         )
         return
+    if result.get("profile_schema") == "sslab-profile-v0":
+        print(
+            "profile "
+            f"{result['status']} "
+            f"{result['product']} "
+            f"p50={result['frame_time_ms_p50']:.3f}ms "
+            f"p95={result['frame_time_ms_p95']:.3f}ms "
+            f"p99={result['frame_time_ms_p99']:.3f}ms "
+            f"short_soak={result['short_soak_status']}"
+        )
+        return
     print(json.dumps(result, sort_keys=True))
 
 
@@ -773,6 +923,7 @@ def main() -> int:
     add_render_parser(subparsers)
     add_compare_parser(subparsers)
     add_lifecycle_parser(subparsers)
+    add_profile_parser(subparsers)
     add_proof_parser(subparsers)
     args = parser.parse_args()
 
