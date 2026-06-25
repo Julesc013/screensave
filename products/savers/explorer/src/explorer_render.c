@@ -270,8 +270,6 @@ static void explorer_draw_route_surface(
     int horizon;
     int floor_y;
     int band_index;
-    int band_y;
-    int next_band_y;
     int center_x;
     int center_curve;
     int width_half;
