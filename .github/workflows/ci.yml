@@ -151,3 +151,43 @@ jobs:
             out/aide/screensave-project-adapter/invocations/render/ci-render
             out/aide/screensave-project-adapter/invocations/compare/ci-compare
           if-no-files-found: error
+
+  windows-native-current-x86:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Validate build controller
+        run: python tools\scripts\check_build_controller.py
+
+      - name: Build and audit current Windows x86 savers
+        run: >
+          python tools\buildctl\screensave_build.py build
+          --profile windows-current-x86
+          --output-dir out\ci\windows-current-x86
+
+      - name: Build and audit current Windows tools
+        run: >
+          python tools\buildctl\screensave_build.py build
+          --profile windows-current-tools
+          --output-dir out\ci\windows-current-tools
+
+      - name: Upload native Windows build evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-native-current-x86-build-evidence
+          path: |
+            out\ci\windows-current-x86
+            out\ci\windows-current-tools
+            out\msvc\vs2022\Release
+          if-no-files-found: error
