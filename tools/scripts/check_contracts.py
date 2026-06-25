@@ -80,6 +80,9 @@ REQUIRED_CONTRACTS = {
         "audit",
         "proof",
         "AIDE may consume receipts",
+        "tools/project_adapter/capability_bindings.json",
+        "tools/project_adapter/receipt_schemas.json",
+        "accept arbitrary output paths",
     ],
 }
 

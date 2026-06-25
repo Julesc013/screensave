@@ -12,6 +12,7 @@ project_state = "PROJECT_STATE.toml"
 version_manifest = "VERSION.toml"
 product_catalog = "catalog/products.toml"
 artifact_profiles = "catalog/artifact_profiles.toml"
+project_bridge_profile = ".aide/project_bridge_profile.toml"
 historical_codex_queues = ".codex/queues"
 
 [scope]
@@ -24,6 +25,7 @@ allowed = [
   "catalog design",
   "validator repair",
   "proof-kernel evidence ingestion",
+  "deterministic project bridge profiling",
 ]
 excluded = [
   "automatic merging",

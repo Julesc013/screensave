@@ -23,6 +23,28 @@ The v0 adapter command set is:
 - `audit`: run the ScreenSave PE artifact audit and report binary facts.
 - `proof`: run the Proof Kernel v0 Nocturne canary and exact comparison.
 
+## Fixed Capability Bindings
+
+The admitted capability profile is committed at
+`tools/project_adapter/capability_bindings.json`. Command-specific receipt
+requirements are committed at `tools/project_adapter/receipt_schemas.json`.
+
+External coordinators must bind to these fixed capabilities, not to an open
+`screensave run <anything>` operation:
+
+- `screensave.project.status`
+- `screensave.project.capabilities`
+- `screensave.catalog.read`
+- `screensave.validation.core`
+- `screensave.proof.nocturne.render`
+- `screensave.proof.capture.compare`
+- `screensave.artifact.pe.audit`
+- `screensave.proof.nocturne.exact`
+
+Each capability has a declared argv shape, decoder schema, mutation policy,
+output policy, timeout, and state probe. Changes to this file are project
+contract changes and must be reviewed as such.
+
 ## Boundaries
 
 The adapter may:
@@ -31,7 +53,8 @@ The adapter may:
 - invoke `sslab`
 - invoke the PE artifact audit
 - emit JSON receipts
-- write generated proof artifacts under `out/`
+- write generated proof artifacts only under contained invocation roots in
+  `out/proof/project-adapter/invocations/`
 - expose limitations and refusal reasons
 
 The adapter may not:
@@ -43,6 +66,9 @@ The adapter may not:
 - accept visual artistic quality
 - redefine saver semantics
 - make AIDE mandatory for builds or releases
+- accept arbitrary output paths from callers
+- read compare or audit inputs outside approved ScreenSave evidence or artifact
+  roots
 
 ## Result Shape
 
@@ -57,6 +83,22 @@ Every command returns a JSON object with:
 - `limits`
 
 Status values are `pass`, `fail`, `informational`, or `blocked`.
+
+Blocked receipts include a typed `refusal` object. Initial refusal codes are:
+
+- `invalid_invocation_id`
+- `output_root_escape`
+- `input_not_found`
+- `input_not_file`
+- `input_root_denied`
+- `quota_exceeded`
+- `command_timeout`
+- `command_failed`
+
+Generated-output commands accept a sanitized `--invocation-id`; they do not
+accept caller-selected absolute output paths. The adapter owns the output root,
+creates an invocation directory, and writes an `artifact-manifest.json` with
+paths, sizes, and SHA-256 digests for generated artifacts.
 
 ## Initial Proof
 

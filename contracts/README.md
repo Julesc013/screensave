@@ -15,7 +15,7 @@ Current contracts:
 - [`proof_bundle_v0.md`](proof_bundle_v0.md): initial proof-bundle shape for future Lab Runner, Workbench, CI, and AIDE evidence packets.
 - [`surface_rgba8_v0.md`](surface_rgba8_v0.md): private proof-kernel pixel-surface contract.
 - [`proof_kernel_v0.md`](proof_kernel_v0.md): active ScreenSave-owned proof-kernel milestone.
-- [`project_adapter_v0.md`](project_adapter_v0.md): ScreenSave-owned status, capability, validation, and proof command surface for external coordinators.
+- [`project_adapter_v0.md`](project_adapter_v0.md): ScreenSave-owned status, capability, validation, proof, fixed capability binding, and receipt schema surface for external coordinators.
 
 Contract rules:
 

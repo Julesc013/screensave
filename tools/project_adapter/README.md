@@ -10,14 +10,23 @@ python tools\project_adapter\screensave_project.py status
 python tools\project_adapter\screensave_project.py capabilities
 python tools\project_adapter\screensave_project.py catalog
 python tools\project_adapter\screensave_project.py validate
-python tools\project_adapter\screensave_project.py render --output-dir out\proof\project-adapter\render\nocturne
+python tools\project_adapter\screensave_project.py render --invocation-id local-render
 python tools\project_adapter\screensave_project.py compare --actual validation\captures\proof-kernel-v0\nocturne\capture.ppm
 python tools\project_adapter\screensave_project.py audit
-python tools\project_adapter\screensave_project.py proof --output-dir out\proof\project-adapter\nocturne
+python tools\project_adapter\screensave_project.py proof --invocation-id local-proof
 ```
 
 The adapter reports JSON receipts. It delegates to ScreenSave validators and
 `sslab`; it does not edit code, merge branches, certify compatibility, or make
 AIDE part of saver runtime.
+
+Generated-output commands use contained invocation roots under
+`out/proof/project-adapter/invocations/`. Callers provide a sanitized
+`--invocation-id`; they do not provide arbitrary output paths. Compare inputs
+are limited to ScreenSave capture/proof roots, and explicit PE audit inputs are
+limited to ScreenSave artifact roots under `out/`.
+
+The fixed capability profile is `capability_bindings.json`.
+Command-specific receipt requirements are recorded in `receipt_schemas.json`.
 
 Type: repository control tool.

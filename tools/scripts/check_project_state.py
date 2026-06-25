@@ -151,8 +151,19 @@ def validate_state(state: dict) -> list[str]:
     for label, value in (
         ("project_adapter.contract", project_adapter.get("contract")),
         ("project_adapter.command", project_adapter.get("command")),
+        ("project_adapter.capability_bindings", project_adapter.get("capability_bindings")),
     ):
         require_path(value, label, errors)
+    require(
+        project_adapter.get("output_root") == "out/proof/project-adapter/invocations",
+        "project_adapter.output_root must be the contained invocation output root.",
+        errors,
+    )
+    require(
+        "contained generated-output roots" in str(project_adapter.get("policy", "")),
+        "project_adapter.policy must mention contained generated-output roots.",
+        errors,
+    )
 
     for name, value in validators.items():
         require_path(value, f"validators.{name}", errors)

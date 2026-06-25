@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "schema_id": "screensave-project-adapter-receipts-v0",
+  "adapter_schema": "screensave-project-adapter-v0",
+  "status_values": ["pass", "fail", "informational", "blocked"],
+  "common_required": [
+    "adapter_schema",
+    "project",
+    "command",
+    "status",
+    "source",
+    "payload",
+    "limits"
+  ],
+  "commands": {
+    "status": {
+      "payload_required": ["state_id", "public_release", "development_head", "active_program"]
+    },
+    "capabilities": {
+      "payload_required": ["binding_ref", "binding_sha256", "output_root", "capabilities", "refusals"]
+    },
+    "catalog": {
+      "payload_required": ["inventory_ref", "schema_version", "product_count", "saver_count"]
+    },
+    "validate": {
+      "payload_required": ["validation_class", "command_binding", "runs"]
+    },
+    "render": {
+      "payload_required": [
+        "capability",
+        "invocation_id",
+        "output_dir",
+        "artifact_manifest_ref",
+        "before_source",
+        "after_source",
+        "command_binding",
+        "run",
+        "proof_ref",
+        "capture_ref",
+        "capture_sha256"
+      ]
+    },
+    "compare": {
+      "payload_required": [
+        "capability",
+        "invocation_id",
+        "output_dir",
+        "comparison_ref",
+        "artifact_manifest_ref",
+        "before_source",
+        "after_source",
+        "command_binding",
+        "inputs",
+        "run",
+        "comparison_status",
+        "comparison_class",
+        "comparison_metrics"
+      ]
+    },
+    "audit": {
+      "payload_required": [
+        "capability",
+        "invocation_id",
+        "output_dir",
+        "audit_ref",
+        "artifact_manifest_ref",
+        "before_source",
+        "after_source",
+        "command_binding",
+        "input_paths",
+        "run",
+        "violation_count",
+        "fail_on_violation",
+        "claim_boundary"
+      ]
+    },
+    "proof": {
+      "payload_required": [
+        "capability",
+        "proof_kind",
+        "invocation_id",
+        "output_dir",
+        "artifact_manifest_ref",
+        "before_source",
+        "after_source",
+        "command_binding",
+        "render",
+        "compare",
+        "proof_ref",
+        "comparison_ref",
+        "capture_ref",
+        "capture_sha256",
+        "comparison_status",
+        "comparison_metrics"
+      ]
+    },
+    "blocked": {
+      "payload_required": ["refusal"],
+      "refusal_required": ["code", "detail"]
+    }
+  }
+}

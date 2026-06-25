@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import pathlib
 import sys
 import tomllib
@@ -9,11 +10,14 @@ import tomllib
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 PILOT_PATH = ROOT / ".aide" / "pilot.toml"
+BRIDGE_PROFILE_PATH = ROOT / ".aide" / "project_bridge_profile.toml"
+CAPABILITY_BINDINGS = ROOT / "tools" / "project_adapter" / "capability_bindings.json"
 GITIGNORE_PATH = ROOT / ".gitignore"
 
 REQUIRED_PATHS = [
     ROOT / ".aide" / "README.md",
     PILOT_PATH,
+    BRIDGE_PROFILE_PATH,
     ROOT / ".aide" / "work_units" / "truth-proof-baseline.toml",
     ROOT / ".aide" / "evidence_packets" / "README.md",
     ROOT / ".aide" / "guidance" / "codex.md",
@@ -23,6 +27,10 @@ REQUIRED_PATHS = [
 def load_toml(path: pathlib.Path) -> dict:
     with path.open("rb") as handle:
         return tomllib.load(handle)
+
+
+def load_json(path: pathlib.Path) -> dict:
+    return json.loads(path.read_text(encoding="utf-8"))
 
 
 def require(condition: bool, message: str, errors: list[str]) -> None:
@@ -73,6 +81,31 @@ def main() -> int:
         require_path(item.get("path"), f"work_units[{index}].path", errors)
     for index, item in enumerate(pilot.get("evidence_packets", [])):
         require_path(item.get("path"), f"evidence_packets[{index}].path", errors)
+
+    bridge_profile = load_toml(BRIDGE_PROFILE_PATH)
+    bindings = load_json(CAPABILITY_BINDINGS)
+    require(bridge_profile.get("schema_version") == 1, ".aide/project_bridge_profile.toml schema_version must be 1.", errors)
+    require(
+        bridge_profile.get("status") == "report-only-ready",
+        ".aide/project_bridge_profile.toml must remain report-only-ready.",
+        errors,
+    )
+    for label, value in bridge_profile.get("authority", {}).items():
+        if label == "output_root":
+            require(
+                value == "out/proof/project-adapter/invocations",
+                "bridge_profile.authority.output_root must be the contained adapter output root.",
+                errors,
+            )
+            continue
+        require_path(value, f"bridge_profile.authority.{label}", errors)
+    bridge = bridge_profile.get("bridge", {})
+    require(bridge.get("mutation_allowed") is False, "ScreenSave bridge must not allow mutation.", errors)
+    require(bridge.get("automatic_merge_allowed") is False, "ScreenSave bridge must not allow automatic merge.", errors)
+    require(bridge.get("worker_runtime_required") is False, "ScreenSave bridge must not require AIDE worker runtime.", errors)
+    profile_names = {item.get("name") for item in bridge_profile.get("capabilities", [])}
+    binding_names = {item.get("name") for item in bindings.get("capabilities", [])}
+    require(profile_names == binding_names, "ScreenSave bridge profile capabilities must match capability bindings.", errors)
 
     gitignore = GITIGNORE_PATH.read_text(encoding="utf-8")
     require(".aide.local/" in gitignore, ".gitignore must ignore .aide.local/.", errors)
