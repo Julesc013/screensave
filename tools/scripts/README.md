@@ -9,6 +9,7 @@ Current stage:
 - `check_docs_basics.py` checks markdown links and roadmap/doc basics.
 - `check_build_layout.py` validates the checked-in build scaffold and target relationships.
 - `check_project_state.py` validates `PROJECT_STATE.toml`, `VERSION.toml`, linked authority files, and prints the current released/development/queue/compatibility state with `--summary`.
+- `check_catalog_profiles.py` validates `catalog/products.toml`, `catalog/artifact_profiles.toml`, product artifact-profile references, and evidence-status vocabulary.
 - `audit_pe_artifacts.py` records PE architecture, subsystem, and import facts for checked-out `.scr` and `.exe` artifacts.
 - `check_shared_settings_layout.py` validates the C04 shared settings, preset, randomization, and pack scaffold.
 - `check_windows_integration_layout.py` validates the C05 Win32 screen, preview, config, persistence, and metadata hardening scaffold.

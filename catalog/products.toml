@@ -4,8 +4,23 @@ schema_version = 1
 release_channel = "core"
 maturity = "c16-core"
 compatibility_status = "targeted"
+artifact_profiles = ["windows_preservation_x86_ansi", "windows_current_x86_scr"]
 source_units = ["config", "module", "presets", "render", "sim", "themes"]
 required_presets = ["defaults.ini", "themed.ini", "performance.ini"]
+semantic_contract = "product-local-ir"
+reference_path_required = true
+
+[defaults.app]
+release_channel = "manager-workbench"
+maturity = "optional-tool"
+compatibility_status = "targeted"
+artifact_profiles = ["windows_current_tool"]
+
+[defaults.sdk]
+release_channel = "sdk"
+maturity = "source-only"
+compatibility_status = "targeted"
+artifact_profiles = ["source_sdk"]
 
 [defaults.routing]
 minimum_kind = "gdi"
@@ -158,18 +173,18 @@ required_presets = ["defaults.ini", "weighted.ini", "families.ini"]
 
 [[products]]
 key = "suite"
-name = "ScreenSave Suite"
+name = "ScreenSave Manager"
 kind = "app"
 role = "optional-manager-companion"
-release_channel = "suite"
+release_channel = "manager"
 maturity = "companion"
 
 [[products]]
 key = "benchlab"
-name = "BenchLab"
+name = "ScreenSave Workbench Lab Runner"
 kind = "app"
 role = "diagnostics-and-proof-harness"
-release_channel = "benchlab"
+release_channel = "workbench"
 maturity = "companion"
 
 [[products]]

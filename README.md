@@ -12,12 +12,13 @@ Implementation currently exists through `S15` plus continuation `C00`, `C01`, `C
 - State authority: [`PROJECT_STATE.toml`](PROJECT_STATE.toml)
 - Version authority: [`VERSION.toml`](VERSION.toml)
 - Product catalog: [`catalog/products.toml`](catalog/products.toml)
+- Artifact profiles: [`catalog/artifact_profiles.toml`](catalog/artifact_profiles.toml)
 - Active milestone: [`docs/roadmap/truth-proof-baseline.md`](docs/roadmap/truth-proof-baseline.md)
 - Released public artifact: `c16-core-baseline`
 - Development-head product truth: Plasma [`U09 Stable Recut`](products/savers/plasma/docs/u09-stable-recut.md) and [`U09 Ship Posture`](products/savers/plasma/docs/u09-ship-posture.md)
 - Plasma ship posture: `GO WITH CAVEATS`
 - Queue status: `.codex/queues/wave0.toml` through `.codex/queues/wave5.toml` are historical-superseded lineage records
-- Compatibility policy: evidence-classed with `certified`, `binary-audited`, `targeted`, and `unsupported` statuses
+- Compatibility policy: evidence-classed with `certified`, `binary-audited`, `buildable`, `targeted`, `experimental`, `unsupported`, and `retired` statuses
 
 Use this command for the current machine-readable summary:
 
@@ -48,8 +49,8 @@ python tools\scripts\check_project_state.py --summary
 Companion channels stay separate from Core:
 
 - `Installer`: optional installed-distribution path built from the frozen Core payload
-- `Suite`: optional browser, launcher, preview, and saver-settings control app
-- `BenchLab`: diagnostics and validation harness for renderer and saver inspection
+- `Manager`: optional browser, installer, repair, preview, and saver-settings control product; the historical `suite` source tree is its current implementation home
+- `Workbench`: optional authoring, inspection, comparison, profiling, and release-proof product; the current `benchlab` implementation is its Lab Runner seed
 - `SDK`: contributor-facing templates, examples, manifests, and authoring guidance
 - `Extras`: holdback channel for experimental or lower-confidence material; no frozen payload ships in `C16`
 
@@ -68,7 +69,7 @@ Companion channels stay separate from Core:
 - Optional premium tier: OpenGL 4.6 (`gl46`), capability-gated above the modern tier without redefining the baseline
 - Internal-only safety tier: `null`
 
-Universal behavior ships first. If an optional capability is absent, ScreenSave must fall back cleanly or keep that behavior out of the universal saver set. Public OS and artifact claims now use evidence classes: `certified`, `binary-audited`, `targeted`, or `unsupported`. For validated coverage, known limits, and the current binary audit, see [`validation/notes/ss02-support-matrix.md`](validation/notes/ss02-support-matrix.md), [`validation/notes/c16-known-issues.md`](validation/notes/c16-known-issues.md), and [`validation/captures/truth-proof-baseline/pe-audit-current.txt`](validation/captures/truth-proof-baseline/pe-audit-current.txt).
+Universal behavior ships first. If an optional capability is absent, ScreenSave must fall back cleanly or keep that behavior out of the universal saver set. Public OS and artifact claims now use evidence classes: `certified`, `binary-audited`, `buildable`, `targeted`, `experimental`, `unsupported`, or `retired`; only `certified` is an ordinary public support promise. For validated coverage, known limits, and the current binary audit, see [`validation/notes/ss02-support-matrix.md`](validation/notes/ss02-support-matrix.md), [`validation/notes/c16-known-issues.md`](validation/notes/c16-known-issues.md), and [`validation/captures/truth-proof-baseline/pe-audit-current.txt`](validation/captures/truth-proof-baseline/pe-audit-current.txt).
 
 ## Repository Map
 

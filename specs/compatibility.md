@@ -15,11 +15,15 @@ Public operating-system, binary, and renderer claims must use explicit evidence 
 
 - `certified`: executed successfully on the named OS, hardware, or renderer profile with stored evidence.
 - `binary-audited`: PE headers, architecture, subsystem, imports, runtime dependencies, and required APIs pass the named profile, but the artifact has not been run there.
+- `buildable`: a reproducible build exists for the named profile, but no binary or runtime compatibility claim is made.
 - `targeted`: architectural goal only; not a public support promise.
+- `experimental`: available with known limitations or incomplete proof, and not silently promoted into Core support.
 - `unsupported`: known not to work or deliberately excluded.
+- `retired`: preserved for historical reference, but no longer maintained as current support.
 
 The broad Windows band is the preservation target.
-It must not be worded as certified coverage until the matching artifact and runtime evidence exists.
+Only `certified` support should be worded as an ordinary public compatibility promise.
+The broad Windows band must not be worded as certified coverage until the matching artifact and runtime evidence exists.
 
 ## Excluded Targets
 

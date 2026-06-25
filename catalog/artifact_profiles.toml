@@ -1,0 +1,93 @@
+schema_version = 1
+
+[defaults]
+proof_policy = "evidence-classed"
+public_claim = "targeted"
+mandatory_renderer = "gdi"
+software_reference_required = true
+autonomous_artifact_required = true
+
+[evidence_statuses]
+allowed = [
+  "certified",
+  "binary-audited",
+  "buildable",
+  "targeted",
+  "experimental",
+  "unsupported",
+  "retired",
+]
+public_promise = "certified"
+
+[[artifact_profiles]]
+key = "windows_preservation_x86_ansi"
+name = "Windows Preservation x86 ANSI"
+product_classes = ["saver"]
+host = "win32_scr_ansi"
+artifact_extension = ".scr"
+machine = "x86"
+pe_format = "PE32"
+subsystem_policy = "conservative_legacy"
+runtime_dependency_policy = "no_mandatory_modern_ucrt"
+mandatory_renderers = ["gdi"]
+optional_renderers = ["gl11"]
+evidence_status = "targeted"
+public_claim = "targeted"
+notes = [
+  "Preservation promise requires real VM or hardware certification before public support language.",
+  "OpenGL is optional and must be loaded safely.",
+]
+
+[[artifact_profiles]]
+key = "windows_current_x86_scr"
+name = "Windows Current x86 Saver"
+product_classes = ["saver"]
+host = "win32_scr_ansi"
+artifact_extension = ".scr"
+machine = "x86"
+pe_format = "PE32"
+subsystem_policy = "current_toolchain_declared"
+runtime_dependency_policy = "modern_crt_allowed_with_packaging_evidence"
+mandatory_renderers = ["gdi"]
+optional_renderers = ["gl11", "gl21", "gl33", "gl46"]
+evidence_status = "targeted"
+public_claim = "targeted"
+notes = [
+  "Current Windows builds may use modern toolchains, but support claims still require evidence.",
+]
+
+[[artifact_profiles]]
+key = "windows_current_tool"
+name = "Windows Current Tool"
+product_classes = ["app"]
+host = "win32_gui_app"
+artifact_extension = ".exe"
+machine = "x86"
+pe_format = "PE32"
+subsystem_policy = "current_toolchain_declared"
+runtime_dependency_policy = "modern_crt_allowed_with_packaging_evidence"
+mandatory_renderers = []
+optional_renderers = ["gdi", "gl11", "gl21", "gl33", "gl46"]
+evidence_status = "targeted"
+public_claim = "targeted"
+notes = [
+  "Manager and Workbench style tools are optional current-platform products, not saver runtime dependencies.",
+]
+
+[[artifact_profiles]]
+key = "source_sdk"
+name = "Source SDK"
+product_classes = ["sdk"]
+host = "source_only"
+artifact_extension = ""
+machine = "source"
+pe_format = "not_applicable"
+subsystem_policy = "not_applicable"
+runtime_dependency_policy = "not_applicable"
+mandatory_renderers = []
+optional_renderers = []
+evidence_status = "targeted"
+public_claim = "targeted"
+notes = [
+  "Contributor-facing SDK content is validated as source and documentation, not as a standalone runtime binary.",
+]
