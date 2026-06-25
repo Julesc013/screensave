@@ -36,6 +36,14 @@ REQUIRED_CONTRACTS = {
         "`null`",
         "gdi` remains mandatory",
     ],
+    ROOT / "contracts" / "screensave_doctrine_v1.md": [
+        "Status: active product doctrine.",
+        "Portable meaning. Native delivery. Deterministic proof. Optional automation.",
+        "Share mechanics.",
+        "Preserve meaning.",
+        "AIDE governs bounded development activity around ScreenSave. ScreenSave governs the product.",
+        "Each saver product owns its visual thesis",
+    ],
     ROOT / "contracts" / "proof_bundle_v0.md": [
         "Status: initial contract",
         "source commit and dirty status",
@@ -56,6 +64,8 @@ REQUIRED_CONTRACTS = {
         "canonical catalog authority",
         "minimal software/reference renderer",
         "fixed-step headless canary host",
+        "exact repeatability comparison",
+        "Proof Kernel v1 is the target for",
         "The first canary is `nocturne`.",
         "AIDE remains an optional evidence consumer",
     ],
@@ -94,6 +104,7 @@ def main() -> int:
     version = load_toml(VERSION_PATH)
     require(version.get("abi", {}).get("portable_contract") == "planned-v2", "VERSION.toml must keep portable_contract planned-v2.", errors)
     require(version.get("proof", {}).get("bundle_schema") == "proof-bundle-v0", "VERSION.toml must point at proof-bundle-v0.", errors)
+    require(version.get("schemas", {}).get("screensave_doctrine") == 1, "VERSION.toml schemas.screensave_doctrine must be 1.", errors)
     require(version.get("schemas", {}).get("proof_kernel") == 1, "VERSION.toml schemas.proof_kernel must be 1.", errors)
     require(version.get("schemas", {}).get("surface_rgba8") == 1, "VERSION.toml schemas.surface_rgba8 must be 1.", errors)
     require(version.get("schemas", {}).get("project_adapter") == 1, "VERSION.toml schemas.project_adapter must be 1.", errors)

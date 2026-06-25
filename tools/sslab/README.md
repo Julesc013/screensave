@@ -15,6 +15,8 @@ python tools\sslab\sslab.py compare --actual out\proof\run-a\capture.ppm --expec
 ```
 
 This is not a public saver runtime API and not a compatibility certification.
-It is the first ScreenSave-owned visual proof spine. `compare` supports
-`exact`, `tolerant`, `perceptual`, and `observational` classes; none of these
-classes replaces human artistic acceptance.
+It is the first ScreenSave-owned visual proof spine. Proof Kernel v0 uses
+`exact` comparison as its gate. `tolerant`, `perceptual`, and `observational`
+classes are available as report helpers only until later proof-kernel stages
+admit them as validation gates. None of these classes replaces human artistic
+acceptance.

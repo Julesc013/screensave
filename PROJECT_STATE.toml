@@ -11,6 +11,7 @@ release_candidate = "none"
 queue_authority = "historical-mx-queue-superseded"
 product_catalog = "catalog/products.toml"
 artifact_profiles = "catalog/artifact_profiles.toml"
+product_doctrine = "contracts/screensave_doctrine_v1.md"
 generated_catalog_inventory = "catalog/generated/products_inventory.json"
 version_manifest = "VERSION.toml"
 project_adapter = "tools/project_adapter/screensave_project.py"
@@ -50,11 +51,13 @@ surface_contract = "contracts/surface_rgba8_v0.md"
 canary_product = "nocturne"
 canary_evidence = "validation/captures/proof-kernel-v0/nocturne/proof.json"
 scope = [
+  "generated catalog inventory",
   "private RGBA8 surface",
   "minimal software/reference renderer",
   "fixed-step headless canary host",
   "sslab render/proof command",
   "deterministic capture hash",
+  "exact repeatability comparison",
 ]
 non_goals = [
   "public API rewrite",
@@ -62,6 +65,14 @@ non_goals = [
   "AIDE autonomous merge",
   "new compatibility certification",
 ]
+
+[doctrine]
+schema_version = 1
+contract = "contracts/screensave_doctrine_v1.md"
+short_form = "Portable meaning. Native delivery. Deterministic proof. Optional automation."
+platform_rule = "Share mechanics. Preserve meaning."
+semantic_rule = "One stable platform contract, many product-owned semantic cores, multiple shells."
+aide_boundary = "AIDE governs bounded development activity around ScreenSave. ScreenSave governs the product."
 
 [catalog]
 schema_version = 1

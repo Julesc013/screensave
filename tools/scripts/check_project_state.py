@@ -23,6 +23,7 @@ REQUIRED_TOP_LEVEL = {
     "development",
     "compatibility",
     "queues",
+    "doctrine",
     "catalog",
     "project_adapter",
     "plasma",
@@ -63,6 +64,7 @@ def validate_state(state: dict) -> list[str]:
     development = state.get("development", {})
     compatibility = state.get("compatibility", {})
     queues = state.get("queues", {})
+    doctrine = state.get("doctrine", {})
     catalog_state = state.get("catalog", {})
     project_adapter = state.get("project_adapter", {})
     validators = state.get("validators", {})
@@ -80,6 +82,7 @@ def validate_state(state: dict) -> list[str]:
     for label, value in (
         ("authority.product_catalog", authority.get("product_catalog")),
         ("authority.artifact_profiles", authority.get("artifact_profiles")),
+        ("authority.product_doctrine", authority.get("product_doctrine")),
         ("authority.generated_catalog_inventory", authority.get("generated_catalog_inventory")),
         ("authority.version_manifest", authority.get("version_manifest")),
         ("authority.project_adapter", authority.get("project_adapter")),
@@ -107,6 +110,25 @@ def validate_state(state: dict) -> list[str]:
             if isinstance(value, str):
                 wave = load_toml(ROOT / value)
                 require(wave.get("status") == REQUIRED_QUEUE_STATUS, f"{value} must have status {REQUIRED_QUEUE_STATUS!r}.", errors)
+
+    require(doctrine.get("schema_version") == 1, "doctrine.schema_version must be 1.", errors)
+    require(
+        doctrine.get("short_form") == "Portable meaning. Native delivery. Deterministic proof. Optional automation.",
+        "doctrine.short_form must preserve the ScreenSave short doctrine.",
+        errors,
+    )
+    require(doctrine.get("platform_rule") == "Share mechanics. Preserve meaning.", "doctrine.platform_rule must preserve the platform rule.", errors)
+    require(
+        "many product-owned semantic cores" in str(doctrine.get("semantic_rule", "")),
+        "doctrine.semantic_rule must preserve product-owned semantic cores.",
+        errors,
+    )
+    require(
+        doctrine.get("aide_boundary") == "AIDE governs bounded development activity around ScreenSave. ScreenSave governs the product.",
+        "doctrine.aide_boundary must preserve the AIDE product boundary.",
+        errors,
+    )
+    require_path(doctrine.get("contract"), "doctrine.contract", errors)
 
     require(catalog_state.get("schema_version") == 1, "catalog.schema_version must be 1.", errors)
     for label, value in (
@@ -166,6 +188,7 @@ def validate_version_manifest(state: dict, version: dict, catalog: dict, errors:
     require(version_development.get("current_state") == state.get("state_id"), "VERSION.toml development.current_state must match PROJECT_STATE state_id.", errors)
     require(version_development.get("development_head") == authority.get("development_head"), "VERSION.toml development.development_head must match PROJECT_STATE authority.", errors)
     require(version_schemas.get("product_catalog") == catalog.get("schema_version"), "VERSION.toml schemas.product_catalog must match catalog schema_version.", errors)
+    require(version_schemas.get("screensave_doctrine") == 1, "VERSION.toml schemas.screensave_doctrine must be 1.", errors)
     require(version_schemas.get("project_adapter") == 1, "VERSION.toml schemas.project_adapter must be 1.", errors)
     require(version_proof.get("policy") == compatibility.get("policy"), "VERSION.toml proof.policy must match PROJECT_STATE compatibility.policy.", errors)
     require_path(version_proof.get("binary_audit_tool"), "VERSION.toml proof.binary_audit_tool", errors)

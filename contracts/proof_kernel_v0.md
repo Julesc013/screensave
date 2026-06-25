@@ -17,11 +17,12 @@ truth.
 Proof Kernel v0 consists of:
 
 - canonical catalog authority
+- generated catalog inventory
 - private RGBA8 surface contract
 - minimal software/reference renderer
 - fixed-step headless canary host
 - `sslab` command surface
-- exact, tolerant, perceptual, and observational comparison classes
+- exact repeatability comparison
 - proof-bundle v0 output
 
 ## Canary
@@ -55,6 +56,37 @@ Given the same product, preset, seed, resolution, frame count, and fixed delta:
 - the existing Win32 `.scr` path remains unchanged
 - no public compatibility claim is widened
 - AIDE remains an optional evidence consumer
+
+## Staging
+
+Proof Kernel v0 is intentionally narrow:
+
+- Nocturne
+- generated catalog inventory
+- fixed-step headless execution
+- RGBA8 surface
+- deterministic software realization
+- frame capture
+- exact repeatability comparison
+- proof-bundle v0
+
+Proof Kernel v1 is the target for:
+
+- Ricochet or another stateful non-field canary
+- tolerant and perceptual comparison gates
+- lifecycle create, destroy, resize, and repeated-run checks
+- frame-time, resource, handle, and soak evidence
+- renderer comparison
+- CI integration
+
+Proof Kernel v2 is the target for:
+
+- Plasma
+- dense field semantics
+- multi-renderer equivalence classes
+- visual-quality metrics
+- pack-generation qualification
+- Workbench and compatibility-lab integration
 
 ## Non-Goals
 

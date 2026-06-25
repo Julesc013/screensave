@@ -2,6 +2,8 @@
 
 ScreenSave is a retro-compatible Windows screensaver platform and product monorepo. Its primary public release is `ScreenSave Core`, a ZIP of standalone `.scr` savers built around a conservative baseline: C89, x86 Win32, the classic ANSI Win32 screensaver host path, mandatory `gdi`, and optional capability-gated OpenGL tiers.
 
+Product doctrine: portable meaning, native delivery, deterministic proof, and optional automation. ScreenSave shares mechanics while preserving product-owned visual meaning; AIDE may coordinate development work, but ScreenSave owns the art, runtime, artifacts, and proof.
+
 The frozen public baseline is `c16-core-baseline`. The current development truth is the Truth And Proof Baseline recorded in [`PROJECT_STATE.toml`](PROJECT_STATE.toml) as `truth-proof-baseline-00`: `ScreenSave Core` remains the released artifact, Plasma's living product posture is the `U09` corrective recut with `GO WITH CAVEATS`, and compatibility claims are now evidence-classed rather than treated as one undifferentiated promise.
 
 Implementation currently exists through `S15` plus continuation `C00`, `C01`, `C02`, `C03`, `C04`, `C05`, `C06`, `C07`, `C08`, `C09`, `C10`, `C11`, `C12`, `C13` Wave A, Wave B, and Wave C, `C14`, `C15`, and `C16`.
@@ -15,6 +17,7 @@ Post-`SS` work now proceeds in the bounded `SX` substrate series.
 - Version authority: [`VERSION.toml`](VERSION.toml)
 - Product catalog: [`catalog/products.toml`](catalog/products.toml)
 - Artifact profiles: [`catalog/artifact_profiles.toml`](catalog/artifact_profiles.toml)
+- Product doctrine: [`contracts/screensave_doctrine_v1.md`](contracts/screensave_doctrine_v1.md)
 - AIDE pilot: [`.aide/pilot.toml`](.aide/pilot.toml)
 - Active milestone: [`docs/roadmap/truth-proof-baseline.md`](docs/roadmap/truth-proof-baseline.md)
 - Active implementation track: [`contracts/proof_kernel_v0.md`](contracts/proof_kernel_v0.md)
@@ -128,7 +131,7 @@ Repository-health and release-support validation lives under [`tools/scripts/`](
 - Release baseline: [`docs/releases/c16-core-baseline.md`](docs/releases/c16-core-baseline.md)
 - Current state authority: [`PROJECT_STATE.toml`](PROJECT_STATE.toml), [`VERSION.toml`](VERSION.toml), and [`docs/roadmap/truth-proof-baseline.md`](docs/roadmap/truth-proof-baseline.md)
 - Generated catalog inventory: [`catalog/generated/products_inventory.json`](catalog/generated/products_inventory.json), [`catalog/generated/products_sources.mk`](catalog/generated/products_sources.mk), and [`catalog/generated/products_table.md`](catalog/generated/products_table.md)
-- Contracts: [`contracts/portable_semantics_v2.md`](contracts/portable_semantics_v2.md), [`contracts/renderer_aliases_v1.md`](contracts/renderer_aliases_v1.md), and [`contracts/proof_bundle_v0.md`](contracts/proof_bundle_v0.md)
+- Contracts: [`contracts/screensave_doctrine_v1.md`](contracts/screensave_doctrine_v1.md), [`contracts/portable_semantics_v2.md`](contracts/portable_semantics_v2.md), [`contracts/renderer_aliases_v1.md`](contracts/renderer_aliases_v1.md), and [`contracts/proof_bundle_v0.md`](contracts/proof_bundle_v0.md)
 - Proof Kernel: [`contracts/proof_kernel_v0.md`](contracts/proof_kernel_v0.md) and [`contracts/surface_rgba8_v0.md`](contracts/surface_rgba8_v0.md)
 - Project adapter: [`contracts/project_adapter_v0.md`](contracts/project_adapter_v0.md) and [`tools/project_adapter/README.md`](tools/project_adapter/README.md)
 - Release doctrine: [`docs/roadmap/release-channels.md`](docs/roadmap/release-channels.md) and [`docs/roadmap/core-zip-doctrine.md`](docs/roadmap/core-zip-doctrine.md)
