@@ -22,7 +22,7 @@ claim_boundary = "deterministic canary proof; not compatibility certification or
 
 [[proof_profiles]]
 key = "ricochet.reference.v1"
-status = "planned"
+status = "implemented"
 product = "ricochet"
 preset = "classic_clean"
 width = 128
@@ -36,7 +36,9 @@ capture_frames = [0, 4, 8, 32]
 comparison_class = "exact"
 lifecycle = ["create", "resize", "step", "render", "destroy"]
 artifact_sets = ["windows_current_x86_scr"]
-claim_boundary = "planned second canary; no proof claim until implemented"
+baseline_capture = "validation/captures/proof-kernel-v1/ricochet/run-a/frame-0032.ppm"
+baseline_proof = "validation/captures/proof-kernel-v1/ricochet/profile-proof.json"
+claim_boundary = "Ricochet multi-frame deterministic and lifecycle proof only; performance, compatibility, release promotion, and artistic acceptance are separate axes"
 
 [[proof_profiles]]
 key = "plasma.v2.reference.preview"

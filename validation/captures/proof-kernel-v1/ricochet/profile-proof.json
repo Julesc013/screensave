@@ -1,0 +1,74 @@
+{
+  "capture_frames": [
+    0,
+    4,
+    8,
+    32
+  ],
+  "captures": [
+    {
+      "frame": 0,
+      "raw_rgba_path": "validation/captures/proof-kernel-v1/ricochet/run-a/frame-0000.rgba",
+      "raw_rgba_sha256": "b8c7c0ea922be06b559485e22a16c286fd29e7496437cfb017a74aec68c6235a",
+      "review_ppm_path": "validation/captures/proof-kernel-v1/ricochet/run-a/frame-0000.ppm"
+    },
+    {
+      "frame": 4,
+      "raw_rgba_path": "validation/captures/proof-kernel-v1/ricochet/run-a/frame-0004.rgba",
+      "raw_rgba_sha256": "7a1615e04d27e9dcb58da30b9520fcfa8dfe4b8fd5c14199750ef95754206ff1",
+      "review_ppm_path": "validation/captures/proof-kernel-v1/ricochet/run-a/frame-0004.ppm"
+    },
+    {
+      "frame": 8,
+      "raw_rgba_path": "validation/captures/proof-kernel-v1/ricochet/run-a/frame-0008.rgba",
+      "raw_rgba_sha256": "a50582e8e8f5517eb2b56e7e01d5b0493b8432375a7e577b152801a4f6574b42",
+      "review_ppm_path": "validation/captures/proof-kernel-v1/ricochet/run-a/frame-0008.ppm"
+    },
+    {
+      "frame": 32,
+      "raw_rgba_path": "validation/captures/proof-kernel-v1/ricochet/run-a/frame-0032.rgba",
+      "raw_rgba_sha256": "65c37015993c76632ce9e384db18b7cfa8c735049c66a72ed2833bbb45f70d25",
+      "review_ppm_path": "validation/captures/proof-kernel-v1/ricochet/run-a/frame-0032.ppm"
+    }
+  ],
+  "claim_boundary": "Ricochet multi-frame deterministic and lifecycle proof only; performance, compatibility, release promotion, and artistic acceptance are separate axes.",
+  "comparison_class": "exact",
+  "comparison_status": "pass",
+  "lifecycle_create_destroy_cycles": 32,
+  "lifecycle_ref": "validation/captures/proof-kernel-v1/ricochet/lifecycle/lifecycle.json",
+  "lifecycle_status": "pass",
+  "preset": "classic_clean",
+  "product": "ricochet",
+  "profile": "ricochet.reference.v1",
+  "profile_proof_schema": "sslab-profile-proof-v0",
+  "profile_source": "catalog/generated/proof_registry.json",
+  "repeat_captures": [
+    {
+      "frame": 0,
+      "raw_rgba_path": "validation/captures/proof-kernel-v1/ricochet/run-b/frame-0000.rgba",
+      "raw_rgba_sha256": "b8c7c0ea922be06b559485e22a16c286fd29e7496437cfb017a74aec68c6235a",
+      "review_ppm_path": "validation/captures/proof-kernel-v1/ricochet/run-b/frame-0000.ppm"
+    },
+    {
+      "frame": 4,
+      "raw_rgba_path": "validation/captures/proof-kernel-v1/ricochet/run-b/frame-0004.rgba",
+      "raw_rgba_sha256": "7a1615e04d27e9dcb58da30b9520fcfa8dfe4b8fd5c14199750ef95754206ff1",
+      "review_ppm_path": "validation/captures/proof-kernel-v1/ricochet/run-b/frame-0004.ppm"
+    },
+    {
+      "frame": 8,
+      "raw_rgba_path": "validation/captures/proof-kernel-v1/ricochet/run-b/frame-0008.rgba",
+      "raw_rgba_sha256": "a50582e8e8f5517eb2b56e7e01d5b0493b8432375a7e577b152801a4f6574b42",
+      "review_ppm_path": "validation/captures/proof-kernel-v1/ricochet/run-b/frame-0008.ppm"
+    },
+    {
+      "frame": 32,
+      "raw_rgba_path": "validation/captures/proof-kernel-v1/ricochet/run-b/frame-0032.rgba",
+      "raw_rgba_sha256": "65c37015993c76632ce9e384db18b7cfa8c735049c66a72ed2833bbb45f70d25",
+      "review_ppm_path": "validation/captures/proof-kernel-v1/ricochet/run-b/frame-0032.ppm"
+    }
+  ],
+  "runner_mode": "compiled-product-session",
+  "runner_stdout": "frame=0 raw=D:\\Projects\\ScreenSave\\screensave\\validation\\captures\\proof-kernel-v1\\ricochet\\run-a/frame-0000.rgba ppm=D:\\Projects\\ScreenSave\\screensave\\validation\\captures\\proof-kernel-v1\\ricochet\\run-a/frame-0000.ppm\nframe=4 raw=D:\\Projects\\ScreenSave\\screensave\\validation\\captures\\proof-kernel-v1\\ricochet\\run-a/frame-0004.rgba ppm=D:\\Projects\\ScreenSave\\screensave\\validation\\captures\\proof-kernel-v1\\ricochet\\run-a/frame-0004.ppm\nframe=8 raw=D:\\Projects\\ScreenSave\\screensave\\validation\\captures\\proof-kernel-v1\\ricochet\\run-a/frame-0008.rgba ppm=D:\\Projects\\ScreenSave\\screensave\\validation\\captures\\proof-kernel-v1\\ricochet\\run-a/frame-0008.ppm\nframe=32 raw=D:\\Projects\\ScreenSave\\screensave\\validation\\captures\\proof-kernel-v1\\ricochet\\run-a/frame-0032.rgba ppm=D:\\Projects\\ScreenSave\\screensave\\validation\\captures\\proof-kernel-v1\\ricochet\\run-a/frame-0032.ppm\ncompiled-ricochet product-session width=128 height=72 seed=2048 delta_ms=100 frames=0,4,8,32",
+  "status": "pass"
+}

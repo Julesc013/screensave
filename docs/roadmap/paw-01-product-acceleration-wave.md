@@ -102,13 +102,13 @@ Deliverables:
 - `sslab_runner proof --profile <key>` builds over one private static `libsslab`
   artifact and executes Nocturne and Ricochet profiles through the same command
   shape
+- Ricochet has committed exact baselines for frames 0, 4, 8, and 32, and its
+  proof profile is promoted to implemented with baseline references
 
 Remaining Gate B extraction:
 
 - remove remaining product-specific execution dispatch from `sslab.py` where
   practical
-- commit Ricochet exact baselines and promote its proof profile from planned to
-  implemented
 - keep portable v2 closed until this Gate B extraction is accepted
 
 Exit:

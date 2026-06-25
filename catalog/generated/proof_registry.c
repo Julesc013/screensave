@@ -27,7 +27,7 @@ const screensave_generated_proof_profile g_screensave_generated_proof_profiles[S
     },
     {
         "ricochet.reference.v1",
-        "planned",
+        "implemented",
         "ricochet",
         "classic_clean",
         128UL,
@@ -42,9 +42,9 @@ const screensave_generated_proof_profile g_screensave_generated_proof_profiles[S
         "exact",
         "create,resize,step,render,destroy",
         "windows_current_x86_scr",
-        "",
-        "",
-        "planned second canary; no proof claim until implemented"
+        "validation/captures/proof-kernel-v1/ricochet/run-a/frame-0032.ppm",
+        "validation/captures/proof-kernel-v1/ricochet/profile-proof.json",
+        "Ricochet multi-frame deterministic and lifecycle proof only; performance, compatibility, release promotion, and artistic acceptance are separate axes"
     },
     {
         "plasma.v2.reference.preview",

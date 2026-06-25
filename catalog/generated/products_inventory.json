@@ -1489,15 +1489,15 @@
       "artifact_sets": [
         "windows_current_x86_scr"
       ],
-      "baseline_capture": "",
-      "baseline_proof": "",
+      "baseline_capture": "validation/captures/proof-kernel-v1/ricochet/run-a/frame-0032.ppm",
+      "baseline_proof": "validation/captures/proof-kernel-v1/ricochet/profile-proof.json",
       "capture_frames": [
         0,
         4,
         8,
         32
       ],
-      "claim_boundary": "planned second canary; no proof claim until implemented",
+      "claim_boundary": "Ricochet multi-frame deterministic and lifecycle proof only; performance, compatibility, release promotion, and artistic acceptance are separate axes",
       "comparison_class": "exact",
       "create_destroy_cycles": 32,
       "delta_ms": 100,
@@ -1515,7 +1515,7 @@
       "resize_height": 54,
       "resize_width": 96,
       "seed": 2048,
-      "status": "planned",
+      "status": "implemented",
       "width": 128
     },
     {
