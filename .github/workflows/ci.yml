@@ -85,12 +85,26 @@ jobs:
           --class exact
           --output-json out/ci/proof-kernel/nocturne/comparison.json
 
+      - name: Run CI Nocturne lifecycle proof
+        run: >
+          python tools/sslab/sslab.py lifecycle
+          --product nocturne
+          --preset observatory_night
+          --width 96
+          --height 54
+          --resize-width 80
+          --resize-height 45
+          --seed 1536
+          --frames 8
+          --delta-ms 100
+          --output-dir out/ci/proof-kernel/nocturne-lifecycle
+
       - name: Upload proof-kernel evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: proof-kernel-nocturne
-          path: out/ci/proof-kernel/nocturne
+          path: out/ci/proof-kernel
           if-no-files-found: error
 
   project-adapter:

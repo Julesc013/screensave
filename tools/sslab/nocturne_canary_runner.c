@@ -201,6 +201,44 @@ static int runner_write_ppm(const screensave_rgba8_surface *surface, const char 
     return 1;
 }
 
+static int runner_write_lifecycle_json(
+    const char *path,
+    int width,
+    int height,
+    int resize_session,
+    int frames,
+    unsigned long checksum,
+    int destroy_session
+)
+{
+    FILE *file;
+
+    if (path == NULL) {
+        return 1;
+    }
+
+    file = fopen(path, "w");
+    if (file == NULL) {
+        return 0;
+    }
+
+    fprintf(file, "{\n");
+    fprintf(file, "  \"lifecycle_schema\": \"screensave-nocturne-canary-lifecycle-v0\",\n");
+    fprintf(file, "  \"status\": \"pass\",\n");
+    fprintf(file, "  \"create_session\": true,\n");
+    fprintf(file, "  \"resize_session\": %s,\n", resize_session ? "true" : "false");
+    fprintf(file, "  \"step_count\": %d,\n", frames);
+    fprintf(file, "  \"render_session\": true,\n");
+    fprintf(file, "  \"destroy_session\": %s,\n", destroy_session ? "true" : "false");
+    fprintf(file, "  \"width\": %d,\n", width);
+    fprintf(file, "  \"height\": %d,\n", height);
+    fprintf(file, "  \"checksum\": %lu\n", checksum);
+    fprintf(file, "}\n");
+
+    fclose(file);
+    return 1;
+}
+
 static int runner_parse_int_arg(const char *text, int *value_out)
 {
     char *end_ptr;
@@ -297,8 +335,13 @@ int main(int argc, char **argv)
     unsigned long seed;
     unsigned long delta_ms;
     unsigned long elapsed_ms;
+    unsigned long checksum;
     const char *output_path;
+    const char *lifecycle_output_path;
     const char *preset_key;
+    int exercise_resize;
+    int resize_width;
+    int resize_height;
     screensave_common_config common_config;
     nocturne_config product_config;
     screensave_config_binding binding;
@@ -313,7 +356,11 @@ int main(int argc, char **argv)
     seed = 1536UL;
     delta_ms = 100UL;
     output_path = "capture.ppm";
+    lifecycle_output_path = NULL;
     preset_key = NOCTURNE_DEFAULT_PRESET_KEY;
+    exercise_resize = 0;
+    resize_width = 0;
+    resize_height = 0;
     session = NULL;
 
     for (index = 1; index < argc; ++index) {
@@ -348,10 +395,32 @@ int main(int argc, char **argv)
         } else if (strcmp(argv[index], "--output") == 0 && index + 1 < argc) {
             ++index;
             output_path = argv[index];
+        } else if (strcmp(argv[index], "--lifecycle-output") == 0 && index + 1 < argc) {
+            ++index;
+            lifecycle_output_path = argv[index];
+        } else if (strcmp(argv[index], "--exercise-resize") == 0) {
+            exercise_resize = 1;
+        } else if (strcmp(argv[index], "--resize-width") == 0 && index + 1 < argc) {
+            ++index;
+            if (!runner_parse_int_arg(argv[index], &resize_width)) {
+                return 2;
+            }
+        } else if (strcmp(argv[index], "--resize-height") == 0 && index + 1 < argc) {
+            ++index;
+            if (!runner_parse_int_arg(argv[index], &resize_height)) {
+                return 2;
+            }
         } else {
             fprintf(stderr, "unknown or incomplete argument: %s\n", argv[index]);
             return 2;
         }
+    }
+
+    if (resize_width <= 0) {
+        resize_width = width;
+    }
+    if (resize_height <= 0) {
+        resize_height = height;
     }
 
     if (!screensave_rgba8_surface_init(&surface, width, height)) {
@@ -367,6 +436,21 @@ int main(int argc, char **argv)
         screensave_rgba8_surface_dispose(&surface);
         fprintf(stderr, "could not create Nocturne product session\n");
         return 1;
+    }
+
+    if (exercise_resize) {
+        screensave_rgba8_surface_dispose(&surface);
+        if (!screensave_rgba8_surface_init(&surface, resize_width, resize_height)) {
+            nocturne_destroy_session(session);
+            fprintf(stderr, "could not allocate resized rgba8 surface\n");
+            return 1;
+        }
+        renderer.surface = &surface;
+        environment.drawable_size.width = resize_width;
+        environment.drawable_size.height = resize_height;
+        width = resize_width;
+        height = resize_height;
+        nocturne_resize_session(session, &environment);
     }
 
     elapsed_ms = 0UL;
@@ -386,6 +470,7 @@ int main(int argc, char **argv)
         return 1;
     }
 
+    checksum = screensave_rgba8_surface_checksum(&surface);
     printf(
         "compiled-nocturne product-session width=%d height=%d seed=%lu frames=%d delta_ms=%lu checksum=%lu output=%s\n",
         width,
@@ -393,11 +478,17 @@ int main(int argc, char **argv)
         seed,
         frames,
         delta_ms,
-        screensave_rgba8_surface_checksum(&surface),
+        checksum,
         output_path
     );
 
     nocturne_destroy_session(session);
+    session = NULL;
+    if (!runner_write_lifecycle_json(lifecycle_output_path, width, height, exercise_resize, frames, checksum, 1)) {
+        screensave_rgba8_surface_dispose(&surface);
+        fprintf(stderr, "could not write lifecycle output\n");
+        return 1;
+    }
     screensave_rgba8_surface_dispose(&surface);
     return 0;
 }

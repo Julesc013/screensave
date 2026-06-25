@@ -45,19 +45,23 @@ REQUIRED_TEXT = {
     ROOT / "tools" / "sslab" / "sslab.py": [
         "proof-bundle-v0",
         "sslab-comparison-v0",
+        "screensave-nocturne-canary-lifecycle-v0",
         "proof-kernel-v0",
         "compile_nocturne_runner",
         "compiled-product-session",
         "RUNNER_SOURCES",
         "def render_nocturne",
+        "def lifecycle_nocturne",
         "def compare_captures",
     ],
     ROOT / "tools" / "sslab" / "nocturne_canary_runner.c": [
         "compiled-nocturne",
         "product-session",
         "nocturne_create_session",
+        "nocturne_resize_session",
         "nocturne_step_session",
         "nocturne_render_session",
+        "runner_write_lifecycle_json",
         "screensave/private/soft_renderer.h",
     ],
 }
@@ -164,6 +168,53 @@ def validate_committed_proof(errors: list[str]) -> None:
     )
 
 
+def validate_lifecycle(errors: list[str]) -> None:
+    with tempfile.TemporaryDirectory() as output_root:
+        lifecycle_dir = pathlib.Path(output_root)
+        subprocess.check_call(
+            [
+                sys.executable,
+                str(SSLAB),
+                "lifecycle",
+                "--product",
+                "nocturne",
+                "--preset",
+                "observatory_night",
+                "--width",
+                "96",
+                "--height",
+                "54",
+                "--resize-width",
+                "80",
+                "--resize-height",
+                "45",
+                "--seed",
+                "1536",
+                "--frames",
+                "8",
+                "--delta-ms",
+                "100",
+                "--output-dir",
+                str(lifecycle_dir),
+            ],
+            cwd=ROOT,
+            stdout=subprocess.DEVNULL,
+        )
+        lifecycle = json.loads((lifecycle_dir / "lifecycle.json").read_text(encoding="utf-8"))
+        require(
+            lifecycle.get("lifecycle_schema") == "screensave-nocturne-canary-lifecycle-v0",
+            "sslab lifecycle must emit screensave-nocturne-canary-lifecycle-v0.",
+            errors,
+        )
+        require(lifecycle.get("status") == "pass", "Nocturne lifecycle proof must pass.", errors)
+        require(lifecycle.get("create_session") is True, "Nocturne lifecycle proof must create a product session.", errors)
+        require(lifecycle.get("resize_session") is True, "Nocturne lifecycle proof must exercise resize.", errors)
+        require(lifecycle.get("step_count") == 8, "Nocturne lifecycle proof must record the step count.", errors)
+        require(lifecycle.get("render_session") is True, "Nocturne lifecycle proof must render.", errors)
+        require(lifecycle.get("destroy_session") is True, "Nocturne lifecycle proof must destroy the session.", errors)
+        require((lifecycle_dir / "lifecycle-capture.ppm").exists(), "Nocturne lifecycle proof must write a capture.", errors)
+
+
 def main() -> int:
     errors: list[str] = []
 
@@ -182,6 +233,9 @@ def main() -> int:
 
     if not errors:
         validate_determinism(errors)
+
+    if not errors:
+        validate_lifecycle(errors)
 
     if errors:
         for error in errors:

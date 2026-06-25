@@ -57,6 +57,8 @@ Given the same product, preset, seed, resolution, frame count, and fixed delta:
 
 - two headless runs produce the same capture hash
 - the repeated captures compare exactly through `sslab compare`
+- a lifecycle run creates, resizes, steps, renders, and destroys the Nocturne
+  product session through the compiled proof runner
 - a proof bundle records source, runtime, seed, renderer, captures, and limits
 - the existing Win32 `.scr` path remains unchanged
 - no public compatibility claim is widened

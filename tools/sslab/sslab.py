@@ -197,6 +197,60 @@ def render_nocturne(args: argparse.Namespace) -> dict:
     return proof
 
 
+def lifecycle_nocturne(args: argparse.Namespace) -> dict:
+    output_dir = pathlib.Path(args.output_dir)
+    if not output_dir.is_absolute():
+        output_dir = ROOT / output_dir
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    capture_path = output_dir / "lifecycle-capture.ppm"
+    lifecycle_path = output_dir / "lifecycle.json"
+
+    with tempfile.TemporaryDirectory() as temp_root:
+        runner_exe = pathlib.Path(temp_root) / "nocturne_canary_runner.exe"
+        compile_nocturne_runner(runner_exe)
+        runner = subprocess.run(
+            [
+                str(runner_exe),
+                "--width",
+                str(args.width),
+                "--height",
+                str(args.height),
+                "--seed",
+                str(args.seed),
+                "--frames",
+                str(args.frames),
+                "--delta-ms",
+                str(args.delta_ms),
+                "--preset",
+                args.preset,
+                "--exercise-resize",
+                "--resize-width",
+                str(args.resize_width),
+                "--resize-height",
+                str(args.resize_height),
+                "--output",
+                str(capture_path),
+                "--lifecycle-output",
+                str(lifecycle_path),
+            ],
+            cwd=ROOT,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=False,
+        )
+        if runner.returncode != 0:
+            raise RuntimeError(f"compiled Nocturne lifecycle runner failed: {runner.stderr.strip()}")
+
+    lifecycle = json.loads(lifecycle_path.read_text(encoding="utf-8"))
+    lifecycle["path"] = display_path(lifecycle_path)
+    lifecycle["capture_path"] = display_path(capture_path)
+    lifecycle["runner_mode"] = "compiled-product-session"
+    lifecycle["runner_stdout"] = runner.stdout.strip()
+    return lifecycle
+
+
 def compare_pixels(actual: PpmImage, expected: PpmImage) -> dict:
     if actual.width != expected.width or actual.height != expected.height:
         return {
@@ -330,6 +384,21 @@ def add_compare_parser(subparsers: argparse._SubParsersAction[argparse.ArgumentP
     parser.set_defaults(func=compare_captures)
 
 
+def add_lifecycle_parser(subparsers: argparse._SubParsersAction[argparse.ArgumentParser]) -> None:
+    parser = subparsers.add_parser("lifecycle", help="Run a Nocturne create/resize/step/render/destroy lifecycle proof.")
+    parser.add_argument("--product", default="nocturne", choices=["nocturne"])
+    parser.add_argument("--preset", default="observatory_night")
+    parser.add_argument("--width", type=int, default=96)
+    parser.add_argument("--height", type=int, default=54)
+    parser.add_argument("--resize-width", type=int, default=80)
+    parser.add_argument("--resize-height", type=int, default=45)
+    parser.add_argument("--seed", type=int, default=1536)
+    parser.add_argument("--frames", type=int, default=8)
+    parser.add_argument("--delta-ms", type=int, default=100)
+    parser.add_argument("--output-dir", default=str((ROOT / "out" / "proof" / "sslab-lifecycle").relative_to(ROOT)))
+    parser.set_defaults(func=lifecycle_nocturne)
+
+
 def print_result(result: dict) -> None:
     if "capture" in result:
         print(f"{result['runtime']['product']} {result['capture']['sha256']} {result['capture']['path']}")
@@ -344,6 +413,15 @@ def print_result(result: dict) -> None:
             f"max_delta={metrics['max_abs_delta']}"
         )
         return
+    if result.get("lifecycle_schema") == "screensave-nocturne-canary-lifecycle-v0":
+        print(
+            "lifecycle "
+            f"{result['status']} "
+            f"resize={result['resize_session']} "
+            f"steps={result['step_count']} "
+            f"checksum={result['checksum']}"
+        )
+        return
     print(json.dumps(result, sort_keys=True))
 
 
@@ -352,6 +430,7 @@ def main() -> int:
     subparsers = parser.add_subparsers(dest="command", required=True)
     add_render_parser(subparsers)
     add_compare_parser(subparsers)
+    add_lifecycle_parser(subparsers)
     args = parser.parse_args()
 
     result = args.func(args)

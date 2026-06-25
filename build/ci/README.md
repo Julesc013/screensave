@@ -11,6 +11,7 @@ not claim a native Windows release build or compatibility certification.
 - build-lane layout and checked-in core/renderer/host/build-file consistency through `tools/scripts/check_build_layout.py`
 - compiled Nocturne proof-runner build through `tools/scripts/check_compiled_nocturne_runner.py`
 - deterministic Proof Kernel v0 render and exact compare through `tools/sslab/sslab.py`
+- Nocturne create, resize, step, render, and destroy lifecycle proof through `tools/sslab/sslab.py lifecycle`
 - bounded project-adapter `status`, `capabilities`, `catalog`, `validate`, `render`, and `compare` receipts
 - current saver/app presence and wiring through the shared platform contracts
 - explicit `gdi`, `gl11`, `gl21`, `gl33`, and `gl46` renderer-tier naming across the active build graph
