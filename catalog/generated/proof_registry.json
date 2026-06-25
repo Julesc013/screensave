@@ -1,0 +1,105 @@
+{
+  "generated_by": "tools/cataloggen/cataloggen.py",
+  "proof_profile_count": 3,
+  "proof_profiles": [
+    {
+      "artifact_sets": [
+        "windows_current_x86_scr"
+      ],
+      "baseline_capture": "validation/captures/proof-kernel-v0/nocturne/capture.ppm",
+      "baseline_proof": "validation/captures/proof-kernel-v0/nocturne/proof.json",
+      "capture_frames": [
+        8
+      ],
+      "claim_boundary": "deterministic canary proof; not compatibility certification or artistic acceptance",
+      "comparison_class": "exact",
+      "delta_ms": 100,
+      "height": 54,
+      "key": "nocturne.reference.v0",
+      "lifecycle": [
+        "create",
+        "resize",
+        "step",
+        "render",
+        "destroy"
+      ],
+      "preset": "observatory_night",
+      "product": "nocturne",
+      "resize_height": 45,
+      "resize_width": 80,
+      "seed": 1536,
+      "status": "implemented",
+      "width": 96
+    },
+    {
+      "artifact_sets": [
+        "windows_current_x86_scr"
+      ],
+      "baseline_capture": "",
+      "baseline_proof": "",
+      "capture_frames": [
+        0,
+        4,
+        8,
+        32
+      ],
+      "claim_boundary": "planned second canary; no proof claim until implemented",
+      "comparison_class": "exact",
+      "delta_ms": 100,
+      "height": 72,
+      "key": "ricochet.reference.v1",
+      "lifecycle": [
+        "create",
+        "resize",
+        "step",
+        "render",
+        "destroy"
+      ],
+      "preset": "defaults",
+      "product": "ricochet",
+      "resize_height": 54,
+      "resize_width": 96,
+      "seed": 2048,
+      "status": "planned",
+      "width": 128
+    },
+    {
+      "artifact_sets": [
+        "windows_current_x86_scr"
+      ],
+      "baseline_capture": "",
+      "baseline_proof": "",
+      "capture_frames": [
+        0,
+        8,
+        32,
+        90
+      ],
+      "claim_boundary": "planned Plasma v2 reference profile; no stable promotion until implemented",
+      "comparison_class": "exact",
+      "delta_ms": 100,
+      "height": 90,
+      "key": "plasma.v2.reference.preview",
+      "lifecycle": [
+        "create",
+        "resize",
+        "step",
+        "render",
+        "destroy"
+      ],
+      "preset": "plasma_lava",
+      "product": "plasma",
+      "resize_height": 72,
+      "resize_width": 128,
+      "seed": 4096,
+      "status": "planned",
+      "width": 160
+    }
+  ],
+  "schema_version": 1,
+  "sources": [
+    "catalog/products.toml",
+    "catalog/artifact_profiles.toml",
+    "catalog/proof_profiles.toml"
+  ]
+}

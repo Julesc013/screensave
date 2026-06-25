@@ -20,5 +20,7 @@ The catalog is the source of truth for:
 `tools/cataloggen/cataloggen.py`. These generated files are committed so legacy
 and preservation-oriented lanes can consume inventory data without requiring
 Python at build time.
+The generated proof registry provides JSON plus C header/source views of
+`proof_profiles.toml` for `libsslab`, Workbench, CI, and release tooling.
 
 Type: repository control data.

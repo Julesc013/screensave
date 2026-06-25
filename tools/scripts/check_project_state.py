@@ -109,6 +109,7 @@ def validate_state(state: dict) -> list[str]:
         ("authority.product_doctrine", authority.get("product_doctrine")),
         ("authority.product_architecture", authority.get("product_architecture")),
         ("authority.generated_catalog_inventory", authority.get("generated_catalog_inventory")),
+        ("authority.generated_proof_registry", authority.get("generated_proof_registry")),
         ("authority.version_manifest", authority.get("version_manifest")),
         ("authority.project_adapter", authority.get("project_adapter")),
         ("authority.build_controller", authority.get("build_controller")),
@@ -179,6 +180,9 @@ def validate_state(state: dict) -> list[str]:
         ("catalog.generated_inventory", catalog_state.get("generated_inventory")),
         ("catalog.generated_sources", catalog_state.get("generated_sources")),
         ("catalog.generated_table", catalog_state.get("generated_table")),
+        ("catalog.generated_proof_registry", catalog_state.get("generated_proof_registry")),
+        ("catalog.generated_proof_registry_header", catalog_state.get("generated_proof_registry_header")),
+        ("catalog.generated_proof_registry_source", catalog_state.get("generated_proof_registry_source")),
     ):
         require_path(value, label, errors)
 
@@ -292,6 +296,8 @@ def print_summary(state: dict) -> None:
     print(f"Version authority: {authority['version_manifest']}")
     if "generated_catalog_inventory" in authority:
         print(f"Generated catalog inventory: {authority['generated_catalog_inventory']}")
+    if "generated_proof_registry" in authority:
+        print(f"Generated proof registry: {authority['generated_proof_registry']}")
     if "project_adapter" in authority:
         print(f"Project adapter: {authority['project_adapter']}")
     print(
