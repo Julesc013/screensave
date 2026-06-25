@@ -31,6 +31,7 @@ artifact_profiles = 1
 artifact_sets = 1
 proof_profiles = 1
 proof_bundle = 0
+proof_bundle_normalized = 1
 screensave_doctrine = 1
 product_architecture = 1
 aide_pilot = 1
@@ -42,6 +43,7 @@ visual_intent = 1
 [proof]
 policy = "evidence-classed"
 bundle_schema = "proof-bundle-v0"
+normalized_bundle_schema = "proof-bundle-v1"
 binary_audit_tool = "tools/scripts/audit_pe_artifacts.py"
 state_validator = "tools/scripts/check_project_state.py"
 
@@ -51,6 +53,7 @@ renderer_aliases = "contracts/renderer_aliases_v1.md"
 screensave_doctrine = "contracts/screensave_doctrine_v1.md"
 product_architecture = "contracts/product_architecture_v1.md"
 proof_bundle = "contracts/proof_bundle_v0.md"
+proof_bundle_v1 = "contracts/proof_bundle_v1.md"
 proof_kernel = "contracts/proof_kernel_v0.md"
 surface_rgba8 = "contracts/surface_rgba8_v0.md"
 project_adapter = "contracts/project_adapter_v0.md"

@@ -276,6 +276,7 @@ Implemented:
 - `sslab compare`
 - `sslab lifecycle`
 - proof-bundle v0 JSON for the canary
+- Proof Bundle v1 normalized envelope contract and normalizer
 - compiled Nocturne canary runner over the real Nocturne product session and
   render functions
 - canonical RGBA8 hash source with PPM as a review derivative
@@ -297,7 +298,8 @@ Caveats:
 - tolerant/perceptual comparison classes exist as report helpers, not accepted
   validation gates
 - soak, resource, and performance proof are not yet in Proof Kernel v0
-- native Windows release builds are not yet produced in CI
+- native Windows build receipts are now represented by a fixed build controller
+  and a Windows CI lane, but hosted CI evidence has not been reviewed here
 
 ### Project Adapter
 
@@ -568,8 +570,9 @@ Remaining:
 
 - extract a reusable compiled `libsslab` path from the canary-grade primitives
 - decide final v0 capture format policy: PPM, raw RGBA, PNG, or multiple
-- update proof-bundle schema from draft to implemented v0 if needed
-- add release-grade native Windows artifact build/proof CI
+- upgrade raw runner output from v0 to v1 once `libsslab` owns the generic
+  proof writer
+- review hosted native Windows artifact build/proof CI evidence after it runs
 
 Exit:
 

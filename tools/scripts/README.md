@@ -17,6 +17,7 @@ Current stage:
 - `check_contracts.py` validates the ScreenSave doctrine, portable-semantics, renderer-alias, proof-bundle, proof-kernel, and project-adapter contract scaffolding.
 - `check_visual_intent_contract.py` validates the draft VisualIntent v1 contract and example authoring intent.
 - `check_product_architecture.py` validates the active product architecture contract, product-family boundaries, canary sequence, and catalog fit.
+- `check_proof_bundle_v1.py` validates the normalized Proof Bundle v1 contract and normalizer output axes.
 - `check_proof_kernel.py` validates the Proof Kernel v0 private surface, software-renderer scaffolding, `sslab` canary command, and deterministic proof output.
 - `check_compiled_nocturne_runner.py` builds the compiled Proof Kernel v0 Nocturne canary and exact-compares it with committed evidence.
 - `check_project_adapter.py` validates the ScreenSave project adapter status, capabilities, catalog, validation, render, compare, audit, and proof command surface.

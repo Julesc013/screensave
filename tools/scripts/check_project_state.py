@@ -223,9 +223,13 @@ def validate_version_manifest(state: dict, version: dict, catalog: dict, errors:
     require(version_schemas.get("visual_intent") == 1, "VERSION.toml schemas.visual_intent must be 1.", errors)
     require(version_schemas.get("artifact_sets") == 1, "VERSION.toml schemas.artifact_sets must be 1.", errors)
     require(version_schemas.get("proof_profiles") == 1, "VERSION.toml schemas.proof_profiles must be 1.", errors)
+    require(version_schemas.get("proof_bundle_normalized") == 1, "VERSION.toml schemas.proof_bundle_normalized must be 1.", errors)
     require_path(version.get("contracts", {}).get("product_architecture"), "VERSION.toml contracts.product_architecture", errors)
     require_path(version.get("contracts", {}).get("visual_intent"), "VERSION.toml contracts.visual_intent", errors)
+    require_path(version.get("contracts", {}).get("proof_bundle_v1"), "VERSION.toml contracts.proof_bundle_v1", errors)
     require(version_proof.get("policy") == compatibility.get("policy"), "VERSION.toml proof.policy must match PROJECT_STATE compatibility.policy.", errors)
+    require(version_proof.get("bundle_schema") == "proof-bundle-v0", "VERSION.toml proof.bundle_schema must preserve raw proof-bundle-v0.", errors)
+    require(version_proof.get("normalized_bundle_schema") == "proof-bundle-v1", "VERSION.toml proof.normalized_bundle_schema must be proof-bundle-v1.", errors)
     require_path(version_proof.get("binary_audit_tool"), "VERSION.toml proof.binary_audit_tool", errors)
     require_path(version_proof.get("state_validator"), "VERSION.toml proof.state_validator", errors)
 
