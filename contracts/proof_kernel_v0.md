@@ -26,6 +26,10 @@ Proof Kernel v0 consists of:
 - exact repeatability comparison
 - proof-bundle v0 output
 
+The compiled Nocturne canary runner must call the real Nocturne product session and render functions.
+It must not carry a mirror implementation of Nocturne RNG, stepping, or
+rendering semantics.
+
 ## Canary
 
 The first canary is `nocturne`.
@@ -103,5 +107,6 @@ Proof Kernel v0 does not:
 - make AIDE mandatory
 
 The compiled Nocturne runner is a proof-kernel tool. It does not create a
-public runtime ABI, does not replace the standalone `.scr` host, and does not
-certify operating-system compatibility.
+public runtime ABI, does not replace the standalone `.scr` host, does not
+carry mirror Nocturne semantics, and does not certify operating-system
+compatibility.

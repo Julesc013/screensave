@@ -74,6 +74,7 @@ REQUIRED_CONTRACTS = {
         "canonical catalog authority",
         "minimal software/reference renderer",
         "compiled Nocturne canary runner",
+        "real Nocturne product session and render functions",
         "fixed-step headless canary host",
         "exact repeatability comparison",
         "Proof Kernel v1 is the target for",

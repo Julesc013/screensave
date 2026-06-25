@@ -52,8 +52,11 @@ REQUIRED_TEXT = {
     ],
     ROOT / "tools" / "sslab" / "nocturne_canary_runner.c": [
         "compiled-nocturne",
+        "product-session",
+        "nocturne_create_session",
+        "nocturne_step_session",
+        "nocturne_render_session",
         "screensave/private/soft_renderer.h",
-        "RUNNER_MOTION_MONOLITH",
     ],
 }
 

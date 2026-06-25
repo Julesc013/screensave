@@ -1,338 +1,172 @@
 /*
  * Compiled Nocturne canary runner for ScreenSave Proof Kernel v0.
  *
- * This is a proof tool, not a saver runtime ABI. It mirrors the fixed
- * Nocturne observatory_night canary used by sslab.py and writes an ASCII PPM
- * capture through the private RGBA8 surface and software renderer.
+ * This proof tool drives the real Nocturne product session and render
+ * functions through a proof-local RGBA8 renderer shim. It is not a saver
+ * runtime ABI and does not publish a portable semantic contract.
  */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
+#include "nocturne_internal.h"
 #include "screensave/private/soft_renderer.h"
 
-#define RUNNER_FIXED_ONE 65536L
-#define RUNNER_FIXED_HALF 32768L
+struct screensave_renderer_tag {
+    screensave_rgba8_surface *surface;
+};
 
-#define RUNNER_MOTION_MONOLITH 3
-#define RUNNER_FADE_GENTLE 2
-#define RUNNER_STRENGTH_SUBTLE 1
-
-typedef struct runner_rng_state_tag {
-    unsigned long state;
-} runner_rng_state;
-
-typedef struct runner_session_tag {
-    int width;
-    int height;
-    unsigned long seed;
-    runner_rng_state rng;
-    unsigned long cycle_index;
-    unsigned long cycle_duration_millis;
-    unsigned long stage_elapsed_millis;
-    unsigned long reseed_count;
-    int stage;
-    int fade_level;
-    long primary_x;
-    long primary_y;
-    long primary_vx;
-    long primary_vy;
-    long secondary_x;
-    long secondary_y;
-    long secondary_vx;
-    long secondary_vy;
-    int breath_direction;
-    int breath_level;
-    int ambient_level;
-} runner_session;
-
-static void runner_rng_seed(runner_rng_state *state, unsigned long seed)
-{
-    if (state == NULL) {
-        return;
-    }
-    state->state = seed != 0UL ? seed : 0x0A1E0A1EUL;
-}
-
-static unsigned long runner_rng_next(runner_rng_state *state)
-{
-    if (state == NULL) {
-        return 0UL;
-    }
-    state->state = state->state * 1664525UL + 1013904223UL;
-    return state->state;
-}
-
-static unsigned long runner_rng_range(runner_rng_state *state, unsigned long upper_bound)
-{
-    if (upper_bound == 0UL) {
-        return 0UL;
-    }
-    return runner_rng_next(state) % upper_bound;
-}
-
-static long runner_random_velocity(runner_rng_state *rng)
-{
-    long speed;
-
-    speed = 300L;
-    if ((runner_rng_next(rng) & 1UL) != 0UL) {
-        return speed;
-    }
-    return -speed;
-}
-
-static void runner_set_initial_positions(runner_session *session)
-{
-    if (session == NULL) {
-        return;
-    }
-
-    session->primary_x =
-        RUNNER_FIXED_HALF +
-        (long)runner_rng_range(&session->rng, (unsigned long)((session->width > 1) ? (session->width - 1) : 1)) *
-            RUNNER_FIXED_ONE;
-    session->primary_y =
-        RUNNER_FIXED_HALF +
-        (long)runner_rng_range(&session->rng, (unsigned long)((session->height > 1) ? (session->height - 1) : 1)) *
-            RUNNER_FIXED_ONE;
-    session->secondary_x =
-        RUNNER_FIXED_HALF +
-        (long)runner_rng_range(&session->rng, (unsigned long)((session->width > 1) ? (session->width - 1) : 1)) *
-            RUNNER_FIXED_ONE;
-    session->secondary_y =
-        RUNNER_FIXED_HALF +
-        (long)runner_rng_range(&session->rng, (unsigned long)((session->height > 1) ? (session->height - 1) : 1)) *
-            RUNNER_FIXED_ONE;
-
-    if (session->width <= 1) {
-        session->primary_x = ((long)session->width * RUNNER_FIXED_ONE) / 2L;
-        session->secondary_x = session->primary_x;
-    }
-    if (session->height <= 1) {
-        session->primary_y = ((long)session->height * RUNNER_FIXED_ONE) / 2L;
-        session->secondary_y = session->primary_y;
-    }
-}
-
-static void runner_reset_cycle(runner_session *session)
-{
-    if (session == NULL) {
-        return;
-    }
-
-    session->cycle_index += 1UL;
-    session->stage = 0;
-    session->stage_elapsed_millis = 0UL;
-    session->fade_level = 0;
-    session->cycle_duration_millis = 70000UL;
-    session->primary_vx = runner_random_velocity(&session->rng);
-    session->primary_vy = runner_random_velocity(&session->rng);
-    session->secondary_vx = runner_random_velocity(&session->rng);
-    session->secondary_vy = runner_random_velocity(&session->rng);
-    session->breath_direction = 1;
-    session->breath_level = 48 + (int)runner_rng_range(&session->rng, 48UL);
-    session->ambient_level = 28 + (int)runner_rng_range(&session->rng, 28UL);
-    runner_set_initial_positions(session);
-}
-
-static void runner_make_session(runner_session *session, int width, int height, unsigned long seed)
-{
-    if (session == NULL) {
-        return;
-    }
-
-    memset(session, 0, sizeof(*session));
-    session->width = width;
-    session->height = height;
-    session->seed = seed;
-    runner_rng_seed(&session->rng, (seed ^ 0x0A1E0A1EUL));
-    runner_reset_cycle(session);
-}
-
-static void runner_advance_axis(long *position, long *velocity, int limit, unsigned long delta_millis)
-{
-    long minimum;
-    long maximum;
-
-    if (position == NULL || velocity == NULL) {
-        return;
-    }
-
-    minimum = RUNNER_FIXED_HALF;
-    maximum = (long)((limit > 1 ? limit - 1 : 1) * RUNNER_FIXED_ONE) - RUNNER_FIXED_HALF;
-    *position += *velocity * (long)delta_millis;
-    if (*position < minimum) {
-        *position = minimum;
-        *velocity = -*velocity;
-    } else if (*position > maximum) {
-        *position = maximum;
-        *velocity = -*velocity;
-    }
-}
-
-static void runner_step_session(runner_session *session, unsigned long delta_millis)
-{
-    unsigned long fade_delta;
-
-    if (session == NULL) {
-        return;
-    }
-    if (delta_millis > 200UL) {
-        delta_millis = 200UL;
-    }
-
-    runner_advance_axis(&session->primary_x, &session->primary_vx, session->width, delta_millis);
-    runner_advance_axis(&session->primary_y, &session->primary_vy, session->height, delta_millis);
-    runner_advance_axis(&session->secondary_x, &session->secondary_vx, session->width, delta_millis);
-    runner_advance_axis(&session->secondary_y, &session->secondary_vy, session->height, delta_millis);
-
-    fade_delta = (delta_millis * 72UL) / 1000UL;
-    if (fade_delta == 0UL && delta_millis > 0UL) {
-        fade_delta = 1UL;
-    }
-
-    session->stage_elapsed_millis += delta_millis;
-    if (session->stage == 0) {
-        session->fade_level += (int)fade_delta;
-        if (session->fade_level >= 255) {
-            session->fade_level = 255;
-            session->stage = 1;
-            session->stage_elapsed_millis = 0UL;
-        }
-    } else if (session->stage == 1) {
-        if (session->stage_elapsed_millis >= session->cycle_duration_millis) {
-            session->stage = 2;
-            session->stage_elapsed_millis = 0UL;
-        }
-    } else {
-        session->fade_level -= (int)fade_delta;
-        if (session->fade_level <= 0) {
-            session->fade_level = 0;
-            session->reseed_count += 1UL;
-            runner_reset_cycle(session);
-        }
-    }
-}
-
-static screensave_color runner_color(unsigned char red, unsigned char green, unsigned char blue)
-{
-    screensave_color color;
-
-    color.red = red;
-    color.green = green;
-    color.blue = blue;
-    color.alpha = 255U;
-    return color;
-}
-
-static screensave_color runner_scale_color(screensave_color color, int fade_level)
-{
-    unsigned int scale;
-
-    scale = (unsigned int)fade_level;
-    color.red = (unsigned char)(((unsigned int)color.red * scale) / 255U);
-    color.green = (unsigned char)(((unsigned int)color.green * scale) / 255U);
-    color.blue = (unsigned char)(((unsigned int)color.blue * scale) / 255U);
-    return color;
-}
-
-static screensave_color runner_scale_color_amount(screensave_color color, unsigned int scale)
-{
-    if (scale > 255U) {
-        scale = 255U;
-    }
-    color.red = (unsigned char)(((unsigned int)color.red * scale) / 255U);
-    color.green = (unsigned char)(((unsigned int)color.green * scale) / 255U);
-    color.blue = (unsigned char)(((unsigned int)color.blue * scale) / 255U);
-    return color;
-}
-
-static int runner_fixed_to_int(long value)
-{
-    return (int)(value / RUNNER_FIXED_ONE);
-}
-
-static void runner_render_monolith_at(
-    screensave_rgba8_surface *surface,
-    int center_x,
-    int center_y,
-    int width,
-    int height,
-    screensave_color primary,
-    screensave_color accent
+void screensave_diag_emit(
+    screensave_diag_context *context,
+    screensave_diag_level level,
+    screensave_diag_domain domain,
+    unsigned long code,
+    const char *origin,
+    const char *text
 )
 {
-    screensave_recti rect;
-
-    rect.x = center_x - (width / 2);
-    rect.y = center_y - (height / 2);
-    rect.width = width;
-    rect.height = height;
-    screensave_soft_fill_rect(surface, &rect, primary);
-    screensave_soft_draw_frame_rect(surface, &rect, accent);
+    (void)context;
+    (void)level;
+    (void)domain;
+    (void)code;
+    (void)origin;
+    (void)text;
 }
 
-static void runner_render_session(runner_session *session, screensave_rgba8_surface *surface)
+const screensave_preset_descriptor *screensave_find_preset(
+    const screensave_preset_descriptor *presets,
+    unsigned int preset_count,
+    const char *preset_key
+)
 {
-    screensave_color background;
-    screensave_color primary;
-    screensave_color accent;
-    screensave_color ghost_fill;
-    screensave_color ghost_outline;
-    screensave_recti frame_rect;
-    int width;
-    int height;
+    unsigned int index;
 
-    if (session == NULL || surface == NULL) {
+    if (presets == NULL || preset_key == NULL) {
+        return NULL;
+    }
+
+    for (index = 0U; index < preset_count; ++index) {
+        if (presets[index].preset_key != NULL && strcmp(presets[index].preset_key, preset_key) == 0) {
+            return &presets[index];
+        }
+    }
+
+    return NULL;
+}
+
+const screensave_theme_descriptor *screensave_find_theme(
+    const screensave_theme_descriptor *themes,
+    unsigned int theme_count,
+    const char *theme_key
+)
+{
+    unsigned int index;
+
+    if (themes == NULL || theme_key == NULL) {
+        return NULL;
+    }
+
+    for (index = 0U; index < theme_count; ++index) {
+        if (themes[index].theme_key != NULL && strcmp(themes[index].theme_key, theme_key) == 0) {
+            return &themes[index];
+        }
+    }
+
+    return NULL;
+}
+
+int screensave_renderer_begin_frame(screensave_renderer *renderer, const screensave_frame_info *frame_info)
+{
+    (void)renderer;
+    (void)frame_info;
+    return 1;
+}
+
+void screensave_renderer_clear(screensave_renderer *renderer, screensave_color color)
+{
+    if (renderer == NULL || renderer->surface == NULL) {
         return;
     }
 
-    background = runner_color(0U, 0U, 0U);
-    screensave_rgba8_surface_clear(surface, background);
+    screensave_rgba8_surface_clear(renderer->surface, color);
+}
 
-    primary = runner_scale_color(runner_color(8U, 8U, 8U), session->fade_level);
-    accent = runner_scale_color(runner_color(20U, 20U, 20U), session->fade_level);
-
-    width = 6;
-    height = session->height / 3;
-    if (height < 12) {
-        height = 12;
+void screensave_renderer_fill_rect(
+    screensave_renderer *renderer,
+    const screensave_recti *rect,
+    screensave_color color
+)
+{
+    if (renderer == NULL || renderer->surface == NULL) {
+        return;
     }
 
-    ghost_fill = runner_scale_color_amount(primary, (unsigned int)(28 + session->ambient_level));
-    ghost_outline = runner_scale_color_amount(accent, (unsigned int)(52 + session->ambient_level));
-    runner_render_monolith_at(
-        surface,
-        runner_fixed_to_int(session->secondary_x),
-        runner_fixed_to_int(session->secondary_y),
-        width,
-        (height * 9) / 10,
-        ghost_fill,
-        ghost_outline
-    );
-    runner_render_monolith_at(
-        surface,
-        runner_fixed_to_int(session->primary_x),
-        runner_fixed_to_int(session->primary_y),
-        width,
-        height,
-        primary,
-        accent
-    );
+    screensave_soft_fill_rect(renderer->surface, rect, color);
+}
 
-    frame_rect.x = 6;
-    frame_rect.y = 6;
-    frame_rect.width = session->width - 12;
-    frame_rect.height = session->height - 12;
-    if (frame_rect.width > 0 && frame_rect.height > 0) {
-        screensave_soft_draw_frame_rect(
-            surface,
-            &frame_rect,
-            runner_scale_color_amount(accent, (unsigned int)(18 + session->ambient_level))
-        );
+void screensave_renderer_draw_frame_rect(
+    screensave_renderer *renderer,
+    const screensave_recti *rect,
+    screensave_color color
+)
+{
+    if (renderer == NULL || renderer->surface == NULL) {
+        return;
     }
+
+    screensave_soft_draw_frame_rect(renderer->surface, rect, color);
+}
+
+void screensave_renderer_draw_line(
+    screensave_renderer *renderer,
+    const screensave_pointi *start_point,
+    const screensave_pointi *end_point,
+    screensave_color color
+)
+{
+    if (renderer == NULL || renderer->surface == NULL) {
+        return;
+    }
+
+    screensave_soft_draw_line(renderer->surface, start_point, end_point, color);
+}
+
+void screensave_renderer_draw_polyline(
+    screensave_renderer *renderer,
+    const screensave_pointi *points,
+    unsigned int point_count,
+    screensave_color color
+)
+{
+    if (renderer == NULL || renderer->surface == NULL) {
+        return;
+    }
+
+    screensave_soft_draw_polyline(renderer->surface, points, point_count, color);
+}
+
+int screensave_renderer_blit_bitmap(
+    screensave_renderer *renderer,
+    const screensave_bitmap_view *bitmap,
+    const screensave_recti *destination_rect
+)
+{
+    (void)renderer;
+    (void)bitmap;
+    (void)destination_rect;
+    return 0;
+}
+
+int screensave_renderer_end_frame(screensave_renderer *renderer)
+{
+    (void)renderer;
+    return 1;
+}
+
+void screensave_renderer_shutdown(screensave_renderer *renderer)
+{
+    (void)renderer;
 }
 
 static int runner_write_ppm(const screensave_rgba8_surface *surface, const char *path)
@@ -403,6 +237,57 @@ static int runner_parse_ulong_arg(const char *text, unsigned long *value_out)
     return 1;
 }
 
+static void runner_make_common_config(
+    screensave_common_config *common_config,
+    nocturne_config *product_config,
+    const char *preset_key
+)
+{
+    if (common_config == NULL || product_config == NULL) {
+        return;
+    }
+
+    memset(common_config, 0, sizeof(*common_config));
+    memset(product_config, 0, sizeof(*product_config));
+    common_config->schema_version = SCREENSAVE_CONFIG_SCHEMA_VERSION;
+    common_config->detail_level = SCREENSAVE_DETAIL_LEVEL_STANDARD;
+    common_config->preset_key = NOCTURNE_DEFAULT_PRESET_KEY;
+    common_config->theme_key = NOCTURNE_DEFAULT_THEME_KEY;
+    product_config->motion_mode = NOCTURNE_MOTION_MONOLITH;
+    product_config->fade_speed = NOCTURNE_FADE_GENTLE;
+    product_config->motion_strength = NOCTURNE_STRENGTH_SUBTLE;
+    nocturne_apply_preset_to_config(preset_key, common_config, product_config);
+}
+
+static void runner_make_environment(
+    screensave_saver_environment *environment,
+    screensave_config_binding *binding,
+    const screensave_common_config *common_config,
+    const nocturne_config *product_config,
+    screensave_renderer *renderer,
+    int width,
+    int height,
+    unsigned long seed
+)
+{
+    memset(environment, 0, sizeof(*environment));
+    memset(binding, 0, sizeof(*binding));
+
+    binding->common_config = common_config;
+    binding->product_config = product_config;
+    binding->product_config_size = (unsigned int)sizeof(*product_config);
+
+    environment->mode = SCREENSAVE_SESSION_MODE_SCREEN;
+    environment->drawable_size.width = width;
+    environment->drawable_size.height = height;
+    environment->seed.base_seed = seed;
+    environment->seed.stream_seed = 0x0A1E0A1EUL;
+    environment->seed.deterministic = 1;
+    environment->config_binding = binding;
+    environment->renderer = renderer;
+    environment->diagnostics = NULL;
+}
+
 int main(int argc, char **argv)
 {
     int width;
@@ -411,8 +296,15 @@ int main(int argc, char **argv)
     int index;
     unsigned long seed;
     unsigned long delta_ms;
+    unsigned long elapsed_ms;
     const char *output_path;
-    runner_session session;
+    const char *preset_key;
+    screensave_common_config common_config;
+    nocturne_config product_config;
+    screensave_config_binding binding;
+    screensave_saver_environment environment;
+    screensave_saver_session *session;
+    screensave_renderer renderer;
     screensave_rgba8_surface surface;
 
     width = 96;
@@ -421,6 +313,8 @@ int main(int argc, char **argv)
     seed = 1536UL;
     delta_ms = 100UL;
     output_path = "capture.ppm";
+    preset_key = NOCTURNE_DEFAULT_PRESET_KEY;
+    session = NULL;
 
     for (index = 1; index < argc; ++index) {
         if (strcmp(argv[index], "--width") == 0 && index + 1 < argc) {
@@ -448,6 +342,9 @@ int main(int argc, char **argv)
             if (!runner_parse_ulong_arg(argv[index], &delta_ms)) {
                 return 2;
             }
+        } else if (strcmp(argv[index], "--preset") == 0 && index + 1 < argc) {
+            ++index;
+            preset_key = argv[index];
         } else if (strcmp(argv[index], "--output") == 0 && index + 1 < argc) {
             ++index;
             output_path = argv[index];
@@ -462,20 +359,35 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    runner_make_session(&session, width, height, seed);
-    for (index = 0; index < frames; ++index) {
-        runner_step_session(&session, delta_ms);
+    renderer.surface = &surface;
+    runner_make_common_config(&common_config, &product_config, preset_key);
+    runner_make_environment(&environment, &binding, &common_config, &product_config, &renderer, width, height, seed);
+
+    if (!nocturne_create_session(NULL, &session, &environment)) {
+        screensave_rgba8_surface_dispose(&surface);
+        fprintf(stderr, "could not create Nocturne product session\n");
+        return 1;
     }
-    runner_render_session(&session, &surface);
+
+    elapsed_ms = 0UL;
+    for (index = 0; index < frames; ++index) {
+        elapsed_ms += delta_ms;
+        environment.clock.delta_millis = delta_ms;
+        environment.clock.elapsed_millis = elapsed_ms;
+        environment.clock.frame_index = (unsigned long)index;
+        nocturne_step_session(session, &environment);
+    }
+    nocturne_render_session(session, &environment);
 
     if (!runner_write_ppm(&surface, output_path)) {
+        nocturne_destroy_session(session);
         screensave_rgba8_surface_dispose(&surface);
         fprintf(stderr, "could not write output capture\n");
         return 1;
     }
 
     printf(
-        "compiled-nocturne width=%d height=%d seed=%lu frames=%d delta_ms=%lu checksum=%lu output=%s\n",
+        "compiled-nocturne product-session width=%d height=%d seed=%lu frames=%d delta_ms=%lu checksum=%lu output=%s\n",
         width,
         height,
         seed,
@@ -484,6 +396,8 @@ int main(int argc, char **argv)
         screensave_rgba8_surface_checksum(&surface),
         output_path
     );
+
+    nocturne_destroy_session(session);
     screensave_rgba8_surface_dispose(&surface);
     return 0;
 }
