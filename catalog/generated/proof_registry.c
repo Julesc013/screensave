@@ -28,7 +28,7 @@ const screensave_generated_proof_profile g_screensave_generated_proof_profiles[S
         "ricochet.reference.v1",
         "planned",
         "ricochet",
-        "defaults",
+        "classic_clean",
         128UL,
         72UL,
         96UL,

@@ -115,6 +115,10 @@ def validate_proof_profiles(
             baseline_proof = ROOT / str(item.get("baseline_proof", ""))
             require(baseline_capture.is_file(), f"implemented proof profile {key} baseline_capture must exist.", errors)
             require(baseline_proof.is_file(), f"implemented proof profile {key} baseline_proof must exist.", errors)
+        if key == "ricochet.reference.v1":
+            require(item.get("preset") == "classic_clean", "ricochet.reference.v1 must use admitted preset classic_clean.", errors)
+            require(item.get("capture_frames") == [0, 4, 8, 32], "ricochet.reference.v1 must freeze frames 0, 4, 8, and 32.", errors)
+            require(item.get("comparison_class") == "exact", "ricochet.reference.v1 must remain exact.", errors)
 
 
 def main() -> int:
