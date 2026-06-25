@@ -14,6 +14,8 @@ Current active control plane:
 - Use `.aide/project_bridge_profile.toml` and
   `tools/project_adapter/capability_bindings.json` for the deterministic
   ScreenSave bridge surface.
+- Use `tools/buildctl/screensave_build.py` only through fixed build profiles;
+  dry-run receipts are command-plan evidence, not native build evidence.
 - Do not expose `screensave run <anything>`; use fixed adapter capabilities
   only.
 - Do not treat fixed command receipts as worker-host acceptance, compatibility

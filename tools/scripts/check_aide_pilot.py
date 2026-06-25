@@ -175,6 +175,8 @@ def main() -> int:
             errors,
         )
     for name in {
+        "screensave.build.windows-current-x86",
+        "screensave.build.windows-current-tools",
         "screensave.proof.nocturne.render",
         "screensave.proof.capture.compare",
         "screensave.artifact.pe.audit",

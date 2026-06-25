@@ -10,15 +10,21 @@ python tools\project_adapter\screensave_project.py status
 python tools\project_adapter\screensave_project.py capabilities
 python tools\project_adapter\screensave_project.py catalog
 python tools\project_adapter\screensave_project.py validate
+python tools\project_adapter\screensave_project.py build --profile windows-current-x86 --invocation-id local-build
 python tools\project_adapter\screensave_project.py render --invocation-id local-render
 python tools\project_adapter\screensave_project.py compare --actual validation\captures\proof-kernel-v0\nocturne\capture.ppm
 python tools\project_adapter\screensave_project.py audit --artifact-profile windows_current_x86_scr
 python tools\project_adapter\screensave_project.py proof --invocation-id local-proof
 ```
 
-The adapter reports JSON receipts. It delegates to ScreenSave validators and
-`sslab`; it does not edit code, merge branches, certify compatibility, or make
-AIDE part of saver runtime.
+The adapter reports JSON receipts. It delegates to ScreenSave validators,
+fixed build profiles, and `sslab`; it does not edit code, merge branches,
+certify compatibility, publish releases, or make AIDE part of saver runtime.
+
+The `build` command accepts named profiles only. Current profiles are
+`windows-current-x86` and `windows-current-tools`; callers cannot provide
+arbitrary MSBuild, compiler, linker, or output arguments. Dry-run receipts prove
+the admitted command plan but are not build evidence.
 
 The `proof` command is a combined Nocturne v0 receipt: deterministic render,
 exact capture comparison, artifact-profile PE audit facts, and an artifact

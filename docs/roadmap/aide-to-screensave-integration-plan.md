@@ -48,6 +48,8 @@ screensave.project.status
 screensave.project.capabilities
 screensave.catalog.read
 screensave.validation.core
+screensave.build.windows-current-x86
+screensave.build.windows-current-tools
 screensave.proof.nocturne.render
 screensave.proof.capture.compare
 screensave.artifact.pe.audit
@@ -66,6 +68,12 @@ The admitted capabilities are declared in
 `tools/project_adapter/capability_bindings.json`, decoded through
 `tools/project_adapter/receipt_schemas.json`, and constrained by
 `tools/project_adapter/artifact_profile_audit_roots.json`.
+
+The build capabilities route through `tools/buildctl/screensave_build.py`.
+They accept named profiles only and do not expose arbitrary MSBuild or compiler
+arguments. Dry-run build receipts may validate the command plan, but only a
+non-dry-run receipt with artifact-set manifests and profile-aware PE audits is
+build evidence.
 
 ## Hardened Adapter Requirements
 
@@ -114,6 +122,7 @@ facts are not compatibility certification.
 | Report-only AIDE pilot | ready-now |
 | Pinned AIDE Lite profile | ready-now |
 | Read-only deterministic commands | admitted-now |
+| Fixed current-Windows build commands | admitted-now-contained |
 | Contained generated proof commands | admitted-now-contained |
 | Coding-agent data-pack proposal | later |
 | Source patch preview/apply | substantially-later |
@@ -153,4 +162,3 @@ compiled Nocturne proof path
 
 This milestone supports useful automation without making AIDE a dependency,
 weakening ScreenSave authority, or pretending the AIDE worker runtime is ready.
-

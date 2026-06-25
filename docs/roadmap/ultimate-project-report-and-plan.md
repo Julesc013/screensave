@@ -419,7 +419,7 @@ surface.
 | `compare` | implemented for PPM captures | exact, tolerant, perceptual, observational proof classes |
 | `audit` | implemented for structured non-vacuous PE facts | exact artifact-manifest aware audit gates |
 | `proof` | implemented for Nocturne exact canary | full proof-bundle exporter |
-| `build` | not yet implemented | profile-aware build command |
+| `build` | implemented as fixed current-Windows dry-run/real build controller | broader profile-aware build command |
 | `lifecycle` | implemented for Nocturne proof-kernel canary | product-generic lifecycle proof |
 | `profile` | not yet implemented | frame-time/resource/handle metrics |
 | `package` | not yet implemented | Core, Manager, Workbench, SDK, Preservation packaging |
@@ -428,6 +428,7 @@ The current project adapter now exposes fixed capability bindings in
 `tools/project_adapter/capability_bindings.json`, command-specific receipt
 requirements in `tools/project_adapter/receipt_schemas.json`, and contained
 generated-output roots under `out/aide/screensave-project-adapter/invocations/`.
+Builds route through fixed profiles in `tools/buildctl/screensave_build.py`.
 PE audit roots are selected through named artifact profiles, not arbitrary
 caller-supplied paths. This is
 the ScreenSave-owned bridge profile AIDE can consume without being allowed to

@@ -7,6 +7,7 @@ Does not belong here: baseline runtime dependencies or product logic.
 Current project-owned protocol surfaces:
 
 - [`sslab/`](sslab/): ScreenSave proof-kernel render and comparison tooling.
+- [`buildctl/`](buildctl/): fixed named build-profile controller for native artifact proof lanes.
 - [`project_adapter/`](project_adapter/): JSON status, capability, validation, and proof adapter for AIDE-compatible coordination.
 
 Type: tooling.

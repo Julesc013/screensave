@@ -16,6 +16,7 @@ RECEIPT_SCHEMAS = ROOT / "tools" / "project_adapter" / "receipt_schemas.json"
 ARTIFACT_PROFILE_AUDIT_ROOTS = ROOT / "tools" / "project_adapter" / "artifact_profile_audit_roots.json"
 ARTIFACT_PROFILES = ROOT / "catalog" / "artifact_profiles.toml"
 PE_AUDIT = ROOT / "tools" / "scripts" / "audit_pe_artifacts.py"
+BUILDCTL = ROOT / "tools" / "buildctl" / "screensave_build.py"
 
 REQUIRED_PATHS = [
     ROOT / "contracts" / "project_adapter_v0.md",
@@ -25,6 +26,7 @@ REQUIRED_PATHS = [
     RECEIPT_SCHEMAS,
     ARTIFACT_PROFILE_AUDIT_ROOTS,
     PE_AUDIT,
+    BUILDCTL,
     ADAPTER,
 ]
 
@@ -35,6 +37,7 @@ REQUIRED_TEXT = {
         "def command_capabilities",
         "def command_catalog",
         "def command_validate",
+        "def command_build",
         "def command_render",
         "def command_compare",
         "def command_audit",
@@ -49,6 +52,7 @@ REQUIRED_TEXT = {
         "capabilities",
         "catalog",
         "validate",
+        "build",
         "render",
         "compare",
         "audit",
@@ -57,8 +61,10 @@ REQUIRED_TEXT = {
         "tools/project_adapter/capability_bindings.json",
         "tools/project_adapter/receipt_schemas.json",
         "tools/project_adapter/artifact_profile_audit_roots.json",
+        "tools/buildctl/screensave_build.py",
         "out/aide/screensave-project-adapter/invocations/",
         "accept arbitrary output paths",
+        "arbitrary compiler, linker, or MSBuild arguments",
     ],
 }
 
@@ -119,6 +125,8 @@ def main() -> int:
         require("screensave.project.capabilities" in names, "capabilities must include screensave.project.capabilities.", errors)
         require("screensave.catalog.read" in names, "capabilities must include screensave.catalog.read.", errors)
         require("screensave.validation.core" in names, "capabilities must include screensave.validation.core.", errors)
+        require("screensave.build.windows-current-x86" in names, "capabilities must include screensave.build.windows-current-x86.", errors)
+        require("screensave.build.windows-current-tools" in names, "capabilities must include screensave.build.windows-current-tools.", errors)
         require("screensave.proof.nocturne.render" in names, "capabilities must include screensave.proof.nocturne.render.", errors)
         require("screensave.proof.capture.compare" in names, "capabilities must include screensave.proof.capture.compare.", errors)
         require("screensave.artifact.pe.audit" in names, "capabilities must include screensave.artifact.pe.audit.", errors)
@@ -177,6 +185,22 @@ def main() -> int:
 
         validation = run_adapter(["validate"])
         require(validation.get("status") == "pass", "adapter validate must pass.", errors)
+
+        build = run_adapter(["build", "--invocation-id", "check-build", "--profile", "windows-current-x86", "--dry-run"])
+        require(build.get("status") == "informational", "adapter build dry-run must be informational.", errors)
+        require(build.get("payload", {}).get("capability") == "screensave.build.windows-current-x86", "adapter build must report the selected fixed build capability.", errors)
+        require(build.get("payload", {}).get("dry_run") is True, "adapter build dry-run must preserve dry_run true.", errors)
+        require(build.get("payload", {}).get("build_receipt_status") == "informational", "adapter build must preserve build receipt status.", errors)
+        require(
+            repo_ref_to_path(build.get("payload", {}).get("build_receipt_ref", "")).exists(),
+            "adapter build dry-run must write build-receipt.json.",
+            errors,
+        )
+        require(
+            repo_ref_to_path(build.get("payload", {}).get("artifact_manifest_ref", "")).exists(),
+            "adapter build dry-run must write an adapter artifact-manifest.json.",
+            errors,
+        )
 
         render = run_adapter(["render", "--invocation-id", "check-render"])
         require(render.get("status") == "pass", "adapter render must pass.", errors)

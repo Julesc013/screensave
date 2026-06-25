@@ -25,6 +25,27 @@
     "validate": {
       "payload_required": ["validation_class", "command_binding", "runs"]
     },
+    "build": {
+      "payload_required": [
+        "capability",
+        "invocation_id",
+        "profile",
+        "dry_run",
+        "output_dir",
+        "artifact_manifest_ref",
+        "before_source",
+        "after_source",
+        "command_binding",
+        "run",
+        "build_receipt_ref",
+        "build_receipt_status",
+        "build_lane",
+        "artifact_sets",
+        "manifest_results",
+        "audit_results",
+        "claim_boundary"
+      ]
+    },
     "render": {
       "payload_required": [
         "capability",

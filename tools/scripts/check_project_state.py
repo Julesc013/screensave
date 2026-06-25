@@ -89,6 +89,7 @@ def validate_state(state: dict) -> list[str]:
         ("authority.generated_catalog_inventory", authority.get("generated_catalog_inventory")),
         ("authority.version_manifest", authority.get("version_manifest")),
         ("authority.project_adapter", authority.get("project_adapter")),
+        ("authority.build_controller", authority.get("build_controller")),
         ("authority.aide_pilot", authority.get("aide_pilot")),
         ("authority.aide_lite_lock", authority.get("aide_lite_lock")),
         ("authority.aide_integration_plan", authority.get("aide_integration_plan")),
@@ -157,8 +158,8 @@ def validate_state(state: dict) -> list[str]:
     require(project_adapter.get("schema_version") == 1, "project_adapter.schema_version must be 1.", errors)
     require(project_adapter.get("status") == "active", "project_adapter.status must be active.", errors)
     require(
-        {"status", "capabilities", "catalog", "validate", "render", "compare", "audit", "proof"} <= set(project_adapter.get("commands", [])),
-        "project_adapter.commands must include status, capabilities, catalog, validate, render, compare, audit, and proof.",
+        {"status", "capabilities", "catalog", "validate", "build", "render", "compare", "audit", "proof"} <= set(project_adapter.get("commands", [])),
+        "project_adapter.commands must include status, capabilities, catalog, validate, build, render, compare, audit, and proof.",
         errors,
     )
     for label, value in (
@@ -175,8 +176,10 @@ def validate_state(state: dict) -> list[str]:
         errors,
     )
     require(
-        "out/aide" in str(project_adapter.get("policy", "")) and "artifact-profile audit roots" in str(project_adapter.get("policy", "")),
-        "project_adapter.policy must mention out/aide containment and artifact-profile audit roots.",
+        "out/aide" in str(project_adapter.get("policy", ""))
+        and "artifact-profile audit roots" in str(project_adapter.get("policy", ""))
+        and "fixed build profiles" in str(project_adapter.get("policy", "")),
+        "project_adapter.policy must mention out/aide containment, fixed build profiles, and artifact-profile audit roots.",
         errors,
     )
 

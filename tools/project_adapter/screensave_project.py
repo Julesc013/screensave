@@ -19,6 +19,7 @@ VERSION_PATH = ROOT / "VERSION.toml"
 SSLAB = ROOT / "tools" / "sslab" / "sslab.py"
 GENERATED_INVENTORY = ROOT / "catalog" / "generated" / "products_inventory.json"
 PE_AUDIT = ROOT / "tools" / "scripts" / "audit_pe_artifacts.py"
+BUILDCTL = ROOT / "tools" / "buildctl" / "screensave_build.py"
 CAPABILITY_BINDINGS = ROOT / "tools" / "project_adapter" / "capability_bindings.json"
 RECEIPT_SCHEMAS = ROOT / "tools" / "project_adapter" / "receipt_schemas.json"
 ARTIFACT_PROFILE_AUDIT_ROOTS = ROOT / "tools" / "project_adapter" / "artifact_profile_audit_roots.json"
@@ -36,6 +37,11 @@ MAX_RENDER_FRAMES = 300
 MAX_RENDER_DELTA_MS = 1000
 MAX_CAPTURE_BYTES = 50 * 1024 * 1024
 MAX_AUDIT_PROFILES = 8
+
+BUILD_CAPABILITIES = {
+    "windows-current-x86": "screensave.build.windows-current-x86",
+    "windows-current-tools": "screensave.build.windows-current-tools",
+}
 
 CORE_VALIDATION = [
     ["tools/scripts/check_project_state.py"],
@@ -221,17 +227,24 @@ def blocked(command: str, error: AdapterError) -> int:
     return 1
 
 
-def capability_binding_for_command(command: str) -> dict[str, Any]:
+def capability_binding_for_command(command: str, capability_name: str | None = None) -> dict[str, Any]:
     bindings = load_json(CAPABILITY_BINDINGS)
     for item in bindings.get("capabilities", []):
+        if capability_name is not None and item.get("name") == capability_name:
+            return item
         if item.get("command") == command:
             return item
     return {}
 
 
-def command_binding_payload(command: str, argv: list[str], delegated_tools: list[pathlib.Path]) -> dict[str, Any]:
+def command_binding_payload(
+    command: str,
+    argv: list[str],
+    delegated_tools: list[pathlib.Path],
+    capability_name: str | None = None,
+) -> dict[str, Any]:
     return {
-        "capability": capability_binding_for_command(command).get("name"),
+        "capability": capability_binding_for_command(command, capability_name).get("name"),
         "argv": argv,
         "adapter_sha256": sha256_file(pathlib.Path(__file__).resolve()),
         "capability_binding_ref": repo_path(CAPABILITY_BINDINGS),
@@ -406,6 +419,73 @@ def command_validate(_args: argparse.Namespace) -> int:
         "runs": runs,
     }
     write_json(envelope("validate", status, payload))
+    return exit_code_for_status(status)
+
+
+def command_build(args: argparse.Namespace) -> int:
+    try:
+        output_dir = invocation_dir("build", args.invocation_id)
+    except AdapterError as exc:
+        return blocked("build", exc)
+    before_source = source_payload()
+    command = [
+        str(BUILDCTL.relative_to(ROOT)),
+        "build",
+        "--profile",
+        args.profile,
+        "--output-dir",
+        str(output_dir),
+    ]
+    if args.dry_run:
+        command.append("--dry-run")
+    build_run = run_command(command, timeout_seconds=1200)
+    receipt_path = output_dir / "build-receipt.json"
+    receipt = load_json(receipt_path) if receipt_path.exists() else {}
+    receipt_status = str(receipt.get("status", "fail"))
+    manifest_path = write_artifact_manifest(
+        output_dir,
+        "build",
+        [
+            ("build_receipt", receipt_path, "build-receipt-json"),
+            ("build_log", output_dir / "build.log", "build-log"),
+        ],
+    )
+    if receipt_status == "blocked":
+        status = "blocked"
+    elif build_run["returncode"] != 0 or receipt_status == "fail":
+        status = "fail"
+    elif receipt_status == "pass":
+        status = "pass"
+    else:
+        status = "informational"
+    payload = {
+        "capability": BUILD_CAPABILITIES[args.profile],
+        "invocation_id": args.invocation_id,
+        "profile": args.profile,
+        "dry_run": bool(args.dry_run),
+        "output_dir": repo_path(output_dir),
+        "artifact_manifest_ref": repo_path(manifest_path),
+        "before_source": before_source,
+        "after_source": source_payload(),
+        "command_binding": command_binding_payload(
+            "build",
+            build_run["command"],
+            [BUILDCTL, ARTIFACT_PROFILE_AUDIT_ROOTS, PE_AUDIT],
+            BUILD_CAPABILITIES[args.profile],
+        ),
+        "run": build_run,
+        "build_receipt_ref": repo_path(receipt_path),
+        "build_receipt_status": receipt_status,
+        "build_lane": receipt.get("build_lane"),
+        "artifact_sets": receipt.get("artifact_sets", []),
+        "manifest_results": receipt.get("manifest_results", []),
+        "audit_results": receipt.get("audit_results", []),
+        "claim_boundary": receipt.get(
+            "claim_boundary",
+            "build, artifact-set, and binary-audit facts only; not runtime compatibility certification or release promotion",
+        ),
+    }
+    write_json(envelope("build", status, payload))
     return exit_code_for_status(status)
 
 
@@ -739,6 +819,12 @@ def build_parser() -> argparse.ArgumentParser:
 
     validate = subparsers.add_parser("validate", help="Run bounded ScreenSave validation.")
     validate.set_defaults(func=command_validate)
+
+    build = subparsers.add_parser("build", help="Run a fixed ScreenSave build profile.")
+    build.add_argument("--invocation-id", default="local", help="Safe id for the contained adapter output root.")
+    build.add_argument("--profile", required=True, choices=sorted(BUILD_CAPABILITIES))
+    build.add_argument("--dry-run", action="store_true", help="Record a fixed build command plan without invoking MSBuild.")
+    build.set_defaults(func=command_build)
 
     render = subparsers.add_parser("render", help="Render the Proof Kernel v0 Nocturne canary.")
     render.add_argument("--invocation-id", default="local", help="Safe id for the contained adapter output root.")

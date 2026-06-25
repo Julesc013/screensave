@@ -26,7 +26,9 @@ jobs:
         run: python tools/scripts/check_codex_config.py
 
       - name: Validate build scaffold layout
-        run: python tools/scripts/check_build_layout.py
+        run: |
+          python tools/scripts/check_build_layout.py
+          python tools/scripts/check_build_controller.py
 
       - name: Validate project state
         run: python tools/scripts/check_project_state.py --summary
@@ -131,6 +133,7 @@ jobs:
           python tools/project_adapter/screensave_project.py capabilities > out/ci/project-adapter/capabilities.json
           python tools/project_adapter/screensave_project.py catalog > out/ci/project-adapter/catalog.json
           python tools/project_adapter/screensave_project.py validate > out/ci/project-adapter/validate.json
+          python tools/project_adapter/screensave_project.py build --invocation-id ci-build --profile windows-current-x86 --dry-run > out/ci/project-adapter/build.json
 
       - name: Run contained render and compare adapter commands
         run: |
@@ -144,6 +147,7 @@ jobs:
           name: project-adapter-receipts
           path: |
             out/ci/project-adapter
+            out/aide/screensave-project-adapter/invocations/build/ci-build
             out/aide/screensave-project-adapter/invocations/render/ci-render
             out/aide/screensave-project-adapter/invocations/compare/ci-compare
           if-no-files-found: error

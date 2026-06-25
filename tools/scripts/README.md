@@ -8,6 +8,7 @@ Current stage:
 - `check_codex_config.py` validates the project-scoped Codex configuration.
 - `check_docs_basics.py` checks markdown links and roadmap/doc basics.
 - `check_build_layout.py` validates the checked-in build scaffold and target relationships.
+- `check_build_controller.py` validates the fixed build-profile controller and dry-run receipt boundary.
 - `check_project_state.py` validates `PROJECT_STATE.toml`, `VERSION.toml`, linked authority files, and prints the current released/development/queue/compatibility state with `--summary`.
 - `check_catalog_profiles.py` validates `catalog/products.toml`, `catalog/artifact_profiles.toml`, product artifact-profile references, and evidence-status vocabulary.
 - `check_artifact_sets.py` validates `catalog/artifact_sets.toml`, `catalog/proof_profiles.toml`, and the artifact manifest tool boundary.

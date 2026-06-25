@@ -18,6 +18,7 @@ The v0 adapter command set is:
 - `capabilities`: report admitted adapter operations and their boundaries.
 - `catalog`: report the committed generated product inventory.
 - `validate`: run a bounded ScreenSave-owned validation ladder.
+- `build`: run a named fixed ScreenSave build profile.
 - `render`: run the Proof Kernel v0 Nocturne canary render.
 - `compare`: compare proof-kernel captures using `sslab`.
 - `audit`: run the ScreenSave PE artifact audit and report binary facts.
@@ -38,6 +39,8 @@ External coordinators must bind to these fixed capabilities, not to an open
 - `screensave.project.capabilities`
 - `screensave.catalog.read`
 - `screensave.validation.core`
+- `screensave.build.windows-current-x86`
+- `screensave.build.windows-current-tools`
 - `screensave.proof.nocturne.render`
 - `screensave.proof.capture.compare`
 - `screensave.artifact.pe.audit`
@@ -53,7 +56,7 @@ The ScreenSave-side admission classes are:
 
 - read-only fixed commands: `status`, `capabilities`, `catalog`, and
   `validate`
-- contained generated-output commands: `render`, `compare`, `audit`, and
+- contained generated-output commands: `build`, `render`, `compare`, `audit`, and
   `proof`
 - blocked worker sessions: source patching, data-pack worker proposals,
   autonomous coding sessions, automatic merge, and release promotion
@@ -66,6 +69,7 @@ worker-host sessions or generic command execution.
 The adapter may:
 
 - invoke repository validators
+- invoke fixed build profiles through `tools/buildctl/screensave_build.py`
 - invoke `sslab`
 - invoke the PE artifact audit
 - emit JSON receipts
@@ -87,6 +91,7 @@ The adapter may not:
   roots
 - accept arbitrary PE audit filesystem paths instead of artifact-profile audit
   roots
+- accept arbitrary compiler, linker, or MSBuild arguments from callers
 
 ## Result Shape
 
@@ -124,6 +129,12 @@ artifact-profile audit-root map and remain binary-fact evidence only.
 The audit tool emits both a human-readable report and a JSON result. Missing
 artifact roots or zero discovered PE artifacts produce `blocked`, not a passing
 empty audit.
+
+The `build` command accepts named `--profile` selections only. Initial profiles
+are `windows-current-x86` and `windows-current-tools`; both route through the
+fixed VS2022 Release Win32 build lane and then produce build receipts,
+artifact-set manifests, and profile-aware PE audit facts. A dry-run build
+receipt may prove the admitted command plan, but it is not build evidence.
 
 ## Initial Proof
 
