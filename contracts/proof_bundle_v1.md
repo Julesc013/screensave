@@ -47,6 +47,25 @@ Each axis has:
 Additional axis-specific fields may exist, but the required axes must remain
 present so consumers can distinguish mechanical proof from product approval.
 
+## Accepted Evidence Inputs
+
+The normalizer may consume these ScreenSave-owned receipt classes:
+
+- proof receipts from fixed-step render or adapter proof commands;
+- comparison receipts from exact, tolerant, or other declared comparison
+  classes;
+- PE or package audit receipts tied to named artifact profiles;
+- build receipts with source, toolchain, artifact, and audit facts;
+- adapter receipts that preserve the invoked fixed project capability;
+- lifecycle receipts for create, resize, step, render, and destroy evidence;
+- performance receipts for frame timing, resource, handle, memory, or soak
+  evidence.
+
+If an optional receipt is not supplied, its axis remains `informational` or
+`blocked` according to the axis semantics. Supplying lifecycle or performance
+evidence does not change the artistic-review, compatibility-certification, or
+release-promotion boundaries.
+
 ## Compatibility Boundary
 
 `artifact_audit.status = pass` or `informational` does not certify an operating
@@ -68,7 +87,7 @@ when they are `blocked` or `informational`.
 
 Proof Bundle v0 remains the raw Proof Kernel v0 Nocturne canary output.
 Proof Bundle v1 is the normalized evidence envelope that may wrap v0 proof,
-comparison receipts, PE audits, build receipts, lifecycle receipts, and future
-Workbench/AIDE evidence.
+comparison receipts, PE audits, build receipts, lifecycle receipts,
+performance receipts, and future Workbench/AIDE evidence.
 
 Type: versioned proof contract.

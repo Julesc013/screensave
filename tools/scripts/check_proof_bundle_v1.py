@@ -14,6 +14,9 @@ TOOL = ROOT / "tools" / "proofbundle" / "proofbundle.py"
 README = ROOT / "tools" / "proofbundle" / "README.md"
 NOCTURNE_PROOF = ROOT / "validation" / "captures" / "proof-kernel-v0" / "nocturne" / "proof.json"
 OUTPUT = ROOT / "out" / "proof" / "proof-bundle-v1" / "check-nocturne.json"
+LIFECYCLE_DIR = ROOT / "out" / "proof" / "proof-bundle-v1" / "check-lifecycle"
+LIFECYCLE_RECEIPT = LIFECYCLE_DIR / "lifecycle.json"
+PERFORMANCE_RECEIPT = ROOT / "out" / "proof" / "proof-bundle-v1" / "check-performance.json"
 
 REQUIRED_AXES = {
     "execution",
@@ -55,6 +58,8 @@ def main() -> int:
             "`release_promotion`",
             "does not certify an operating system",
             "does not mean the saver looks good",
+            "lifecycle receipts",
+            "performance receipts",
         ]:
             require(needle in text, f"proof_bundle_v1.md is missing expected text: {needle!r}", errors)
 
@@ -67,10 +72,67 @@ def main() -> int:
         subprocess.check_call(
             [
                 sys.executable,
+                str(ROOT / "tools" / "sslab" / "sslab.py"),
+                "lifecycle",
+                "--product",
+                "nocturne",
+                "--preset",
+                "observatory_night",
+                "--width",
+                "96",
+                "--height",
+                "54",
+                "--resize-width",
+                "80",
+                "--resize-height",
+                "45",
+                "--seed",
+                "1536",
+                "--frames",
+                "8",
+                "--delta-ms",
+                "100",
+                "--output-dir",
+                str(LIFECYCLE_DIR),
+            ],
+            cwd=ROOT,
+        )
+        PERFORMANCE_RECEIPT.parent.mkdir(parents=True, exist_ok=True)
+        PERFORMANCE_RECEIPT.write_text(
+            json.dumps(
+                {
+                    "performance_schema": "screensave-proof-performance-sample-v0",
+                    "status": "informational",
+                    "frame_count": 8,
+                    "frame_time_ms": {
+                        "p50": 0.0,
+                        "p95": 0.0,
+                        "p99": 0.0,
+                    },
+                    "soak": {
+                        "class": "not-run",
+                    },
+                    "limits": {
+                        "classification": "validator fixture only",
+                    },
+                },
+                indent=2,
+                sort_keys=True,
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+        subprocess.check_call(
+            [
+                sys.executable,
                 str(TOOL),
                 "normalize",
                 "--proof",
                 str(NOCTURNE_PROOF),
+                "--lifecycle",
+                str(LIFECYCLE_RECEIPT),
+                "--performance",
+                str(PERFORMANCE_RECEIPT),
                 "--output",
                 str(OUTPUT),
             ],
@@ -82,6 +144,22 @@ def main() -> int:
         axes = bundle.get("result_axes", {})
         require(set(axes) == REQUIRED_AXES, "normalized bundle must contain the required result axes.", errors)
         require(axes.get("capture", {}).get("status") == "pass", "capture axis must pass for the committed Nocturne proof.", errors)
+        require(axes.get("lifecycle", {}).get("status") == "pass", "lifecycle axis must consume a passing lifecycle receipt.", errors)
+        require(
+            axes.get("lifecycle", {}).get("step_count") == 8,
+            "lifecycle axis must retain lifecycle step evidence.",
+            errors,
+        )
+        require(
+            axes.get("performance", {}).get("status") == "informational",
+            "performance axis must consume informational profile evidence.",
+            errors,
+        )
+        require(
+            axes.get("performance", {}).get("frame_count") == 8,
+            "performance axis must retain performance frame-count evidence.",
+            errors,
+        )
         require(axes.get("compatibility", {}).get("certified") is False, "compatibility axis must not certify OS support.", errors)
         require(
             axes.get("artistic_review", {}).get("status") == "blocked",

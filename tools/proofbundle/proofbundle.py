@@ -74,12 +74,16 @@ def normalize(args: argparse.Namespace) -> dict[str, Any]:
     audit_path = resolve_input(args.pe_audit_json)
     build_path = resolve_input(args.build_receipt)
     adapter_path = resolve_input(args.adapter_receipt)
+    lifecycle_path = resolve_input(args.lifecycle)
+    performance_path = resolve_input(args.performance)
 
     proof = load_json(proof_path)
     comparison = load_json(comparison_path)
     pe_audit = load_json(audit_path)
     build_receipt = load_json(build_path)
     adapter_receipt = load_json(adapter_path)
+    lifecycle = load_json(lifecycle_path)
+    performance = load_json(performance_path)
 
     runtime = proof.get("runtime", {})
     capture = proof.get("capture", {})
@@ -89,6 +93,8 @@ def normalize(args: argparse.Namespace) -> dict[str, Any]:
     audit_ref = repo_path(audit_path) if audit_path else ""
     build_ref = repo_path(build_path) if build_path else ""
     adapter_ref = repo_path(adapter_path) if adapter_path else ""
+    lifecycle_ref = repo_path(lifecycle_path) if lifecycle_path else ""
+    performance_ref = repo_path(performance_path) if performance_path else ""
 
     artifact_count = int(pe_audit.get("artifact_count", 0)) if pe_audit else 0
     pe_audit_status = status_from_input(pe_audit) if pe_audit else "informational"
@@ -97,6 +103,8 @@ def normalize(args: argparse.Namespace) -> dict[str, Any]:
         compatibility_class = "binary-audited"
 
     comparison_status = status_from_input(comparison) if comparison else "informational"
+    lifecycle_status = status_from_input(lifecycle) if lifecycle else "informational"
+    performance_status = status_from_input(performance) if performance else "informational"
     build_status = status_from_input(build_receipt) if build_receipt else "informational"
     execution_status = "fail" if proof.get("status") == "fail" or build_status == "fail" else "informational"
     if build_status == "blocked":
@@ -118,6 +126,8 @@ def normalize(args: argparse.Namespace) -> dict[str, Any]:
             "pe_audit_json": audit_ref,
             "build_receipt": build_ref,
             "adapter_receipt": adapter_ref,
+            "lifecycle": lifecycle_ref,
+            "performance": performance_ref,
         },
         "result_axes": {
             "execution": axis(
@@ -144,14 +154,30 @@ def normalize(args: argparse.Namespace) -> dict[str, Any]:
                 metrics=comparison.get("metrics", {}),
             ),
             "lifecycle": axis(
-                "informational",
-                "Lifecycle axis is reserved unless a lifecycle receipt is supplied.",
-                [],
+                lifecycle_status,
+                "Lifecycle receipt was supplied." if lifecycle else "No lifecycle receipt was supplied.",
+                [lifecycle_ref] if lifecycle_ref else [],
+                lifecycle_schema=lifecycle.get("lifecycle_schema") or lifecycle.get("schema"),
+                create_session=lifecycle.get("create_session"),
+                resize_session=lifecycle.get("resize_session"),
+                step_count=lifecycle.get("step_count"),
+                render_session=lifecycle.get("render_session"),
+                destroy_session=lifecycle.get("destroy_session"),
+                width=lifecycle.get("width"),
+                height=lifecycle.get("height"),
+                checksum=lifecycle.get("checksum"),
             ),
             "performance": axis(
-                "informational",
-                "Performance axis is reserved until profiling evidence is supplied.",
-                [],
+                performance_status,
+                "Performance receipt was supplied." if performance else "No performance receipt was supplied.",
+                [performance_ref] if performance_ref else [],
+                performance_schema=performance.get("performance_schema") or performance.get("schema"),
+                frame_count=performance.get("frame_count"),
+                frame_time_ms=performance.get("frame_time_ms", {}),
+                memory=performance.get("memory", {}),
+                handles=performance.get("handles", {}),
+                soak=performance.get("soak", {}),
+                limits=performance.get("limits", {}),
             ),
             "artifact_audit": axis(
                 pe_audit_status,
@@ -211,6 +237,8 @@ def build_parser() -> argparse.ArgumentParser:
     normalize_parser.add_argument("--pe-audit-json", help="Optional PE audit JSON input.")
     normalize_parser.add_argument("--build-receipt", help="Optional build receipt JSON input.")
     normalize_parser.add_argument("--adapter-receipt", help="Optional adapter receipt JSON input.")
+    normalize_parser.add_argument("--lifecycle", help="Optional lifecycle JSON input.")
+    normalize_parser.add_argument("--performance", help="Optional performance/profile JSON input.")
     normalize_parser.add_argument("--output", required=True)
     normalize_parser.set_defaults(func=command_normalize)
 
