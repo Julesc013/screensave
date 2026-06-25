@@ -13,6 +13,7 @@ Current stage:
 - `check_catalog_generated.py` verifies that committed `catalog/generated/` inventory outputs match `tools/cataloggen/cataloggen.py`.
 - `check_aide_pilot.py` validates the report-only `.aide/` pilot, ignored local state, linked work-unit/evidence paths, and the no-product-runtime-dependency boundary.
 - `check_contracts.py` validates the ScreenSave doctrine, portable-semantics, renderer-alias, proof-bundle, proof-kernel, and project-adapter contract scaffolding.
+- `check_visual_intent_contract.py` validates the draft VisualIntent v1 contract and example authoring intent.
 - `check_proof_kernel.py` validates the Proof Kernel v0 private surface, software-renderer scaffolding, `sslab` canary command, and deterministic proof output.
 - `check_compiled_nocturne_runner.py` builds the compiled Proof Kernel v0 Nocturne canary and exact-compares it with committed evidence.
 - `check_project_adapter.py` validates the ScreenSave project adapter status, capabilities, catalog, validation, render, compare, audit, and proof command surface.

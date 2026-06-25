@@ -52,8 +52,12 @@ The repository has already implemented a substantial baseline:
 - product catalog and artifact profiles
 - generated catalog inventory
 - Proof Kernel v0 Nocturne canary
+- compiled Nocturne canary runner
 - `sslab` render and comparison tooling
 - ScreenSave project adapter commands for external coordinators
+- hardened fixed-capability adapter output containment
+- VisualIntent v1 draft authoring contract
+- pinned report-only AIDE Lite lock
 - report-only AIDE pilot integration
 
 The repository is not complete. The largest remaining work is not more
@@ -62,7 +66,7 @@ architecture prose. It is a sequence of proof-backed product slices:
 - finish Proof Kernel v0 as a complete Nocturne vertical slice
 - add Ricochet as the second architectural canary
 - move to a host-neutral portable v2 seam only after multiple products prove it
-- implement VisualIntent and safe pack generation after proof exists
+- implement the VisualIntent resolver and safe pack generation after proof exists
 - build Workbench over the same runner as CI
 - evolve Manager from the current suite lineage
 - certify compatibility from evidence instead of target language
@@ -83,7 +87,9 @@ Current authority is split deliberately:
 | Proof Kernel v0 | [../../contracts/proof_kernel_v0.md](../../contracts/proof_kernel_v0.md) |
 | RGBA8 surface contract | [../../contracts/surface_rgba8_v0.md](../../contracts/surface_rgba8_v0.md) |
 | Project adapter | [../../contracts/project_adapter_v0.md](../../contracts/project_adapter_v0.md) |
+| VisualIntent draft | [../../contracts/visual_intent_v1.md](../../contracts/visual_intent_v1.md) |
 | Report-only AIDE pilot | [../../.aide/pilot.toml](../../.aide/pilot.toml) |
+| Pinned AIDE Lite lock | [../../.aide/aide_lite.lock.toml](../../.aide/aide_lite.lock.toml) |
 | Plasma stable truth | [../../products/savers/plasma/docs/u09-stable-recut.md](../../products/savers/plasma/docs/u09-stable-recut.md) |
 | Plasma ship posture | [../../products/savers/plasma/docs/u09-ship-posture.md](../../products/savers/plasma/docs/u09-ship-posture.md) |
 
@@ -198,13 +204,18 @@ The most recent implemented authority/proof work added:
 - generated catalog inventory
 - PE audit tooling
 - report-only AIDE pilot
+- pinned AIDE Lite lock
 - portable seam and proof-bundle draft contracts
 - Proof Kernel v0 Nocturne canary
 - private RGBA8 and soft-render primitives
+- compiled Nocturne canary runner
 - `sslab` render and compare
 - ScreenSave Doctrine v1
+- VisualIntent v1 draft authoring contract
 - ScreenSave project adapter with `status`, `capabilities`, `catalog`,
   `validate`, `render`, `compare`, `audit`, and `proof`
+- fixed-capability adapter containment for generated outputs, compare inputs,
+  and artifact-profile PE audit roots
 
 ## Current Product Inventory
 
@@ -261,13 +272,14 @@ Implemented:
 - `sslab render`
 - `sslab compare`
 - proof-bundle v0 JSON for the canary
+- compiled Nocturne canary runner over the private C proof primitives
+- adapter proof receipts that include artifact-profile PE audit facts
 - validator for deterministic repeatability and exact comparison
 
 Caveats:
 
-- current proof runner is Python and mirrors the Nocturne path
-- C proof primitives exist, but a compiled headless runner/library is not yet
-  the canonical implementation path
+- `sslab.py` remains the current proof CLI; the compiled canary validates the
+  private C primitives but is not yet a reusable `libsslab`
 - Nocturne is the only proof-kernel product canary
 - tolerant/perceptual comparison classes exist as report helpers, not accepted
   validation gates
@@ -300,9 +312,12 @@ harnesses.
 Implemented:
 
 - report-only `.aide/` pilot
+- pinned `.aide/aide_lite.lock.toml`
 - project boundary that forbids saver runtime dependency
 - WorkUnit/evidence framing direction
 - project adapter that AIDE can call without owning ScreenSave truth
+- fixed-capability bridge profile and evidence packet for deterministic
+  command admission
 
 Not implemented:
 
@@ -443,7 +458,8 @@ run arbitrary ScreenSave commands or choose arbitrary output paths.
 
 ### Content And Modding Gaps
 
-- VisualIntent is not implemented
+- VisualIntent v1 is documented as a draft authoring contract, but no resolver
+  or compiler consumes it yet
 - product-specific authoring schemas are not formalized as stable pack inputs
 - pack compiler is not implemented as a definitive safe data pipeline
 - text/image/video-to-intent flows are not implemented
@@ -453,8 +469,12 @@ run arbitrary ScreenSave commands or choose arbitrary output paths.
 ### AIDE And Automation Gaps
 
 - AIDE remains report-only
-- no pinned imported AIDE version lock is currently the development authority
-- no ScreenSave-specific AIDE EvidencePacket bridge is complete
+- `.aide/aide_lite.lock.toml` pins the admitted AIDE Lite identity, but AIDE
+  remains optional and removable
+- the fixed-command bridge profile exists, but no external AIDE-side runtime
+  admission is complete in this repository
+- no ScreenSave-specific AIDE EvidencePacket export from live adapter receipts
+  is complete
 - no autonomous canary should run until ScreenSave proof bundles are stronger
 - no automatic merge should be allowed until deterministic acceptance classes
   exist for the task class
@@ -524,21 +544,23 @@ Done:
 - `sslab render`
 - `sslab compare`
 - deterministic PPM capture and hash
+- compiled C canary over private proof primitives
+- artifact-profile PE audit facts in adapter proof receipts
 - adapter `render`, `compare`, and `proof`
 
 Remaining:
 
-- make a compiled C runner or `libsslab` path use the private C primitives
+- extract a reusable compiled `libsslab` path from the canary-grade primitives
 - decide final v0 capture format policy: PPM, raw RGBA, PNG, or multiple
 - add basic lifecycle smoke for Nocturne without widening v0 too far
-- include PE audit facts in the proof bundle
 - update proof-bundle schema from draft to implemented v0 if needed
 - make CI run the v0 proof command
 
 Exit:
 
 - `python tools\project_adapter\screensave_project.py proof` emits a complete
-  proof bundle from ScreenSave-owned compiled/reference infrastructure
+  proof bundle from ScreenSave-owned reference infrastructure and records
+  artifact-profile binary facts
 - repeated runs compare exactly
 - no public compatibility claim is widened
 
@@ -587,7 +609,7 @@ Goal: turn vague user input into safe data, not arbitrary native code.
 
 Required:
 
-- `VisualIntent` schema
+- `VisualIntent` resolver over the draft authoring contract
 - product-family resolver
 - product-specific schemas
 - safe pack compiler
@@ -610,7 +632,7 @@ Goal: let AIDE coordinate ScreenSave work without owning ScreenSave truth.
 
 Required:
 
-- pinned AIDE version or portable-pack lock
+- external AIDE-side admission of the pinned ScreenSave bridge profile
 - ScreenSave project adapter used as the command interface
 - AIDE WorkUnit maps to a bounded pack-generation task
 - ScreenSave validation and proof bundle emitted
@@ -829,12 +851,12 @@ Do not:
 
 The next bounded implementation packets should be:
 
-1. `proof: move Nocturne canary behind compiled proof primitives`
-2. `proof: include PE audit facts in adapter proof receipts`
-3. `proof: add minimal lifecycle smoke for Nocturne`
-4. `proof: add Ricochet fixed-step canary`
-5. `contracts: define VisualIntent v1 draft`
-6. `packc: introduce safe pack compiler skeleton`
+1. `proof: add minimal lifecycle smoke for Nocturne`
+2. `proof: extract reusable libsslab boundary from canary-grade primitives`
+3. `proof: add Ricochet fixed-step canary`
+4. `contracts: define first product-specific authoring schema slice`
+5. `packc: introduce safe pack compiler skeleton`
+6. `visual-intent: add resolver prototype that emits bounded candidates`
 7. `workbench: extract libsslab boundary`
 8. `aide: add EvidencePacket export from project adapter receipts`
 

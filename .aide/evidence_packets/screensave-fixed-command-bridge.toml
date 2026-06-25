@@ -15,6 +15,7 @@ scope = [
   "compare",
   "audit",
   "proof",
+  "proof includes Nocturne render, exact compare, and artifact-profile PE audit facts",
 ]
 non_claims = [
   "not an AIDE worker-host acceptance",

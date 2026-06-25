@@ -51,6 +51,7 @@ REQUIRED_CONTRACTS = {
         "binary audit facts",
         "fallback and degradation reasons",
         "A binary audit without runtime execution may support `binary-audited`",
+        "Adapter proof receipts may embed artifact-profile PE audit facts",
     ],
     ROOT / "contracts" / "surface_rgba8_v0.md": [
         "Status: private proof-kernel contract.",
@@ -85,6 +86,15 @@ REQUIRED_CONTRACTS = {
         "tools/project_adapter/receipt_schemas.json",
         "tools/project_adapter/artifact_profile_audit_roots.json",
         "accept arbitrary output paths",
+        "proof-receipt PE audit fields record binary facts only",
+    ],
+    ROOT / "contracts" / "visual_intent_v1.md": [
+        "Status: draft authoring contract, not executable runtime behavior.",
+        "not a universal graphics language",
+        "product-family resolver",
+        "product-specific specification",
+        "must not bypass product schemas, proof",
+        "generate C source",
     ],
 }
 
@@ -117,6 +127,7 @@ def main() -> int:
     require(version.get("schemas", {}).get("proof_kernel") == 1, "VERSION.toml schemas.proof_kernel must be 1.", errors)
     require(version.get("schemas", {}).get("surface_rgba8") == 1, "VERSION.toml schemas.surface_rgba8 must be 1.", errors)
     require(version.get("schemas", {}).get("project_adapter") == 1, "VERSION.toml schemas.project_adapter must be 1.", errors)
+    require(version.get("schemas", {}).get("visual_intent") == 1, "VERSION.toml schemas.visual_intent must be 1.", errors)
 
     if errors:
         for error in errors:

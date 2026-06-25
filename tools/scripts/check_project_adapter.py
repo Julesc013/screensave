@@ -210,9 +210,29 @@ def main() -> int:
         proof = run_adapter(["proof", "--invocation-id", "check-proof"])
         require(proof.get("status") == "pass", "adapter proof must pass.", errors)
         require(proof.get("payload", {}).get("comparison_status") == "pass", "adapter proof comparison must pass.", errors)
+        require(
+            proof.get("payload", {}).get("pe_audit_artifact_profiles") == ["windows_current_x86_scr"],
+            "adapter proof must include the selected PE audit artifact profile.",
+            errors,
+        )
+        require(
+            proof.get("payload", {}).get("pe_audit_claim_boundary") == "binary facts only; not compatibility certification",
+            "adapter proof PE audit facts must preserve the compatibility claim boundary.",
+            errors,
+        )
+        require(
+            isinstance(proof.get("payload", {}).get("pe_audit_violation_count"), int),
+            "adapter proof must include a numeric PE audit violation count.",
+            errors,
+        )
         proof_dir = repo_ref_to_path(proof.get("payload", {}).get("output_dir", ""))
         require((proof_dir / "adapter-proof.json").exists(), "adapter proof must write adapter-proof.json.", errors)
         require((proof_dir / "artifact-manifest.json").exists(), "adapter proof must write artifact-manifest.json.", errors)
+        require(
+            repo_ref_to_path(proof.get("payload", {}).get("pe_audit_ref", "")).exists(),
+            "adapter proof must write a PE audit report.",
+            errors,
+        )
 
         refusal_code, refusal = run_adapter_result(["render", "--invocation-id", "..\\escape"])
         require(refusal_code != 0, "invalid invocation ids must be refused.", errors)

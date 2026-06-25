@@ -46,6 +46,11 @@ Only a proof bundle tied to a matching artifact profile may upgrade a public
 claim. A binary audit without runtime execution may support `binary-audited`;
 it must not become `certified`.
 
+Adapter proof receipts may embed artifact-profile PE audit facts alongside
+render and comparison evidence. Those facts keep the same boundary: they are
+binary evidence, not operating-system certification and not artistic
+acceptance.
+
 ## Minimal Text Form
 
 The first implementation may be a deterministic text or TOML bundle emitted by

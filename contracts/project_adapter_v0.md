@@ -112,10 +112,11 @@ artifact-profile audit-root map and remain binary-fact evidence only.
 
 The initial proof command renders the Nocturne `observatory_night` canary using
 `sslab render`, compares it with the committed canary capture using
-`sslab compare --class exact`, and writes an adapter receipt.
+`sslab compare --class exact`, runs the named artifact-profile PE audit, and
+writes an adapter receipt plus artifact manifest.
 
 This is deterministic proof-kernel evidence. It is not a public compatibility
 certification and not a visual-artistic acceptance decision.
 
-The `audit` command records binary facts only. It is informational by default
-and does not certify compatibility.
+The `audit` command and proof-receipt PE audit fields record binary facts only.
+They are informational by default and do not certify compatibility.

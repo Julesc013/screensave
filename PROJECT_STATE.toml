@@ -17,6 +17,7 @@ version_manifest = "VERSION.toml"
 project_adapter = "tools/project_adapter/screensave_project.py"
 aide_pilot = ".aide/pilot.toml"
 aide_lite_lock = ".aide/aide_lite.lock.toml"
+visual_intent_contract = "contracts/visual_intent_v1.md"
 
 [release]
 tag = "c16-core-baseline"
@@ -60,6 +61,7 @@ scope = [
   "sslab render/proof command",
   "deterministic capture hash",
   "exact repeatability comparison",
+  "adapter proof receipt includes artifact-profile PE audit facts",
 ]
 non_goals = [
   "public API rewrite",
@@ -75,6 +77,7 @@ short_form = "Portable meaning. Native delivery. Deterministic proof. Optional a
 platform_rule = "Share mechanics. Preserve meaning."
 semantic_rule = "One stable platform contract, many product-owned semantic cores, multiple shells."
 aide_boundary = "AIDE governs bounded development activity around ScreenSave. ScreenSave governs the product."
+visual_intent_rule = "VisualIntent is descriptive authoring intent only; product-specific schemas own executable meaning."
 
 [catalog]
 schema_version = 1
@@ -168,6 +171,7 @@ catalog = "tools/scripts/check_catalog_profiles.py"
 catalog_generated = "tools/scripts/check_catalog_generated.py"
 aide = "tools/scripts/check_aide_pilot.py"
 contracts = "tools/scripts/check_contracts.py"
+visual_intent = "tools/scripts/check_visual_intent_contract.py"
 proof_kernel = "tools/scripts/check_proof_kernel.py"
 compiled_nocturne_runner = "tools/scripts/check_compiled_nocturne_runner.py"
 project_adapter = "tools/scripts/check_project_adapter.py"

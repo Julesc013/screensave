@@ -16,6 +16,7 @@ Current contracts:
 - [`surface_rgba8_v0.md`](surface_rgba8_v0.md): private proof-kernel pixel-surface contract.
 - [`proof_kernel_v0.md`](proof_kernel_v0.md): active ScreenSave-owned proof-kernel milestone.
 - [`project_adapter_v0.md`](project_adapter_v0.md): ScreenSave-owned status, capability, validation, proof, fixed capability binding, and receipt schema surface for external coordinators.
+- [`visual_intent_v1.md`](visual_intent_v1.md): draft descriptive authoring-intent contract for future resolver and pack-generation work.
 
 Contract rules:
 

@@ -589,6 +589,7 @@ def command_proof(args: argparse.Namespace) -> int:
     before_source = source_payload()
     comparison_path = output_dir / "comparison.json"
     receipt_path = output_dir / "adapter-proof.json"
+    pe_audit_path = output_dir / "pe-audit.txt"
 
     render_command = [
         str(SSLAB.relative_to(ROOT)),
@@ -622,8 +623,16 @@ def command_proof(args: argparse.Namespace) -> int:
         "--output-json",
         str(comparison_path),
     ]
+    audit_profiles, audit_paths = resolve_audit_profiles(["windows_current_x86_scr"])
+    audit_command = [
+        str(PE_AUDIT.relative_to(ROOT)),
+        "--output",
+        str(pe_audit_path),
+    ]
+    audit_command.extend(str(path) for path in audit_paths)
     render_run = run_command(render_command, timeout_seconds=30)
     compare_run = run_command(compare_command, timeout_seconds=30)
+    audit_run = run_command(audit_command, timeout_seconds=60)
 
     comparison = {}
     proof = {}
@@ -632,8 +641,10 @@ def command_proof(args: argparse.Namespace) -> int:
     proof_path = output_dir / "proof.json"
     if proof_path.exists():
         proof = json.loads(proof_path.read_text(encoding="utf-8"))
+    pe_audit_report = pe_audit_path.read_text(encoding="utf-8") if pe_audit_path.exists() else ""
+    pe_audit_violation_count = pe_audit_report.count("VIOLATION:")
 
-    status = "pass" if render_run["returncode"] == 0 and compare_run["returncode"] == 0 else "fail"
+    status = "pass" if render_run["returncode"] == 0 and compare_run["returncode"] == 0 and audit_run["returncode"] == 0 else "fail"
     manifest_path = output_dir / "artifact-manifest.json"
     payload = {
         "capability": "screensave.proof.nocturne.exact",
@@ -643,9 +654,19 @@ def command_proof(args: argparse.Namespace) -> int:
         "artifact_manifest_ref": repo_path(manifest_path),
         "before_source": before_source,
         "after_source": source_payload(),
-        "command_binding": command_binding_payload("proof", render_run["command"] + ["&&"] + compare_run["command"], [SSLAB]),
+        "command_binding": command_binding_payload(
+            "proof",
+            render_run["command"] + ["&&"] + compare_run["command"] + ["&&"] + audit_run["command"],
+            [SSLAB, PE_AUDIT, ARTIFACT_PROFILE_AUDIT_ROOTS],
+        ),
         "render": render_run,
         "compare": compare_run,
+        "pe_audit": audit_run,
+        "pe_audit_ref": repo_path(pe_audit_path),
+        "pe_audit_violation_count": pe_audit_violation_count,
+        "pe_audit_artifact_profiles": audit_profiles,
+        "pe_audit_claim_boundary": "binary facts only; not compatibility certification",
+        "artifact_profile_audit_roots_ref": repo_path(ARTIFACT_PROFILE_AUDIT_ROOTS),
         "proof_ref": repo_path(proof_path),
         "comparison_ref": repo_path(comparison_path),
         "capture_ref": repo_path(output_dir / "capture.ppm"),
@@ -662,6 +683,7 @@ def command_proof(args: argparse.Namespace) -> int:
             ("capture", output_dir / "capture.ppm", "ppm-p3-capture"),
             ("proof", proof_path, "proof-json"),
             ("comparison", comparison_path, "comparison-json"),
+            ("pe_audit", pe_audit_path, "text-report"),
             ("adapter_receipt", receipt_path, "adapter-receipt-json"),
         ],
     )

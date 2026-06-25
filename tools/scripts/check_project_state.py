@@ -88,6 +88,7 @@ def validate_state(state: dict) -> list[str]:
         ("authority.project_adapter", authority.get("project_adapter")),
         ("authority.aide_pilot", authority.get("aide_pilot")),
         ("authority.aide_lite_lock", authority.get("aide_lite_lock")),
+        ("authority.visual_intent_contract", authority.get("visual_intent_contract")),
         ("release.artifact_manifest", release.get("artifact_manifest")),
         ("release.checksums", release.get("checksums")),
         ("release.notes", release.get("notes")),
@@ -127,6 +128,11 @@ def validate_state(state: dict) -> list[str]:
     require(
         doctrine.get("aide_boundary") == "AIDE governs bounded development activity around ScreenSave. ScreenSave governs the product.",
         "doctrine.aide_boundary must preserve the AIDE product boundary.",
+        errors,
+    )
+    require(
+        "descriptive authoring intent only" in str(doctrine.get("visual_intent_rule", "")),
+        "doctrine.visual_intent_rule must keep VisualIntent descriptive only.",
         errors,
     )
     require_path(doctrine.get("contract"), "doctrine.contract", errors)
@@ -204,6 +210,8 @@ def validate_version_manifest(state: dict, version: dict, catalog: dict, errors:
     require(version_schemas.get("product_catalog") == catalog.get("schema_version"), "VERSION.toml schemas.product_catalog must match catalog schema_version.", errors)
     require(version_schemas.get("screensave_doctrine") == 1, "VERSION.toml schemas.screensave_doctrine must be 1.", errors)
     require(version_schemas.get("project_adapter") == 1, "VERSION.toml schemas.project_adapter must be 1.", errors)
+    require(version_schemas.get("visual_intent") == 1, "VERSION.toml schemas.visual_intent must be 1.", errors)
+    require_path(version.get("contracts", {}).get("visual_intent"), "VERSION.toml contracts.visual_intent", errors)
     require(version_proof.get("policy") == compatibility.get("policy"), "VERSION.toml proof.policy must match PROJECT_STATE compatibility.policy.", errors)
     require_path(version_proof.get("binary_audit_tool"), "VERSION.toml proof.binary_audit_tool", errors)
     require_path(version_proof.get("state_validator"), "VERSION.toml proof.state_validator", errors)

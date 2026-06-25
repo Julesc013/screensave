@@ -20,6 +20,11 @@ The adapter reports JSON receipts. It delegates to ScreenSave validators and
 `sslab`; it does not edit code, merge branches, certify compatibility, or make
 AIDE part of saver runtime.
 
+The `proof` command is a combined Nocturne v0 receipt: deterministic render,
+exact capture comparison, artifact-profile PE audit facts, and an artifact
+manifest. The PE audit facts are binary evidence only; they are not operating
+system compatibility certification.
+
 Generated-output commands use contained invocation roots under
 `out/aide/screensave-project-adapter/invocations/`. Callers provide a sanitized
 `--invocation-id`; they do not provide arbitrary output paths. Compare inputs
