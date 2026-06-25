@@ -56,6 +56,7 @@ The repository has already implemented a substantial baseline:
 - `sslab` render and comparison tooling
 - ScreenSave project adapter commands for external coordinators
 - hardened fixed-capability adapter output containment
+- Product Architecture v1 contract for four planes and canary sequence
 - VisualIntent v1 draft authoring contract
 - pinned report-only AIDE Lite lock
 - report-only AIDE pilot integration
@@ -81,6 +82,7 @@ Current authority is split deliberately:
 | Project state | [../../PROJECT_STATE.toml](../../PROJECT_STATE.toml) |
 | Version authority | [../../VERSION.toml](../../VERSION.toml) |
 | Product doctrine | [../../contracts/screensave_doctrine_v1.md](../../contracts/screensave_doctrine_v1.md) |
+| Product architecture | [../../contracts/product_architecture_v1.md](../../contracts/product_architecture_v1.md) |
 | Product catalog | [../../catalog/products.toml](../../catalog/products.toml) |
 | Generated catalog inventory | [../../catalog/generated/products_inventory.json](../../catalog/generated/products_inventory.json) |
 | Artifact profiles | [../../catalog/artifact_profiles.toml](../../catalog/artifact_profiles.toml) |
@@ -211,6 +213,7 @@ The most recent implemented authority/proof work added:
 - compiled Nocturne canary runner
 - `sslab` render and compare
 - ScreenSave Doctrine v1
+- Product Architecture v1
 - VisualIntent v1 draft authoring contract
 - ScreenSave project adapter with `status`, `capabilities`, `catalog`,
   `validate`, `render`, `compare`, `audit`, and `proof`

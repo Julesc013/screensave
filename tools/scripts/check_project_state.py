@@ -83,6 +83,7 @@ def validate_state(state: dict) -> list[str]:
         ("authority.product_catalog", authority.get("product_catalog")),
         ("authority.artifact_profiles", authority.get("artifact_profiles")),
         ("authority.product_doctrine", authority.get("product_doctrine")),
+        ("authority.product_architecture", authority.get("product_architecture")),
         ("authority.generated_catalog_inventory", authority.get("generated_catalog_inventory")),
         ("authority.version_manifest", authority.get("version_manifest")),
         ("authority.project_adapter", authority.get("project_adapter")),
@@ -210,8 +211,10 @@ def validate_version_manifest(state: dict, version: dict, catalog: dict, errors:
     require(version_development.get("development_head") == authority.get("development_head"), "VERSION.toml development.development_head must match PROJECT_STATE authority.", errors)
     require(version_schemas.get("product_catalog") == catalog.get("schema_version"), "VERSION.toml schemas.product_catalog must match catalog schema_version.", errors)
     require(version_schemas.get("screensave_doctrine") == 1, "VERSION.toml schemas.screensave_doctrine must be 1.", errors)
+    require(version_schemas.get("product_architecture") == 1, "VERSION.toml schemas.product_architecture must be 1.", errors)
     require(version_schemas.get("project_adapter") == 1, "VERSION.toml schemas.project_adapter must be 1.", errors)
     require(version_schemas.get("visual_intent") == 1, "VERSION.toml schemas.visual_intent must be 1.", errors)
+    require_path(version.get("contracts", {}).get("product_architecture"), "VERSION.toml contracts.product_architecture", errors)
     require_path(version.get("contracts", {}).get("visual_intent"), "VERSION.toml contracts.visual_intent", errors)
     require(version_proof.get("policy") == compatibility.get("policy"), "VERSION.toml proof.policy must match PROJECT_STATE compatibility.policy.", errors)
     require_path(version_proof.get("binary_audit_tool"), "VERSION.toml proof.binary_audit_tool", errors)

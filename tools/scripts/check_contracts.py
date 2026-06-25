@@ -44,6 +44,15 @@ REQUIRED_CONTRACTS = {
         "AIDE governs bounded development activity around ScreenSave. ScreenSave governs the product.",
         "Each saver product owns its visual thesis",
     ],
+    ROOT / "contracts" / "product_architecture_v1.md": [
+        "Status: active ScreenSave product architecture contract.",
+        "Core is primary. Anthology remains a saver.",
+        "VisualIntent is descriptive authoring intent only.",
+        "ScreenSave must not adopt one universal visual graph.",
+        "at least two structurally different products",
+        "AIDE is optional external development infrastructure.",
+        "generic `screensave run anything`",
+    ],
     ROOT / "contracts" / "proof_bundle_v0.md": [
         "Status: initial contract",
         "source commit and dirty status",
@@ -127,6 +136,7 @@ def main() -> int:
     require(version.get("abi", {}).get("portable_contract") == "planned-v2", "VERSION.toml must keep portable_contract planned-v2.", errors)
     require(version.get("proof", {}).get("bundle_schema") == "proof-bundle-v0", "VERSION.toml must point at proof-bundle-v0.", errors)
     require(version.get("schemas", {}).get("screensave_doctrine") == 1, "VERSION.toml schemas.screensave_doctrine must be 1.", errors)
+    require(version.get("schemas", {}).get("product_architecture") == 1, "VERSION.toml schemas.product_architecture must be 1.", errors)
     require(version.get("schemas", {}).get("proof_kernel") == 1, "VERSION.toml schemas.proof_kernel must be 1.", errors)
     require(version.get("schemas", {}).get("surface_rgba8") == 1, "VERSION.toml schemas.surface_rgba8 must be 1.", errors)
     require(version.get("schemas", {}).get("project_adapter") == 1, "VERSION.toml schemas.project_adapter must be 1.", errors)
