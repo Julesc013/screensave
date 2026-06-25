@@ -13,6 +13,7 @@ PROFILES_PATH = ROOT / "catalog" / "artifact_profiles.toml"
 ARTIFACT_SETS_PATH = ROOT / "catalog" / "artifact_sets.toml"
 PROOF_PROFILES_PATH = ROOT / "catalog" / "proof_profiles.toml"
 ARTIFACT_MANIFEST_TOOL = ROOT / "tools" / "artifactmanifest" / "artifactmanifest.py"
+PE_AUDIT_TOOL = ROOT / "tools" / "scripts" / "audit_pe_artifacts.py"
 
 
 def load_toml(path: pathlib.Path) -> dict:
@@ -126,6 +127,12 @@ def main() -> int:
     profile_keys = {item.get("key") for item in artifact_profiles_data.get("artifact_profiles", [])}
 
     require(ARTIFACT_MANIFEST_TOOL.exists(), "Missing tools/artifactmanifest/artifactmanifest.py.", errors)
+    require(PE_AUDIT_TOOL.exists(), "Missing tools/scripts/audit_pe_artifacts.py.", errors)
+    pe_audit_text = PE_AUDIT_TOOL.read_text(encoding="utf-8") if PE_AUDIT_TOOL.exists() else ""
+    require("--artifact-manifest" in pe_audit_text, "PE audit tool must accept exact artifact manifests.", errors)
+    require("--artifact-profile" in pe_audit_text, "PE audit tool must accept catalog artifact profiles.", errors)
+    require("artifact_manifest" in pe_audit_text, "PE audit JSON must report artifact manifest context.", errors)
+    require("artifact_profile" in pe_audit_text, "PE audit JSON must report artifact profile context.", errors)
     artifact_set_keys = validate_artifact_sets(artifact_sets_data, profile_keys, kind_by_product, errors)
     validate_proof_profiles(proof_profiles_data, artifact_set_keys, set(products_by_key), errors)
 

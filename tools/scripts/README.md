@@ -19,7 +19,7 @@ Current stage:
 - `check_proof_kernel.py` validates the Proof Kernel v0 private surface, software-renderer scaffolding, `sslab` canary command, and deterministic proof output.
 - `check_compiled_nocturne_runner.py` builds the compiled Proof Kernel v0 Nocturne canary and exact-compares it with committed evidence.
 - `check_project_adapter.py` validates the ScreenSave project adapter status, capabilities, catalog, validation, render, compare, audit, and proof command surface.
-- `audit_pe_artifacts.py` records PE architecture, subsystem, import, identity, and structured JSON facts for checked-out `.scr` and `.exe` artifacts; missing roots or zero discovered PE artifacts are blocked.
+- `audit_pe_artifacts.py` records PE architecture, subsystem, import, identity, and structured JSON facts for checked-out `.scr` and `.exe` artifacts; missing roots or zero discovered PE artifacts are blocked, and exact proof lanes should pass `--artifact-manifest` plus `--artifact-profile`.
 - `check_shared_settings_layout.py` validates the C04 shared settings, preset, randomization, and pack scaffold.
 - `check_windows_integration_layout.py` validates the C05 Win32 screen, preview, config, persistence, and metadata hardening scaffold.
 - `check_portable_bundle_layout.py` validates the frozen C16 Core bundle definition, staged bundle, and frozen-status docs.

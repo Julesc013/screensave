@@ -8,6 +8,7 @@ import json
 import pathlib
 import struct
 import sys
+import tomllib
 from dataclasses import dataclass
 
 
@@ -29,6 +30,8 @@ DEFAULT_ROOTS = [
     ROOT / "out" / "msvc" / "vs2022" / "Release",
     ROOT / "out" / "mingw" / "i686" / "debug",
 ]
+
+ARTIFACT_PROFILES = ROOT / "catalog" / "artifact_profiles.toml"
 
 
 @dataclass
@@ -184,6 +187,30 @@ def display_path(path: pathlib.Path) -> str:
         return str(resolved)
 
 
+def load_json(path: pathlib.Path) -> dict:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def load_toml(path: pathlib.Path) -> dict:
+    with path.open("rb") as handle:
+        return tomllib.load(handle)
+
+
+def resolve_repo_path(value: str) -> pathlib.Path:
+    path = pathlib.Path(value)
+    if path.is_absolute():
+        return path
+    return ROOT / path
+
+
+def profile_by_key(key: str) -> dict:
+    data = load_toml(ARTIFACT_PROFILES)
+    for item in data.get("artifact_profiles", []):
+        if item.get("key") == key:
+            return item
+    raise KeyError(key)
+
+
 def collect_artifacts(inputs: list[pathlib.Path]) -> tuple[list[pathlib.Path], list[pathlib.Path]]:
     artifacts: list[pathlib.Path] = []
     missing_inputs: list[pathlib.Path] = []
@@ -197,9 +224,56 @@ def collect_artifacts(inputs: list[pathlib.Path]) -> tuple[list[pathlib.Path], l
     return sorted(artifacts), missing_inputs
 
 
-def status_for_audit(facts: list[PeFacts], errors: list[str], missing_inputs: list[pathlib.Path], fail_on_violation: bool) -> str:
+def collect_manifest_artifacts(manifest_path: pathlib.Path) -> tuple[list[pathlib.Path], list[pathlib.Path], list[str], dict]:
+    manifest = load_json(manifest_path)
+    artifacts: list[pathlib.Path] = []
+    missing_inputs: list[pathlib.Path] = []
+    blocked_reasons: list[str] = []
+
+    if manifest.get("status") != "pass":
+        blocked_reasons.append(f"artifact manifest status is {manifest.get('status')!r}")
+
+    for item in manifest.get("expected_artifacts", []):
+        path = resolve_repo_path(str(item.get("path", ""))).resolve()
+        if not path.exists():
+            missing_inputs.append(path)
+        else:
+            artifacts.append(path)
+
+    if manifest.get("counts", {}).get("missing", 0) != 0:
+        blocked_reasons.append("artifact manifest reports missing artifacts")
+    if manifest.get("counts", {}).get("unexpected", 0) != 0:
+        blocked_reasons.append("artifact manifest reports unexpected artifacts")
+
+    return sorted(artifacts), missing_inputs, blocked_reasons, manifest
+
+
+def apply_profile_policy(facts: list[PeFacts], profile: dict | None) -> None:
+    if profile is None:
+        return
+
+    expected_machine = profile.get("machine")
+    expected_format = profile.get("pe_format")
+    expected_extension = profile.get("artifact_extension")
+
+    for item in facts:
+        if expected_machine in {"x86", "x64"} and item.machine != expected_machine:
+            item.flags.append(f"VIOLATION: profile machine mismatch expected {expected_machine}")
+        if expected_format in {"PE32", "PE32+"} and item.optional_format != expected_format:
+            item.flags.append(f"VIOLATION: profile PE format mismatch expected {expected_format}")
+        if expected_extension and item.path.suffix.lower() != str(expected_extension).lower():
+            item.flags.append(f"VIOLATION: profile extension mismatch expected {expected_extension}")
+
+
+def status_for_audit(
+    facts: list[PeFacts],
+    errors: list[str],
+    missing_inputs: list[pathlib.Path],
+    blocked_reasons: list[str],
+    fail_on_violation: bool,
+) -> str:
     violation_count = sum(1 for item in facts for flag in item.flags if flag.startswith("VIOLATION:"))
-    if missing_inputs:
+    if missing_inputs or blocked_reasons:
         return "blocked"
     if not facts:
         return "blocked"
@@ -214,18 +288,40 @@ def json_payload(
     facts: list[PeFacts],
     errors: list[str],
     missing_inputs: list[pathlib.Path],
+    blocked_reasons: list[str],
     input_paths: list[pathlib.Path],
     fail_on_violation: bool,
+    artifact_manifest: dict | None,
+    artifact_profile: dict | None,
 ) -> dict:
     violation_count = sum(1 for item in facts for flag in item.flags if flag.startswith("VIOLATION:"))
     note_count = sum(1 for item in facts for flag in item.flags if flag.startswith("NOTE:"))
-    status = status_for_audit(facts, errors, missing_inputs, fail_on_violation)
+    status = status_for_audit(facts, errors, missing_inputs, blocked_reasons, fail_on_violation)
     return {
         "audit_schema": "screensave-pe-audit-v0",
         "status": status,
         "claim_boundary": "binary facts only; not compatibility certification",
         "input_paths": [display_path(path) for path in input_paths],
         "missing_inputs": [display_path(path) for path in missing_inputs],
+        "blocked_reasons": blocked_reasons,
+        "artifact_manifest": {
+            "schema": artifact_manifest.get("manifest_schema"),
+            "status": artifact_manifest.get("status"),
+            "artifact_set": artifact_manifest.get("artifact_set", {}).get("key"),
+            "expected_count": artifact_manifest.get("counts", {}).get("expected"),
+            "observed_expected": artifact_manifest.get("counts", {}).get("observed_expected"),
+            "unexpected": artifact_manifest.get("counts", {}).get("unexpected"),
+        }
+        if artifact_manifest is not None
+        else None,
+        "artifact_profile": {
+            "key": artifact_profile.get("key"),
+            "machine": artifact_profile.get("machine"),
+            "pe_format": artifact_profile.get("pe_format"),
+            "artifact_extension": artifact_profile.get("artifact_extension"),
+        }
+        if artifact_profile is not None
+        else None,
         "artifact_count": len(facts),
         "parse_error_count": len(errors),
         "violation_count": violation_count,
@@ -249,12 +345,21 @@ def json_payload(
         "limits": [
             "A nonempty PE audit records binary facts only.",
             "Missing roots or zero discovered artifacts block proof promotion.",
+            "Artifact manifests and artifact profiles make audit membership and binary policy explicit.",
             "Runtime compatibility still requires separate execution evidence.",
         ],
     }
 
 
-def format_report(facts: list[PeFacts], errors: list[str], missing_inputs: list[pathlib.Path], input_paths: list[pathlib.Path], status: str) -> str:
+def format_report(
+    facts: list[PeFacts],
+    errors: list[str],
+    missing_inputs: list[pathlib.Path],
+    blocked_reasons: list[str],
+    input_paths: list[pathlib.Path],
+    status: str,
+    artifact_profile: dict | None,
+) -> str:
     violation_count = sum(1 for item in facts for flag in item.flags if flag.startswith("VIOLATION:"))
     lines = [
         "ScreenSave PE Artifact Audit",
@@ -266,10 +371,22 @@ def format_report(facts: list[PeFacts], errors: list[str], missing_inputs: list[
         f"Input count: {len(input_paths)}",
         f"Artifact count: {len(facts)}",
         f"Missing input count: {len(missing_inputs)}",
+        f"Blocked reason count: {len(blocked_reasons)}",
         f"Parse error count: {len(errors)}",
         f"Violation count: {violation_count}",
         "",
     ]
+    if artifact_profile is not None:
+        lines.append(f"Artifact profile: {artifact_profile.get('key')}")
+        lines.append(f"  machine: {artifact_profile.get('machine')}")
+        lines.append(f"  format: {artifact_profile.get('pe_format')}")
+        lines.append(f"  extension: {artifact_profile.get('artifact_extension')}")
+        lines.append("")
+    if blocked_reasons:
+        lines.append("Blocked reasons:")
+        for reason in blocked_reasons:
+            lines.append(f"  {reason}")
+        lines.append("")
     if missing_inputs:
         lines.append("Missing inputs:")
         for path in missing_inputs:
@@ -292,16 +409,39 @@ def format_report(facts: list[PeFacts], errors: list[str], missing_inputs: list[
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("paths", nargs="*", help="Optional artifact roots or files. Defaults to known out/ artifact roots.")
+    parser.add_argument("--artifact-manifest", help="Audit the expected artifacts from an exact artifact-set manifest.")
+    parser.add_argument("--artifact-profile", help="Evaluate artifacts against a named catalog artifact profile.")
     parser.add_argument("--output", help="Write the report to this path instead of stdout.")
     parser.add_argument("--json-output", help="Write a machine-readable audit result to this path.")
     parser.add_argument("--fail-on-violation", action="store_true", help="Return nonzero when a VIOLATION flag is found.")
     args = parser.parse_args()
 
-    if args.paths:
+    artifact_manifest = None
+    artifact_profile = None
+    blocked_reasons: list[str] = []
+
+    if args.artifact_profile:
+        try:
+            artifact_profile = profile_by_key(args.artifact_profile)
+        except KeyError:
+            print(f"unknown artifact profile: {args.artifact_profile}", file=sys.stderr)
+            return 2
+
+    if args.artifact_manifest:
+        manifest_path = resolve_repo_path(args.artifact_manifest).resolve()
+        inputs = [manifest_path]
+        if not manifest_path.exists():
+            artifacts = []
+            missing_inputs = [manifest_path]
+            blocked_reasons = ["artifact manifest does not exist"]
+        else:
+            artifacts, missing_inputs, blocked_reasons, artifact_manifest = collect_manifest_artifacts(manifest_path)
+    elif args.paths:
         inputs = [(ROOT / value).resolve() if not pathlib.Path(value).is_absolute() else pathlib.Path(value) for value in args.paths]
+        artifacts, missing_inputs = collect_artifacts(inputs)
     else:
         inputs = DEFAULT_ROOTS
-    artifacts, missing_inputs = collect_artifacts(inputs)
+        artifacts, missing_inputs = collect_artifacts(inputs)
 
     facts: list[PeFacts] = []
     errors: list[str] = []
@@ -311,8 +451,10 @@ def main() -> int:
         except Exception as exc:  # noqa: BLE001 - reports binary parse failures as audit facts.
             errors.append(f"{path}: {exc}")
 
-    status = status_for_audit(facts, errors, missing_inputs, args.fail_on_violation)
-    report = format_report(facts, errors, missing_inputs, inputs, status)
+    apply_profile_policy(facts, artifact_profile)
+    fail_on_violation = bool(args.fail_on_violation or args.artifact_profile)
+    status = status_for_audit(facts, errors, missing_inputs, blocked_reasons, fail_on_violation)
+    report = format_report(facts, errors, missing_inputs, blocked_reasons, inputs, status, artifact_profile)
     if errors:
         report += "\nParse errors:\n" + "\n".join(f"  {error}" for error in errors) + "\n"
 
@@ -327,7 +469,21 @@ def main() -> int:
         json_path = (ROOT / args.json_output).resolve() if not pathlib.Path(args.json_output).is_absolute() else pathlib.Path(args.json_output)
         json_path.parent.mkdir(parents=True, exist_ok=True)
         json_path.write_text(
-            json.dumps(json_payload(facts, errors, missing_inputs, inputs, args.fail_on_violation), indent=2, sort_keys=True) + "\n",
+            json.dumps(
+                json_payload(
+                    facts,
+                    errors,
+                    missing_inputs,
+                    blocked_reasons,
+                    inputs,
+                    fail_on_violation,
+                    artifact_manifest,
+                    artifact_profile,
+                ),
+                indent=2,
+                sort_keys=True,
+            )
+            + "\n",
             encoding="utf-8",
         )
 
