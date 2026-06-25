@@ -18,14 +18,21 @@ DEFAULT_OUTPUT = ROOT / "validation" / "captures" / "proof-kernel-v0" / "nocturn
 DEFAULT_COMPARISON = ROOT / "out" / "proof" / "sslab-compare" / "comparison.json"
 PROOF_REGISTRY = ROOT / "catalog" / "generated" / "proof_registry.json"
 RUNNER = ROOT / "tools" / "sslab" / "nocturne_canary_runner.c"
+RICOCHET_RUNNER = ROOT / "tools" / "sslab" / "ricochet_canary_runner.c"
 SURFACE = ROOT / "platform" / "src" / "surface" / "rgba8" / "surface_rgba8.c"
 SOFT_RENDERER = ROOT / "platform" / "src" / "render" / "soft" / "soft_renderer.c"
+CONFIG_CORE = ROOT / "platform" / "src" / "core" / "config" / "config.c"
+VISUAL_BUFFER = ROOT / "platform" / "src" / "core" / "visual" / "visual_buffer.c"
 SSLAB_CAPTURE = ROOT / "tools" / "sslab" / "src" / "capture.c"
 SSLAB_RENDERER_RGBA8 = ROOT / "tools" / "sslab" / "src" / "renderer_rgba8.c"
 NOCTURNE_SIM = ROOT / "products" / "savers" / "nocturne" / "src" / "nocturne_sim.c"
 NOCTURNE_RENDER = ROOT / "products" / "savers" / "nocturne" / "src" / "nocturne_render.c"
 NOCTURNE_THEMES = ROOT / "products" / "savers" / "nocturne" / "src" / "nocturne_themes.c"
 NOCTURNE_PRESETS = ROOT / "products" / "savers" / "nocturne" / "src" / "nocturne_presets.c"
+RICOCHET_SIM = ROOT / "products" / "savers" / "ricochet" / "src" / "ricochet_sim.c"
+RICOCHET_RENDER = ROOT / "products" / "savers" / "ricochet" / "src" / "ricochet_render.c"
+RICOCHET_THEMES = ROOT / "products" / "savers" / "ricochet" / "src" / "ricochet_themes.c"
+RICOCHET_PRESETS = ROOT / "products" / "savers" / "ricochet" / "src" / "ricochet_presets.c"
 RUNNER_SOURCES = [
     RUNNER,
     SSLAB_CAPTURE,
@@ -34,6 +41,19 @@ RUNNER_SOURCES = [
     NOCTURNE_RENDER,
     NOCTURNE_THEMES,
     NOCTURNE_PRESETS,
+    SURFACE,
+    SOFT_RENDERER,
+]
+RICOCHET_RUNNER_SOURCES = [
+    RICOCHET_RUNNER,
+    SSLAB_CAPTURE,
+    SSLAB_RENDERER_RGBA8,
+    RICOCHET_SIM,
+    RICOCHET_RENDER,
+    RICOCHET_THEMES,
+    RICOCHET_PRESETS,
+    CONFIG_CORE,
+    VISUAL_BUFFER,
     SURFACE,
     SOFT_RENDERER,
 ]
@@ -89,6 +109,27 @@ def compile_nocturne_runner(output_exe: pathlib.Path) -> None:
             "-I",
             str(ROOT / "products" / "savers" / "nocturne" / "src"),
             *(str(path) for path in RUNNER_SOURCES),
+            "-o",
+            str(output_exe),
+        ],
+        cwd=ROOT,
+    )
+
+
+def compile_ricochet_runner(output_exe: pathlib.Path) -> None:
+    subprocess.check_call(
+        [
+            "gcc",
+            "-std=c89",
+            "-Wall",
+            "-Wextra",
+            "-I",
+            str(ROOT / "platform" / "include"),
+            "-I",
+            str(ROOT / "tools" / "sslab" / "src"),
+            "-I",
+            str(ROOT / "products" / "savers" / "ricochet" / "src"),
+            *(str(path) for path in RICOCHET_RUNNER_SOURCES),
             "-o",
             str(output_exe),
         ],
@@ -279,6 +320,82 @@ def lifecycle_nocturne(args: argparse.Namespace) -> dict:
     return lifecycle
 
 
+def run_ricochet_capture_pass(profile: dict[str, Any], output_dir: pathlib.Path) -> dict[str, Any]:
+    output_dir.mkdir(parents=True, exist_ok=True)
+    capture_frames = [int(frame) for frame in profile.get("capture_frames", [])]
+    with tempfile.TemporaryDirectory() as temp_root:
+        runner_exe = pathlib.Path(temp_root) / "ricochet_canary_runner.exe"
+        compile_ricochet_runner(runner_exe)
+        runner = subprocess.run(
+            [
+                str(runner_exe),
+                "--width",
+                str(profile["width"]),
+                "--height",
+                str(profile["height"]),
+                "--seed",
+                str(profile["seed"]),
+                "--delta-ms",
+                str(profile["delta_ms"]),
+                "--capture-frames",
+                ",".join(str(frame) for frame in capture_frames),
+                "--output-dir",
+                str(output_dir),
+            ],
+            cwd=ROOT,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=False,
+        )
+        if runner.returncode != 0:
+            raise RuntimeError(f"compiled Ricochet runner failed: {runner.stderr.strip()}")
+
+    captures = []
+    for frame in capture_frames:
+        raw_path = output_dir / f"frame-{frame:04d}.rgba"
+        ppm_path = output_dir / f"frame-{frame:04d}.ppm"
+        captures.append(
+            {
+                "frame": frame,
+                "raw_rgba_path": display_path(raw_path),
+                "review_ppm_path": display_path(ppm_path),
+                "raw_rgba_sha256": sha256_file(raw_path),
+            }
+        )
+    return {
+        "runner_stdout": runner.stdout.strip(),
+        "captures": captures,
+    }
+
+
+def proof_ricochet_from_profile(profile: dict[str, Any], output_dir: pathlib.Path) -> dict[str, Any]:
+    first = run_ricochet_capture_pass(profile, output_dir / "run-a")
+    second = run_ricochet_capture_pass(profile, output_dir / "run-b")
+    first_hashes = [capture["raw_rgba_sha256"] for capture in first["captures"]]
+    second_hashes = [capture["raw_rgba_sha256"] for capture in second["captures"]]
+    status = "pass" if first_hashes == second_hashes else "fail"
+    receipt = {
+        "profile_proof_schema": "sslab-profile-proof-v0",
+        "status": status,
+        "profile": profile.get("key"),
+        "product": profile.get("product"),
+        "preset": profile.get("preset"),
+        "profile_source": display_path(PROOF_REGISTRY),
+        "capture_frames": [int(frame) for frame in profile.get("capture_frames", [])],
+        "captures": first["captures"],
+        "repeat_captures": second["captures"],
+        "comparison_status": status,
+        "comparison_class": "exact",
+        "lifecycle_status": "not-run",
+        "runner_mode": "compiled-product-session",
+        "runner_stdout": first["runner_stdout"],
+        "claim_boundary": "Ricochet multi-frame deterministic proof only; lifecycle, performance, compatibility, and artistic acceptance are separate axes.",
+    }
+    (output_dir / "profile-proof.json").write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    return receipt
+
+
 def proof_from_profile(args: argparse.Namespace) -> dict:
     profile = find_proof_profile(args.profile)
     output_dir = pathlib.Path(args.output_dir)
@@ -286,13 +403,16 @@ def proof_from_profile(args: argparse.Namespace) -> dict:
         output_dir = ROOT / output_dir
     output_dir.mkdir(parents=True, exist_ok=True)
 
+    if profile.get("product") == "ricochet":
+        return proof_ricochet_from_profile(profile, output_dir)
+
     if profile.get("product") != "nocturne":
         return {
             "profile_proof_schema": "sslab-profile-proof-v0",
             "status": "blocked",
             "profile": profile.get("key"),
             "product": profile.get("product"),
-            "reason": "Only nocturne.reference.v0 is implemented on the profile-driven path before Ricochet lands.",
+            "reason": "Only Nocturne and Ricochet are implemented on the profile-driven path before portable v2.",
         }
 
     capture_frames = [int(frame) for frame in profile.get("capture_frames", [])]
@@ -528,11 +648,17 @@ def add_proof_parser(subparsers: argparse._SubParsersAction[argparse.ArgumentPar
 
 def print_result(result: dict) -> None:
     if result.get("profile_proof_schema") == "sslab-profile-proof-v0":
+        if result.get("captures"):
+            capture_text = ",".join(
+                f"{capture['frame']}:{capture['raw_rgba_sha256'][:12]}" for capture in result.get("captures", [])
+            )
+        else:
+            capture_text = result.get("render_sha256", "")
         print(
             "profile-proof "
             f"{result['status']} "
             f"{result['profile']} "
-            f"capture={result.get('render_sha256', '')} "
+            f"capture={capture_text} "
             f"comparison={result.get('comparison_status', '')} "
             f"lifecycle={result.get('lifecycle_status', '')}"
         )

@@ -37,6 +37,7 @@ REQUIRED_PATHS = [
     SSLAB,
     ROOT / "catalog" / "generated" / "proof_registry.json",
     ROOT / "tools" / "sslab" / "nocturne_canary_runner.c",
+    ROOT / "tools" / "sslab" / "ricochet_canary_runner.c",
     ROOT / "tools" / "sslab" / "src" / "capture.c",
     ROOT / "tools" / "sslab" / "src" / "capture.h",
     ROOT / "tools" / "sslab" / "src" / "renderer_rgba8.c",
@@ -74,6 +75,9 @@ REQUIRED_TEXT = {
         "def render_nocturne",
         "def lifecycle_nocturne",
         "def proof_from_profile",
+        "compile_ricochet_runner",
+        "proof_ricochet_from_profile",
+        "RICOCHET_RUNNER_SOURCES",
         "def compare_captures",
     ],
     ROOT / "tools" / "sslab" / "nocturne_canary_runner.c": [
@@ -86,6 +90,15 @@ REQUIRED_TEXT = {
         "runner_write_lifecycle_json",
         "sslab_rgba8_renderer_init",
         "sslab_write_review_ppm",
+    ],
+    ROOT / "tools" / "sslab" / "ricochet_canary_runner.c": [
+        "compiled-ricochet",
+        "ricochet_create_session",
+        "ricochet_step_session",
+        "ricochet_render_session",
+        "sslab_write_raw_rgba",
+        "frame-%04lu.rgba",
+        "sizeof(unsigned long) != 4U",
     ],
     ROOT / "tools" / "sslab" / "src" / "capture.c": [
         "sslab_write_review_ppm",
@@ -319,6 +332,49 @@ def validate_profile_proof(errors: list[str]) -> None:
         )
 
 
+def validate_ricochet_profile_proof(errors: list[str]) -> None:
+    with tempfile.TemporaryDirectory() as output_root:
+        profile_dir = pathlib.Path(output_root)
+        subprocess.check_call(
+            [
+                sys.executable,
+                str(SSLAB),
+                "proof",
+                "--profile",
+                "ricochet.reference.v1",
+                "--output-dir",
+                str(profile_dir),
+            ],
+            cwd=ROOT,
+            stdout=subprocess.DEVNULL,
+        )
+        receipt = json.loads((profile_dir / "profile-proof.json").read_text(encoding="utf-8"))
+        captures = receipt.get("captures", [])
+        repeat_captures = receipt.get("repeat_captures", [])
+        capture_frames = [capture.get("frame") for capture in captures]
+
+        require(receipt.get("profile_proof_schema") == "sslab-profile-proof-v0", "Ricochet profile proof must emit profile proof schema.", errors)
+        require(receipt.get("status") == "pass", "ricochet.reference.v1 profile proof must pass.", errors)
+        require(receipt.get("profile") == "ricochet.reference.v1", "Ricochet profile proof must record the profile key.", errors)
+        require(receipt.get("comparison_status") == "pass", "Ricochet repeated exact comparison must pass.", errors)
+        require(receipt.get("lifecycle_status") == "not-run", "Ricochet lifecycle must remain explicit follow-up until generalized lifecycle lands.", errors)
+        require(capture_frames == [0, 4, 8, 32], "Ricochet proof must capture frames 0, 4, 8, and 32.", errors)
+        require(len(captures) == 4, "Ricochet proof must record four primary captures.", errors)
+        require(len(repeat_captures) == 4, "Ricochet proof must record four repeated captures.", errors)
+
+        for capture, repeat_capture in zip(captures, repeat_captures):
+            require(
+                capture.get("raw_rgba_sha256") == repeat_capture.get("raw_rgba_sha256"),
+                f"Ricochet frame {capture.get('frame')} must repeat exactly.",
+                errors,
+            )
+            for key in ("raw_rgba_path", "review_ppm_path"):
+                path_text = capture.get(key)
+                require(bool(path_text), f"Ricochet capture frame {capture.get('frame')} must record {key}.", errors)
+                if path_text:
+                    require((ROOT / path_text).exists() or pathlib.Path(path_text).exists(), f"Ricochet capture path must exist: {path_text}", errors)
+
+
 def main() -> int:
     errors: list[str] = []
 
@@ -343,6 +399,9 @@ def main() -> int:
 
     if not errors:
         validate_profile_proof(errors)
+
+    if not errors:
+        validate_ricochet_profile_proof(errors)
 
     if errors:
         for error in errors:

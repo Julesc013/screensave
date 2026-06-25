@@ -28,6 +28,7 @@ python tools\sslab\sslab.py render --product nocturne --output-dir validation\ca
 python tools\sslab\sslab.py compare --actual out\proof\run-a\capture.ppm --expected validation\captures\proof-kernel-v0\nocturne\capture.ppm --class exact
 python tools\sslab\sslab.py lifecycle --product nocturne --output-dir out\proof\sslab-lifecycle
 python tools\sslab\sslab.py proof --profile nocturne.reference.v0 --output-dir out\proof\sslab-profile
+python tools\sslab\sslab.py proof --profile ricochet.reference.v1 --output-dir out\proof\ricochet-profile
 ```
 
 Proof Kernel v0 includes a compiled Nocturne canary runner. It is built and
@@ -50,6 +51,10 @@ The proof command loads `catalog/generated/proof_registry.json` and orchestrates
 render, exact comparison, and lifecycle receipts from the named profile. It is
 the PAW-B entry point for moving Nocturne, then Ricochet, onto catalog-owned
 proof profiles.
+The Ricochet profile path compiles a product-session runner, captures canonical
+raw RGBA plus PPM review frames at 0, 4, 8, and 32 fixed-step checkpoints, and
+requires repeated exact raw hashes. Ricochet lifecycle, profiling, and short
+soak receipts are still explicit PAW-B follow-up axes.
 
 This is not a public saver runtime API and not a compatibility certification.
 It is the first ScreenSave-owned visual proof spine. Proof Kernel v0 uses
