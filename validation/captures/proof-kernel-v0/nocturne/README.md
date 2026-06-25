@@ -21,4 +21,7 @@ Scope:
 The validator `tools/scripts/check_proof_kernel.py` reruns the same canary in
 temporary directories, checks the committed capture hash, and verifies that the
 committed proof records clean-source provenance and Nocturne product-source
-digests.
+digests. The recorded source commit is the clean capture-baseline provenance;
+the validator separately recomputes every recorded implementation SHA-256
+against the current tree so proof-relevant source edits require an intentional
+baseline refresh.

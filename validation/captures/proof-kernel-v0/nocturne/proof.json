@@ -9,7 +9,7 @@
   "implementation": [
     {
       "path": "tools/sslab/nocturne_canary_runner.c",
-      "sha256": "fde9df82aef7448f810531895cbf4376b169b9d3da4e3856efc383a6fd8c4cac"
+      "sha256": "27b8f2138f7b300f4e3616b156330ba9647c187d8850a28fbfbaa0117edd4c85"
     },
     {
       "path": "products/savers/nocturne/src/nocturne_sim.c",
@@ -59,7 +59,7 @@
     "width": 96
   },
   "source": {
-    "commit": "6e9567217256279dcd16e5eb97f64148f739c28e",
+    "commit": "b07a5cc55395aa3548769d4ec47a24681790f357",
     "dirty": false
   },
   "status": "informational"

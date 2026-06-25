@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import pathlib
 import subprocess
 import sys
@@ -12,6 +13,16 @@ import tempfile
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 SSLAB = ROOT / "tools" / "sslab" / "sslab.py"
 EVIDENCE_DIR = ROOT / "validation" / "captures" / "proof-kernel-v0" / "nocturne"
+
+EXPECTED_IMPLEMENTATION_PATHS = [
+    "tools/sslab/nocturne_canary_runner.c",
+    "products/savers/nocturne/src/nocturne_sim.c",
+    "products/savers/nocturne/src/nocturne_render.c",
+    "products/savers/nocturne/src/nocturne_themes.c",
+    "products/savers/nocturne/src/nocturne_presets.c",
+    "platform/src/surface/rgba8/surface_rgba8.c",
+    "platform/src/render/soft/soft_renderer.c",
+]
 
 REQUIRED_PATHS = [
     ROOT / "contracts" / "proof_kernel_v0.md",
@@ -50,6 +61,7 @@ REQUIRED_TEXT = {
         "compile_nocturne_runner",
         "compiled-product-session",
         "RUNNER_SOURCES",
+        "sha256_file",
         "def render_nocturne",
         "def lifecycle_nocturne",
         "def compare_captures",
@@ -70,6 +82,27 @@ REQUIRED_TEXT = {
 def require(condition: bool, message: str, errors: list[str]) -> None:
     if not condition:
         errors.append(message)
+
+
+def sha256_file(path: pathlib.Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def git_commit_exists(commit: str) -> bool:
+    if not commit:
+        return False
+    result = subprocess.run(
+        ["git", "cat-file", "-e", f"{commit}^{{commit}}"],
+        cwd=ROOT,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+        check=False,
+    )
+    return result.returncode == 0
 
 
 def run_sslab(output_dir: pathlib.Path) -> dict:
@@ -149,13 +182,34 @@ def validate_committed_proof(errors: list[str]) -> None:
     if not proof_path.exists():
         return
     proof = json.loads(proof_path.read_text(encoding="utf-8"))
-    implementation_paths = {item.get("path") for item in proof.get("implementation", [])}
+    implementation = proof.get("implementation", [])
+    implementation_by_path = {item.get("path"): item for item in implementation}
+    implementation_paths = set(implementation_by_path)
+    expected_paths = set(EXPECTED_IMPLEMENTATION_PATHS)
+    source_commit = str(proof.get("source", {}).get("commit", ""))
+
     require(proof.get("source", {}).get("dirty") is False, "Committed Nocturne proof must record a clean source state.", errors)
+    require(git_commit_exists(source_commit), "Committed Nocturne proof source commit must exist in this repository.", errors)
     require(
         proof.get("runtime", {}).get("runner_mode") == "compiled-product-session",
         "Committed Nocturne proof must use the compiled product-session runner.",
         errors,
     )
+    require(
+        implementation_paths == expected_paths,
+        "Committed Nocturne proof implementation inputs must exactly match the proof-kernel source set.",
+        errors,
+    )
+    for relative_path in EXPECTED_IMPLEMENTATION_PATHS:
+        item = implementation_by_path.get(relative_path, {})
+        path = ROOT / relative_path
+        require(path.exists(), f"Committed Nocturne proof implementation input is missing: {relative_path}", errors)
+        if path.exists():
+            require(
+                item.get("sha256") == sha256_file(path),
+                f"Committed Nocturne proof digest is stale for {relative_path}; regenerate the proof baseline after proof-relevant source changes.",
+                errors,
+            )
     require(
         "products/savers/nocturne/src/nocturne_sim.c" in implementation_paths,
         "Committed Nocturne proof must record the Nocturne simulation source digest.",

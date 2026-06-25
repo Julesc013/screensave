@@ -63,6 +63,7 @@ Given the same product, preset, seed, resolution, frame count, and fixed delta:
 - a lifecycle run creates, resizes, steps, renders, and destroys the Nocturne
   product session through the compiled proof runner
 - a proof bundle records source, runtime, seed, renderer, captures, and limits
+- committed implementation digests match the current proof-relevant source set
 - the existing Win32 `.scr` path remains unchanged
 - no public compatibility claim is widened
 - AIDE remains an optional evidence consumer
