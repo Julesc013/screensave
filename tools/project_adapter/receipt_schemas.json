@@ -67,6 +67,8 @@
         "before_source",
         "after_source",
         "command_binding",
+        "artifact_profiles",
+        "artifact_profile_audit_roots_ref",
         "input_paths",
         "run",
         "violation_count",

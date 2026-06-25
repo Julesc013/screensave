@@ -399,7 +399,9 @@ surface.
 The current project adapter now exposes fixed capability bindings in
 `tools/project_adapter/capability_bindings.json`, command-specific receipt
 requirements in `tools/project_adapter/receipt_schemas.json`, and contained
-generated-output roots under `out/proof/project-adapter/invocations/`. This is
+generated-output roots under `out/aide/screensave-project-adapter/invocations/`.
+PE audit roots are selected through named artifact profiles, not arbitrary
+caller-supplied paths. This is
 the ScreenSave-owned bridge profile AIDE can consume without being allowed to
 run arbitrary ScreenSave commands or choose arbitrary output paths.
 

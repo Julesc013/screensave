@@ -19,8 +19,10 @@ project_state = "PROJECT_STATE.toml"
 version_manifest = "VERSION.toml"
 product_catalog = "catalog/products.toml"
 artifact_profiles = "catalog/artifact_profiles.toml"
+aide_lite_lock = ".aide/aide_lite.lock.toml"
 project_bridge_profile = ".aide/project_bridge_profile.toml"
 project_adapter = "tools/project_adapter/screensave_project.py"
+artifact_profile_audit_roots = "tools/project_adapter/artifact_profile_audit_roots.json"
 historical_queues = ".codex/queues"
 
 [required_checks]
@@ -35,4 +37,4 @@ compiled_nocturne_runner = "python tools\\scripts\\check_compiled_nocturne_runne
 pe_audit = "python tools\\scripts\\audit_pe_artifacts.py --output validation\\captures\\truth-proof-baseline\\pe-audit-current.txt"
 
 [exit_condition]
-summary = "State, version, catalog, docs, build, and AIDE pilot checks pass; PE audit records current binary facts honestly."
+summary = "State, version, catalog, docs, build, AIDE pilot, project adapter, and compiled Nocturne checks pass; PE audit and bridge evidence record current facts honestly."

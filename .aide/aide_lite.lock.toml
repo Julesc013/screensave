@@ -1,0 +1,31 @@
+schema_version = 1
+lock_id = "screensave-aide-lite-lock-00"
+as_of = "2026-06-25"
+status = "pinned-report-only"
+install_level = "L0 AIDE Lite profile"
+runtime_dependency_allowed = false
+product_runtime_dependency_allowed = false
+automatic_merge_allowed = false
+
+[source]
+repository = "https://github.com/Julesc013/aide"
+pinned_commit = "6a94811b8befd2843aa99b25f4de5e1ee4c2e3fa"
+resolution_command = "git ls-remote https://github.com/Julesc013/aide.git HEAD"
+resolution_kind = "public-head-snapshot"
+
+[screen_save_boundary]
+project_truth_owner = "ScreenSave"
+adapter_contract = "contracts/project_adapter_v0.md"
+project_bridge_profile = ".aide/project_bridge_profile.toml"
+capability_bindings = "tools/project_adapter/capability_bindings.json"
+receipt_schemas = "tools/project_adapter/receipt_schemas.json"
+artifact_profile_audit_roots = "tools/project_adapter/artifact_profile_audit_roots.json"
+worker_runtime_required = false
+
+[limits]
+notes = [
+  "This lock records the reviewed AIDE Lite source identity for report-only integration.",
+  "It does not vendor AIDE code into ScreenSave.",
+  "It does not make AIDE required for ScreenSave builds, tests, savers, Workbench, Manager, packaging, or releases.",
+  "Coding-agent worker sessions remain blocked until AIDE worker-host gates are accepted elsewhere.",
+]

@@ -11,12 +11,15 @@ import tomllib
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 PILOT_PATH = ROOT / ".aide" / "pilot.toml"
 BRIDGE_PROFILE_PATH = ROOT / ".aide" / "project_bridge_profile.toml"
+AIDE_LITE_LOCK_PATH = ROOT / ".aide" / "aide_lite.lock.toml"
 CAPABILITY_BINDINGS = ROOT / "tools" / "project_adapter" / "capability_bindings.json"
+ARTIFACT_PROFILE_AUDIT_ROOTS = ROOT / "tools" / "project_adapter" / "artifact_profile_audit_roots.json"
 GITIGNORE_PATH = ROOT / ".gitignore"
 
 REQUIRED_PATHS = [
     ROOT / ".aide" / "README.md",
     PILOT_PATH,
+    AIDE_LITE_LOCK_PATH,
     BRIDGE_PROFILE_PATH,
     ROOT / ".aide" / "work_units" / "truth-proof-baseline.toml",
     ROOT / ".aide" / "evidence_packets" / "README.md",
@@ -69,6 +72,7 @@ def main() -> int:
     pilot = load_toml(PILOT_PATH)
     require(pilot.get("schema_version") == 1, ".aide/pilot.toml schema_version must be 1.", errors)
     require(pilot.get("status") == "report-only", ".aide/pilot.toml status must remain report-only.", errors)
+    require(pilot.get("source_strategy") == "pinned-lite-lock", ".aide/pilot.toml source_strategy must be pinned-lite-lock.", errors)
     require(pilot.get("runtime_dependency_allowed") is False, "AIDE runtime dependency must be disabled.", errors)
     require(pilot.get("automatic_merging_allowed") is False, "AIDE automatic merging must be disabled.", errors)
     require(pilot.get("product_runtime_dependency_allowed") is False, "AIDE product runtime dependency must be disabled.", errors)
@@ -82,8 +86,23 @@ def main() -> int:
     for index, item in enumerate(pilot.get("evidence_packets", [])):
         require_path(item.get("path"), f"evidence_packets[{index}].path", errors)
 
+    aide_lite_lock = load_toml(AIDE_LITE_LOCK_PATH)
+    require(aide_lite_lock.get("schema_version") == 1, ".aide/aide_lite.lock.toml schema_version must be 1.", errors)
+    require(aide_lite_lock.get("status") == "pinned-report-only", ".aide/aide_lite.lock.toml must remain pinned-report-only.", errors)
+    require(
+        aide_lite_lock.get("source", {}).get("pinned_commit") == "6a94811b8befd2843aa99b25f4de5e1ee4c2e3fa",
+        ".aide/aide_lite.lock.toml must pin the reviewed AIDE Lite commit.",
+        errors,
+    )
+    require(
+        aide_lite_lock.get("runtime_dependency_allowed") is False,
+        ".aide/aide_lite.lock.toml must not allow runtime dependency.",
+        errors,
+    )
+
     bridge_profile = load_toml(BRIDGE_PROFILE_PATH)
     bindings = load_json(CAPABILITY_BINDINGS)
+    audit_roots = load_json(ARTIFACT_PROFILE_AUDIT_ROOTS)
     require(bridge_profile.get("schema_version") == 1, ".aide/project_bridge_profile.toml schema_version must be 1.", errors)
     require(
         bridge_profile.get("status") == "report-only-ready",
@@ -93,8 +112,8 @@ def main() -> int:
     for label, value in bridge_profile.get("authority", {}).items():
         if label == "output_root":
             require(
-                value == "out/proof/project-adapter/invocations",
-                "bridge_profile.authority.output_root must be the contained adapter output root.",
+                value == "out/aide/screensave-project-adapter/invocations",
+                "bridge_profile.authority.output_root must be the contained AIDE adapter output root.",
                 errors,
             )
             continue
@@ -106,6 +125,16 @@ def main() -> int:
     profile_names = {item.get("name") for item in bridge_profile.get("capabilities", [])}
     binding_names = {item.get("name") for item in bindings.get("capabilities", [])}
     require(profile_names == binding_names, "ScreenSave bridge profile capabilities must match capability bindings.", errors)
+    require(
+        bindings.get("output_root") == "out/aide/screensave-project-adapter/invocations",
+        "ScreenSave bridge capability bindings must use the out/aide output root.",
+        errors,
+    )
+    require(
+        "windows_current_tool" in {item.get("key") for item in audit_roots.get("profiles", [])},
+        "ScreenSave bridge audit roots must include the current tool artifact profile.",
+        errors,
+    )
 
     gitignore = GITIGNORE_PATH.read_text(encoding="utf-8")
     require(".aide.local/" in gitignore, ".gitignore must ignore .aide.local/.", errors)

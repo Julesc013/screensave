@@ -18,6 +18,7 @@ It must not become:
 - a replacement for `PROJECT_STATE.toml`, `VERSION.toml`, `specs/`, or validators
 
 The current pilot is [`pilot.toml`](pilot.toml).
+The current report-only AIDE Lite pin is [`aide_lite.lock.toml`](aide_lite.lock.toml).
 The current deterministic project bridge profile is
 [`project_bridge_profile.toml`](project_bridge_profile.toml).
 Local transient state belongs in `.aide.local/`, which is ignored.

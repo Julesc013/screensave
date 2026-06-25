@@ -21,15 +21,13 @@ GENERATED_INVENTORY = ROOT / "catalog" / "generated" / "products_inventory.json"
 PE_AUDIT = ROOT / "tools" / "scripts" / "audit_pe_artifacts.py"
 CAPABILITY_BINDINGS = ROOT / "tools" / "project_adapter" / "capability_bindings.json"
 RECEIPT_SCHEMAS = ROOT / "tools" / "project_adapter" / "receipt_schemas.json"
-ADAPTER_OUTPUT_ROOT = ROOT / "out" / "proof" / "project-adapter"
+ARTIFACT_PROFILE_AUDIT_ROOTS = ROOT / "tools" / "project_adapter" / "artifact_profile_audit_roots.json"
+ADAPTER_OUTPUT_ROOT = ROOT / "out" / "aide" / "screensave-project-adapter"
 INVOCATION_OUTPUT_ROOT = ADAPTER_OUTPUT_ROOT / "invocations"
 COMMITTED_CANARY = ROOT / "validation" / "captures" / "proof-kernel-v0" / "nocturne" / "capture.ppm"
 APPROVED_COMPARE_INPUT_ROOTS = [
     ROOT / "validation" / "captures",
     ADAPTER_OUTPUT_ROOT,
-]
-APPROVED_AUDIT_INPUT_ROOTS = [
-    ROOT / "out",
 ]
 INVOCATION_ID_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.-]{0,79}$")
 MAX_RENDER_WIDTH = 512
@@ -37,7 +35,7 @@ MAX_RENDER_HEIGHT = 512
 MAX_RENDER_FRAMES = 300
 MAX_RENDER_DELTA_MS = 1000
 MAX_CAPTURE_BYTES = 50 * 1024 * 1024
-MAX_AUDIT_PATHS = 16
+MAX_AUDIT_PROFILES = 8
 
 CORE_VALIDATION = [
     ["tools/scripts/check_project_state.py"],
@@ -137,30 +135,41 @@ def resolve_input_file(label: str, value: str, allowed_roots: list[pathlib.Path]
     return path
 
 
-def resolve_audit_paths(values: list[str]) -> list[pathlib.Path]:
-    if len(values) > MAX_AUDIT_PATHS:
+def load_audit_profile_roots() -> dict[str, Any]:
+    return load_json(ARTIFACT_PROFILE_AUDIT_ROOTS)
+
+
+def resolve_audit_profiles(values: list[str] | None) -> tuple[list[str], list[pathlib.Path]]:
+    profile_roots = load_audit_profile_roots()
+    profile_map = {item.get("key"): item for item in profile_roots.get("profiles", [])}
+    selected = list(values) if values else list(profile_roots.get("default_profiles", []))
+
+    if len(selected) > MAX_AUDIT_PROFILES:
         raise AdapterError(
             "quota_exceeded",
-            "Too many explicit PE audit paths were requested.",
-            {"requested": len(values), "max_explicit_paths": MAX_AUDIT_PATHS},
+            "Too many artifact profiles were requested for PE audit.",
+            {"requested": len(selected), "max_artifact_profiles": MAX_AUDIT_PROFILES},
         )
 
-    paths: list[pathlib.Path] = []
-    for value in values:
-        path = pathlib.Path(value)
-        if not path.is_absolute():
-            path = ROOT / path
-        path = path.resolve()
-        if not path.exists():
-            raise AdapterError("input_not_found", "PE audit input path does not exist.", {"path": str(value)})
-        if not any(is_within(path, root) for root in APPROVED_AUDIT_INPUT_ROOTS):
+    roots: list[pathlib.Path] = []
+    for key in selected:
+        profile = profile_map.get(key)
+        if profile is None:
             raise AdapterError(
-                "input_root_denied",
-                "PE audit paths must be under an approved artifact root.",
-                {"path": repo_path(path), "approved_roots": display_roots(APPROVED_AUDIT_INPUT_ROOTS)},
+                "unknown_artifact_profile",
+                "PE audit artifact profile is not admitted by the ScreenSave adapter audit-root map.",
+                {"artifact_profile": key, "admitted_profiles": sorted(profile_map)},
             )
-        paths.append(path)
-    return paths
+        for value in profile.get("roots", []):
+            path = (ROOT / value).resolve()
+            if not is_within(path, ROOT / "out"):
+                raise AdapterError(
+                    "input_root_denied",
+                    "PE audit roots must stay under out/.",
+                    {"artifact_profile": key, "root": repo_path(path)},
+                )
+            roots.append(path)
+    return selected, roots
 
 
 def git_text(args: list[str]) -> str:
@@ -227,6 +236,8 @@ def command_binding_payload(command: str, argv: list[str], delegated_tools: list
         "adapter_sha256": sha256_file(pathlib.Path(__file__).resolve()),
         "capability_binding_ref": repo_path(CAPABILITY_BINDINGS),
         "capability_binding_sha256": sha256_file(CAPABILITY_BINDINGS),
+        "receipt_schema_ref": repo_path(RECEIPT_SCHEMAS),
+        "receipt_schema_sha256": sha256_file(RECEIPT_SCHEMAS),
         "delegated_tools": [
             {
                 "path": repo_path(tool),
@@ -324,6 +335,7 @@ def command_status(_args: argparse.Namespace) -> int:
         "project_adapter": {
             "contract": state.get("project_adapter", {}).get("contract"),
             "capability_bindings": state.get("project_adapter", {}).get("capability_bindings"),
+            "artifact_profile_audit_roots": state.get("project_adapter", {}).get("artifact_profile_audit_roots"),
             "output_root": state.get("project_adapter", {}).get("output_root"),
             "receipt_schemas": repo_path(RECEIPT_SCHEMAS),
         },
@@ -343,6 +355,8 @@ def command_capabilities(_args: argparse.Namespace) -> int:
         "binding_sha256": sha256_file(CAPABILITY_BINDINGS),
         "receipt_schema_ref": repo_path(RECEIPT_SCHEMAS),
         "receipt_schema_sha256": sha256_file(RECEIPT_SCHEMAS),
+        "artifact_profile_audit_roots_ref": repo_path(ARTIFACT_PROFILE_AUDIT_ROOTS),
+        "artifact_profile_audit_roots_sha256": sha256_file(ARTIFACT_PROFILE_AUDIT_ROOTS),
         "output_root": repo_path(INVOCATION_OUTPUT_ROOT),
         "capabilities": bindings.get("capabilities", []),
         "refusals": [
@@ -521,7 +535,7 @@ def command_compare(args: argparse.Namespace) -> int:
 def command_audit(args: argparse.Namespace) -> int:
     try:
         output_dir = invocation_dir("audit", args.invocation_id)
-        audit_paths = resolve_audit_paths(args.paths)
+        artifact_profiles, audit_paths = resolve_audit_profiles(args.artifact_profile)
     except AdapterError as exc:
         return blocked("audit", exc)
     before_source = source_payload()
@@ -554,7 +568,9 @@ def command_audit(args: argparse.Namespace) -> int:
         "artifact_manifest_ref": repo_path(manifest_path),
         "before_source": before_source,
         "after_source": source_payload(),
-        "command_binding": command_binding_payload("audit", audit_run["command"], [PE_AUDIT]),
+        "command_binding": command_binding_payload("audit", audit_run["command"], [PE_AUDIT, ARTIFACT_PROFILE_AUDIT_ROOTS]),
+        "artifact_profiles": artifact_profiles,
+        "artifact_profile_audit_roots_ref": repo_path(ARTIFACT_PROFILE_AUDIT_ROOTS),
         "input_paths": [repo_path(path) for path in audit_paths],
         "run": audit_run,
         "violation_count": violation_count,
@@ -697,7 +713,11 @@ def build_parser() -> argparse.ArgumentParser:
 
     audit = subparsers.add_parser("audit", help="Run the ScreenSave PE artifact audit.")
     audit.add_argument("--invocation-id", default="local", help="Safe id for the contained adapter output root.")
-    audit.add_argument("paths", nargs="*", help="Optional PE artifact roots or files.")
+    audit.add_argument(
+        "--artifact-profile",
+        action="append",
+        help="Artifact profile key to audit. Defaults to all PE artifact profiles admitted by the adapter.",
+    )
     audit.add_argument("--fail-on-violation", action="store_true")
     audit.set_defaults(func=command_audit)
 

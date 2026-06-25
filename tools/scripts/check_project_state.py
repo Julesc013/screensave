@@ -87,6 +87,7 @@ def validate_state(state: dict) -> list[str]:
         ("authority.version_manifest", authority.get("version_manifest")),
         ("authority.project_adapter", authority.get("project_adapter")),
         ("authority.aide_pilot", authority.get("aide_pilot")),
+        ("authority.aide_lite_lock", authority.get("aide_lite_lock")),
         ("release.artifact_manifest", release.get("artifact_manifest")),
         ("release.checksums", release.get("checksums")),
         ("release.notes", release.get("notes")),
@@ -152,16 +153,18 @@ def validate_state(state: dict) -> list[str]:
         ("project_adapter.contract", project_adapter.get("contract")),
         ("project_adapter.command", project_adapter.get("command")),
         ("project_adapter.capability_bindings", project_adapter.get("capability_bindings")),
+        ("project_adapter.receipt_schemas", project_adapter.get("receipt_schemas")),
+        ("project_adapter.artifact_profile_audit_roots", project_adapter.get("artifact_profile_audit_roots")),
     ):
         require_path(value, label, errors)
     require(
-        project_adapter.get("output_root") == "out/proof/project-adapter/invocations",
-        "project_adapter.output_root must be the contained invocation output root.",
+        project_adapter.get("output_root") == "out/aide/screensave-project-adapter/invocations",
+        "project_adapter.output_root must be the contained AIDE invocation output root.",
         errors,
     )
     require(
-        "contained generated-output roots" in str(project_adapter.get("policy", "")),
-        "project_adapter.policy must mention contained generated-output roots.",
+        "out/aide" in str(project_adapter.get("policy", "")) and "artifact-profile audit roots" in str(project_adapter.get("policy", "")),
+        "project_adapter.policy must mention out/aide containment and artifact-profile audit roots.",
         errors,
     )
 

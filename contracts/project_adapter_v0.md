@@ -28,6 +28,8 @@ The v0 adapter command set is:
 The admitted capability profile is committed at
 `tools/project_adapter/capability_bindings.json`. Command-specific receipt
 requirements are committed at `tools/project_adapter/receipt_schemas.json`.
+Artifact-profile audit roots are committed at
+`tools/project_adapter/artifact_profile_audit_roots.json`.
 
 External coordinators must bind to these fixed capabilities, not to an open
 `screensave run <anything>` operation:
@@ -54,7 +56,7 @@ The adapter may:
 - invoke the PE artifact audit
 - emit JSON receipts
 - write generated proof artifacts only under contained invocation roots in
-  `out/proof/project-adapter/invocations/`
+  `out/aide/screensave-project-adapter/invocations/`
 - expose limitations and refusal reasons
 
 The adapter may not:
@@ -68,6 +70,8 @@ The adapter may not:
 - make AIDE mandatory for builds or releases
 - accept arbitrary output paths from callers
 - read compare or audit inputs outside approved ScreenSave evidence or artifact
+  roots
+- accept arbitrary PE audit filesystem paths instead of artifact-profile audit
   roots
 
 ## Result Shape
@@ -99,6 +103,10 @@ Generated-output commands accept a sanitized `--invocation-id`; they do not
 accept caller-selected absolute output paths. The adapter owns the output root,
 creates an invocation directory, and writes an `artifact-manifest.json` with
 paths, sizes, and SHA-256 digests for generated artifacts.
+
+The `audit` command accepts named `--artifact-profile` selections, not
+free-form filesystem paths. Those names are resolved through the committed
+artifact-profile audit-root map and remain binary-fact evidence only.
 
 ## Initial Proof
 

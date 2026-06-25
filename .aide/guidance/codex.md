@@ -7,6 +7,8 @@ Current active control plane:
 - Read `catalog/products.toml` and `catalog/artifact_profiles.toml` before changing build graphs, package manifests, product naming, or compatibility claims.
 - Treat `.codex/queues/` as historical-superseded lineage unless a future state file reopens queue authority.
 - Keep AIDE report-only during this pilot.
+- Treat `.aide/aide_lite.lock.toml` as the report-only AIDE Lite source pin;
+  do not vendor AIDE or make it required for ScreenSave builds.
 - Use `.aide/project_bridge_profile.toml` and
   `tools/project_adapter/capability_bindings.json` for the deterministic
   ScreenSave bridge surface.

@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "source_catalog": "catalog/artifact_profiles.toml",
+  "default_profiles": [
+    "windows_preservation_x86_ansi",
+    "windows_current_x86_scr",
+    "windows_current_tool"
+  ],
+  "profiles": [
+    {
+      "key": "windows_preservation_x86_ansi",
+      "artifact_extension": ".scr",
+      "roots": [
+        "out/portable/screensave-core-c16-baseline",
+        "out/mingw/i686/debug"
+      ],
+      "claim_boundary": "binary facts only; not preservation certification"
+    },
+    {
+      "key": "windows_current_x86_scr",
+      "artifact_extension": ".scr",
+      "roots": [
+        "out/msvc/vs2022/Release",
+        "out/mingw/i686/debug"
+      ],
+      "claim_boundary": "binary facts only; not current-Windows certification"
+    },
+    {
+      "key": "windows_current_tool",
+      "artifact_extension": ".exe",
+      "roots": [
+        "out/msvc/vs2022/Release",
+        "out/installer/screensave-installer-c16-baseline"
+      ],
+      "claim_boundary": "binary facts only; optional tools are not saver runtime dependencies"
+    }
+  ]
+}
