@@ -85,12 +85,22 @@ proof infrastructure and a second structurally different canary.
 
 Deliverables:
 
-- `libsslab` private proof library
-- generated product proof registry from the catalog
-- catalog-owned proof profiles
-- Ricochet deterministic proof canary
-- lifecycle, profile, and short-soak surfaces
-- exact deterministic proof for Nocturne and Ricochet
+- private `libsslab` ABI v0 header is present
+- shared RGBA8 renderer and capture helpers are present
+- generated product proof registry from the catalog is present
+- catalog-owned Nocturne and Ricochet proof profiles are present
+- Ricochet deterministic proof canary is present
+- lifecycle, profile, and short-soak surfaces are present
+- exact deterministic proof for Nocturne and Ricochet is present
+- profile-driven Proof Bundle v1 composition is present
+- CI runs the Nocturne and Ricochet proof/profile matrix
+- a minimal BenchLab/Workbench shell binds to `sslab` and the generated proof registry
+
+Remaining Gate B question:
+
+- whether to accept the current runner-backed proof-runtime slice as the
+  `libsslab` v1 foundation or require a deeper compiled library extraction
+  before opening portable v2
 
 Exit:
 

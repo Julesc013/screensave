@@ -95,6 +95,26 @@ objective = "Extract generic libsslab proof runtime and add Ricochet as the seco
 libsslab_abi = "contracts/libsslab_abi_v0.md"
 libsslab_header = "tools/sslab/include/screensave/sslab.h"
 canary_products = ["nocturne", "ricochet"]
+implemented = [
+  "private libsslab ABI v0 header",
+  "shared RGBA8 renderer and capture helpers",
+  "generated proof registry from catalog proof profiles",
+  "profile-driven Nocturne proof orchestration",
+  "Ricochet classic_clean proof profile with frames 0, 4, 8, and 32",
+  "Ricochet compiled product-session proof runner",
+  "Ricochet repeated exact raw RGBA multi-frame proof",
+  "generalized Ricochet lifecycle receipt with resize evidence and 32 create/destroy cycles",
+  "informational Nocturne and Ricochet profile and short-soak receipts",
+  "profile-driven Proof Bundle v1 composition for Ricochet",
+  "Windows CI proof-profile matrix for Nocturne and Ricochet",
+  "minimal BenchLab/Workbench shell bound to sslab ABI and generated proof profiles",
+]
+remaining = [
+  "fully extracted reusable compiled libsslab implementation instead of runner-specific compilation paths",
+  "remove remaining product-specific orchestration branches from sslab.py where practical",
+  "decide whether Gate B accepts the current runner-backed library slice or requires deeper C library extraction",
+  "only then open portable-v2 work",
+]
 required_boundaries = [
   "current Windows/32-bit v1 proof only",
   "no portable v2 claim before Gate B exit",
@@ -215,3 +235,4 @@ product_architecture = "tools/scripts/check_product_architecture.py"
 proof_kernel = "tools/scripts/check_proof_kernel.py"
 compiled_nocturne_runner = "tools/scripts/check_compiled_nocturne_runner.py"
 project_adapter = "tools/scripts/check_project_adapter.py"
+workbench_shell = "tools/scripts/check_workbench_shell.py"
