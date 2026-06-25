@@ -1,0 +1,38 @@
+schema_version = 1
+version_id = "screensave-version-authority-00"
+as_of = "2026-06-25"
+
+[release]
+public_artifact = "c16-core-baseline"
+runtime_version = "0.15.0"
+series = "C16 Core Baseline Freeze"
+status = "released-frozen"
+
+[development]
+current_state = "truth-proof-baseline-00"
+development_head = "plasma-u09-corrective-recut"
+active_milestone = "truth-proof-baseline"
+release_candidate = "none"
+
+[abi]
+platform_api = 1
+saver_api = 1
+renderer_contract = 1
+win32_scr_host = 1
+portable_contract = "planned-v2"
+compatibility_shim = "v1-public-contract-preserved"
+
+[schemas]
+product_catalog = 1
+config = 1
+settings_file = 1
+pack_manifest = 1
+artifact_profiles = 0
+proof_bundle = 0
+aide_pilot = 0
+
+[proof]
+policy = "evidence-classed"
+bundle_schema = "planned-proof-bundle-v0"
+binary_audit_tool = "tools/scripts/audit_pe_artifacts.py"
+state_validator = "tools/scripts/check_project_state.py"

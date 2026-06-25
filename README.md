@@ -10,6 +10,7 @@ Implementation currently exists through `S15` plus continuation `C00`, `C01`, `C
 ## Current Project State
 
 - State authority: [`PROJECT_STATE.toml`](PROJECT_STATE.toml)
+- Version authority: [`VERSION.toml`](VERSION.toml)
 - Product catalog: [`catalog/products.toml`](catalog/products.toml)
 - Active milestone: [`docs/roadmap/truth-proof-baseline.md`](docs/roadmap/truth-proof-baseline.md)
 - Released public artifact: `c16-core-baseline`
@@ -112,7 +113,7 @@ Repository-health and release-support validation lives under [`tools/scripts/`](
 ## Further Reading
 
 - Release baseline: [`docs/releases/c16-core-baseline.md`](docs/releases/c16-core-baseline.md)
-- Current state authority: [`PROJECT_STATE.toml`](PROJECT_STATE.toml) and [`docs/roadmap/truth-proof-baseline.md`](docs/roadmap/truth-proof-baseline.md)
+- Current state authority: [`PROJECT_STATE.toml`](PROJECT_STATE.toml), [`VERSION.toml`](VERSION.toml), and [`docs/roadmap/truth-proof-baseline.md`](docs/roadmap/truth-proof-baseline.md)
 - Release doctrine: [`docs/roadmap/release-channels.md`](docs/roadmap/release-channels.md) and [`docs/roadmap/core-zip-doctrine.md`](docs/roadmap/core-zip-doctrine.md)
 - Architecture: [`docs/architecture/overview.md`](docs/architecture/overview.md) and [`docs/architecture/repo-structure.md`](docs/architecture/repo-structure.md)
 - Product lineup: [`docs/roadmap/products-and-lineup.md`](docs/roadmap/products-and-lineup.md)
@@ -122,4 +123,4 @@ Repository-health and release-support validation lives under [`tools/scripts/`](
 
 ## Project History
 
-The repository has a long implemented history from `S00` through `S15` and a completed `C00` through `C16` continuation bridge, but the root README is no longer the full chronology ledger. Historical milestones such as Series 09, which established the first true multi-product saver family with `ricochet` and `deepfield`, now live in the roadmap docs instead of the front page. For the historical baseline, see [`docs/roadmap/prompt-program.md`](docs/roadmap/prompt-program.md) and [`docs/roadmap/series-map.md`](docs/roadmap/series-map.md). For the current post-`U09` authority, start with [`PROJECT_STATE.toml`](PROJECT_STATE.toml), [`docs/roadmap/truth-proof-baseline.md`](docs/roadmap/truth-proof-baseline.md), and the Plasma `U09` docs.
+The repository has a long implemented history from `S00` through `S15` and a completed `C00` through `C16` continuation bridge, but the root README is no longer the full chronology ledger. Historical milestones such as Series 09, which established the first true multi-product saver family with `ricochet` and `deepfield`, now live in the roadmap docs instead of the front page. For the historical baseline, see [`docs/roadmap/prompt-program.md`](docs/roadmap/prompt-program.md) and [`docs/roadmap/series-map.md`](docs/roadmap/series-map.md). For the current post-`U09` authority, start with [`PROJECT_STATE.toml`](PROJECT_STATE.toml), [`VERSION.toml`](VERSION.toml), [`docs/roadmap/truth-proof-baseline.md`](docs/roadmap/truth-proof-baseline.md), and the Plasma `U09` docs.

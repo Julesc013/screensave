@@ -10,6 +10,7 @@ active_program = "truth-proof-baseline"
 release_candidate = "none"
 queue_authority = "historical-mx-queue-superseded"
 product_catalog = "catalog/products.toml"
+version_manifest = "VERSION.toml"
 
 [release]
 tag = "c16-core-baseline"
