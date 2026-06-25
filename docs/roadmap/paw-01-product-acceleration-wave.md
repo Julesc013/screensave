@@ -99,11 +99,12 @@ Deliverables:
 - Nocturne and Ricochet have product adapters inside the `libsslab` tranche
 - Workbench smoke executes both canaries through in-process `libsslab` calls
 - capture, lifecycle, profile, and short-soak receipt operations are implemented in compiled C
+- `sslab_runner proof --profile <key>` builds over one private static `libsslab`
+  artifact and executes Nocturne and Ricochet profiles through the same command
+  shape
 
 Remaining Gate B extraction:
 
-- replace runner-specific compilation paths with one generic runner built over
-  private `libsslab`
 - remove remaining product-specific execution dispatch from `sslab.py` where
   practical
 - commit Ricochet exact baselines and promote its proof profile from planned to
