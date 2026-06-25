@@ -1,0 +1,33 @@
+schema_version = 1
+id = "SS-TRUTH-000"
+title = "Truth and proof baseline"
+status = "active"
+owner = "repo"
+mode = "report-only"
+
+[goal]
+summary = "Keep current ScreenSave truth, compatibility evidence, artifact profiles, and validator entry points aligned before larger portability work begins."
+non_goals = [
+  "do not rewrite Plasma",
+  "do not replace renderer contracts",
+  "do not widen public compatibility claims",
+  "do not make products depend on AIDE",
+]
+
+[inputs]
+project_state = "PROJECT_STATE.toml"
+version_manifest = "VERSION.toml"
+product_catalog = "catalog/products.toml"
+artifact_profiles = "catalog/artifact_profiles.toml"
+historical_queues = ".codex/queues"
+
+[required_checks]
+state = "python tools\\scripts\\check_project_state.py --summary"
+catalog = "python tools\\scripts\\check_catalog_profiles.py"
+docs = "python tools\\scripts\\check_docs_basics.py"
+build = "python tools\\scripts\\check_build_layout.py"
+aide = "python tools\\scripts\\check_aide_pilot.py"
+pe_audit = "python tools\\scripts\\audit_pe_artifacts.py --output validation\\captures\\truth-proof-baseline\\pe-audit-current.txt"
+
+[exit_condition]
+summary = "State, version, catalog, docs, build, and AIDE pilot checks pass; PE audit records current binary facts honestly."

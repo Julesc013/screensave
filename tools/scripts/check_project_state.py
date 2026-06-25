@@ -77,6 +77,7 @@ def validate_state(state: dict) -> list[str]:
         ("authority.product_catalog", authority.get("product_catalog")),
         ("authority.artifact_profiles", authority.get("artifact_profiles")),
         ("authority.version_manifest", authority.get("version_manifest")),
+        ("authority.aide_pilot", authority.get("aide_pilot")),
         ("release.artifact_manifest", release.get("artifact_manifest")),
         ("release.checksums", release.get("checksums")),
         ("release.notes", release.get("notes")),

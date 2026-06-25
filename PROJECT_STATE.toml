@@ -12,6 +12,7 @@ queue_authority = "historical-mx-queue-superseded"
 product_catalog = "catalog/products.toml"
 artifact_profiles = "catalog/artifact_profiles.toml"
 version_manifest = "VERSION.toml"
+aide_pilot = ".aide/pilot.toml"
 
 [release]
 tag = "c16-core-baseline"
@@ -106,3 +107,4 @@ docs = "tools/scripts/check_docs_basics.py"
 build = "tools/scripts/check_build_layout.py"
 codex = "tools/scripts/check_codex_config.py"
 catalog = "tools/scripts/check_catalog_profiles.py"
+aide = "tools/scripts/check_aide_pilot.py"

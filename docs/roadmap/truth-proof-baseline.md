@@ -17,6 +17,8 @@ This baseline makes the current authority explicit:
   undifferentiated support claim
 - build and proof validators must check the current tree rather than stale
   source lists
+- AIDE may govern development evidence in report-only mode, but products must
+  not depend on it
 
 ## Canonical State File
 
@@ -36,8 +38,13 @@ It records:
 - validator entry points
 
 The product catalog entry point is [`../../catalog/products.toml`](../../catalog/products.toml).
-That catalog is the first step toward generated build, packaging, Suite,
+Artifact-profile authority is [`../../catalog/artifact_profiles.toml`](../../catalog/artifact_profiles.toml).
+That catalog is the first step toward generated build, packaging, Manager,
 Anthology, Workbench, SDK, and documentation surfaces.
+
+The report-only AIDE pilot is [`../../.aide/pilot.toml`](../../.aide/pilot.toml).
+It may coordinate WorkUnits and evidence packets, but it must not become a
+runtime dependency or automatic merge authority.
 
 ## Evidence Classes
 
@@ -47,11 +54,15 @@ Compatibility claims must use these classes:
 | --- | --- |
 | `certified` | Executed successfully on the named OS or hardware profile with stored evidence. |
 | `binary-audited` | PE headers, architecture, subsystem, imports, runtime dependencies, and required APIs pass the named profile, but the artifact has not been run there. |
+| `buildable` | A reproducible build exists for the named profile, without a binary or runtime support claim. |
 | `targeted` | Architectural goal only; not a public support promise. |
+| `experimental` | Available with known limitations or incomplete proof, and not silently promoted into Core support. |
 | `unsupported` | Known not to work or deliberately excluded. |
+| `retired` | Preserved for historical reference, but no longer maintained as current support. |
 
 The broad Windows band remains the preservation target.
-It is not automatically certified for every current artifact.
+It is not automatically certified for every current artifact, and only
+`certified` should read as ordinary public support language.
 
 ## Queue Reconciliation
 
@@ -77,6 +88,8 @@ The active exit command is:
 
 ```powershell
 python tools\scripts\check_project_state.py --summary
+python tools\scripts\check_catalog_profiles.py
+python tools\scripts\check_aide_pilot.py
 ```
 
 That command must be able to report what is released, what is current in
@@ -85,7 +98,7 @@ governs public claims.
 
 ## Scope Boundary
 
-This milestone does not build Workbench, refactor the semantic core, or change
-runtime behavior.
+This milestone does not build Workbench, refactor the semantic core, rewrite
+Plasma, or change runtime behavior.
 
 It creates the authority and proof spine those later changes must use.

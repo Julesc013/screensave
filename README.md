@@ -13,6 +13,7 @@ Implementation currently exists through `S15` plus continuation `C00`, `C01`, `C
 - Version authority: [`VERSION.toml`](VERSION.toml)
 - Product catalog: [`catalog/products.toml`](catalog/products.toml)
 - Artifact profiles: [`catalog/artifact_profiles.toml`](catalog/artifact_profiles.toml)
+- AIDE pilot: [`.aide/pilot.toml`](.aide/pilot.toml)
 - Active milestone: [`docs/roadmap/truth-proof-baseline.md`](docs/roadmap/truth-proof-baseline.md)
 - Released public artifact: `c16-core-baseline`
 - Development-head product truth: Plasma [`U09 Stable Recut`](products/savers/plasma/docs/u09-stable-recut.md) and [`U09 Ship Posture`](products/savers/plasma/docs/u09-ship-posture.md)
@@ -83,6 +84,7 @@ Universal behavior ships first. If an optional capability is absent, ScreenSave 
 - [`tests/`](tests/): executable verification logic and fixtures
 - [`validation/`](validation/): stored evidence, support notes, and release validation captures
 - [`tools/`](tools/): repository validators and support tooling
+- [`.aide/`](.aide/): report-only development control plane and evidence/work-unit pilot
 - [`assets/`](assets/): shared non-code content and license records
 - [`third_party/`](third_party/): third-party material and license placeholders
 

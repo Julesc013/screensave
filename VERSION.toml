@@ -29,7 +29,7 @@ settings_file = 1
 pack_manifest = 1
 artifact_profiles = 1
 proof_bundle = 0
-aide_pilot = 0
+aide_pilot = 1
 
 [proof]
 policy = "evidence-classed"

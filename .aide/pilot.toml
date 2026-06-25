@@ -1,0 +1,52 @@
+schema_version = 1
+pilot_id = "screensave-aide-pilot-00"
+as_of = "2026-06-25"
+status = "report-only"
+source_strategy = "pinned-portable-pack-pending"
+runtime_dependency_allowed = false
+automatic_merging_allowed = false
+product_runtime_dependency_allowed = false
+
+[authority]
+project_state = "PROJECT_STATE.toml"
+version_manifest = "VERSION.toml"
+product_catalog = "catalog/products.toml"
+artifact_profiles = "catalog/artifact_profiles.toml"
+historical_codex_queues = ".codex/queues"
+
+[scope]
+allowed = [
+  "line-ending policy",
+  "project-state authority",
+  "public release truth",
+  "artifact inventory",
+  "PE audit",
+  "catalog design",
+  "validator repair",
+]
+excluded = [
+  "automatic merging",
+  "automatic promotion",
+  "runtime product dependency",
+  "Plasma v2 rewrite",
+  "renderer v2 rewrite",
+  "public compatibility widening without evidence",
+]
+
+[validators]
+state = "tools/scripts/check_project_state.py"
+catalog = "tools/scripts/check_catalog_profiles.py"
+pe_audit = "tools/scripts/audit_pe_artifacts.py"
+aide_pilot = "tools/scripts/check_aide_pilot.py"
+
+[[work_units]]
+id = "SS-TRUTH-000"
+title = "Truth and proof baseline"
+status = "active"
+path = ".aide/work_units/truth-proof-baseline.toml"
+
+[[evidence_packets]]
+id = "SS-EVIDENCE-PE-000"
+title = "Current PE artifact audit"
+status = "recorded-with-violations"
+path = "validation/captures/truth-proof-baseline/pe-audit-current.txt"

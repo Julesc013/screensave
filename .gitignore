@@ -20,6 +20,8 @@ $null
 __pycache__/
 *.pyc
 
+.aide.local/
+
 tmp/
 bin/
 obj/
