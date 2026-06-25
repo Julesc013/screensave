@@ -16,6 +16,8 @@ EVIDENCE_DIR = ROOT / "validation" / "captures" / "proof-kernel-v0" / "nocturne"
 
 EXPECTED_IMPLEMENTATION_PATHS = [
     "tools/sslab/nocturne_canary_runner.c",
+    "tools/sslab/src/capture.c",
+    "tools/sslab/src/renderer_rgba8.c",
     "products/savers/nocturne/src/nocturne_sim.c",
     "products/savers/nocturne/src/nocturne_render.c",
     "products/savers/nocturne/src/nocturne_themes.c",
@@ -34,6 +36,10 @@ REQUIRED_PATHS = [
     ROOT / "tools" / "sslab" / "README.md",
     SSLAB,
     ROOT / "tools" / "sslab" / "nocturne_canary_runner.c",
+    ROOT / "tools" / "sslab" / "src" / "capture.c",
+    ROOT / "tools" / "sslab" / "src" / "capture.h",
+    ROOT / "tools" / "sslab" / "src" / "renderer_rgba8.c",
+    ROOT / "tools" / "sslab" / "src" / "renderer_rgba8.h",
     ROOT / "tools" / "scripts" / "check_compiled_nocturne_runner.py",
     EVIDENCE_DIR / "README.md",
     EVIDENCE_DIR / "capture.ppm",
@@ -74,7 +80,18 @@ REQUIRED_TEXT = {
         "nocturne_step_session",
         "nocturne_render_session",
         "runner_write_lifecycle_json",
-        "screensave/private/soft_renderer.h",
+        "sslab_rgba8_renderer_init",
+        "sslab_write_review_ppm",
+    ],
+    ROOT / "tools" / "sslab" / "src" / "capture.c": [
+        "sslab_write_review_ppm",
+        "sslab_write_raw_rgba",
+        "P3",
+    ],
+    ROOT / "tools" / "sslab" / "src" / "renderer_rgba8.c": [
+        "sslab_rgba8_renderer_init",
+        "screensave_renderer_clear",
+        "screensave_renderer_draw_polyline",
     ],
 }
 

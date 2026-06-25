@@ -16,6 +16,8 @@ SSLAB = ROOT / "tools" / "sslab" / "sslab.py"
 EXPECTED_CAPTURE = ROOT / "validation" / "captures" / "proof-kernel-v0" / "nocturne" / "capture.ppm"
 SURFACE = ROOT / "platform" / "src" / "surface" / "rgba8" / "surface_rgba8.c"
 SOFT_RENDERER = ROOT / "platform" / "src" / "render" / "soft" / "soft_renderer.c"
+SSLAB_CAPTURE = ROOT / "tools" / "sslab" / "src" / "capture.c"
+SSLAB_RENDERER_RGBA8 = ROOT / "tools" / "sslab" / "src" / "renderer_rgba8.c"
 NOCTURNE_SIM = ROOT / "products" / "savers" / "nocturne" / "src" / "nocturne_sim.c"
 NOCTURNE_RENDER = ROOT / "products" / "savers" / "nocturne" / "src" / "nocturne_render.c"
 NOCTURNE_THEMES = ROOT / "products" / "savers" / "nocturne" / "src" / "nocturne_themes.c"
@@ -37,8 +39,12 @@ def compile_runner(output_exe: pathlib.Path) -> None:
             "-I",
             str(ROOT / "platform" / "include"),
             "-I",
+            str(ROOT / "tools" / "sslab" / "src"),
+            "-I",
             str(ROOT / "products" / "savers" / "nocturne" / "src"),
             str(RUNNER),
+            str(SSLAB_CAPTURE),
+            str(SSLAB_RENDERER_RGBA8),
             str(NOCTURNE_SIM),
             str(NOCTURNE_RENDER),
             str(NOCTURNE_THEMES),
@@ -55,7 +61,19 @@ def compile_runner(output_exe: pathlib.Path) -> None:
 def main() -> int:
     errors: list[str] = []
 
-    for path in (RUNNER, SSLAB, EXPECTED_CAPTURE, SURFACE, SOFT_RENDERER, NOCTURNE_SIM, NOCTURNE_RENDER, NOCTURNE_THEMES, NOCTURNE_PRESETS):
+    for path in (
+        RUNNER,
+        SSLAB,
+        EXPECTED_CAPTURE,
+        SURFACE,
+        SOFT_RENDERER,
+        SSLAB_CAPTURE,
+        SSLAB_RENDERER_RGBA8,
+        NOCTURNE_SIM,
+        NOCTURNE_RENDER,
+        NOCTURNE_THEMES,
+        NOCTURNE_PRESETS,
+    ):
         require(path.exists(), f"Missing compiled Nocturne runner input: {path.relative_to(ROOT)}", errors)
 
     if RUNNER.exists():
@@ -65,7 +83,8 @@ def main() -> int:
         require("nocturne_create_session" in text, "Compiled Nocturne runner must call the product session constructor.", errors)
         require("nocturne_step_session" in text, "Compiled Nocturne runner must call the product step function.", errors)
         require("nocturne_render_session" in text, "Compiled Nocturne runner must call the product render function.", errors)
-        require("screensave/private/soft_renderer.h" in text, "Compiled Nocturne runner must use the private soft renderer.", errors)
+        require("renderer_rgba8.h" in text, "Compiled Nocturne runner must use the shared RGBA8 renderer shim.", errors)
+        require("capture.h" in text, "Compiled Nocturne runner must use the shared capture core.", errors)
         require("windows.h" not in text, "Compiled Nocturne runner must not include windows.h directly.", errors)
         require("runner_rng_state" not in text, "Compiled Nocturne runner must not carry a mirror RNG implementation.", errors)
         require("runner_step_session" not in text, "Compiled Nocturne runner must not carry a mirror session step implementation.", errors)

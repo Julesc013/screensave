@@ -14,6 +14,13 @@ Windows/32-bit v1 proof-runtime boundary for Nocturne and Ricochet. It is not
 the portable v2 seam and must block proof promotion on hosts where
 `sizeof(unsigned long) != 4`.
 
+The first reusable proof mechanics live under `tools/sslab/src/`:
+
+- `renderer_rgba8.c` exposes the proof-local RGBA8 renderer shim used by
+  current v1 product-session canaries.
+- `capture.c` writes canonical raw RGBA bytes and PPM review captures without
+  owning product simulation or rendering semantics.
+
 Current commands:
 
 ```powershell

@@ -10,12 +10,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "capture.h"
 #include "nocturne_internal.h"
-#include "screensave/private/soft_renderer.h"
-
-struct screensave_renderer_tag {
-    screensave_rgba8_surface *surface;
-};
+#include "renderer_rgba8.h"
 
 void screensave_diag_emit(
     screensave_diag_context *context,
@@ -74,131 +71,6 @@ const screensave_theme_descriptor *screensave_find_theme(
     }
 
     return NULL;
-}
-
-int screensave_renderer_begin_frame(screensave_renderer *renderer, const screensave_frame_info *frame_info)
-{
-    (void)renderer;
-    (void)frame_info;
-    return 1;
-}
-
-void screensave_renderer_clear(screensave_renderer *renderer, screensave_color color)
-{
-    if (renderer == NULL || renderer->surface == NULL) {
-        return;
-    }
-
-    screensave_rgba8_surface_clear(renderer->surface, color);
-}
-
-void screensave_renderer_fill_rect(
-    screensave_renderer *renderer,
-    const screensave_recti *rect,
-    screensave_color color
-)
-{
-    if (renderer == NULL || renderer->surface == NULL) {
-        return;
-    }
-
-    screensave_soft_fill_rect(renderer->surface, rect, color);
-}
-
-void screensave_renderer_draw_frame_rect(
-    screensave_renderer *renderer,
-    const screensave_recti *rect,
-    screensave_color color
-)
-{
-    if (renderer == NULL || renderer->surface == NULL) {
-        return;
-    }
-
-    screensave_soft_draw_frame_rect(renderer->surface, rect, color);
-}
-
-void screensave_renderer_draw_line(
-    screensave_renderer *renderer,
-    const screensave_pointi *start_point,
-    const screensave_pointi *end_point,
-    screensave_color color
-)
-{
-    if (renderer == NULL || renderer->surface == NULL) {
-        return;
-    }
-
-    screensave_soft_draw_line(renderer->surface, start_point, end_point, color);
-}
-
-void screensave_renderer_draw_polyline(
-    screensave_renderer *renderer,
-    const screensave_pointi *points,
-    unsigned int point_count,
-    screensave_color color
-)
-{
-    if (renderer == NULL || renderer->surface == NULL) {
-        return;
-    }
-
-    screensave_soft_draw_polyline(renderer->surface, points, point_count, color);
-}
-
-int screensave_renderer_blit_bitmap(
-    screensave_renderer *renderer,
-    const screensave_bitmap_view *bitmap,
-    const screensave_recti *destination_rect
-)
-{
-    (void)renderer;
-    (void)bitmap;
-    (void)destination_rect;
-    return 0;
-}
-
-int screensave_renderer_end_frame(screensave_renderer *renderer)
-{
-    (void)renderer;
-    return 1;
-}
-
-void screensave_renderer_shutdown(screensave_renderer *renderer)
-{
-    (void)renderer;
-}
-
-static int runner_write_ppm(const screensave_rgba8_surface *surface, const char *path)
-{
-    FILE *file;
-    int x;
-    int y;
-    const unsigned char *pixel;
-
-    if (surface == NULL || surface->pixels == NULL || path == NULL) {
-        return 0;
-    }
-
-    file = fopen(path, "w");
-    if (file == NULL) {
-        return 0;
-    }
-
-    fprintf(file, "P3\n%d %d\n255\n", surface->width, surface->height);
-    for (y = 0; y < surface->height; ++y) {
-        for (x = 0; x < surface->width; ++x) {
-            pixel = surface->pixels + (y * surface->stride_bytes) + (x * 4);
-            if (x > 0) {
-                fprintf(file, " ");
-            }
-            fprintf(file, "%u %u %u", (unsigned int)pixel[0], (unsigned int)pixel[1], (unsigned int)pixel[2]);
-        }
-        fprintf(file, "\n");
-    }
-
-    fclose(file);
-    return 1;
 }
 
 static int runner_write_lifecycle_json(
@@ -428,7 +300,7 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    renderer.surface = &surface;
+    sslab_rgba8_renderer_init(&renderer, &surface);
     runner_make_common_config(&common_config, &product_config, preset_key);
     runner_make_environment(&environment, &binding, &common_config, &product_config, &renderer, width, height, seed);
 
@@ -445,7 +317,7 @@ int main(int argc, char **argv)
             fprintf(stderr, "could not allocate resized rgba8 surface\n");
             return 1;
         }
-        renderer.surface = &surface;
+        sslab_rgba8_renderer_init(&renderer, &surface);
         environment.drawable_size.width = resize_width;
         environment.drawable_size.height = resize_height;
         width = resize_width;
@@ -463,7 +335,7 @@ int main(int argc, char **argv)
     }
     nocturne_render_session(session, &environment);
 
-    if (!runner_write_ppm(&surface, output_path)) {
+    if (!sslab_write_review_ppm(&surface, output_path)) {
         nocturne_destroy_session(session);
         screensave_rgba8_surface_dispose(&surface);
         fprintf(stderr, "could not write output capture\n");

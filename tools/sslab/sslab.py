@@ -18,11 +18,23 @@ DEFAULT_COMPARISON = ROOT / "out" / "proof" / "sslab-compare" / "comparison.json
 RUNNER = ROOT / "tools" / "sslab" / "nocturne_canary_runner.c"
 SURFACE = ROOT / "platform" / "src" / "surface" / "rgba8" / "surface_rgba8.c"
 SOFT_RENDERER = ROOT / "platform" / "src" / "render" / "soft" / "soft_renderer.c"
+SSLAB_CAPTURE = ROOT / "tools" / "sslab" / "src" / "capture.c"
+SSLAB_RENDERER_RGBA8 = ROOT / "tools" / "sslab" / "src" / "renderer_rgba8.c"
 NOCTURNE_SIM = ROOT / "products" / "savers" / "nocturne" / "src" / "nocturne_sim.c"
 NOCTURNE_RENDER = ROOT / "products" / "savers" / "nocturne" / "src" / "nocturne_render.c"
 NOCTURNE_THEMES = ROOT / "products" / "savers" / "nocturne" / "src" / "nocturne_themes.c"
 NOCTURNE_PRESETS = ROOT / "products" / "savers" / "nocturne" / "src" / "nocturne_presets.c"
-RUNNER_SOURCES = [RUNNER, NOCTURNE_SIM, NOCTURNE_RENDER, NOCTURNE_THEMES, NOCTURNE_PRESETS, SURFACE, SOFT_RENDERER]
+RUNNER_SOURCES = [
+    RUNNER,
+    SSLAB_CAPTURE,
+    SSLAB_RENDERER_RGBA8,
+    NOCTURNE_SIM,
+    NOCTURNE_RENDER,
+    NOCTURNE_THEMES,
+    NOCTURNE_PRESETS,
+    SURFACE,
+    SOFT_RENDERER,
+]
 
 
 def display_path(path: pathlib.Path) -> str:
@@ -58,6 +70,8 @@ def compile_nocturne_runner(output_exe: pathlib.Path) -> None:
             "-Wextra",
             "-I",
             str(ROOT / "platform" / "include"),
+            "-I",
+            str(ROOT / "tools" / "sslab" / "src"),
             "-I",
             str(ROOT / "products" / "savers" / "nocturne" / "src"),
             *(str(path) for path in RUNNER_SOURCES),
