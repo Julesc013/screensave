@@ -1,0 +1,54 @@
+schema_version = 1
+
+[[proof_profiles]]
+key = "nocturne.reference.v0"
+status = "implemented"
+product = "nocturne"
+preset = "observatory_night"
+width = 96
+height = 54
+resize_width = 80
+resize_height = 45
+seed = 1536
+delta_ms = 100
+capture_frames = [8]
+comparison_class = "exact"
+lifecycle = ["create", "resize", "step", "render", "destroy"]
+artifact_sets = ["windows_current_x86_scr"]
+baseline_capture = "validation/captures/proof-kernel-v0/nocturne/capture.ppm"
+baseline_proof = "validation/captures/proof-kernel-v0/nocturne/proof.json"
+claim_boundary = "deterministic canary proof; not compatibility certification or artistic acceptance"
+
+[[proof_profiles]]
+key = "ricochet.reference.v1"
+status = "planned"
+product = "ricochet"
+preset = "defaults"
+width = 128
+height = 72
+resize_width = 96
+resize_height = 54
+seed = 2048
+delta_ms = 100
+capture_frames = [0, 4, 8, 32]
+comparison_class = "exact"
+lifecycle = ["create", "resize", "step", "render", "destroy"]
+artifact_sets = ["windows_current_x86_scr"]
+claim_boundary = "planned second canary; no proof claim until implemented"
+
+[[proof_profiles]]
+key = "plasma.v2.reference.preview"
+status = "planned"
+product = "plasma"
+preset = "plasma_lava"
+width = 160
+height = 90
+resize_width = 128
+resize_height = 72
+seed = 4096
+delta_ms = 100
+capture_frames = [0, 8, 32, 90]
+comparison_class = "exact"
+lifecycle = ["create", "resize", "step", "render", "destroy"]
+artifact_sets = ["windows_current_x86_scr"]
+claim_boundary = "planned Plasma v2 reference profile; no stable promotion until implemented"

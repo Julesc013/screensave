@@ -82,6 +82,8 @@ def validate_state(state: dict) -> list[str]:
     for label, value in (
         ("authority.product_catalog", authority.get("product_catalog")),
         ("authority.artifact_profiles", authority.get("artifact_profiles")),
+        ("authority.artifact_sets", authority.get("artifact_sets")),
+        ("authority.proof_profiles", authority.get("proof_profiles")),
         ("authority.product_doctrine", authority.get("product_doctrine")),
         ("authority.product_architecture", authority.get("product_architecture")),
         ("authority.generated_catalog_inventory", authority.get("generated_catalog_inventory")),
@@ -143,6 +145,8 @@ def validate_state(state: dict) -> list[str]:
     for label, value in (
         ("catalog.source", catalog_state.get("source")),
         ("catalog.artifact_profiles", catalog_state.get("artifact_profiles")),
+        ("catalog.artifact_sets", catalog_state.get("artifact_sets")),
+        ("catalog.proof_profiles", catalog_state.get("proof_profiles")),
         ("catalog.generator", catalog_state.get("generator")),
         ("catalog.generated_inventory", catalog_state.get("generated_inventory")),
         ("catalog.generated_sources", catalog_state.get("generated_sources")),
@@ -214,6 +218,8 @@ def validate_version_manifest(state: dict, version: dict, catalog: dict, errors:
     require(version_schemas.get("product_architecture") == 1, "VERSION.toml schemas.product_architecture must be 1.", errors)
     require(version_schemas.get("project_adapter") == 1, "VERSION.toml schemas.project_adapter must be 1.", errors)
     require(version_schemas.get("visual_intent") == 1, "VERSION.toml schemas.visual_intent must be 1.", errors)
+    require(version_schemas.get("artifact_sets") == 1, "VERSION.toml schemas.artifact_sets must be 1.", errors)
+    require(version_schemas.get("proof_profiles") == 1, "VERSION.toml schemas.proof_profiles must be 1.", errors)
     require_path(version.get("contracts", {}).get("product_architecture"), "VERSION.toml contracts.product_architecture", errors)
     require_path(version.get("contracts", {}).get("visual_intent"), "VERSION.toml contracts.visual_intent", errors)
     require(version_proof.get("policy") == compatibility.get("policy"), "VERSION.toml proof.policy must match PROJECT_STATE compatibility.policy.", errors)

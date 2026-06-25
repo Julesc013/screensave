@@ -34,6 +34,7 @@ jobs:
       - name: Validate catalog authority
         run: |
           python tools/scripts/check_catalog_profiles.py
+          python tools/scripts/check_artifact_sets.py
           python tools/scripts/check_catalog_generated.py
 
       - name: Validate contracts and product architecture

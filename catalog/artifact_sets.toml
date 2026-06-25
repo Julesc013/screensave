@@ -1,0 +1,83 @@
+schema_version = 1
+
+[[artifact_sets]]
+key = "windows_preservation_x86_ansi_core"
+artifact_profile = "windows_preservation_x86_ansi"
+build_lane = "portable-c16-baseline"
+root = "out/portable/screensave-core-c16-baseline"
+path_template = "SAVERS/{product}.scr"
+machine = "x86"
+pe_format = "PE32"
+extension = ".scr"
+expected_count = 19
+expected_products = [
+  "nocturne",
+  "ricochet",
+  "deepfield",
+  "plasma",
+  "phosphor",
+  "pipeworks",
+  "lifeforms",
+  "signals",
+  "mechanize",
+  "ecosystems",
+  "stormglass",
+  "transit",
+  "observatory",
+  "vector",
+  "explorer",
+  "city",
+  "atlas",
+  "gallery",
+  "anthology",
+]
+claim_boundary = "binary facts only; not preservation certification"
+
+[[artifact_sets]]
+key = "windows_current_x86_scr"
+artifact_profile = "windows_current_x86_scr"
+build_lane = "msvc-vs2022-release-win32"
+root = "out/msvc/vs2022/Release"
+path_template = "{product}/{product}.scr"
+machine = "x86"
+pe_format = "PE32"
+extension = ".scr"
+expected_count = 19
+expected_products = [
+  "nocturne",
+  "ricochet",
+  "deepfield",
+  "plasma",
+  "phosphor",
+  "pipeworks",
+  "lifeforms",
+  "signals",
+  "mechanize",
+  "ecosystems",
+  "stormglass",
+  "transit",
+  "observatory",
+  "vector",
+  "explorer",
+  "city",
+  "atlas",
+  "gallery",
+  "anthology",
+]
+claim_boundary = "binary facts only; not current Windows certification"
+
+[[artifact_sets]]
+key = "windows_current_tools"
+artifact_profile = "windows_current_tool"
+build_lane = "msvc-vs2022-release-win32"
+root = "out/msvc/vs2022/Release"
+path_template = "{product}/{product}.exe"
+machine = "x86"
+pe_format = "PE32"
+extension = ".exe"
+expected_count = 2
+expected_products = [
+  "suite",
+  "benchlab",
+]
+claim_boundary = "binary facts only; optional tools are not saver runtime dependencies"

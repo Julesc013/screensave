@@ -10,6 +10,7 @@ Current stage:
 - `check_build_layout.py` validates the checked-in build scaffold and target relationships.
 - `check_project_state.py` validates `PROJECT_STATE.toml`, `VERSION.toml`, linked authority files, and prints the current released/development/queue/compatibility state with `--summary`.
 - `check_catalog_profiles.py` validates `catalog/products.toml`, `catalog/artifact_profiles.toml`, product artifact-profile references, and evidence-status vocabulary.
+- `check_artifact_sets.py` validates `catalog/artifact_sets.toml`, `catalog/proof_profiles.toml`, and the artifact manifest tool boundary.
 - `check_catalog_generated.py` verifies that committed `catalog/generated/` inventory outputs match `tools/cataloggen/cataloggen.py`.
 - `check_aide_pilot.py` validates the report-only `.aide/` pilot, fixed-command bridge admission plan, ignored local state, linked work-unit/evidence paths, and the no-product-runtime-dependency boundary.
 - `check_contracts.py` validates the ScreenSave doctrine, portable-semantics, renderer-alias, proof-bundle, proof-kernel, and project-adapter contract scaffolding.
