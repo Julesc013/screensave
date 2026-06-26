@@ -1,29 +1,33 @@
 schema_version: aide.test-tiers-policy.v0
 policy_id: aide.validation-tiers.v0
-status: active-pending-review
-mode: portable_report_only
+status: active
+mode: screensave_fixed_commands
 
 tiers:
   T0:
-    name: smoke_syntax_policy_architecture
-    purpose: Fast checks for syntax, policy anchors, architecture boundaries, and no-call posture.
+    name: screensave_authority_and_syntax
+    purpose: Fast ScreenSave authority, contract, docs, AIDE pilot, and whitespace checks.
     normal_post_task: true
     promotion_gate: false
+    command: py -3 tools/project_adapter/screensave_project.py validate --tier T0
   T1:
-    name: impacted_tests
-    purpose: Changed-path-driven tests selected by impacted-test planning.
+    name: screensave_affected_subsystem
+    purpose: Changed-area checks for catalogs, adapter, libsslab, proof bundle, proof kernel, and Workbench shell.
     normal_post_task: true
     promotion_gate: false
+    command: py -3 tools/project_adapter/screensave_project.py validate --tier T1
   T2:
-    name: component_integration
-    purpose: Component and integration suites relevant to larger changes.
+    name: screensave_full_local_project_gate
+    purpose: Full local check-script sweep plus fixed Nocturne and Ricochet proof profiles.
     normal_post_task: false
     promotion_gate: conditional
+    command: py -3 tools/project_adapter/screensave_project.py validate --tier T2
   T3:
-    name: full_promotion_suite
-    purpose: Full discovery for checkpoint, promotion, and release gates.
+    name: screensave_native_and_extended_evidence
+    purpose: Native Windows builds, exact manifests, PE audit, proof normalization, soak, and release evidence.
     normal_post_task: false
     promotion_gate: true
+    command: operator-scheduled native evidence gate; not an admitted AIDE fixed capability
 
 defaults:
   normal_post_task:
@@ -44,4 +48,5 @@ rules:
   must_not_overwrite_target_manifests: true
   no_target_execution_in_cross_repo_audits: true
   full_suite_is_t3_not_normal_default: true
-  report_only_until_target_adoption: true
+  generic_command_capability_forbidden: true
+  t3_not_admitted_as_aide_fixed_capability: true

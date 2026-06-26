@@ -198,7 +198,10 @@ def main() -> int:
         "screensave.project.status",
         "screensave.project.capabilities",
         "screensave.catalog.read",
-        "screensave.validation.core",
+        "screensave.profiles.read",
+        "screensave.validation.t0",
+        "screensave.validation.t1",
+        "screensave.validation.t2",
     }:
         require(
             capability_status.get(name) == "screensave-side-admitted-read-only",
@@ -211,7 +214,10 @@ def main() -> int:
         "screensave.proof.nocturne.render",
         "screensave.proof.capture.compare",
         "screensave.artifact.pe.audit",
-        "screensave.proof.nocturne.exact",
+        "screensave.proof.nocturne.reference-v0",
+        "screensave.proof.ricochet.reference-v1",
+        "screensave.bundle.nocturne.reference-v0",
+        "screensave.bundle.ricochet.reference-v1",
     }:
         require(
             capability_status.get(name) == "screensave-side-admitted-contained-output",

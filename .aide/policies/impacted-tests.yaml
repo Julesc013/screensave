@@ -1,52 +1,75 @@
 schema_version: aide.impacted-tests-policy.v0
 policy_id: aide.impacted-test-planning.v0
-status: active-pending-review
-mode: report_only
+status: active
+mode: screensave_report_first_fixed_commands
 
 planning:
   proof_status: plan_not_proof
   changed_path_source: git diff --name-only <from>...HEAD
-  target_test_execution: false
+  target_test_execution: fixed_commands_only
   target_specific_preservation: true
   must_not_overwrite_target_manifests: true
 
 mappings:
   - path_prefix: .aide/
-    tier: T1
-    test_roots: [.aide/scripts/tests, .aide/evals/golden-tasks]
+    tier: T0
+    test_roots: [.aide, tools/aideops, tools/scripts]
     commands:
       - py -3 .aide/scripts/aide_lite.py validate
-      - py -3 -m unittest discover -s .aide/scripts/tests
-      - py -3 .aide/scripts/aide_lite.py eval run
-  - path_prefix: core/harness/
-    tier: T2
-    test_roots: [core/harness/tests]
+      - py -3 tools/scripts/check_aide_pilot.py
+      - py -3 tools/scripts/check_aide_operational.py
+  - path_prefix: tools/aideops/
+    tier: T0
+    test_roots: [tools/aideops, tools/scripts]
     commands:
-      - py -3 -m unittest discover -s core/harness/tests -t .
-  - path_prefix: core/compat/
-    tier: T2
-    test_roots: [core/compat/tests]
+      - py -3 tools/scripts/check_aide_operational.py
+      - py -3 tools/aideops/screensave_aide.py --dry-run bootstrap
+  - path_prefix: tools/project_adapter/
+    tier: T1
+    test_roots: [tools/project_adapter, contracts/project_adapter_v0.md]
     commands:
-      - py -3 -m unittest discover -s core/compat/tests -t .
-  - path_prefix: core/gateway/
-    tier: T2
-    test_roots: [core/gateway/tests]
+      - py -3 tools/scripts/check_project_adapter.py
+      - py -3 tools/project_adapter/screensave_project.py validate --tier T1
+  - path_prefix: tools/sslab/
+    tier: T1
+    test_roots: [tools/sslab, tools/scripts]
     commands:
-      - py -3 -m unittest discover -s core/gateway/tests -t .
-  - path_prefix: core/providers/
-    tier: T2
-    test_roots: [core/providers/tests]
+      - py -3 tools/scripts/check_sslab_runner.py
+      - py -3 tools/scripts/check_proof_kernel.py
+  - path_prefix: catalog/
+    tier: T1
+    test_roots: [catalog, tools/cataloggen]
     commands:
-      - py -3 -m unittest discover -s core/providers/tests -t .
+      - py -3 tools/scripts/check_catalog_generated.py
+      - py -3 tools/scripts/check_artifact_sets.py
+  - path_prefix: validation/captures/
+    tier: T1
+    test_roots: [validation/captures, tools/sslab]
+    commands:
+      - py -3 tools/scripts/check_proof_kernel.py
+      - py -3 tools/scripts/check_proof_bundle_v1.py
   - path_prefix: docs/
     tier: T1
-    test_roots: [docs/reference]
+    test_roots: [docs, contracts, specs]
     commands:
-      - py -3 .aide/scripts/aide_lite.py validate
+      - py -3 tools/scripts/check_docs_basics.py
+      - py -3 tools/scripts/check_contracts.py
+  - path_prefix: platform/include/screensave/v2/
+    tier: T2
+    test_roots: [platform/include/screensave/v2, products/savers/nocturne, products/savers/ricochet]
+    commands:
+      - py -3 tools/scripts/check_portable_v2.py
+      - py -3 tools/project_adapter/screensave_project.py validate --tier T2
+  - path_prefix: platform/include/screensave/v2.h
+    tier: T2
+    test_roots: [platform/include/screensave/v2.h, platform/include/screensave/v2, products/savers/nocturne, products/savers/ricochet]
+    commands:
+      - py -3 tools/scripts/check_portable_v2.py
+      - py -3 tools/project_adapter/screensave_project.py validate --tier T2
 
 fallback:
   unknown_mapping: true
-  recommended_tier: T2
+  recommended_tier: T1
   commands:
-    - py -3 .aide/scripts/aide_lite.py validate
+    - py -3 tools/project_adapter/screensave_project.py validate --tier T1
   warning: unknown_mapping

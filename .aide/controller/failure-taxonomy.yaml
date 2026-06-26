@@ -1,0 +1,56 @@
+schema_version: aide.failure-taxonomy.v0
+taxonomy_id: screensave-aide-controller-failure-taxonomy-v0
+status: active
+source:
+  imported_aide_lite_commit: 492faa4f1a8280ba67954aa4fc252e79f2e19c15
+  local_owner: ScreenSave
+  source_policy_ref: .aide/policies/controller.yaml
+classes:
+  - id: context_missing
+    severity: warning
+    meaning: Required context, map, index, or packet artifacts are missing.
+  - id: packet_too_large
+    severity: warning
+    meaning: A compact packet or review surface exceeded its local budget.
+  - id: token_budget_exceeded
+    severity: error
+    meaning: Token accounting exceeded a hard local budget.
+  - id: token_regression
+    severity: warning
+    meaning: Token accounting regressed against a named baseline.
+  - id: adapter_drift
+    severity: warning
+    meaning: Generated or managed adapter guidance is stale.
+  - id: verifier_gap
+    severity: warning
+    meaning: Verification evidence is missing or incomplete.
+  - id: verifier_fail
+    severity: error
+    meaning: Verification evidence failed a deterministic check.
+  - id: review_packet_incomplete
+    severity: warning
+    meaning: The review packet is missing required decision or evidence fields.
+  - id: golden_task_fail
+    severity: error
+    meaning: A deterministic golden task failed or has no current passing report.
+  - id: unclear_acceptance
+    severity: warning
+    meaning: Acceptance criteria are missing, vague, or not tied to evidence.
+  - id: validation_failure
+    severity: error
+    meaning: A local validation command failed.
+  - id: policy_violation
+    severity: error
+    meaning: A repository policy or boundary was violated.
+  - id: stale_artifact
+    severity: warning
+    meaning: A generated artifact no longer matches its source inputs.
+  - id: missing_evidence
+    severity: warning
+    meaning: Required evidence references are absent.
+  - id: secret_risk
+    severity: error
+    meaning: A surface appears to expose secret-like or local-only data.
+  - id: unknown
+    severity: info
+    meaning: The condition is known but not yet classified more precisely.

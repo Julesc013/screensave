@@ -1,7 +1,7 @@
 schema_version: aide.validation-promotion-gates-policy.v0
 policy_id: aide.validation-promotion-gates.v0
-status: active-pending-review
-mode: report_only
+status: active
+mode: screensave_fixed_commands_plus_operator_evidence
 
 gates:
   normal_post_task:
@@ -17,8 +17,13 @@ gates:
     required: [T0, T1, relevant_T2, T3]
 
 rules:
-  T3: full_promotion_suite
+  T3: screensave_native_and_extended_evidence
   T3_not_normal_post_task: true
+  T3_requires_operator_scheduled_native_evidence: true
   full_discovery_handoff_allowed: true
   promotion_evidence_blocked_when_t3_missing_or_stale: true
   no_target_execution_in_cross_repo_audits: true
+  deterministic_proof_does_not_imply_artistic_acceptance: true
+  pe_audit_does_not_imply_os_certification: true
+  portable_v2_native_type_scan_required: true
+  portable_v2_struct_prefix_scan_required: true

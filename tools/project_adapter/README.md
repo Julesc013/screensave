@@ -9,30 +9,40 @@ Commands:
 python tools\project_adapter\screensave_project.py status
 python tools\project_adapter\screensave_project.py capabilities
 python tools\project_adapter\screensave_project.py catalog
-python tools\project_adapter\screensave_project.py validate
+python tools\project_adapter\screensave_project.py profiles
+python tools\project_adapter\screensave_project.py validate --tier T0
+python tools\project_adapter\screensave_project.py validate --tier T1
+python tools\project_adapter\screensave_project.py validate --tier T2
 python tools\project_adapter\screensave_project.py build --profile windows-current-x86 --invocation-id local-build
 python tools\project_adapter\screensave_project.py render --invocation-id local-render
 python tools\project_adapter\screensave_project.py compare --actual validation\captures\proof-kernel-v0\nocturne\capture.ppm
 python tools\project_adapter\screensave_project.py audit --artifact-profile windows_current_x86_scr
-python tools\project_adapter\screensave_project.py proof --invocation-id local-proof
+python tools\project_adapter\screensave_project.py proof --profile nocturne.reference.v0 --invocation-id local-proof
+python tools\project_adapter\screensave_project.py proof --profile ricochet.reference.v1 --invocation-id local-proof
+python tools\project_adapter\screensave_project.py bundle --profile nocturne.reference.v0 --invocation-id local-bundle
+python tools\project_adapter\screensave_project.py bundle --profile ricochet.reference.v1 --invocation-id local-bundle
 ```
 
 The adapter reports JSON receipts. It delegates to ScreenSave validators,
 fixed build profiles, and `sslab`; it does not edit code, merge branches,
 certify compatibility, publish releases, or make AIDE part of saver runtime.
 
+The `validate` command accepts fixed tiers only. `T0` covers authority, syntax,
+docs, AIDE pilot, and whitespace checks. `T1` includes `T0` and adds affected
+catalog, adapter, `libsslab`, proof, and Workbench checks. `T2` includes `T0`
+and `T1` and adds the portable v2 header seam check, the full local project
+gate, plus fixed Nocturne and Ricochet profile proofs. T3 remains an
+operator-scheduled native evidence gate, not an admitted AIDE fixed capability.
+
 The `build` command accepts named profiles only. Current profiles are
 `windows-current-x86` and `windows-current-tools`; callers cannot provide
 arbitrary MSBuild, compiler, linker, or output arguments. Dry-run receipts prove
 the admitted command plan but are not build evidence.
 
-The `proof` command is a combined Nocturne v0 receipt: deterministic render,
-exact capture comparison, artifact-profile PE audit facts, and an artifact
-manifest. The PE audit facts are binary evidence only; they are not operating
-system compatibility certification.
-Proof receipts include the PE audit JSON result and require a nonzero audited
-artifact count. Missing artifact roots or zero discovered binaries are reported
-as `blocked` rather than as an empty passing proof.
+The `profiles` command reports the fixed admitted proof profile keys. The
+`proof` and `bundle` commands accept only `nocturne.reference.v0` and
+`ricochet.reference.v1`. They do not expose `screensave.proof.any-profile` or
+arbitrary command execution.
 
 Generated-output commands use contained invocation roots under
 `out/aide/screensave-project-adapter/invocations/`. Callers provide a sanitized

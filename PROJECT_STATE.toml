@@ -134,6 +134,9 @@ status = "active"
 milestone = "portable-v2-seam"
 gate = "PAW-C"
 contract = "contracts/portable_semantics_v2.md"
+public_headers = "platform/include/screensave/v2"
+public_aggregate_header = "platform/include/screensave/v2.h"
+validator = "tools/scripts/check_portable_v2.py"
 proof_dependency = "proof-kernel-v1-ricochet"
 porting_products = ["nocturne", "ricochet"]
 compatibility_adapter = "v1-win32-public-host-preserved"
@@ -148,6 +151,22 @@ work_units = [
   "SS-PV2-06 route libsslab and Workbench through v2",
   "SS-PV2-07 native build and CI regression",
   "SS-PV2-08 independent check and Gate C acceptance",
+]
+implemented = [
+  "host-neutral fixed-width v2 base aliases and width guards",
+  "v2 size/version-prefixed public structures for types, clock, seed, diagnostics, config, surface, draw, product, and session descriptors",
+  "v2 aggregate public header",
+  "portable v2 deterministic header validator",
+]
+remaining = [
+  "generic v1 compatibility adapter runtime",
+  "Nocturne portable v2 product core",
+  "Ricochet portable v2 product core",
+  "libsslab ABI v1 over portable v2",
+  "v1/v2 exact equivalence proof",
+  "Workbench v2 inspection",
+  "CI portable v2 and native compatibility gates",
+  "Gate C independent acceptance",
 ]
 required_boundaries = [
   "no Windows types in v2 headers",
@@ -192,7 +211,7 @@ command = "tools/project_adapter/screensave_project.py"
 capability_bindings = "tools/project_adapter/capability_bindings.json"
 receipt_schemas = "tools/project_adapter/receipt_schemas.json"
 artifact_profile_audit_roots = "tools/project_adapter/artifact_profile_audit_roots.json"
-commands = ["status", "capabilities", "catalog", "validate", "build", "render", "compare", "audit", "proof"]
+commands = ["status", "capabilities", "catalog", "profiles", "validate", "build", "render", "compare", "audit", "proof", "bundle"]
 output_root = "out/aide/screensave-project-adapter/invocations"
 policy = "project-owned adapter for AIDE-compatible coordination; fixed capabilities, fixed build profiles, contained generated-output roots under out/aide, artifact-profile audit roots, typed refusals, and no source mutation, merge, release, compatibility certification, or artistic acceptance"
 
@@ -308,3 +327,4 @@ proof_kernel = "tools/scripts/check_proof_kernel.py"
 compiled_nocturne_runner = "tools/scripts/check_compiled_nocturne_runner.py"
 project_adapter = "tools/scripts/check_project_adapter.py"
 workbench_shell = "tools/scripts/check_workbench_shell.py"
+portable_v2 = "tools/scripts/check_portable_v2.py"

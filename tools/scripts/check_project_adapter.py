@@ -36,12 +36,16 @@ REQUIRED_TEXT = {
         "def command_status",
         "def command_capabilities",
         "def command_catalog",
+        "def command_profiles",
         "def command_validate",
+        "VALIDATION_TIERS",
+        "ADMITTED_PROOF_PROFILES",
         "def command_build",
         "def command_render",
         "def command_compare",
         "def command_audit",
         "def command_proof",
+        "def command_bundle",
         "APPROVED_COMPARE_INPUT_ROOTS",
         "ARTIFACT_PROFILE_AUDIT_ROOTS",
         "def resolve_audit_profiles",
@@ -51,12 +55,14 @@ REQUIRED_TEXT = {
         "status",
         "capabilities",
         "catalog",
+        "profiles",
         "validate",
         "build",
         "render",
         "compare",
         "audit",
         "proof",
+        "bundle",
         "AIDE may consume receipts",
         "tools/project_adapter/capability_bindings.json",
         "tools/project_adapter/receipt_schemas.json",
@@ -128,13 +134,19 @@ def main() -> int:
         require("screensave.project.status" in names, "capabilities must include screensave.project.status.", errors)
         require("screensave.project.capabilities" in names, "capabilities must include screensave.project.capabilities.", errors)
         require("screensave.catalog.read" in names, "capabilities must include screensave.catalog.read.", errors)
-        require("screensave.validation.core" in names, "capabilities must include screensave.validation.core.", errors)
+        require("screensave.profiles.read" in names, "capabilities must include screensave.profiles.read.", errors)
+        require("screensave.validation.t0" in names, "capabilities must include screensave.validation.t0.", errors)
+        require("screensave.validation.t1" in names, "capabilities must include screensave.validation.t1.", errors)
+        require("screensave.validation.t2" in names, "capabilities must include screensave.validation.t2.", errors)
         require("screensave.build.windows-current-x86" in names, "capabilities must include screensave.build.windows-current-x86.", errors)
         require("screensave.build.windows-current-tools" in names, "capabilities must include screensave.build.windows-current-tools.", errors)
         require("screensave.proof.nocturne.render" in names, "capabilities must include screensave.proof.nocturne.render.", errors)
         require("screensave.proof.capture.compare" in names, "capabilities must include screensave.proof.capture.compare.", errors)
         require("screensave.artifact.pe.audit" in names, "capabilities must include screensave.artifact.pe.audit.", errors)
-        require("screensave.proof.nocturne.exact" in names, "capabilities must include screensave.proof.nocturne.exact.", errors)
+        require("screensave.proof.nocturne.reference-v0" in names, "capabilities must include screensave.proof.nocturne.reference-v0.", errors)
+        require("screensave.proof.ricochet.reference-v1" in names, "capabilities must include screensave.proof.ricochet.reference-v1.", errors)
+        require("screensave.bundle.nocturne.reference-v0" in names, "capabilities must include screensave.bundle.nocturne.reference-v0.", errors)
+        require("screensave.bundle.ricochet.reference-v1" in names, "capabilities must include screensave.bundle.ricochet.reference-v1.", errors)
         require(
             capabilities.get("payload", {}).get("output_root") == "out/aide/screensave-project-adapter/invocations",
             "capabilities must expose the contained invocation output root.",
@@ -187,8 +199,27 @@ def main() -> int:
         catalog = run_adapter(["catalog"])
         require(catalog.get("payload", {}).get("saver_count", 0) >= 19, "adapter catalog must report current saver family.", errors)
 
+        profiles = run_adapter(["profiles"])
+        admitted_profiles = {item.get("key") for item in profiles.get("payload", {}).get("admitted_profiles", [])}
+        require(
+            admitted_profiles == {"nocturne.reference.v0", "ricochet.reference.v1"},
+            "adapter profiles must expose only fixed Nocturne and Ricochet proof profiles.",
+            errors,
+        )
+        require(
+            "screensave.proof.any-profile" in profiles.get("payload", {}).get("refusals", []),
+            "adapter profiles must explicitly refuse any-profile proof capability.",
+            errors,
+        )
+
         validation = run_adapter(["validate"])
         require(validation.get("status") == "pass", "adapter validate must pass.", errors)
+        require(validation.get("payload", {}).get("tier") == "T0", "adapter validate default tier must be T0.", errors)
+        require(
+            validation.get("payload", {}).get("command_binding", {}).get("capability") == "screensave.validation.t0",
+            "adapter validate default command binding must report screensave.validation.t0.",
+            errors,
+        )
 
         build = run_adapter(["build", "--invocation-id", "check-build", "--profile", "windows-current-x86", "--dry-run"])
         require(build.get("status") == "informational", "adapter build dry-run must be informational.", errors)
@@ -241,50 +272,48 @@ def main() -> int:
         require(audit.get("payload", {}).get("audit_status") == "informational", "adapter audit must preserve PE audit status.", errors)
         require(audit.get("payload", {}).get("missing_inputs") == [], "adapter audit must report no missing inputs for the current profile.", errors)
 
-        proof = run_adapter(["proof", "--invocation-id", "check-proof"])
+        proof = run_adapter(["proof", "--invocation-id", "check-proof-nocturne", "--profile", "nocturne.reference.v0"])
         require(proof.get("status") == "pass", "adapter proof must pass.", errors)
+        require(
+            proof.get("payload", {}).get("capability") == "screensave.proof.nocturne.reference-v0",
+            "adapter proof must report the Nocturne fixed profile capability.",
+            errors,
+        )
+        require(proof.get("payload", {}).get("profile_proof_status") == "pass", "adapter proof profile status must pass.", errors)
         require(proof.get("payload", {}).get("comparison_status") == "pass", "adapter proof comparison must pass.", errors)
+        require(proof.get("payload", {}).get("lifecycle_status") == "pass", "adapter proof lifecycle must pass.", errors)
         require(
-            proof.get("payload", {}).get("pe_audit_artifact_profiles") == ["windows_current_x86_scr"],
-            "adapter proof must include the selected PE audit artifact profile.",
-            errors,
-        )
-        require(
-            proof.get("payload", {}).get("pe_audit_claim_boundary") == "binary facts only; not compatibility certification",
-            "adapter proof PE audit facts must preserve the compatibility claim boundary.",
-            errors,
-        )
-        require(
-            isinstance(proof.get("payload", {}).get("pe_audit_violation_count"), int),
-            "adapter proof must include a numeric PE audit violation count.",
-            errors,
-        )
-        require(
-            proof.get("payload", {}).get("pe_audit_artifact_count", 0) > 0,
-            "adapter proof must include a nonzero PE artifact count.",
-            errors,
-        )
-        require(
-            proof.get("payload", {}).get("pe_audit_status") == "informational",
-            "adapter proof must preserve the structured PE audit status.",
-            errors,
-        )
-        require(
-            proof.get("payload", {}).get("pe_audit_missing_inputs") == [],
-            "adapter proof must report no missing PE audit inputs for the current profile.",
+            "artistic acceptance" in str(proof.get("payload", {}).get("claim_boundary", "")),
+            "adapter proof must preserve the proof claim boundary.",
             errors,
         )
         proof_dir = repo_ref_to_path(proof.get("payload", {}).get("output_dir", ""))
         require((proof_dir / "adapter-proof.json").exists(), "adapter proof must write adapter-proof.json.", errors)
         require((proof_dir / "artifact-manifest.json").exists(), "adapter proof must write artifact-manifest.json.", errors)
         require(
-            repo_ref_to_path(proof.get("payload", {}).get("pe_audit_ref", "")).exists(),
-            "adapter proof must write a PE audit report.",
+            repo_ref_to_path(proof.get("payload", {}).get("profile_proof_ref", "")).exists(),
+            "adapter proof must write profile-proof.json.",
+            errors,
+        )
+
+        ricochet_proof = run_adapter(["proof", "--invocation-id", "check-proof-ricochet", "--profile", "ricochet.reference.v1"])
+        require(ricochet_proof.get("status") == "pass", "adapter Ricochet proof must pass.", errors)
+        require(
+            ricochet_proof.get("payload", {}).get("capability") == "screensave.proof.ricochet.reference-v1",
+            "adapter Ricochet proof must report the fixed profile capability.",
+            errors,
+        )
+
+        bundle = run_adapter(["bundle", "--invocation-id", "check-bundle-ricochet", "--profile", "ricochet.reference.v1"])
+        require(bundle.get("status") == "pass", "adapter Ricochet bundle must pass.", errors)
+        require(
+            bundle.get("payload", {}).get("capability") == "screensave.bundle.ricochet.reference-v1",
+            "adapter bundle must report the fixed Ricochet bundle capability.",
             errors,
         )
         require(
-            repo_ref_to_path(proof.get("payload", {}).get("pe_audit_json_ref", "")).exists(),
-            "adapter proof must write a PE audit JSON report.",
+            repo_ref_to_path(bundle.get("payload", {}).get("proof_bundle_ref", "")).exists(),
+            "adapter bundle must write proof-bundle-v1.json.",
             errors,
         )
 

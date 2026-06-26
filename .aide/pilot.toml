@@ -71,12 +71,21 @@ pe_audit = "tools/scripts/audit_pe_artifacts.py"
 aide_pilot = "tools/scripts/check_aide_pilot.py"
 contracts = "tools/scripts/check_contracts.py"
 compiled_nocturne_runner = "tools/scripts/check_compiled_nocturne_runner.py"
+aide_operational = "tools/scripts/check_aide_operational.py"
+aide_evidence_bridge = "tools/scripts/check_aide_evidence_bridge.py"
+portable_v2 = "tools/scripts/check_portable_v2.py"
 
 [[work_units]]
 id = "SS-TRUTH-000"
 title = "Truth and proof baseline"
 status = "active"
 path = ".aide/work_units/truth-proof-baseline.toml"
+
+[[work_units]]
+id = "SS-PAW-CX-000"
+title = "AIDE-operational portable v2"
+status = "active"
+path = ".aide/work_units/paw-cx-portable-v2.toml"
 
 [[evidence_packets]]
 id = "SS-EVIDENCE-PE-000"

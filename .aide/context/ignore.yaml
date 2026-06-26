@@ -1,0 +1,23 @@
+schema_version: aide.context-ignore.v0
+policy_id: screensave-context-ignore-v0
+status: active
+purpose: Exclude local state, secrets, caches, dependency trees, generated outputs, and build products from AIDE Lite context packing.
+exclude:
+  - .git/**
+  - .env
+  - secrets/**
+  - .aide.local/**
+  - __pycache__/**
+  - .pytest_cache/**
+  - .mypy_cache/**
+  - .ruff_cache/**
+  - node_modules/**
+  - dist/**
+  - build/**
+  - out/**
+  - tmp/**
+  - bin/**
+  - obj/**
+  - Debug/**
+  - Release/**
+  - x64/**

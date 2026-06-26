@@ -17,12 +17,15 @@ The v0 adapter command set is:
   program, release posture, and proof-kernel location.
 - `capabilities`: report admitted adapter operations and their boundaries.
 - `catalog`: report the committed generated product inventory.
-- `validate`: run a bounded ScreenSave-owned validation ladder.
+- `profiles`: report fixed admitted proof profile keys.
+- `validate`: run a fixed ScreenSave-owned validation tier.
 - `build`: run a named fixed ScreenSave build profile.
 - `render`: run the Proof Kernel v0 Nocturne canary render.
 - `compare`: compare proof-kernel captures using `sslab`.
 - `audit`: run the ScreenSave PE artifact audit and report binary facts.
-- `proof`: run the Proof Kernel v0 Nocturne canary and exact comparison.
+- `proof`: run a fixed Nocturne or Ricochet catalog proof profile.
+- `bundle`: normalize a fixed Nocturne or Ricochet catalog proof profile as
+  Proof Bundle v1.
 
 ## Fixed Capability Bindings
 
@@ -38,13 +41,19 @@ External coordinators must bind to these fixed capabilities, not to an open
 - `screensave.project.status`
 - `screensave.project.capabilities`
 - `screensave.catalog.read`
-- `screensave.validation.core`
+- `screensave.profiles.read`
+- `screensave.validation.t0`
+- `screensave.validation.t1`
+- `screensave.validation.t2`
 - `screensave.build.windows-current-x86`
 - `screensave.build.windows-current-tools`
 - `screensave.proof.nocturne.render`
 - `screensave.proof.capture.compare`
 - `screensave.artifact.pe.audit`
-- `screensave.proof.nocturne.exact`
+- `screensave.proof.nocturne.reference-v0`
+- `screensave.proof.ricochet.reference-v1`
+- `screensave.bundle.nocturne.reference-v0`
+- `screensave.bundle.ricochet.reference-v1`
 
 Each capability has a declared argv shape, decoder schema, mutation policy,
 output policy, timeout, and state probe. Changes to this file are project
@@ -54,8 +63,8 @@ contract changes and must be reviewed as such.
 
 The ScreenSave-side admission classes are:
 
-- read-only fixed commands: `status`, `capabilities`, `catalog`, and
-  `validate`
+- read-only fixed commands: `status`, `capabilities`, `catalog`, and fixed
+  `validate --tier T0/T1/T2`
 - contained generated-output commands: `build`, `render`, `compare`, `audit`, and
   `proof`
 - blocked worker sessions: source patching, data-pack worker proposals,
@@ -63,6 +72,18 @@ The ScreenSave-side admission classes are:
 
 This adapter admits fixed command execution only. It does not admit AIDE
 worker-host sessions or generic command execution.
+
+Validation tiers are fixed:
+
+- `T0`: authority, contracts, docs, AIDE pilot, AIDE operational repair, and
+  whitespace.
+- `T1`: `T0` plus catalog, artifact-set, adapter, `libsslab`, proof-kernel,
+  Proof Bundle v1, and Workbench shell checks.
+- `T2`: `T0` and `T1` plus the portable v2 header seam check, wider local
+  check-script gate, and fixed Nocturne/Ricochet profile proofs.
+
+T3 is native and extended evidence. It remains an operator-scheduled promotion
+or release gate and is not exposed as an AIDE fixed capability.
 
 ## Boundaries
 
@@ -138,14 +159,10 @@ receipt may prove the admitted command plan, but it is not build evidence.
 
 ## Initial Proof
 
-The initial proof command renders the Nocturne `observatory_night` canary using
-`sslab render`, compares it with the committed canary capture using
-`sslab compare --class exact`, runs the named artifact-profile PE audit, and
-writes an adapter receipt plus artifact manifest.
-The proof receipt must preserve the PE audit JSON reference, structured audit
-status, artifact count, missing inputs, parse-error count, and violation count.
-It may not pass if the selected PE artifact profile resolves to no audited
-artifacts.
+The fixed profile proof commands call `tools/sslab/sslab.py proof --profile`
+with either `nocturne.reference.v0` or `ricochet.reference.v1`, then write an
+adapter receipt plus artifact manifest. The bundle commands normalize that
+profile proof through `tools/proofbundle/proofbundle.py normalize`.
 
 This is deterministic proof-kernel evidence. It is not a public compatibility
 certification and not a visual-artistic acceptance decision.

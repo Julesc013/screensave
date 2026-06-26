@@ -17,7 +17,9 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 STATE_PATH = ROOT / "PROJECT_STATE.toml"
 VERSION_PATH = ROOT / "VERSION.toml"
 SSLAB = ROOT / "tools" / "sslab" / "sslab.py"
+PROOF_BUNDLE = ROOT / "tools" / "proofbundle" / "proofbundle.py"
 GENERATED_INVENTORY = ROOT / "catalog" / "generated" / "products_inventory.json"
+GENERATED_PROOF_REGISTRY = ROOT / "catalog" / "generated" / "proof_registry.json"
 PE_AUDIT = ROOT / "tools" / "scripts" / "audit_pe_artifacts.py"
 BUILDCTL = ROOT / "tools" / "buildctl" / "screensave_build.py"
 CAPABILITY_BINDINGS = ROOT / "tools" / "project_adapter" / "capability_bindings.json"
@@ -51,6 +53,61 @@ CORE_VALIDATION = [
     ["tools/scripts/check_proof_kernel.py"],
     ["tools/scripts/check_docs_basics.py"],
 ]
+
+VALIDATION_TIERS = {
+    "T0": [
+        ["tools/scripts/check_project_state.py", "--summary"],
+        ["tools/scripts/check_contracts.py"],
+        ["tools/scripts/check_docs_basics.py"],
+        ["tools/scripts/check_aide_pilot.py"],
+        ["tools/scripts/check_aide_operational.py"],
+        ["git", "diff", "--check"],
+    ],
+    "T1": [
+        ["tools/scripts/check_catalog_generated.py"],
+        ["tools/scripts/check_artifact_sets.py"],
+        ["tools/scripts/check_project_adapter.py"],
+        ["tools/scripts/check_sslab_runner.py"],
+        ["tools/scripts/check_proof_kernel.py"],
+        ["tools/scripts/check_proof_bundle_v1.py"],
+        ["tools/scripts/check_workbench_shell.py"],
+    ],
+    "T2": [
+        ["tools/scripts/check_backlog_surface.py"],
+        ["tools/scripts/check_build_controller.py"],
+        ["tools/scripts/check_build_layout.py"],
+        ["tools/scripts/check_catalog_profiles.py"],
+        ["tools/scripts/check_compiled_nocturne_runner.py"],
+        ["tools/scripts/check_portable_v2.py"],
+        ["tools/scripts/check_product_architecture.py"],
+        ["tools/scripts/check_project_state.py"],
+        ["tools/scripts/check_release_baseline_surface.py"],
+        ["tools/scripts/check_release_candidate_surface.py"],
+        ["tools/scripts/check_release_scaffold.py"],
+        ["tools/scripts/check_visual_intent_contract.py"],
+        [str(SSLAB.relative_to(ROOT)), "proof", "--profile", "nocturne.reference.v0", "--output-dir", "out/aide/proofs/nocturne-reference-v0"],
+        [str(SSLAB.relative_to(ROOT)), "proof", "--profile", "ricochet.reference.v1", "--output-dir", "out/aide/proofs/ricochet-reference-v1"],
+    ],
+}
+
+VALIDATION_TIER_CAPABILITIES = {
+    "T0": "screensave.validation.t0",
+    "T1": "screensave.validation.t1",
+    "T2": "screensave.validation.t2",
+}
+
+ADMITTED_PROOF_PROFILES = {
+    "nocturne.reference.v0": {
+        "capability": "screensave.proof.nocturne.reference-v0",
+        "bundle_capability": "screensave.bundle.nocturne.reference-v0",
+        "slug": "nocturne-reference-v0",
+    },
+    "ricochet.reference.v1": {
+        "capability": "screensave.proof.ricochet.reference-v1",
+        "bundle_capability": "screensave.bundle.ricochet.reference-v1",
+        "slug": "ricochet-reference-v1",
+    },
+}
 
 
 class AdapterError(Exception):
@@ -178,6 +235,32 @@ def resolve_audit_profiles(values: list[str] | None) -> tuple[list[str], list[pa
     return selected, roots
 
 
+def load_proof_registry() -> dict[str, Any]:
+    return load_json(GENERATED_PROOF_REGISTRY)
+
+
+def proof_profile_by_key(profile_key: str) -> dict[str, Any]:
+    for item in load_proof_registry().get("proof_profiles", []):
+        if item.get("key") == profile_key:
+            return item
+    raise AdapterError(
+        "unknown_proof_profile",
+        "Proof profile is not present in the generated ScreenSave proof registry.",
+        {"profile": profile_key},
+    )
+
+
+def admitted_profile(profile_key: str) -> dict[str, str]:
+    profile = ADMITTED_PROOF_PROFILES.get(profile_key)
+    if profile is None:
+        raise AdapterError(
+            "proof_profile_not_admitted",
+            "This adapter only admits fixed Nocturne and Ricochet catalog proof profiles.",
+            {"profile": profile_key, "admitted_profiles": sorted(ADMITTED_PROOF_PROFILES)},
+        )
+    return profile
+
+
 def git_text(args: list[str]) -> str:
     try:
         return subprocess.check_output(["git", *args], cwd=ROOT, text=True, stderr=subprocess.DEVNULL).strip()
@@ -230,8 +313,10 @@ def blocked(command: str, error: AdapterError) -> int:
 def capability_binding_for_command(command: str, capability_name: str | None = None) -> dict[str, Any]:
     bindings = load_json(CAPABILITY_BINDINGS)
     for item in bindings.get("capabilities", []):
-        if capability_name is not None and item.get("name") == capability_name:
-            return item
+        if capability_name is not None:
+            if item.get("name") == capability_name:
+                return item
+            continue
         if item.get("command") == command:
             return item
     return {}
@@ -294,9 +379,13 @@ def write_artifact_manifest(output_dir: pathlib.Path, command: str, artifacts: l
 
 
 def run_command(command: list[str], timeout_seconds: int) -> dict[str, Any]:
+    if command and command[0] == "git":
+        argv = command
+    else:
+        argv = [sys.executable, *command]
     try:
         result = subprocess.run(
-            [sys.executable, *command],
+            argv,
             cwd=ROOT,
             text=True,
             stdout=subprocess.PIPE,
@@ -305,7 +394,7 @@ def run_command(command: list[str], timeout_seconds: int) -> dict[str, Any]:
         )
     except subprocess.TimeoutExpired as exc:
         return {
-            "command": [sys.executable, *command],
+            "command": argv,
             "returncode": None,
             "stdout": (exc.stdout or "").strip() if isinstance(exc.stdout, str) else "",
             "stderr": (exc.stderr or "").strip() if isinstance(exc.stderr, str) else "",
@@ -314,13 +403,22 @@ def run_command(command: list[str], timeout_seconds: int) -> dict[str, Any]:
             "timeout_seconds": timeout_seconds,
         }
     return {
-        "command": [sys.executable, *command],
+        "command": argv,
         "returncode": result.returncode,
         "stdout": result.stdout.strip(),
         "stderr": result.stderr.strip(),
         "status": "pass" if result.returncode == 0 else "fail",
         "timeout_seconds": timeout_seconds,
     }
+
+
+def validation_commands_for_tier(tier: str) -> list[list[str]]:
+    selected: list[list[str]] = []
+    for candidate in ["T0", "T1", "T2"]:
+        selected.extend(VALIDATION_TIERS[candidate])
+        if candidate == tier:
+            return selected
+    raise AdapterError("unknown_validation_tier", "Validation tier is not admitted by the ScreenSave adapter.", {"tier": tier})
 
 
 def render_quota_check(args: argparse.Namespace) -> None:
@@ -410,12 +508,62 @@ def command_catalog(args: argparse.Namespace) -> int:
     return 0
 
 
-def command_validate(_args: argparse.Namespace) -> int:
-    runs = [run_command(command, timeout_seconds=180) for command in CORE_VALIDATION]
-    status = "pass" if all(run["returncode"] == 0 for run in runs) else "fail"
+def command_profiles(_args: argparse.Namespace) -> int:
+    registry = load_proof_registry()
+    profiles = []
+    for key, binding in ADMITTED_PROOF_PROFILES.items():
+        profile = proof_profile_by_key(key)
+        profiles.append(
+            {
+                "key": key,
+                "status": profile.get("status"),
+                "product": profile.get("product"),
+                "preset": profile.get("preset"),
+                "capture_frames": profile.get("capture_frames", []),
+                "proof_capability": binding["capability"],
+                "bundle_capability": binding["bundle_capability"],
+                "claim_boundary": profile.get("claim_boundary"),
+            }
+        )
     payload = {
-        "validation_class": "bounded-core",
-        "command_binding": command_binding_payload("validate", ["validate"], []),
+        "proof_registry_ref": repo_path(GENERATED_PROOF_REGISTRY),
+        "proof_registry_sha256": sha256_file(GENERATED_PROOF_REGISTRY),
+        "admitted_profiles": profiles,
+        "refusals": [
+            "screensave.proof.any-profile",
+            "screensave.validate.arbitrary-command",
+            "profiles outside Nocturne/Ricochet fixed catalog keys",
+        ],
+    }
+    write_json(envelope("profiles", "informational", payload))
+    return 0
+
+
+def command_validate(args: argparse.Namespace) -> int:
+    tier = args.tier.upper()
+    commands = validation_commands_for_tier(tier)
+    runs = [run_command(command, timeout_seconds=240) for command in commands]
+    status = "pass" if all(run["returncode"] == 0 for run in runs) else "fail"
+    delegated = [
+        pathlib.Path(value)
+        for value in sorted(
+            {
+                str(ROOT / command[0])
+                for command in commands
+                if command and command[0] != "git"
+            }
+        )
+    ]
+    payload = {
+        "validation_class": "screensave-fixed-tier",
+        "tier": tier,
+        "included_tiers": [candidate for candidate in ["T0", "T1", "T2"] if ["T0", "T1", "T2"].index(candidate) <= ["T0", "T1", "T2"].index(tier)],
+        "command_binding": command_binding_payload(
+            "validate",
+            ["validate", "--tier", tier],
+            delegated,
+            VALIDATION_TIER_CAPABILITIES[tier],
+        ),
         "runs": runs,
     }
     write_json(envelope("validate", status, payload))
@@ -675,130 +823,145 @@ def command_audit(args: argparse.Namespace) -> int:
 
 def command_proof(args: argparse.Namespace) -> int:
     try:
+        profile_binding = admitted_profile(args.profile)
+        profile = proof_profile_by_key(args.profile)
         output_dir = invocation_dir("proof", args.invocation_id)
     except AdapterError as exc:
         return blocked("proof", exc)
     before_source = source_payload()
-    comparison_path = output_dir / "comparison.json"
     receipt_path = output_dir / "adapter-proof.json"
-    pe_audit_path = output_dir / "pe-audit.txt"
-    pe_audit_json_path = output_dir / "pe-audit.json"
-
-    render_command = [
+    profile_proof_path = output_dir / "profile-proof.json"
+    command = [
         str(SSLAB.relative_to(ROOT)),
-        "render",
-        "--product",
-        "nocturne",
-        "--preset",
-        "observatory_night",
-        "--width",
-        "96",
-        "--height",
-        "54",
-        "--seed",
-        "1536",
-        "--frames",
-        "8",
-        "--delta-ms",
-        "100",
+        "proof",
+        "--profile",
+        args.profile,
         "--output-dir",
         str(output_dir),
     ]
-    compare_command = [
-        str(SSLAB.relative_to(ROOT)),
-        "compare",
-        "--actual",
-        str(output_dir / "capture.ppm"),
-        "--expected",
-        str(COMMITTED_CANARY),
-        "--class",
-        "exact",
-        "--output-json",
-        str(comparison_path),
-    ]
-    audit_profiles, audit_paths = resolve_audit_profiles(["windows_current_x86_scr"])
-    audit_command = [
-        str(PE_AUDIT.relative_to(ROOT)),
-        "--output",
-        str(pe_audit_path),
-        "--json-output",
-        str(pe_audit_json_path),
-        "--fail-on-violation",
-    ]
-    audit_command.extend(str(path) for path in audit_paths)
-    render_run = run_command(render_command, timeout_seconds=30)
-    compare_run = run_command(compare_command, timeout_seconds=30)
-    audit_run = run_command(audit_command, timeout_seconds=60)
-
-    comparison = {}
-    proof = {}
-    if comparison_path.exists():
-        comparison = json.loads(comparison_path.read_text(encoding="utf-8"))
-    proof_path = output_dir / "proof.json"
-    if proof_path.exists():
-        proof = json.loads(proof_path.read_text(encoding="utf-8"))
-    pe_audit_report = pe_audit_path.read_text(encoding="utf-8") if pe_audit_path.exists() else ""
-    pe_audit_json = load_json(pe_audit_json_path) if pe_audit_json_path.exists() else {}
-    pe_audit_status = str(pe_audit_json.get("status", "fail"))
-    pe_audit_artifact_count = int(pe_audit_json.get("artifact_count", 0))
-    pe_audit_violation_count = int(pe_audit_json.get("violation_count", pe_audit_report.count("VIOLATION:")))
-
-    if render_run["returncode"] != 0 or compare_run["returncode"] != 0:
-        status = "fail"
-    elif pe_audit_status == "blocked" or pe_audit_artifact_count <= 0:
-        status = "blocked"
-    elif audit_run["returncode"] != 0 or pe_audit_status == "fail":
-        status = "fail"
-    else:
-        status = "pass"
-    manifest_path = output_dir / "artifact-manifest.json"
+    proof_run = run_command(command, timeout_seconds=120)
+    profile_proof = load_json(profile_proof_path) if profile_proof_path.exists() else {}
+    proof_status = str(profile_proof.get("status", "fail"))
+    status = "pass" if proof_run["returncode"] == 0 and proof_status == "pass" else "fail"
+    manifest_path = write_artifact_manifest(
+        output_dir,
+        "proof",
+        [
+            ("profile_proof", profile_proof_path, "sslab-profile-proof-json"),
+            ("proof", output_dir / "proof.json", "proof-json"),
+            ("comparison", output_dir / "comparison.json", "comparison-json"),
+            ("lifecycle", output_dir / "lifecycle" / "lifecycle.json", "lifecycle-json"),
+            ("adapter_receipt", receipt_path, "adapter-receipt-json"),
+        ],
+    )
     payload = {
-        "capability": "screensave.proof.nocturne.exact",
-        "proof_kind": "proof-kernel-v0-nocturne-exact",
+        "capability": profile_binding["capability"],
+        "proof_kind": "catalog-profile-proof",
         "invocation_id": args.invocation_id,
+        "profile": args.profile,
+        "product": profile.get("product"),
+        "preset": profile.get("preset"),
+        "capture_frames": profile.get("capture_frames", []),
         "output_dir": repo_path(output_dir),
         "artifact_manifest_ref": repo_path(manifest_path),
         "before_source": before_source,
         "after_source": source_payload(),
         "command_binding": command_binding_payload(
             "proof",
-            render_run["command"] + ["&&"] + compare_run["command"] + ["&&"] + audit_run["command"],
-            [SSLAB, PE_AUDIT, ARTIFACT_PROFILE_AUDIT_ROOTS],
+            proof_run["command"],
+            [SSLAB, GENERATED_PROOF_REGISTRY],
+            profile_binding["capability"],
         ),
-        "render": render_run,
-        "compare": compare_run,
-        "pe_audit": audit_run,
-        "pe_audit_ref": repo_path(pe_audit_path),
-        "pe_audit_json_ref": repo_path(pe_audit_json_path),
-        "pe_audit_status": pe_audit_status,
-        "pe_audit_artifact_count": pe_audit_artifact_count,
-        "pe_audit_missing_inputs": pe_audit_json.get("missing_inputs", []),
-        "pe_audit_parse_error_count": int(pe_audit_json.get("parse_error_count", 0)),
-        "pe_audit_violation_count": pe_audit_violation_count,
-        "pe_audit_artifact_profiles": audit_profiles,
-        "pe_audit_claim_boundary": "binary facts only; not compatibility certification",
-        "artifact_profile_audit_roots_ref": repo_path(ARTIFACT_PROFILE_AUDIT_ROOTS),
-        "proof_ref": repo_path(proof_path),
-        "comparison_ref": repo_path(comparison_path),
-        "capture_ref": repo_path(output_dir / "capture.ppm"),
-        "capture_sha256": proof.get("capture", {}).get("sha256"),
-        "comparison_status": comparison.get("status"),
-        "comparison_metrics": comparison.get("metrics", {}),
+        "run": proof_run,
+        "profile_proof_ref": repo_path(profile_proof_path),
+        "profile_proof_status": proof_status,
+        "comparison_status": profile_proof.get("comparison_status"),
+        "lifecycle_status": profile_proof.get("lifecycle_status"),
+        "claim_boundary": profile.get("claim_boundary"),
     }
     receipt = envelope("proof", status, payload)
     receipt_path.write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-    write_artifact_manifest(
-        output_dir,
+    write_json(receipt)
+    return exit_code_for_status(status)
+
+
+def command_bundle(args: argparse.Namespace) -> int:
+    try:
+        profile_binding = admitted_profile(args.profile)
+        profile = proof_profile_by_key(args.profile)
+        output_dir = invocation_dir("bundle", args.invocation_id)
+    except AdapterError as exc:
+        return blocked("bundle", exc)
+    before_source = source_payload()
+    proof_dir = output_dir / "proof"
+    proof_path = proof_dir / "profile-proof.json"
+    bundle_path = output_dir / "proof-bundle-v1.json"
+    receipt_path = output_dir / "adapter-proof.json"
+    proof_command = [
+        str(SSLAB.relative_to(ROOT)),
         "proof",
+        "--profile",
+        args.profile,
+        "--output-dir",
+        str(proof_dir),
+    ]
+    bundle_command = [
+        str(PROOF_BUNDLE.relative_to(ROOT)),
+        "normalize",
+        "--proof",
+        str(proof_path),
+        "--output",
+        str(bundle_path),
+    ]
+    proof_run = run_command(proof_command, timeout_seconds=120)
+    bundle_run = run_command(bundle_command, timeout_seconds=60) if proof_run["returncode"] == 0 else {
+        "command": [sys.executable, *bundle_command],
+        "returncode": None,
+        "stdout": "",
+        "stderr": "proof step did not pass",
+        "status": "fail",
+        "timeout_seconds": 60,
+    }
+    profile_proof = load_json(proof_path) if proof_path.exists() else {}
+    bundle = load_json(bundle_path) if bundle_path.exists() else {}
+    status = "pass" if proof_run["returncode"] == 0 and bundle_run["returncode"] == 0 else "fail"
+    manifest_path = write_artifact_manifest(
+        output_dir,
+        "bundle",
         [
-            ("capture", output_dir / "capture.ppm", "ppm-p3-capture"),
-            ("proof", proof_path, "proof-json"),
-            ("comparison", comparison_path, "comparison-json"),
-            ("pe_audit", pe_audit_path, "text-report"),
-            ("pe_audit_json", pe_audit_json_path, "pe-audit-json"),
+            ("profile_proof", proof_path, "sslab-profile-proof-json"),
+            ("proof_bundle_v1", bundle_path, "proof-bundle-v1-json"),
             ("adapter_receipt", receipt_path, "adapter-receipt-json"),
         ],
     )
+    payload = {
+        "capability": profile_binding["bundle_capability"],
+        "bundle_kind": "proof-bundle-v1-from-catalog-profile",
+        "invocation_id": args.invocation_id,
+        "profile": args.profile,
+        "product": profile.get("product"),
+        "preset": profile.get("preset"),
+        "output_dir": repo_path(output_dir),
+        "artifact_manifest_ref": repo_path(manifest_path),
+        "before_source": before_source,
+        "after_source": source_payload(),
+        "command_binding": command_binding_payload(
+            "bundle",
+            proof_run["command"] + ["&&"] + bundle_run["command"],
+            [SSLAB, PROOF_BUNDLE, GENERATED_PROOF_REGISTRY],
+            profile_binding["bundle_capability"],
+        ),
+        "proof_run": proof_run,
+        "bundle_run": bundle_run,
+        "profile_proof_ref": repo_path(proof_path),
+        "profile_proof_status": profile_proof.get("status"),
+        "proof_bundle_ref": repo_path(bundle_path),
+        "proof_bundle_status": bundle.get("status"),
+        "result_axes": bundle.get("result_axes", {}),
+        "claim_boundary": "Proof Bundle v1 projection only; not compatibility certification, artistic acceptance, or release promotion.",
+    }
+    receipt = envelope("bundle", status, payload)
+    receipt_path.write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     write_json(receipt)
     return exit_code_for_status(status)
 
@@ -817,7 +980,11 @@ def build_parser() -> argparse.ArgumentParser:
     catalog.add_argument("--full", action="store_true", help="Include the full generated inventory payload.")
     catalog.set_defaults(func=command_catalog)
 
-    validate = subparsers.add_parser("validate", help="Run bounded ScreenSave validation.")
+    profiles = subparsers.add_parser("profiles", help="Report fixed admitted proof profiles.")
+    profiles.set_defaults(func=command_profiles)
+
+    validate = subparsers.add_parser("validate", help="Run a fixed ScreenSave validation tier.")
+    validate.add_argument("--tier", default="T0", choices=sorted(VALIDATION_TIERS), help="Fixed validation tier to run.")
     validate.set_defaults(func=command_validate)
 
     build = subparsers.add_parser("build", help="Run a fixed ScreenSave build profile.")
@@ -861,9 +1028,15 @@ def build_parser() -> argparse.ArgumentParser:
     audit.add_argument("--fail-on-violation", action="store_true")
     audit.set_defaults(func=command_audit)
 
-    proof = subparsers.add_parser("proof", help="Run Proof Kernel v0 Nocturne proof.")
+    proof = subparsers.add_parser("proof", help="Run a fixed catalog proof profile.")
     proof.add_argument("--invocation-id", default="local", help="Safe id for the contained adapter output root.")
+    proof.add_argument("--profile", required=True, choices=sorted(ADMITTED_PROOF_PROFILES))
     proof.set_defaults(func=command_proof)
+
+    bundle = subparsers.add_parser("bundle", help="Export a fixed catalog proof profile as Proof Bundle v1.")
+    bundle.add_argument("--invocation-id", default="local", help="Safe id for the contained adapter output root.")
+    bundle.add_argument("--profile", required=True, choices=sorted(ADMITTED_PROOF_PROFILES))
+    bundle.set_defaults(func=command_bundle)
 
     return parser
 

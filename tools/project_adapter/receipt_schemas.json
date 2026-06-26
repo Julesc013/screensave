@@ -22,8 +22,11 @@
     "catalog": {
       "payload_required": ["inventory_ref", "schema_version", "product_count", "saver_count"]
     },
+    "profiles": {
+      "payload_required": ["proof_registry_ref", "proof_registry_sha256", "admitted_profiles", "refusals"]
+    },
     "validate": {
-      "payload_required": ["validation_class", "command_binding", "runs"]
+      "payload_required": ["validation_class", "tier", "included_tiers", "command_binding", "runs"]
     },
     "build": {
       "payload_required": [
@@ -107,30 +110,44 @@
         "capability",
         "proof_kind",
         "invocation_id",
+        "profile",
+        "product",
+        "preset",
+        "capture_frames",
         "output_dir",
         "artifact_manifest_ref",
         "before_source",
         "after_source",
         "command_binding",
-        "render",
-        "compare",
-        "pe_audit",
-        "pe_audit_ref",
-        "pe_audit_json_ref",
-        "pe_audit_status",
-        "pe_audit_artifact_count",
-        "pe_audit_missing_inputs",
-        "pe_audit_parse_error_count",
-        "pe_audit_violation_count",
-        "pe_audit_artifact_profiles",
-        "pe_audit_claim_boundary",
-        "artifact_profile_audit_roots_ref",
-        "proof_ref",
-        "comparison_ref",
-        "capture_ref",
-        "capture_sha256",
+        "run",
+        "profile_proof_ref",
+        "profile_proof_status",
         "comparison_status",
-        "comparison_metrics"
+        "lifecycle_status",
+        "claim_boundary"
+      ]
+    },
+    "bundle": {
+      "payload_required": [
+        "capability",
+        "bundle_kind",
+        "invocation_id",
+        "profile",
+        "product",
+        "preset",
+        "output_dir",
+        "artifact_manifest_ref",
+        "before_source",
+        "after_source",
+        "command_binding",
+        "proof_run",
+        "bundle_run",
+        "profile_proof_ref",
+        "profile_proof_status",
+        "proof_bundle_ref",
+        "proof_bundle_status",
+        "result_axes",
+        "claim_boundary"
       ]
     },
     "blocked": {

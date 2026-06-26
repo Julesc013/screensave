@@ -1,0 +1,14 @@
+schema_version: aide.context-compiler.v0
+compiler_id: screensave-context-compiler-v0
+status: active
+mode: metadata_refs_only
+purpose: Compile compact ScreenSave task context from repo maps, test maps, indexes, and explicit file references without inlining ignored files or raw local state.
+rules:
+  raw_prompt_storage: false
+  raw_response_storage: false
+  provider_calls: false
+  model_calls: false
+  network_calls: false
+  inline_full_files: false
+  ignored_paths_are_excluded: true
+  generated_context_is_local_output: true

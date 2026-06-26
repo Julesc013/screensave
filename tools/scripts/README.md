@@ -14,6 +14,9 @@ Current stage:
 - `check_artifact_sets.py` validates `catalog/artifact_sets.toml`, `catalog/proof_profiles.toml`, and the artifact manifest tool boundary.
 - `check_catalog_generated.py` verifies that committed `catalog/generated/` inventory and proof-registry outputs match `tools/cataloggen/cataloggen.py`.
 - `check_aide_pilot.py` validates the bounded AIDE Lite operational control plane, fixed-command bridge admission plan, ignored local state, linked work-unit/evidence paths, and the no-product-runtime-dependency boundary.
+- `check_aide_operational.py` validates the PAW-CX ScreenSave-local AIDE bootstrap repair files, controller failure taxonomy, token baselines, validation-tier map, deterministic ScreenSave golden task definitions, and operation-receipt wrapper boundary.
+- `check_aide_evidence_bridge.py` validates the ScreenSave AIDE EvidencePacket exporter by generating a fixed Ricochet Proof Bundle v1 projection and checking that compatibility certification, artistic review, and release promotion remain separate claims.
+- `check_portable_v2.py` validates the public portable v2 header seam: fixed-width C89-compatible aliases, no native platform terms, no public `long`, and size/version-prefixed public structures.
 - `check_contracts.py` validates the ScreenSave doctrine, portable-semantics, renderer-alias, proof-bundle, proof-kernel, and project-adapter contract scaffolding.
 - `check_visual_intent_contract.py` validates the draft VisualIntent v1 contract and example authoring intent.
 - `check_product_architecture.py` validates the active product architecture contract, product-family boundaries, canary sequence, and catalog fit.

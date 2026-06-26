@@ -1,0 +1,121 @@
+schema_version: screensave.test-impact-map.v0
+map_id: screensave-paw-cx-validation-tiers-v0
+status: active
+mode: deterministic_local_commands
+tiers:
+  T0:
+    role: Authority and syntax
+    required_checks:
+      - py -3 tools/scripts/check_project_state.py --summary
+      - py -3 tools/scripts/check_contracts.py
+      - py -3 tools/scripts/check_docs_basics.py
+      - py -3 tools/scripts/check_aide_pilot.py
+      - py -3 tools/scripts/check_aide_operational.py
+      - git diff --check
+  T1:
+    role: Affected subsystem
+    required_checks:
+      - py -3 tools/scripts/check_catalog_generated.py
+      - py -3 tools/scripts/check_artifact_sets.py
+      - py -3 tools/scripts/check_project_adapter.py
+      - py -3 tools/scripts/check_sslab_runner.py
+      - py -3 tools/scripts/check_proof_kernel.py
+      - py -3 tools/scripts/check_proof_bundle_v1.py
+      - py -3 tools/scripts/check_workbench_shell.py
+  T2:
+    role: Full local project gate
+    required_checks:
+      - all tools/scripts/check_*.py
+      - py -3 tools/scripts/check_portable_v2.py
+      - py -3 tools/project_adapter/screensave_project.py validate --tier T2
+      - py -3 tools/sslab/sslab.py proof --profile nocturne.reference.v0 --output-dir out/aide/proofs/nocturne-reference-v0
+      - py -3 tools/sslab/sslab.py proof --profile ricochet.reference.v1 --output-dir out/aide/proofs/ricochet-reference-v1
+  T3:
+    role: Native and extended evidence
+    required_checks:
+      - py -3 tools/buildctl/screensave_build.py build --profile windows-current-x86 --output-dir out/build/windows-current-x86
+      - py -3 tools/buildctl/screensave_build.py build --profile windows-current-tools --output-dir out/build/windows-current-tools
+      - exact artifact manifests
+      - profile-aware PE audit
+      - adapter proof and normalized Proof Bundle v1
+      - scheduled profile and soak evidence
+golden_tasks:
+  - id: screensave-aide-remains-optional
+    acceptance: AIDE remains external-sidecar-only and is not a product runtime dependency.
+    validation_command: py -3 tools/scripts/check_aide_pilot.py
+    evidence_refs:
+      - .aide/pilot.toml
+      - .aide/aide_lite.lock.toml
+    forbidden_claims:
+      - AIDE is required by shipped screensavers
+  - id: screensave-no-generic-exec-capability
+    acceptance: Project adapter exposes only fixed capabilities and no generic command/run/exec surface.
+    validation_command: py -3 tools/scripts/check_project_adapter.py
+    evidence_refs:
+      - tools/project_adapter/capability_bindings.json
+    forbidden_claims:
+      - screensave.command
+      - screensave.run
+      - screensave.exec
+      - screensave.proof.any-profile
+      - screensave.validate.arbitrary-command
+  - id: screensave-nocturne-baseline-exact
+    acceptance: Nocturne reference proof remains exact against the committed baseline.
+    validation_command: py -3 tools/scripts/check_proof_kernel.py
+    evidence_refs:
+      - validation/captures/proof-kernel-v0/nocturne/proof.json
+    forbidden_claims:
+      - exact proof implies artistic acceptance
+  - id: screensave-ricochet-baselines-exact
+    acceptance: Ricochet frames 0, 4, 8, and 32 remain exact in the committed proof receipt.
+    validation_command: py -3 tools/scripts/check_sslab_runner.py
+    evidence_refs:
+      - validation/captures/proof-kernel-v1/ricochet/profile-proof.json
+    forbidden_claims:
+      - single-frame proof covers Ricochet
+  - id: screensave-workbench-uses-libsslab
+    acceptance: BenchLab/Workbench proof smoke stays bound to the private libsslab runtime path.
+    validation_command: py -3 tools/scripts/check_workbench_shell.py
+    evidence_refs:
+      - products/apps/benchlab/src/benchlab_workbench_shell.c
+    forbidden_claims:
+      - Workbench is a release workspace
+  - id: screensave-proof-does-not-imply-artistic-acceptance
+    acceptance: Proof receipts keep deterministic execution separate from artistic review.
+    validation_command: py -3 tools/scripts/check_proof_bundle_v1.py
+    evidence_refs:
+      - contracts/proof_bundle_v1.md
+      - catalog/proof_profiles.toml
+    forbidden_claims:
+      - deterministic proof is artistic approval
+  - id: screensave-pe-audit-does-not-imply-os-certification
+    acceptance: PE audit records binary facts without certifying OS support.
+    validation_command: py -3 tools/scripts/audit_pe_artifacts.py --help
+    evidence_refs:
+      - tools/scripts/audit_pe_artifacts.py
+    forbidden_claims:
+      - PE audit certifies Windows compatibility
+  - id: screensave-v2-headers-have-no-native-types
+    acceptance: Portable v2 public headers do not expose native platform types.
+    validation_command: py -3 tools/scripts/check_portable_v2.py
+    evidence_refs:
+      - platform/include/screensave/v2
+    forbidden_claims:
+      - HWND
+      - HDC
+      - HINSTANCE
+  - id: screensave-v2-structs-are-size-version-prefixed
+    acceptance: Portable v2 public structs begin with struct_size and abi_version.
+    validation_command: py -3 tools/scripts/check_portable_v2.py
+    evidence_refs:
+      - platform/include/screensave/v2
+    forbidden_claims:
+      - compiler layout is serialized ABI
+  - id: screensave-v1-scr-build-remains-operational
+    acceptance: The current Win32 x86 saver build lane remains the baseline delivery path.
+    validation_command: py -3 tools/buildctl/screensave_build.py build --profile windows-current-x86 --output-dir out/build/windows-current-x86
+    evidence_refs:
+      - catalog/artifact_sets.toml
+      - tools/buildctl/screensave_build.py
+    forbidden_claims:
+      - portable v2 replaces the Win32 .scr baseline

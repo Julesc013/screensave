@@ -2,6 +2,11 @@
 
 Status: planned contract, not yet a runtime implementation.
 
+Current header slice: `platform/include/screensave/v2/` defines the initial
+host-neutral public base, surface, draw, product, and session seam. It is not a
+claim that product migrations, compatibility adapters, or v1/v2 equivalence are
+complete.
+
 ## Purpose
 
 ScreenSave v2 should let products share deterministic semantic infrastructure

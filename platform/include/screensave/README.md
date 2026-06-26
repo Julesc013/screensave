@@ -16,6 +16,7 @@ Current stage: the first narrow public header set remains real here, with Series
 - `saver_api.h` for the saver/module lifecycle boundary, shared host entry, product-owned config hooks, and reusable saver-config state helpers
 - `grid_buffer_api.h` for the narrow shared byte-grid helper promoted in Series 11 for Pipeworks and Lifeforms
 - `visual_buffer_api.h` for the narrow shared software-framebuffer helper promoted in Series 10 for Plasma and Phosphor
+- `v2/` and `v2.h` for the PAW-CX portable v2 base, surface, draw, product, and session seam. This is a host-neutral public contract slice only; v1 remains the active Win32 saver delivery contract until adapters and proof show equivalence.
 
 Implementation details remain private under `platform/src/`.
 That includes the `SX`-era internal band model, backend kinds, routing logic, and future service seams unless a later explicit spec promotes them.

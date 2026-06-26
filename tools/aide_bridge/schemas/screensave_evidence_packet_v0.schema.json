@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "schema_id": "screensave.aide-evidence-packet.v0",
+  "required_top_level": [
+    "schema_version",
+    "kind",
+    "domain",
+    "source",
+    "subject",
+    "inputs",
+    "claims",
+    "claim_boundary"
+  ],
+  "required_claims": [
+    "execution",
+    "capture",
+    "exact_comparison",
+    "lifecycle",
+    "performance_soak",
+    "artifact_audit",
+    "compatibility_evidence_class",
+    "artistic_review",
+    "release_promotion"
+  ],
+  "forbidden_claims": [
+    "certified_os_support_true_without_runtime_evidence",
+    "artistic_acceptance_from_mechanical_proof",
+    "release_promotion_from_proof"
+  ]
+}

@@ -1,0 +1,13 @@
+schema_version: aide.excerpt-policy.v0
+policy_id: screensave-excerpt-policy-v0
+status: active
+purpose: Bound excerpts in AIDE Lite task, context, verification, and review packets.
+rules:
+  max_excerpt_chars: 1200
+  prefer_line_refs: true
+  no_full_repo_dump: true
+  no_raw_prompt_storage: true
+  no_raw_response_storage: true
+  no_secrets: true
+  no_ignored_paths: true
+  generated_reports_are_refs: true

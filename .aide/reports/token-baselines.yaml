@@ -1,0 +1,43 @@
+schema_version: aide.token-baselines.v0
+baseline_id: screensave-token-baselines-v0
+status: active
+method: chars_divided_by_4
+
+baselines:
+  - name: root_history_baseline
+    purpose: ScreenSave authority, release, doctrine, and roadmap surface.
+    paths:
+      - README.md
+      - PROJECT_STATE.toml
+      - VERSION.toml
+      - contracts/screensave_doctrine_v1.md
+      - contracts/product_architecture_v1.md
+      - docs/roadmap/paw-01-product-acceleration-wave.md
+      - docs/roadmap/ultimate-project-report-and-plan.md
+
+  - name: repo_context_baseline
+    purpose: ScreenSave catalog, proof, adapter, and portable-contract context.
+    paths:
+      - PROJECT_STATE.toml
+      - catalog/products.toml
+      - catalog/proof_profiles.toml
+      - catalog/artifact_sets.toml
+      - tools/project_adapter/capability_bindings.json
+      - contracts/portable_semantics_v2.md
+      - contracts/proof_bundle_v1.md
+
+  - name: review_baseline
+    purpose: Latest generated AIDE review surfaces for compactness comparison.
+    paths:
+      - .aide/context/latest-task-packet.md
+      - .aide/context/latest-context-packet.md
+      - .aide/verification/latest-verification-report.md
+      - .aide/context/latest-review-packet.md
+
+  - name: token_survival_baseline
+    purpose: Latest generated AIDE task, context, review, and verification surfaces.
+    paths:
+      - .aide/context/latest-task-packet.md
+      - .aide/context/latest-context-packet.md
+      - .aide/context/latest-review-packet.md
+      - .aide/verification/latest-verification-report.md

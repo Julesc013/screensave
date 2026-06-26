@@ -43,15 +43,51 @@
       "state_probe": "catalog generated inventory digest"
     },
     {
-      "name": "screensave.validation.core",
-      "command": "validate",
-      "effect": "run bounded ScreenSave-owned validators",
+      "name": "screensave.profiles.read",
+      "command": "profiles",
+      "effect": "read fixed admitted proof profile catalog",
       "deterministic": true,
-      "argv": ["python", "tools/project_adapter/screensave_project.py", "validate"],
+      "argv": ["python", "tools/project_adapter/screensave_project.py", "profiles"],
+      "decoder_schema": "tools/project_adapter/receipt_schemas.json#/commands/profiles",
+      "output_policy": "stdout JSON only",
+      "input_policy": "committed generated proof registry",
+      "timeout_seconds": 10,
+      "state_probe": "catalog generated proof registry digest"
+    },
+    {
+      "name": "screensave.validation.t0",
+      "command": "validate",
+      "effect": "run ScreenSave T0 authority, syntax, docs, AIDE pilot, and whitespace checks",
+      "deterministic": true,
+      "argv": ["python", "tools/project_adapter/screensave_project.py", "validate", "--tier", "T0"],
       "decoder_schema": "tools/project_adapter/receipt_schemas.json#/commands/validate",
       "output_policy": "stdout JSON only",
-      "input_policy": "repository validators only",
-      "timeout_seconds": 180,
+      "input_policy": "fixed T0 validation tier",
+      "timeout_seconds": 240,
+      "state_probe": "validator command receipts"
+    },
+    {
+      "name": "screensave.validation.t1",
+      "command": "validate",
+      "effect": "run ScreenSave T0 plus T1 affected-subsystem checks",
+      "deterministic": true,
+      "argv": ["python", "tools/project_adapter/screensave_project.py", "validate", "--tier", "T1"],
+      "decoder_schema": "tools/project_adapter/receipt_schemas.json#/commands/validate",
+      "output_policy": "stdout JSON only",
+      "input_policy": "fixed T1 validation tier",
+      "timeout_seconds": 600,
+      "state_probe": "validator command receipts"
+    },
+    {
+      "name": "screensave.validation.t2",
+      "command": "validate",
+      "effect": "run ScreenSave T0/T1 plus full local project gate and two-canary proof profiles",
+      "deterministic": true,
+      "argv": ["python", "tools/project_adapter/screensave_project.py", "validate", "--tier", "T2"],
+      "decoder_schema": "tools/project_adapter/receipt_schemas.json#/commands/validate",
+      "output_policy": "stdout JSON only",
+      "input_policy": "fixed T2 validation tier",
+      "timeout_seconds": 1800,
       "state_probe": "validator command receipts"
     },
     {
@@ -127,16 +163,52 @@
       "state_probe": "PE audit report and artifact manifest"
     },
     {
-      "name": "screensave.proof.nocturne.exact",
+      "name": "screensave.proof.nocturne.reference-v0",
       "command": "proof",
-      "effect": "write Nocturne render, exact comparison, PE audit facts, and adapter receipt",
+      "effect": "write fixed Nocturne reference profile proof and adapter receipt",
       "deterministic": true,
-      "argv": ["python", "tools/project_adapter/screensave_project.py", "proof", "--invocation-id", "<safe-id>"],
+      "argv": ["python", "tools/project_adapter/screensave_project.py", "proof", "--invocation-id", "<safe-id>", "--profile", "nocturne.reference.v0"],
       "decoder_schema": "tools/project_adapter/receipt_schemas.json#/commands/proof",
       "output_policy": "contained invocation output root only",
-      "input_policy": "fixed Nocturne canary and committed validation capture",
-      "timeout_seconds": 60,
-      "state_probe": "adapter-proof.json, pe-audit.txt, and artifact manifest"
+      "input_policy": "fixed catalog profile nocturne.reference.v0",
+      "timeout_seconds": 120,
+      "state_probe": "profile-proof.json, adapter-proof.json, and artifact manifest"
+    },
+    {
+      "name": "screensave.proof.ricochet.reference-v1",
+      "command": "proof",
+      "effect": "write fixed Ricochet reference profile proof and adapter receipt",
+      "deterministic": true,
+      "argv": ["python", "tools/project_adapter/screensave_project.py", "proof", "--invocation-id", "<safe-id>", "--profile", "ricochet.reference.v1"],
+      "decoder_schema": "tools/project_adapter/receipt_schemas.json#/commands/proof",
+      "output_policy": "contained invocation output root only",
+      "input_policy": "fixed catalog profile ricochet.reference.v1",
+      "timeout_seconds": 120,
+      "state_probe": "profile-proof.json, adapter-proof.json, and artifact manifest"
+    },
+    {
+      "name": "screensave.bundle.nocturne.reference-v0",
+      "command": "bundle",
+      "effect": "normalize fixed Nocturne reference profile proof as Proof Bundle v1",
+      "deterministic": true,
+      "argv": ["python", "tools/project_adapter/screensave_project.py", "bundle", "--invocation-id", "<safe-id>", "--profile", "nocturne.reference.v0"],
+      "decoder_schema": "tools/project_adapter/receipt_schemas.json#/commands/bundle",
+      "output_policy": "contained invocation output root only",
+      "input_policy": "fixed catalog profile nocturne.reference.v0",
+      "timeout_seconds": 180,
+      "state_probe": "proof-bundle-v1.json, profile-proof.json, adapter-proof.json, and artifact manifest"
+    },
+    {
+      "name": "screensave.bundle.ricochet.reference-v1",
+      "command": "bundle",
+      "effect": "normalize fixed Ricochet reference profile proof as Proof Bundle v1",
+      "deterministic": true,
+      "argv": ["python", "tools/project_adapter/screensave_project.py", "bundle", "--invocation-id", "<safe-id>", "--profile", "ricochet.reference.v1"],
+      "decoder_schema": "tools/project_adapter/receipt_schemas.json#/commands/bundle",
+      "output_policy": "contained invocation output root only",
+      "input_policy": "fixed catalog profile ricochet.reference.v1",
+      "timeout_seconds": 180,
+      "state_probe": "proof-bundle-v1.json, profile-proof.json, adapter-proof.json, and artifact manifest"
     }
   ],
   "refusal_codes": [
@@ -147,6 +219,9 @@
     "input_root_denied",
     "quota_exceeded",
     "unknown_artifact_profile",
+    "unknown_validation_tier",
+    "unknown_proof_profile",
+    "proof_profile_not_admitted",
     "command_timeout",
     "command_failed"
   ]

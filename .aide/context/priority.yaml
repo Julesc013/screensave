@@ -1,0 +1,21 @@
+schema_version: aide.context-priority.v0
+priority_id: screensave-context-priority-v0
+status: active
+purpose: Prefer compact authority, contract, validation, and task-local references for ScreenSave AIDE Lite packets.
+priority_order:
+  - PROJECT_STATE.toml
+  - VERSION.toml
+  - AGENTS.md
+  - specs/
+  - contracts/
+  - catalog/
+  - tools/scripts/
+  - tools/project_adapter/
+  - tools/sslab/
+  - products/savers/nocturne/
+  - products/savers/ricochet/
+  - validation/captures/
+limits:
+  max_excerpt_chars: 1200
+  max_file_refs_per_packet: 80
+  max_generated_refs_per_packet: 40

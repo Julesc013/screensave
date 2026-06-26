@@ -18,9 +18,34 @@ Desktop.ini
 *.pid
 $null
 __pycache__/
+__pycache__/**
 *.pyc
+.pytest_cache/**
+.mypy_cache/**
+.ruff_cache/**
+node_modules/**
+dist/**
+build/**
 
 .aide.local/
+.aide/context/*
+!.aide/context/
+!.aide/context/ignore.yaml
+!.aide/context/compiler.yaml
+!.aide/context/priority.yaml
+!.aide/context/excerpt-policy.yaml
+.aide/evals/runs/
+.aide/git/latest-helper-plan.*
+.aide/git/workflow-detection.*
+.aide/reports/*
+!.aide/reports/
+!.aide/reports/token-baselines.yaml
+.aide/controller/latest-outcome-report.md
+.aide/controller/latest-recommendations.md
+.aide/controller/outcome-ledger.jsonl
+.aide/verification/latest-*
+.aide/routing/latest-route-decision.*
+.aide/cache/latest-cache-keys.*
 
 tmp/
 bin/
