@@ -58,6 +58,8 @@ out/
 dist/
 Debug/
 Release/
+!tools/release/
+!tools/release/**
 x64/
 ipch/
 *.ilk

@@ -1,0 +1,37 @@
+schema_version = 1
+package_id = "screensave.plasma-v2.preview-stage"
+status = "staged-preview"
+product = "plasma"
+profile = "plasma.v2.reference.preview"
+support_class = "buildable"
+published = false
+stable = false
+release_promotion = "blocked"
+compatibility_certification = "not-claimed"
+rollback_notes = "Remove the staged package directory and continue using the stable-candidate evidence refs."
+claim_boundary = "Package stage only; not publication, stable release, final artistic acceptance, compatibility certification, or installer admission."
+
+[artifact_refs]
+plasma_scr_current = "out/msvc/vs2017_xp/Release/plasma/plasma.scr"
+build_profile = "windows-current-x86"
+build_command = "py -3 tools/buildctl/screensave_build.py build --profile windows-current-x86"
+
+[pack_refs]
+example_pack = "products/savers/plasma/content/v2/examples/plasma_lava_v2.toml"
+packc_check = "py -3 tools/scripts/check_packc.py"
+
+[proof_refs]
+profile_proof = "validation/captures/plasma-v2/reference-preview/profile-proof.json"
+proof_bundle = "validation/captures/plasma-v2/reference-preview/proof-bundle-v1.json"
+stable_candidate_gate = "validation/captures/plasma-v2/stable-candidate/gate-report.json"
+release_readiness_contract = "contracts/plasma_release_readiness_v1.md"
+
+[evidence_refs]
+aide_evidence_index = ".aide/evidence/index.toml"
+package_check = "tools/scripts/check_plasma_v2_package_stage.py"
+
+[known_limits]
+ref = "packaging/windows/plasma-v2-preview/known-limits.md"
+
+[checksums]
+ref = "packaging/windows/plasma-v2-preview/checksums.json"
