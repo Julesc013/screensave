@@ -20,6 +20,8 @@ PERFORMANCE_RECEIPT = ROOT / "out" / "proof" / "proof-bundle-v1" / "check-perfor
 RICOCHET_PROOF_DIR = ROOT / "out" / "proof" / "proof-bundle-v1" / "check-ricochet-proof"
 RICOCHET_PROFILE_DIR = ROOT / "out" / "proof" / "proof-bundle-v1" / "check-ricochet-profile"
 RICOCHET_BUNDLE = ROOT / "out" / "proof" / "proof-bundle-v1" / "check-ricochet.json"
+PORTABLE_V2_EQUIVALENCE = ROOT / "out" / "proof" / "proof-bundle-v1" / "check-portable-v2-equivalence.json"
+PORTABLE_V2_EQUIVALENCE_WORK = ROOT / "out" / "proof" / "proof-bundle-v1" / "check-portable-v2-equivalence-captures"
 
 REQUIRED_AXES = {
     "execution",
@@ -226,12 +228,25 @@ def main() -> int:
         subprocess.check_call(
             [
                 sys.executable,
+                str(ROOT / "tools" / "sslab" / "sslab_equivalence.py"),
+                "--output",
+                str(PORTABLE_V2_EQUIVALENCE),
+                "--work-root",
+                str(PORTABLE_V2_EQUIVALENCE_WORK),
+            ],
+            cwd=ROOT,
+        )
+        subprocess.check_call(
+            [
+                sys.executable,
                 str(TOOL),
                 "normalize",
                 "--proof",
                 str(RICOCHET_PROOF_DIR / "profile-proof.json"),
                 "--performance",
                 str(RICOCHET_PROFILE_DIR / "profile.json"),
+                "--portable-v2-equivalence",
+                str(PORTABLE_V2_EQUIVALENCE),
                 "--output",
                 str(RICOCHET_BUNDLE),
             ],
@@ -258,6 +273,23 @@ def main() -> int:
         require(
             ricochet_axes.get("performance", {}).get("soak", {}).get("status") == "pass",
             "Ricochet bundle performance axis must retain short-soak status.",
+            errors,
+        )
+        portable_axis = ricochet_axes.get("portable_v2_equivalence", {})
+        require(portable_axis.get("status") == "pass", "portable v2 equivalence axis must pass when receipt is supplied.", errors)
+        require(
+            portable_axis.get("products") == ["nocturne", "ricochet"],
+            "portable v2 equivalence axis must identify Nocturne and Ricochet products.",
+            errors,
+        )
+        require(
+            portable_axis.get("profiles") == ["nocturne.reference.v0", "ricochet.reference.v1"],
+            "portable v2 equivalence axis must identify the canary proof profiles.",
+            errors,
+        )
+        require(
+            portable_axis.get("claim_boundary") == "Named canary v1/v2 deterministic equivalence only.",
+            "portable v2 equivalence axis must keep the named-canary claim boundary.",
             errors,
         )
 

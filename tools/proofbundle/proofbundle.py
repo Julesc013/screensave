@@ -68,6 +68,24 @@ def status_from_input(payload: dict[str, Any], default: str = "informational") -
     return default
 
 
+def equivalence_profiles(payload: dict[str, Any]) -> list[str]:
+    profiles: list[str] = []
+    for item in payload.get("profiles", []):
+        profile = str(item.get("profile", ""))
+        if profile and profile not in profiles:
+            profiles.append(profile)
+    return profiles
+
+
+def products_from_profiles(profiles: list[str]) -> list[str]:
+    products: list[str] = []
+    for profile in profiles:
+        product = profile.split(".", 1)[0]
+        if product and product not in products:
+            products.append(product)
+    return products
+
+
 def is_profile_proof(payload: dict[str, Any]) -> bool:
     return payload.get("profile_proof_schema") == "sslab-profile-proof-v0"
 
@@ -168,6 +186,8 @@ def normalize(args: argparse.Namespace) -> dict[str, Any]:
     execution_status = "fail" if proof.get("status") == "fail" or build_status == "fail" else "informational"
     if build_status == "blocked":
         execution_status = "blocked"
+    portable_v2_profiles = equivalence_profiles(portable_v2_equivalence)
+    portable_v2_products = products_from_profiles(portable_v2_profiles)
 
     bundle = {
         "proof_schema": "proof-bundle-v1",
@@ -225,7 +245,10 @@ def normalize(args: argparse.Namespace) -> dict[str, Any]:
                 status_from_input(portable_v2_equivalence) if portable_v2_equivalence else "informational",
                 "Portable v2 equivalence receipt was supplied." if portable_v2_equivalence else "No portable v2 equivalence receipt was supplied.",
                 [portable_v2_equivalence_ref] if portable_v2_equivalence_ref else [],
-                claim_boundary=portable_v2_equivalence.get(
+                products=portable_v2_products,
+                profiles=portable_v2_profiles,
+                claim_boundary="Named canary v1/v2 deterministic equivalence only.",
+                receipt_claim_boundary=portable_v2_equivalence.get(
                     "claim_boundary",
                     "v1/v2 deterministic equivalence for named canary profiles only",
                 ),

@@ -47,6 +47,9 @@ Each axis has:
 
 Additional axis-specific fields may exist, but the required axes must remain
 present so consumers can distinguish mechanical proof from product approval.
+When supplied, `portable_v2_equivalence` records the named canary `products`,
+the fixed proof `profiles`, and the claim boundary `Named canary v1/v2
+deterministic equivalence only.`
 
 ## Accepted Evidence Inputs
 

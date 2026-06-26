@@ -66,6 +66,7 @@ def export_packet(args: argparse.Namespace) -> dict[str, Any]:
     compatibility = axes.get("compatibility", {})
     artistic = axes.get("artistic_review", {})
     release = axes.get("release_promotion", {})
+    portable_axis = axes.get("portable_v2_equivalence", portable_v2_equivalence)
     adapter_payload = adapter_receipt.get("payload", {})
 
     certified_os_support = bool(compatibility.get("certified", False))
@@ -105,14 +106,13 @@ def export_packet(args: argparse.Namespace) -> dict[str, Any]:
             "lifecycle": axis_claim(axes.get("lifecycle", {}), "Lifecycle evidence reference."),
             "performance_soak": axis_claim(axes.get("performance", {}), "Performance and soak evidence reference."),
             "portable_v2_equivalence": axis_claim(
-                axes.get("portable_v2_equivalence", portable_v2_equivalence),
+                portable_axis,
                 "Portable v2 equivalence remains a separate deterministic canary claim.",
-                claim_boundary=portable_v2_equivalence.get(
+                products=portable_axis.get("products", []),
+                profiles=portable_axis.get("profiles", []),
+                claim_boundary=portable_axis.get(
                     "claim_boundary",
-                    axes.get("portable_v2_equivalence", {}).get(
-                        "claim_boundary",
-                        "v1/v2 deterministic equivalence for named canary profiles only",
-                    ),
+                    portable_v2_equivalence.get("claim_boundary", "v1/v2 deterministic equivalence for named canary profiles only"),
                 ),
             ),
             "artifact_audit": axis_claim(
