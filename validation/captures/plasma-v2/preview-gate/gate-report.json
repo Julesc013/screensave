@@ -1,0 +1,265 @@
+{
+  "claim_boundary": "Plasma v2 reference preview candidate only; not stable release promotion, artistic acceptance, or compatibility certification.",
+  "profile": "plasma.v2.reference.preview",
+  "results": [
+    {
+      "id": "portable-v2-accepted",
+      "payload": {
+        "observed_status": "accepted"
+      },
+      "status": "pass",
+      "summary": "Portable v2 must be accepted before Plasma v2 preview."
+    },
+    {
+      "id": "active-program",
+      "payload": {
+        "active_program": "plasma-v2-reference-slice"
+      },
+      "status": "pass",
+      "summary": "Active program must be plasma-v2-reference-slice."
+    },
+    {
+      "id": "plasma-v2-state-boundary",
+      "payload": {},
+      "status": "pass",
+      "summary": "Plasma v2 state is not yet recorded; preview gate remains pre-state."
+    },
+    {
+      "id": "path-plasma_spec_contract",
+      "payload": {},
+      "status": "pass",
+      "summary": "Required path exists: contracts/plasma_spec_v2.md"
+    },
+    {
+      "id": "path-pack_contract",
+      "payload": {},
+      "status": "pass",
+      "summary": "Required path exists: contracts/pack_v1.md"
+    },
+    {
+      "id": "path-migration_header",
+      "payload": {},
+      "status": "pass",
+      "summary": "Required path exists: products/savers/plasma/src/plasma_migration_v2.h"
+    },
+    {
+      "id": "path-migration_source",
+      "payload": {},
+      "status": "pass",
+      "summary": "Required path exists: products/savers/plasma/src/plasma_migration_v2.c"
+    },
+    {
+      "id": "path-core_header",
+      "payload": {},
+      "status": "pass",
+      "summary": "Required path exists: products/savers/plasma/src/plasma_v2_core.h"
+    },
+    {
+      "id": "path-core_source",
+      "payload": {},
+      "status": "pass",
+      "summary": "Required path exists: products/savers/plasma/src/plasma_v2_core.c"
+    },
+    {
+      "id": "path-pack_example",
+      "payload": {},
+      "status": "pass",
+      "summary": "Required path exists: products/savers/plasma/content/v2/examples/plasma_lava_v2.toml"
+    },
+    {
+      "id": "path-profile_proof",
+      "payload": {},
+      "status": "pass",
+      "summary": "Required path exists: validation/captures/plasma-v2/reference-preview/profile-proof.json"
+    },
+    {
+      "id": "path-proof_bundle",
+      "payload": {},
+      "status": "pass",
+      "summary": "Required path exists: validation/captures/plasma-v2/reference-preview/proof-bundle-v1.json"
+    },
+    {
+      "id": "path-material_summary",
+      "payload": {},
+      "status": "pass",
+      "summary": "Required path exists: validation/captures/plasma-v2/materials/material-treatment-summary.json"
+    },
+    {
+      "id": "path-aide_packet",
+      "payload": {},
+      "status": "pass",
+      "summary": "Required path exists: .aide/evidence_packets/screensave-plasma-v2-reference-preview.toml"
+    },
+    {
+      "id": "proof-profile-implemented",
+      "payload": {
+        "profile": {
+          "artifact_sets": [
+            "windows_current_x86_scr"
+          ],
+          "baseline_capture": "validation/captures/plasma-v2/reference-preview/frame-0090.rgba",
+          "baseline_proof": "validation/captures/plasma-v2/reference-preview/profile-proof.json",
+          "capture_frames": [
+            0,
+            8,
+            32,
+            90
+          ],
+          "claim_boundary": "Plasma v2 preview reference proof only; not stable promotion or artistic acceptance",
+          "comparison_class": "exact",
+          "create_destroy_cycles": 1,
+          "delta_ms": 100,
+          "height": 90,
+          "key": "plasma.v2.reference.preview",
+          "lifecycle": [
+            "create",
+            "resize",
+            "step",
+            "render",
+            "destroy"
+          ],
+          "preset": "plasma_lava",
+          "product": "plasma",
+          "resize_height": 72,
+          "resize_width": 128,
+          "seed": 4096,
+          "status": "implemented",
+          "width": 160
+        }
+      },
+      "status": "pass",
+      "summary": "Plasma preview proof profile must be implemented."
+    },
+    {
+      "id": "reference-captures",
+      "payload": {
+        "missing": []
+      },
+      "status": "pass",
+      "summary": "Reference preview captures must exist."
+    },
+    {
+      "id": "profile-proof-pass",
+      "payload": {
+        "comparison_status": "pass",
+        "observed_status": "pass"
+      },
+      "status": "pass",
+      "summary": "Plasma profile proof must pass exact comparison."
+    },
+    {
+      "id": "proof-bundle-boundaries",
+      "payload": {},
+      "status": "pass",
+      "summary": "Proof Bundle v1 must pass capture while blocking artistic/release axes."
+    },
+    {
+      "id": "validator-plasma-core-boundary",
+      "payload": {
+        "run": {
+          "command": "tools/scripts/check_plasma_core_boundaries.py",
+          "returncode": 0,
+          "status": "pass",
+          "stderr": "",
+          "stdout": "Plasma v2 core boundary checks passed."
+        }
+      },
+      "status": "pass",
+      "summary": "Required validator must pass."
+    },
+    {
+      "id": "validator-packc",
+      "payload": {
+        "run": {
+          "command": "tools/scripts/check_packc.py",
+          "returncode": 0,
+          "status": "pass",
+          "stderr": "",
+          "stdout": "packc checks passed."
+        }
+      },
+      "status": "pass",
+      "summary": "Required validator must pass."
+    },
+    {
+      "id": "validator-plasma-spec",
+      "payload": {
+        "run": {
+          "command": "tools/scripts/check_plasma_spec_v2.py",
+          "returncode": 0,
+          "status": "pass",
+          "stderr": "",
+          "stdout": "Plasma v2 specification checks passed."
+        }
+      },
+      "status": "pass",
+      "summary": "Required validator must pass."
+    },
+    {
+      "id": "validator-plasma-materials",
+      "payload": {
+        "run": {
+          "command": "tools/scripts/check_plasma_v2_materials.py",
+          "returncode": 0,
+          "status": "pass",
+          "stderr": "",
+          "stdout": "Plasma v2 material checks passed."
+        }
+      },
+      "status": "pass",
+      "summary": "Required validator must pass."
+    },
+    {
+      "id": "validator-workbench",
+      "payload": {
+        "run": {
+          "command": "tools/scripts/check_workbench_shell.py",
+          "returncode": 0,
+          "status": "pass",
+          "stderr": "",
+          "stdout": "Workbench shell checks passed."
+        }
+      },
+      "status": "pass",
+      "summary": "Required validator must pass."
+    },
+    {
+      "id": "validator-aide-evidence-bridge",
+      "payload": {
+        "run": {
+          "command": "tools/scripts/check_aide_evidence_bridge.py",
+          "returncode": 0,
+          "status": "pass",
+          "stderr": "",
+          "stdout": "AIDE evidence bridge checks passed."
+        }
+      },
+      "status": "pass",
+      "summary": "Required validator must pass."
+    },
+    {
+      "id": "validator-aide-evidence-index",
+      "payload": {
+        "run": {
+          "command": "tools/scripts/check_aide_evidence_index.py",
+          "returncode": 0,
+          "status": "pass",
+          "stderr": "",
+          "stdout": "AIDE evidence index checks passed."
+        }
+      },
+      "status": "pass",
+      "summary": "Required validator must pass."
+    },
+    {
+      "id": "blocked-claim-scan",
+      "payload": {
+        "hits": []
+      },
+      "status": "pass",
+      "summary": "No stable/artistic/release/compatibility overclaim may exist."
+    }
+  ],
+  "schema": "screensave.plasma-v2.preview-gate.v0",
+  "status": "pass"
+}
