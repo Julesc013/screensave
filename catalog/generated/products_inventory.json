@@ -1369,11 +1369,13 @@
       "family": "",
       "files": {
         "headers": [
+          "products/apps/suite/src/manager_pack_preview.h",
           "products/apps/suite/src/suite_internal.h"
         ],
         "presets": [],
         "resources": [],
         "sources": [
+          "products/apps/suite/src/manager_pack_preview.c",
           "products/apps/suite/src/suite_app.c",
           "products/apps/suite/src/suite_browser.c",
           "products/apps/suite/src/suite_config.c",
@@ -1384,6 +1386,7 @@
         ],
         "tests": [
           "products/apps/suite/tests/README.md",
+          "products/apps/suite/tests/manager_pack_preview_smoke.c",
           "products/apps/suite/tests/smoke.c"
         ]
       },

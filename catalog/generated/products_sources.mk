@@ -61,7 +61,7 @@ SCREENSAVE_GALLERY_RESOURCES := products/savers/gallery/src/gallery_config.rc pr
 SCREENSAVE_ANTHOLOGY_SOURCES := products/savers/anthology/src/anthology_config.c products/savers/anthology/src/anthology_entry.c products/savers/anthology/src/anthology_module.c products/savers/anthology/src/anthology_presets.c products/savers/anthology/src/anthology_render.c products/savers/anthology/src/anthology_sim.c products/savers/anthology/src/anthology_themes.c
 SCREENSAVE_ANTHOLOGY_RESOURCES := products/savers/anthology/src/anthology_config.rc products/savers/anthology/src/anthology_version.rc
 
-SCREENSAVE_SUITE_SOURCES := products/apps/suite/src/suite_app.c products/apps/suite/src/suite_browser.c products/apps/suite/src/suite_config.c products/apps/suite/src/suite_launch.c products/apps/suite/src/suite_main.c products/apps/suite/src/suite_manifest.c products/apps/suite/src/suite_state.c
+SCREENSAVE_SUITE_SOURCES := products/apps/suite/src/manager_pack_preview.c products/apps/suite/src/suite_app.c products/apps/suite/src/suite_browser.c products/apps/suite/src/suite_config.c products/apps/suite/src/suite_launch.c products/apps/suite/src/suite_main.c products/apps/suite/src/suite_manifest.c products/apps/suite/src/suite_state.c
 SCREENSAVE_SUITE_RESOURCES :=
 
 SCREENSAVE_BENCHLAB_SOURCES := products/apps/benchlab/src/benchlab_app.c products/apps/benchlab/src/benchlab_config.c products/apps/benchlab/src/benchlab_diag.c products/apps/benchlab/src/benchlab_main.c products/apps/benchlab/src/benchlab_overlay.c products/apps/benchlab/src/benchlab_report.c products/apps/benchlab/src/benchlab_session.c products/apps/benchlab/src/benchlab_workbench_shell.c
