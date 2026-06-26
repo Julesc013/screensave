@@ -18,6 +18,7 @@
     "dlls",
     "macros",
     "commands",
+    "network_references",
     "absolute_paths",
     "parent_traversal"
   ],

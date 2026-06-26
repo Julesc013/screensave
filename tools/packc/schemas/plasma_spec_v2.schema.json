@@ -1,0 +1,117 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "brightness": {
+      "maximum": 100,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "complexity": {
+      "maximum": 100,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "contrast": {
+      "maximum": 100,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "feedback_amount": {
+      "maximum": 100,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "field_family": {
+      "enum": [
+        "classic_interference",
+        "radial_warped"
+      ],
+      "type": "string"
+    },
+    "material": {
+      "enum": [
+        "plasma_lava",
+        "aurora_cool",
+        "oceanic_blue",
+        "museum_phosphor",
+        "quiet_darkroom"
+      ],
+      "type": "string"
+    },
+    "motion_speed": {
+      "maximum": 100,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "output_style": {
+      "enum": [
+        "continuous",
+        "banded",
+        "contour"
+      ],
+      "type": "string"
+    },
+    "presentation": {
+      "const": "flat",
+      "type": "string"
+    },
+    "quality_intent": {
+      "const": "safe",
+      "type": "string"
+    },
+    "scale": {
+      "maximum": 100,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "schema_id": {
+      "const": "screensave.plasma.spec.v2",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": 2,
+      "type": "integer"
+    },
+    "seed_policy": {
+      "enum": [
+        "session",
+        "fixed",
+        "randomize"
+      ],
+      "type": "string"
+    },
+    "treatment": {
+      "enum": [
+        "none",
+        "restrained_dither",
+        "restrained_crt"
+      ],
+      "type": "string"
+    },
+    "warp_amount": {
+      "maximum": 100,
+      "minimum": 0,
+      "type": "integer"
+    }
+  },
+  "required": [
+    "schema_id",
+    "schema_version",
+    "field_family",
+    "scale",
+    "complexity",
+    "motion_speed",
+    "warp_amount",
+    "feedback_amount",
+    "output_style",
+    "material",
+    "brightness",
+    "contrast",
+    "treatment",
+    "quality_intent",
+    "seed_policy",
+    "presentation"
+  ],
+  "schema": "screensave.plasma.spec.v2",
+  "type": "object"
+}

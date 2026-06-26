@@ -1,0 +1,58 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "claim_boundary": {
+      "type": "string"
+    },
+    "content_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "data_only": {
+      "const": true,
+      "type": "boolean"
+    },
+    "file_count": {
+      "maximum": 4,
+      "minimum": 1,
+      "type": "integer"
+    },
+    "kind": {
+      "const": "screensave.plasma.v2",
+      "type": "string"
+    },
+    "pack_id": {
+      "pattern": "^[A-Za-z0-9_.-]+$",
+      "type": "string"
+    },
+    "pack_manifest_schema": {
+      "const": "screensave.pack_manifest.v1",
+      "type": "string"
+    },
+    "pack_schema": {
+      "const": "screensave.pack.v1",
+      "type": "string"
+    },
+    "product": {
+      "const": "plasma",
+      "type": "string"
+    },
+    "source_ref": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "pack_manifest_schema",
+    "pack_schema",
+    "pack_id",
+    "kind",
+    "product",
+    "file_count",
+    "data_only",
+    "content_sha256",
+    "source_ref",
+    "claim_boundary"
+  ],
+  "schema": "screensave.pack_manifest.v1",
+  "type": "object"
+}

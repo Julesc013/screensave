@@ -1,6 +1,6 @@
 # Pack v1 Contract
 
-Status: bounded PAW-DX data-pack contract.
+Status: bounded Pack v1 preview contract.
 
 `packc` compiles repository-local authoring TOML into a deterministic,
 data-only runtime package. Pack v1 is not a plugin ABI, not a scripting surface,
@@ -35,6 +35,7 @@ Pack v1 is data only:
 - no scripts,
 - no DLLs or executables,
 - no macros,
+- no network references,
 - no absolute paths,
 - no parent traversal,
 - bounded strings,
@@ -45,8 +46,20 @@ Pack v1 is data only:
 - transactional output under `out/`.
 
 The compiler must reject unknown pack kinds, unknown Plasma v2 tokens,
-out-of-range numeric fields, path-like string payloads, and executable-looking
-fields.
+out-of-range numeric fields, network references, path-like string payloads, and
+executable-looking fields.
+
+## Preview Schemas
+
+The Pack v1 preview schema files are:
+
+- `tools/packc/schemas/plasma_spec_v2.schema.json`
+- `tools/packc/schemas/pack_manifest_v1.schema.json`
+- `tools/packc/schemas/plasma_pack_v1.schema.json`
+
+These schemas document the bounded compiler surface. The compiler itself remains
+the local deterministic authority for accepted tokens, canonical output, content
+hashes, proof-profile references, and output-root enforcement.
 
 ## Boundaries
 

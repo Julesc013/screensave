@@ -13,7 +13,11 @@ import tempfile
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 PACKC = ROOT / "tools" / "packc" / "packc.py"
 CONTRACT = ROOT / "contracts" / "pack_v1.md"
-SCHEMA = ROOT / "tools" / "packc" / "schemas" / "plasma_pack_v1.schema.json"
+SCHEMAS = [
+    ROOT / "tools" / "packc" / "schemas" / "plasma_pack_v1.schema.json",
+    ROOT / "tools" / "packc" / "schemas" / "plasma_spec_v2.schema.json",
+    ROOT / "tools" / "packc" / "schemas" / "pack_manifest_v1.schema.json",
+]
 EXAMPLE = ROOT / "products" / "savers" / "plasma" / "content" / "v2" / "examples" / "plasma_lava_v2.toml"
 OUT_DIR = ROOT / "out" / "checks" / "packc" / "plasma_lava_v2"
 
@@ -39,7 +43,7 @@ def load_json(path: pathlib.Path) -> dict:
 
 def main() -> int:
     errors: list[str] = []
-    for path in [PACKC, CONTRACT, SCHEMA, EXAMPLE]:
+    for path in [PACKC, CONTRACT, EXAMPLE, *SCHEMAS]:
         require(path.exists(), f"Missing packc input {path.relative_to(ROOT)}.", errors)
     if errors:
         for error in errors:
@@ -58,9 +62,11 @@ def main() -> int:
     require((OUT_DIR / "hash-manifest.json").exists(), "packc compile must write hash-manifest.json.", errors)
     if (OUT_DIR / "manifest.json").exists():
         manifest = load_json(OUT_DIR / "manifest.json")
+        require(manifest.get("pack_manifest_schema") == "screensave.pack_manifest.v1", "packc manifest must record Pack Manifest v1 schema.", errors)
         require(manifest.get("data_only") is True, "packc manifest must record data_only true.", errors)
         require(manifest.get("kind") == "screensave.plasma.v2", "packc manifest must record Plasma pack kind.", errors)
         require(manifest.get("file_count") == 4, "packc manifest must record the bounded file count.", errors)
+        require(isinstance(manifest.get("content_sha256"), str) and len(manifest.get("content_sha256", "")) == 64, "packc manifest must emit a content hash.", errors)
     if (OUT_DIR / "plasma-spec-v2.json").exists():
         spec = load_json(OUT_DIR / "plasma-spec-v2.json")
         require(spec.get("proof_profile") == "plasma.v2.reference.preview", "compiled pack must reference the preview proof profile.", errors)
@@ -89,6 +95,16 @@ def main() -> int:
         )
         bad_path_validate = run_packc(["validate", str(bad_path)])
         require(bad_path_validate.returncode != 0, "packc must reject parent-traversal strings.", errors)
+        bad_network = temp_root / "bad_network.toml"
+        bad_network.write_text(
+            EXAMPLE.read_text(encoding="utf-8").replace(
+                'provenance = "PAW-DX U09 deterministic migration"',
+                'provenance = "https://example.invalid/source"',
+            ),
+            encoding="utf-8",
+        )
+        bad_network_validate = run_packc(["validate", str(bad_network)])
+        require(bad_network_validate.returncode != 0, "packc must reject network-reference strings.", errors)
         outside_compile = run_packc(["compile", str(EXAMPLE), "--out", str(temp_root / "outside")])
         require(outside_compile.returncode != 0, "packc compile must reject output outside out/.", errors)
 

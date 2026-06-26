@@ -21,6 +21,7 @@ MAX_EXPANDED_BYTES = 65536
 MAX_OUTPUT_FILES = 4
 
 PACK_SCHEMA = "screensave.pack.v1"
+PACK_MANIFEST_SCHEMA = "screensave.pack_manifest.v1"
 PACK_KIND = "screensave.plasma.v2"
 PLASMA_SCHEMA_ID = "screensave.plasma.spec.v2"
 PLASMA_SCHEMA_VERSION = 2
@@ -134,6 +135,9 @@ def ensure_safe_string(label: str, value: Any) -> str:
     for token in [".dll", ".exe", ".bat", ".cmd", ".ps1", "<script"]:
         if token in lowered:
             raise PackError(f"{label} must not contain executable-looking text.")
+    for token in ["http://", "https://", "ftp://", "file://"]:
+        if token in lowered:
+            raise PackError(f"{label} must not contain network or file URI references.")
     return value
 
 
@@ -268,17 +272,20 @@ def compile_pack(source: pathlib.Path, output_dir: pathlib.Path) -> dict[str, An
         proof_path = temp_dir / "proof-profile-ref.json"
         manifest_path = temp_dir / "manifest.json"
         hash_path = temp_dir / "hash-manifest.json"
+        content_hash = sha256_bytes(canonical_bytes(canonical_pack))
         proof_ref = {
             "proof_profile": canonical_pack["proof_profile"],
             "claim_boundary": "Proof profile reference only; pack compilation does not run proof or promote release.",
         }
         manifest = {
+            "pack_manifest_schema": PACK_MANIFEST_SCHEMA,
             "pack_schema": PACK_SCHEMA,
             "pack_id": canonical_pack["pack_id"],
             "kind": canonical_pack["kind"],
             "product": canonical_pack["product"],
             "file_count": MAX_OUTPUT_FILES,
             "data_only": True,
+            "content_sha256": content_hash,
             "source_ref": canonical_pack["source_ref"],
             "claim_boundary": canonical_pack["claim_boundary"],
         }
