@@ -1,4 +1,5 @@
 #include "screensave/sslab.h"
+#include "screensave/sslab_v1.h"
 #include "proof_registry.h"
 
 #include <stdio.h>
@@ -136,6 +137,7 @@ static int runner_write_proof_json(
     const sslab_capture_receipt *captures,
     const sslab_lifecycle_receipt *lifecycle,
     const sslab_profile_receipt *profile_receipt,
+    const char *abi_name,
     sslab_execution_path execution_path,
     sslab_status aggregate_status)
 {
@@ -151,6 +153,9 @@ static int runner_write_proof_json(
     fprintf(file, ",\n");
     fprintf(file, "  \"product\": ");
     runner_write_json_string(file, generated->product);
+    fprintf(file, ",\n");
+    fprintf(file, "  \"abi\": ");
+    runner_write_json_string(file, abi_name);
     fprintf(file, ",\n");
     fprintf(file, "  \"path\": ");
     runner_write_json_string(file, runner_execution_path_name(execution_path));
@@ -201,6 +206,7 @@ static int runner_run_proof(
     const char *profile_key,
     const char *output_path,
     const char *output_root,
+    const char *abi_name,
     sslab_execution_path execution_path)
 {
     const screensave_generated_proof_profile *generated;
@@ -218,6 +224,22 @@ static int runner_run_proof(
     FILE *file;
     unsigned int index;
     unsigned long max_frame;
+
+    if (abi_name == 0) {
+        abi_name = "v0";
+    }
+    if (strcmp(abi_name, "v1") == 0) {
+        sslab_v1_abi_info abi_info;
+
+        if (execution_path != SSLAB_EXECUTION_PATH_V2) {
+            fprintf(stderr, "ABI v1 requires --path v2\n");
+            return 2;
+        }
+        if (sslab_v1_get_abi_info(&abi_info) != SSLAB_V1_STATUS_OK || abi_info.abi_version != SSLAB_V1_ABI_VERSION) {
+            fprintf(stderr, "failed to initialize sslab ABI v1\n");
+            return 3;
+        }
+    }
 
     generated = screensave_generated_find_proof_profile(profile_key);
     if (generated == 0) {
@@ -299,6 +321,7 @@ static int runner_run_proof(
         captures,
         &lifecycle_receipt,
         &profile_receipt,
+        abi_name,
         execution_path,
         aggregate_status);
     if (output_path != 0) {
@@ -310,7 +333,7 @@ static int runner_run_proof(
 
 static void runner_usage(void)
 {
-    fprintf(stderr, "usage: sslab_runner proof --profile <profile-key> [--path v1|v2] [--output <path>] [--output-root <path>]\n");
+    fprintf(stderr, "usage: sslab_runner proof --profile <profile-key> [--abi v0|v1] [--path v1|v2] [--output <path>] [--output-root <path>]\n");
 }
 
 int main(int argc, char **argv)
@@ -319,6 +342,7 @@ int main(int argc, char **argv)
     const char *output_path;
     const char *output_root;
     const char *path_name;
+    const char *abi_name;
     sslab_execution_path execution_path;
     int index;
 
@@ -326,6 +350,7 @@ int main(int argc, char **argv)
     output_path = 0;
     output_root = 0;
     path_name = "v1";
+    abi_name = "v0";
     if (argc < 4 || strcmp(argv[1], "proof") != 0) {
         runner_usage();
         return 1;
@@ -343,6 +368,9 @@ int main(int argc, char **argv)
         } else if (strcmp(argv[index], "--path") == 0 && (index + 1) < argc) {
             ++index;
             path_name = argv[index];
+        } else if (strcmp(argv[index], "--abi") == 0 && (index + 1) < argc) {
+            ++index;
+            abi_name = argv[index];
         } else {
             runner_usage();
             return 1;
@@ -356,6 +384,10 @@ int main(int argc, char **argv)
         runner_usage();
         return 1;
     }
+    if (strcmp(abi_name, "v0") != 0 && strcmp(abi_name, "v1") != 0) {
+        runner_usage();
+        return 1;
+    }
     execution_path = runner_execution_path(path_name);
-    return runner_run_proof(profile_key, output_path, output_root, execution_path);
+    return runner_run_proof(profile_key, output_path, output_root, abi_name, execution_path);
 }

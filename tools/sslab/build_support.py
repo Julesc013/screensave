@@ -9,6 +9,7 @@ import subprocess
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 SSLAB_INCLUDE = ROOT / "tools" / "sslab" / "include"
 SSLAB_SRC = ROOT / "tools" / "sslab" / "src"
+SSLAB_SRC_V1 = ROOT / "tools" / "sslab" / "src_v1"
 PLATFORM_INCLUDE = ROOT / "platform" / "include"
 NOCTURNE_SRC = ROOT / "products" / "savers" / "nocturne" / "src"
 RICOCHET_SRC = ROOT / "products" / "savers" / "ricochet" / "src"
@@ -24,6 +25,12 @@ LIBSSLAB_SOURCES = [
     SSLAB_SRC / "capture.c",
     SSLAB_SRC / "renderer_rgba8.c",
     SSLAB_SRC / "diag_stub.c",
+    SSLAB_SRC_V1 / "context.c",
+    SSLAB_SRC_V1 / "product.c",
+    SSLAB_SRC_V1 / "session.c",
+    SSLAB_SRC_V1 / "operations.c",
+    SSLAB_SRC_V1 / "profile.c",
+    SSLAB_SRC_V1 / "proof.c",
     SSLAB_SRC / "products" / "nocturne_adapter.c",
     SSLAB_SRC / "products" / "ricochet_adapter.c",
     NOCTURNE_SRC / "nocturne_core.c",
@@ -58,6 +65,8 @@ INCLUDE_ARGS = [
     str(SSLAB_INCLUDE),
     "-I",
     str(SSLAB_SRC),
+    "-I",
+    str(SSLAB_SRC_V1),
     "-I",
     str(NOCTURNE_SRC),
     "-I",
