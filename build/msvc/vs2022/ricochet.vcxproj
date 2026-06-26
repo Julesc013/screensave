@@ -20,8 +20,10 @@
     <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_config.c" />
     <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_module.c" />
     <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_presets.c" />
+    <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_core.c" />
     <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_render.c" />
     <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_sim.c" />
+    <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_v1_adapter.c" />
     <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_themes.c" />
     <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_entry.c" />
   </ItemGroup>

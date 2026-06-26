@@ -6,80 +6,19 @@
 #include "screensave/config_api.h"
 #include "screensave/diagnostics_api.h"
 #include "screensave/saver_api.h"
+#include "ricochet_core.h"
 
 #define RICOCHET_PRODUCT_REGISTRY_ROOTA "Software\\Julesc013\\ScreenSave\\Products\\ricochet"
-#define RICOCHET_DEFAULT_PRESET_KEY "classic_clean"
-#define RICOCHET_DEFAULT_THEME_KEY "classic_clean"
-#define RICOCHET_PRESET_COUNT 7U
-#define RICOCHET_THEME_COUNT 5U
-#define RICOCHET_MAX_OBJECTS 5U
-#define RICOCHET_MAX_TRAIL_POINTS 14U
-
-typedef enum ricochet_object_mode_tag {
-    RICOCHET_OBJECT_BLOCK = 0,
-    RICOCHET_OBJECT_DISC = 1,
-    RICOCHET_OBJECT_EMBLEM = 2
-} ricochet_object_mode;
-
-typedef enum ricochet_speed_mode_tag {
-    RICOCHET_SPEED_CALM = 0,
-    RICOCHET_SPEED_STANDARD = 1,
-    RICOCHET_SPEED_LIVELY = 2
-} ricochet_speed_mode;
-
-typedef enum ricochet_trail_mode_tag {
-    RICOCHET_TRAIL_NONE = 0,
-    RICOCHET_TRAIL_SHORT = 1,
-    RICOCHET_TRAIL_PHOSPHOR = 2
-} ricochet_trail_mode;
-
-typedef struct ricochet_config_tag {
-    int object_mode;
-    int object_count;
-    int speed_mode;
-    int trail_mode;
-} ricochet_config;
-
-typedef struct ricochet_preset_values_tag {
-    int object_mode;
-    int object_count;
-    int speed_mode;
-    int trail_mode;
-} ricochet_preset_values;
 
 typedef struct ricochet_rng_state_tag {
     unsigned long state;
 } ricochet_rng_state;
 
-typedef struct ricochet_body_tag {
-    long x;
-    long y;
-    long vx;
-    long vy;
-    int size;
-    unsigned int trail_head;
-    unsigned int trail_count;
-    long trail_x[RICOCHET_MAX_TRAIL_POINTS];
-    long trail_y[RICOCHET_MAX_TRAIL_POINTS];
-    int trail_size[RICOCHET_MAX_TRAIL_POINTS];
-    int flash_timer;
-} ricochet_body;
-
 extern const screensave_preset_descriptor g_ricochet_presets[];
 extern const screensave_theme_descriptor g_ricochet_themes[];
 
 struct screensave_saver_session_tag {
-    ricochet_config config;
-    const screensave_theme_descriptor *theme;
-    screensave_sizei drawable_size;
-    screensave_detail_level detail_level;
-    int preview_mode;
-    ricochet_rng_state rng;
-    unsigned int object_count;
-    ricochet_body bodies[RICOCHET_MAX_OBJECTS];
-    int celebration_timer;
-    unsigned long elapsed_millis;
-    unsigned long variation_elapsed_millis;
+    ricochet_core_session *core;
 };
 
 const screensave_saver_module *ricochet_get_module(void);

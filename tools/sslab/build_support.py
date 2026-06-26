@@ -33,6 +33,8 @@ LIBSSLAB_SOURCES = [
     NOCTURNE_SRC / "nocturne_v2_adapter.c",
     NOCTURNE_SRC / "nocturne_themes.c",
     NOCTURNE_SRC / "nocturne_presets.c",
+    RICOCHET_SRC / "ricochet_core.c",
+    RICOCHET_SRC / "ricochet_v1_adapter.c",
     RICOCHET_SRC / "ricochet_sim.c",
     RICOCHET_SRC / "ricochet_render.c",
     RICOCHET_SRC / "ricochet_v2_adapter.c",

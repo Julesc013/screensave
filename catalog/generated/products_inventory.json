@@ -130,6 +130,7 @@
       "family": "motion",
       "files": {
         "headers": [
+          "products/savers/ricochet/src/ricochet_core.h",
           "products/savers/ricochet/src/ricochet_internal.h",
           "products/savers/ricochet/src/ricochet_resource.h",
           "products/savers/ricochet/src/ricochet_v2_adapter.h"
@@ -144,12 +145,14 @@
         ],
         "sources": [
           "products/savers/ricochet/src/ricochet_config.c",
+          "products/savers/ricochet/src/ricochet_core.c",
           "products/savers/ricochet/src/ricochet_entry.c",
           "products/savers/ricochet/src/ricochet_module.c",
           "products/savers/ricochet/src/ricochet_presets.c",
           "products/savers/ricochet/src/ricochet_render.c",
           "products/savers/ricochet/src/ricochet_sim.c",
           "products/savers/ricochet/src/ricochet_themes.c",
+          "products/savers/ricochet/src/ricochet_v1_adapter.c",
           "products/savers/ricochet/src/ricochet_v2_adapter.c"
         ],
         "tests": [
