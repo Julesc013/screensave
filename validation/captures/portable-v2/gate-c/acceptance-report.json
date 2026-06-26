@@ -1,0 +1,263 @@
+{
+  "checks": [
+    {
+      "data": {
+        "status": "active"
+      },
+      "id": "project-state-portable-v2-mode",
+      "status": "pass",
+      "summary": "PROJECT_STATE portable_v2 status is active before acceptance or accepted after acceptance."
+    },
+    {
+      "data": {
+        "remaining": [],
+        "status": "complete"
+      },
+      "id": "proof-kernel-v1-complete",
+      "status": "pass",
+      "summary": "Proof Kernel v1 is complete with no remaining work."
+    },
+    {
+      "data": {
+        "run": {
+          "command": [
+            "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+            "tools/scripts/check_product_core_boundaries.py"
+          ],
+          "returncode": 0,
+          "status": "pass",
+          "stderr": "",
+          "stdout": "Product core boundary checks passed.",
+          "timeout_seconds": 240
+        }
+      },
+      "id": "product-core-boundaries",
+      "status": "pass",
+      "summary": "Command passed."
+    },
+    {
+      "data": {
+        "run": {
+          "command": [
+            "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+            "tools/scripts/check_portable_v2.py"
+          ],
+          "returncode": 0,
+          "status": "pass",
+          "stderr": "",
+          "stdout": "Portable v2 checks passed.",
+          "timeout_seconds": 240
+        }
+      },
+      "id": "portable-v2-headers",
+      "status": "pass",
+      "summary": "Command passed."
+    },
+    {
+      "data": {
+        "run": {
+          "command": [
+            "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+            "tools/scripts/check_portable_v2_equivalence.py"
+          ],
+          "returncode": 0,
+          "status": "pass",
+          "stderr": "",
+          "stdout": "Portable v2 equivalence checks passed.",
+          "timeout_seconds": 240
+        }
+      },
+      "id": "portable-v2-equivalence",
+      "status": "pass",
+      "summary": "Command passed."
+    },
+    {
+      "data": {
+        "run": {
+          "command": [
+            "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+            "tools/scripts/check_sslab_abi_v1.py"
+          ],
+          "returncode": 0,
+          "status": "pass",
+          "stderr": "",
+          "stdout": "sslab ABI v1 checks passed.",
+          "timeout_seconds": 240
+        }
+      },
+      "id": "libsslab-abi-v1",
+      "status": "pass",
+      "summary": "Command passed."
+    },
+    {
+      "data": {
+        "run": {
+          "command": [
+            "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+            "tools/scripts/check_workbench_shell.py"
+          ],
+          "returncode": 0,
+          "status": "pass",
+          "stderr": "",
+          "stdout": "Workbench shell checks passed.",
+          "timeout_seconds": 240
+        }
+      },
+      "id": "workbench-v2-inspect",
+      "status": "pass",
+      "summary": "Command passed."
+    },
+    {
+      "data": {
+        "run": {
+          "command": [
+            "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+            "tools/scripts/check_aide_evidence_bridge.py"
+          ],
+          "returncode": 0,
+          "status": "pass",
+          "stderr": "",
+          "stdout": "AIDE evidence bridge checks passed.",
+          "timeout_seconds": 240
+        }
+      },
+      "id": "aide-evidence-export",
+      "status": "pass",
+      "summary": "Command passed."
+    },
+    {
+      "data": {
+        "run": {
+          "command": [
+            "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+            "tools/scripts/check_proof_bundle_v1.py"
+          ],
+          "returncode": 0,
+          "status": "pass",
+          "stderr": "",
+          "stdout": "lifecycle pass resize=True steps=8 cycles=1 checksum=1677695189\ninformational out/proof/proof-bundle-v1/check-nocturne.json\nprofile-proof pass ricochet.reference.v1 abi=v0 path=v1 capture=0:b8c7c0ea922b,4:7a1615e04d27,8:a50582e8e8f5,32:65c37015993c comparison=pass lifecycle=pass\nprofile informational ricochet p50=1.043ms p95=2.303ms p99=2.303ms short_soak=pass\nportable-v2-equivalence pass out\\proof\\proof-bundle-v1\\check-portable-v2-equivalence.json\ninformational out/proof/proof-bundle-v1/check-ricochet.json\nProof Bundle v1 checks passed.",
+          "timeout_seconds": 300
+        }
+      },
+      "id": "proof-bundle-v1",
+      "status": "pass",
+      "summary": "Command passed."
+    },
+    {
+      "data": {
+        "violations": []
+      },
+      "id": "v2-adapters-use-product-cores",
+      "status": "pass",
+      "summary": "Nocturne and Ricochet v2 adapters call extracted product cores instead of v1 sessions."
+    },
+    {
+      "data": {
+        "missing": []
+      },
+      "id": "adapter-fixed-v2-capabilities",
+      "status": "pass",
+      "summary": "Project adapter exposes the fixed portable v2 proof and bundle capabilities."
+    },
+    {
+      "data": {
+        "forbidden_present": []
+      },
+      "id": "adapter-no-generic-command-capability",
+      "status": "pass",
+      "summary": "Project adapter does not expose generic command, run, exec, arbitrary-profile, or arbitrary-command capabilities."
+    },
+    {
+      "data": {
+        "summary_ref": "validation/captures/portable-v2/native-windows-current/artifact-summary.json"
+      },
+      "id": "native-artifact-summary",
+      "status": "pass",
+      "summary": "Native artifact summary records 19 current .scr artifacts and 2 current tools."
+    },
+    {
+      "data": {
+        "summary_ref": "validation/captures/portable-v2/native-windows-current/pe-audit-summary.json"
+      },
+      "id": "native-pe-audit-summary",
+      "status": "pass",
+      "summary": "Native PE audit summaries exist and report zero violations."
+    },
+    {
+      "data": {
+        "summary_ref": "validation/captures/portable-v2/native-windows-current/proof-summary.json"
+      },
+      "id": "native-proof-summary",
+      "status": "pass",
+      "summary": "Native proof summary records exact Nocturne and Ricochet v1/v2 hashes."
+    },
+    {
+      "data": {
+        "changed_native_inputs": [],
+        "evidence_source": "ff601685e9e540e2c6ad01107945adfe5783278c"
+      },
+      "id": "native-evidence-current-for-runtime-inputs",
+      "status": "pass",
+      "summary": "No native runtime, product, build, or catalog inputs changed after the native evidence source commit."
+    },
+    {
+      "data": {
+        "axis": {
+          "claim_boundary": "Named canary v1/v2 deterministic equivalence only.",
+          "evidence_refs": [
+            "out/proof/proof-bundle-v1/check-portable-v2-equivalence.json"
+          ],
+          "products": [
+            "nocturne",
+            "ricochet"
+          ],
+          "profiles": [
+            "nocturne.reference.v0",
+            "ricochet.reference.v1"
+          ],
+          "receipt_claim_boundary": "v1/v2 deterministic equivalence for Nocturne and Ricochet canary proof profiles only",
+          "status": "pass",
+          "summary": "Portable v2 equivalence receipt was supplied."
+        },
+        "bundle_ref": "out/proof/proof-bundle-v1/check-ricochet.json"
+      },
+      "id": "proof-bundle-portable-v2-axis",
+      "status": "pass",
+      "summary": "Proof Bundle v1 includes the explicit portable v2 equivalence axis."
+    },
+    {
+      "data": {
+        "refs": []
+      },
+      "id": "aide-absent-from-product-runtime",
+      "status": "pass",
+      "summary": "AIDE remains absent from product and platform runtime C sources."
+    },
+    {
+      "data": {
+        "candidate_source": "b906edf5e81eb0386eb74596bc706b28d8c0e171",
+        "changed_files": []
+      },
+      "id": "plasma-runtime-unchanged",
+      "status": "pass",
+      "summary": "Plasma runtime files have not changed during Gate C closure."
+    }
+  ],
+  "claim_boundary": "Gate C acceptance evidence only; not compatibility certification, artistic acceptance, release promotion, or Plasma runtime implementation.",
+  "inputs": {
+    "candidate_base": "validation/captures/portable-v2/candidate-base.json",
+    "native_artifact_summary": "validation/captures/portable-v2/native-windows-current/artifact-summary.json",
+    "native_pe_audit_summary": "validation/captures/portable-v2/native-windows-current/pe-audit-summary.json",
+    "native_proof_summary": "validation/captures/portable-v2/native-windows-current/proof-summary.json",
+    "project_state": "PROJECT_STATE.toml",
+    "proof_bundle_check": "out/proof/proof-bundle-v1/check-ricochet.json"
+  },
+  "mode": "pre_acceptance",
+  "schema": "screensave-portable-v2-gate-c-acceptance-report-v0",
+  "source": {
+    "branch": "main",
+    "commit": "de751d3bbe9a53cbd16decbcd7c934f2e068d3ab",
+    "dirty": false
+  },
+  "status": "pass"
+}

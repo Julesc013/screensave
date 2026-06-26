@@ -1,0 +1,18 @@
+{
+  "inputs": {
+    "candidate_base": "validation/captures/portable-v2/candidate-base.json",
+    "native_artifact_summary": "validation/captures/portable-v2/native-windows-current/artifact-summary.json",
+    "native_pe_audit_summary": "validation/captures/portable-v2/native-windows-current/pe-audit-summary.json",
+    "native_proof_summary": "validation/captures/portable-v2/native-windows-current/proof-summary.json",
+    "project_state": "PROJECT_STATE.toml",
+    "proof_bundle_check": "out/proof/proof-bundle-v1/check-ricochet.json"
+  },
+  "mode": "pre_acceptance",
+  "schema": "screensave-portable-v2-gate-c-acceptance-inputs-v0",
+  "source": {
+    "branch": "main",
+    "commit": "de751d3bbe9a53cbd16decbcd7c934f2e068d3ab",
+    "dirty": false
+  },
+  "status": "pass"
+}
