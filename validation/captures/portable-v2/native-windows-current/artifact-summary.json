@@ -1,0 +1,151 @@
+{
+  "schema": "screensave-portable-v2-native-artifact-summary-v0",
+  "status": "pass",
+  "captured_on": "2026-06-26",
+  "source": {
+    "branch": "main",
+    "commit": "ff601685e9e540e2c6ad01107945adfe5783278c",
+    "dirty": false
+  },
+  "claim_boundary": "Current Windows artifact build facts only; not compatibility certification, artistic acceptance, or release promotion.",
+  "profiles": [
+    {
+      "profile": "windows-current-x86",
+      "artifact_set": "windows_current_x86_scr",
+      "artifact_profile": "windows_current_x86_scr",
+      "build_receipt_ref": "out/gate-c/windows-current-x86/build-receipt.json",
+      "manifest_ref": "out/gate-c/windows-current-x86/windows_current_x86_scr.manifest.json",
+      "expected_count": 19,
+      "observed_count": 19,
+      "missing_count": 0,
+      "unexpected_count": 0,
+      "machine": "x86",
+      "format": "PE32",
+      "extension": ".scr",
+      "artifacts": [
+        {
+          "path": "out/msvc/vs2022/Release/anthology/anthology.scr",
+          "bytes": 553984,
+          "sha256": "5cbce40e46ca1e1cb5198124977c813313b4837c8cc8c9d5d5ed947ccda2c8fe"
+        },
+        {
+          "path": "out/msvc/vs2022/Release/atlas/atlas.scr",
+          "bytes": 141824,
+          "sha256": "bad2eaf2aade7fa2a687d531e1767b1c03b937b4f2c26f4491a8afc6234a0821"
+        },
+        {
+          "path": "out/msvc/vs2022/Release/city/city.scr",
+          "bytes": 147968,
+          "sha256": "8460759e51336f03dfdfdd476f0906b9e2fe6a2f6df4762191f5a2a599da274c"
+        },
+        {
+          "path": "out/msvc/vs2022/Release/deepfield/deepfield.scr",
+          "bytes": 144896,
+          "sha256": "74e27bf5470704820b148dc7e81e7c350d932c65ceda5091a328327e31b68429"
+        },
+        {
+          "path": "out/msvc/vs2022/Release/ecosystems/ecosystems.scr",
+          "bytes": 142848,
+          "sha256": "0c2f3c1dbc455baeea86743d5698ee3b4bb430983bd8e24a0065280546e60ade"
+        },
+        {
+          "path": "out/msvc/vs2022/Release/explorer/explorer.scr",
+          "bytes": 145920,
+          "sha256": "713bdb385e63336b51e6c0627950c37e8cd5630d09f41f5260d1f77b8c803b07"
+        },
+        {
+          "path": "out/msvc/vs2022/Release/gallery/gallery.scr",
+          "bytes": 144384,
+          "sha256": "3d15e008139a22a95411e2d07efc994147230a9c52950a0153fc8fe4e113e383"
+        },
+        {
+          "path": "out/msvc/vs2022/Release/lifeforms/lifeforms.scr",
+          "bytes": 144384,
+          "sha256": "2aca8cd1a6c83f3e6b13896f2e5112f7642024bbf74b13f95c445e0b31688677"
+        },
+        {
+          "path": "out/msvc/vs2022/Release/mechanize/mechanize.scr",
+          "bytes": 144384,
+          "sha256": "ad0136f6b3829b82485d67720d927c0c5131f53be848f62fb7933fe8450a3735"
+        },
+        {
+          "path": "out/msvc/vs2022/Release/nocturne/nocturne.scr",
+          "bytes": 148480,
+          "sha256": "65aa5fdc7b6154e2c86bae2cb0f6927997e5758a5fe7818e5996b1c42b14410c"
+        },
+        {
+          "path": "out/msvc/vs2022/Release/observatory/observatory.scr",
+          "bytes": 142336,
+          "sha256": "12c3e1e902ebaf6ebb8a7131524aa3b59c730b6092c4fb171d0cbdd76329dab3"
+        },
+        {
+          "path": "out/msvc/vs2022/Release/phosphor/phosphor.scr",
+          "bytes": 144896,
+          "sha256": "5ec4b7d8e41fdb21b783db59af649d2a4f72f55e721608f6eb5e2d7d0cc6aa92"
+        },
+        {
+          "path": "out/msvc/vs2022/Release/pipeworks/pipeworks.scr",
+          "bytes": 147968,
+          "sha256": "9da0593a38257ecc8e834acc2b6ee2db9fab34575ad148fc6681d23522ef45c7"
+        },
+        {
+          "path": "out/msvc/vs2022/Release/plasma/plasma.scr",
+          "bytes": 258560,
+          "sha256": "6e190fc0ac299daa9a49478b53fbe85f87647fb8b8f8f0574a06962470f75c6d"
+        },
+        {
+          "path": "out/msvc/vs2022/Release/ricochet/ricochet.scr",
+          "bytes": 148992,
+          "sha256": "4a2357f0bde8f93ac11ea92cf39a37b2176c0403ffe3adf211a06c246bba430d"
+        },
+        {
+          "path": "out/msvc/vs2022/Release/signals/signals.scr",
+          "bytes": 147456,
+          "sha256": "592573bbd60dbbc0f4418b3e5c28d7ec3d95a1203e579cf8a5a9fe85365f583d"
+        },
+        {
+          "path": "out/msvc/vs2022/Release/stormglass/stormglass.scr",
+          "bytes": 144896,
+          "sha256": "2b5e0b57b5523d728d0b9158ebab1aa24bb94ba8ae25bb49294ad4a133de742e"
+        },
+        {
+          "path": "out/msvc/vs2022/Release/transit/transit.scr",
+          "bytes": 142336,
+          "sha256": "b3f59d7c03360a8a508f9673154ad081ac04df9671d8d1030a37c5d331042c90"
+        },
+        {
+          "path": "out/msvc/vs2022/Release/vector/vector.scr",
+          "bytes": 145408,
+          "sha256": "6b7670fd13c389c2d3d60e302b8a372fc746964fb1a9aab410409112ea080876"
+        }
+      ]
+    },
+    {
+      "profile": "windows-current-tools",
+      "artifact_set": "windows_current_tools",
+      "artifact_profile": "windows_current_tool",
+      "build_receipt_ref": "out/gate-c/windows-current-tools/build-receipt.json",
+      "manifest_ref": "out/gate-c/windows-current-tools/windows_current_tools.manifest.json",
+      "expected_count": 2,
+      "observed_count": 2,
+      "missing_count": 0,
+      "unexpected_count": 0,
+      "machine": "x86",
+      "format": "PE32",
+      "extension": ".exe",
+      "artifacts": [
+        {
+          "path": "out/msvc/vs2022/Release/benchlab/benchlab.exe",
+          "bytes": 601088,
+          "sha256": "12f2cc90fb326fafc1009074753c29c1cc84b0efd2a3923e090be5039d41c65e"
+        },
+        {
+          "path": "out/msvc/vs2022/Release/suite/suite.exe",
+          "bytes": 588288,
+          "sha256": "f20b34614f19a7925adc52471807c29a42931d2e66476722d69d2623406c20fb"
+        }
+      ]
+    }
+  ]
+}
+

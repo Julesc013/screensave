@@ -1,0 +1,79 @@
+{
+  "schema": "screensave-portable-v2-native-proof-summary-v0",
+  "status": "pass",
+  "captured_on": "2026-06-26",
+  "source": {
+    "branch": "main",
+    "commit": "ff601685e9e540e2c6ad01107945adfe5783278c",
+    "dirty": false
+  },
+  "claim_boundary": "Deterministic proof evidence for named Nocturne and Ricochet canary profiles only; not compatibility certification, artistic acceptance, or release promotion.",
+  "equivalence_check": {
+    "command": "py -3 tools/scripts/check_portable_v2_equivalence.py",
+    "status": "pass"
+  },
+  "proofs": [
+    {
+      "product": "nocturne",
+      "profile": "nocturne.reference.v0",
+      "abi": "v0",
+      "path": "v1",
+      "status": "pass",
+      "hash": "5394a14b6622c17bfb10cd5721c08a4c92cdbddfb12f55c954ef1d5f6ef878b2",
+      "comparison_status": "pass",
+      "lifecycle_status": "pass",
+      "profile_proof_ref": "out/gate-c/proofs/nocturne-reference-v0-abi-v0-v1/profile-proof.json"
+    },
+    {
+      "product": "nocturne",
+      "profile": "nocturne.reference.v0",
+      "abi": "v1",
+      "path": "v2",
+      "status": "pass",
+      "hash": "5394a14b6622c17bfb10cd5721c08a4c92cdbddfb12f55c954ef1d5f6ef878b2",
+      "comparison_status": "pass",
+      "lifecycle_status": "pass",
+      "profile_proof_ref": "out/gate-c/proofs/nocturne-reference-v0-abi-v1-v2/profile-proof.json"
+    },
+    {
+      "product": "ricochet",
+      "profile": "ricochet.reference.v1",
+      "abi": "v0",
+      "path": "v1",
+      "status": "pass",
+      "comparison_status": "pass",
+      "lifecycle_status": "pass",
+      "create_destroy_cycles": 32,
+      "frames": {
+        "0": "b8c7c0ea922be06b559485e22a16c286fd29e7496437cfb017a74aec68c6235a",
+        "4": "7a1615e04d27e9dcb58da30b9520fcfa8dfe4b8fd5c14199750ef95754206ff1",
+        "8": "a50582e8e8f5517eb2b56e7e01d5b0493b8432375a7e577b152801a4f6574b42",
+        "32": "65c37015993c76632ce9e384db18b7cfa8c735049c66a72ed2833bbb45f70d25"
+      },
+      "profile_proof_ref": "out/gate-c/proofs/ricochet-reference-v1-abi-v0-v1/profile-proof.json"
+    },
+    {
+      "product": "ricochet",
+      "profile": "ricochet.reference.v1",
+      "abi": "v1",
+      "path": "v2",
+      "status": "pass",
+      "comparison_status": "pass",
+      "lifecycle_status": "pass",
+      "create_destroy_cycles": 32,
+      "frames": {
+        "0": "b8c7c0ea922be06b559485e22a16c286fd29e7496437cfb017a74aec68c6235a",
+        "4": "7a1615e04d27e9dcb58da30b9520fcfa8dfe4b8fd5c14199750ef95754206ff1",
+        "8": "a50582e8e8f5517eb2b56e7e01d5b0493b8432375a7e577b152801a4f6574b42",
+        "32": "65c37015993c76632ce9e384db18b7cfa8c735049c66a72ed2833bbb45f70d25"
+      },
+      "profile_proof_ref": "out/gate-c/proofs/ricochet-reference-v1-abi-v1-v2/profile-proof.json"
+    }
+  ],
+  "aide_refs": {
+    "evidence_packet_ref": "out/aide/evidence-bridge-check/ricochet.evidence-packet.json",
+    "evidence_index_summary_ref": "out/aide/evidence/index-summary.json",
+    "truth_boundary": "ScreenSave proof bundles and validators remain authoritative; AIDE indexes and exports references only."
+  }
+}
+

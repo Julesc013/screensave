@@ -1,0 +1,34 @@
+{
+  "schema": "screensave-portable-v2-native-pe-audit-summary-v0",
+  "status": "pass",
+  "captured_on": "2026-06-26",
+  "source": {
+    "branch": "main",
+    "commit": "ff601685e9e540e2c6ad01107945adfe5783278c",
+    "dirty": false
+  },
+  "claim_boundary": "PE audit facts only; zero violations do not certify operating-system compatibility.",
+  "audits": [
+    {
+      "profile": "windows-current-x86",
+      "artifact_set": "windows_current_x86_scr",
+      "artifact_profile": "windows_current_x86_scr",
+      "audit_ref": "out/gate-c/windows-current-x86/windows_current_x86_scr.pe-audit.json",
+      "artifact_count": 19,
+      "violation_count": 0,
+      "note_count": 38,
+      "status": "informational"
+    },
+    {
+      "profile": "windows-current-tools",
+      "artifact_set": "windows_current_tools",
+      "artifact_profile": "windows_current_tool",
+      "audit_ref": "out/gate-c/windows-current-tools/windows_current_tools.pe-audit.json",
+      "artifact_count": 2,
+      "violation_count": 0,
+      "note_count": 4,
+      "status": "informational"
+    }
+  ]
+}
+
