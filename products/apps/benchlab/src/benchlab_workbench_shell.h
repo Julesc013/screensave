@@ -91,6 +91,20 @@ typedef struct benchlab_workbench_plasma_review_tag {
     const char *claim_boundary;
 } benchlab_workbench_plasma_review;
 
+typedef struct benchlab_workbench_plasma_release_readiness_tag {
+    const char *product_key;
+    const char *release_readiness_status;
+    const char *package_stage_status;
+    const char *known_limits_status;
+    const char *proof_bundle_status;
+    const char *visual_review_status;
+    const char *performance_envelope_status;
+    const char *packc_status;
+    const char *manager_preview_status;
+    const char *promotion_status;
+    const char *claim_boundary;
+} benchlab_workbench_plasma_release_readiness;
+
 unsigned int benchlab_workbench_shell_workspace_count(void);
 const benchlab_workbench_workspace *benchlab_workbench_shell_workspace(unsigned int index);
 int benchlab_workbench_shell_validate_binding(void);
@@ -113,5 +127,8 @@ int benchlab_workbench_shell_author_plasma_v2(benchlab_workbench_plasma_author *
 int benchlab_workbench_shell_compare_plasma_v2(benchlab_workbench_plasma_compare *compare_out);
 int benchlab_workbench_shell_profile_plasma_v2(benchlab_workbench_plasma_profile *profile_out);
 int benchlab_workbench_shell_review_plasma_v2(benchlab_workbench_plasma_review *review_out);
+int benchlab_workbench_shell_release_readiness_plasma_v2(
+    benchlab_workbench_plasma_release_readiness *release_out
+);
 
 #endif

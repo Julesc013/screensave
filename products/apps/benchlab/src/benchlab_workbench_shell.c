@@ -16,7 +16,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define BENCHLAB_WORKBENCH_WORKSPACE_COUNT 7U
+#define BENCHLAB_WORKBENCH_WORKSPACE_COUNT 8U
 #define BENCHLAB_WORKBENCH_REQUIRED_PROFILE_COUNT 3U
 
 static const benchlab_workbench_workspace g_benchlab_workbench_workspaces[BENCHLAB_WORKBENCH_WORKSPACE_COUNT] = {
@@ -26,7 +26,8 @@ static const benchlab_workbench_workspace g_benchlab_workbench_workspaces[BENCHL
     { "compare", "Compare", "Open capture and comparison evidence without rendering independently." },
     { "author", "Author", "Edit Plasma v2 Basic controls, compile data-only packs, and run the fixed preview proof path." },
     { "profile", "Profile", "Read Plasma v2 reference, candidate, comparison, and performance envelope evidence." },
-    { "review", "Review", "Record reviewer decisions against contact sheets without release promotion." }
+    { "review", "Review", "Record reviewer decisions against contact sheets without release promotion." },
+    { "release-readiness", "Release-readiness", "Gather Plasma v2 package, proof, review, Manager, and Workbench readiness facts without publication." }
 };
 
 static const char *g_benchlab_workbench_required_profiles[BENCHLAB_WORKBENCH_REQUIRED_PROFILE_COUNT] = {
@@ -410,5 +411,28 @@ int benchlab_workbench_shell_review_plasma_v2(benchlab_workbench_plasma_review *
     review_out->performance_envelope_ref = "validation/captures/plasma-v2/performance/envelope.json";
     review_out->release_readiness = "blocked";
     review_out->claim_boundary = "Workbench Review records stable-candidate review facts only; final artistic acceptance and release promotion remain separate.";
+    return 1;
+}
+
+int benchlab_workbench_shell_release_readiness_plasma_v2(
+    benchlab_workbench_plasma_release_readiness *release_out
+)
+{
+    if (release_out == 0) {
+        return 0;
+    }
+    memset(release_out, 0, sizeof(*release_out));
+
+    release_out->product_key = "plasma";
+    release_out->release_readiness_status = "candidate-package-ready";
+    release_out->package_stage_status = "packaging/windows/plasma-v2-preview/manifest.toml";
+    release_out->known_limits_status = "packaging/windows/plasma-v2-preview/known-limits.md";
+    release_out->proof_bundle_status = "validation/captures/plasma-v2/reference-preview/proof-bundle-v1.json";
+    release_out->visual_review_status = "validation/captures/plasma-v2/stable-candidate-review/review-summary.json";
+    release_out->performance_envelope_status = "validation/captures/plasma-v2/performance/envelope.json";
+    release_out->packc_status = "v1-candidate";
+    release_out->manager_preview_status = "preview-ready";
+    release_out->promotion_status = "blocked";
+    release_out->claim_boundary = "Workbench Release-readiness gathers evidence only; no publication, stable release, or compatibility certification is implied.";
     return 1;
 }

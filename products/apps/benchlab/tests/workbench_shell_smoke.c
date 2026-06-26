@@ -12,10 +12,11 @@ int main(void)
     benchlab_workbench_plasma_compare plasma_compare;
     benchlab_workbench_plasma_profile plasma_profile;
     benchlab_workbench_plasma_review plasma_review;
+    benchlab_workbench_plasma_release_readiness plasma_release;
     unsigned long nocturne_checksum;
     unsigned long ricochet_checksum;
 
-    if (benchlab_workbench_shell_workspace_count() != 7U) {
+    if (benchlab_workbench_shell_workspace_count() != 8U) {
         return 1;
     }
     workspace = benchlab_workbench_shell_workspace(0U);
@@ -37,6 +38,10 @@ int main(void)
     workspace = benchlab_workbench_shell_workspace(6U);
     if (workspace == 0 || strcmp(workspace->key, "review") != 0) {
         return 40;
+    }
+    workspace = benchlab_workbench_shell_workspace(7U);
+    if (workspace == 0 || strcmp(workspace->key, "release-readiness") != 0) {
+        return 47;
     }
     if (benchlab_workbench_shell_required_profile(0U) == 0) {
         return 5;
@@ -184,6 +189,18 @@ int main(void)
     }
     if (strcmp(plasma_review.release_readiness, "blocked") != 0) {
         return 46;
+    }
+    if (!benchlab_workbench_shell_release_readiness_plasma_v2(&plasma_release)) {
+        return 48;
+    }
+    if (strcmp(plasma_release.package_stage_status, "packaging/windows/plasma-v2-preview/manifest.toml") != 0) {
+        return 49;
+    }
+    if (strcmp(plasma_release.manager_preview_status, "preview-ready") != 0) {
+        return 50;
+    }
+    if (strcmp(plasma_release.promotion_status, "blocked") != 0) {
+        return 51;
     }
     return 0;
 }
