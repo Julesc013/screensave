@@ -1,0 +1,39 @@
+{
+  "schema": "screensave-portable-v2-candidate-base-v0",
+  "candidate": "PAW-C2 Gate C candidate base",
+  "source_commit": "b906edf5e81eb0386eb74596bc706b28d8c0e171",
+  "recorded_on": "2026-06-26",
+  "claim_boundary": "Candidate-base evidence only; not Gate C acceptance, compatibility certification, artistic acceptance, or release promotion.",
+  "nocturne": {
+    "profile": "nocturne.reference.v0",
+    "frame_hashes": {
+      "8": "5394a14b6622c17bfb10cd5721c08a4c92cdbddfb12f55c954ef1d5f6ef878b2"
+    }
+  },
+  "ricochet": {
+    "profile": "ricochet.reference.v1",
+    "frame_hashes": {
+      "0": "b8c7c0ea922be06b559485e22a16c286fd29e7496437cfb017a74aec68c6235a",
+      "4": "7a1615e04d27e9dcb58da30b9520fcfa8dfe4b8fd5c14199750ef95754206ff1",
+      "8": "a50582e8e8f5517eb2b56e7e01d5b0493b8432375a7e577b152801a4f6574b42",
+      "32": "65c37015993c76632ce9e384db18b7cfa8c735049c66a72ed2833bbb45f70d25"
+    }
+  },
+  "equivalence": {
+    "status": "pass",
+    "receipt_ref": "out/checks/portable-v2-equivalence/equivalence.json",
+    "nocturne_v1_runner_ref": "out/checks/portable-v2-equivalence/captures/nocturne.reference.v0/v1/runner-proof.json",
+    "nocturne_v2_runner_ref": "out/checks/portable-v2-equivalence/captures/nocturne.reference.v0/v2/runner-proof.json",
+    "ricochet_v1_runner_ref": "out/checks/portable-v2-equivalence/captures/ricochet.reference.v1/v1/runner-proof.json",
+    "ricochet_v2_runner_ref": "out/checks/portable-v2-equivalence/captures/ricochet.reference.v1/v2/runner-proof.json"
+  },
+  "adapter": {
+    "capability_bindings_ref": "tools/project_adapter/capability_bindings.json",
+    "capability_bindings_sha256": "c15cfcb6bbaf837031c062760c69e094a73c545c1ebe567416c483827299b4e1"
+  },
+  "aide": {
+    "preflight_receipt_ref": "out/aide/operations/20260626T090705Z-preflight/operation-receipt.json",
+    "evidence_index_ref": ".aide/evidence/index.toml",
+    "evidence_index_sha256": "702f099ab60ef80609bf66d3dcb66137a9a5f85b978a00ac649e1684be2fdefd"
+  }
+}
