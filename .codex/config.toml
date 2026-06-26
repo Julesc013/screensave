@@ -1,4 +1,4 @@
-model = "gpt-5.4"
+model = "gpt-5.5"
 model_reasoning_effort = "xhigh"
 plan_mode_reasoning_effort = "xhigh"
 approval_policy = "never"
@@ -9,7 +9,7 @@ sandbox = "elevated"
 
 [agents]
 max_threads = 4
-max_depth = 1
+max_depth = 2
 
 [agents.repo_explorer]
 description = "Read-only repository mapper for locating relevant files, constraints, and series boundaries."
