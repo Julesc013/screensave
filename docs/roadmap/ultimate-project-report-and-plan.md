@@ -64,8 +64,8 @@ The repository has already implemented a substantial baseline:
 The repository is not complete. The largest remaining work is not more
 architecture prose. It is a sequence of proof-backed product slices:
 
-- freeze and implement the host-neutral portable v2 seam now that Nocturne and
-  Ricochet prove the shared proof mechanics
+- build the Plasma v2 reference slice now that Nocturne and Ricochet prove the
+  accepted portable v2 seam
 - implement the VisualIntent resolver and safe pack generation after proof exists
 - build Workbench over the same runner as CI
 - evolve Manager from the current suite lineage
@@ -98,7 +98,7 @@ Current state summary:
 
 - released public artifact: `c16-core-baseline`
 - development head: `plasma-u09-corrective-recut`
-- active program: `portable-v2-seam`
+- active program: `plasma-v2-reference-slice`
 - release candidate: none
 - queue authority: historical-superseded MX queues
 - compatibility policy: evidence-classed
@@ -447,13 +447,14 @@ run arbitrary ScreenSave commands or choose arbitrary output paths.
 
 ### Product And Runtime Gaps
 
-- no portable v2 host-neutral saver contract is implemented yet
-- public headers still expose Win32-specific types
-- no v1 compatibility adapter wraps a new v2 semantic contract
-- product-local IRs are not formalized across canaries
-- Nocturne now has a compiled proof-kernel canary, but not yet a reusable
-  compiled `libsslab` runner path
-- Ricochet and Plasma are not yet proof-kernel canaries
+- Plasma v2 has not yet been reduced to a proof-backed reference slice over the
+  accepted portable seam
+- product-local IRs are not formalized beyond the Nocturne/Ricochet canary
+  seam
+- broader saver migration to portable v2 remains deliberately unstarted
+- native compatibility certification remains separate from current artifact
+  build/audit evidence
+- Plasma is not yet a portable-v2 proof canary
 - native macOS/Linux hosts do not exist
 - WebAssembly preview does not exist
 

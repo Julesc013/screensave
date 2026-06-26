@@ -1,11 +1,14 @@
 # Portable Semantics Contract v2
 
-Status: planned contract, not yet a runtime implementation.
+Status: accepted portable seam for the Gate C Nocturne/Ricochet canary slice.
 
-Current header slice: `platform/include/screensave/v2/` defines the initial
-host-neutral public base, surface, draw, product, and session seam. It is not a
-claim that product migrations, compatibility adapters, or v1/v2 equivalence are
-complete.
+Current header slice: `platform/include/screensave/v2/` defines the
+host-neutral public base, surface, draw, product, and session seam. Gate C
+acceptance proves the named Nocturne and Ricochet v1/v2 canary equivalence,
+the preserved current Win32 artifact build, and the private `libsslab` ABI v1
+proof path. It is not a public SDK stability claim, an all-saver migration, a
+compatibility certification, artistic acceptance, release promotion, or Plasma
+runtime implementation.
 
 ## Purpose
 

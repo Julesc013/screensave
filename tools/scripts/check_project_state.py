@@ -86,9 +86,16 @@ def validate_state(state: dict) -> list[str]:
     require(development.get("ship_posture") == "GO_WITH_CAVEATS", "development.ship_posture must preserve GO_WITH_CAVEATS.", errors)
     require(compatibility.get("policy") == "evidence-classed", "compatibility.policy must be evidence-classed.", errors)
     require(authority.get("version_manifest") == "VERSION.toml", "authority.version_manifest must point to VERSION.toml.", errors)
+    portable_status = portable_v2.get("status")
+    expected_active_program = "plasma-v2-reference-slice" if portable_status == "accepted" else "portable-v2-seam"
     require(
-        authority.get("active_program") == "portable-v2-seam",
-        "authority.active_program must be portable-v2-seam.",
+        authority.get("active_program") == expected_active_program,
+        f"authority.active_program must be {expected_active_program}.",
+        errors,
+    )
+    require(
+        development.get("active_program") == expected_active_program,
+        f"development.active_program must be {expected_active_program}.",
         errors,
     )
     require(proof_kernel.get("status") == "complete", "proof_kernel.status must be complete.", errors)
@@ -107,7 +114,7 @@ def validate_state(state: dict) -> list[str]:
         "proof_kernel_v1.canary_products must include ricochet.",
         errors,
     )
-    require(portable_v2.get("status") == "active", "portable_v2.status must be active.", errors)
+    require(portable_status in {"active", "accepted"}, "portable_v2.status must be active or accepted.", errors)
     require(portable_v2.get("milestone") == "portable-v2-seam", "portable_v2.milestone must be portable-v2-seam.", errors)
     require(portable_v2.get("gate") == "PAW-C", "portable_v2.gate must be PAW-C.", errors)
     require(
@@ -115,6 +122,11 @@ def validate_state(state: dict) -> list[str]:
         "portable_v2.porting_products must include nocturne and ricochet.",
         errors,
     )
+    if portable_status == "accepted":
+        require(portable_v2.get("completed_on") == "2026-06-26", "portable_v2.completed_on must be 2026-06-26.", errors)
+        require(portable_v2.get("accepted_by") == "check_gate_c_acceptance.py", "portable_v2.accepted_by must name the Gate C checker.", errors)
+        require(portable_v2.get("opened_next") == "plasma-v2-reference-slice", "portable_v2.opened_next must be plasma-v2-reference-slice.", errors)
+        require(list(portable_v2.get("remaining", [])) == [], "portable_v2.remaining must be empty after Gate C acceptance.", errors)
 
     for label, value in (
         ("authority.product_catalog", authority.get("product_catalog")),
@@ -303,7 +315,8 @@ def validate_version_manifest(state: dict, version: dict, catalog: dict, errors:
     require(version_schemas.get("artifact_sets") == 1, "VERSION.toml schemas.artifact_sets must be 1.", errors)
     require(version_schemas.get("proof_profiles") == 1, "VERSION.toml schemas.proof_profiles must be 1.", errors)
     require(version_schemas.get("proof_bundle_normalized") == 1, "VERSION.toml schemas.proof_bundle_normalized must be 1.", errors)
-    require(version_schemas.get("libsslab_abi") == 0, "VERSION.toml schemas.libsslab_abi must be 0 for private ABI v0.", errors)
+    require(version.get("abi", {}).get("portable_contract") == "accepted-v2", "VERSION.toml abi.portable_contract must be accepted-v2 after Gate C.", errors)
+    require(version_schemas.get("libsslab_abi") == 0, "VERSION.toml schemas.libsslab_abi must remain 0 for the ABI v0 contract record.", errors)
     require_path(version.get("contracts", {}).get("product_architecture"), "VERSION.toml contracts.product_architecture", errors)
     require_path(version.get("contracts", {}).get("visual_intent"), "VERSION.toml contracts.visual_intent", errors)
     require_path(version.get("contracts", {}).get("proof_bundle_v1"), "VERSION.toml contracts.proof_bundle_v1", errors)

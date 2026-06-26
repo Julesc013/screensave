@@ -19,8 +19,8 @@ Post-`SS` work now proceeds in the bounded `SX` substrate series.
 - Artifact profiles: [`catalog/artifact_profiles.toml`](catalog/artifact_profiles.toml)
 - Product doctrine: [`contracts/screensave_doctrine_v1.md`](contracts/screensave_doctrine_v1.md)
 - AIDE Lite operational profile: [`.aide/pilot.toml`](.aide/pilot.toml), [`.aide/aide_lite.lock.toml`](.aide/aide_lite.lock.toml), and [`.aide/profile.yaml`](.aide/profile.yaml)
-- Active milestone: [`docs/roadmap/paw-01-product-acceleration-wave.md`](docs/roadmap/paw-01-product-acceleration-wave.md)
-- Active implementation track: [`contracts/portable_semantics_v2.md`](contracts/portable_semantics_v2.md)
+- Active milestone: [`docs/roadmap/plasma-v2-reference-slice.md`](docs/roadmap/plasma-v2-reference-slice.md)
+- Accepted portable seam: [`contracts/portable_semantics_v2.md`](contracts/portable_semantics_v2.md)
 - Project adapter: [`contracts/project_adapter_v0.md`](contracts/project_adapter_v0.md) and [`tools/project_adapter/screensave_project.py`](tools/project_adapter/screensave_project.py)
 - Released public artifact: `c16-core-baseline`
 - Development-head product truth: Plasma [`U09 Stable Recut`](products/savers/plasma/docs/u09-stable-recut.md) and [`U09 Ship Posture`](products/savers/plasma/docs/u09-ship-posture.md)
@@ -43,12 +43,14 @@ python tools\project_adapter\screensave_project.py validate
 python tools\project_adapter\screensave_project.py proof
 ```
 
-PAW-B is now closed around one shared `libsslab` proof path for Nocturne and
-Ricochet. The active implementation track is the `portable-v2-seam`: preserve
-the current Win32 `.scr` host and proof baselines while introducing host-neutral
-v2 contracts for shared session and surface semantics. That seam remains
-ScreenSave-owned; AIDE may consume its evidence but must not define its product
-truth.
+PAW-C Gate C is now accepted for the portable v2 Nocturne/Ricochet canary
+slice. Nocturne and Ricochet run through the v2 proof path with unchanged
+hashes, current Win32 `.scr` artifacts remain buildable and audited, and AIDE
+remains an optional evidence consumer rather than product truth. The active
+implementation track is now `plasma-v2-reference-slice`; this opens Plasma v2
+planning and implementation without implying release promotion, public SDK
+stability, all-saver migration, compatibility certification, or artistic
+acceptance.
 
 ## Download ScreenSave Core
 

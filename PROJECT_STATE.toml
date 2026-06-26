@@ -6,7 +6,7 @@ as_of = "2026-06-26"
 current_truth = "truth-proof-baseline"
 public_release = "c16-core-baseline"
 development_head = "plasma-u09-corrective-recut"
-active_program = "portable-v2-seam"
+active_program = "plasma-v2-reference-slice"
 release_candidate = "none"
 queue_authority = "historical-mx-queue-superseded"
 product_catalog = "catalog/products.toml"
@@ -38,6 +38,7 @@ artifact_currency = "frozen-release-artifacts-do-not-represent-u09-development-h
 
 [development]
 status = "post-c16-development-head"
+active_program = "plasma-v2-reference-slice"
 current_product_truth = "products/savers/plasma/docs/u09-stable-recut.md"
 ship_posture = "GO_WITH_CAVEATS"
 ship_posture_source = "products/savers/plasma/docs/u09-ship-posture.md"
@@ -130,7 +131,7 @@ required_boundaries = [
 ]
 
 [portable_v2]
-status = "active"
+status = "accepted"
 milestone = "portable-v2-seam"
 gate = "PAW-C"
 contract = "contracts/portable_semantics_v2.md"
@@ -139,8 +140,11 @@ public_aggregate_header = "platform/include/screensave/v2.h"
 validator = "tools/scripts/check_portable_v2.py"
 proof_dependency = "proof-kernel-v1-ricochet"
 porting_products = ["nocturne", "ricochet"]
-compatibility_adapter = "v1-win32-public-host-preserved"
+compatibility_adapter = "generic-v1-v2-compat-adapter-present"
 objective = "Freeze the host-neutral portable v2 seam, implement the v1 compatibility adapter, and adapt Nocturne and Ricochet without changing current Win32 .scr artifacts."
+completed_on = "2026-06-26"
+accepted_by = "check_gate_c_acceptance.py"
+opened_next = "plasma-v2-reference-slice"
 work_units = [
   "SS-PV2-00 freeze portable v2 contract",
   "SS-PV2-01 implement host-neutral base/session/config/surface types",
@@ -168,15 +172,15 @@ implemented = [
   "Workbench Inspect model for portable v2 canary sessions through libsslab",
   "GitHub CI gates for portable v2 equivalence and expanded Windows v1/v2 proof matrix",
   "AIDE proof evidence index for ScreenSave-owned proof references",
+  "Nocturne portable product core with v1 and v2 adapters over the same semantics",
+  "Ricochet portable product core with fixed-width proof-observable state and v1/v2 adapters",
+  "generic v1-to-v2 compatibility adapter runtime for the preserved Win32 host path",
+  "formal private libsslab ABI v1 header and source tranche over portable v2",
+  "current-head native Windows evidence for 19 current .scr artifacts and 2 companion tools",
+  "Proof Bundle v1 portable_v2_equivalence gate axis with named-canary claim boundary",
+  "independent Gate C acceptance checker and committed acceptance capture",
 ]
-remaining = [
-  "generic v1 compatibility adapter runtime",
-  "Nocturne portable v2 product core",
-  "Ricochet portable v2 product core",
-  "formal libsslab ABI v1 header and source tranche over portable v2",
-  "current-head native operator evidence for all 19 Windows current .scr artifacts",
-  "Gate C independent acceptance",
-]
+remaining = []
 required_boundaries = [
   "no Windows types in v2 headers",
   "public v2 structs are versioned and size-prefixed",
@@ -341,3 +345,4 @@ project_adapter = "tools/scripts/check_project_adapter.py"
 workbench_shell = "tools/scripts/check_workbench_shell.py"
 portable_v2 = "tools/scripts/check_portable_v2.py"
 portable_v2_equivalence = "tools/scripts/check_portable_v2_equivalence.py"
+gate_c_acceptance = "tools/scripts/check_gate_c_acceptance.py"

@@ -96,9 +96,9 @@ CI lanes for proof-kernel, project-adapter, native Windows build/audit,
 adapter proof, and normalized Proof Bundle v1 evidence.
 
 The next active program was `proof-kernel-v1-ricochet`. That gate is now complete.
-The current active program is `portable-v2-seam`. It must freeze the host-neutral
-portable seam only after Nocturne and Ricochet prove the shared `libsslab`
-mechanics.
+The portable v2 seam is accepted for the Nocturne/Ricochet Gate C canary slice.
+The current active program is `plasma-v2-reference-slice`, which must build on
+the accepted portable seam rather than starting a parallel runtime.
 
 Proof Kernel v1 is the target for:
 

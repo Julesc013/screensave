@@ -11,7 +11,7 @@ status = "released-frozen"
 [development]
 current_state = "truth-proof-baseline-00"
 development_head = "plasma-u09-corrective-recut"
-active_milestone = "portable-v2-seam"
+active_milestone = "plasma-v2-reference-slice"
 release_candidate = "none"
 
 [abi]
@@ -19,7 +19,7 @@ platform_api = 1
 saver_api = 1
 renderer_contract = 1
 win32_scr_host = 1
-portable_contract = "planned-v2"
+portable_contract = "accepted-v2"
 compatibility_shim = "v1-public-contract-preserved"
 
 [schemas]

@@ -126,8 +126,8 @@ def main() -> int:
         status = run_adapter(["status"])
         require(status.get("adapter_schema") == "screensave-project-adapter-v0", "status must emit adapter schema.", errors)
         require(
-            status.get("payload", {}).get("active_program") == "portable-v2-seam",
-            "status must report portable-v2-seam.",
+            status.get("payload", {}).get("active_program") in {"portable-v2-seam", "plasma-v2-reference-slice"},
+            "status must report the active portable-v2 or Plasma v2 program.",
             errors,
         )
 

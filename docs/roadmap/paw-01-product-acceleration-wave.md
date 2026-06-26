@@ -1,7 +1,7 @@
 # PAW-01 Product Acceleration Wave
 
-Status: active umbrella program; Gates A and B are closed and Gate C
-`portable-v2-seam` is active.
+Status: active umbrella program; Gates A, B, and C are closed. Gate D
+`plasma-v2-reference-slice` is active.
 
 ## Purpose
 
@@ -123,7 +123,7 @@ Exit:
 
 ## Gate C - Portable v2 Seam
 
-Status: active.
+Status: closed.
 
 Objective: introduce the host-neutral shared semantic seam only after Nocturne
 and Ricochet prove the mechanics.
@@ -155,7 +155,20 @@ Exit:
 - headless proof uses the same products
 - no platform type appears in v2 headers
 
+Closeout evidence:
+
+- Nocturne canonical RGBA hash remains unchanged.
+- Ricochet frames 0, 4, 8, and 32 remain exact.
+- `libsslab` ABI v1 runs the v2 proof path for the two canaries.
+- Current Windows native evidence records 19/19 `.scr` artifacts, 2/2 tools,
+  and zero PE audit violations for the current profiles.
+- Proof Bundle v1 carries the named-canary `portable_v2_equivalence` axis.
+- AIDE EvidencePackets export references only and do not own ScreenSave truth.
+- Gate C is accepted by `tools/scripts/check_gate_c_acceptance.py`.
+
 ## Gate D - Plasma v2
+
+Status: active.
 
 Objective: make Plasma the proof-backed flagship saver by refining the U09
 runtime rather than starting a parallel engine.

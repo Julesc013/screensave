@@ -1,6 +1,6 @@
 # PAW-C1 Portable v2 Runtime Equivalence
 
-Status: active plan.
+Status: complete; Gate C accepted on 2026-06-26.
 
 PAW-C1 starts at commit `d57669d`, after the PAW-CX checkpoint added the
 ScreenSave-local AIDE operating loop, validation tiers, fixed proof and bundle
@@ -21,7 +21,19 @@ By the end of this wave:
 - Ricochet keeps exact hashes for frames `0`, `4`, `8`, and `32`.
 - Workbench can inspect v2 sessions through the same proof runtime used by CI.
 - AIDE records evidence without becoming product runtime truth.
-- Gate C is accepted only after the deterministic and native evidence gates pass.
+- Gate C was accepted only after the deterministic and native evidence gates passed.
+
+## Closeout
+
+- Nocturne and Ricochet now use extracted portable product cores.
+- The v2 adapters call product cores directly rather than wrapping v1 sessions.
+- `libsslab` ABI v1 exists as the v2-backed proof path while ABI v0 remains
+  available for comparison.
+- Current-head native evidence is recorded under
+  `validation/captures/portable-v2/native-windows-current/`.
+- Independent Gate C acceptance is recorded under
+  `validation/captures/portable-v2/gate-c/`.
+- The next active program is `plasma-v2-reference-slice`.
 
 ## Sequencing
 

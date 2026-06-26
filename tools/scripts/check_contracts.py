@@ -16,7 +16,8 @@ REQUIRED_CONTRACTS = {
         "Do not treat a draft contract as implemented runtime behavior.",
     ],
     ROOT / "contracts" / "portable_semantics_v2.md": [
-        "Status: planned contract, not yet a runtime implementation.",
+        "Status: accepted portable seam for the Gate C Nocturne/Ricochet canary slice.",
+        "not a public SDK stability claim",
         "Portable Layer May Know",
         "Portable Layer Must Not Know",
         "Product-Local IR Rule",
@@ -90,7 +91,7 @@ REQUIRED_CONTRACTS = {
         "fixed-step headless canary host",
         "exact repeatability comparison",
         "Proof Kernel v1 is the target for",
-        "The current active program is `portable-v2-seam`.",
+        "The current active program is `plasma-v2-reference-slice`",
         "The first canary is `nocturne`.",
         "AIDE remains an optional evidence consumer",
     ],
@@ -166,7 +167,7 @@ def main() -> int:
             require(needle in text, f"{path.relative_to(ROOT)} is missing expected text: {needle!r}", errors)
 
     version = load_toml(VERSION_PATH)
-    require(version.get("abi", {}).get("portable_contract") == "planned-v2", "VERSION.toml must keep portable_contract planned-v2.", errors)
+    require(version.get("abi", {}).get("portable_contract") == "accepted-v2", "VERSION.toml must record portable_contract accepted-v2.", errors)
     require(version.get("proof", {}).get("bundle_schema") == "proof-bundle-v0", "VERSION.toml must point at proof-bundle-v0.", errors)
     require(
         version.get("proof", {}).get("normalized_bundle_schema") == "proof-bundle-v1",
