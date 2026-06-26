@@ -1,0 +1,346 @@
+schema_version = 1
+id = "SS-PAW-E-000"
+title = "Plasma v2 visual review, packc, and Workbench authoring"
+status = "active"
+owner = "repo"
+mode = "aide-lite-operational"
+required_source_revision = "783148ef2edcfc70954cea82fd73a1c10bf0e5ea"
+roadmap = "docs/roadmap/paw-e-plasma-v2-visual-review-packc-workbench.md"
+
+[goal]
+summary = "Convert the Plasma v2 reference preview into a reviewed, pack-authored, Workbench-usable preview candidate without stable promotion."
+claim_boundary = "PAW-E may record preview review, pack compilation, bounded VisualIntent resolution, proof qualification, and Workbench authoring support only; it must not imply stable release, compatibility certification, public SDK stability, or AIDE product authority."
+non_goals = [
+  "do not promote Plasma v2 to stable Core",
+  "do not broaden compatibility certification",
+  "do not admit runtime executable plugins",
+  "do not start all-saver migration",
+  "do not start macOS or Linux native host work",
+  "do not add D3D12 or Vulkan",
+  "do not freeze a public SDK",
+  "do not admit automatic AIDE mutation",
+  "do not admit automatic release promotion",
+]
+
+[aide_operator]
+preflight = "py -3 tools/aideops/screensave_aide.py preflight --task <id> --objective <objective>"
+postflight = "py -3 tools/aideops/screensave_aide.py postflight --task <id>"
+receipt_root = "out/aide/operations"
+provider_calls = false
+model_calls = false
+network_calls = false
+
+[evidence]
+portable_v2_gate = "accepted"
+plasma_v2_status = "reference-preview"
+active_profile = "plasma.v2.reference.preview"
+packc = "preview"
+workbench_author = "preview"
+artistic_acceptance = "not-yet-reviewed"
+release_promotion = "blocked"
+aide_worker = "blocked"
+capture_root = "validation/captures/plasma-v2"
+claim_boundary = "Reference-preview review evidence remains separate from final artistic acceptance, stable release, compatibility certification, and AIDE evidence."
+
+[[work_units]]
+id = "SS-PLV2-E0"
+title = "checkpoint Plasma v2 reference-preview"
+objective = "Checkpoint Plasma v2 preview truth before review, pack, and authoring work."
+status = "implemented-local"
+selected_validation_tier = "T1"
+preflight_required = true
+postflight_required = true
+preflight_receipt = "out/aide/operations/SS-PLV2-E0-preflight/operation-receipt.json"
+postflight_receipt = "out/aide/operations/SS-PLV2-E0-postflight/operation-receipt.json"
+rollback_point = "783148ef2edcfc70954cea82fd73a1c10bf0e5ea"
+allowed_paths = [
+  ".aide/work_units/plasma-v2-visual-review-and-packc.toml",
+  "docs/roadmap/paw-e-plasma-v2-visual-review-packc-workbench.md",
+  "validation/captures/plasma-v2/reference-preview/preview-state.json",
+  "tools/aideops/screensave_aide.py",
+]
+forbidden_paths = [
+  "products/savers/plasma/src",
+  "catalog/proof_profiles.toml",
+  "stable release state",
+  "compatibility certification claims",
+  "automatic worker admission",
+]
+expected_validators = [
+  "py -3 tools/scripts/check_project_state.py --summary",
+  "py -3 tools/scripts/check_plasma_v2_preview_gate.py",
+  "py -3 tools/aideops/screensave_aide.py preflight --task SS-PLV2-E0 --objective \"Checkpoint Plasma v2 preview truth\"",
+  "git diff --check",
+]
+baseline_refs = [
+  "PROJECT_STATE.toml [plasma_v2.status=reference-preview]",
+  "validation/captures/plasma-v2/preview-gate/gate-report.json",
+]
+claim_boundary = "Checkpoint only; no new review decision, pack feature, proof profile, or product runtime change."
+
+[[work_units]]
+id = "SS-PLV2-E1"
+title = "visual review protocol"
+objective = "Define the Plasma v2 visual review protocol and validator without making release or certification decisions."
+status = "planned"
+selected_validation_tier = "T2"
+preflight_required = true
+postflight_required = true
+preflight_receipt = "out/aide/operations/SS-PLV2-E1-preflight/operation-receipt.json"
+postflight_receipt = "out/aide/operations/SS-PLV2-E1-postflight/operation-receipt.json"
+rollback_point = "SS-PLV2-E0"
+allowed_paths = [
+  "contracts/visual_review_v1.md",
+  "products/savers/plasma/docs/plasma-v2-visual-review.md",
+  "tools/scripts/check_visual_review.py",
+  "validation/captures/plasma-v2/review",
+]
+forbidden_paths = [
+  "stable release state",
+  "compatibility certification broadening",
+  "Core promotion claims",
+]
+expected_validators = [
+  "py -3 tools/scripts/check_visual_review.py",
+  "py -3 tools/scripts/check_contracts.py",
+  "py -3 tools/scripts/check_docs_basics.py",
+]
+baseline_refs = [
+  "contracts/screensave_doctrine_v1.md",
+  "specs/release_contract.md",
+  "specs/compatibility.md",
+]
+claim_boundary = "Visual review can record preview decisions only; it is not stable release or compatibility certification."
+
+[[work_units]]
+id = "SS-PLV2-E2"
+title = "Pack v1 preview hardening"
+objective = "Harden packc as a deterministic data-only Plasma v2 pack preview pipeline."
+status = "planned"
+selected_validation_tier = "T2"
+preflight_required = true
+postflight_required = true
+preflight_receipt = "out/aide/operations/SS-PLV2-E2-preflight/operation-receipt.json"
+postflight_receipt = "out/aide/operations/SS-PLV2-E2-postflight/operation-receipt.json"
+rollback_point = "SS-PLV2-E1"
+allowed_paths = [
+  "contracts/pack_v1.md",
+  "tools/packc",
+  "tools/scripts/check_packc.py",
+]
+forbidden_paths = [
+  "runtime executable plugins",
+  "DLL loading",
+  "macros",
+  "network references",
+  "public SDK freeze",
+]
+expected_validators = [
+  "py -3 tools/scripts/check_packc.py",
+  "py -3 tools/packc/packc.py validate products/savers/plasma/content/v2/examples/plasma_lava_v2.toml",
+  "py -3 tools/packc/packc.py compile products/savers/plasma/content/v2/examples/plasma_lava_v2.toml --out out/packc/plasma_lava_v2",
+]
+baseline_refs = [
+  "contracts/pack_v1.md",
+  "products/savers/plasma/content/v2/examples/plasma_lava_v2.toml",
+]
+claim_boundary = "Data-only pack preview; no executable plugin, source generation, release promotion, or SDK declaration."
+
+[[work_units]]
+id = "SS-PLV2-E3"
+title = "VisualIntent Plasma resolver"
+objective = "Resolve bounded deterministic VisualIntent inputs into three Plasma v2 pack candidates."
+status = "planned"
+selected_validation_tier = "T2"
+preflight_required = true
+postflight_required = true
+preflight_receipt = "out/aide/operations/SS-PLV2-E3-preflight/operation-receipt.json"
+postflight_receipt = "out/aide/operations/SS-PLV2-E3-postflight/operation-receipt.json"
+rollback_point = "SS-PLV2-E2"
+allowed_paths = [
+  "contracts/visual_intent_v1.md",
+  "tools/visualintent",
+  "tools/scripts/check_visual_intent_resolver.py",
+]
+forbidden_paths = [
+  "source-code generation",
+  "model calls",
+  "network calls",
+  "automatic promotion",
+]
+expected_validators = [
+  "py -3 tools/scripts/check_packc.py",
+  "py -3 tools/scripts/check_visual_intent_resolver.py",
+]
+baseline_refs = [
+  "contracts/visual_intent_v1.md",
+  "contracts/plasma_spec_v2.md",
+]
+claim_boundary = "Deterministic local candidate generation only; no AI call, source generation, stable claim, or automatic promotion."
+
+[[work_units]]
+id = "SS-PLV2-E4"
+title = "Plasma v2 proof matrix"
+objective = "Add preview proof matrix evidence for reference, materials, controls, and VisualIntent candidates."
+status = "planned"
+selected_validation_tier = "T2"
+preflight_required = true
+postflight_required = true
+preflight_receipt = "out/aide/operations/SS-PLV2-E4-preflight/operation-receipt.json"
+postflight_receipt = "out/aide/operations/SS-PLV2-E4-postflight/operation-receipt.json"
+rollback_point = "SS-PLV2-E3"
+allowed_paths = [
+  "catalog/proof_profiles.toml",
+  "catalog/generated/proof_registry.*",
+  "tools/sslab",
+  "tools/project_adapter",
+  "tools/proofbundle",
+  "validation/captures/plasma-v2/matrix",
+]
+forbidden_paths = [
+  "stable release state",
+  "compatibility certification claims",
+  "all-saver migration",
+]
+expected_validators = [
+  "py -3 tools/scripts/check_plasma_v2_materials.py",
+  "py -3 tools/scripts/check_plasma_v2_influence.py",
+  "py -3 tools/scripts/check_proof_bundle_v1.py",
+  "py -3 tools/project_adapter/screensave_project.py bundle --profile plasma.v2.reference.preview --path v2",
+]
+baseline_refs = [
+  "validation/captures/plasma-v2/reference-preview/proof-bundle-v1.json",
+]
+claim_boundary = "Preview proof qualification only; not stable promotion or artistic acceptance."
+
+[[work_units]]
+id = "SS-PLV2-E5"
+title = "Workbench authoring review loop"
+objective = "Extend the Workbench preview shell with Plasma v2 Author, Inspect, and Compare review-loop facts."
+status = "planned"
+selected_validation_tier = "T2"
+preflight_required = true
+postflight_required = true
+preflight_receipt = "out/aide/operations/SS-PLV2-E5-preflight/operation-receipt.json"
+postflight_receipt = "out/aide/operations/SS-PLV2-E5-postflight/operation-receipt.json"
+rollback_point = "SS-PLV2-E4"
+allowed_paths = [
+  "products/apps/benchlab/src/benchlab_workbench_shell.*",
+  "products/apps/benchlab/tests/workbench_shell_smoke.c",
+  "tools/scripts/check_workbench_shell.py",
+]
+forbidden_paths = [
+  "duplicate proof runner",
+  "release workspace",
+  "automatic artistic scoring",
+  "automatic promotion",
+]
+expected_validators = [
+  "py -3 tools/scripts/check_workbench_shell.py",
+  "py -3 tools/scripts/check_packc.py",
+  "py -3 tools/scripts/check_plasma_spec_v2.py",
+]
+baseline_refs = [
+  "tools/sslab/include/screensave/sslab_v1.h",
+  "tools/packc/packc.py",
+]
+claim_boundary = "Workbench remains a shell over shared proof and pack paths, not a duplicate engine or release authority."
+
+[[work_units]]
+id = "SS-PLV2-E6"
+title = "AIDE review evidence ledger"
+objective = "Record Plasma v2 review evidence in development-plane ledgers without transferring product authority."
+status = "planned"
+selected_validation_tier = "T2"
+preflight_required = true
+postflight_required = true
+preflight_receipt = "out/aide/operations/SS-PLV2-E6-preflight/operation-receipt.json"
+postflight_receipt = "out/aide/operations/SS-PLV2-E6-postflight/operation-receipt.json"
+rollback_point = "SS-PLV2-E5"
+allowed_paths = [
+  ".aide/evidence/plasma-v2-review.toml",
+  ".aide/evidence/index.toml",
+  "tools/aide_bridge",
+  "tools/scripts/check_plasma_aide_review.py",
+]
+forbidden_paths = [
+  "product runtime dependency on AIDE",
+  "automatic worker admission",
+  "stable release promotion",
+]
+expected_validators = [
+  "py -3 tools/scripts/check_aide_evidence_bridge.py",
+  "py -3 tools/scripts/check_aide_evidence_index.py",
+  "py -3 tools/scripts/check_plasma_aide_review.py",
+]
+baseline_refs = [
+  ".aide/evidence/index.toml",
+  "validation/captures/plasma-v2/review",
+]
+claim_boundary = "AIDE records review evidence only; ScreenSave proof and product review remain authoritative."
+
+[[work_units]]
+id = "SS-PLV2-E7"
+title = "reviewed-preview gate"
+objective = "Add an independent checked gate for Plasma v2 reviewed-preview status."
+status = "planned"
+selected_validation_tier = "T2"
+preflight_required = true
+postflight_required = true
+preflight_receipt = "out/aide/operations/SS-PLV2-E7-preflight/operation-receipt.json"
+postflight_receipt = "out/aide/operations/SS-PLV2-E7-postflight/operation-receipt.json"
+rollback_point = "SS-PLV2-E6"
+allowed_paths = [
+  "tools/scripts/check_plasma_v2_reviewed_preview.py",
+  "validation/captures/plasma-v2/reviewed-preview",
+]
+forbidden_paths = [
+  "stable release state",
+  "compatibility certification broadening",
+  "generic AIDE command capability",
+]
+expected_validators = [
+  "py -3 tools/scripts/check_plasma_v2_reviewed_preview.py",
+  "py -3 tools/project_adapter/screensave_project.py validate --tier T2",
+  "git diff --check",
+]
+baseline_refs = [
+  "validation/captures/plasma-v2/preview-gate/gate-report.json",
+]
+claim_boundary = "Reviewed-preview gate only; stable release, compatibility certification, and generic command authority remain blocked."
+
+[[work_units]]
+id = "SS-PLV2-E8"
+title = "record reviewed preview candidate"
+objective = "Record Plasma v2 as reviewed-preview while keeping stable promotion blocked."
+status = "planned"
+selected_validation_tier = "T2"
+preflight_required = true
+postflight_required = true
+preflight_receipt = "out/aide/operations/SS-PLV2-E8-preflight/operation-receipt.json"
+postflight_receipt = "out/aide/operations/SS-PLV2-E8-postflight/operation-receipt.json"
+rollback_point = "SS-PLV2-E7"
+allowed_paths = [
+  "PROJECT_STATE.toml",
+  "VERSION.toml",
+  "README.md",
+  "docs/roadmap/plasma-v2-reference-slice.md",
+  "docs/roadmap/plasma-v2-visual-review-and-packc.md",
+  "products/savers/plasma/docs/plasma-v2-reviewed-preview.md",
+]
+forbidden_paths = [
+  "stable=true",
+  "release promotion",
+  "compatibility certification",
+  "public SDK freeze",
+]
+expected_validators = [
+  "py -3 tools/scripts/check_project_state.py --summary",
+  "py -3 tools/scripts/check_docs_basics.py",
+  "py -3 tools/scripts/check_contracts.py",
+  "py -3 tools/scripts/check_plasma_v2_reviewed_preview.py",
+]
+baseline_refs = [
+  "validation/captures/plasma-v2/reviewed-preview/gate-report.json",
+]
+claim_boundary = "Reviewed preview candidate only; not stable, not released, and not compatibility certified."

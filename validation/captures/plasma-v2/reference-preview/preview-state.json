@@ -1,0 +1,14 @@
+{
+  "active_profile": "plasma.v2.reference.preview",
+  "aide_worker": "blocked",
+  "artistic_acceptance": "not-yet-reviewed",
+  "claim_boundary": "Reference-preview is not artistic acceptance; artistic acceptance is not stable release; stable release is not compatibility certification; AIDE evidence is not ScreenSave product truth.",
+  "packc": "preview",
+  "portable_v2": "accepted",
+  "recorded_at": "2026-06-27",
+  "release_promotion": "blocked",
+  "source_commit": "783148ef2edcfc70954cea82fd73a1c10bf0e5ea",
+  "stable": false,
+  "status": "reference-preview",
+  "workbench_author": "preview"
+}
