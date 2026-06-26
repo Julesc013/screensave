@@ -18,6 +18,11 @@ REQUIRED_IDS = {
     "nocturne-v2-proof",
     "ricochet-v1-proof",
     "ricochet-v2-proof",
+    "plasma-v2-proof",
+    "plasma-v2-proof-bundle",
+    "plasma-v2-materials",
+    "plasma-v2-packc",
+    "plasma-v2-evidence-packet",
     "portable-v2-equivalence-proof",
     "windows-current-artifact-manifests",
     "windows-current-pe-audit-json",
@@ -65,6 +70,9 @@ def main() -> int:
         text = INDEX.read_text(encoding="utf-8")
         for needle in [
             "portable-v2-equivalence-proof",
+            "plasma-v2-proof",
+            "plasma-v2-materials",
+            "plasma-v2-packc",
             "compatibility certification",
             "artistic acceptance",
             "release promotion",

@@ -1,0 +1,37 @@
+schema_version = 1
+id = "SS-PLV2-EVIDENCE-000"
+title = "Plasma v2 reference preview evidence projection"
+status = "recorded-by-validator"
+as_of = "2026-06-26"
+
+[claim]
+summary = "AIDE records references for the Plasma v2 reference preview proof, materials, packc compilation, and generated EvidencePacket."
+scope = [
+  "plasma_v2_reference_execution",
+  "plasma_v2_exact_capture",
+  "plasma_v2_material_distinctness",
+  "plasma_v2_pack_compilation",
+  "artistic_acceptance_blocked",
+  "stable_release_promotion_blocked",
+  "compatibility_certification_not_claimed",
+  "aide_runtime_dependency_false",
+]
+non_claims = [
+  "not artistic acceptance",
+  "not stable release promotion",
+  "not compatibility certification",
+  "not a public SDK declaration",
+  "not an AIDE worker runtime",
+]
+
+[authority]
+profile_proof = "validation/captures/plasma-v2/reference-preview/profile-proof.json"
+proof_bundle = "validation/captures/plasma-v2/reference-preview/proof-bundle-v1.json"
+material_summary = "validation/captures/plasma-v2/materials/material-treatment-summary.json"
+pack_example = "products/savers/plasma/content/v2/examples/plasma_lava_v2.toml"
+evidence_exporter = "tools/aide_bridge/export_evidence.py"
+
+[checks]
+evidence_bridge = "python tools\\scripts\\check_aide_evidence_bridge.py"
+evidence_index = "python tools\\scripts\\check_aide_evidence_index.py"
+preview_gate = "python tools\\scripts\\check_plasma_v2_preview_gate.py"

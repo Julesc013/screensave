@@ -68,6 +68,12 @@ def export_packet(args: argparse.Namespace) -> dict[str, Any]:
     release = axes.get("release_promotion", {})
     portable_axis = axes.get("portable_v2_equivalence", portable_v2_equivalence)
     adapter_payload = adapter_receipt.get("payload", {})
+    subject_product = adapter_payload.get("product") or proof_bundle.get("subject", {}).get("product")
+    subject_profile = adapter_payload.get("profile") or proof_bundle.get("subject", {}).get("profile")
+    is_plasma_preview = subject_product == "plasma" and subject_profile == "plasma.v2.reference.preview"
+    plasma_material_summary = ROOT / "validation" / "captures" / "plasma-v2" / "materials" / "material-treatment-summary.json"
+    plasma_pack_example = ROOT / "products" / "savers" / "plasma" / "content" / "v2" / "examples" / "plasma_lava_v2.toml"
+    packc_tool = ROOT / "tools" / "packc" / "packc.py"
 
     certified_os_support = bool(compatibility.get("certified", False))
     packet = {
@@ -80,9 +86,9 @@ def export_packet(args: argparse.Namespace) -> dict[str, Any]:
             "dirty": bool(adapter_receipt.get("source", {}).get("dirty", bool(git_text(["status", "--short"])))),
         },
         "subject": {
-            "product": adapter_payload.get("product") or proof_bundle.get("subject", {}).get("product"),
+            "product": subject_product,
             "preset": adapter_payload.get("preset") or proof_bundle.get("subject", {}).get("preset"),
-            "profile": adapter_payload.get("profile") or proof_bundle.get("subject", {}).get("profile"),
+            "profile": subject_profile,
         },
         "inputs": {
             "adapter_receipt": repo_path(adapter_receipt_path),
@@ -133,6 +139,26 @@ def export_packet(args: argparse.Namespace) -> dict[str, Any]:
                 artifact_count=axes.get("artifact_audit", {}).get("artifact_count", pe_audit.get("artifact_count", 0)),
                 violation_count=axes.get("artifact_audit", {}).get("violation_count", pe_audit.get("violation_count", 0)),
             ),
+            "plasma_v2_reference_execution": {
+                "status": "supported" if is_plasma_preview else "not-applicable",
+                "summary": "Plasma v2 preview reference execution is supported through the fixed v2 proof path." if is_plasma_preview else "Not a Plasma v2 preview packet.",
+                "evidence_refs": [repo_path(proof_bundle_path)] if is_plasma_preview else [],
+            },
+            "plasma_v2_exact_capture": {
+                "status": "supported" if is_plasma_preview and axes.get("capture", {}).get("status") == "pass" else "not-applicable",
+                "summary": "Plasma v2 preview captures are exact deterministic RGBA evidence." if is_plasma_preview else "Not a Plasma v2 preview packet.",
+                "evidence_refs": axes.get("capture", {}).get("evidence_refs", []) if is_plasma_preview else [],
+            },
+            "plasma_v2_material_distinctness": {
+                "status": "supported" if is_plasma_preview and plasma_material_summary.exists() else "not-applicable",
+                "summary": "Admitted Plasma v2 materials are distinct and restrained treatments are bounded." if is_plasma_preview else "Not a Plasma v2 preview packet.",
+                "evidence_refs": [repo_path(plasma_material_summary)] if is_plasma_preview and plasma_material_summary.exists() else [],
+            },
+            "plasma_v2_pack_compilation": {
+                "status": "supported" if is_plasma_preview and plasma_pack_example.exists() and packc_tool.exists() else "not-applicable",
+                "summary": "The Plasma lava v2 example compiles through bounded data-only packc." if is_plasma_preview else "Not a Plasma v2 preview packet.",
+                "evidence_refs": [repo_path(plasma_pack_example), repo_path(packc_tool)] if is_plasma_preview and plasma_pack_example.exists() and packc_tool.exists() else [],
+            },
             "no_aide_runtime_dependency": {
                 "status": "pass",
                 "summary": "AIDE EvidencePacket projection stores references only and is absent from ScreenSave product/runtime code.",

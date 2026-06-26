@@ -315,7 +315,7 @@ claim_boundary = "Workbench is an author/inspect shell over CLI proof paths, not
 id = "SS-PLV2-07"
 title = "AIDE evidence and preview gate"
 objective = "Export Plasma v2 evidence packets, add preview gate, and record reference-preview state without stable promotion."
-status = "pending"
+status = "partial-local"
 selected_validation_tier = "T2"
 preflight_required = true
 postflight_required = true
@@ -323,6 +323,7 @@ preflight_receipt = "out/aide/operations/SS-PLV2-07-preflight/operation-receipt.
 postflight_receipt = "out/aide/operations/SS-PLV2-07-postflight/operation-receipt.json"
 rollback_point = "SS-PLV2-06"
 allowed_paths = [
+  ".aide/evidence_packets",
   "tools/aide_bridge",
   ".aide/evidence/index.toml",
   "tools/scripts/check_aide_evidence_bridge.py",

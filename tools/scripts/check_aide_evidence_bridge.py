@@ -135,6 +135,79 @@ def main() -> int:
                 errors,
             )
 
+        plasma_bundle = run([
+            str(ADAPTER.relative_to(ROOT)),
+            "bundle",
+            "--invocation-id",
+            "check-evidence-bridge-plasma",
+            "--profile",
+            "plasma.v2.reference.preview",
+            "--path",
+            "v2",
+        ])
+        require(plasma_bundle.returncode == 0, f"adapter Plasma bundle failed: {plasma_bundle.stderr or plasma_bundle.stdout}", errors)
+        plasma_base = ROOT / "out" / "aide" / "screensave-project-adapter" / "invocations" / "bundle" / "check-evidence-bridge-plasma"
+        plasma_packet_path = OUT / "plasma-v2.evidence-packet.json"
+        plasma_export = run([
+            str(EXPORTER.relative_to(ROOT)),
+            "--adapter-receipt",
+            str(plasma_base / "adapter-proof.json"),
+            "--proof-bundle",
+            str(plasma_base / "proof-bundle-v1.json"),
+            "--artifact-manifest",
+            str(plasma_base / "artifact-manifest.json"),
+            "--portable-v2-equivalence",
+            str(plasma_base / "portable-v2-equivalence.json"),
+            "--output",
+            str(plasma_packet_path),
+        ])
+        require(plasma_export.returncode == 0, f"Plasma evidence export failed: {plasma_export.stderr or plasma_export.stdout}", errors)
+        require(plasma_packet_path.exists(), "evidence exporter must write the Plasma packet.", errors)
+        if plasma_packet_path.exists():
+            plasma_packet = load_json(plasma_packet_path)
+            plasma_claims = plasma_packet.get("claims", {})
+            require(plasma_packet.get("subject", {}).get("product") == "plasma", "Plasma packet subject must be plasma.", errors)
+            require(
+                plasma_packet.get("subject", {}).get("profile") == "plasma.v2.reference.preview",
+                "Plasma packet subject must be the reference preview profile.",
+                errors,
+            )
+            require(
+                plasma_claims.get("plasma_v2_reference_execution", {}).get("status") == "supported",
+                "Plasma packet must support reference execution.",
+                errors,
+            )
+            require(
+                plasma_claims.get("plasma_v2_exact_capture", {}).get("status") == "supported",
+                "Plasma packet must support exact capture evidence.",
+                errors,
+            )
+            require(
+                plasma_claims.get("plasma_v2_material_distinctness", {}).get("status") == "supported",
+                "Plasma packet must support material distinctness evidence.",
+                errors,
+            )
+            require(
+                plasma_claims.get("plasma_v2_pack_compilation", {}).get("status") == "supported",
+                "Plasma packet must support pack compilation evidence.",
+                errors,
+            )
+            require(
+                plasma_claims.get("artistic_acceptance_blocked", {}).get("status") == "blocked",
+                "Plasma packet must keep artistic acceptance blocked.",
+                errors,
+            )
+            require(
+                plasma_claims.get("release_promotion_blocked", {}).get("status") == "blocked",
+                "Plasma packet must keep release promotion blocked.",
+                errors,
+            )
+            require(
+                plasma_claims.get("compatibility_not_certified", {}).get("certified_os_support") is False,
+                "Plasma packet must not certify compatibility.",
+                errors,
+            )
+
     if errors:
         for error in errors:
             print(error, file=sys.stderr)
