@@ -1,6 +1,6 @@
 schema_version = 1
 version_id = "screensave-version-authority-00"
-as_of = "2026-06-26"
+as_of = "2026-06-27"
 
 [release]
 public_artifact = "c16-core-baseline"
@@ -15,12 +15,13 @@ active_milestone = "plasma-v2-reference-slice"
 release_candidate = "none"
 
 [plasma_v2]
-status = "reference-preview"
+status = "reviewed-preview"
 stable = false
 active_profile = "plasma.v2.reference.preview"
-artistic_acceptance = "not-yet-reviewed"
+visual_review = "recorded"
+artistic_acceptance = "preview-only"
 release_promotion = "blocked"
-opened_next = "plasma-v2-visual-review-and-packc"
+opened_next = "plasma-v2-accelerated-realization"
 
 [abi]
 platform_api = 1

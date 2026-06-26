@@ -52,12 +52,13 @@ planning and implementation without implying release promotion, public SDK
 stability, all-saver migration, compatibility certification, or artistic
 acceptance.
 
-Plasma v2 is now recorded as a reference-preview candidate, not a stable
+Plasma v2 is now recorded as a reviewed-preview candidate, not a stable
 release. The preview profile is `plasma.v2.reference.preview`; it has exact
 captures, a Proof Bundle v1 projection, bounded materials/treatments evidence,
-a data-only `packc` example, and Workbench Author/Inspect support. Artistic
-acceptance and release promotion remain blocked pending later human review and
-promotion work.
+data-only `packc` packs, deterministic VisualIntent candidates, and Workbench
+Author/Inspect/Compare support. Visual review is recorded for preview
+continuation only; final artistic acceptance, release promotion, compatibility
+certification, public SDK stability, and all-saver migration remain blocked.
 
 ## Download ScreenSave Core
 

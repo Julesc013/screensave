@@ -1,6 +1,6 @@
 schema_version = 1
 state_id = "truth-proof-baseline-00"
-as_of = "2026-06-26"
+as_of = "2026-06-27"
 
 [authority]
 current_truth = "truth-proof-baseline"
@@ -193,17 +193,21 @@ required_boundaries = [
 ]
 
 [plasma_v2]
-status = "reference-preview"
+status = "reviewed-preview"
 stable = false
 active_profile = "plasma.v2.reference.preview"
-artistic_acceptance = "not-yet-reviewed"
+visual_review = "recorded"
+artistic_acceptance = "preview-only"
 release_promotion = "blocked"
-opened_next = "plasma-v2-visual-review-and-packc"
+opened_next = "plasma-v2-accelerated-realization"
 proof = "validation/captures/plasma-v2/reference-preview/profile-proof.json"
 proof_bundle = "validation/captures/plasma-v2/reference-preview/proof-bundle-v1.json"
 preview_gate = "validation/captures/plasma-v2/preview-gate/gate-report.json"
+review_gate = "validation/captures/plasma-v2/reviewed-preview/gate-report.json"
+review_decision = "validation/captures/plasma-v2/review/reviewer-decision.preview.toml"
+proof_matrix = "validation/captures/plasma-v2/matrix"
 pack_example = "products/savers/plasma/content/v2/examples/plasma_lava_v2.toml"
-claim_boundary = "Reference preview only; not stable release promotion, artistic acceptance, compatibility certification, public SDK stability, or all-saver migration."
+claim_boundary = "Reviewed preview candidate only; not stable release promotion, final artistic acceptance, compatibility certification, public SDK stability, or all-saver migration."
 
 [doctrine]
 schema_version = 1

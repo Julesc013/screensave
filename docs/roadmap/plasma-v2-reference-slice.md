@@ -1,12 +1,14 @@
 # Plasma v2 Reference Slice
 
-Status: reference-preview candidate.
+Status: reviewed-preview candidate.
 
 Opened on: 2026-06-26.
 
 Gate C source of authority: `tools/scripts/check_gate_c_acceptance.py`.
 
 AIDE work-unit packet: `.aide/work_units/plasma-v2-reference-slice.toml`.
+
+Reviewed-preview follow-up: `docs/roadmap/plasma-v2-visual-review-and-packc.md`.
 
 ## Purpose
 
@@ -75,7 +77,7 @@ remain the product authority.
 
 ## Exit Definition
 
-PAW-DX exits when Plasma v2 has a bounded product spec, a deterministic U09
+PAW-DX exited when Plasma v2 had a bounded product spec, a deterministic U09
 migration map, a software reference path, material Basic controls, reference
 captures, a proof bundle, a data-only `packc` example, Workbench
 Author/Inspect support, AIDE EvidencePackets, and a preview gate. The exit
@@ -88,3 +90,15 @@ Evidence is recorded under `validation/captures/plasma-v2/`, including the
 reference-preview captures, material/treatment summary, Proof Bundle v1, and
 preview gate report. The next opened program is
 `plasma-v2-visual-review-and-packc`.
+
+## Reviewed Preview Candidate
+
+As of 2026-06-27, PAW-E records Plasma v2 as a reviewed-preview candidate. The
+reviewed-preview evidence adds a visual review protocol, a preview review
+decision, a hardened data-only Pack v1 path, deterministic VisualIntent
+candidates, a proof matrix for reference/material/control/candidate lanes, and
+Workbench Author/Inspect/Compare facts.
+
+This remains preview scope. The recorded review permits continued candidate
+work only; it is not final artistic acceptance, stable release promotion,
+compatibility certification, public SDK stability, or all-saver migration.
