@@ -1,0 +1,11 @@
+schema_version = 1
+id = "SS-REPAIR-TEMPLATE"
+title = "Repair task template"
+repair_class = "validator_failure"
+status = "planned"
+allowed_paths = []
+forbidden_paths = []
+expected_validators = []
+evidence_outputs = []
+claim_boundary = "Repair task only; no release promotion or compatibility certification."
+rollback_point = "HEAD"

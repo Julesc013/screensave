@@ -1,0 +1,26 @@
+schema_version: screensave.repair-policy.v1
+status: active
+network_calls: false
+provider_or_model_calls: false
+source_mutation_by_aide: false
+automatic_merge: false
+automatic_promotion: false
+repair_classes:
+  - validator_failure
+  - doc_drift
+  - generated_catalog_drift
+  - proof_baseline_drift
+  - packc_schema_drift
+  - aide_evidence_drift
+  - ci_drift
+  - artifact_manifest_drift
+  - workbench_surface_drift
+  - release_readiness_gap
+commit_body_required:
+  - WorkUnit
+  - Repair class
+  - Allowed paths
+  - Validation
+  - Evidence
+  - Boundary
+claim_boundary: "Repairs are bounded ScreenSave tasks; AIDE may plan and record but does not autonomously mutate source, merge, promote, release, or certify compatibility."
