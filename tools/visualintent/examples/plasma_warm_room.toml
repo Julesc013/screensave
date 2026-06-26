@@ -1,0 +1,24 @@
+visual_intent_version = 1
+
+[appearance]
+brightness = 0.42
+contrast = 0.74
+density = 0.62
+palette = ["#100704", "#5c1f09", "#d46b1b"]
+texture = "soft-grain"
+
+[motion]
+character = "slow-drifting"
+speed = 0.22
+continuity = 0.88
+loop_seconds = 90
+
+[composition]
+symmetry = "low"
+depth = "medium"
+focus = "distributed"
+
+[constraints]
+avoid_flashing = true
+deterministic = true
+maximum_brightness = 0.50

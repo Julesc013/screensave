@@ -1,0 +1,15 @@
+{
+  "candidate_count": 3,
+  "forbidden": [
+    "source_code_generation",
+    "model_calls",
+    "network_calls",
+    "automatic_promotion",
+    "stable_release_claim"
+  ],
+  "input_schema": "screensave.visual_intent.v1",
+  "output_schema": "screensave.visualintent.plasma.resolution.v1",
+  "product_schema": "screensave.plasma.spec.v2",
+  "resolver": "tools/visualintent/resolve_plasma.py",
+  "status": "bounded-deterministic-preview"
+}
