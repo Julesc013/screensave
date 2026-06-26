@@ -20,7 +20,8 @@ This directory translates those rules into reviewable build lanes.
 
 Real now:
 
-- a concrete MSVC VS2022 solution and project pair
+- a concrete MSVC VS2017 `v141_xp` saver solution used as the default Windows `.scr` build lane
+- a concrete MSVC VS2022 solution retained for companion tools and modern development builds
 - a concrete MinGW i686 make-based lane
 - a real Win32 `.scr` host skeleton wired into both concrete modern lanes
 - a real shared core runtime under `platform/src/core/`
@@ -56,7 +57,8 @@ Deferred:
 
 ## Toolchain Lanes
 
-- `build/msvc/vs2022/` is the practical modern Windows lane for near-term implementation work.
+- `build/msvc/vs2017_xp/` is the default Windows saver lane for current `.scr` artifacts; it targets VS2017 `v141_xp`, x86 Win32, and static MSVC runtime linkage for binary-audit compatibility work.
+- `build/msvc/vs2022/` is the practical modern Windows lane for companion tools and near-term development work.
 - `build/mingw/i686/` is the practical GCC-family x86 lane.
 - `build/msvc/vs6/` documents the long-term legacy validation lane for early Windows targets.
 - `build/msvc/vs2008/` documents the intermediate-era MSVC lane.
@@ -72,7 +74,8 @@ Generated output belongs under `out/` using a stable pattern:
 
 Examples:
 
-- `out/msvc/vs2022/Debug/nocturne/nocturne.scr`
+- `out/msvc/vs2017_xp/Release/nocturne/nocturne.scr`
+- `out/msvc/vs2022/Release/suite/suite.exe`
 - `out/intermediate/mingw/i686/release/screensave_platform/`
 
 These conventions are documented now so later series can extend them without reshaping the tree.

@@ -331,11 +331,14 @@ rules = [
 
 [build_profiles.current_x86]
 status = "development-profile"
-artifact_class = "current Windows x86 build lane"
+artifact_class = "default Windows x86 saver build lane"
 rules = [
   "same product semantics as preservation_x86",
-  "modern compiler allowed",
-  "qualified renderer tiers allowed",
+  "VS2017 v141_xp Release Win32 saver lane",
+  "PE32 GUI subsystem 5.01 target",
+  "static MSVC runtime for saver artifacts",
+  "mandatory GDI floor",
+  "qualified GL11, GL21, GL33, and GL46 renderer tiers remain optional and capability-gated",
   "binary and runtime evidence required before public support claims",
 ]
 

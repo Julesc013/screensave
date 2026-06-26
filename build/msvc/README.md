@@ -16,7 +16,8 @@ The checked-in layout makes those lanes explicit instead of hiding them behind o
 
 Real now:
 
-- `vs2022/` contains the concrete modern solution and project files used to build the shared core runtime, the real host skeleton, the mandatory GDI backend, the optional GL11 and GL21 capability paths, the current canonical saver line as one true `.scr` output per saver through `anthology.scr`, and the real `benchlab.exe` diagnostics app target.
+- `vs2017_xp/` contains the default Windows saver solution and project files used to build the shared core runtime, the real host skeleton, the mandatory GDI backend, the optional GL11, GL21, GL33, and GL46 capability paths, and the current canonical saver line as one true `.scr` output per saver through `anthology.scr`. This lane targets VS2017 `v141_xp`, x86 Win32, and static MSVC runtime linkage.
+- `vs2022/` contains the concrete modern solution and project files retained for companion tools, current development builds, and the real `benchlab.exe` and `suite.exe` targets.
 
 Documented scaffold only:
 

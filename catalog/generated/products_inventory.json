@@ -19,7 +19,7 @@
       "host": "win32_scr_ansi",
       "key": "windows_current_x86_scr",
       "machine": "x86",
-      "name": "Windows Current x86 Saver",
+      "name": "Windows Compatibility x86 Saver",
       "product_classes": [
         "saver"
       ],

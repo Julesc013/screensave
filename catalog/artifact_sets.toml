@@ -36,8 +36,8 @@ claim_boundary = "binary facts only; not preservation certification"
 [[artifact_sets]]
 key = "windows_current_x86_scr"
 artifact_profile = "windows_current_x86_scr"
-build_lane = "msvc-vs2022-release-win32"
-root = "out/msvc/vs2022/Release"
+build_lane = "msvc-vs2017-xp-release-win32"
+root = "out/msvc/vs2017_xp/Release"
 path_template = "{product}/{product}.scr"
 machine = "x86"
 pe_format = "PE32"
@@ -64,7 +64,7 @@ expected_products = [
   "gallery",
   "anthology",
 ]
-claim_boundary = "binary facts only; not current Windows certification"
+claim_boundary = "binary facts only; not legacy Windows or current Windows certification"
 
 [[artifact_sets]]
 key = "windows_current_tools"

@@ -19,9 +19,9 @@
       "key": "windows_current_x86_scr",
       "artifact_extension": ".scr",
       "roots": [
-        "out/msvc/vs2022/Release"
+        "out/msvc/vs2017_xp/Release"
       ],
-      "claim_boundary": "binary facts only; not current-Windows certification"
+      "claim_boundary": "binary facts only; not legacy-Windows or current-Windows certification"
     },
     {
       "key": "windows_current_tool",

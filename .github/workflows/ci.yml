@@ -300,5 +300,6 @@ jobs:
             out\aide\screensave-project-adapter\invocations\proof\windows-current-ricochet-v1
             out\aide\screensave-project-adapter\invocations\proof\windows-current-ricochet-v2
             out\aide\screensave-project-adapter\invocations\equivalence\windows-current-portable-v2-equivalence
+            out\msvc\vs2017_xp\Release
             out\msvc\vs2022\Release
           if-no-files-found: error

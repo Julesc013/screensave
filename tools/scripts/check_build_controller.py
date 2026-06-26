@@ -35,6 +35,9 @@ def main() -> int:
             "windows-current-x86",
             "windows-current-tools",
             "msbuild",
+            "msvc-vs2017-xp-release-win32",
+            "build/msvc/vs2017_xp/ScreenSave.sln",
+            "v141_xp",
             "windows_current_x86_scr",
             "windows_current_tools",
             "No arbitrary compiler, linker, or MSBuild arguments are exposed.",
@@ -52,15 +55,39 @@ def main() -> int:
         require(profiles.get("policy") == "fixed profiles only; no arbitrary build arguments", "buildctl profiles must declare fixed-profile policy.", errors)
         require("windows-current-x86" in profile_map, "buildctl must expose windows-current-x86.", errors)
         require("windows-current-tools" in profile_map, "buildctl must expose windows-current-tools.", errors)
-        for key, artifact_set in [
-            ("windows-current-x86", "windows_current_x86_scr"),
-            ("windows-current-tools", "windows_current_tools"),
-        ]:
+        expected_profiles = [
+            (
+                "windows-current-x86",
+                "windows_current_x86_scr",
+                "build/msvc/vs2017_xp/ScreenSave.sln",
+                "msvc-vs2017-xp-release-win32",
+                "vs2017",
+                {"VisualStudioVersion=15.0", "WindowsTargetPlatformVersion=8.1", "PlatformToolset=v141_xp"},
+                {"nocturne", "ricochet", "deepfield", "plasma", "anthology"},
+            ),
+            (
+                "windows-current-tools",
+                "windows_current_tools",
+                "build/msvc/vs2022/ScreenSave.sln",
+                "msvc-vs2022-release-win32",
+                "vs2022",
+                {"VisualStudioVersion=17.0"},
+                {"benchlab", "suite"},
+            ),
+        ]
+        for key, artifact_set, solution, build_lane, msbuild_preference, expected_properties, expected_targets in expected_profiles:
             profile = profile_map.get(key, {})
             command = profile.get("command", [])
-            require(command[:2] == ["msbuild", "build/msvc/vs2022/ScreenSave.sln"], f"{key} must use the fixed VS2022 solution.", errors)
+            properties = set(profile.get("properties", []))
+            targets = set(profile.get("targets", []))
+            require(command[:2] == ["msbuild", solution], f"{key} must use the fixed {solution} solution.", errors)
             require("/p:Configuration=Release" in command, f"{key} must build Release.", errors)
             require("/p:Platform=Win32" in command, f"{key} must build Win32.", errors)
+            require(any(str(item).startswith("/t:") for item in command), f"{key} must use fixed MSBuild targets.", errors)
+            require(profile.get("build_lane") == build_lane, f"{key} must report build lane {build_lane}.", errors)
+            require(profile.get("msbuild_preference") == msbuild_preference, f"{key} must prefer {msbuild_preference} MSBuild.", errors)
+            require(expected_properties <= properties, f"{key} is missing expected fixed MSBuild properties.", errors)
+            require(expected_targets <= targets, f"{key} is missing expected fixed build targets.", errors)
             require(profile.get("artifact_sets") == [artifact_set], f"{key} must map to {artifact_set}.", errors)
 
         dry_run = run_buildctl(

@@ -9,12 +9,12 @@ import xml.etree.ElementTree as ET
 
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-SOLUTION = ROOT / "build" / "msvc" / "vs2022" / "ScreenSave.sln"
-PLATFORM_PROJECT = ROOT / "build" / "msvc" / "vs2022" / "screensave_platform.vcxproj"
+SOLUTION = ROOT / "build" / "msvc" / "vs2017_xp" / "ScreenSave.sln"
+PLATFORM_PROJECT = ROOT / "build" / "msvc" / "vs2017_xp" / "screensave_platform.vcxproj"
 BENCHLAB_PROJECT = ROOT / "build" / "msvc" / "vs2022" / "benchlab.vcxproj"
 SUITE_PROJECT = ROOT / "build" / "msvc" / "vs2022" / "suite.vcxproj"
-SAVER_COMMON_PROPS = ROOT / "build" / "msvc" / "vs2022" / "saver_target_common.props"
-ANTHOLOGY_TARGET_SOURCES_PROPS = ROOT / "build" / "msvc" / "vs2022" / "anthology_target_sources.props"
+SAVER_COMMON_PROPS = ROOT / "build" / "msvc" / "vs2017_xp" / "saver_target_common.props"
+ANTHOLOGY_TARGET_SOURCES_PROPS = ROOT / "build" / "msvc" / "vs2017_xp" / "anthology_target_sources.props"
 SUITE_TARGET_SOURCES_PROPS = ROOT / "build" / "msvc" / "vs2022" / "suite_target_sources.props"
 MINGW_MAKEFILE = ROOT / "build" / "mingw" / "i686" / "Makefile"
 CATALOG = ROOT / "catalog" / "products.toml"
@@ -53,7 +53,7 @@ def collect_items(project_root: ET.Element, item_name: str) -> list[str]:
 
 
 def saver_project_path(saver_key: str) -> pathlib.Path:
-    return ROOT / "build" / "msvc" / "vs2022" / f"{saver_key}.vcxproj"
+    return ROOT / "build" / "msvc" / "vs2017_xp" / f"{saver_key}.vcxproj"
 
 
 def saver_source_paths(saver_key: str) -> list[str]:
@@ -102,6 +102,7 @@ def required_paths() -> list[pathlib.Path]:
         ROOT / "build" / "msvc" / "README.md",
         ROOT / "build" / "msvc" / "vs6" / "README.md",
         ROOT / "build" / "msvc" / "vs2008" / "README.md",
+        ROOT / "build" / "msvc" / "vs2017_xp" / "README.md",
         ROOT / "build" / "msvc" / "vs2022" / "README.md",
         ROOT / "build" / "mingw" / "README.md",
         ROOT / "build" / "mingw" / "i686" / "README.md",
@@ -189,6 +190,8 @@ def require_saver_project(project_path: pathlib.Path, saver_key: str, errors: li
     require("<TargetExt>.scr</TargetExt>" in project_text, f"{project_path.name} must emit a .scr target.", errors)
     require(f"<TargetName>{saver_key}</TargetName>" in project_text, f"{project_path.name} must set the expected target name.", errors)
     require("saver_target_common.props" in project_text, f"{project_path.name} must import saver_target_common.props.", errors)
+    require("<PlatformToolset>v141_xp</PlatformToolset>" in project_text, f"{project_path.name} must use the VS2017 XP toolset.", errors)
+    require("out\\msvc\\vs2017_xp" in project_text, f"{project_path.name} must emit under the VS2017 XP output root.", errors)
 
 
 def anthology_source_paths() -> list[str]:
@@ -213,6 +216,8 @@ def require_anthology_project(project_path: pathlib.Path, errors: list[str]) -> 
     require("saver_target_common.props" in project_text, f"{project_path.name} must import saver_target_common.props.", errors)
     require("anthology_target_sources.props" in project_text, f"{project_path.name} must import anthology_target_sources.props.", errors)
     require("screensave_platform.vcxproj" in project_refs, f"{project_path.name} must reference the platform project.", errors)
+    require("<PlatformToolset>v141_xp</PlatformToolset>" in project_text, f"{project_path.name} must use the VS2017 XP toolset.", errors)
+    require("out\\msvc\\vs2017_xp" in project_text, f"{project_path.name} must emit under the VS2017 XP output root.", errors)
     require_exact(
         collect_items(props_root, "ClCompile"),
         anthology_source_paths(),
@@ -279,6 +284,7 @@ def main() -> int:
         "screensave_platform.vcxproj",
         "benchlab.vcxproj",
         "suite.vcxproj",
+        "Visual Studio Version 15",
         "Debug|Win32",
         "Release|Win32",
     ):
@@ -287,6 +293,12 @@ def main() -> int:
         require(f"{saver_key}.vcxproj" in solution_text, f"ScreenSave.sln is missing {saver_key}.vcxproj.", errors)
 
     platform_project = parse_project(PLATFORM_PROJECT)
+    platform_project_text = PLATFORM_PROJECT.read_text(encoding="utf-8")
+    require("<PlatformToolset>v141_xp</PlatformToolset>" in platform_project_text, "screensave_platform.vcxproj must use the VS2017 XP toolset.", errors)
+    require("<RuntimeLibrary>MultiThreaded</RuntimeLibrary>" in platform_project_text, "screensave_platform.vcxproj must use the static release runtime.", errors)
+    require("out\\msvc\\vs2017_xp" in platform_project_text, "screensave_platform.vcxproj must emit under the VS2017 XP output root.", errors)
+    saver_props_text = SAVER_COMMON_PROPS.read_text(encoding="utf-8")
+    require("<RuntimeLibrary>MultiThreaded</RuntimeLibrary>" in saver_props_text, "saver_target_common.props must use the static release runtime.", errors)
     platform_sources = collect_items(platform_project, "ClCompile")
     require_all(
         platform_sources,

@@ -16,14 +16,44 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 ARTIFACT_MANIFEST = ROOT / "tools" / "artifactmanifest" / "artifactmanifest.py"
 PE_AUDIT = ROOT / "tools" / "scripts" / "audit_pe_artifacts.py"
 OUTPUT_ROOT = ROOT / "out" / "buildctl"
+SAVER_TARGETS = [
+    "nocturne",
+    "ricochet",
+    "deepfield",
+    "plasma",
+    "phosphor",
+    "pipeworks",
+    "lifeforms",
+    "signals",
+    "mechanize",
+    "ecosystems",
+    "stormglass",
+    "transit",
+    "observatory",
+    "vector",
+    "explorer",
+    "city",
+    "atlas",
+    "gallery",
+    "anthology",
+]
+TOOL_TARGETS = ["benchlab", "suite"]
 
 PROFILES: dict[str, dict[str, Any]] = {
     "windows-current-x86": {
         "description": "Current Windows x86 saver build lane.",
-        "build_lane": "msvc-vs2022-release-win32",
-        "solution": "build/msvc/vs2022/ScreenSave.sln",
+        "build_lane": "msvc-vs2017-xp-release-win32",
+        "solution": "build/msvc/vs2017_xp/ScreenSave.sln",
         "configuration": "Release",
         "platform": "Win32",
+        "targets": SAVER_TARGETS,
+        "msbuild_preference": "vs2017",
+        "properties": [
+            "VisualStudioVersion=15.0",
+            "WindowsTargetPlatformVersion=8.1",
+            "PlatformToolset=v141_xp",
+            "ForceSynchronousPDBWrites=true",
+        ],
         "artifact_sets": ["windows_current_x86_scr"],
         "timeout_seconds": 900,
     },
@@ -33,6 +63,12 @@ PROFILES: dict[str, dict[str, Any]] = {
         "solution": "build/msvc/vs2022/ScreenSave.sln",
         "configuration": "Release",
         "platform": "Win32",
+        "targets": TOOL_TARGETS,
+        "msbuild_preference": "vs2022",
+        "properties": [
+            "VisualStudioVersion=17.0",
+            "ForceSynchronousPDBWrites=true",
+        ],
         "artifact_sets": ["windows_current_tools"],
         "timeout_seconds": 900,
     },
@@ -62,48 +98,152 @@ def source_payload() -> dict[str, Any]:
     }
 
 
-def resolve_msbuild() -> str:
+def msbuild_env_names(preference: str) -> list[str]:
+    names = []
+    if preference == "vs2017":
+        names.extend(["SS_MSBUILD_VS2017", "VS2017_MSBUILD"])
+    elif preference == "vs2022":
+        names.extend(["SS_MSBUILD_VS2022", "VS2022_MSBUILD"])
+    names.append("SS_MSBUILD")
+    return names
+
+
+def visual_studio_sxs_path(version: str) -> pathlib.Path | None:
+    if os.name != "nt":
+        return None
+    try:
+        import winreg
+    except ImportError:
+        return None
+
+    key_paths = [
+        r"SOFTWARE\WOW6432Node\Microsoft\VisualStudio\SxS\VS7",
+        r"SOFTWARE\Microsoft\VisualStudio\SxS\VS7",
+    ]
+    for key_path in key_paths:
+        try:
+            with winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, key_path) as key:
+                value, _kind = winreg.QueryValueEx(key, version)
+        except OSError:
+            continue
+        if value:
+            return pathlib.Path(value)
+    return None
+
+
+def standard_msbuild_candidates(preference: str) -> list[pathlib.Path]:
+    candidates: list[pathlib.Path] = []
+
+    if preference == "vs2017":
+        install = visual_studio_sxs_path("15.0")
+        if install is not None:
+            candidates.append(install / "MSBuild" / "15.0" / "Bin" / "MSBuild.exe")
+        program_files_x86 = os.environ.get("ProgramFiles(x86)")
+        if program_files_x86:
+            for edition in ("Enterprise", "Professional", "Community", "BuildTools"):
+                candidates.append(
+                    pathlib.Path(program_files_x86)
+                    / "Microsoft Visual Studio"
+                    / "2017"
+                    / edition
+                    / "MSBuild"
+                    / "15.0"
+                    / "Bin"
+                    / "MSBuild.exe"
+                )
+
+    if preference == "vs2022":
+        install = visual_studio_sxs_path("17.0")
+        if install is not None:
+            candidates.append(install / "MSBuild" / "Current" / "Bin" / "MSBuild.exe")
+        for program_files_name in ("ProgramFiles", "ProgramFiles(x86)"):
+            program_files = os.environ.get(program_files_name)
+            if not program_files:
+                continue
+            for edition in ("Enterprise", "Professional", "Community", "BuildTools"):
+                candidates.append(
+                    pathlib.Path(program_files)
+                    / "Microsoft Visual Studio"
+                    / "2022"
+                    / edition
+                    / "MSBuild"
+                    / "Current"
+                    / "Bin"
+                    / "MSBuild.exe"
+                )
+
+    return candidates
+
+
+def vswhere_msbuild(preference: str) -> str | None:
+    program_files_x86 = os.environ.get("ProgramFiles(x86)")
+    if not program_files_x86:
+        return None
+    vswhere = pathlib.Path(program_files_x86) / "Microsoft Visual Studio" / "Installer" / "vswhere.exe"
+    if not vswhere.exists():
+        return None
+
+    command = [
+        str(vswhere),
+        "-products",
+        "*",
+        "-requires",
+        "Microsoft.Component.MSBuild",
+        "-find",
+        "MSBuild\\**\\Bin\\MSBuild.exe",
+    ]
+    if preference == "vs2017":
+        command[1:1] = ["-version", "[15.0,16.0)"]
+    elif preference == "vs2022":
+        command[1:1] = ["-version", "[17.0,18.0)"]
+    else:
+        command[1:1] = ["-latest"]
+
+    try:
+        output = subprocess.check_output(command, cwd=ROOT, text=True, stderr=subprocess.DEVNULL).strip()
+    except Exception:
+        output = ""
+    if output:
+        first = output.splitlines()[0].strip()
+        if first:
+            return first
+    return None
+
+
+def resolve_msbuild(preference: str = "default") -> str:
+    for name in msbuild_env_names(preference):
+        value = os.environ.get(name)
+        if value and pathlib.Path(value).exists():
+            return value
+
+    for candidate in standard_msbuild_candidates(preference):
+        if candidate.exists():
+            return str(candidate)
+
+    from_vswhere = vswhere_msbuild(preference)
+    if from_vswhere:
+        return from_vswhere
+
     from_path = shutil.which("msbuild")
     if from_path:
         return from_path
-
-    program_files_x86 = os.environ.get("ProgramFiles(x86)")
-    if program_files_x86:
-        vswhere = pathlib.Path(program_files_x86) / "Microsoft Visual Studio" / "Installer" / "vswhere.exe"
-        if vswhere.exists():
-            try:
-                output = subprocess.check_output(
-                    [
-                        str(vswhere),
-                        "-latest",
-                        "-requires",
-                        "Microsoft.Component.MSBuild",
-                        "-find",
-                        "MSBuild\\**\\Bin\\MSBuild.exe",
-                    ],
-                    cwd=ROOT,
-                    text=True,
-                    stderr=subprocess.DEVNULL,
-                ).strip()
-            except Exception:
-                output = ""
-            if output:
-                first = output.splitlines()[0].strip()
-                if first:
-                    return first
 
     return "msbuild"
 
 
 def profile_command(profile: dict[str, Any], resolve_tool: bool = False) -> list[str]:
-    msbuild = resolve_msbuild() if resolve_tool else "msbuild"
-    return [
+    msbuild = resolve_msbuild(str(profile.get("msbuild_preference", "default"))) if resolve_tool else "msbuild"
+    command = [
         msbuild,
         str(profile["solution"]),
         "/m",
+        "/t:" + ";".join(str(item) for item in profile.get("targets", [])),
         f"/p:Configuration={profile['configuration']}",
         f"/p:Platform={profile['platform']}",
     ]
+    for item in profile.get("properties", []):
+        command.append(f"/p:{item}")
+    return command
 
 
 def run_process(command: list[str], timeout_seconds: int, output_log: pathlib.Path | None = None) -> dict[str, Any]:
@@ -288,6 +428,9 @@ def command_profiles(_args: argparse.Namespace) -> int:
                 "configuration": value["configuration"],
                 "platform": value["platform"],
                 "solution": value["solution"],
+                "targets": list(value.get("targets", [])),
+                "msbuild_preference": value.get("msbuild_preference", "default"),
+                "properties": list(value.get("properties", [])),
                 "artifact_sets": value["artifact_sets"],
                 "command": profile_command(value),
             }

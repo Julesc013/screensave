@@ -126,11 +126,12 @@ Universal behavior ships first. If an optional capability is absent, ScreenSave 
 
 Checked-in build entry points:
 
-- VS2022 solution: [`build/msvc/vs2022/ScreenSave.sln`](build/msvc/vs2022/ScreenSave.sln)
-- MSBuild example:
+- Default Windows saver solution: [`build/msvc/vs2017_xp/ScreenSave.sln`](build/msvc/vs2017_xp/ScreenSave.sln)
+- Companion-tool/dev solution: [`build/msvc/vs2022/ScreenSave.sln`](build/msvc/vs2022/ScreenSave.sln)
+- MSBuild example for the default saver lane:
 
 ```powershell
-msbuild build\msvc\vs2022\ScreenSave.sln /p:Configuration=Debug /p:Platform=Win32
+py -3 tools\buildctl\screensave_build.py build --profile windows-current-x86
 ```
 
 - MinGW i686 make lane:
@@ -141,7 +142,8 @@ mingw32-make -C build/mingw/i686 PROFILE=debug
 
 Generated output belongs under `out/`, not inside source directories. The checked-in conventions are:
 
-- `out/msvc/vs2022/<Configuration>/<ProjectName>/`
+- `out/msvc/vs2017_xp/<Configuration>/<ProjectName>/` for default Windows `.scr` savers
+- `out/msvc/vs2022/<Configuration>/<ProjectName>/` for companion tools and modern development builds
 - `out/mingw/i686/<profile>/<target>/`
 - `out/intermediate/<toolchain>/<lane>/<profile>/<target>/`
 

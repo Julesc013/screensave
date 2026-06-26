@@ -26,6 +26,10 @@ __pycache__/**
 node_modules/**
 dist/**
 build/**
+!build/
+!build/msvc/
+!build/msvc/vs2017_xp/
+!build/msvc/vs2017_xp/**
 
 .aide.local/
 .aide/context/*

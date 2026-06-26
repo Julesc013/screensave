@@ -23,9 +23,11 @@ python tools\buildctl\screensave_build.py build --profile windows-current-x86 --
 `--dry-run` records the exact command plan without invoking MSBuild. It is for
 validators and capability review only; it is not build evidence.
 
-For real runs, the controller first uses `msbuild` from `PATH`; if unavailable
-on Windows, it resolves MSBuild through Visual Studio `vswhere`. The selected
-tool still belongs to the fixed profile command plan and callers still cannot
-provide arbitrary build arguments.
+For real runs, the controller resolves MSBuild from the fixed profile policy:
+the saver profile prefers VS2017 for the `v141_xp` lane, while the companion
+tool profile prefers VS2022. It checks explicit environment overrides,
+standard Visual Studio install paths, Visual Studio `vswhere`, then `PATH`.
+The selected tool still belongs to the fixed profile command plan and callers
+still cannot provide arbitrary build arguments.
 
 Type: repository proof tooling.

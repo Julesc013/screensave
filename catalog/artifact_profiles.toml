@@ -40,20 +40,22 @@ notes = [
 
 [[artifact_profiles]]
 key = "windows_current_x86_scr"
-name = "Windows Current x86 Saver"
+name = "Windows Compatibility x86 Saver"
 product_classes = ["saver"]
 host = "win32_scr_ansi"
 artifact_extension = ".scr"
 machine = "x86"
 pe_format = "PE32"
-subsystem_policy = "current_toolchain_declared"
-runtime_dependency_policy = "modern_crt_allowed_with_packaging_evidence"
+subsystem_policy = "xp_subsystem_5_01_static_runtime"
+runtime_dependency_policy = "static_msvc_runtime_no_mandatory_modern_ucrt"
 mandatory_renderers = ["gdi"]
 optional_renderers = ["gl11", "gl21", "gl33", "gl46"]
 evidence_status = "targeted"
 public_claim = "targeted"
 notes = [
-  "Current Windows builds may use modern toolchains, but support claims still require evidence.",
+  "Default Windows saver builds use the VS2017 v141_xp lane, PE32 Win32 GUI subsystem 5.01, and the static MSVC runtime.",
+  "This profile preserves the ANSI Win32 .scr host, GDI floor, and optional capability-gated GL11/GL21/GL33/GL46 tiers.",
+  "Old-Windows and current-Windows support claims still require VM, hardware, or operator certification evidence.",
 ]
 
 [[artifact_profiles]]

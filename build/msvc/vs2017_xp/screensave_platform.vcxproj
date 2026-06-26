@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{27C5F6A5-7D40-4A3B-A344-1D8A23F63C01}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>screensave_platform</RootNamespace>
+    <ProjectName>screensave_platform</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141_xp</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141_xp</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Label="Shared" />
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <OutDir>$(SolutionDir)..\..\..\out\msvc\vs2017_xp\$(Configuration)\$(ProjectName)\</OutDir>
+    <IntDir>$(SolutionDir)..\..\..\out\intermediate\msvc\vs2017_xp\$(Configuration)\$(ProjectName)\</IntDir>
+    <TargetName>screensave_platform</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <CompileAs>CompileAsC</CompileAs>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\platform\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <CompileAs>CompileAsC</CompileAs>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\platform\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Lib>
+      <LinkTimeCodeGeneration>true</LinkTimeCodeGeneration>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\platform\src\core\substrate\backend_caps.c" />
+    <ClCompile Include="..\..\..\platform\src\core\substrate\backend_family_service.c" />
+    <ClCompile Include="..\..\..\platform\src\core\substrate\backend_kind.c" />
+    <ClCompile Include="..\..\..\platform\src\core\substrate\backend_loader.c" />
+    <ClCompile Include="..\..\..\platform\src\core\substrate\backend_registry.c" />
+    <ClCompile Include="..\..\..\platform\src\core\substrate\image_service.c" />
+    <ClCompile Include="..\..\..\platform\src\core\substrate\present_path.c" />
+    <ClCompile Include="..\..\..\platform\src\core\substrate\present_service.c" />
+    <ClCompile Include="..\..\..\platform\src\core\substrate\render_band.c" />
+    <ClCompile Include="..\..\..\platform\src\core\substrate\routing_policy.c" />
+    <ClCompile Include="..\..\..\platform\src\core\substrate\service_registry.c" />
+    <ClCompile Include="..\..\..\platform\src\core\substrate\service_seams.c" />
+    <ClCompile Include="..\..\..\platform\src\core\substrate\text_service.c" />
+    <ClCompile Include="..\..\..\platform\src\core\base\display_text.c" />
+    <ClCompile Include="..\..\..\platform\src\core\base\ini_file.c" />
+    <ClCompile Include="..\..\..\platform\src\core\base\renderer_dispatch.c" />
+    <ClCompile Include="..\..\..\platform\src\core\base\saver_contract.c" />
+    <ClCompile Include="..\..\..\platform\src\core\base\saver_registry.c" />
+    <ClCompile Include="..\..\..\platform\src\core\config\config.c" />
+    <ClCompile Include="..\..\..\platform\src\core\config\settings.c" />
+    <ClCompile Include="..\..\..\platform\src\core\diagnostics\diagnostics.c">
+      <ObjectFileName>$(IntDir)core_diagnostics.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\platform\src\core\grid\grid_buffer.c" />
+    <ClCompile Include="..\..\..\platform\src\core\rng\rng.c" />
+    <ClCompile Include="..\..\..\platform\src\core\timing\timing.c" />
+    <ClCompile Include="..\..\..\platform\src\core\version\version.c" />
+    <ClCompile Include="..\..\..\platform\src\core\visual\visual_buffer.c" />
+    <ClCompile Include="..\..\..\platform\src\surface\rgba8\surface_rgba8.c" />
+    <ClCompile Include="..\..\..\platform\src\render\soft\soft_renderer.c" />
+    <ClCompile Include="..\..\..\platform\src\render\gdi\gdi_capture.c" />
+    <ClCompile Include="..\..\..\platform\src\render\gdi\gdi_backend.c" />
+    <ClCompile Include="..\..\..\platform\src\render\gdi\gdi_bitmap.c" />
+    <ClCompile Include="..\..\..\platform\src\render\gdi\gdi_present.c" />
+    <ClCompile Include="..\..\..\platform\src\render\gdi\gdi_primitives.c" />
+    <ClCompile Include="..\..\..\platform\src\render\gdi\gdi_state.c" />
+    <ClCompile Include="..\..\..\platform\src\render\gdi\gdi_surface.c" />
+    <ClCompile Include="..\..\..\platform\src\render\gl11\gl11_backend.c" />
+    <ClCompile Include="..\..\..\platform\src\render\gl11\gl11_bitmap.c" />
+    <ClCompile Include="..\..\..\platform\src\render\gl11\gl11_caps.c" />
+    <ClCompile Include="..\..\..\platform\src\render\gl11\gl11_capture.c" />
+    <ClCompile Include="..\..\..\platform\src\render\gl11\gl11_context.c" />
+    <ClCompile Include="..\..\..\platform\src\render\gl11\gl11_present.c" />
+    <ClCompile Include="..\..\..\platform\src\render\gl11\gl11_primitives.c" />
+    <ClCompile Include="..\..\..\platform\src\render\gl11\gl11_state.c" />
+    <ClCompile Include="..\..\..\platform\src\render\gl21\gl21_backend.c" />
+    <ClCompile Include="..\..\..\platform\src\render\gl21\gl21_caps.c" />
+    <ClCompile Include="..\..\..\platform\src\render\gl21\gl21_capture.c" />
+    <ClCompile Include="..\..\..\platform\src\render\gl21\gl21_context.c" />
+    <ClCompile Include="..\..\..\platform\src\render\gl21\gl21_present.c" />
+    <ClCompile Include="..\..\..\platform\src\render\gl21\gl21_primitives.c" />
+    <ClCompile Include="..\..\..\platform\src\render\gl21\gl21_state.c" />
+    <ClCompile Include="..\..\..\platform\src\render\gl33\gl33_backend.c" />
+    <ClCompile Include="..\..\..\platform\src\render\gl33\gl33_caps.c" />
+    <ClCompile Include="..\..\..\platform\src\render\gl33\gl33_capture.c" />
+    <ClCompile Include="..\..\..\platform\src\render\gl33\gl33_context.c" />
+    <ClCompile Include="..\..\..\platform\src\render\gl33\gl33_present.c" />
+    <ClCompile Include="..\..\..\platform\src\render\gl33\gl33_primitives.c" />
+    <ClCompile Include="..\..\..\platform\src\render\gl33\gl33_state.c" />
+    <ClCompile Include="..\..\..\platform\src\render\gl46\gl46_backend.c" />
+    <ClCompile Include="..\..\..\platform\src\render\gl46\gl46_caps.c" />
+    <ClCompile Include="..\..\..\platform\src\render\gl46\gl46_capture.c" />
+    <ClCompile Include="..\..\..\platform\src\render\gl46\gl46_context.c" />
+    <ClCompile Include="..\..\..\platform\src\render\gl46\gl46_present.c" />
+    <ClCompile Include="..\..\..\platform\src\render\gl46\gl46_primitives.c" />
+    <ClCompile Include="..\..\..\platform\src\render\gl46\gl46_state.c" />
+    <ClCompile Include="..\..\..\platform\src\render\null\null_backend.c" />
+    <ClCompile Include="..\..\..\platform\src\v2\base_validate.c" />
+    <ClCompile Include="..\..\..\platform\src\v2\config_view.c" />
+    <ClCompile Include="..\..\..\platform\src\v2\diagnostics.c">
+      <ObjectFileName>$(IntDir)v2_diagnostics.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\platform\src\v2\draw_renderer_bridge.c" />
+    <ClCompile Include="..\..\..\platform\src\v2\draw_target.c" />
+    <ClCompile Include="..\..\..\platform\src\v2\session_helpers.c" />
+    <ClCompile Include="..\..\..\platform\src\v2\surface_view.c" />
+    <ClCompile Include="..\..\..\platform\src\v2\v1_v2_compat_adapter.c" />
+    <ClCompile Include="..\..\..\platform\src\host\win32_scr\scr_args.c" />
+    <ClCompile Include="..\..\..\platform\src\host\win32_scr\scr_config_dialog.c" />
+    <ClCompile Include="..\..\..\platform\src\host\win32_scr\scr_diagnostics.c" />
+    <ClCompile Include="..\..\..\platform\src\host\win32_scr\scr_entry.c" />
+    <ClCompile Include="..\..\..\platform\src\host\win32_scr\scr_settings.c" />
+    <ClCompile Include="..\..\..\platform\src\host\win32_scr\scr_validation_scene.c" />
+    <ClCompile Include="..\..\..\platform\src\host\win32_scr\scr_window.c" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+</Project>
+

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32"><Configuration>Debug</Configuration><Platform>Win32</Platform></ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32"><Configuration>Release</Configuration><Platform>Win32</Platform></ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals"><ProjectGuid>{7E3D0D7A-6D13-4F9B-AF7B-0B602E4A5A11}</ProjectGuid><Keyword>Win32Proj</Keyword><RootNamespace>pipeworks</RootNamespace><ProjectName>pipeworks</ProjectName></PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration"><ConfigurationType>Application</ConfigurationType><UseDebugLibraries>true</UseDebugLibraries><PlatformToolset>v141_xp</PlatformToolset><CharacterSet>NotSet</CharacterSet></PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration"><ConfigurationType>Application</ConfigurationType><UseDebugLibraries>false</UseDebugLibraries><PlatformToolset>v141_xp</PlatformToolset><WholeProgramOptimization>true</WholeProgramOptimization><CharacterSet>NotSet</CharacterSet></PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Label="Shared" />
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'"><Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" /></ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"><Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" /></ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup><OutDir>$(SolutionDir)..\..\..\out\msvc\vs2017_xp\$(Configuration)\$(ProjectName)\</OutDir><IntDir>$(SolutionDir)..\..\..\out\intermediate\msvc\vs2017_xp\$(Configuration)\$(ProjectName)\</IntDir><TargetName>pipeworks</TargetName><TargetExt>.scr</TargetExt></PropertyGroup>
+  <Import Project="saver_target_common.props" />
+  <ItemGroup>
+    <ClCompile Include="..\..\..\products\savers\pipeworks\src\pipeworks_config.c" />
+    <ClCompile Include="..\..\..\products\savers\pipeworks\src\pipeworks_module.c" />
+    <ClCompile Include="..\..\..\products\savers\pipeworks\src\pipeworks_presets.c" />
+    <ClCompile Include="..\..\..\products\savers\pipeworks\src\pipeworks_render.c" />
+    <ClCompile Include="..\..\..\products\savers\pipeworks\src\pipeworks_sim.c" />
+    <ClCompile Include="..\..\..\products\savers\pipeworks\src\pipeworks_themes.c" />
+    <ClCompile Include="..\..\..\products\savers\pipeworks\src\pipeworks_entry.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\..\..\products\savers\pipeworks\src\pipeworks_config.rc" />
+    <ResourceCompile Include="..\..\..\products\savers\pipeworks\src\pipeworks_version.rc" />
+    <ResourceCompile Include="..\..\..\platform\src\host\win32_scr\screensave_host.rc" />
+  </ItemGroup>
+  <ItemGroup><ProjectReference Include="screensave_platform.vcxproj"><Project>{27C5F6A5-7D40-4A3B-A344-1D8A23F63C01}</Project></ProjectReference></ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+</Project>
+

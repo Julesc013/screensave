@@ -27,6 +27,7 @@ OPTIONAL_MAGIC = {
 DEFAULT_ROOTS = [
     ROOT / "out" / "portable" / "screensave-core-c16-baseline",
     ROOT / "out" / "installer" / "screensave-installer-c16-baseline",
+    ROOT / "out" / "msvc" / "vs2017_xp" / "Release",
     ROOT / "out" / "msvc" / "vs2022" / "Release",
     ROOT / "out" / "mingw" / "i686" / "debug",
 ]
