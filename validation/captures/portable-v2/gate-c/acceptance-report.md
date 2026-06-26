@@ -1,14 +1,15 @@
 # Portable v2 Gate C acceptance report
 
 - Status: pass
-- Mode: pre_acceptance
-- Source commit: de751d3bbe9a53cbd16decbcd7c934f2e068d3ab
+- Mode: accepted
+- Source commit: ae9c6c6dd7c761fa7bcac81d8dc635edfe934643
 - Claim boundary: Gate C acceptance evidence only; not compatibility certification, artistic acceptance, release promotion, or Plasma runtime implementation.
 
 ## Checks
 
 - pass: project-state-portable-v2-mode - PROJECT_STATE portable_v2 status is active before acceptance or accepted after acceptance.
 - pass: proof-kernel-v1-complete - Proof Kernel v1 is complete with no remaining work.
+- pass: project-state-accepted-fields - Accepted state records Gate C closure and opens Plasma v2.
 - pass: product-core-boundaries - Command passed.
 - pass: portable-v2-headers - Command passed.
 - pass: portable-v2-equivalence - Command passed.

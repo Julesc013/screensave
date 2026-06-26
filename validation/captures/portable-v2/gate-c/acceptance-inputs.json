@@ -7,11 +7,11 @@
     "project_state": "PROJECT_STATE.toml",
     "proof_bundle_check": "out/proof/proof-bundle-v1/check-ricochet.json"
   },
-  "mode": "pre_acceptance",
+  "mode": "accepted",
   "schema": "screensave-portable-v2-gate-c-acceptance-inputs-v0",
   "source": {
     "branch": "main",
-    "commit": "de751d3bbe9a53cbd16decbcd7c934f2e068d3ab",
+    "commit": "ae9c6c6dd7c761fa7bcac81d8dc635edfe934643",
     "dirty": false
   },
   "status": "pass"

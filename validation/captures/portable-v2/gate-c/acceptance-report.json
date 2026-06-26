@@ -2,7 +2,7 @@
   "checks": [
     {
       "data": {
-        "status": "active"
+        "status": "accepted"
       },
       "id": "project-state-portable-v2-mode",
       "status": "pass",
@@ -16,6 +16,87 @@
       "id": "proof-kernel-v1-complete",
       "status": "pass",
       "summary": "Proof Kernel v1 is complete with no remaining work."
+    },
+    {
+      "data": {
+        "development": {
+          "active_program": "plasma-v2-reference-slice",
+          "current_product_truth": "products/savers/plasma/docs/u09-stable-recut.md",
+          "proof_captures": "validation/captures/u09/README.md",
+          "proof_record": "products/savers/plasma/tests/u09-recut-proof.md",
+          "ship_posture": "GO_WITH_CAVEATS",
+          "ship_posture_source": "products/savers/plasma/docs/u09-ship-posture.md",
+          "status": "post-c16-development-head"
+        },
+        "portable_v2": {
+          "accepted_by": "check_gate_c_acceptance.py",
+          "compatibility_adapter": "generic-v1-v2-compat-adapter-present",
+          "completed_on": "2026-06-26",
+          "contract": "contracts/portable_semantics_v2.md",
+          "gate": "PAW-C",
+          "implemented": [
+            "host-neutral fixed-width v2 base aliases and width guards",
+            "v2 size/version-prefixed public structures for types, clock, seed, diagnostics, config, surface, draw, product, and session descriptors",
+            "v2 aggregate public header",
+            "portable v2 deterministic header validator",
+            "portable v2 descriptor validation helpers and C89 public-header smoke compile",
+            "portable v2 draw target bridge to the existing reference renderer mechanics",
+            "Nocturne v2 session adapter over the existing canary session path",
+            "Ricochet v2 session adapter over the existing canary session path",
+            "private libsslab execution-path switch for v1 and v2 canary proof runs",
+            "v1/v2 exact equivalence receipt for Nocturne and Ricochet canary proof profiles",
+            "fixed portable v2 proof and bundle capabilities in the project adapter",
+            "AIDE EvidencePacket export for portable v2 equivalence with separated claim boundaries",
+            "Workbench Inspect model for portable v2 canary sessions through libsslab",
+            "GitHub CI gates for portable v2 equivalence and expanded Windows v1/v2 proof matrix",
+            "AIDE proof evidence index for ScreenSave-owned proof references",
+            "Nocturne portable product core with v1 and v2 adapters over the same semantics",
+            "Ricochet portable product core with fixed-width proof-observable state and v1/v2 adapters",
+            "generic v1-to-v2 compatibility adapter runtime for the preserved Win32 host path",
+            "formal private libsslab ABI v1 header and source tranche over portable v2",
+            "current-head native Windows evidence for 19 current .scr artifacts and 2 companion tools",
+            "Proof Bundle v1 portable_v2_equivalence gate axis with named-canary claim boundary",
+            "independent Gate C acceptance checker and committed acceptance capture"
+          ],
+          "milestone": "portable-v2-seam",
+          "objective": "Freeze the host-neutral portable v2 seam, implement the v1 compatibility adapter, and adapt Nocturne and Ricochet without changing current Win32 .scr artifacts.",
+          "opened_next": "plasma-v2-reference-slice",
+          "porting_products": [
+            "nocturne",
+            "ricochet"
+          ],
+          "proof_dependency": "proof-kernel-v1-ricochet",
+          "public_aggregate_header": "platform/include/screensave/v2.h",
+          "public_headers": "platform/include/screensave/v2",
+          "remaining": [],
+          "required_boundaries": [
+            "no Windows types in v2 headers",
+            "public v2 structs are versioned and size-prefixed",
+            "Nocturne output must remain unchanged",
+            "Ricochet four-frame output must remain unchanged",
+            "current Win32 .scr artifacts remain operational during the seam transition",
+            "Workbench and CI continue to share the libsslab execution path",
+            "AIDE remains optional and absent from product or build runtime",
+            "no Plasma runtime implementation before portable v2 acceptance"
+          ],
+          "status": "accepted",
+          "validator": "tools/scripts/check_portable_v2.py",
+          "work_units": [
+            "SS-PV2-00 freeze portable v2 contract",
+            "SS-PV2-01 implement host-neutral base/session/config/surface types",
+            "SS-PV2-02 implement v1 compatibility adapter",
+            "SS-PV2-03 adapt Nocturne",
+            "SS-PV2-04 adapt Ricochet",
+            "SS-PV2-05 prove v1-v2 equivalence",
+            "SS-PV2-06 route libsslab and Workbench through v2",
+            "SS-PV2-07 native build and CI regression",
+            "SS-PV2-08 independent check and Gate C acceptance"
+          ]
+        }
+      },
+      "id": "project-state-accepted-fields",
+      "status": "pass",
+      "summary": "Accepted state records Gate C closure and opens Plasma v2."
     },
     {
       "data": {
@@ -135,7 +216,7 @@
           "returncode": 0,
           "status": "pass",
           "stderr": "",
-          "stdout": "lifecycle pass resize=True steps=8 cycles=1 checksum=1677695189\ninformational out/proof/proof-bundle-v1/check-nocturne.json\nprofile-proof pass ricochet.reference.v1 abi=v0 path=v1 capture=0:b8c7c0ea922b,4:7a1615e04d27,8:a50582e8e8f5,32:65c37015993c comparison=pass lifecycle=pass\nprofile informational ricochet p50=1.043ms p95=2.303ms p99=2.303ms short_soak=pass\nportable-v2-equivalence pass out\\proof\\proof-bundle-v1\\check-portable-v2-equivalence.json\ninformational out/proof/proof-bundle-v1/check-ricochet.json\nProof Bundle v1 checks passed.",
+          "stdout": "lifecycle pass resize=True steps=8 cycles=1 checksum=1677695189\ninformational out/proof/proof-bundle-v1/check-nocturne.json\nprofile-proof pass ricochet.reference.v1 abi=v0 path=v1 capture=0:b8c7c0ea922b,4:7a1615e04d27,8:a50582e8e8f5,32:65c37015993c comparison=pass lifecycle=pass\nprofile informational ricochet p50=1.019ms p95=2.184ms p99=2.184ms short_soak=pass\nportable-v2-equivalence pass out\\proof\\proof-bundle-v1\\check-portable-v2-equivalence.json\ninformational out/proof/proof-bundle-v1/check-ricochet.json\nProof Bundle v1 checks passed.",
           "timeout_seconds": 300
         }
       },
@@ -252,11 +333,11 @@
     "project_state": "PROJECT_STATE.toml",
     "proof_bundle_check": "out/proof/proof-bundle-v1/check-ricochet.json"
   },
-  "mode": "pre_acceptance",
+  "mode": "accepted",
   "schema": "screensave-portable-v2-gate-c-acceptance-report-v0",
   "source": {
     "branch": "main",
-    "commit": "de751d3bbe9a53cbd16decbcd7c934f2e068d3ab",
+    "commit": "ae9c6c6dd7c761fa7bcac81d8dc635edfe934643",
     "dirty": false
   },
   "status": "pass"
