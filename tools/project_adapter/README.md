@@ -20,8 +20,10 @@ python tools\project_adapter\screensave_project.py compare --actual validation\c
 python tools\project_adapter\screensave_project.py audit --artifact-profile windows_current_x86_scr
 python tools\project_adapter\screensave_project.py proof --profile nocturne.reference.v0 --invocation-id local-proof
 python tools\project_adapter\screensave_project.py proof --profile ricochet.reference.v1 --path v2 --invocation-id local-proof
+python tools\project_adapter\screensave_project.py proof --profile plasma.v2.reference.preview --path v2 --invocation-id local-proof
 python tools\project_adapter\screensave_project.py bundle --profile nocturne.reference.v0 --invocation-id local-bundle
 python tools\project_adapter\screensave_project.py bundle --profile ricochet.reference.v1 --path v2 --invocation-id local-bundle
+python tools\project_adapter\screensave_project.py bundle --profile plasma.v2.reference.preview --path v2 --invocation-id local-bundle
 python tools\project_adapter\screensave_project.py equivalence --invocation-id local-equivalence
 ```
 
@@ -33,7 +35,8 @@ The `validate` command accepts fixed tiers only. `T0` covers authority, syntax,
 docs, AIDE pilot, and whitespace checks. `T1` includes `T0` and adds affected
 catalog, adapter, `libsslab`, proof, and Workbench checks. `T2` includes `T0`
 and `T1` and adds the portable v2 header seam and equivalence checks, the full
-local project gate, plus fixed Nocturne and Ricochet v1/v2 profile proofs.
+local project gate, plus fixed Nocturne, Ricochet, and preview Plasma profile
+proofs.
 `T3` includes `T0` through `T2` and adds the fixed Gate C checker, current
 Windows saver/tool build profiles, and AIDE evidence bridge/index checks.
 
@@ -43,10 +46,11 @@ arbitrary MSBuild, compiler, linker, or output arguments. Dry-run receipts prove
 the admitted command plan but are not build evidence.
 
 The `profiles` command reports the fixed admitted proof profile keys. The
-`proof` and `bundle` commands accept only `nocturne.reference.v0` and
-`ricochet.reference.v1`, and the fixed `--path v1|v2` selector. `equivalence`
-runs only the fixed portable v2 canary matrix. They do not expose
-`screensave.proof.any-profile` or arbitrary command execution.
+`proof` and `bundle` commands accept only `nocturne.reference.v0`,
+`ricochet.reference.v1`, and the v2-only `plasma.v2.reference.preview`, plus
+the fixed `--path v1|v2` selector where admitted. `equivalence` runs only the
+fixed portable v2 canary matrix. They do not expose `screensave.proof.any-profile`
+or arbitrary command execution.
 
 Generated-output commands use contained invocation roots under
 `out/aide/screensave-project-adapter/invocations/`. Callers provide a sanitized

@@ -1,0 +1,15 @@
+{
+  "capture_path": "validation/captures/plasma-v2/reference-preview/lifecycle/frame-0090.ppm",
+  "checksum": 1446792570,
+  "create_destroy_cycles": 1,
+  "create_session": true,
+  "destroy_session": true,
+  "lifecycle_schema": "screensave-product-lifecycle-v0",
+  "path": "validation/captures/plasma-v2/reference-preview/lifecycle/lifecycle.json",
+  "render_session": true,
+  "resize_session": true,
+  "runner_mode": "generic-libsslab-proof",
+  "runner_stdout": "",
+  "status": "pass",
+  "step_count": 90
+}

@@ -219,12 +219,14 @@ def main() -> int:
         "screensave.proof.nocturne.reference-v0.v2",
         "screensave.proof.ricochet.reference-v1.v1",
         "screensave.proof.ricochet.reference-v1.v2",
+        "screensave.proof.plasma-v2.reference-preview.v2",
         "screensave.proof.portable-v2.equivalence",
         "screensave.bundle.portable-v2.equivalence",
         "screensave.bundle.nocturne.reference-v0.v1",
         "screensave.bundle.nocturne.reference-v0.v2",
         "screensave.bundle.ricochet.reference-v1.v1",
         "screensave.bundle.ricochet.reference-v1.v2",
+        "screensave.bundle.plasma-v2.reference-preview.v2",
     }:
         require(
             capability_status.get(name) == "screensave-side-admitted-contained-output",

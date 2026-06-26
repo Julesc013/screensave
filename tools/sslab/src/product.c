@@ -19,6 +19,10 @@ const sslab_product_adapter_v0 *sslab_find_product_adapter(const char *product_k
     if (adapter != 0 && adapter->product_key != 0 && strcmp(adapter->product_key, product_key) == 0) {
         return adapter;
     }
+    adapter = sslab_plasma_adapter();
+    if (adapter != 0 && adapter->product_key != 0 && strcmp(adapter->product_key, product_key) == 0) {
+        return adapter;
+    }
 
     return 0;
 }

@@ -48,7 +48,7 @@ const screensave_generated_proof_profile g_screensave_generated_proof_profiles[S
     },
     {
         "plasma.v2.reference.preview",
-        "planned",
+        "implemented",
         "plasma",
         "plasma_lava",
         160UL,
@@ -63,9 +63,9 @@ const screensave_generated_proof_profile g_screensave_generated_proof_profiles[S
         "exact",
         "create,resize,step,render,destroy",
         "windows_current_x86_scr",
-        "",
-        "",
-        "planned Plasma v2 reference profile; no stable promotion until implemented"
+        "validation/captures/plasma-v2/reference-preview/frame-0090.rgba",
+        "validation/captures/plasma-v2/reference-preview/profile-proof.json",
+        "Plasma v2 preview reference proof only; not stable promotion or artistic acceptance"
     }
 };
 

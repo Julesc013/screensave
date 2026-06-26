@@ -133,6 +133,15 @@ ADMITTED_PROOF_PROFILES = {
         },
         "slug": "ricochet-reference-v1",
     },
+    "plasma.v2.reference.preview": {
+        "capabilities": {
+            "v2": "screensave.proof.plasma-v2.reference-preview.v2",
+        },
+        "bundle_capabilities": {
+            "v2": "screensave.bundle.plasma-v2.reference-preview.v2",
+        },
+        "slug": "plasma-v2-reference-preview",
+    },
 }
 
 
@@ -877,6 +886,8 @@ def command_proof(args: argparse.Namespace) -> int:
         "--output-dir",
         str(output_dir),
     ]
+    if profile.get("product") == "plasma" and execution_path == "v2":
+        command.extend(["--abi", "v1"])
     proof_run = run_command(command, timeout_seconds=120)
     profile_proof = load_json(profile_proof_path) if profile_proof_path.exists() else {}
     proof_status = str(profile_proof.get("status", "fail"))
@@ -949,6 +960,8 @@ def command_bundle(args: argparse.Namespace) -> int:
         "--output-dir",
         str(proof_dir),
     ]
+    if profile.get("product") == "plasma" and execution_path == "v2":
+        proof_command.extend(["--abi", "v1"])
     bundle_command = [
         str(PROOF_BUNDLE.relative_to(ROOT)),
         "normalize",

@@ -150,12 +150,14 @@ def main() -> int:
         require("screensave.proof.nocturne.reference-v0.v2" in names, "capabilities must include screensave.proof.nocturne.reference-v0.v2.", errors)
         require("screensave.proof.ricochet.reference-v1.v1" in names, "capabilities must include screensave.proof.ricochet.reference-v1.v1.", errors)
         require("screensave.proof.ricochet.reference-v1.v2" in names, "capabilities must include screensave.proof.ricochet.reference-v1.v2.", errors)
+        require("screensave.proof.plasma-v2.reference-preview.v2" in names, "capabilities must include screensave.proof.plasma-v2.reference-preview.v2.", errors)
         require("screensave.proof.portable-v2.equivalence" in names, "capabilities must include screensave.proof.portable-v2.equivalence.", errors)
         require("screensave.bundle.portable-v2.equivalence" in names, "capabilities must include screensave.bundle.portable-v2.equivalence.", errors)
         require("screensave.bundle.nocturne.reference-v0.v1" in names, "capabilities must include screensave.bundle.nocturne.reference-v0.v1.", errors)
         require("screensave.bundle.nocturne.reference-v0.v2" in names, "capabilities must include screensave.bundle.nocturne.reference-v0.v2.", errors)
         require("screensave.bundle.ricochet.reference-v1.v1" in names, "capabilities must include screensave.bundle.ricochet.reference-v1.v1.", errors)
         require("screensave.bundle.ricochet.reference-v1.v2" in names, "capabilities must include screensave.bundle.ricochet.reference-v1.v2.", errors)
+        require("screensave.bundle.plasma-v2.reference-preview.v2" in names, "capabilities must include screensave.bundle.plasma-v2.reference-preview.v2.", errors)
         require(
             capabilities.get("payload", {}).get("output_root") == "out/aide/screensave-project-adapter/invocations",
             "capabilities must expose the contained invocation output root.",
@@ -211,8 +213,8 @@ def main() -> int:
         profiles = run_adapter(["profiles"])
         admitted_profiles = {item.get("key") for item in profiles.get("payload", {}).get("admitted_profiles", [])}
         require(
-            admitted_profiles == {"nocturne.reference.v0", "ricochet.reference.v1"},
-            "adapter profiles must expose only fixed Nocturne and Ricochet proof profiles.",
+            admitted_profiles == {"nocturne.reference.v0", "ricochet.reference.v1", "plasma.v2.reference.preview"},
+            "adapter profiles must expose only fixed Nocturne, Ricochet, and Plasma preview proof profiles.",
             errors,
         )
         require(
@@ -322,6 +324,19 @@ def main() -> int:
             errors,
         )
 
+        plasma_v2_proof = run_adapter(["proof", "--invocation-id", "check-proof-plasma-v2", "--profile", "plasma.v2.reference.preview", "--path", "v2"])
+        require(plasma_v2_proof.get("status") == "pass", "adapter Plasma v2 proof must pass.", errors)
+        require(
+            plasma_v2_proof.get("payload", {}).get("capability") == "screensave.proof.plasma-v2.reference-preview.v2",
+            "adapter Plasma v2 proof must report the fixed preview profile capability.",
+            errors,
+        )
+        require(
+            plasma_v2_proof.get("payload", {}).get("claim_boundary", "").find("not stable promotion") >= 0,
+            "adapter Plasma v2 proof must preserve the preview-only claim boundary.",
+            errors,
+        )
+
         bundle = run_adapter(["bundle", "--invocation-id", "check-bundle-ricochet", "--profile", "ricochet.reference.v1", "--path", "v2"])
         require(bundle.get("status") == "pass", "adapter Ricochet bundle must pass.", errors)
         require(
@@ -333,6 +348,20 @@ def main() -> int:
         require(
             repo_ref_to_path(bundle.get("payload", {}).get("proof_bundle_ref", "")).exists(),
             "adapter bundle must write proof-bundle-v1.json.",
+            errors,
+        )
+
+        plasma_bundle = run_adapter(["bundle", "--invocation-id", "check-bundle-plasma-v2", "--profile", "plasma.v2.reference.preview", "--path", "v2"])
+        require(plasma_bundle.get("status") == "pass", "adapter Plasma v2 bundle must pass.", errors)
+        require(
+            plasma_bundle.get("payload", {}).get("capability") == "screensave.bundle.plasma-v2.reference-preview.v2",
+            "adapter Plasma v2 bundle must report the fixed preview bundle capability.",
+            errors,
+        )
+        require(plasma_bundle.get("payload", {}).get("execution_path") == "v2", "adapter Plasma v2 bundle must record v2 path.", errors)
+        require(
+            repo_ref_to_path(plasma_bundle.get("payload", {}).get("proof_bundle_ref", "")).exists(),
+            "adapter Plasma v2 bundle must write proof-bundle-v1.json.",
             errors,
         )
 

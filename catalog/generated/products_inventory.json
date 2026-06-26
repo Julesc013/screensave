@@ -271,6 +271,7 @@
           "products/savers/plasma/src/plasma_classic.h",
           "products/savers/plasma/src/plasma_content.h",
           "products/savers/plasma/src/plasma_internal.h",
+          "products/savers/plasma/src/plasma_migration_v2.h",
           "products/savers/plasma/src/plasma_modern.h",
           "products/savers/plasma/src/plasma_output.h",
           "products/savers/plasma/src/plasma_plan.h",
@@ -279,8 +280,11 @@
           "products/savers/plasma/src/plasma_resource.h",
           "products/savers/plasma/src/plasma_selection.h",
           "products/savers/plasma/src/plasma_settings.h",
+          "products/savers/plasma/src/plasma_spec_v2.h",
           "products/savers/plasma/src/plasma_transition.h",
           "products/savers/plasma/src/plasma_treatment.h",
+          "products/savers/plasma/src/plasma_v2_adapter.h",
+          "products/savers/plasma/src/plasma_v2_core.h",
           "products/savers/plasma/src/plasma_validate.h"
         ],
         "presets": [
@@ -299,6 +303,7 @@
           "products/savers/plasma/src/plasma_config.c",
           "products/savers/plasma/src/plasma_content.c",
           "products/savers/plasma/src/plasma_entry.c",
+          "products/savers/plasma/src/plasma_migration_v2.c",
           "products/savers/plasma/src/plasma_modern.c",
           "products/savers/plasma/src/plasma_module.c",
           "products/savers/plasma/src/plasma_output.c",
@@ -310,9 +315,12 @@
           "products/savers/plasma/src/plasma_selection.c",
           "products/savers/plasma/src/plasma_settings.c",
           "products/savers/plasma/src/plasma_sim.c",
+          "products/savers/plasma/src/plasma_spec_v2.c",
           "products/savers/plasma/src/plasma_themes.c",
           "products/savers/plasma/src/plasma_transition.c",
           "products/savers/plasma/src/plasma_treatment.c",
+          "products/savers/plasma/src/plasma_v2_adapter.c",
+          "products/savers/plasma/src/plasma_v2_core.c",
           "products/savers/plasma/src/plasma_validate.c"
         ],
         "tests": [
@@ -1538,15 +1546,15 @@
       "artifact_sets": [
         "windows_current_x86_scr"
       ],
-      "baseline_capture": "",
-      "baseline_proof": "",
+      "baseline_capture": "validation/captures/plasma-v2/reference-preview/frame-0090.rgba",
+      "baseline_proof": "validation/captures/plasma-v2/reference-preview/profile-proof.json",
       "capture_frames": [
         0,
         8,
         32,
         90
       ],
-      "claim_boundary": "planned Plasma v2 reference profile; no stable promotion until implemented",
+      "claim_boundary": "Plasma v2 preview reference proof only; not stable promotion or artistic acceptance",
       "comparison_class": "exact",
       "create_destroy_cycles": 1,
       "delta_ms": 100,
@@ -1564,7 +1572,7 @@
       "resize_height": 72,
       "resize_width": 128,
       "seed": 4096,
-      "status": "planned",
+      "status": "implemented",
       "width": 160
     }
   ],

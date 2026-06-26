@@ -31,6 +31,7 @@ PROOF_REGISTRY = ROOT / "catalog" / "generated" / "proof_registry.json"
 LEGACY_PROFILE_ALIASES = {
     "nocturne": "nocturne.reference.v0",
     "ricochet": "ricochet.reference.v1",
+    "plasma": "plasma.v2.reference.preview",
 }
 
 
@@ -484,6 +485,94 @@ def proof_ricochet_from_profile(
     return receipt
 
 
+def proof_plasma_from_profile(
+    runner_exe: pathlib.Path,
+    profile: dict[str, Any],
+    output_dir: pathlib.Path,
+    execution_path: str,
+    abi: str = "v1",
+) -> dict[str, Any]:
+    first = run_runner_proof(
+        runner_exe,
+        str(profile.get("key", "")),
+        output_dir / "run-a",
+        output_dir / "run-a" / "runner-proof.json",
+        execution_path,
+        abi,
+    )
+    second = run_runner_proof(
+        runner_exe,
+        str(profile.get("key", "")),
+        output_dir / "run-b",
+        output_dir / "run-b" / "runner-proof.json",
+        execution_path,
+        abi,
+    )
+    lifecycle = lifecycle_payload(profile, output_dir / "lifecycle", first)
+    captures = runner_capture_records(first)
+    repeat_captures = runner_capture_records(second)
+    first_hashes = [capture.get("raw_rgba_sha256") for capture in captures]
+    second_hashes = [capture.get("raw_rgba_sha256") for capture in repeat_captures]
+    repeat_capture_summaries = [
+        {
+            "frame": int(capture.get("frame", 0)),
+            "status": capture.get("status"),
+            "raw_rgba_sha256": capture.get("raw_rgba_sha256"),
+        }
+        for capture in repeat_captures
+    ]
+    comparison_status = "pass" if first_hashes == second_hashes else "fail"
+    copied_captures: list[dict[str, Any]] = []
+    for capture in captures:
+        frame = int(capture.get("frame", 0))
+        raw_target = output_dir / f"frame-{frame:04d}.rgba"
+        ppm_target = output_dir / f"frame-{frame:04d}.ppm"
+        copy_path(str(capture.get("raw_rgba_path", "")), raw_target)
+        copy_path(str(capture.get("review_ppm_path", "")), ppm_target)
+        copied = dict(capture)
+        copied["raw_rgba_path"] = display_path(raw_target)
+        copied["review_ppm_path"] = display_path(ppm_target)
+        copied_captures.append(copied)
+    contact_lines = [
+        "# Plasma v2 Reference Preview Captures",
+        "",
+        "These captures are deterministic preview evidence only.",
+        "",
+        "| Frame | RGBA SHA-256 | RGBA | Review PPM |",
+        "| ---: | --- | --- | --- |",
+    ]
+    for capture in copied_captures:
+        contact_lines.append(
+            f"| {int(capture.get('frame', 0))} | {capture.get('raw_rgba_sha256', '')} | "
+            f"`{capture.get('raw_rgba_path', '')}` | `{capture.get('review_ppm_path', '')}` |"
+        )
+    (output_dir / "review-contact-sheet.md").write_text("\n".join(contact_lines) + "\n", encoding="utf-8")
+    status = "pass" if comparison_status == "pass" and lifecycle.get("status") == "pass" else "fail"
+    receipt = {
+        "profile_proof_schema": "sslab-profile-proof-v0",
+        "status": status,
+        "profile": profile.get("key"),
+        "product": profile.get("product"),
+        "preset": profile.get("preset"),
+        "abi": abi,
+        "execution_path": execution_path,
+        "profile_source": display_path(PROOF_REGISTRY),
+        "capture_frames": [int(frame) for frame in profile.get("capture_frames", [])],
+        "captures": copied_captures,
+        "repeat_captures": repeat_capture_summaries,
+        "comparison_status": comparison_status,
+        "comparison_class": "exact",
+        "lifecycle_ref": display_path(output_dir / "lifecycle" / "lifecycle.json"),
+        "lifecycle_status": lifecycle.get("status"),
+        "lifecycle_create_destroy_cycles": lifecycle.get("create_destroy_cycles"),
+        "runner_mode": "generic-libsslab-proof",
+        "runner_stdout": "",
+        "claim_boundary": "Plasma v2 preview reference proof only; not stable promotion, compatibility certification, or artistic acceptance.",
+    }
+    write_json(output_dir / "profile-proof.json", receipt)
+    return receipt
+
+
 def proof_nocturne_from_profile(
     runner_exe: pathlib.Path,
     profile: dict[str, Any],
@@ -553,6 +642,14 @@ def proof_from_profile(args: argparse.Namespace) -> dict[str, Any]:
         raise ValueError("proof --abi must be v0 or v1")
     if abi == "v1" and execution_path != "v2":
         raise ValueError("proof --abi v1 requires --path v2")
+    if product == "plasma":
+        if execution_path != "v2":
+            raise ValueError("Plasma v2 reference preview proof requires --path v2")
+        if abi == "v0":
+            abi = "v1"
+        with tempfile.TemporaryDirectory() as temp_root:
+            runner_exe = build_runner(pathlib.Path(temp_root))
+            return proof_plasma_from_profile(runner_exe, profile, output_dir, execution_path, abi)
     if product == "ricochet":
         with tempfile.TemporaryDirectory() as temp_root:
             runner_exe = build_runner(pathlib.Path(temp_root))

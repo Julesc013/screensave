@@ -23,9 +23,9 @@ The v0 adapter command set is:
 - `render`: run the Proof Kernel v0 Nocturne canary render.
 - `compare`: compare proof-kernel captures using `sslab`.
 - `audit`: run the ScreenSave PE artifact audit and report binary facts.
-- `proof`: run a fixed Nocturne or Ricochet catalog proof profile.
-- `bundle`: normalize a fixed Nocturne or Ricochet catalog proof profile as
-  Proof Bundle v1.
+- `proof`: run a fixed Nocturne, Ricochet, or Plasma preview catalog proof profile.
+- `bundle`: normalize a fixed Nocturne, Ricochet, or Plasma preview catalog
+  proof profile as Proof Bundle v1.
 - `equivalence`: run the fixed Nocturne/Ricochet portable v2 equivalence proof.
 
 ## Fixed Capability Bindings
@@ -55,11 +55,13 @@ External coordinators must bind to these fixed capabilities, not to an open
 - `screensave.proof.nocturne.reference-v0.v2`
 - `screensave.proof.ricochet.reference-v1.v1`
 - `screensave.proof.ricochet.reference-v1.v2`
+- `screensave.proof.plasma-v2.reference-preview.v2`
 - `screensave.proof.portable-v2.equivalence`
 - `screensave.bundle.nocturne.reference-v0.v1`
 - `screensave.bundle.nocturne.reference-v0.v2`
 - `screensave.bundle.ricochet.reference-v1.v1`
 - `screensave.bundle.ricochet.reference-v1.v2`
+- `screensave.bundle.plasma-v2.reference-preview.v2`
 - `screensave.bundle.portable-v2.equivalence`
 
 Each capability has a declared argv shape, decoder schema, mutation policy,
@@ -168,11 +170,12 @@ receipt may prove the admitted command plan, but it is not build evidence.
 ## Initial Proof
 
 The fixed profile proof commands call `tools/sslab/sslab.py proof --profile`
-with either `nocturne.reference.v0` or `ricochet.reference.v1`, plus a fixed
-`--path v1` or `--path v2`, then write an adapter receipt plus artifact
-manifest. The bundle commands normalize that profile proof through
-`tools/proofbundle/proofbundle.py normalize`. The equivalence command delegates
-to `tools/sslab/sslab_equivalence.py` for the fixed canary profile set only.
+with `nocturne.reference.v0`, `ricochet.reference.v1`, or the v2-only
+`plasma.v2.reference.preview`, plus a fixed `--path v1` or `--path v2`, then
+write an adapter receipt plus artifact manifest. The bundle commands normalize
+that profile proof through `tools/proofbundle/proofbundle.py normalize`. The
+equivalence command delegates to `tools/sslab/sslab_equivalence.py` for the
+fixed canary profile set only.
 
 This is deterministic proof-kernel evidence. It is not a public compatibility
 certification and not a visual-artistic acceptance decision.

@@ -13,6 +13,7 @@ SSLAB_SRC_V1 = ROOT / "tools" / "sslab" / "src_v1"
 PLATFORM_INCLUDE = ROOT / "platform" / "include"
 NOCTURNE_SRC = ROOT / "products" / "savers" / "nocturne" / "src"
 RICOCHET_SRC = ROOT / "products" / "savers" / "ricochet" / "src"
+PLASMA_SRC = ROOT / "products" / "savers" / "plasma" / "src"
 PROOF_REGISTRY_C = ROOT / "catalog" / "generated" / "proof_registry.c"
 GENERIC_RUNNER = ROOT / "tools" / "sslab" / "runner" / "sslab_runner.c"
 
@@ -33,6 +34,7 @@ LIBSSLAB_SOURCES = [
     SSLAB_SRC_V1 / "proof.c",
     SSLAB_SRC / "products" / "nocturne_adapter.c",
     SSLAB_SRC / "products" / "ricochet_adapter.c",
+    SSLAB_SRC / "products" / "plasma_adapter.c",
     NOCTURNE_SRC / "nocturne_core.c",
     NOCTURNE_SRC / "nocturne_v1_adapter.c",
     NOCTURNE_SRC / "nocturne_sim.c",
@@ -47,6 +49,10 @@ LIBSSLAB_SOURCES = [
     RICOCHET_SRC / "ricochet_v2_adapter.c",
     RICOCHET_SRC / "ricochet_themes.c",
     RICOCHET_SRC / "ricochet_presets.c",
+    PLASMA_SRC / "plasma_spec_v2.c",
+    PLASMA_SRC / "plasma_migration_v2.c",
+    PLASMA_SRC / "plasma_v2_core.c",
+    PLASMA_SRC / "plasma_v2_adapter.c",
     ROOT / "platform" / "src" / "v2" / "base_validate.c",
     ROOT / "platform" / "src" / "v2" / "config_view.c",
     ROOT / "platform" / "src" / "v2" / "surface_view.c",
@@ -71,6 +77,8 @@ INCLUDE_ARGS = [
     str(NOCTURNE_SRC),
     "-I",
     str(RICOCHET_SRC),
+    "-I",
+    str(PLASMA_SRC),
     "-I",
     str(ROOT / "catalog" / "generated"),
 ]

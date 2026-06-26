@@ -42,7 +42,7 @@ claim_boundary = "Ricochet multi-frame deterministic and lifecycle proof only; p
 
 [[proof_profiles]]
 key = "plasma.v2.reference.preview"
-status = "planned"
+status = "implemented"
 product = "plasma"
 preset = "plasma_lava"
 width = 160
@@ -56,4 +56,6 @@ capture_frames = [0, 8, 32, 90]
 comparison_class = "exact"
 lifecycle = ["create", "resize", "step", "render", "destroy"]
 artifact_sets = ["windows_current_x86_scr"]
-claim_boundary = "planned Plasma v2 reference profile; no stable promotion until implemented"
+baseline_capture = "validation/captures/plasma-v2/reference-preview/frame-0090.rgba"
+baseline_proof = "validation/captures/plasma-v2/reference-preview/profile-proof.json"
+claim_boundary = "Plasma v2 preview reference proof only; not stable promotion or artistic acceptance"

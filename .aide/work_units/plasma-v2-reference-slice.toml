@@ -200,7 +200,7 @@ claim_boundary = "Controls must either materially influence preview output or be
 id = "SS-PLV2-04"
 title = "proof profiles and captures"
 objective = "Add Plasma v2 reference preview proof profile and deterministic captures."
-status = "pending"
+status = "implemented-local"
 selected_validation_tier = "T2"
 preflight_required = true
 postflight_required = true
@@ -208,11 +208,18 @@ preflight_receipt = "out/aide/operations/SS-PLV2-04-preflight/operation-receipt.
 postflight_receipt = "out/aide/operations/SS-PLV2-04-postflight/operation-receipt.json"
 rollback_point = "SS-PLV2-03"
 allowed_paths = [
+  ".aide/project_bridge_profile.toml",
+  ".aide/work_units/plasma-v2-reference-slice.toml",
   "catalog/proof_profiles.toml",
   "catalog/generated/proof_registry.*",
+  "catalog/generated/products_*",
+  "contracts/project_adapter_v0.md",
   "tools/sslab",
   "tools/project_adapter",
   "tools/proofbundle",
+  "tools/scripts/check_aide_pilot.py",
+  "tools/scripts/check_project_adapter.py",
+  "tools/scripts/check_sslab_runner.py",
   "validation/captures/plasma-v2/reference-preview",
 ]
 forbidden_paths = [

@@ -16,6 +16,12 @@ if str(SSLAB_DIR) not in sys.path:
 from build_support import GENERIC_RUNNER, LIBSSLAB_SOURCES, PROOF_REGISTRY_C, build_runner
 
 NOCTURNE_HASH = "5394a14b6622c17bfb10cd5721c08a4c92cdbddfb12f55c954ef1d5f6ef878b2"
+PLASMA_HASHES = [
+    "bb23057fbf42d3b23a934b1080df971e32877fc43e030957d6b892e60a3886b4",
+    "be64bb94300dc792115c4324724660ccd4db488ce5824f7d163594e6cc3a867b",
+    "34e272c068df31e32033d5745edb5bf4d371e571b534df5582fb25d2b96db76e",
+    "df0c70d4c53e9c9bfb0c7c3eaaa81cad5a53596fff68175ef68cc8b3b504d1af",
+]
 
 
 def require(condition: bool, message: str, errors: list[str]) -> None:
@@ -23,10 +29,17 @@ def require(condition: bool, message: str, errors: list[str]) -> None:
         errors.append(message)
 
 
-def run_proof(runner_path: pathlib.Path, profile: str, path: str | None = None) -> dict[str, object]:
+def run_proof(
+    runner_path: pathlib.Path,
+    profile: str,
+    path: str | None = None,
+    abi: str | None = None,
+) -> dict[str, object]:
     command = [str(runner_path), "proof", "--profile", profile]
     if path is not None:
         command.extend(["--path", path])
+    if abi is not None:
+        command.extend(["--abi", abi])
     output = subprocess.check_output(
         command,
         cwd=ROOT,
@@ -47,10 +60,12 @@ def main() -> int:
             nocturne_v2 = run_proof(runner, "nocturne.reference.v0", "v2")
             ricochet = run_proof(runner, "ricochet.reference.v1")
             ricochet_v2 = run_proof(runner, "ricochet.reference.v1", "v2")
+            plasma_v2 = run_proof(runner, "plasma.v2.reference.preview", "v2", "v1")
             nocturne_captures = nocturne.get("captures", [])
             nocturne_v2_captures = nocturne_v2.get("captures", [])
             ricochet_captures = ricochet.get("captures", [])
             ricochet_v2_captures = ricochet_v2.get("captures", [])
+            plasma_v2_captures = plasma_v2.get("captures", [])
 
             require(nocturne.get("status") == "pass", "Nocturne generic runner proof must pass.", errors)
             require(nocturne.get("path") == "v1", "Nocturne default proof path must remain v1.", errors)
@@ -92,6 +107,16 @@ def main() -> int:
                     [capture.get("rgba_sha256") for capture in ricochet_v2_captures]
                     == [capture.get("rgba_sha256") for capture in ricochet_captures],
                     "Ricochet v2 runner hashes must match the exact v1 frame hashes.",
+                    errors,
+                )
+            require(plasma_v2.get("status") == "pass", "Plasma v2 runner proof must pass.", errors)
+            require(plasma_v2.get("path") == "v2", "Plasma proof must record the v2 path.", errors)
+            require(plasma_v2.get("abi") == "v1", "Plasma proof must run through ABI v1.", errors)
+            require(isinstance(plasma_v2_captures, list) and len(plasma_v2_captures) == 4, "Plasma proof must emit four captures.", errors)
+            if isinstance(plasma_v2_captures, list):
+                require(
+                    [capture.get("rgba_sha256") for capture in plasma_v2_captures] == PLASMA_HASHES,
+                    "Plasma v2 preview hashes must remain exact.",
                     errors,
                 )
 

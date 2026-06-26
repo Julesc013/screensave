@@ -37,5 +37,6 @@ typedef struct sslab_product_adapter_v0 {
 
 const sslab_product_adapter_v0 *sslab_nocturne_adapter(void);
 const sslab_product_adapter_v0 *sslab_ricochet_adapter(void);
+const sslab_product_adapter_v0 *sslab_plasma_adapter(void);
 
 #endif
