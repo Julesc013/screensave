@@ -24,10 +24,19 @@ ADAPTER_FILES = [
     SRC_ROOT / "plasma_v2_adapter.c",
 ]
 
+REALIZATION_FILES = [
+    SRC_ROOT / "plasma_v2_realization.h",
+    SRC_ROOT / "plasma_v2_realization.c",
+    SRC_ROOT / "plasma_v2_gl11.h",
+    SRC_ROOT / "plasma_v2_gl11.c",
+]
+
 REQUIRED_SOURCES = [
     SRC_ROOT / "plasma_spec_v2.c",
     SRC_ROOT / "plasma_migration_v2.c",
     SRC_ROOT / "plasma_v2_core.c",
+    SRC_ROOT / "plasma_v2_realization.c",
+    SRC_ROOT / "plasma_v2_gl11.c",
     SRC_ROOT / "plasma_v2_adapter.c",
     V2_SRC_ROOT / "base_validate.c",
     V2_SRC_ROOT / "config_view.c",
@@ -239,6 +248,8 @@ def scan_files(errors: list[str]) -> None:
         check_core_file(path, errors)
     for path in ADAPTER_FILES:
         require(path.exists(), f"Missing Plasma v2 adapter file: {repo_path(path)}", errors)
+    for path in REALIZATION_FILES:
+        require(path.exists(), f"Missing Plasma v2 realization file: {repo_path(path)}", errors)
     if ADAPTER_FILES[1].exists():
         adapter_text = ADAPTER_FILES[1].read_text(encoding="utf-8")
         for needle in [

@@ -1,0 +1,137 @@
+schema_version = 1
+packet_id = "screensave-plasma-v2-accelerated-stable-candidate"
+status = "active"
+program = "plasma-v2-accelerated-stable-candidate"
+claim_boundary = "AIDE work units coordinate PAW-F only; ScreenSave proof and review records remain authoritative."
+
+[[work_units]]
+id = "SS-PLV2-F0"
+title = "Checkpoint reviewed-preview truth"
+status = "complete"
+selected_validation_tier = "T1"
+allowed_paths = ["PROJECT_STATE.toml", "VERSION.toml", "docs/roadmap/**", "validation/captures/plasma-v2/reviewed-preview/**", ".aide/work_units/**"]
+forbidden_paths = ["products/savers/plasma/src/plasma_v2_core.*"]
+expected_validators = ["py -3 tools/scripts/check_project_state.py --summary", "py -3 tools/scripts/check_plasma_v2_reviewed_preview.py"]
+baseline_refs = ["validation/captures/plasma-v2/reviewed-preview/state.json"]
+claim_boundary = "Reviewed-preview checkpoint only; not stable release."
+rollback_point = "eb361bf4642a54e6f2612e7d4c0e3d50f1132c25"
+
+[[work_units]]
+id = "SS-PLV2-F1"
+title = "Define acceleration admission policy"
+status = "complete"
+selected_validation_tier = "T1"
+allowed_paths = ["contracts/plasma_acceleration_v1.md", "products/savers/plasma/docs/plasma-v2-acceleration-policy.md", "tools/scripts/check_plasma_acceleration_policy.py"]
+forbidden_paths = ["products/savers/plasma/src/plasma_v2_core.*"]
+expected_validators = ["py -3 tools/scripts/check_plasma_acceleration_policy.py"]
+baseline_refs = ["contracts/plasma_acceleration_v1.md"]
+claim_boundary = "Policy only; no acceleration or release claim."
+rollback_point = "eb361bf4642a54e6f2612e7d4c0e3d50f1132c25"
+
+[[work_units]]
+id = "SS-PLV2-F2"
+title = "Add first acceleration candidate"
+status = "complete"
+selected_validation_tier = "T2"
+allowed_paths = ["products/savers/plasma/src/plasma_v2_realization.*", "products/savers/plasma/src/plasma_v2_gl11.*", "tools/scripts/check_plasma_core_boundaries.py"]
+forbidden_paths = ["platform/include/screensave/v2/**"]
+expected_validators = ["py -3 tools/scripts/check_plasma_core_boundaries.py", "py -3 tools/scripts/check_plasma_v2_materials.py", "py -3 tools/scripts/check_sslab_runner.py"]
+baseline_refs = ["products/savers/plasma/src/plasma_v2_realization.h"]
+claim_boundary = "GL11 candidate is optional and falls back to the software reference oracle."
+rollback_point = "eb361bf4642a54e6f2612e7d4c0e3d50f1132c25"
+
+[[work_units]]
+id = "SS-PLV2-F3"
+title = "Compare reference and accelerated candidates"
+status = "complete"
+selected_validation_tier = "T2"
+allowed_paths = ["tools/scripts/check_plasma_v2_acceleration.py", "validation/captures/plasma-v2/acceleration/**"]
+forbidden_paths = ["products/savers/plasma/src/plasma_v2_core.*"]
+expected_validators = ["py -3 tools/scripts/check_plasma_v2_acceleration.py", "py -3 tools/scripts/check_proof_bundle_v1.py"]
+baseline_refs = ["validation/captures/plasma-v2/acceleration/matrix.json"]
+claim_boundary = "Reference-versus-candidate evidence only; not release promotion."
+rollback_point = "eb361bf4642a54e6f2612e7d4c0e3d50f1132c25"
+
+[[work_units]]
+id = "SS-PLV2-F4"
+title = "Record performance envelope"
+status = "complete"
+selected_validation_tier = "T2"
+allowed_paths = ["contracts/performance_envelope_v1.md", "tools/scripts/check_plasma_v2_performance.py", "validation/captures/plasma-v2/performance/**"]
+forbidden_paths = ["products/savers/plasma/src/plasma_v2_core.*"]
+expected_validators = ["py -3 tools/scripts/check_plasma_v2_performance.py"]
+baseline_refs = ["validation/captures/plasma-v2/performance/envelope.json"]
+claim_boundary = "Performance evidence does not imply stable release."
+rollback_point = "eb361bf4642a54e6f2612e7d4c0e3d50f1132c25"
+
+[[work_units]]
+id = "SS-PLV2-F5"
+title = "Promote bounded packs to v1 candidate"
+status = "complete"
+selected_validation_tier = "T2"
+allowed_paths = ["contracts/pack_v1.md", "tools/packc/**", "tools/scripts/check_packc.py", "products/savers/plasma/content/v2/examples/**"]
+forbidden_paths = ["products/savers/plasma/src/plasma_v2_core.*"]
+expected_validators = ["py -3 tools/scripts/check_packc.py", "py -3 tools/scripts/check_visual_intent_resolver.py"]
+baseline_refs = ["products/savers/plasma/content/v2/examples/plasma_lava_v2.toml"]
+claim_boundary = "Data-only pack v1 candidate; no executable plugin admission."
+rollback_point = "eb361bf4642a54e6f2612e7d4c0e3d50f1132c25"
+
+[[work_units]]
+id = "SS-PLV2-F6"
+title = "Add Workbench Profile and Review loop"
+status = "complete"
+selected_validation_tier = "T2"
+allowed_paths = ["products/apps/benchlab/**", "tools/scripts/check_workbench_shell.py"]
+forbidden_paths = ["tools/sslab/src/**"]
+expected_validators = ["py -3 tools/scripts/check_workbench_shell.py"]
+baseline_refs = ["products/apps/benchlab/src/benchlab_workbench_shell.c"]
+claim_boundary = "Workbench consumes proof facts; it is not a duplicate proof engine."
+rollback_point = "eb361bf4642a54e6f2612e7d4c0e3d50f1132c25"
+
+[[work_units]]
+id = "SS-PLV2-F7"
+title = "Record stable-candidate review round"
+status = "complete"
+selected_validation_tier = "T2"
+allowed_paths = ["validation/captures/plasma-v2/stable-candidate-review/**", "tools/scripts/check_plasma_v2_visual_review_round.py", "contracts/visual_review_v1.md"]
+forbidden_paths = ["PROJECT_STATE.toml"]
+expected_validators = ["py -3 tools/scripts/check_plasma_v2_visual_review_round.py", "py -3 tools/scripts/check_visual_review.py"]
+baseline_refs = ["validation/captures/plasma-v2/stable-candidate-review/review-summary.json"]
+claim_boundary = "Stable-candidate review round is not final artistic acceptance."
+rollback_point = "eb361bf4642a54e6f2612e7d4c0e3d50f1132c25"
+
+[[work_units]]
+id = "SS-PLV2-F8"
+title = "Export stable-candidate evidence"
+status = "complete"
+selected_validation_tier = "T2"
+allowed_paths = [".aide/evidence/**", "tools/aide_bridge/**", "tools/scripts/check_aide_evidence_bridge.py", "tools/scripts/check_aide_evidence_index.py"]
+forbidden_paths = ["products/savers/plasma/src/**"]
+expected_validators = ["py -3 tools/scripts/check_aide_evidence_bridge.py", "py -3 tools/scripts/check_aide_evidence_index.py"]
+baseline_refs = [".aide/evidence/index.toml"]
+claim_boundary = "AIDE records references only and does not own product truth."
+rollback_point = "eb361bf4642a54e6f2612e7d4c0e3d50f1132c25"
+
+[[work_units]]
+id = "SS-PLV2-F9"
+title = "Add stable-candidate checker"
+status = "complete"
+selected_validation_tier = "T2"
+allowed_paths = ["tools/scripts/check_plasma_v2_stable_candidate.py", "validation/captures/plasma-v2/stable-candidate/**"]
+forbidden_paths = ["products/savers/plasma/src/plasma_v2_core.*"]
+expected_validators = ["py -3 tools/scripts/check_plasma_v2_stable_candidate.py", "py -3 tools/project_adapter/screensave_project.py validate --tier T2"]
+baseline_refs = ["validation/captures/plasma-v2/stable-candidate/gate-report.json"]
+claim_boundary = "Gate validates stable-candidate evidence only; no stable release."
+rollback_point = "eb361bf4642a54e6f2612e7d4c0e3d50f1132c25"
+
+[[work_units]]
+id = "SS-PLV2-F10"
+title = "Record stable-candidate state"
+status = "complete"
+selected_validation_tier = "T2"
+allowed_paths = ["PROJECT_STATE.toml", "VERSION.toml", "README.md", "docs/roadmap/**", "products/savers/plasma/docs/**"]
+forbidden_paths = ["products/savers/plasma/src/plasma_v2_core.*"]
+expected_validators = ["py -3 tools/scripts/check_project_state.py --summary", "py -3 tools/scripts/check_plasma_v2_stable_candidate.py", "py -3 tools/scripts/check_docs_basics.py", "py -3 tools/scripts/check_contracts.py"]
+baseline_refs = ["PROJECT_STATE.toml", "VERSION.toml"]
+claim_boundary = "State records stable-candidate only; stable remains false."
+rollback_point = "eb361bf4642a54e6f2612e7d4c0e3d50f1132c25"

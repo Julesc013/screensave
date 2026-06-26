@@ -33,6 +33,37 @@
       "const": "screensave.pack.v1",
       "type": "string"
     },
+    "pack_status": {
+      "const": "v1-candidate",
+      "type": "string"
+    },
+    "author": {
+      "type": "string"
+    },
+    "license": {
+      "type": "string"
+    },
+    "provenance": {
+      "type": "string"
+    },
+    "compatibility_range": {
+      "additionalProperties": false,
+      "properties": {
+        "maximum_schema_version": {
+          "const": 2,
+          "type": "integer"
+        },
+        "minimum_schema_version": {
+          "const": 2,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "minimum_schema_version",
+        "maximum_schema_version"
+      ],
+      "type": "object"
+    },
     "product": {
       "const": "plasma",
       "type": "string"
@@ -44,9 +75,14 @@
   "required": [
     "pack_manifest_schema",
     "pack_schema",
+    "pack_status",
     "pack_id",
     "kind",
     "product",
+    "author",
+    "license",
+    "provenance",
+    "compatibility_range",
     "file_count",
     "data_only",
     "content_sha256",

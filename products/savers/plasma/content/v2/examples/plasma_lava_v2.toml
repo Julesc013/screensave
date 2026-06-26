@@ -3,9 +3,15 @@ pack_id = "screensave.plasma.plasma_lava_v2"
 kind = "screensave.plasma.v2"
 product = "plasma"
 name = "Plasma Lava v2"
+author = "ScreenSave"
 license = "ScreenSave sample content"
 provenance = "PAW-DX U09 deterministic migration"
 proof_profile = "plasma.v2.reference.preview"
+
+[compatibility]
+minimum_schema_version = 2
+maximum_schema_version = 2
+pack_status = "v1-candidate"
 
 [plasma_spec_v2]
 schema_id = "screensave.plasma.spec.v2"

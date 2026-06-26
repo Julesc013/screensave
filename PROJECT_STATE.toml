@@ -6,7 +6,7 @@ as_of = "2026-06-27"
 current_truth = "truth-proof-baseline"
 public_release = "c16-core-baseline"
 development_head = "plasma-u09-corrective-recut"
-active_program = "plasma-v2-reference-slice"
+active_program = "plasma-v2-release-readiness"
 release_candidate = "none"
 queue_authority = "historical-mx-queue-superseded"
 product_catalog = "catalog/products.toml"
@@ -38,7 +38,7 @@ artifact_currency = "frozen-release-artifacts-do-not-represent-u09-development-h
 
 [development]
 status = "post-c16-development-head"
-active_program = "plasma-v2-reference-slice"
+active_program = "plasma-v2-release-readiness"
 current_product_truth = "products/savers/plasma/docs/u09-stable-recut.md"
 ship_posture = "GO_WITH_CAVEATS"
 ship_posture_source = "products/savers/plasma/docs/u09-ship-posture.md"
@@ -193,13 +193,14 @@ required_boundaries = [
 ]
 
 [plasma_v2]
-status = "reviewed-preview"
+status = "stable-candidate"
 stable = false
 active_profile = "plasma.v2.reference.preview"
-visual_review = "recorded"
-artistic_acceptance = "preview-only"
+packc = "v1-candidate"
+visual_review = "stable-candidate-round-recorded"
+artistic_acceptance = "stable-candidate-review"
 release_promotion = "blocked"
-opened_next = "plasma-v2-accelerated-realization"
+opened_next = "plasma-v2-release-readiness"
 proof = "validation/captures/plasma-v2/reference-preview/profile-proof.json"
 proof_bundle = "validation/captures/plasma-v2/reference-preview/proof-bundle-v1.json"
 preview_gate = "validation/captures/plasma-v2/preview-gate/gate-report.json"
@@ -207,7 +208,11 @@ review_gate = "validation/captures/plasma-v2/reviewed-preview/gate-report.json"
 review_decision = "validation/captures/plasma-v2/review/reviewer-decision.preview.toml"
 proof_matrix = "validation/captures/plasma-v2/matrix"
 pack_example = "products/savers/plasma/content/v2/examples/plasma_lava_v2.toml"
-claim_boundary = "Reviewed preview candidate only; not stable release promotion, final artistic acceptance, compatibility certification, public SDK stability, or all-saver migration."
+acceleration_matrix = "validation/captures/plasma-v2/acceleration/matrix.json"
+performance_envelope = "validation/captures/plasma-v2/performance/envelope.json"
+stable_candidate_review = "validation/captures/plasma-v2/stable-candidate-review/review-summary.json"
+stable_candidate_gate = "validation/captures/plasma-v2/stable-candidate/gate-report.json"
+claim_boundary = "Stable candidate only; not stable release promotion, final artistic acceptance, compatibility certification, public SDK stability, or all-saver migration."
 
 [doctrine]
 schema_version = 1
@@ -366,3 +371,8 @@ workbench_shell = "tools/scripts/check_workbench_shell.py"
 portable_v2 = "tools/scripts/check_portable_v2.py"
 portable_v2_equivalence = "tools/scripts/check_portable_v2_equivalence.py"
 gate_c_acceptance = "tools/scripts/check_gate_c_acceptance.py"
+plasma_acceleration_policy = "tools/scripts/check_plasma_acceleration_policy.py"
+plasma_v2_acceleration = "tools/scripts/check_plasma_v2_acceleration.py"
+plasma_v2_performance = "tools/scripts/check_plasma_v2_performance.py"
+plasma_v2_visual_review_round = "tools/scripts/check_plasma_v2_visual_review_round.py"
+plasma_v2_stable_candidate = "tools/scripts/check_plasma_v2_stable_candidate.py"

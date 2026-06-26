@@ -26,6 +26,7 @@ PACK_KIND = "screensave.plasma.v2"
 PLASMA_SCHEMA_ID = "screensave.plasma.spec.v2"
 PLASMA_SCHEMA_VERSION = 2
 ADMITTED_PROOF_PROFILE = "plasma.v2.reference.preview"
+PACK_STATUS = "v1-candidate"
 
 FIELD_FAMILY = {
     "classic_interference": 0,
@@ -66,10 +67,17 @@ TOP_LEVEL_KEYS = {
     "kind",
     "product",
     "name",
+    "author",
     "license",
     "provenance",
     "proof_profile",
+    "compatibility",
     "plasma_spec_v2",
+}
+COMPATIBILITY_KEYS = {
+    "minimum_schema_version",
+    "maximum_schema_version",
+    "pack_status",
 }
 SPEC_KEYS = {
     "schema_id",
@@ -203,6 +211,18 @@ def validate_and_resolve(data: dict[str, Any], source: pathlib.Path) -> dict[str
     if proof_profile != ADMITTED_PROOF_PROFILE:
         raise PackError(f"proof_profile must be {ADMITTED_PROOF_PROFILE}.")
 
+    compatibility = data.get("compatibility")
+    if not isinstance(compatibility, dict):
+        raise PackError("compatibility must be a table.")
+    require_keys("compatibility", set(compatibility), COMPATIBILITY_KEYS)
+    if compatibility.get("minimum_schema_version") != PLASMA_SCHEMA_VERSION:
+        raise PackError(f"compatibility.minimum_schema_version must be {PLASMA_SCHEMA_VERSION}.")
+    if compatibility.get("maximum_schema_version") != PLASMA_SCHEMA_VERSION:
+        raise PackError(f"compatibility.maximum_schema_version must be {PLASMA_SCHEMA_VERSION}.")
+    pack_status = ensure_safe_string("compatibility.pack_status", compatibility.get("pack_status"))
+    if pack_status != PACK_STATUS:
+        raise PackError(f"compatibility.pack_status must be {PACK_STATUS}.")
+
     spec = data.get("plasma_spec_v2")
     if not isinstance(spec, dict):
         raise PackError("plasma_spec_v2 must be a table.")
@@ -236,12 +256,18 @@ def validate_and_resolve(data: dict[str, Any], source: pathlib.Path) -> dict[str
         "kind": kind,
         "product": product,
         "name": ensure_safe_string("name", data.get("name")),
+        "author": ensure_safe_string("author", data.get("author")),
         "license": ensure_safe_string("license", data.get("license")),
         "provenance": ensure_safe_string("provenance", data.get("provenance")),
         "source_ref": repo_path(source),
+        "pack_status": pack_status,
+        "compatibility": {
+            "minimum_schema_version": PLASMA_SCHEMA_VERSION,
+            "maximum_schema_version": PLASMA_SCHEMA_VERSION,
+        },
         "proof_profile": proof_profile,
         "plasma_spec_v2": resolved_spec,
-        "claim_boundary": "Data-only Plasma v2 preview pack; not executable code, artistic acceptance, compatibility certification, or release promotion.",
+        "claim_boundary": "Data-only Plasma v2 pack v1 candidate; not executable code, artistic acceptance, compatibility certification, or release promotion.",
     }
     if len(canonical_bytes(canonical_pack)) > MAX_EXPANDED_BYTES:
         raise PackError(f"expanded pack exceeds {MAX_EXPANDED_BYTES} bytes.")
@@ -275,14 +301,20 @@ def compile_pack(source: pathlib.Path, output_dir: pathlib.Path) -> dict[str, An
         content_hash = sha256_bytes(canonical_bytes(canonical_pack))
         proof_ref = {
             "proof_profile": canonical_pack["proof_profile"],
+            "pack_status": canonical_pack["pack_status"],
             "claim_boundary": "Proof profile reference only; pack compilation does not run proof or promote release.",
         }
         manifest = {
             "pack_manifest_schema": PACK_MANIFEST_SCHEMA,
             "pack_schema": PACK_SCHEMA,
+            "pack_status": canonical_pack["pack_status"],
             "pack_id": canonical_pack["pack_id"],
             "kind": canonical_pack["kind"],
             "product": canonical_pack["product"],
+            "author": canonical_pack["author"],
+            "license": canonical_pack["license"],
+            "provenance": canonical_pack["provenance"],
+            "compatibility_range": canonical_pack["compatibility"],
             "file_count": MAX_OUTPUT_FILES,
             "data_only": True,
             "content_sha256": content_hash,

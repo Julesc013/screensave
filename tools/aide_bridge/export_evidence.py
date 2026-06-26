@@ -73,6 +73,10 @@ def export_packet(args: argparse.Namespace) -> dict[str, Any]:
     is_plasma_preview = subject_product == "plasma" and subject_profile == "plasma.v2.reference.preview"
     plasma_material_summary = ROOT / "validation" / "captures" / "plasma-v2" / "materials" / "material-treatment-summary.json"
     plasma_pack_example = ROOT / "products" / "savers" / "plasma" / "content" / "v2" / "examples" / "plasma_lava_v2.toml"
+    plasma_visualintent_candidates = ROOT / "validation" / "captures" / "plasma-v2" / "matrix" / "visualintent-candidates.json"
+    plasma_acceleration_matrix = ROOT / "validation" / "captures" / "plasma-v2" / "acceleration" / "matrix.json"
+    plasma_performance_envelope = ROOT / "validation" / "captures" / "plasma-v2" / "performance" / "envelope.json"
+    plasma_stable_review = ROOT / "validation" / "captures" / "plasma-v2" / "stable-candidate-review" / "review-summary.json"
     packc_tool = ROOT / "tools" / "packc" / "packc.py"
 
     certified_os_support = bool(compatibility.get("certified", False))
@@ -159,14 +163,59 @@ def export_packet(args: argparse.Namespace) -> dict[str, Any]:
                 "summary": "The Plasma lava v2 example compiles through bounded data-only packc." if is_plasma_preview else "Not a Plasma v2 preview packet.",
                 "evidence_refs": [repo_path(plasma_pack_example), repo_path(packc_tool)] if is_plasma_preview and plasma_pack_example.exists() and packc_tool.exists() else [],
             },
+            "packc_v1_candidate": {
+                "status": "supported" if is_plasma_preview and plasma_pack_example.exists() and "v1-candidate" in plasma_pack_example.read_text(encoding="utf-8") else "not-applicable",
+                "summary": "Packc emits bounded Plasma v2 pack v1 candidate metadata." if is_plasma_preview else "Not a Plasma v2 preview packet.",
+                "evidence_refs": [repo_path(plasma_pack_example), repo_path(packc_tool)] if is_plasma_preview and plasma_pack_example.exists() else [],
+            },
+            "visualintent_candidates": {
+                "status": "supported" if is_plasma_preview and plasma_visualintent_candidates.exists() else "not-applicable",
+                "summary": "Deterministic local VisualIntent resolver emits bounded Plasma candidates." if is_plasma_preview else "Not a Plasma v2 preview packet.",
+                "evidence_refs": [repo_path(plasma_visualintent_candidates)] if is_plasma_preview and plasma_visualintent_candidates.exists() else [],
+            },
+            "acceleration_candidate": {
+                "status": "supported" if is_plasma_preview and plasma_acceleration_matrix.exists() else ("warning" if is_plasma_preview else "not-applicable"),
+                "summary": "GL11 is admitted as an acceleration candidate with explicit software-reference fallback evidence." if is_plasma_preview else "Not a Plasma v2 preview packet.",
+                "evidence_refs": [repo_path(plasma_acceleration_matrix)] if is_plasma_preview and plasma_acceleration_matrix.exists() else [],
+            },
+            "performance_envelope": {
+                "status": "supported" if is_plasma_preview and plasma_performance_envelope.exists() else ("warning" if is_plasma_preview else "not-applicable"),
+                "summary": "Plasma v2 stable-candidate performance/resource envelope is recorded with runner limits." if is_plasma_preview else "Not a Plasma v2 preview packet.",
+                "evidence_refs": [repo_path(plasma_performance_envelope)] if is_plasma_preview and plasma_performance_envelope.exists() else [],
+            },
+            "visual_review_round": {
+                "status": "recorded" if is_plasma_preview and plasma_stable_review.exists() else "not-applicable",
+                "summary": "Stable-candidate visual review round is recorded separately from final artistic acceptance." if is_plasma_preview else "Not a Plasma v2 preview packet.",
+                "evidence_refs": [repo_path(plasma_stable_review)] if is_plasma_preview and plasma_stable_review.exists() else [],
+            },
+            "stable_candidate": {
+                "status": "proposed" if is_plasma_preview and plasma_stable_review.exists() and plasma_acceleration_matrix.exists() and plasma_performance_envelope.exists() else "not-applicable",
+                "summary": "Plasma v2 stable-candidate status is proposed by ScreenSave evidence; this packet does not promote release." if is_plasma_preview else "Not a Plasma v2 preview packet.",
+                "evidence_refs": [
+                    repo_path(plasma_stable_review),
+                    repo_path(plasma_acceleration_matrix),
+                    repo_path(plasma_performance_envelope),
+                ] if is_plasma_preview and plasma_stable_review.exists() and plasma_acceleration_matrix.exists() and plasma_performance_envelope.exists() else [],
+            },
             "no_aide_runtime_dependency": {
                 "status": "pass",
                 "summary": "AIDE EvidencePacket projection stores references only and is absent from ScreenSave product/runtime code.",
                 "evidence_refs": [repo_path(adapter_receipt_path), repo_path(proof_bundle_path)],
             },
+            "aide_runtime_dependency": {
+                "status": False,
+                "summary": "AIDE remains outside Plasma product/runtime code.",
+                "evidence_refs": [repo_path(adapter_receipt_path), repo_path(proof_bundle_path)],
+            },
             "compatibility_not_certified": {
                 "status": "pass",
                 "summary": "Mechanical proof and binary facts do not certify operating-system compatibility.",
+                "evidence_refs": [repo_path(proof_bundle_path)],
+                "certified_os_support": False,
+            },
+            "compatibility_certification": {
+                "status": "not_claimed",
+                "summary": "Stable-candidate evidence does not broaden compatibility certification.",
                 "evidence_refs": [repo_path(proof_bundle_path)],
                 "certified_os_support": False,
             },
@@ -190,6 +239,12 @@ def export_packet(args: argparse.Namespace) -> dict[str, Any]:
                 "status": release.get("status", "blocked"),
                 "summary": "Release promotion remains blocked unless supplied by an explicit promotion record.",
                 "evidence_refs": release.get("evidence_refs", []),
+                "promoted": False,
+            },
+            "stable_release": {
+                "status": "blocked",
+                "summary": "Stable release remains blocked until a later release-readiness gate.",
+                "evidence_refs": [],
                 "promoted": False,
             },
         },

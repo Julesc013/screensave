@@ -1,0 +1,31 @@
+schema_version = 1
+id = "plasma-v2-stable-candidate-ledger"
+status = "active"
+as_of = "2026-06-27"
+product = "plasma"
+profile = "plasma.v2.reference.preview"
+truth_boundary = "ScreenSave proof, review records, and validators remain authoritative; AIDE records stable-candidate references only."
+network_calls = false
+provider_or_model_calls = false
+runtime_dependency_allowed = false
+claim_boundary = "AIDE stable-candidate evidence records PAW-F references only; it does not decide stable release, final artistic acceptance, compatibility certification, or product truth."
+
+[claims]
+plasma_v2_reference_execution = "supported"
+packc_v1_candidate = "supported"
+visualintent_candidates = "supported"
+acceleration_candidate = "supported"
+performance_envelope = "supported-with-runner-limits"
+visual_review_round = "recorded"
+stable_candidate = "proposed"
+stable_release = "blocked"
+compatibility_certification = "not-claimed"
+aide_runtime_dependency = false
+
+[refs]
+acceleration_matrix = "validation/captures/plasma-v2/acceleration/matrix.json"
+performance_envelope = "validation/captures/plasma-v2/performance/envelope.json"
+stable_candidate_review = "validation/captures/plasma-v2/stable-candidate-review/review-summary.json"
+stable_candidate_gate = "validation/captures/plasma-v2/stable-candidate/gate-report.json"
+pack_example = "products/savers/plasma/content/v2/examples/plasma_lava_v2.toml"
+workbench_check = "tools/scripts/check_workbench_shell.py"

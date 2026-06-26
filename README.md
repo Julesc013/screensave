@@ -19,7 +19,7 @@ Post-`SS` work now proceeds in the bounded `SX` substrate series.
 - Artifact profiles: [`catalog/artifact_profiles.toml`](catalog/artifact_profiles.toml)
 - Product doctrine: [`contracts/screensave_doctrine_v1.md`](contracts/screensave_doctrine_v1.md)
 - AIDE Lite operational profile: [`.aide/pilot.toml`](.aide/pilot.toml), [`.aide/aide_lite.lock.toml`](.aide/aide_lite.lock.toml), and [`.aide/profile.yaml`](.aide/profile.yaml)
-- Active milestone: [`docs/roadmap/plasma-v2-reference-slice.md`](docs/roadmap/plasma-v2-reference-slice.md)
+- Active milestone: [`docs/roadmap/plasma-v2-stable-candidate.md`](docs/roadmap/plasma-v2-stable-candidate.md)
 - Accepted portable seam: [`contracts/portable_semantics_v2.md`](contracts/portable_semantics_v2.md)
 - Project adapter: [`contracts/project_adapter_v0.md`](contracts/project_adapter_v0.md) and [`tools/project_adapter/screensave_project.py`](tools/project_adapter/screensave_project.py)
 - Released public artifact: `c16-core-baseline`
@@ -52,12 +52,13 @@ planning and implementation without implying release promotion, public SDK
 stability, all-saver migration, compatibility certification, or artistic
 acceptance.
 
-Plasma v2 is now recorded as a reviewed-preview candidate, not a stable
-release. The preview profile is `plasma.v2.reference.preview`; it has exact
-captures, a Proof Bundle v1 projection, bounded materials/treatments evidence,
-data-only `packc` packs, deterministic VisualIntent candidates, and Workbench
-Author/Inspect/Compare support. Visual review is recorded for preview
-continuation only; final artistic acceptance, release promotion, compatibility
+Plasma v2 is now recorded as a stable-candidate, not a stable release. The
+preview profile remains `plasma.v2.reference.preview`; it has exact captures, a
+Proof Bundle v1 projection, bounded materials/treatments evidence, data-only
+`packc` v1-candidate packs, deterministic VisualIntent candidates, a GL11
+acceleration candidate with software-reference fallback evidence, a
+performance/resource envelope, and Workbench Author/Inspect/Compare/Profile/
+Review support. Final artistic acceptance, release promotion, compatibility
 certification, public SDK stability, and all-saver migration remain blocked.
 
 ## Download ScreenSave Core

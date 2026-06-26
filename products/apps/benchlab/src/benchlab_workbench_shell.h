@@ -66,6 +66,31 @@ typedef struct benchlab_workbench_plasma_compare_tag {
     const char *claim_boundary;
 } benchlab_workbench_plasma_compare;
 
+typedef struct benchlab_workbench_plasma_profile_tag {
+    const char *product_key;
+    const char *candidate_id;
+    const char *pack_digest;
+    const char *reference_proof_status;
+    const char *accelerated_proof_status;
+    const char *comparison_class;
+    const char *performance_summary;
+    const char *visual_review_decision;
+    const char *release_readiness;
+    const char *claim_boundary;
+} benchlab_workbench_plasma_profile;
+
+typedef struct benchlab_workbench_plasma_review_tag {
+    const char *product_key;
+    const char *review_round;
+    const char *decision_class;
+    const char *contact_sheet_ref;
+    const char *review_summary_ref;
+    const char *acceleration_matrix_ref;
+    const char *performance_envelope_ref;
+    const char *release_readiness;
+    const char *claim_boundary;
+} benchlab_workbench_plasma_review;
+
 unsigned int benchlab_workbench_shell_workspace_count(void);
 const benchlab_workbench_workspace *benchlab_workbench_shell_workspace(unsigned int index);
 int benchlab_workbench_shell_validate_binding(void);
@@ -86,5 +111,7 @@ int benchlab_workbench_shell_inspect_profile_v2(
 );
 int benchlab_workbench_shell_author_plasma_v2(benchlab_workbench_plasma_author *author_out);
 int benchlab_workbench_shell_compare_plasma_v2(benchlab_workbench_plasma_compare *compare_out);
+int benchlab_workbench_shell_profile_plasma_v2(benchlab_workbench_plasma_profile *profile_out);
+int benchlab_workbench_shell_review_plasma_v2(benchlab_workbench_plasma_review *review_out);
 
 #endif

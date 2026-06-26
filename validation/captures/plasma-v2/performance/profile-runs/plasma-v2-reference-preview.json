@@ -1,0 +1,18 @@
+{
+  "command": "tools/project_adapter/screensave_project.py proof --profile plasma.v2.reference.preview --path v2",
+  "elapsed_ms": 22214.487,
+  "returncode": 0,
+  "stderr_tail": [],
+  "stdout_tail": [
+    "    }",
+    "  },",
+    "  \"project\": \"screensave\",",
+    "  \"source\": {",
+    "    \"branch\": \"main\",",
+    "    \"commit\": \"eb361bf4642a54e6f2612e7d4c0e3d50f1132c25\",",
+    "    \"dirty\": true",
+    "  },",
+    "  \"status\": \"pass\"",
+    "}"
+  ]
+}

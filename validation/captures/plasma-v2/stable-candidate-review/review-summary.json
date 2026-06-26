@@ -1,0 +1,23 @@
+{
+  "artistic_acceptance": "stable-candidate-review",
+  "claim_boundary": "Stable-candidate review round only; not stable release, final artistic acceptance, compatibility certification, or automatic promotion.",
+  "decision_class": "accepted-for-stable-candidate",
+  "profile": "plasma.v2.reference.preview",
+  "product": "plasma",
+  "review_round": "stable-candidate-round",
+  "reviewed_dimensions": [
+    "default_profile",
+    "migrated_materials",
+    "visualintent_candidates",
+    "accelerated_path",
+    "dark_room_comfort",
+    "control_influence",
+    "luminance_safety",
+    "artifacting",
+    "motion_quality",
+    "fallback_degradation_honesty"
+  ],
+  "schema_version": "screensave.plasma-v2.stable-candidate-review.v1",
+  "stable_release": false,
+  "status": "pass"
+}

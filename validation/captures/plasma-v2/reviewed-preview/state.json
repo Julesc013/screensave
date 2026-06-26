@@ -1,0 +1,11 @@
+{
+  "active_profile": "plasma.v2.reference.preview",
+  "artistic_acceptance": "preview-only",
+  "claim_boundary": "Reviewed-preview checkpoint only; not stable release, final artistic acceptance, compatibility certification, or automatic promotion.",
+  "current_commit": "eb361bf4642a54e6f2612e7d4c0e3d50f1132c25",
+  "next_track": "plasma-v2-accelerated-realization",
+  "recorded_on": "2026-06-27",
+  "release_promotion": "blocked",
+  "stable": false,
+  "status": "reviewed-preview"
+}

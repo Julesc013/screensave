@@ -1,0 +1,38 @@
+schema_version = 1
+product = "plasma"
+profile = "plasma.v2.reference.preview"
+review_round = "stable-candidate-round"
+decision_class = "accepted-for-stable-candidate"
+reviewer = "operator-review-record"
+
+reviewed_capture_refs = [
+  "validation/captures/plasma-v2/reference-preview/frame-0090.ppm",
+  "validation/captures/plasma-v2/matrix/contact-sheets/README.md",
+  "validation/captures/plasma-v2/acceleration/matrix.md",
+  "validation/captures/plasma-v2/performance/summary.md",
+]
+
+explicit_non_decisions = [
+  "stable_release",
+  "compatibility_certification",
+  "core_promotion",
+  "all_platform_support",
+  "public_sdk_stability",
+  "automatic_product_promotion",
+  "final_artistic_acceptance",
+]
+
+notes = "Second review round accepts the bounded Plasma v2 slice for stable-candidate work only. GL11 acceleration is admitted as a candidate with explicit software-reference fallback evidence."
+claim_boundary = "Stable-candidate review only; not stable release, final artistic acceptance, compatibility certification, or automatic promotion."
+
+[dimensions]
+default_profile = "accepted-for-stable-candidate"
+migrated_materials = "accepted-for-stable-candidate"
+visualintent_candidates = "accepted-for-stable-candidate"
+accelerated_path = "fallback-reference-accepted-for-candidate"
+dark_room_comfort = "accepted-for-stable-candidate"
+control_influence = "accepted-for-stable-candidate"
+luminance_safety = "accepted-for-stable-candidate"
+artifacting = "accepted-for-stable-candidate"
+motion_quality = "accepted-for-stable-candidate"
+fallback_degradation_honesty = "accepted-for-stable-candidate"

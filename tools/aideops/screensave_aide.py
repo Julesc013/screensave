@@ -22,6 +22,7 @@ WORK_UNIT_FILES = [
     ROOT / ".aide" / "work_units" / "paw-c1-portable-v2-runtime-equivalence.toml",
     ROOT / ".aide" / "work_units" / "plasma-v2-reference-slice.toml",
     ROOT / ".aide" / "work_units" / "plasma-v2-visual-review-and-packc.toml",
+    ROOT / ".aide" / "work_units" / "plasma-v2-accelerated-stable-candidate.toml",
 ]
 PORTABLE_EVAL_TASKS = [
     "compact-task-packet-required-sections",

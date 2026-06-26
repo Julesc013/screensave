@@ -285,6 +285,8 @@
           "products/savers/plasma/src/plasma_treatment.h",
           "products/savers/plasma/src/plasma_v2_adapter.h",
           "products/savers/plasma/src/plasma_v2_core.h",
+          "products/savers/plasma/src/plasma_v2_gl11.h",
+          "products/savers/plasma/src/plasma_v2_realization.h",
           "products/savers/plasma/src/plasma_validate.h"
         ],
         "presets": [
@@ -321,6 +323,8 @@
           "products/savers/plasma/src/plasma_treatment.c",
           "products/savers/plasma/src/plasma_v2_adapter.c",
           "products/savers/plasma/src/plasma_v2_core.c",
+          "products/savers/plasma/src/plasma_v2_gl11.c",
+          "products/savers/plasma/src/plasma_v2_realization.c",
           "products/savers/plasma/src/plasma_validate.c"
         ],
         "tests": [

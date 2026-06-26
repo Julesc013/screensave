@@ -1,0 +1,32 @@
+schema_version = 1
+pack_id = "screensave.plasma.bad_parent_traversal"
+kind = "screensave.plasma.v2"
+product = "plasma"
+name = "Bad Parent Traversal"
+author = "ScreenSave"
+license = "ScreenSave sample content"
+provenance = "..\\escape"
+proof_profile = "plasma.v2.reference.preview"
+
+[compatibility]
+minimum_schema_version = 2
+maximum_schema_version = 2
+pack_status = "v1-candidate"
+
+[plasma_spec_v2]
+schema_id = "screensave.plasma.spec.v2"
+schema_version = 2
+field_family = "classic_interference"
+scale = 100
+complexity = 56
+motion_speed = 32
+warp_amount = 18
+feedback_amount = 8
+output_style = "continuous"
+material = "plasma_lava"
+brightness = 100
+contrast = 100
+treatment = "none"
+quality_intent = "safe"
+seed_policy = "session"
+presentation = "flat"

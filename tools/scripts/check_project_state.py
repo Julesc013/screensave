@@ -70,6 +70,7 @@ def validate_state(state: dict) -> list[str]:
     proof_kernel = state.get("proof_kernel", {})
     proof_kernel_v1 = state.get("proof_kernel_v1", {})
     portable_v2 = state.get("portable_v2", {})
+    plasma_v2 = state.get("plasma_v2", {})
     queues = state.get("queues", {})
     doctrine = state.get("doctrine", {})
     catalog_state = state.get("catalog", {})
@@ -87,7 +88,14 @@ def validate_state(state: dict) -> list[str]:
     require(compatibility.get("policy") == "evidence-classed", "compatibility.policy must be evidence-classed.", errors)
     require(authority.get("version_manifest") == "VERSION.toml", "authority.version_manifest must point to VERSION.toml.", errors)
     portable_status = portable_v2.get("status")
-    expected_active_program = "plasma-v2-reference-slice" if portable_status == "accepted" else "portable-v2-seam"
+    if portable_status == "accepted":
+        expected_active_program = (
+            "plasma-v2-release-readiness"
+            if plasma_v2.get("status") == "stable-candidate"
+            else "plasma-v2-reference-slice"
+        )
+    else:
+        expected_active_program = "portable-v2-seam"
     require(
         authority.get("active_program") == expected_active_program,
         f"authority.active_program must be {expected_active_program}.",
@@ -127,6 +135,44 @@ def validate_state(state: dict) -> list[str]:
         require(portable_v2.get("accepted_by") == "check_gate_c_acceptance.py", "portable_v2.accepted_by must name the Gate C checker.", errors)
         require(portable_v2.get("opened_next") == "plasma-v2-reference-slice", "portable_v2.opened_next must be plasma-v2-reference-slice.", errors)
         require(list(portable_v2.get("remaining", [])) == [], "portable_v2.remaining must be empty after Gate C acceptance.", errors)
+
+    if plasma_v2:
+        require(plasma_v2.get("stable") is False, "plasma_v2.stable must remain false before release readiness.", errors)
+        require(plasma_v2.get("release_promotion") == "blocked", "plasma_v2.release_promotion must remain blocked.", errors)
+        require(
+            plasma_v2.get("status") in {"reference-preview", "reviewed-preview", "stable-candidate"},
+            "plasma_v2.status must be a recognized pre-stable status.",
+            errors,
+        )
+        if plasma_v2.get("status") == "stable-candidate":
+            require(plasma_v2.get("packc") == "v1-candidate", "plasma_v2.packc must be v1-candidate.", errors)
+            require(
+                plasma_v2.get("visual_review") == "stable-candidate-round-recorded",
+                "plasma_v2.visual_review must record the stable-candidate round.",
+                errors,
+            )
+            require(
+                plasma_v2.get("artistic_acceptance") == "stable-candidate-review",
+                "plasma_v2.artistic_acceptance must remain stable-candidate-review.",
+                errors,
+            )
+            require(
+                plasma_v2.get("opened_next") == "plasma-v2-release-readiness",
+                "plasma_v2.opened_next must be plasma-v2-release-readiness.",
+                errors,
+            )
+            for label in (
+                "acceleration_matrix",
+                "performance_envelope",
+                "stable_candidate_review",
+                "stable_candidate_gate",
+            ):
+                require_path(plasma_v2.get(label), f"plasma_v2.{label}", errors)
+            require(
+                "not stable release" in str(plasma_v2.get("claim_boundary", "")).lower(),
+                "plasma_v2.claim_boundary must block stable release.",
+                errors,
+            )
 
     for label, value in (
         ("authority.product_catalog", authority.get("product_catalog")),
@@ -370,6 +416,13 @@ def print_summary(state: dict) -> None:
         f"{portable_v2['status']} gate {portable_v2['gate']} "
         f"for {', '.join(portable_v2.get('porting_products', []))}"
     )
+    if state.get("plasma_v2"):
+        plasma_v2 = state["plasma_v2"]
+        print(
+            "Plasma v2: "
+            f"{plasma_v2.get('status', 'unknown')} "
+            f"(stable={plasma_v2.get('stable')}, release={plasma_v2.get('release_promotion')})"
+        )
     print(
         "Plasma stable center: "
         f"{plasma['default_preset']} + {plasma['default_theme']}, "

@@ -1,6 +1,6 @@
 # Plasma v2 Visual Review And Packc
 
-Status: reviewed-preview candidate.
+Status: reviewed-preview candidate; superseded by stable-candidate evidence.
 
 Recorded on: 2026-06-27.
 
@@ -46,6 +46,6 @@ It is not:
 - executable pack admission,
 - automatic product mutation.
 
-The next responsible wave is `plasma-v2-accelerated-realization`, which may
-introduce one accelerated path only against the software reference and current
-lower-band truth.
+The next wave, `plasma-v2-accelerated-realization`, has recorded a
+stable-candidate gate. Release-readiness remains a later track and must not be
+inferred from PAW-E.

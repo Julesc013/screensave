@@ -1,0 +1,310 @@
+{
+  "claim_boundary": "Plasma v2 stable-candidate gate only; not stable release, final artistic acceptance, compatibility certification, or automatic promotion.",
+  "product": "plasma",
+  "profile": "plasma.v2.reference.preview",
+  "results": [
+    {
+      "id": "portable-v2-accepted",
+      "payload": {
+        "observed": "accepted"
+      },
+      "status": "pass",
+      "summary": "Portable v2 must be accepted before Plasma stable-candidate work."
+    },
+    {
+      "id": "plasma-status-input",
+      "payload": {
+        "observed": "stable-candidate"
+      },
+      "status": "pass",
+      "summary": "Plasma v2 must enter the gate from reviewed-preview and may exit as stable-candidate."
+    },
+    {
+      "id": "plasma-not-stable",
+      "payload": {
+        "plasma": {
+          "acceleration_matrix": "validation/captures/plasma-v2/acceleration/matrix.json",
+          "active_profile": "plasma.v2.reference.preview",
+          "artistic_acceptance": "stable-candidate-review",
+          "claim_boundary": "Stable candidate only; not stable release promotion, final artistic acceptance, compatibility certification, public SDK stability, or all-saver migration.",
+          "opened_next": "plasma-v2-release-readiness",
+          "pack_example": "products/savers/plasma/content/v2/examples/plasma_lava_v2.toml",
+          "packc": "v1-candidate",
+          "performance_envelope": "validation/captures/plasma-v2/performance/envelope.json",
+          "preview_gate": "validation/captures/plasma-v2/preview-gate/gate-report.json",
+          "proof": "validation/captures/plasma-v2/reference-preview/profile-proof.json",
+          "proof_bundle": "validation/captures/plasma-v2/reference-preview/proof-bundle-v1.json",
+          "proof_matrix": "validation/captures/plasma-v2/matrix",
+          "release_promotion": "blocked",
+          "review_decision": "validation/captures/plasma-v2/review/reviewer-decision.preview.toml",
+          "review_gate": "validation/captures/plasma-v2/reviewed-preview/gate-report.json",
+          "stable": false,
+          "stable_candidate_gate": "validation/captures/plasma-v2/stable-candidate/gate-report.json",
+          "stable_candidate_review": "validation/captures/plasma-v2/stable-candidate-review/review-summary.json",
+          "status": "stable-candidate",
+          "visual_review": "stable-candidate-round-recorded"
+        }
+      },
+      "status": "pass",
+      "summary": "Plasma v2 must remain not stable and release promotion must remain blocked."
+    },
+    {
+      "id": "path-pack_example",
+      "payload": {},
+      "status": "pass",
+      "summary": "Required stable-candidate evidence exists: products/savers/plasma/content/v2/examples/plasma_lava_v2.toml"
+    },
+    {
+      "id": "path-acceleration_matrix",
+      "payload": {},
+      "status": "pass",
+      "summary": "Required stable-candidate evidence exists: validation/captures/plasma-v2/acceleration/matrix.json"
+    },
+    {
+      "id": "path-performance_envelope",
+      "payload": {},
+      "status": "pass",
+      "summary": "Required stable-candidate evidence exists: validation/captures/plasma-v2/performance/envelope.json"
+    },
+    {
+      "id": "path-visual_review_round",
+      "payload": {},
+      "status": "pass",
+      "summary": "Required stable-candidate evidence exists: validation/captures/plasma-v2/stable-candidate-review/review-summary.json"
+    },
+    {
+      "id": "path-aide_stable_candidate",
+      "payload": {},
+      "status": "pass",
+      "summary": "Required stable-candidate evidence exists: .aide/evidence/plasma-v2-stable-candidate.toml"
+    },
+    {
+      "id": "acceleration-matrix-status",
+      "payload": {
+        "row_count": 11,
+        "status": "pass"
+      },
+      "status": "pass",
+      "summary": "Acceleration matrix must pass and cover the candidate matrix."
+    },
+    {
+      "id": "performance-envelope-status",
+      "payload": {
+        "status": "pass-with-warnings"
+      },
+      "status": "pass",
+      "summary": "Performance envelope must be recorded with explicit warning status when needed."
+    },
+    {
+      "id": "visual-review-round-status",
+      "payload": {
+        "decision_class": "accepted-for-stable-candidate",
+        "stable_release": false
+      },
+      "status": "pass",
+      "summary": "Visual review round must accept stable-candidate only and keep stable release false."
+    },
+    {
+      "id": "no-generic-command-capability",
+      "payload": {
+        "forbidden_hits": []
+      },
+      "status": "pass",
+      "summary": "Project adapter must not expose generic command, run, or exec capabilities."
+    },
+    {
+      "id": "no-overclaim-scan",
+      "payload": {
+        "hits": []
+      },
+      "status": "pass",
+      "summary": "No stable release, final acceptance, or certification overclaim may exist."
+    },
+    {
+      "id": "no-aide-runtime-dependency",
+      "payload": {
+        "hits": []
+      },
+      "status": "pass",
+      "summary": "Plasma runtime/source files must not depend on AIDE."
+    },
+    {
+      "id": "validator-check_packc",
+      "payload": {
+        "run": {
+          "command": "tools/scripts/check_packc.py",
+          "returncode": 0,
+          "status": "pass",
+          "stderr_tail": [],
+          "stdout_tail": [
+            "packc checks passed."
+          ]
+        }
+      },
+      "status": "pass",
+      "summary": "Required validator must pass."
+    },
+    {
+      "id": "validator-check_visual_intent_resolver",
+      "payload": {
+        "run": {
+          "command": "tools/scripts/check_visual_intent_resolver.py",
+          "returncode": 0,
+          "status": "pass",
+          "stderr_tail": [],
+          "stdout_tail": [
+            "VisualIntent resolver checks passed."
+          ]
+        }
+      },
+      "status": "pass",
+      "summary": "Required validator must pass."
+    },
+    {
+      "id": "validator-check_plasma_v2_matrix",
+      "payload": {
+        "run": {
+          "command": "tools/scripts/check_plasma_v2_matrix.py",
+          "returncode": 0,
+          "status": "pass",
+          "stderr_tail": [],
+          "stdout_tail": [
+            "Plasma v2 matrix checks passed."
+          ]
+        }
+      },
+      "status": "pass",
+      "summary": "Required validator must pass."
+    },
+    {
+      "id": "validator-check_plasma_v2_materials",
+      "payload": {
+        "run": {
+          "command": "tools/scripts/check_plasma_v2_materials.py",
+          "returncode": 0,
+          "status": "pass",
+          "stderr_tail": [],
+          "stdout_tail": [
+            "Plasma v2 material checks passed."
+          ]
+        }
+      },
+      "status": "pass",
+      "summary": "Required validator must pass."
+    },
+    {
+      "id": "validator-check_plasma_v2_influence",
+      "payload": {
+        "run": {
+          "command": "tools/scripts/check_plasma_v2_influence.py",
+          "returncode": 0,
+          "status": "pass",
+          "stderr_tail": [],
+          "stdout_tail": [
+            "Plasma v2 influence checks passed."
+          ]
+        }
+      },
+      "status": "pass",
+      "summary": "Required validator must pass."
+    },
+    {
+      "id": "validator-check_plasma_v2_acceleration",
+      "payload": {
+        "run": {
+          "command": "tools/scripts/check_plasma_v2_acceleration.py",
+          "returncode": 0,
+          "status": "pass",
+          "stderr_tail": [],
+          "stdout_tail": [
+            "Plasma v2 acceleration checks passed."
+          ]
+        }
+      },
+      "status": "pass",
+      "summary": "Required validator must pass."
+    },
+    {
+      "id": "validator-check_plasma_v2_performance",
+      "payload": {
+        "run": {
+          "command": "tools/scripts/check_plasma_v2_performance.py",
+          "returncode": 0,
+          "status": "pass",
+          "stderr_tail": [],
+          "stdout_tail": [
+            "Plasma v2 performance checks passed."
+          ]
+        }
+      },
+      "status": "pass",
+      "summary": "Required validator must pass."
+    },
+    {
+      "id": "validator-check_workbench_shell",
+      "payload": {
+        "run": {
+          "command": "tools/scripts/check_workbench_shell.py",
+          "returncode": 0,
+          "status": "pass",
+          "stderr_tail": [],
+          "stdout_tail": [
+            "Workbench shell checks passed."
+          ]
+        }
+      },
+      "status": "pass",
+      "summary": "Required validator must pass."
+    },
+    {
+      "id": "validator-check_plasma_v2_visual_review_round",
+      "payload": {
+        "run": {
+          "command": "tools/scripts/check_plasma_v2_visual_review_round.py",
+          "returncode": 0,
+          "status": "pass",
+          "stderr_tail": [],
+          "stdout_tail": [
+            "Plasma v2 stable-candidate visual review round checks passed."
+          ]
+        }
+      },
+      "status": "pass",
+      "summary": "Required validator must pass."
+    },
+    {
+      "id": "validator-check_aide_evidence_index",
+      "payload": {
+        "run": {
+          "command": "tools/scripts/check_aide_evidence_index.py",
+          "returncode": 0,
+          "status": "pass",
+          "stderr_tail": [],
+          "stdout_tail": [
+            "AIDE evidence index checks passed."
+          ]
+        }
+      },
+      "status": "pass",
+      "summary": "Required validator must pass."
+    },
+    {
+      "id": "validator-check_aide_evidence_bridge",
+      "payload": {
+        "run": {
+          "command": "tools/scripts/check_aide_evidence_bridge.py",
+          "returncode": 0,
+          "status": "pass",
+          "stderr_tail": [],
+          "stdout_tail": [
+            "AIDE evidence bridge checks passed."
+          ]
+        }
+      },
+      "status": "pass",
+      "summary": "Required validator must pass."
+    }
+  ],
+  "schema_version": "screensave.plasma-v2.stable-candidate-gate.v1",
+  "status": "pass"
+}

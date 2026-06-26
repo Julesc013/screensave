@@ -10,10 +10,12 @@ int main(void)
     benchlab_workbench_v2_inspect plasma_inspect;
     benchlab_workbench_plasma_author plasma_author;
     benchlab_workbench_plasma_compare plasma_compare;
+    benchlab_workbench_plasma_profile plasma_profile;
+    benchlab_workbench_plasma_review plasma_review;
     unsigned long nocturne_checksum;
     unsigned long ricochet_checksum;
 
-    if (benchlab_workbench_shell_workspace_count() != 5U) {
+    if (benchlab_workbench_shell_workspace_count() != 7U) {
         return 1;
     }
     workspace = benchlab_workbench_shell_workspace(0U);
@@ -27,6 +29,14 @@ int main(void)
     workspace = benchlab_workbench_shell_workspace(4U);
     if (workspace == 0 || strcmp(workspace->key, "author") != 0) {
         return 4;
+    }
+    workspace = benchlab_workbench_shell_workspace(5U);
+    if (workspace == 0 || strcmp(workspace->key, "profile") != 0) {
+        return 39;
+    }
+    workspace = benchlab_workbench_shell_workspace(6U);
+    if (workspace == 0 || strcmp(workspace->key, "review") != 0) {
+        return 40;
     }
     if (benchlab_workbench_shell_required_profile(0U) == 0) {
         return 5;
@@ -156,6 +166,24 @@ int main(void)
     }
     if (plasma_compare.left_rgba_sha256 == 0 || plasma_compare.right_rgba_sha256 == 0) {
         return 38;
+    }
+    if (!benchlab_workbench_shell_profile_plasma_v2(&plasma_profile)) {
+        return 41;
+    }
+    if (strcmp(plasma_profile.candidate_id, "plasma_v2_realization_gl11_candidate") != 0) {
+        return 42;
+    }
+    if (strcmp(plasma_profile.release_readiness, "blocked") != 0) {
+        return 43;
+    }
+    if (!benchlab_workbench_shell_review_plasma_v2(&plasma_review)) {
+        return 44;
+    }
+    if (strcmp(plasma_review.decision_class, "accepted-for-stable-candidate") != 0) {
+        return 45;
+    }
+    if (strcmp(plasma_review.release_readiness, "blocked") != 0) {
+        return 46;
     }
     return 0;
 }

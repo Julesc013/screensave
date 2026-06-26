@@ -193,6 +193,51 @@ def main() -> int:
                 errors,
             )
             require(
+                plasma_claims.get("packc_v1_candidate", {}).get("status") == "supported",
+                "Plasma packet must support packc v1 candidate evidence.",
+                errors,
+            )
+            require(
+                plasma_claims.get("visualintent_candidates", {}).get("status") == "supported",
+                "Plasma packet must support VisualIntent candidate evidence.",
+                errors,
+            )
+            require(
+                plasma_claims.get("acceleration_candidate", {}).get("status") == "supported",
+                "Plasma packet must support acceleration candidate evidence.",
+                errors,
+            )
+            require(
+                plasma_claims.get("performance_envelope", {}).get("status") == "supported",
+                "Plasma packet must support performance envelope evidence.",
+                errors,
+            )
+            require(
+                plasma_claims.get("visual_review_round", {}).get("status") == "recorded",
+                "Plasma packet must record the stable-candidate visual review round.",
+                errors,
+            )
+            require(
+                plasma_claims.get("stable_candidate", {}).get("status") == "proposed",
+                "Plasma packet must mark stable candidate as proposed, not released.",
+                errors,
+            )
+            require(
+                plasma_claims.get("stable_release", {}).get("status") == "blocked",
+                "Plasma packet must keep stable release blocked.",
+                errors,
+            )
+            require(
+                plasma_claims.get("compatibility_certification", {}).get("status") == "not_claimed",
+                "Plasma packet must not claim compatibility certification.",
+                errors,
+            )
+            require(
+                plasma_claims.get("aide_runtime_dependency", {}).get("status") is False,
+                "Plasma packet must record no AIDE runtime dependency.",
+                errors,
+            )
+            require(
                 plasma_claims.get("artistic_acceptance_blocked", {}).get("status") == "blocked",
                 "Plasma packet must keep artistic acceptance blocked.",
                 errors,

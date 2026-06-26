@@ -24,13 +24,22 @@
     "plasma_v2_exact_capture",
     "plasma_v2_material_distinctness",
     "plasma_v2_pack_compilation",
+    "packc_v1_candidate",
+    "visualintent_candidates",
+    "acceleration_candidate",
+    "performance_envelope",
+    "visual_review_round",
+    "stable_candidate",
     "no_aide_runtime_dependency",
+    "aide_runtime_dependency",
     "compatibility_evidence_class",
     "compatibility_not_certified",
+    "compatibility_certification",
     "artistic_review",
     "artistic_acceptance_blocked",
     "release_promotion",
-    "release_promotion_blocked"
+    "release_promotion_blocked",
+    "stable_release"
   ],
   "forbidden_claims": [
     "certified_os_support_true_without_runtime_evidence",

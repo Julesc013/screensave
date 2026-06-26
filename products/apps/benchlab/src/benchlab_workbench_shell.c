@@ -16,7 +16,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define BENCHLAB_WORKBENCH_WORKSPACE_COUNT 5U
+#define BENCHLAB_WORKBENCH_WORKSPACE_COUNT 7U
 #define BENCHLAB_WORKBENCH_REQUIRED_PROFILE_COUNT 3U
 
 static const benchlab_workbench_workspace g_benchlab_workbench_workspaces[BENCHLAB_WORKBENCH_WORKSPACE_COUNT] = {
@@ -24,7 +24,9 @@ static const benchlab_workbench_workspace g_benchlab_workbench_workspaces[BENCHL
     { "run", "Run", "Launch named proof profiles through sslab-owned execution." },
     { "inspect", "Inspect", "Show requested, resolved, degraded, and receipt metadata." },
     { "compare", "Compare", "Open capture and comparison evidence without rendering independently." },
-    { "author", "Author", "Edit Plasma v2 Basic controls, compile data-only packs, and run the fixed preview proof path." }
+    { "author", "Author", "Edit Plasma v2 Basic controls, compile data-only packs, and run the fixed preview proof path." },
+    { "profile", "Profile", "Read Plasma v2 reference, candidate, comparison, and performance envelope evidence." },
+    { "review", "Review", "Record reviewer decisions against contact sheets without release promotion." }
 };
 
 static const char *g_benchlab_workbench_required_profiles[BENCHLAB_WORKBENCH_REQUIRED_PROFILE_COUNT] = {
@@ -369,5 +371,44 @@ int benchlab_workbench_shell_compare_plasma_v2(benchlab_workbench_plasma_compare
     compare_out->review_status = "pending-human-preview-review";
     compare_out->candidate_ranking_notes = "manual-ranking-required";
     compare_out->claim_boundary = "Workbench Compare shows deterministic capture refs and hashes only; it does not assign artistic scores or promote release.";
+    return 1;
+}
+
+int benchlab_workbench_shell_profile_plasma_v2(benchlab_workbench_plasma_profile *profile_out)
+{
+    if (profile_out == 0) {
+        return 0;
+    }
+    memset(profile_out, 0, sizeof(*profile_out));
+
+    profile_out->product_key = "plasma";
+    profile_out->candidate_id = "plasma_v2_realization_gl11_candidate";
+    profile_out->pack_digest = "out/checks/packc/plasma_lava_v2/manifest.json";
+    profile_out->reference_proof_status = "pass";
+    profile_out->accelerated_proof_status = "fallback-reference-pass";
+    profile_out->comparison_class = "exact";
+    profile_out->performance_summary = "validation/captures/plasma-v2/performance/envelope.json";
+    profile_out->visual_review_decision = "accepted-for-stable-candidate";
+    profile_out->release_readiness = "blocked";
+    profile_out->claim_boundary = "Workbench Profile reads Plasma v2 stable-candidate evidence only; release readiness remains blocked.";
+    return 1;
+}
+
+int benchlab_workbench_shell_review_plasma_v2(benchlab_workbench_plasma_review *review_out)
+{
+    if (review_out == 0) {
+        return 0;
+    }
+    memset(review_out, 0, sizeof(*review_out));
+
+    review_out->product_key = "plasma";
+    review_out->review_round = "stable-candidate-round";
+    review_out->decision_class = "accepted-for-stable-candidate";
+    review_out->contact_sheet_ref = "validation/captures/plasma-v2/stable-candidate-review/contact-sheets/README.md";
+    review_out->review_summary_ref = "validation/captures/plasma-v2/stable-candidate-review/review-summary.json";
+    review_out->acceleration_matrix_ref = "validation/captures/plasma-v2/acceleration/matrix.json";
+    review_out->performance_envelope_ref = "validation/captures/plasma-v2/performance/envelope.json";
+    review_out->release_readiness = "blocked";
+    review_out->claim_boundary = "Workbench Review records stable-candidate review facts only; final artistic acceptance and release promotion remain separate.";
     return 1;
 }

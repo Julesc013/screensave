@@ -37,6 +37,17 @@ Allowed decision classes are:
 does not mean stable release, Core promotion, compatibility certification, or
 final artistic acceptance.
 
+For stable-candidate review rounds, allowed decision classes are:
+
+- `accepted-for-stable-candidate`
+- `request-changes`
+- `defer-to-labs`
+- `reject`
+
+`accepted-for-stable-candidate` means the candidate may proceed to a later
+release-readiness wave. It still does not mean stable release, compatibility
+certification, Core promotion, or final artistic acceptance.
+
 ## Required Boundaries
 
 Visual Review v1 must keep these claims separate:

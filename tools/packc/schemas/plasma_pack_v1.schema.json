@@ -1,16 +1,18 @@
 {
   "schema": "screensave.pack.v1",
   "kind": "screensave.plasma.v2",
-  "status": "bounded-data-only",
+  "status": "v1-candidate",
   "required_top_level": [
     "schema_version",
     "pack_id",
     "kind",
     "product",
     "name",
+    "author",
     "license",
     "provenance",
     "proof_profile",
+    "compatibility",
     "plasma_spec_v2"
   ],
   "forbidden": [

@@ -20,6 +20,15 @@ SCHEMAS = [
 ]
 EXAMPLE = ROOT / "products" / "savers" / "plasma" / "content" / "v2" / "examples" / "plasma_lava_v2.toml"
 OUT_DIR = ROOT / "out" / "checks" / "packc" / "plasma_lava_v2"
+NEGATIVE_FIXTURES = {
+    "bad-absolute-path.toml": "absolute paths",
+    "bad-parent-traversal.toml": "parent traversal",
+    "bad-executable-payload.toml": "executable payload",
+    "bad-oversized-string.toml": "oversized string",
+    "bad-missing-license.toml": "missing license",
+    "bad-unknown-material.toml": "unknown material",
+}
+NEGATIVE_DIR = ROOT / "tools" / "packc" / "examples" / "plasma"
 
 
 def require(condition: bool, message: str, errors: list[str]) -> None:
@@ -45,6 +54,9 @@ def main() -> int:
     errors: list[str] = []
     for path in [PACKC, CONTRACT, EXAMPLE, *SCHEMAS]:
         require(path.exists(), f"Missing packc input {path.relative_to(ROOT)}.", errors)
+    for name in NEGATIVE_FIXTURES:
+        path = NEGATIVE_DIR / name
+        require(path.exists(), f"Missing packc negative fixture {path.relative_to(ROOT)}.", errors)
     if errors:
         for error in errors:
             print(error, file=sys.stderr)
@@ -63,8 +75,14 @@ def main() -> int:
     if (OUT_DIR / "manifest.json").exists():
         manifest = load_json(OUT_DIR / "manifest.json")
         require(manifest.get("pack_manifest_schema") == "screensave.pack_manifest.v1", "packc manifest must record Pack Manifest v1 schema.", errors)
+        require(manifest.get("pack_status") == "v1-candidate", "packc manifest must record v1-candidate status.", errors)
         require(manifest.get("data_only") is True, "packc manifest must record data_only true.", errors)
         require(manifest.get("kind") == "screensave.plasma.v2", "packc manifest must record Plasma pack kind.", errors)
+        require(manifest.get("author") == "ScreenSave", "packc manifest must record author metadata.", errors)
+        require(manifest.get("license") == "ScreenSave sample content", "packc manifest must record license metadata.", errors)
+        require(manifest.get("provenance") == "PAW-DX U09 deterministic migration", "packc manifest must record provenance metadata.", errors)
+        require(manifest.get("compatibility_range", {}).get("minimum_schema_version") == 2, "packc manifest must record minimum schema compatibility.", errors)
+        require(manifest.get("compatibility_range", {}).get("maximum_schema_version") == 2, "packc manifest must record maximum schema compatibility.", errors)
         require(manifest.get("file_count") == 4, "packc manifest must record the bounded file count.", errors)
         require(isinstance(manifest.get("content_sha256"), str) and len(manifest.get("content_sha256", "")) == 64, "packc manifest must emit a content hash.", errors)
     if (OUT_DIR / "plasma-spec-v2.json").exists():
@@ -75,6 +93,10 @@ def main() -> int:
         hashes = load_json(OUT_DIR / "hash-manifest.json")
         require(len(hashes.get("files", [])) == 3, "hash manifest must hash emitted data files.", errors)
         require(hashes.get("total_bytes", 999999) <= hashes.get("max_expanded_bytes", 0), "hash manifest must remain bounded.", errors)
+
+    for fixture_name, fixture_label in NEGATIVE_FIXTURES.items():
+        bad_validate = run_packc(["validate", str(NEGATIVE_DIR / fixture_name)])
+        require(bad_validate.returncode != 0, f"packc must reject fixture for {fixture_label}.", errors)
 
     with tempfile.TemporaryDirectory() as temp_name:
         temp_root = pathlib.Path(temp_name)
