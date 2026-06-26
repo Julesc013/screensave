@@ -36,15 +36,20 @@ def main() -> int:
             "run",
             "inspect",
             "compare",
+            "author",
             "SSLAB_ABI_VERSION",
             "SSLAB_EXECUTION_PATH_V2",
             "screensave_generated_find_proof_profile",
             "benchlab_workbench_shell_run_profile_once",
             "benchlab_workbench_shell_inspect_profile_v2",
+            "benchlab_workbench_shell_author_plasma_v2",
             "benchlab_workbench_v2_inspect",
             "ss_v2_product_descriptor_is_valid",
             "nocturne.reference.v0",
             "ricochet.reference.v1",
+            "plasma.v2.reference.preview",
+            "products/savers/plasma/content/v2/examples/plasma_lava_v2.toml",
+            "tools/packc/packc.py",
         ]:
             require(needle in text, f"benchlab_workbench_shell.c is missing expected text: {needle!r}", errors)
 

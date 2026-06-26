@@ -280,7 +280,7 @@ claim_boundary = "Data-only package compilation; no executable plugin or VisualI
 id = "SS-PLV2-06"
 title = "Workbench Author and Inspect"
 objective = "Extend Workbench shell to Author and Inspect the Plasma v2 reference slice through the shared proof path."
-status = "pending"
+status = "implemented-local"
 selected_validation_tier = "T2"
 preflight_required = true
 postflight_required = true
@@ -288,7 +288,8 @@ preflight_receipt = "out/aide/operations/SS-PLV2-06-preflight/operation-receipt.
 postflight_receipt = "out/aide/operations/SS-PLV2-06-postflight/operation-receipt.json"
 rollback_point = "SS-PLV2-05"
 allowed_paths = [
-  "tools/workbench",
+  "products/apps/benchlab/src/benchlab_workbench_shell.*",
+  "products/apps/benchlab/tests/workbench_shell_smoke.c",
   "tools/scripts/check_workbench_shell.py",
   "docs/roadmap/plasma-v2-reference-slice.md",
 ]
@@ -304,6 +305,8 @@ expected_validators = [
 ]
 baseline_refs = [
   "tools/sslab/include/screensave/sslab_v1.h",
+  "tools/packc/packc.py",
+  "products/savers/plasma/content/v2/examples/plasma_lava_v2.toml",
   "catalog/generated/proof_registry.json",
 ]
 claim_boundary = "Workbench is an author/inspect shell over CLI proof paths, not a duplicate execution engine."

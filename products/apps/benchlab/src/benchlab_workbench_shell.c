@@ -11,23 +11,26 @@
 #include "../../../../tools/sslab/include/screensave/sslab.h"
 #include "../../../../products/savers/nocturne/src/nocturne_v2_adapter.h"
 #include "../../../../products/savers/ricochet/src/ricochet_v2_adapter.h"
+#include "../../../../products/savers/plasma/src/plasma_v2_adapter.h"
 
 #include <stdlib.h>
 #include <string.h>
 
-#define BENCHLAB_WORKBENCH_WORKSPACE_COUNT 4U
-#define BENCHLAB_WORKBENCH_REQUIRED_PROFILE_COUNT 2U
+#define BENCHLAB_WORKBENCH_WORKSPACE_COUNT 5U
+#define BENCHLAB_WORKBENCH_REQUIRED_PROFILE_COUNT 3U
 
 static const benchlab_workbench_workspace g_benchlab_workbench_workspaces[BENCHLAB_WORKBENCH_WORKSPACE_COUNT] = {
     { "catalog", "Catalog", "Read generated products and proof-profile inventory." },
     { "run", "Run", "Launch named proof profiles through sslab-owned execution." },
     { "inspect", "Inspect", "Show requested, resolved, degraded, and receipt metadata." },
-    { "compare", "Compare", "Open capture and comparison evidence without rendering independently." }
+    { "compare", "Compare", "Open capture and comparison evidence without rendering independently." },
+    { "author", "Author", "Edit Plasma v2 Basic controls, compile data-only packs, and run the fixed preview proof path." }
 };
 
 static const char *g_benchlab_workbench_required_profiles[BENCHLAB_WORKBENCH_REQUIRED_PROFILE_COUNT] = {
     "nocturne.reference.v0",
-    "ricochet.reference.v1"
+    "ricochet.reference.v1",
+    "plasma.v2.reference.preview"
 };
 
 unsigned int benchlab_workbench_shell_workspace_count(void)
@@ -100,6 +103,9 @@ static const ss_v2_product_descriptor *benchlab_workbench_shell_v2_descriptor(
     }
     if (strcmp(product_key, "ricochet") == 0) {
         return ricochet_v2_product_descriptor();
+    }
+    if (strcmp(product_key, "plasma") == 0) {
+        return plasma_v2_product_descriptor();
     }
     return 0;
 }
@@ -281,9 +287,64 @@ int benchlab_workbench_shell_inspect_profile_v2(
     inspect_out->delta_ms = profile->delta_ms;
     inspect_out->surface_format = "rgba8";
     inspect_out->draw_target_kind = "sslab-v2-rgba8";
+    inspect_out->field_family = "not-inspected";
+    inspect_out->output_style = "not-inspected";
+    inspect_out->material = "not-inspected";
+    inspect_out->treatment = "not-inspected";
+    inspect_out->capture_refs = "catalog-profile-capture-frames";
+    inspect_out->proof_status = "pass";
     inspect_out->diagnostics = "none";
-    inspect_out->equivalence_status = "pass";
-    inspect_out->claim_boundary = "v1/v2 deterministic equivalence for named canary profiles only";
+    if (strcmp(profile->product, "plasma") == 0) {
+        inspect_out->field_family = "classic_interference";
+        inspect_out->output_style = "continuous";
+        inspect_out->material = "plasma_lava";
+        inspect_out->treatment = "none";
+        inspect_out->capture_refs = "validation/captures/plasma-v2/reference-preview";
+        inspect_out->equivalence_status = "not-applicable-preview-profile";
+        inspect_out->claim_boundary = "Plasma v2 preview reference proof only; not stable promotion or artistic acceptance";
+    } else {
+        inspect_out->equivalence_status = "pass";
+        inspect_out->claim_boundary = "v1/v2 deterministic equivalence for named canary profiles only";
+    }
     inspect_out->probe_checksum = checksum;
     return 1;
+}
+
+int benchlab_workbench_shell_author_plasma_v2(benchlab_workbench_plasma_author *author_out)
+{
+    unsigned long checksum;
+
+    if (author_out == 0) {
+        return 0;
+    }
+    memset(author_out, 0, sizeof(*author_out));
+
+    checksum = 0UL;
+    if (!benchlab_workbench_shell_run_profile_once_on_path(
+        "plasma",
+        "plasma_lava",
+        160UL,
+        90UL,
+        4096UL,
+        90UL,
+        100UL,
+        SSLAB_EXECUTION_PATH_V2,
+        &checksum)) {
+        return 0;
+    }
+
+    author_out->product_key = "plasma";
+    author_out->profile_key = "plasma.v2.reference.preview";
+    author_out->spec_schema_id = "screensave.plasma.spec.v2";
+    author_out->spec_schema_version = 2UL;
+    author_out->pack_input_ref = "products/savers/plasma/content/v2/examples/plasma_lava_v2.toml";
+    author_out->packc_validate_command = "py -3 tools/packc/packc.py validate products/savers/plasma/content/v2/examples/plasma_lava_v2.toml";
+    author_out->packc_compile_command = "py -3 tools/packc/packc.py compile products/savers/plasma/content/v2/examples/plasma_lava_v2.toml --out out/packc/plasma_lava_v2";
+    author_out->proof_command = "py -3 tools/project_adapter/screensave_project.py proof --profile plasma.v2.reference.preview --path v2";
+    author_out->requested_facts = "field/output/material/treatment/basic-controls";
+    author_out->resolved_facts = "classic_interference/continuous/plasma_lava/none/safe-flat";
+    author_out->degraded_facts = "none";
+    author_out->claim_boundary = "Workbench Author model only; pack compilation and proof stay delegated to packc and sslab.";
+    author_out->preview_checksum = checksum;
+    return checksum != 0UL;
 }
