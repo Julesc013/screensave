@@ -15,7 +15,7 @@ Scope:
 - preset: `observatory_night`
 - surface: RGBA8, top-left origin, sRGB bytes
 - renderer: `soft-reference-v0`
-- runner: compiled product-session proof runner
+- runner: compiled product-session proof runner over the extracted Nocturne core
 - status: informational canary, not compatibility certification
 
 The validator `tools/scripts/check_proof_kernel.py` reruns the same canary in

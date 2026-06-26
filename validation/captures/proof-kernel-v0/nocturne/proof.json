@@ -21,11 +21,19 @@
     },
     {
       "path": "products/savers/nocturne/src/nocturne_sim.c",
-      "sha256": "88e76cfdaf556a2e6ea9dfe36fdb72120671803eb1ec23f16d3468e2d6957d0d"
+      "sha256": "c8f3a6d80e0939bf7371ad3bd127421488501757c84f41e4c8ed05b4a3e1fdc6"
     },
     {
       "path": "products/savers/nocturne/src/nocturne_render.c",
-      "sha256": "b578eee385081fb1fe7ee98596a6cf2491d8f77335455e84d789028398a43c93"
+      "sha256": "1e87b6e7b828493b5e27b5333a7075faf4e7d872d86c43151363a89974926bfb"
+    },
+    {
+      "path": "products/savers/nocturne/src/nocturne_core.c",
+      "sha256": "7c84a73daf5ca05078b2302790adbea940c82540516894498d6c63b8a0edde92"
+    },
+    {
+      "path": "products/savers/nocturne/src/nocturne_v1_adapter.c",
+      "sha256": "958d38392450f0d6fcd9d9de75ab063b59666c0cf0097b09e8d41d1f27fddcc7"
     },
     {
       "path": "products/savers/nocturne/src/nocturne_themes.c",
@@ -67,7 +75,7 @@
     "width": 96
   },
   "source": {
-    "commit": "0136659655eac8eece0baba25bf7639ccefc1842",
+    "commit": "bb96445e5b33dca0333f37b369f850d3ed12b0c7",
     "dirty": false
   },
   "status": "informational"
