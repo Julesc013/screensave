@@ -13,6 +13,7 @@ python tools\project_adapter\screensave_project.py profiles
 python tools\project_adapter\screensave_project.py validate --tier T0
 python tools\project_adapter\screensave_project.py validate --tier T1
 python tools\project_adapter\screensave_project.py validate --tier T2
+python tools\project_adapter\screensave_project.py validate --tier T3
 python tools\project_adapter\screensave_project.py build --profile windows-current-x86 --invocation-id local-build
 python tools\project_adapter\screensave_project.py render --invocation-id local-render
 python tools\project_adapter\screensave_project.py compare --actual validation\captures\proof-kernel-v0\nocturne\capture.ppm
@@ -32,8 +33,9 @@ The `validate` command accepts fixed tiers only. `T0` covers authority, syntax,
 docs, AIDE pilot, and whitespace checks. `T1` includes `T0` and adds affected
 catalog, adapter, `libsslab`, proof, and Workbench checks. `T2` includes `T0`
 and `T1` and adds the portable v2 header seam and equivalence checks, the full
-local project gate, plus fixed Nocturne and Ricochet v1/v2 profile proofs. T3 remains an
-operator-scheduled native evidence gate, not an admitted AIDE fixed capability.
+local project gate, plus fixed Nocturne and Ricochet v1/v2 profile proofs.
+`T3` includes `T0` through `T2` and adds the fixed Gate C checker, current
+Windows saver/tool build profiles, and AIDE evidence bridge/index checks.
 
 The `build` command accepts named profiles only. Current profiles are
 `windows-current-x86` and `windows-current-tools`; callers cannot provide

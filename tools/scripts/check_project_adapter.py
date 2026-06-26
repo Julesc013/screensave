@@ -140,6 +140,7 @@ def main() -> int:
         require("screensave.validation.t0" in names, "capabilities must include screensave.validation.t0.", errors)
         require("screensave.validation.t1" in names, "capabilities must include screensave.validation.t1.", errors)
         require("screensave.validation.t2" in names, "capabilities must include screensave.validation.t2.", errors)
+        require("screensave.validation.t3" in names, "capabilities must include screensave.validation.t3.", errors)
         require("screensave.build.windows-current-x86" in names, "capabilities must include screensave.build.windows-current-x86.", errors)
         require("screensave.build.windows-current-tools" in names, "capabilities must include screensave.build.windows-current-tools.", errors)
         require("screensave.proof.nocturne.render" in names, "capabilities must include screensave.proof.nocturne.render.", errors)

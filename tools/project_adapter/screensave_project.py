@@ -92,12 +92,22 @@ VALIDATION_TIERS = {
         [str(SSLAB.relative_to(ROOT)), "proof", "--profile", "ricochet.reference.v1", "--output-dir", "out/aide/proofs/ricochet-reference-v1"],
         [str(SSLAB.relative_to(ROOT)), "proof", "--profile", "ricochet.reference.v1", "--path", "v2", "--output-dir", "out/aide/proofs/ricochet-reference-v1-v2"],
     ],
+    "T3": [
+        ["tools/scripts/check_gate_c_acceptance.py"],
+        [str(BUILDCTL.relative_to(ROOT)), "build", "--profile", "windows-current-x86", "--output-dir", "out/aide/t3/windows-current-x86"],
+        [str(BUILDCTL.relative_to(ROOT)), "build", "--profile", "windows-current-tools", "--output-dir", "out/aide/t3/windows-current-tools"],
+        ["tools/scripts/check_aide_evidence_bridge.py"],
+        ["tools/scripts/check_aide_evidence_index.py"],
+    ],
 }
+
+VALIDATION_TIER_ORDER = ["T0", "T1", "T2", "T3"]
 
 VALIDATION_TIER_CAPABILITIES = {
     "T0": "screensave.validation.t0",
     "T1": "screensave.validation.t1",
     "T2": "screensave.validation.t2",
+    "T3": "screensave.validation.t3",
 }
 
 ADMITTED_PROOF_PROFILES = {
@@ -438,7 +448,7 @@ def run_command(command: list[str], timeout_seconds: int) -> dict[str, Any]:
 
 def validation_commands_for_tier(tier: str) -> list[list[str]]:
     selected: list[list[str]] = []
-    for candidate in ["T0", "T1", "T2"]:
+    for candidate in VALIDATION_TIER_ORDER:
         selected.extend(VALIDATION_TIERS[candidate])
         if candidate == tier:
             return selected
@@ -581,7 +591,7 @@ def command_validate(args: argparse.Namespace) -> int:
     payload = {
         "validation_class": "screensave-fixed-tier",
         "tier": tier,
-        "included_tiers": [candidate for candidate in ["T0", "T1", "T2"] if ["T0", "T1", "T2"].index(candidate) <= ["T0", "T1", "T2"].index(tier)],
+        "included_tiers": [candidate for candidate in VALIDATION_TIER_ORDER if VALIDATION_TIER_ORDER.index(candidate) <= VALIDATION_TIER_ORDER.index(tier)],
         "command_binding": command_binding_payload(
             "validate",
             ["validate", "--tier", tier],

@@ -56,6 +56,7 @@ exact_capabilities = [
   "screensave.validation.t0",
   "screensave.validation.t1",
   "screensave.validation.t2",
+  "screensave.validation.t3",
   "screensave.build.windows-current-x86",
   "screensave.build.windows-current-tools",
   "screensave.artifact.pe.audit",
@@ -105,6 +106,11 @@ command = ["python", "tools/project_adapter/screensave_project.py", "validate", 
 name = "screensave.validation.t2"
 status = "screensave-side-admitted-read-only"
 command = ["python", "tools/project_adapter/screensave_project.py", "validate", "--tier", "T2"]
+
+[[capabilities]]
+name = "screensave.validation.t3"
+status = "screensave-side-admitted-read-only"
+command = ["python", "tools/project_adapter/screensave_project.py", "validate", "--tier", "T3"]
 
 [[capabilities]]
 name = "screensave.build.windows-current-x86"

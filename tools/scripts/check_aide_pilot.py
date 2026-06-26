@@ -202,6 +202,7 @@ def main() -> int:
         "screensave.validation.t0",
         "screensave.validation.t1",
         "screensave.validation.t2",
+        "screensave.validation.t3",
     }:
         require(
             capability_status.get(name) == "screensave-side-admitted-read-only",
