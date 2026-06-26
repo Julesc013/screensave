@@ -1,0 +1,33 @@
+schema_version = 1
+packet_id = "screensave.plasma-v2.final-artistic-decision.template"
+product = "plasma"
+profile = "plasma.v2.reference.preview"
+decision_state = "not-started"
+reviewer = "OPERATOR_REQUIRED"
+reviewed_on = "OPERATOR_REQUIRED"
+decision_summary = "OPERATOR_REQUIRED"
+
+allowed_states = [
+  "not-started",
+  "preview-only",
+  "stable-candidate-review",
+  "accepted-for-release-candidate",
+  "request-changes",
+  "defer-to-labs",
+  "rejected",
+]
+
+[evidence_refs]
+proof_bundle = "validation/captures/plasma-v2/reference-preview/proof-bundle-v1.json"
+stable_candidate_review = "validation/captures/plasma-v2/stable-candidate-review/review-summary.json"
+acceleration_matrix = "validation/captures/plasma-v2/acceleration/matrix.json"
+performance_envelope = "validation/captures/plasma-v2/performance/envelope.json"
+package_stage = "packaging/windows/plasma-v2-preview/manifest.toml"
+known_limits = "packaging/windows/plasma-v2-preview/known-limits.md"
+
+[boundaries]
+final_stable_artistic_acceptance = false
+stable_release = false
+release_publication = false
+compatibility_certification = false
+public_sdk_stability = false
