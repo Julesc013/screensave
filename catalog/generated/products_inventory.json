@@ -114,11 +114,14 @@
       "semantic_contract": "product-local-ir",
       "source_units": [
         "config",
+        "core",
         "module",
         "presets",
         "render",
         "sim",
-        "themes"
+        "themes",
+        "v1_adapter",
+        "v2_adapter"
       ]
     },
     {
@@ -180,11 +183,14 @@
       "semantic_contract": "product-local-ir",
       "source_units": [
         "config",
+        "core",
         "module",
         "presets",
         "render",
         "sim",
-        "themes"
+        "themes",
+        "v1_adapter",
+        "v2_adapter"
       ]
     },
     {

@@ -59,6 +59,8 @@ PLATFORM_OBJS := \
 	$(PLATFORM_DIR)/timing.o \
 	$(PLATFORM_DIR)/version.o \
 	$(PLATFORM_DIR)/visual_buffer.o \
+	$(PLATFORM_DIR)/surface_rgba8.o \
+	$(PLATFORM_DIR)/soft_renderer.o \
 	$(PLATFORM_DIR)/gdi_capture.o \
 	$(PLATFORM_DIR)/gdi_backend.o \
 	$(PLATFORM_DIR)/gdi_bitmap.o \
@@ -96,6 +98,14 @@ PLATFORM_OBJS := \
 	$(PLATFORM_DIR)/gl46_primitives.o \
 	$(PLATFORM_DIR)/gl46_state.o \
 	$(PLATFORM_DIR)/null_backend.o \
+	$(PLATFORM_DIR)/v2_base_validate.o \
+	$(PLATFORM_DIR)/v2_config_view.o \
+	$(PLATFORM_DIR)/v2_diagnostics.o \
+	$(PLATFORM_DIR)/v2_draw_renderer_bridge.o \
+	$(PLATFORM_DIR)/v2_draw_target.o \
+	$(PLATFORM_DIR)/v2_session_helpers.o \
+	$(PLATFORM_DIR)/v2_surface_view.o \
+	$(PLATFORM_DIR)/v2_v1_v2_compat_adapter.o \
 	$(PLATFORM_DIR)/scr_args.o \
 	$(PLATFORM_DIR)/scr_config_dialog.o \
 	$(PLATFORM_DIR)/scr_diagnostics.o \
@@ -104,7 +114,7 @@ PLATFORM_OBJS := \
 	$(PLATFORM_DIR)/scr_validation_scene.o \
 	$(PLATFORM_DIR)/scr_window.o
 
-saver_extra_units = $(if $(filter $(1),nocturne ricochet),core v1_adapter,) $(if $(filter $(1),plasma),advanced authoring benchlab content modern output plan premium presentation selection settings transition treatment validate,)
+saver_extra_units = $(if $(filter $(1),nocturne ricochet),core v1_adapter v2_adapter,) $(if $(filter $(1),plasma),advanced authoring benchlab content modern output plan premium presentation selection settings transition treatment validate,)
 saver_all_units = $(SAVER_UNITS) $(call saver_extra_units,$(1))
 saver_objs = $(foreach unit,$(call saver_all_units,$(1)),$(INT_ROOT)/$(1)/$(1)_$(unit).o)
 saver_resource_objs = $(INT_ROOT)/$(1)/$(1)_config_res.o $(INT_ROOT)/$(1)/$(1)_version_res.o $(INT_ROOT)/$(1)/screensave_host_res.o
@@ -181,6 +191,14 @@ $(PLATFORM_DIR)/visual_buffer.o: $(ROOT)/platform/src/core/visual/visual_buffer.
 	mkdir -p $(PLATFORM_DIR)
 	$(CC) $(CFLAGS) -MMD -MP -MF $(@:.o=.d) -c $< -o $@
 
+$(PLATFORM_DIR)/surface_rgba8.o: $(ROOT)/platform/src/surface/rgba8/surface_rgba8.c
+	mkdir -p $(PLATFORM_DIR)
+	$(CC) $(CFLAGS) -MMD -MP -MF $(@:.o=.d) -c $< -o $@
+
+$(PLATFORM_DIR)/soft_renderer.o: $(ROOT)/platform/src/render/soft/soft_renderer.c
+	mkdir -p $(PLATFORM_DIR)
+	$(CC) $(CFLAGS) -MMD -MP -MF $(@:.o=.d) -c $< -o $@
+
 $(PLATFORM_DIR)/gdi_%.o: $(ROOT)/platform/src/render/gdi/gdi_%.c
 	mkdir -p $(PLATFORM_DIR)
 	$(CC) $(CFLAGS) -MMD -MP -MF $(@:.o=.d) -c $< -o $@
@@ -202,6 +220,10 @@ $(PLATFORM_DIR)/gl46_%.o: $(ROOT)/platform/src/render/gl46/gl46_%.c
 	$(CC) $(CFLAGS) -MMD -MP -MF $(@:.o=.d) -c $< -o $@
 
 $(PLATFORM_DIR)/null_%.o: $(ROOT)/platform/src/render/null/null_%.c
+	mkdir -p $(PLATFORM_DIR)
+	$(CC) $(CFLAGS) -MMD -MP -MF $(@:.o=.d) -c $< -o $@
+
+$(PLATFORM_DIR)/v2_%.o: $(ROOT)/platform/src/v2/%.c
 	mkdir -p $(PLATFORM_DIR)
 	$(CC) $(CFLAGS) -MMD -MP -MF $(@:.o=.d) -c $< -o $@
 

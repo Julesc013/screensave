@@ -32,6 +32,7 @@ key = "nocturne"
 name = "Nocturne"
 kind = "saver"
 family = "quiet-utility-ambient"
+source_units = ["config", "core", "module", "presets", "render", "sim", "themes", "v1_adapter", "v2_adapter"]
 required_presets = ["defaults.ini", "museum.ini", "night_modes.ini"]
 
 [[products]]
@@ -39,6 +40,7 @@ key = "ricochet"
 name = "Ricochet"
 kind = "saver"
 family = "motion"
+source_units = ["config", "core", "module", "presets", "render", "sim", "themes", "v1_adapter", "v2_adapter"]
 required_presets = ["defaults.ini", "themed.ini"]
 
 [[products]]

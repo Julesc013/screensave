@@ -22,6 +22,7 @@
     <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_sim.c" />
     <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_themes.c" />
     <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_v1_adapter.c" />
+    <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_v2_adapter.c" />
     <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_config.c" />
     <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_core.c" />
     <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_module.c" />
@@ -30,6 +31,7 @@
     <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_sim.c" />
     <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_themes.c" />
     <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_v1_adapter.c" />
+    <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_v2_adapter.c" />
     <ClCompile Include="..\..\..\products\savers\deepfield\src\deepfield_config.c" />
     <ClCompile Include="..\..\..\products\savers\deepfield\src\deepfield_module.c" />
     <ClCompile Include="..\..\..\products\savers\deepfield\src\deepfield_presets.c" />
