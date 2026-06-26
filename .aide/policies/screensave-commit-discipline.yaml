@@ -1,0 +1,20 @@
+schema_version: screensave.commit-discipline.v1
+status: active
+commit_frequency:
+  - one commit per bounded WorkUnit
+  - one commit per repair
+  - one commit per generated-catalog refresh
+  - one commit per authority transition
+  - never mix behavior plus generated inventory plus state promotion unless unavoidable
+required_sections:
+  - Summary
+  - Why
+  - Scope
+  - Validation
+  - Evidence
+  - Boundary
+required_boundary_lines:
+  - No release promotion.
+  - No compatibility certification.
+  - No AIDE product-runtime dependency.
+claim_boundary: "Commit discipline shapes development history only; it does not authorize source mutation, branch mutation, release promotion, or compatibility certification."
