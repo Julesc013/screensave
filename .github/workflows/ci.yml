@@ -45,6 +45,50 @@ jobs:
           python tools/scripts/check_product_architecture.py
           python tools/scripts/check_visual_intent_contract.py
 
+  portable-v2-equivalence:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install portable proof compiler
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential
+
+      - name: Validate portable v2 public seam
+        run: python tools/scripts/check_portable_v2.py
+
+      - name: Validate libsslab v1 and v2 runner paths
+        run: python tools/scripts/check_sslab_runner.py
+
+      - name: Run direct portable v2 proof matrix
+        run: |
+          python tools/sslab/sslab.py proof --profile nocturne.reference.v0 --path v2 --output-dir out/ci/portable-v2/nocturne
+          python tools/sslab/sslab.py proof --profile ricochet.reference.v1 --path v2 --output-dir out/ci/portable-v2/ricochet
+
+      - name: Prove portable v2 equivalence
+        run: >
+          python tools/sslab/sslab_equivalence.py
+          --output out/ci/portable-v2/equivalence.json
+          --work-root out/ci/portable-v2/equivalence-captures
+
+      - name: Validate Workbench v2 Inspect
+        run: python tools/scripts/check_workbench_shell.py
+
+      - name: Upload portable v2 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: portable-v2-equivalence
+          path: out/ci/portable-v2
+          if-no-files-found: error
+
   proof-kernel:
     runs-on: windows-latest
     steps:
@@ -110,16 +154,25 @@ jobs:
 
       - name: Run CI proof-profile matrix
         run: |
-          python tools\sslab\sslab.py proof --profile nocturne.reference.v0 --output-dir out\ci\proof-kernel\matrix\nocturne
-          python tools\sslab\sslab.py proof --profile ricochet.reference.v1 --output-dir out\ci\proof-kernel\matrix\ricochet
+          python tools\sslab\sslab.py proof --profile nocturne.reference.v0 --path v1 --output-dir out\ci\proof-kernel\matrix\nocturne-v1
+          python tools\sslab\sslab.py proof --profile nocturne.reference.v0 --path v2 --output-dir out\ci\proof-kernel\matrix\nocturne-v2
+          python tools\sslab\sslab.py proof --profile ricochet.reference.v1 --path v1 --output-dir out\ci\proof-kernel\matrix\ricochet-v1
+          python tools\sslab\sslab.py proof --profile ricochet.reference.v1 --path v2 --output-dir out\ci\proof-kernel\matrix\ricochet-v2
           python tools\sslab\sslab.py profile --product nocturne --preset observatory_night --width 96 --height 54 --seed 1536 --frames 8 --delta-ms 100 --iterations 3 --short-soak-cycles 2 --output-dir out\ci\proof-kernel\matrix\nocturne-profile
           python tools\sslab\sslab.py profile --product ricochet --preset classic_clean --width 128 --height 72 --seed 2048 --frames 32 --delta-ms 100 --iterations 3 --short-soak-cycles 2 --output-dir out\ci\proof-kernel\matrix\ricochet-profile
+
+      - name: Run CI portable v2 equivalence
+        run: >
+          python tools\sslab\sslab_equivalence.py
+          --output out\ci\proof-kernel\matrix\portable-v2-equivalence.json
+          --work-root out\ci\proof-kernel\matrix\portable-v2-equivalence-captures
 
       - name: Compose CI Ricochet Proof Bundle v1
         run: >
           python tools\proofbundle\proofbundle.py normalize
-          --proof out\ci\proof-kernel\matrix\ricochet\profile-proof.json
+          --proof out\ci\proof-kernel\matrix\ricochet-v2\profile-proof.json
           --performance out\ci\proof-kernel\matrix\ricochet-profile\profile.json
+          --portable-v2-equivalence out\ci\proof-kernel\matrix\portable-v2-equivalence.json
           --output out\ci\proof-kernel\matrix\ricochet-proof-bundle-v1.json
 
       - name: Upload proof-kernel evidence
@@ -153,12 +206,14 @@ jobs:
           python tools/project_adapter/screensave_project.py capabilities > out/ci/project-adapter/capabilities.json
           python tools/project_adapter/screensave_project.py catalog > out/ci/project-adapter/catalog.json
           python tools/project_adapter/screensave_project.py validate > out/ci/project-adapter/validate.json
+          python tools/project_adapter/screensave_project.py validate --tier T2 > out/ci/project-adapter/validate-t2.json
           python tools/project_adapter/screensave_project.py build --invocation-id ci-build --profile windows-current-x86 --dry-run > out/ci/project-adapter/build.json
 
       - name: Run contained render and compare adapter commands
         run: |
           python tools/project_adapter/screensave_project.py render --invocation-id ci-render > out/ci/project-adapter/render.json
           python tools/project_adapter/screensave_project.py compare --invocation-id ci-compare --actual out/aide/screensave-project-adapter/invocations/render/ci-render/capture.ppm > out/ci/project-adapter/compare.json
+          python tools/project_adapter/screensave_project.py equivalence --invocation-id ci-portable-v2-equivalence > out/ci/project-adapter/equivalence.json
 
       - name: Upload adapter receipts
         if: always()
@@ -170,6 +225,7 @@ jobs:
             out/aide/screensave-project-adapter/invocations/build/ci-build
             out/aide/screensave-project-adapter/invocations/render/ci-render
             out/aide/screensave-project-adapter/invocations/compare/ci-compare
+            out/aide/screensave-project-adapter/invocations/equivalence/ci-portable-v2-equivalence
           if-no-files-found: error
 
   windows-native-current-x86:
@@ -213,16 +269,21 @@ jobs:
       - name: Run Windows adapter proof
         run: |
           New-Item -ItemType Directory -Force out\ci\windows-current-proof | Out-Null
-          python tools\project_adapter\screensave_project.py proof --invocation-id windows-current-nocturne > out\ci\windows-current-proof\adapter-proof-receipt.json
+          python tools\project_adapter\screensave_project.py proof --invocation-id windows-current-nocturne-v1 --profile nocturne.reference.v0 --path v1 > out\ci\windows-current-proof\adapter-proof-nocturne-v1.json
+          python tools\project_adapter\screensave_project.py proof --invocation-id windows-current-nocturne-v2 --profile nocturne.reference.v0 --path v2 > out\ci\windows-current-proof\adapter-proof-nocturne-v2.json
+          python tools\project_adapter\screensave_project.py proof --invocation-id windows-current-ricochet-v1 --profile ricochet.reference.v1 --path v1 > out\ci\windows-current-proof\adapter-proof-ricochet-v1.json
+          python tools\project_adapter\screensave_project.py proof --invocation-id windows-current-ricochet-v2 --profile ricochet.reference.v1 --path v2 > out\ci\windows-current-proof\adapter-proof-ricochet-v2.json
+          python tools\project_adapter\screensave_project.py equivalence --invocation-id windows-current-portable-v2-equivalence > out\ci\windows-current-proof\adapter-equivalence.json
 
       - name: Normalize Windows Proof Bundle v1
         run: >
           python tools\proofbundle\proofbundle.py normalize
-          --proof out\aide\screensave-project-adapter\invocations\proof\windows-current-nocturne\proof.json
-          --comparison out\aide\screensave-project-adapter\invocations\proof\windows-current-nocturne\comparison.json
-          --pe-audit-json out\aide\screensave-project-adapter\invocations\proof\windows-current-nocturne\pe-audit.json
+          --proof out\aide\screensave-project-adapter\invocations\proof\windows-current-ricochet-v2\proof.json
+          --comparison out\aide\screensave-project-adapter\invocations\proof\windows-current-ricochet-v2\comparison.json
+          --pe-audit-json out\aide\screensave-project-adapter\invocations\proof\windows-current-ricochet-v2\pe-audit.json
           --build-receipt out\ci\windows-current-x86\build-receipt.json
-          --adapter-receipt out\aide\screensave-project-adapter\invocations\proof\windows-current-nocturne\adapter-proof.json
+          --adapter-receipt out\aide\screensave-project-adapter\invocations\proof\windows-current-ricochet-v2\adapter-proof.json
+          --portable-v2-equivalence out\aide\screensave-project-adapter\invocations\equivalence\windows-current-portable-v2-equivalence\portable-v2-equivalence.json
           --output out\ci\windows-current-proof\proof-bundle-v1.json
 
       - name: Upload native Windows build evidence
@@ -234,6 +295,10 @@ jobs:
             out\ci\windows-current-x86
             out\ci\windows-current-tools
             out\ci\windows-current-proof
-            out\aide\screensave-project-adapter\invocations\proof\windows-current-nocturne
+            out\aide\screensave-project-adapter\invocations\proof\windows-current-nocturne-v1
+            out\aide\screensave-project-adapter\invocations\proof\windows-current-nocturne-v2
+            out\aide\screensave-project-adapter\invocations\proof\windows-current-ricochet-v1
+            out\aide\screensave-project-adapter\invocations\proof\windows-current-ricochet-v2
+            out\aide\screensave-project-adapter\invocations\equivalence\windows-current-portable-v2-equivalence
             out\msvc\vs2022\Release
           if-no-files-found: error
