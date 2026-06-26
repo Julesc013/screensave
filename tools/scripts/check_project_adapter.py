@@ -162,6 +162,22 @@ def main() -> int:
         require("screensave.bundle.ricochet.reference-v1.v1" in names, "capabilities must include screensave.bundle.ricochet.reference-v1.v1.", errors)
         require("screensave.bundle.ricochet.reference-v1.v2" in names, "capabilities must include screensave.bundle.ricochet.reference-v1.v2.", errors)
         require("screensave.bundle.plasma-v2.reference-preview.v2" in names, "capabilities must include screensave.bundle.plasma-v2.reference-preview.v2.", errors)
+        require("screensave.plasma.v2.stable-candidate.check" in names, "capabilities must include screensave.plasma.v2.stable-candidate.check.", errors)
+        require("screensave.plasma.v2.package-stage.check" in names, "capabilities must include screensave.plasma.v2.package-stage.check.", errors)
+        require("screensave.plasma.v2.manager-preview.check" in names, "capabilities must include screensave.plasma.v2.manager-preview.check.", errors)
+        require("screensave.plasma.v2.release-readiness.check" in names, "capabilities must include screensave.plasma.v2.release-readiness.check.", errors)
+        require("screensave.aide.workunits.check" in names, "capabilities must include screensave.aide.workunits.check.", errors)
+        require("screensave.aide.repairs.check" in names, "capabilities must include screensave.aide.repairs.check.", errors)
+        require("screensave.aide.agentic.check" in names, "capabilities must include screensave.aide.agentic.check.", errors)
+        for forbidden_capability in (
+            "screensave.command",
+            "screensave.run",
+            "screensave.exec",
+            "screensave.release.publish",
+            "screensave.promote.stable",
+            "screensave.agent.apply",
+        ):
+            require(forbidden_capability not in names, f"capabilities must not include {forbidden_capability}.", errors)
         require(
             capabilities.get("payload", {}).get("output_root") == "out/aide/screensave-project-adapter/invocations",
             "capabilities must expose the contained invocation output root.",

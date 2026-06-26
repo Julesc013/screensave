@@ -72,6 +72,13 @@ exact_capabilities = [
   "screensave.bundle.ricochet.reference-v1.v1",
   "screensave.bundle.ricochet.reference-v1.v2",
   "screensave.bundle.plasma-v2.reference-preview.v2",
+  "screensave.plasma.v2.stable-candidate.check",
+  "screensave.plasma.v2.package-stage.check",
+  "screensave.plasma.v2.manager-preview.check",
+  "screensave.plasma.v2.release-readiness.check",
+  "screensave.aide.workunits.check",
+  "screensave.aide.repairs.check",
+  "screensave.aide.agentic.check",
 ]
 
 [[capabilities]]
@@ -198,6 +205,41 @@ command = ["python", "tools/project_adapter/screensave_project.py", "bundle", "-
 name = "screensave.bundle.plasma-v2.reference-preview.v2"
 status = "screensave-side-admitted-contained-output"
 command = ["python", "tools/project_adapter/screensave_project.py", "bundle", "--invocation-id", "<safe-id>", "--profile", "plasma.v2.reference.preview", "--path", "v2"]
+
+[[capabilities]]
+name = "screensave.plasma.v2.stable-candidate.check"
+status = "screensave-side-admitted-contained-output"
+command = ["python", "tools/scripts/check_plasma_v2_stable_candidate.py"]
+
+[[capabilities]]
+name = "screensave.plasma.v2.package-stage.check"
+status = "screensave-side-admitted-contained-output"
+command = ["python", "tools/scripts/check_plasma_v2_package_stage.py"]
+
+[[capabilities]]
+name = "screensave.plasma.v2.manager-preview.check"
+status = "screensave-side-admitted-contained-output"
+command = ["python", "tools/scripts/check_manager_pack_preview.py"]
+
+[[capabilities]]
+name = "screensave.plasma.v2.release-readiness.check"
+status = "screensave-side-admitted-contained-output"
+command = ["python", "tools/scripts/check_plasma_v2_release_readiness.py"]
+
+[[capabilities]]
+name = "screensave.aide.workunits.check"
+status = "screensave-side-admitted-contained-output"
+command = ["python", "tools/scripts/check_aide_workunits.py"]
+
+[[capabilities]]
+name = "screensave.aide.repairs.check"
+status = "screensave-side-admitted-contained-output"
+command = ["python", "tools/scripts/check_repair_queue.py"]
+
+[[capabilities]]
+name = "screensave.aide.agentic.check"
+status = "screensave-side-admitted-contained-output"
+command = ["python", "tools/scripts/check_agentic_policy.py"]
 
 [refusals]
 source_patch_preview = "later"

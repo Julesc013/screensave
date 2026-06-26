@@ -317,6 +317,90 @@
       "input_policy": "fixed catalog profile plasma.v2.reference.preview on path v2",
       "timeout_seconds": 180,
       "state_probe": "proof-bundle-v1.json, profile-proof.json, adapter-proof.json, and artifact manifest"
+    },
+    {
+      "name": "screensave.plasma.v2.stable-candidate.check",
+      "command": "validate",
+      "effect": "run the fixed Plasma v2 stable-candidate checker",
+      "deterministic": true,
+      "argv": ["python", "tools/scripts/check_plasma_v2_stable_candidate.py"],
+      "decoder_schema": "tools/project_adapter/receipt_schemas.json#/commands/validate",
+      "output_policy": "stdout text and deterministic report refresh only",
+      "input_policy": "committed Plasma v2 stable-candidate evidence",
+      "timeout_seconds": 240,
+      "state_probe": "validation/captures/plasma-v2/stable-candidate/gate-report.json"
+    },
+    {
+      "name": "screensave.plasma.v2.package-stage.check",
+      "command": "validate",
+      "effect": "run the fixed Plasma v2 package-stage checker",
+      "deterministic": true,
+      "argv": ["python", "tools/scripts/check_plasma_v2_package_stage.py"],
+      "decoder_schema": "tools/project_adapter/receipt_schemas.json#/commands/validate",
+      "output_policy": "stdout text and ignored stage summary under out/",
+      "input_policy": "packaging/windows/plasma-v2-preview committed package-stage refs",
+      "timeout_seconds": 120,
+      "state_probe": "packaging/windows/plasma-v2-preview/manifest.toml"
+    },
+    {
+      "name": "screensave.plasma.v2.manager-preview.check",
+      "command": "validate",
+      "effect": "run the fixed Manager Plasma v2 pack preview checker",
+      "deterministic": true,
+      "argv": ["python", "tools/scripts/check_manager_pack_preview.py"],
+      "decoder_schema": "tools/project_adapter/receipt_schemas.json#/commands/validate",
+      "output_policy": "stdout text only",
+      "input_policy": "products/apps/suite Manager preview source and smoke test",
+      "timeout_seconds": 120,
+      "state_probe": "products/apps/suite/src/manager_pack_preview.c"
+    },
+    {
+      "name": "screensave.plasma.v2.release-readiness.check",
+      "command": "validate",
+      "effect": "run the fixed Plasma v2 release-readiness checker",
+      "deterministic": true,
+      "argv": ["python", "tools/scripts/check_plasma_v2_release_readiness.py"],
+      "decoder_schema": "tools/project_adapter/receipt_schemas.json#/commands/validate",
+      "output_policy": "stdout text and deterministic report refresh only",
+      "input_policy": "committed Plasma v2 release-readiness evidence",
+      "timeout_seconds": 300,
+      "state_probe": "validation/captures/plasma-v2/release-readiness/gate-report.json"
+    },
+    {
+      "name": "screensave.aide.workunits.check",
+      "command": "validate",
+      "effect": "run the fixed ScreenSave AIDE WorkUnit checker",
+      "deterministic": true,
+      "argv": ["python", "tools/scripts/check_aide_workunits.py"],
+      "decoder_schema": "tools/project_adapter/receipt_schemas.json#/commands/validate",
+      "output_policy": "stdout text only",
+      "input_policy": ".aide/work_units/index.toml and templates",
+      "timeout_seconds": 60,
+      "state_probe": ".aide/work_units/index.toml"
+    },
+    {
+      "name": "screensave.aide.repairs.check",
+      "command": "validate",
+      "effect": "run the fixed ScreenSave AIDE repair queue checker",
+      "deterministic": true,
+      "argv": ["python", "tools/scripts/check_repair_queue.py"],
+      "decoder_schema": "tools/project_adapter/receipt_schemas.json#/commands/validate",
+      "output_policy": "stdout text only",
+      "input_policy": ".aide/repairs/index.toml and templates",
+      "timeout_seconds": 60,
+      "state_probe": ".aide/repairs/index.toml"
+    },
+    {
+      "name": "screensave.aide.agentic.check",
+      "command": "validate",
+      "effect": "run the fixed ScreenSave AIDE proposal-only agentic policy checker",
+      "deterministic": true,
+      "argv": ["python", "tools/scripts/check_agentic_policy.py"],
+      "decoder_schema": "tools/project_adapter/receipt_schemas.json#/commands/validate",
+      "output_policy": "stdout text and ignored proposal receipts under out/",
+      "input_policy": ".aide/agentic policy and schemas",
+      "timeout_seconds": 60,
+      "state_probe": ".aide/agentic/policy.toml"
     }
   ],
   "refusal_codes": [
