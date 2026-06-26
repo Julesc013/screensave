@@ -49,11 +49,13 @@
   <Import Project="saver_target_common.props" />
   <ItemGroup>
     <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_config.c" />
+    <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_core.c" />
     <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_module.c" />
     <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_presets.c" />
     <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_render.c" />
     <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_sim.c" />
     <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_themes.c" />
+    <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_v1_adapter.c" />
     <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_entry.c" />
   </ItemGroup>
   <ItemGroup>

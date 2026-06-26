@@ -62,6 +62,7 @@
       "family": "quiet-utility-ambient",
       "files": {
         "headers": [
+          "products/savers/nocturne/src/nocturne_core.h",
           "products/savers/nocturne/src/nocturne_internal.h",
           "products/savers/nocturne/src/nocturne_resource.h",
           "products/savers/nocturne/src/nocturne_v2_adapter.h"
@@ -77,12 +78,14 @@
         ],
         "sources": [
           "products/savers/nocturne/src/nocturne_config.c",
+          "products/savers/nocturne/src/nocturne_core.c",
           "products/savers/nocturne/src/nocturne_entry.c",
           "products/savers/nocturne/src/nocturne_module.c",
           "products/savers/nocturne/src/nocturne_presets.c",
           "products/savers/nocturne/src/nocturne_render.c",
           "products/savers/nocturne/src/nocturne_sim.c",
           "products/savers/nocturne/src/nocturne_themes.c",
+          "products/savers/nocturne/src/nocturne_v1_adapter.c",
           "products/savers/nocturne/src/nocturne_v2_adapter.c"
         ],
         "tests": [

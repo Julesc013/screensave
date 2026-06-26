@@ -20,6 +20,8 @@ SSLAB_CAPTURE = ROOT / "tools" / "sslab" / "src" / "capture.c"
 SSLAB_RENDERER_RGBA8 = ROOT / "tools" / "sslab" / "src" / "renderer_rgba8.c"
 NOCTURNE_SIM = ROOT / "products" / "savers" / "nocturne" / "src" / "nocturne_sim.c"
 NOCTURNE_RENDER = ROOT / "products" / "savers" / "nocturne" / "src" / "nocturne_render.c"
+NOCTURNE_CORE = ROOT / "products" / "savers" / "nocturne" / "src" / "nocturne_core.c"
+NOCTURNE_V1_ADAPTER = ROOT / "products" / "savers" / "nocturne" / "src" / "nocturne_v1_adapter.c"
 NOCTURNE_THEMES = ROOT / "products" / "savers" / "nocturne" / "src" / "nocturne_themes.c"
 NOCTURNE_PRESETS = ROOT / "products" / "savers" / "nocturne" / "src" / "nocturne_presets.c"
 
@@ -45,6 +47,8 @@ def compile_runner(output_exe: pathlib.Path) -> None:
             str(RUNNER),
             str(SSLAB_CAPTURE),
             str(SSLAB_RENDERER_RGBA8),
+            str(NOCTURNE_CORE),
+            str(NOCTURNE_V1_ADAPTER),
             str(NOCTURNE_SIM),
             str(NOCTURNE_RENDER),
             str(NOCTURNE_THEMES),
@@ -69,6 +73,8 @@ def main() -> int:
         SOFT_RENDERER,
         SSLAB_CAPTURE,
         SSLAB_RENDERER_RGBA8,
+        NOCTURNE_CORE,
+        NOCTURNE_V1_ADAPTER,
         NOCTURNE_SIM,
         NOCTURNE_RENDER,
         NOCTURNE_THEMES,

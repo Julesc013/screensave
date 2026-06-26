@@ -18,6 +18,8 @@ EXPECTED_IMPLEMENTATION_PATHS = [
     "tools/sslab/nocturne_canary_runner.c",
     "tools/sslab/src/capture.c",
     "tools/sslab/src/renderer_rgba8.c",
+    "products/savers/nocturne/src/nocturne_core.c",
+    "products/savers/nocturne/src/nocturne_v1_adapter.c",
     "products/savers/nocturne/src/nocturne_sim.c",
     "products/savers/nocturne/src/nocturne_render.c",
     "products/savers/nocturne/src/nocturne_themes.c",
@@ -227,8 +229,8 @@ def validate_committed_proof(errors: list[str]) -> None:
     require(proof.get("source", {}).get("dirty") is False, "Committed Nocturne proof must record a clean source state.", errors)
     require(git_commit_exists(source_commit), "Committed Nocturne proof source commit must exist in this repository.", errors)
     require(
-        proof.get("runtime", {}).get("runner_mode") == "compiled-product-session",
-        "Committed Nocturne proof must use the compiled product-session runner.",
+        proof.get("runtime", {}).get("runner_mode") in ("compiled-product-session", "generic-libsslab-proof"),
+        "Committed Nocturne proof must use a product-session proof runner.",
         errors,
     )
     require(
@@ -247,13 +249,23 @@ def validate_committed_proof(errors: list[str]) -> None:
                 errors,
             )
     require(
+        "products/savers/nocturne/src/nocturne_core.c" in implementation_paths,
+        "Committed Nocturne proof must record the Nocturne portable core source digest.",
+        errors,
+    )
+    require(
+        "products/savers/nocturne/src/nocturne_v1_adapter.c" in implementation_paths,
+        "Committed Nocturne proof must record the Nocturne v1 adapter source digest.",
+        errors,
+    )
+    require(
         "products/savers/nocturne/src/nocturne_sim.c" in implementation_paths,
-        "Committed Nocturne proof must record the Nocturne simulation source digest.",
+        "Committed Nocturne proof must record the Nocturne legacy simulation source slot digest.",
         errors,
     )
     require(
         "products/savers/nocturne/src/nocturne_render.c" in implementation_paths,
-        "Committed Nocturne proof must record the Nocturne render source digest.",
+        "Committed Nocturne proof must record the Nocturne legacy render source slot digest.",
         errors,
     )
 

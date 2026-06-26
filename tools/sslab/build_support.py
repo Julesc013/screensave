@@ -26,6 +26,8 @@ LIBSSLAB_SOURCES = [
     SSLAB_SRC / "diag_stub.c",
     SSLAB_SRC / "products" / "nocturne_adapter.c",
     SSLAB_SRC / "products" / "ricochet_adapter.c",
+    NOCTURNE_SRC / "nocturne_core.c",
+    NOCTURNE_SRC / "nocturne_v1_adapter.c",
     NOCTURNE_SRC / "nocturne_sim.c",
     NOCTURNE_SRC / "nocturne_render.c",
     NOCTURNE_SRC / "nocturne_v2_adapter.c",
