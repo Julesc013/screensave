@@ -1,6 +1,6 @@
 schema_version = 1
 state_id = "truth-proof-baseline-00"
-as_of = "2026-06-25"
+as_of = "2026-06-26"
 
 [authority]
 current_truth = "truth-proof-baseline"
@@ -22,6 +22,7 @@ project_adapter = "tools/project_adapter/screensave_project.py"
 build_controller = "tools/buildctl/screensave_build.py"
 aide_pilot = ".aide/pilot.toml"
 aide_lite_lock = ".aide/aide_lite.lock.toml"
+aide_profile = ".aide/profile.yaml"
 aide_integration_plan = "docs/roadmap/aide-to-screensave-integration-plan.md"
 visual_intent_contract = "contracts/visual_intent_v1.md"
 
@@ -163,6 +164,40 @@ artifact_profile_audit_roots = "tools/project_adapter/artifact_profile_audit_roo
 commands = ["status", "capabilities", "catalog", "validate", "build", "render", "compare", "audit", "proof"]
 output_root = "out/aide/screensave-project-adapter/invocations"
 policy = "project-owned adapter for AIDE-compatible coordination; fixed capabilities, fixed build profiles, contained generated-output roots under out/aide, artifact-profile audit roots, typed refusals, and no source mutation, merge, release, compatibility certification, or artistic acceptance"
+
+[aide_lite]
+status = "aide-lite-operational"
+admitted_commit = "492faa4f1a8280ba67954aa4fc252e79f2e19c15"
+latest_observed_head = "dd3f47ea0b4d90f86ca6b4ae93b06aae81cb54f1"
+latest_observed_head_subject = "audit(queue): check distribution manifest v1"
+import_mode = "safe"
+runtime_mode = "external-sidecar-only"
+source_mutation_allowed = false
+automatic_merge_allowed = false
+general_worker_admitted = false
+distribution_manifest_v1_status = "unaccepted"
+distribution_manifest_v1_open_material_findings = 9
+pack_manifest_sha256 = "E02EFBB64036F0E73AF2856EE6066B1B6D4945C490EE0788FA1352A4DB371B4B"
+pack_source_dirty_state = true
+pack_source_dirty_reason = "The accepted export-pack implementation only writes to the committed .aide/export path, so regenerating the pack at 492faa4 records dirty provenance even from a clean disposable worktree."
+import_operation_count = 850
+import_conflicts = 0
+import_skipped = 16
+accepted_capability_baseline = "AIDE Lite governance, context, repo intelligence, and review plus the accepted local Service, trust-enforcement, and durable WorkerRun fixture slice in AIDE; ScreenSave does not admit a general worker."
+import_scope = [
+  ".aide portable tooling, schemas, templates, and policies",
+  ".aide.local.example target-local state template",
+  "docs/reference AIDE guidance",
+  "managed AGENTS.md portable guidance section",
+  ".gitignore .aide.local ignore rule",
+]
+safe_mode_excluded_roots = ["core/apply", "core/gateway", "core/providers"]
+
+[aide_lite.layers]
+lite_governance = "admitted"
+fixed_capability_invocation = "screensave-local-bindings-admitted"
+local_service_trust_evidence = "screensave-capability-invocation-slice-planned"
+general_worker = "blocked"
 
 [queues]
 status = "historical-superseded"

@@ -1,0 +1,29 @@
+schema_version: aide.profile.template.v0
+profile_id: screensave
+project_name: screensave
+generated_from: aide-lite-pack-v0
+status: operational
+purpose: ScreenSave-local AIDE Lite operational profile with external-sidecar-only boundaries.
+current_focus:
+  phase: paw-cx
+  primary_goal: Use imported AIDE Lite governance, context, repo intelligence, and review workflows around ScreenSave while keeping fixed capability invocation bounded and ScreenSave-owned.
+  next_task: Repair the ScreenSave-local AIDE bootstrap, controller, and token-ledger loop once the stabilization stack is committed cleanly.
+deferred_surfaces:
+  - Gateway forwarding, provider/model calls, UI, runtime, and autonomous loops remain deferred.
+  - General coding workers, preview/apply, and automatic merge remain blocked.
+runtime:
+  gateway_forwarding: deferred
+  provider_calls: forbidden_until_reviewed_phase
+  model_calls: forbidden_until_reviewed_phase
+  source_mutation: forbidden
+  merge_automation: forbidden
+  execution_mode: external-sidecar-only
+local_state:
+  root: .aide.local/
+  committed: false
+notes: >
+  ScreenSave admits the AIDE Lite pack pinned at
+  492faa4f1a8280ba67954aa4fc252e79f2e19c15 through safe import. AIDE remains
+  optional to ScreenSave runtime products, fixed ScreenSave capability bindings
+  are usable locally now, and AIDE may not become a source-editing worker
+  inside this repository without later reviewed gates.

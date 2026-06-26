@@ -3,7 +3,7 @@ id = "SS-TRUTH-000"
 title = "Truth and proof baseline"
 status = "active"
 owner = "repo"
-mode = "report-only"
+mode = "aide-lite-operational"
 
 [goal]
 summary = "Keep current ScreenSave truth, compatibility evidence, artifact profiles, and validator entry points aligned before larger portability work begins."

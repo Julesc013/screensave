@@ -1,8 +1,8 @@
 # AIDE To ScreenSave Integration Plan
 
-Status: active supporting development plan.
+Status: active supporting operational development plan.
 
-Date: 2026-06-25.
+Date: 2026-06-26.
 
 Primary contract: [../../contracts/project_adapter_v0.md](../../contracts/project_adapter_v0.md).
 
@@ -26,6 +26,21 @@ ScreenSave proof bundles preserve domain meaning.
 AIDE records and coordinates evidence.
 Saver binaries never depend on AIDE.
 ```
+
+## Current Operational Boundary
+
+ScreenSave now runs with an admitted AIDE Lite operational safe import pinned to
+`492faa4f1a8280ba67954aa4fc252e79f2e19c15`.
+
+That means:
+
+- governance, context, repo intelligence, and review are admitted now
+- fixed ScreenSave capabilities remain ScreenSave-side admitted now
+- ScreenSave-local fixed capability bindings are usable now and do not wait on
+  DistributionManifest v1
+- canonical AIDE-repository bridge acceptance can remain serialized separately
+- source mutation, preview/apply, automatic merge, and a general coding worker
+  remain blocked
 
 ## Command Class Split
 
@@ -119,18 +134,25 @@ facts are not compatibility certification.
 
 | Integration | ScreenSave-side status |
 | --- | --- |
-| Report-only AIDE pilot | ready-now |
+| AIDE Lite operational safe import | ready-now |
 | Pinned AIDE Lite profile | ready-now |
-| Read-only deterministic commands | admitted-now |
+| ScreenSave-side deterministic commands | admitted-now |
 | Fixed current-Windows build commands | admitted-now-contained |
 | Contained generated proof commands | admitted-now-contained |
+| ScreenSave-local deterministic bridge bindings | ready-now |
+| Canonical AIDE bridge acceptance | serialized outside this repository |
 | Coding-agent data-pack proposal | later |
-| Source patch preview/apply | substantially-later |
+| Source patch preview/apply | blocked |
 | Automatic product promotion or release | deliberately-excluded |
 
 External AIDE-side runtime admission remains outside this repository. This
 repository can expose a safe ScreenSave-owned bridge; it cannot certify an
 external worker host.
+
+DistributionManifest v1 remains relevant only to AIDE self-update and automatic
+target-update machinery. It does not logically block ScreenSave-local AIDE Lite
+governance, ScreenSave-owned fixed capability bindings, or portable v2 work in
+this repository.
 
 ## First Worker Canary
 

@@ -1,12 +1,14 @@
 schema_version = 1
 lock_id = "screensave-aide-lite-lock-00"
 as_of = "2026-06-26"
-status = "safe-pack-vendored"
-install_level = "L0 AIDE Lite safe pack vendor"
+status = "aide-lite-operational"
+install_level = "L1 AIDE Lite operational safe import"
 import_mode = "safe"
+runtime_mode = "external-sidecar-only"
 runtime_dependency_allowed = false
 product_runtime_dependency_allowed = false
 automatic_merge_allowed = false
+source_mutation_allowed = false
 
 [source]
 repository = "https://github.com/Julesc013/aide"
@@ -15,6 +17,7 @@ latest_observed_head = "dd3f47ea0b4d90f86ca6b4ae93b06aae81cb54f1"
 latest_observed_head_subject = "audit(queue): check distribution manifest v1"
 resolution_command = "git ls-remote https://github.com/Julesc013/aide.git HEAD"
 resolution_kind = "public-head-snapshot"
+accepted_capability_baseline = "AIDE Lite governance, context, repo intelligence, and review plus the accepted local Service, trust-enforcement, and durable WorkerRun fixture slice in AIDE; ScreenSave does not admit a general worker."
 
 [pack]
 pack_id = "aide-lite-pack-v0"
@@ -34,6 +37,13 @@ imported_paths = [
 ]
 safe_mode_excluded_roots = ["core/apply", "core/gateway", "core/providers"]
 
+[distribution_manifest_v1]
+status = "unaccepted"
+open_material_findings = 9
+update_protocol_admitted = false
+automatic_update_allowed = false
+note = "Record the current AIDE DistributionManifest v1 as unaccepted for self-update and automatic target-update machinery while ScreenSave-local capability bindings proceed separately."
+
 [screen_save_boundary]
 project_truth_owner = "ScreenSave"
 adapter_contract = "contracts/project_adapter_v0.md"
@@ -45,8 +55,8 @@ worker_runtime_required = false
 
 [limits]
 notes = [
-  "This lock records the vendored AIDE Lite safe-pack identity and import record.",
+  "This lock records the admitted AIDE Lite source identity for ScreenSave-side operational use.",
   "It does not vendor AIDE into ScreenSave runtime products.",
   "It does not make AIDE required for ScreenSave builds, tests, savers, Workbench, Manager, packaging, or releases.",
-  "Operational admission, source-mutation boundaries, and worker controls are recorded separately in the ScreenSave pilot and bridge profile.",
+  "General coding-agent worker sessions, source mutation, preview/apply, and automatic merge remain blocked.",
 ]

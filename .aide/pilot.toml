@@ -1,11 +1,14 @@
 schema_version = 1
 pilot_id = "screensave-aide-pilot-00"
-as_of = "2026-06-25"
-status = "report-only"
-source_strategy = "pinned-lite-lock"
+as_of = "2026-06-26"
+status = "aide-lite-operational"
+source_strategy = "pinned-lite-safe-import"
+import_mode = "safe"
+runtime_mode = "external-sidecar-only"
 runtime_dependency_allowed = false
 automatic_merging_allowed = false
 product_runtime_dependency_allowed = false
+source_mutation_allowed = false
 
 [authority]
 project_state = "PROJECT_STATE.toml"
@@ -13,12 +16,15 @@ version_manifest = "VERSION.toml"
 product_catalog = "catalog/products.toml"
 artifact_profiles = "catalog/artifact_profiles.toml"
 aide_lite_lock = ".aide/aide_lite.lock.toml"
+aide_profile = ".aide/profile.yaml"
+aide_guidance = ".aide/guidance/codex.md"
 project_bridge_profile = ".aide/project_bridge_profile.toml"
 integration_plan = "docs/roadmap/aide-to-screensave-integration-plan.md"
 historical_codex_queues = ".codex/queues"
 
 [scope]
 allowed = [
+  "AIDE Lite governance, context, repo intelligence, and review",
   "line-ending policy",
   "project-state authority",
   "public release truth",
@@ -27,9 +33,12 @@ allowed = [
   "catalog design",
   "validator repair",
   "proof-kernel evidence ingestion",
+  "tool inventory and wrap-plan mapping without execution, rename, or deletion",
   "deterministic project bridge profiling",
 ]
 excluded = [
+  "general coding worker",
+  "source mutation",
   "automatic merging",
   "automatic promotion",
   "runtime product dependency",
@@ -38,6 +47,22 @@ excluded = [
   "public compatibility widening without evidence",
   "ScreenSave proof-kernel ownership transfer",
 ]
+
+[layers.lite_governance]
+status = "admitted-now"
+details = "Governance, context, repo intelligence, evaluation, and review packets run locally from the imported AIDE Lite pack."
+
+[layers.fixed_capability_invocation]
+status = "screensave-local-bindings-admitted"
+details = "ScreenSave already exposes fixed project adapter capabilities locally; canonical AIDE-repository bridge acceptance remains serialized separately and is not blocked by DistributionManifest v1."
+
+[layers.local_service_trust_evidence]
+status = "accepted-aide-components-screensave-generalization-pending"
+details = "Accepted AIDE local Service, trust, idempotency, EvidencePacket, and EventRecord components may only be reused through a ScreenSave-specific capability-invocation slice."
+
+[layers.general_worker]
+status = "blocked"
+details = "No source-editing worker, preview/apply, or automatic merge is admitted."
 
 [validators]
 state = "tools/scripts/check_project_state.py"

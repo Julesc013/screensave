@@ -17,8 +17,8 @@ This baseline makes the current authority explicit:
   undifferentiated support claim
 - build and proof validators must check the current tree rather than stale
   source lists
-- AIDE may govern development evidence in report-only mode, but products must
-  not depend on it
+- AIDE may govern development evidence in bounded operational mode, but
+  products must not depend on it and source mutation remains blocked
 
 ## Canonical State File
 
@@ -43,9 +43,9 @@ Artifact-profile authority is [`../../catalog/artifact_profiles.toml`](../../cat
 That catalog is the first step toward generated build, packaging, Manager,
 Anthology, Workbench, SDK, and documentation surfaces.
 
-The report-only AIDE pilot is [`../../.aide/pilot.toml`](../../.aide/pilot.toml).
+The AIDE Lite operational profile is [`../../.aide/pilot.toml`](../../.aide/pilot.toml).
 It may coordinate WorkUnits and evidence packets, but it must not become a
-runtime dependency or automatic merge authority.
+runtime dependency, source-mutation authority, or automatic merge authority.
 
 ## Evidence Classes
 

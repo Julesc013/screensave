@@ -1,6 +1,6 @@
 # AIDE Control Plane
 
-Purpose: report-only development governance for ScreenSave.
+Purpose: bounded AIDE Lite operational governance for ScreenSave.
 
 The `.aide/` tree may record:
 
@@ -18,11 +18,12 @@ It must not become:
 - a replacement for `PROJECT_STATE.toml`, `VERSION.toml`, `specs/`, or validators
 
 The current pilot is [`pilot.toml`](pilot.toml).
-The current report-only AIDE Lite pin is [`aide_lite.lock.toml`](aide_lite.lock.toml).
+The current AIDE Lite operational pin is [`aide_lite.lock.toml`](aide_lite.lock.toml).
 The current AIDE-to-ScreenSave integration plan is
 [`../docs/roadmap/aide-to-screensave-integration-plan.md`](../docs/roadmap/aide-to-screensave-integration-plan.md).
 The current deterministic project bridge profile is
 [`project_bridge_profile.toml`](project_bridge_profile.toml).
+The current target-local AIDE profile is [`profile.yaml`](profile.yaml).
 Local transient state belongs in `.aide.local/`, which is ignored.
 
 Type: development control plane.

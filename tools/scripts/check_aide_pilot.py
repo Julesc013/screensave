@@ -1,4 +1,4 @@
-"""Validate the report-only AIDE pilot control plane."""
+"""Validate the bounded AIDE Lite operational control plane."""
 
 from __future__ import annotations
 
@@ -22,6 +22,7 @@ REQUIRED_PATHS = [
     PILOT_PATH,
     AIDE_LITE_LOCK_PATH,
     BRIDGE_PROFILE_PATH,
+    ROOT / ".aide" / "profile.yaml",
     INTEGRATION_PLAN_PATH,
     ROOT / ".aide" / "work_units" / "truth-proof-baseline.toml",
     ROOT / ".aide" / "evidence_packets" / "README.md",
@@ -73,11 +74,14 @@ def main() -> int:
 
     pilot = load_toml(PILOT_PATH)
     require(pilot.get("schema_version") == 1, ".aide/pilot.toml schema_version must be 1.", errors)
-    require(pilot.get("status") == "report-only", ".aide/pilot.toml status must remain report-only.", errors)
-    require(pilot.get("source_strategy") == "pinned-lite-lock", ".aide/pilot.toml source_strategy must be pinned-lite-lock.", errors)
+    require(pilot.get("status") == "aide-lite-operational", ".aide/pilot.toml status must remain aide-lite-operational.", errors)
+    require(pilot.get("source_strategy") == "pinned-lite-safe-import", ".aide/pilot.toml source_strategy must be pinned-lite-safe-import.", errors)
+    require(pilot.get("import_mode") == "safe", ".aide/pilot.toml import_mode must remain safe.", errors)
+    require(pilot.get("runtime_mode") == "external-sidecar-only", ".aide/pilot.toml runtime_mode must remain external-sidecar-only.", errors)
     require(pilot.get("runtime_dependency_allowed") is False, "AIDE runtime dependency must be disabled.", errors)
     require(pilot.get("automatic_merging_allowed") is False, "AIDE automatic merging must be disabled.", errors)
     require(pilot.get("product_runtime_dependency_allowed") is False, "AIDE product runtime dependency must be disabled.", errors)
+    require(pilot.get("source_mutation_allowed") is False, "AIDE source mutation must be disabled.", errors)
 
     for label, value in pilot.get("authority", {}).items():
         require_path(value, f"authority.{label}", errors)
@@ -90,15 +94,33 @@ def main() -> int:
 
     aide_lite_lock = load_toml(AIDE_LITE_LOCK_PATH)
     require(aide_lite_lock.get("schema_version") == 1, ".aide/aide_lite.lock.toml schema_version must be 1.", errors)
-    require(aide_lite_lock.get("status") == "pinned-report-only", ".aide/aide_lite.lock.toml must remain pinned-report-only.", errors)
+    require(aide_lite_lock.get("status") == "aide-lite-operational", ".aide/aide_lite.lock.toml must remain aide-lite-operational.", errors)
     require(
-        aide_lite_lock.get("source", {}).get("pinned_commit") == "6a94811b8befd2843aa99b25f4de5e1ee4c2e3fa",
+        aide_lite_lock.get("source", {}).get("pinned_commit") == "492faa4f1a8280ba67954aa4fc252e79f2e19c15",
         ".aide/aide_lite.lock.toml must pin the reviewed AIDE Lite commit.",
+        errors,
+    )
+    require(aide_lite_lock.get("import_mode") == "safe", ".aide/aide_lite.lock.toml import_mode must remain safe.", errors)
+    require(
+        aide_lite_lock.get("runtime_mode") == "external-sidecar-only",
+        ".aide/aide_lite.lock.toml runtime_mode must remain external-sidecar-only.",
         errors,
     )
     require(
         aide_lite_lock.get("runtime_dependency_allowed") is False,
         ".aide/aide_lite.lock.toml must not allow runtime dependency.",
+        errors,
+    )
+    require(aide_lite_lock.get("automatic_merge_allowed") is False, ".aide/aide_lite.lock.toml must not allow automatic merge.", errors)
+    require(aide_lite_lock.get("source_mutation_allowed") is False, ".aide/aide_lite.lock.toml must not allow source mutation.", errors)
+    require(
+        aide_lite_lock.get("pack", {}).get("manifest_sha256") == "E02EFBB64036F0E73AF2856EE6066B1B6D4945C490EE0788FA1352A4DB371B4B",
+        ".aide/aide_lite.lock.toml must record the regenerated pack manifest digest.",
+        errors,
+    )
+    require(
+        aide_lite_lock.get("distribution_manifest_v1", {}).get("status") == "unaccepted",
+        ".aide/aide_lite.lock.toml must record DistributionManifest v1 as unaccepted.",
         errors,
     )
 
@@ -107,8 +129,8 @@ def main() -> int:
     audit_roots = load_json(ARTIFACT_PROFILE_AUDIT_ROOTS)
     require(bridge_profile.get("schema_version") == 1, ".aide/project_bridge_profile.toml schema_version must be 1.", errors)
     require(
-        bridge_profile.get("status") == "report-only-ready",
-        ".aide/project_bridge_profile.toml must remain report-only-ready.",
+        bridge_profile.get("status") == "aide-lite-operational",
+        ".aide/project_bridge_profile.toml must remain aide-lite-operational.",
         errors,
     )
     for label, value in bridge_profile.get("authority", {}).items():
@@ -125,11 +147,10 @@ def main() -> int:
     require(bridge.get("automatic_merge_allowed") is False, "ScreenSave bridge must not allow automatic merge.", errors)
     require(bridge.get("worker_runtime_required") is False, "ScreenSave bridge must not require AIDE worker runtime.", errors)
     readiness = bridge_profile.get("readiness", {})
-    require(readiness.get("report_only_aide_pilot") == "ready-now", "report-only AIDE pilot must remain ready-now.", errors)
-    require(readiness.get("pinned_aide_lite_profile") == "ready-now", "pinned AIDE Lite profile must remain ready-now.", errors)
+    require(readiness.get("aide_lite_operational") == "ready-now", "AIDE Lite operational mode must remain ready-now.", errors)
     require(
-        readiness.get("read_only_deterministic_commands") == "screensave-side-admitted",
-        "read-only deterministic commands must be ScreenSave-side admitted.",
+        readiness.get("screen_save_fixed_capabilities") == "screensave-side-admitted",
+        "ScreenSave fixed capabilities must be ScreenSave-side admitted.",
         errors,
     )
     require(
@@ -137,10 +158,20 @@ def main() -> int:
         "contained generated proof commands must be ScreenSave-side admitted.",
         errors,
     )
+    require(
+        readiness.get("aide_side_deterministic_bridge") == "screensave-local-bindings-ready",
+        "AIDE-side deterministic bridge readiness must reflect ScreenSave-local bindings that are ready now.",
+        errors,
+    )
+    require(
+        bridge.get("aide_side_bridge_admission") == "canonical-aide-repo-acceptance-pending",
+        "bridge.aide_side_bridge_admission must preserve the separate canonical AIDE acceptance boundary.",
+        errors,
+    )
     require(readiness.get("coding_agent_data_pack_proposal") == "later", "coding-agent data-pack proposal must remain later.", errors)
     require(
-        readiness.get("source_patch_preview_apply") == "substantially-later",
-        "source patch preview/apply must remain substantially-later.",
+        readiness.get("source_patch_preview_apply") == "blocked",
+        "source patch preview/apply must remain blocked.",
         errors,
     )
     require(
@@ -204,8 +235,11 @@ def main() -> int:
     integration_plan = INTEGRATION_PLAN_PATH.read_text(encoding="utf-8") if INTEGRATION_PLAN_PATH.exists() else ""
     for needle in (
         "ScreenSave does not need to become an AIDE project.",
+        "AIDE Lite operational safe import",
         "Deterministic fixed command",
         "Worker session",
+        "ScreenSave-local fixed capability bindings are usable now",
+        "DistributionManifest v1 remains relevant only to AIDE self-update",
         "screensave.command",
         "Automatic product promotion or release",
         "deliberately-excluded",

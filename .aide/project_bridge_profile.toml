@@ -1,12 +1,16 @@
 schema_version = 1
 profile_id = "screensave-deterministic-project-bridge-v0"
-as_of = "2026-06-25"
-status = "report-only-ready"
+as_of = "2026-06-26"
+status = "aide-lite-operational"
 owner = "ScreenSave"
+import_mode = "safe"
+runtime_mode = "external-sidecar-only"
+source_mutation_allowed = false
 
 [authority]
 project_state = "PROJECT_STATE.toml"
 aide_lite_lock = ".aide/aide_lite.lock.toml"
+profile = ".aide/profile.yaml"
 adapter_contract = "contracts/project_adapter_v0.md"
 integration_plan = "docs/roadmap/aide-to-screensave-integration-plan.md"
 adapter_command = "tools/project_adapter/screensave_project.py"
@@ -24,16 +28,38 @@ compatibility_certification_allowed = false
 artistic_acceptance_allowed = false
 worker_runtime_required = false
 local_process_worker_required = false
+aide_side_bridge_admission = "canonical-aide-repo-acceptance-pending"
 
 [readiness]
-report_only_aide_pilot = "ready-now"
-pinned_aide_lite_profile = "ready-now"
-read_only_deterministic_commands = "screensave-side-admitted"
+aide_lite_operational = "ready-now"
+screen_save_fixed_capabilities = "screensave-side-admitted"
 contained_generated_proof_commands = "screensave-side-admitted"
+aide_side_deterministic_bridge = "screensave-local-bindings-ready"
+screen_save_durable_capability_invocation = "planned-after-aide-bridge"
 coding_agent_data_pack_proposal = "later"
-source_patch_preview_apply = "substantially-later"
+source_patch_preview_apply = "blocked"
 automatic_product_promotion_or_release = "deliberately-excluded"
 external_aide_runtime_admission = "outside-this-repository"
+
+[future_bridge]
+status = "planned"
+required_aide_tasks = [
+  "AIDE-BUILD-SCREENSAVE-DETERMINISTIC-BRIDGE-V1-01",
+  "AIDE-CHECK-SCREENSAVE-DETERMINISTIC-BRIDGE-V1-01",
+  "AIDE-ACCEPT-SCREENSAVE-DETERMINISTIC-BRIDGE-V1-01",
+]
+exact_capabilities = [
+  "screensave.project.status",
+  "screensave.project.capabilities",
+  "screensave.catalog.read",
+  "screensave.validation.core",
+  "screensave.build.windows-current-x86",
+  "screensave.build.windows-current-tools",
+  "screensave.proof.profile.nocturne",
+  "screensave.proof.profile.ricochet",
+  "screensave.proof.bundle.normalize",
+  "screensave.artifact.pe.audit",
+]
 
 [[capabilities]]
 name = "screensave.project.status"
