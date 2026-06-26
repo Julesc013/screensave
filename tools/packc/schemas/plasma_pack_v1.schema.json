@@ -1,0 +1,29 @@
+{
+  "schema": "screensave.pack.v1",
+  "kind": "screensave.plasma.v2",
+  "status": "bounded-data-only",
+  "required_top_level": [
+    "schema_version",
+    "pack_id",
+    "kind",
+    "product",
+    "name",
+    "license",
+    "provenance",
+    "proof_profile",
+    "plasma_spec_v2"
+  ],
+  "forbidden": [
+    "scripts",
+    "dlls",
+    "macros",
+    "commands",
+    "absolute_paths",
+    "parent_traversal"
+  ],
+  "bounds": {
+    "max_string_length": 96,
+    "max_expanded_bytes": 65536,
+    "max_output_files": 4
+  }
+}

@@ -243,7 +243,7 @@ claim_boundary = "Exact reference preview proof only; not stable promotion or ar
 id = "SS-PLV2-05"
 title = "packc Plasma skeleton"
 objective = "Compile bounded data-only Plasma v2 specs through packc."
-status = "pending"
+status = "implemented-local"
 selected_validation_tier = "T2"
 preflight_required = true
 postflight_required = true
@@ -271,6 +271,7 @@ expected_validators = [
 ]
 baseline_refs = [
   "contracts/plasma_spec_v2.md",
+  "contracts/pack_v1.md",
   "products/savers/plasma/content/v2/examples/plasma_lava_v2.toml",
 ]
 claim_boundary = "Data-only package compilation; no executable plugin or VisualIntent runtime."
