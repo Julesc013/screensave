@@ -122,8 +122,8 @@ typedef struct sslab_capture_receipt {
     sslab_u32 width;
     sslab_u32 height;
     char rgba_sha256[65];
-    const char *raw_rgba_path;
-    const char *review_ppm_path;
+    char raw_rgba_path[260];
+    char review_ppm_path[260];
 } sslab_capture_receipt;
 
 typedef struct sslab_lifecycle_receipt {

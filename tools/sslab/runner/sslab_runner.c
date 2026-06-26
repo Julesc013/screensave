@@ -147,6 +147,10 @@ static int runner_write_proof_json(
         runner_write_json_string(file, runner_status_name(captures[index].status));
         fprintf(file, ", \"rgba_sha256\": ");
         runner_write_json_string(file, captures[index].rgba_sha256);
+        fprintf(file, ", \"raw_rgba_path\": ");
+        runner_write_json_string(file, captures[index].raw_rgba_path);
+        fprintf(file, ", \"review_ppm_path\": ");
+        runner_write_json_string(file, captures[index].review_ppm_path);
         fprintf(file, " }%s\n", (index + 1U) < generated->capture_frame_count ? "," : "");
     }
     fprintf(file, "  ],\n");
@@ -154,7 +158,11 @@ static int runner_write_proof_json(
     fprintf(file, "    \"status\": ");
     runner_write_json_string(file, runner_status_name(lifecycle->status));
     fprintf(file, ",\n");
+    fprintf(file, "    \"create_session\": %lu,\n", lifecycle->create_session);
+    fprintf(file, "    \"resize_session\": %lu,\n", lifecycle->resize_session);
     fprintf(file, "    \"step_count\": %lu,\n", lifecycle->step_count);
+    fprintf(file, "    \"render_session\": %lu,\n", lifecycle->render_session);
+    fprintf(file, "    \"destroy_session\": %lu,\n", lifecycle->destroy_session);
     fprintf(file, "    \"create_destroy_cycles\": %lu,\n", lifecycle->create_destroy_cycles);
     fprintf(file, "    \"checksum\": %lu\n", lifecycle->checksum);
     fprintf(file, "  },\n");
@@ -172,7 +180,7 @@ static int runner_write_proof_json(
     return 1;
 }
 
-static int runner_run_proof(const char *profile_key, const char *output_path)
+static int runner_run_proof(const char *profile_key, const char *output_path, const char *output_root)
 {
     const screensave_generated_proof_profile *generated;
     sslab_context_desc context_desc;
@@ -207,7 +215,7 @@ static int runner_run_proof(const char *profile_key, const char *output_path)
     context = 0;
     context_desc.size = sizeof(context_desc);
     context_desc.abi_version = SSLAB_ABI_VERSION;
-    context_desc.output_root = "out/sslab-runner";
+    context_desc.output_root = output_root != 0 ? output_root : "out/sslab-runner";
     context_desc.catalog_root = "catalog";
     status = sslab_create_context(&context_desc, &context);
     if (status != SSLAB_STATUS_OK) {
@@ -268,17 +276,19 @@ static int runner_run_proof(const char *profile_key, const char *output_path)
 
 static void runner_usage(void)
 {
-    fprintf(stderr, "usage: sslab_runner proof --profile <profile-key> [--output <path>]\n");
+    fprintf(stderr, "usage: sslab_runner proof --profile <profile-key> [--output <path>] [--output-root <path>]\n");
 }
 
 int main(int argc, char **argv)
 {
     const char *profile_key;
     const char *output_path;
+    const char *output_root;
     int index;
 
     profile_key = 0;
     output_path = 0;
+    output_root = 0;
     if (argc < 4 || strcmp(argv[1], "proof") != 0) {
         runner_usage();
         return 1;
@@ -290,6 +300,9 @@ int main(int argc, char **argv)
         } else if (strcmp(argv[index], "--output") == 0 && (index + 1) < argc) {
             ++index;
             output_path = argv[index];
+        } else if (strcmp(argv[index], "--output-root") == 0 && (index + 1) < argc) {
+            ++index;
+            output_root = argv[index];
         } else {
             runner_usage();
             return 1;
@@ -299,5 +312,5 @@ int main(int argc, char **argv)
         runner_usage();
         return 1;
     }
-    return runner_run_proof(profile_key, output_path);
+    return runner_run_proof(profile_key, output_path, output_root);
 }

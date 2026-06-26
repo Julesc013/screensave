@@ -7,6 +7,7 @@ import hashlib
 import json
 import math
 import pathlib
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -15,50 +16,22 @@ from dataclasses import dataclass
 from typing import Any
 
 
+THIS_DIR = pathlib.Path(__file__).resolve().parent
+if str(THIS_DIR) not in sys.path:
+    sys.path.insert(0, str(THIS_DIR))
+
+from build_support import build_runner, runner_implementation_paths
+
+
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 DEFAULT_OUTPUT = ROOT / "validation" / "captures" / "proof-kernel-v0" / "nocturne"
 DEFAULT_COMPARISON = ROOT / "out" / "proof" / "sslab-compare" / "comparison.json"
 PROOF_REGISTRY = ROOT / "catalog" / "generated" / "proof_registry.json"
-RUNNER = ROOT / "tools" / "sslab" / "nocturne_canary_runner.c"
-RICOCHET_RUNNER = ROOT / "tools" / "sslab" / "ricochet_canary_runner.c"
-SURFACE = ROOT / "platform" / "src" / "surface" / "rgba8" / "surface_rgba8.c"
-SOFT_RENDERER = ROOT / "platform" / "src" / "render" / "soft" / "soft_renderer.c"
-CONFIG_CORE = ROOT / "platform" / "src" / "core" / "config" / "config.c"
-VISUAL_BUFFER = ROOT / "platform" / "src" / "core" / "visual" / "visual_buffer.c"
-SSLAB_CAPTURE = ROOT / "tools" / "sslab" / "src" / "capture.c"
-SSLAB_RENDERER_RGBA8 = ROOT / "tools" / "sslab" / "src" / "renderer_rgba8.c"
-NOCTURNE_SIM = ROOT / "products" / "savers" / "nocturne" / "src" / "nocturne_sim.c"
-NOCTURNE_RENDER = ROOT / "products" / "savers" / "nocturne" / "src" / "nocturne_render.c"
-NOCTURNE_THEMES = ROOT / "products" / "savers" / "nocturne" / "src" / "nocturne_themes.c"
-NOCTURNE_PRESETS = ROOT / "products" / "savers" / "nocturne" / "src" / "nocturne_presets.c"
-RICOCHET_SIM = ROOT / "products" / "savers" / "ricochet" / "src" / "ricochet_sim.c"
-RICOCHET_RENDER = ROOT / "products" / "savers" / "ricochet" / "src" / "ricochet_render.c"
-RICOCHET_THEMES = ROOT / "products" / "savers" / "ricochet" / "src" / "ricochet_themes.c"
-RICOCHET_PRESETS = ROOT / "products" / "savers" / "ricochet" / "src" / "ricochet_presets.c"
-RUNNER_SOURCES = [
-    RUNNER,
-    SSLAB_CAPTURE,
-    SSLAB_RENDERER_RGBA8,
-    NOCTURNE_SIM,
-    NOCTURNE_RENDER,
-    NOCTURNE_THEMES,
-    NOCTURNE_PRESETS,
-    SURFACE,
-    SOFT_RENDERER,
-]
-RICOCHET_RUNNER_SOURCES = [
-    RICOCHET_RUNNER,
-    SSLAB_CAPTURE,
-    SSLAB_RENDERER_RGBA8,
-    RICOCHET_SIM,
-    RICOCHET_RENDER,
-    RICOCHET_THEMES,
-    RICOCHET_PRESETS,
-    CONFIG_CORE,
-    VISUAL_BUFFER,
-    SURFACE,
-    SOFT_RENDERER,
-]
+
+LEGACY_PROFILE_ALIASES = {
+    "nocturne": "nocturne.reference.v0",
+    "ricochet": "ricochet.reference.v1",
+}
 
 
 def display_path(path: pathlib.Path) -> str:
@@ -95,48 +68,6 @@ def find_proof_profile(profile_key: str) -> dict[str, Any]:
         if profile.get("key") == profile_key:
             return profile
     raise ValueError(f"unknown proof profile: {profile_key}")
-
-
-def compile_nocturne_runner(output_exe: pathlib.Path) -> None:
-    subprocess.check_call(
-        [
-            "gcc",
-            "-std=c89",
-            "-Wall",
-            "-Wextra",
-            "-I",
-            str(ROOT / "platform" / "include"),
-            "-I",
-            str(ROOT / "tools" / "sslab" / "src"),
-            "-I",
-            str(ROOT / "products" / "savers" / "nocturne" / "src"),
-            *(str(path) for path in RUNNER_SOURCES),
-            "-o",
-            str(output_exe),
-        ],
-        cwd=ROOT,
-    )
-
-
-def compile_ricochet_runner(output_exe: pathlib.Path) -> None:
-    subprocess.check_call(
-        [
-            "gcc",
-            "-std=c89",
-            "-Wall",
-            "-Wextra",
-            "-I",
-            str(ROOT / "platform" / "include"),
-            "-I",
-            str(ROOT / "tools" / "sslab" / "src"),
-            "-I",
-            str(ROOT / "products" / "savers" / "ricochet" / "src"),
-            *(str(path) for path in RICOCHET_RUNNER_SOURCES),
-            "-o",
-            str(output_exe),
-        ],
-        cwd=ROOT,
-    )
 
 
 @dataclass
@@ -177,51 +108,129 @@ def read_ppm(path: pathlib.Path) -> PpmImage:
     return PpmImage(width=width, height=height, pixels=bytes(values))
 
 
-def render_nocturne(args: argparse.Namespace) -> dict:
-    output_dir = pathlib.Path(args.output_dir)
+def resolve_output_dir(path_text: str) -> pathlib.Path:
+    output_dir = pathlib.Path(path_text)
     if not output_dir.is_absolute():
         output_dir = ROOT / output_dir
     output_dir.mkdir(parents=True, exist_ok=True)
+    return output_dir
 
-    capture_path = output_dir / "capture.ppm"
-    proof_path = output_dir / "proof.json"
-    hash_path = output_dir / "capture.sha256"
 
-    with tempfile.TemporaryDirectory() as temp_root:
-        runner_exe = pathlib.Path(temp_root) / "nocturne_canary_runner.exe"
-        compile_nocturne_runner(runner_exe)
-        runner = subprocess.run(
-            [
-                str(runner_exe),
-                "--width",
-                str(args.width),
-                "--height",
-                str(args.height),
-                "--seed",
-                str(args.seed),
-                "--frames",
-                str(args.frames),
-                "--delta-ms",
-                str(args.delta_ms),
-                "--preset",
-                args.preset,
-                "--output",
-                str(capture_path),
-            ],
-            cwd=ROOT,
-            text=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            check=False,
+def write_json(path: pathlib.Path, payload: dict[str, Any]) -> dict[str, Any]:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    return payload
+
+
+def max_capture_frame(profile: dict[str, Any]) -> int:
+    capture_frames = [int(frame) for frame in profile.get("capture_frames", [])]
+    if not capture_frames:
+        raise ValueError(f"proof profile does not define capture frames: {profile.get('key', '')}")
+    return max(capture_frames)
+
+
+def resolve_legacy_profile(args: argparse.Namespace, *, allow_ricochet: bool = True) -> dict[str, Any]:
+    product = str(getattr(args, "product", "nocturne"))
+    if product == "ricochet" and not allow_ricochet:
+        raise ValueError("legacy render compatibility only supports the Nocturne reference profile")
+    profile_key = LEGACY_PROFILE_ALIASES.get(product)
+    if not profile_key:
+        raise ValueError(f"legacy compatibility alias is unavailable for product: {product}")
+    profile = find_proof_profile(profile_key)
+    expected_pairs: list[tuple[str, object]] = [
+        ("preset", profile.get("preset")),
+        ("width", int(profile.get("width", 0))),
+        ("height", int(profile.get("height", 0))),
+        ("seed", int(profile.get("seed", 0))),
+        ("delta_ms", int(profile.get("delta_ms", 0))),
+    ]
+    if hasattr(args, "frames"):
+        expected_pairs.append(("frames", max_capture_frame(profile)))
+    if hasattr(args, "resize_width"):
+        expected_pairs.append(("resize_width", int(profile.get("resize_width", profile.get("width", 0)))))
+    if hasattr(args, "resize_height"):
+        expected_pairs.append(("resize_height", int(profile.get("resize_height", profile.get("height", 0)))))
+    if hasattr(args, "create_destroy_cycles"):
+        expected_pairs.append(("create_destroy_cycles", int(profile.get("create_destroy_cycles", 1))))
+    for field_name, expected in expected_pairs:
+        actual = getattr(args, field_name, expected)
+        if actual is None:
+            continue
+        if actual != expected:
+            raise ValueError(
+                f"legacy compatibility alias requires {field_name}={expected} for {profile.get('key', product)}; "
+                f"use proof --profile {profile.get('key', product)} for the named proof profile path"
+            )
+    return profile
+
+
+def run_runner_proof(
+    runner_exe: pathlib.Path,
+    profile_key: str,
+    output_root: pathlib.Path,
+    output_json: pathlib.Path,
+) -> dict[str, Any]:
+    output_root.mkdir(parents=True, exist_ok=True)
+    output_json.parent.mkdir(parents=True, exist_ok=True)
+    runner = subprocess.run(
+        [
+            str(runner_exe),
+            "proof",
+            "--profile",
+            profile_key,
+            "--output-root",
+            str(output_root),
+            "--output",
+            str(output_json),
+        ],
+        cwd=ROOT,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=False,
+    )
+    if runner.returncode != 0:
+        raise RuntimeError(f"generic sslab runner failed for {profile_key}: {runner.stderr.strip()}")
+    return json.loads(output_json.read_text(encoding="utf-8"))
+
+
+def runner_capture_records(result: dict[str, Any]) -> list[dict[str, Any]]:
+    captures: list[dict[str, Any]] = []
+    for item in result.get("captures", []):
+        captures.append(
+            {
+                "frame": int(item.get("frame", 0)),
+                "status": str(item.get("status", "")),
+                "raw_rgba_path": str(item.get("raw_rgba_path", "")),
+                "review_ppm_path": str(item.get("review_ppm_path", "")),
+                "raw_rgba_sha256": str(item.get("rgba_sha256", "")),
+            }
         )
-        if runner.returncode != 0:
-            raise RuntimeError(f"compiled Nocturne runner failed: {runner.stderr.strip()}")
+    return captures
 
-    capture = read_ppm(capture_path)
-    capture_hash = capture.rgba_sha256()
-    hash_path.write_text(capture_hash + "\n", encoding="ascii")
 
-    proof = {
+def runner_capture_for_frame(result: dict[str, Any], frame_index: int) -> dict[str, Any]:
+    captures = runner_capture_records(result)
+    for capture in captures:
+        if int(capture.get("frame", -1)) == int(frame_index):
+            return capture
+    if captures:
+        return captures[-1]
+    raise ValueError("generic sslab runner did not emit any captures")
+
+
+def copy_path(source_text: str, target_path: pathlib.Path) -> pathlib.Path:
+    source = pathlib.Path(source_text)
+    if not source.is_absolute():
+        source = ROOT / source
+    target_path.parent.mkdir(parents=True, exist_ok=True)
+    if source.resolve() != target_path.resolve():
+        shutil.copyfile(source, target_path)
+    return target_path
+
+
+def render_proof_payload(profile: dict[str, Any], capture_path: pathlib.Path, capture_hash: str) -> dict[str, Any]:
+    return {
         "proof_schema": "proof-bundle-v0",
         "proof_kernel": "proof-kernel-v0",
         "status": "informational",
@@ -231,17 +240,16 @@ def render_nocturne(args: argparse.Namespace) -> dict:
             "dirty": bool(git_text(["status", "--short"])),
         },
         "runtime": {
-            "runner": "tools/sslab/nocturne_canary_runner.c",
-            "runner_mode": "compiled-product-session",
-            "runner_stdout": runner.stdout.strip(),
-            "product": "nocturne",
-            "preset": args.preset,
+            "runner": "tools/sslab/runner/sslab_runner.c",
+            "runner_mode": "generic-libsslab-proof",
+            "product": profile.get("product"),
+            "preset": profile.get("preset"),
             "theme": "gray_black",
-            "width": args.width,
-            "height": args.height,
-            "seed": args.seed,
-            "frames": args.frames,
-            "delta_ms": args.delta_ms,
+            "width": int(profile.get("width", 0)),
+            "height": int(profile.get("height", 0)),
+            "seed": int(profile.get("seed", 0)),
+            "frames": max_capture_frame(profile),
+            "delta_ms": int(profile.get("delta_ms", 0)),
             "surface": "rgba8-top-left-srgb",
             "renderer": "soft-reference-v0",
         },
@@ -250,7 +258,7 @@ def render_nocturne(args: argparse.Namespace) -> dict:
                 "path": display_path(path),
                 "sha256": sha256_file(path),
             }
-            for path in RUNNER_SOURCES
+            for path in runner_implementation_paths()
         ],
         "capture": {
             "path": display_path(capture_path),
@@ -260,126 +268,88 @@ def render_nocturne(args: argparse.Namespace) -> dict:
         },
         "limits": [
             "Nocturne canary only",
-            "Compiled runner drives the real Nocturne product session and render functions",
+            "Generic sslab_runner drives the shared libsslab proof path",
             "No operating-system compatibility claim is certified by this proof",
         ],
     }
-    proof_path.write_text(json.dumps(proof, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+
+def write_nocturne_render_artifacts(
+    profile: dict[str, Any],
+    output_dir: pathlib.Path,
+    runner_result: dict[str, Any],
+) -> dict[str, Any]:
+    capture = runner_capture_for_frame(runner_result, max_capture_frame(profile))
+    capture_path = copy_path(str(capture.get("review_ppm_path", "")), output_dir / "capture.ppm")
+    capture_hash = read_ppm(capture_path).rgba_sha256()
+    (output_dir / "capture.sha256").write_text(capture_hash + "\n", encoding="ascii")
+    proof = render_proof_payload(profile, capture_path, capture_hash)
+    write_json(output_dir / "proof.json", proof)
     return proof
 
 
-def lifecycle_nocturne(args: argparse.Namespace) -> dict:
-    output_dir = pathlib.Path(args.output_dir)
-    if not output_dir.is_absolute():
-        output_dir = ROOT / output_dir
-    output_dir.mkdir(parents=True, exist_ok=True)
-
-    capture_path = output_dir / "lifecycle-capture.ppm"
-    lifecycle_path = output_dir / "lifecycle.json"
-
-    with tempfile.TemporaryDirectory() as temp_root:
-        runner_exe = pathlib.Path(temp_root) / "nocturne_canary_runner.exe"
-        compile_nocturne_runner(runner_exe)
-        runner = subprocess.run(
-            [
-                str(runner_exe),
-                "--width",
-                str(args.width),
-                "--height",
-                str(args.height),
-                "--seed",
-                str(args.seed),
-                "--frames",
-                str(args.frames),
-                "--delta-ms",
-                str(args.delta_ms),
-                "--preset",
-                args.preset,
-                "--exercise-resize",
-                "--resize-width",
-                str(args.resize_width),
-                "--resize-height",
-                str(args.resize_height),
-                "--output",
-                str(capture_path),
-                "--lifecycle-output",
-                str(lifecycle_path),
-            ],
-            cwd=ROOT,
-            text=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            check=False,
+def lifecycle_payload(
+    profile: dict[str, Any],
+    output_dir: pathlib.Path,
+    runner_result: dict[str, Any],
+) -> dict[str, Any]:
+    lifecycle = dict(runner_result.get("lifecycle", {}))
+    capture = runner_capture_for_frame(runner_result, max_capture_frame(profile))
+    if profile.get("product") == "nocturne":
+        capture_path = copy_path(str(capture.get("review_ppm_path", "")), output_dir / "lifecycle-capture.ppm")
+        schema = "screensave-nocturne-canary-lifecycle-v0"
+    else:
+        capture_path = copy_path(
+            str(capture.get("review_ppm_path", "")),
+            output_dir / f"frame-{max_capture_frame(profile):04d}.ppm",
         )
-        if runner.returncode != 0:
-            raise RuntimeError(f"compiled Nocturne lifecycle runner failed: {runner.stderr.strip()}")
+        schema = "screensave-product-lifecycle-v0"
+    return write_json(
+        output_dir / "lifecycle.json",
+        {
+            "lifecycle_schema": schema,
+            "status": lifecycle.get("status"),
+            "create_session": bool(lifecycle.get("create_session", 0)),
+            "resize_session": bool(lifecycle.get("resize_session", 0)),
+            "step_count": int(lifecycle.get("step_count", 0)),
+            "render_session": bool(lifecycle.get("render_session", 0)),
+            "destroy_session": bool(lifecycle.get("destroy_session", 0)),
+            "create_destroy_cycles": int(lifecycle.get("create_destroy_cycles", 0)),
+            "checksum": int(lifecycle.get("checksum", 0)),
+            "path": display_path(output_dir / "lifecycle.json"),
+            "capture_path": display_path(capture_path),
+            "runner_mode": "generic-libsslab-proof",
+            "runner_stdout": "",
+        },
+    )
 
-    lifecycle = json.loads(lifecycle_path.read_text(encoding="utf-8"))
-    lifecycle["path"] = display_path(lifecycle_path)
-    lifecycle["capture_path"] = display_path(capture_path)
-    lifecycle["runner_mode"] = "compiled-product-session"
-    lifecycle["runner_stdout"] = runner.stdout.strip()
-    return lifecycle
 
-
-def lifecycle_ricochet(args: argparse.Namespace) -> dict[str, Any]:
-    output_dir = pathlib.Path(args.output_dir)
-    if not output_dir.is_absolute():
-        output_dir = ROOT / output_dir
-    output_dir.mkdir(parents=True, exist_ok=True)
-
-    capture_frame = int(args.frames)
-    lifecycle_path = output_dir / "lifecycle.json"
-
+def render_nocturne(args: argparse.Namespace) -> dict[str, Any]:
+    profile = resolve_legacy_profile(args, allow_ricochet=False)
+    output_dir = resolve_output_dir(str(args.output_dir))
     with tempfile.TemporaryDirectory() as temp_root:
-        runner_exe = pathlib.Path(temp_root) / "ricochet_canary_runner.exe"
-        compile_ricochet_runner(runner_exe)
-        runner = subprocess.run(
-            [
-                str(runner_exe),
-                "--width",
-                str(args.width),
-                "--height",
-                str(args.height),
-                "--seed",
-                str(args.seed),
-                "--delta-ms",
-                str(args.delta_ms),
-                "--capture-frames",
-                str(capture_frame),
-                "--output-dir",
-                str(output_dir),
-                "--exercise-resize",
-                "--resize-width",
-                str(args.resize_width),
-                "--resize-height",
-                str(args.resize_height),
-                "--create-destroy-cycles",
-                str(args.create_destroy_cycles),
-                "--lifecycle-output",
-                str(lifecycle_path),
-            ],
-            cwd=ROOT,
-            text=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            check=False,
+        runner_exe = build_runner(pathlib.Path(temp_root))
+        runner_result = run_runner_proof(
+            runner_exe,
+            str(profile.get("key", "")),
+            output_dir / "runner",
+            output_dir / "runner-proof.json",
         )
-        if runner.returncode != 0:
-            raise RuntimeError(f"compiled Ricochet lifecycle runner failed: {runner.stderr.strip()}")
-
-    lifecycle = json.loads(lifecycle_path.read_text(encoding="utf-8"))
-    lifecycle["path"] = display_path(lifecycle_path)
-    lifecycle["capture_path"] = display_path(output_dir / f"frame-{capture_frame:04d}.ppm")
-    lifecycle["runner_mode"] = "compiled-product-session"
-    lifecycle["runner_stdout"] = runner.stdout.strip()
-    return lifecycle
+    return write_nocturne_render_artifacts(profile, output_dir, runner_result)
 
 
 def lifecycle_product(args: argparse.Namespace) -> dict[str, Any]:
-    if args.product == "ricochet":
-        return lifecycle_ricochet(args)
-    return lifecycle_nocturne(args)
+    profile = resolve_legacy_profile(args)
+    output_dir = resolve_output_dir(str(args.output_dir))
+    with tempfile.TemporaryDirectory() as temp_root:
+        runner_exe = build_runner(pathlib.Path(temp_root))
+        runner_result = run_runner_proof(
+            runner_exe,
+            str(profile.get("key", "")),
+            output_dir / "runner",
+            output_dir / "runner-proof.json",
+        )
+    return lifecycle_payload(profile, output_dir, runner_result)
 
 
 def percentile(values: list[float], percent: float) -> float:
@@ -395,10 +365,8 @@ def percentile(values: list[float], percent: float) -> float:
 
 
 def profile_product(args: argparse.Namespace) -> dict[str, Any]:
-    output_dir = pathlib.Path(args.output_dir)
-    if not output_dir.is_absolute():
-        output_dir = ROOT / output_dir
-    output_dir.mkdir(parents=True, exist_ok=True)
+    profile = resolve_legacy_profile(args)
+    output_dir = resolve_output_dir(str(args.output_dir))
 
     measured_samples: list[float] = []
     soak_hashes: list[str] = []
@@ -407,73 +375,24 @@ def profile_product(args: argparse.Namespace) -> dict[str, Any]:
     if int(args.short_soak_cycles) <= 0:
         raise ValueError("short soak cycles must be positive")
     run_count = int(args.iterations) + int(args.short_soak_cycles)
-    frames = max(1, int(args.frames))
+    frames = max_capture_frame(profile)
 
     with tempfile.TemporaryDirectory() as temp_root:
-        runner_exe = pathlib.Path(temp_root) / f"{args.product}_profile_runner.exe"
-        if args.product == "ricochet":
-            compile_ricochet_runner(runner_exe)
-        else:
-            compile_nocturne_runner(runner_exe)
-
+        runner_exe = build_runner(pathlib.Path(temp_root))
         for run_index in range(run_count):
             run_dir = output_dir / f"run-{run_index:02d}"
-            run_dir.mkdir(parents=True, exist_ok=True)
             start = time.perf_counter()
-            if args.product == "ricochet":
-                command = [
-                    str(runner_exe),
-                    "--width",
-                    str(args.width),
-                    "--height",
-                    str(args.height),
-                    "--seed",
-                    str(args.seed),
-                    "--delta-ms",
-                    str(args.delta_ms),
-                    "--capture-frames",
-                    str(frames),
-                    "--output-dir",
-                    str(run_dir),
-                ]
-            else:
-                command = [
-                    str(runner_exe),
-                    "--width",
-                    str(args.width),
-                    "--height",
-                    str(args.height),
-                    "--seed",
-                    str(args.seed),
-                    "--frames",
-                    str(frames),
-                    "--delta-ms",
-                    str(args.delta_ms),
-                    "--preset",
-                    args.preset,
-                    "--output",
-                    str(run_dir / "capture.ppm"),
-                ]
-            runner = subprocess.run(
-                command,
-                cwd=ROOT,
-                text=True,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                check=False,
+            runner_result = run_runner_proof(
+                runner_exe,
+                str(profile.get("key", "")),
+                run_dir,
+                run_dir / "runner-proof.json",
             )
             elapsed_ms = (time.perf_counter() - start) * 1000.0
-            if runner.returncode != 0:
-                raise RuntimeError(f"compiled {args.product} profile runner failed: {runner.stderr.strip()}")
-
             if run_index < int(args.iterations):
                 measured_samples.append(elapsed_ms / float(frames))
-
-            if args.product == "ricochet":
-                capture_hash = sha256_file(run_dir / f"frame-{frames:04d}.rgba")
-            else:
-                capture_hash = read_ppm(run_dir / "capture.ppm").rgba_sha256()
-            soak_hashes.append(capture_hash)
+            capture = runner_capture_for_frame(runner_result, frames)
+            soak_hashes.append(str(capture.get("raw_rgba_sha256", "")))
 
     short_soak_hashes = soak_hashes[-int(args.short_soak_cycles) :] if int(args.short_soak_cycles) > 0 else []
     short_soak_status = "pass"
@@ -483,13 +402,13 @@ def profile_product(args: argparse.Namespace) -> dict[str, Any]:
     receipt = {
         "profile_schema": "sslab-profile-v0",
         "status": "informational" if short_soak_status == "pass" else "fail",
-        "product": args.product,
-        "preset": args.preset,
-        "runner_mode": "compiled-product-session",
-        "width": int(args.width),
-        "height": int(args.height),
-        "seed": int(args.seed),
-        "delta_ms": int(args.delta_ms),
+        "product": profile.get("product"),
+        "preset": profile.get("preset"),
+        "runner_mode": "generic-libsslab-profile",
+        "width": int(profile.get("width", 0)),
+        "height": int(profile.get("height", 0)),
+        "seed": int(profile.get("seed", 0)),
+        "delta_ms": int(profile.get("delta_ms", 0)),
         "measured_frames": frames,
         "measurement_iterations": int(args.iterations),
         "short_soak_cycles": int(args.short_soak_cycles),
@@ -500,79 +419,23 @@ def profile_product(args: argparse.Namespace) -> dict[str, Any]:
         "frame_time_ms_p99": percentile(measured_samples, 99.0),
         "claim_boundary": "informational process-level profile and bounded short-soak receipt; not a performance qualification gate",
     }
-    (output_dir / "profile.json").write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    write_json(output_dir / "profile.json", receipt)
     return receipt
 
 
-def run_ricochet_capture_pass(profile: dict[str, Any], output_dir: pathlib.Path) -> dict[str, Any]:
-    output_dir.mkdir(parents=True, exist_ok=True)
-    capture_frames = [int(frame) for frame in profile.get("capture_frames", [])]
-    with tempfile.TemporaryDirectory() as temp_root:
-        runner_exe = pathlib.Path(temp_root) / "ricochet_canary_runner.exe"
-        compile_ricochet_runner(runner_exe)
-        runner = subprocess.run(
-            [
-                str(runner_exe),
-                "--width",
-                str(profile["width"]),
-                "--height",
-                str(profile["height"]),
-                "--seed",
-                str(profile["seed"]),
-                "--delta-ms",
-                str(profile["delta_ms"]),
-                "--capture-frames",
-                ",".join(str(frame) for frame in capture_frames),
-                "--output-dir",
-                str(output_dir),
-            ],
-            cwd=ROOT,
-            text=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            check=False,
-        )
-        if runner.returncode != 0:
-            raise RuntimeError(f"compiled Ricochet runner failed: {runner.stderr.strip()}")
-
-    captures = []
-    for frame in capture_frames:
-        raw_path = output_dir / f"frame-{frame:04d}.rgba"
-        ppm_path = output_dir / f"frame-{frame:04d}.ppm"
-        captures.append(
-            {
-                "frame": frame,
-                "raw_rgba_path": display_path(raw_path),
-                "review_ppm_path": display_path(ppm_path),
-                "raw_rgba_sha256": sha256_file(raw_path),
-            }
-        )
-    return {
-        "runner_stdout": runner.stdout.strip(),
-        "captures": captures,
-    }
-
-
-def proof_ricochet_from_profile(profile: dict[str, Any], output_dir: pathlib.Path) -> dict[str, Any]:
-    first = run_ricochet_capture_pass(profile, output_dir / "run-a")
-    second = run_ricochet_capture_pass(profile, output_dir / "run-b")
-    first_hashes = [capture["raw_rgba_sha256"] for capture in first["captures"]]
-    second_hashes = [capture["raw_rgba_sha256"] for capture in second["captures"]]
+def proof_ricochet_from_profile(
+    runner_exe: pathlib.Path,
+    profile: dict[str, Any],
+    output_dir: pathlib.Path,
+) -> dict[str, Any]:
+    first = run_runner_proof(runner_exe, str(profile.get("key", "")), output_dir / "run-a", output_dir / "run-a" / "runner-proof.json")
+    second = run_runner_proof(runner_exe, str(profile.get("key", "")), output_dir / "run-b", output_dir / "run-b" / "runner-proof.json")
+    lifecycle = lifecycle_payload(profile, output_dir / "lifecycle", first)
+    captures = runner_capture_records(first)
+    repeat_captures = runner_capture_records(second)
+    first_hashes = [capture.get("raw_rgba_sha256") for capture in captures]
+    second_hashes = [capture.get("raw_rgba_sha256") for capture in repeat_captures]
     comparison_status = "pass" if first_hashes == second_hashes else "fail"
-    lifecycle_args = argparse.Namespace(
-        product=profile["product"],
-        preset=profile["preset"],
-        width=int(profile["width"]),
-        height=int(profile["height"]),
-        resize_width=int(profile.get("resize_width", profile["width"])),
-        resize_height=int(profile.get("resize_height", profile["height"])),
-        seed=int(profile["seed"]),
-        frames=max(int(frame) for frame in profile.get("capture_frames", [])),
-        delta_ms=int(profile["delta_ms"]),
-        create_destroy_cycles=int(profile.get("create_destroy_cycles", 32)),
-        output_dir=str(output_dir / "lifecycle"),
-    )
-    lifecycle = lifecycle_ricochet(lifecycle_args)
     status = "pass" if comparison_status == "pass" and lifecycle.get("status") == "pass" else "fail"
     receipt = {
         "profile_proof_schema": "sslab-profile-proof-v0",
@@ -582,64 +445,35 @@ def proof_ricochet_from_profile(profile: dict[str, Any], output_dir: pathlib.Pat
         "preset": profile.get("preset"),
         "profile_source": display_path(PROOF_REGISTRY),
         "capture_frames": [int(frame) for frame in profile.get("capture_frames", [])],
-        "captures": first["captures"],
-        "repeat_captures": second["captures"],
+        "captures": captures,
+        "repeat_captures": repeat_captures,
         "comparison_status": comparison_status,
         "comparison_class": "exact",
-        "lifecycle_ref": lifecycle.get("path", ""),
+        "lifecycle_ref": display_path(output_dir / "lifecycle" / "lifecycle.json"),
         "lifecycle_status": lifecycle.get("status"),
         "lifecycle_create_destroy_cycles": lifecycle.get("create_destroy_cycles"),
-        "runner_mode": "compiled-product-session",
-        "runner_stdout": first["runner_stdout"],
+        "runner_mode": "generic-libsslab-proof",
+        "runner_stdout": "",
         "claim_boundary": "Ricochet multi-frame deterministic and lifecycle proof only; performance, compatibility, release promotion, and artistic acceptance are separate axes.",
     }
-    (output_dir / "profile-proof.json").write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    write_json(output_dir / "profile-proof.json", receipt)
     return receipt
 
 
-def proof_from_profile(args: argparse.Namespace) -> dict:
-    profile = find_proof_profile(args.profile)
-    output_dir = pathlib.Path(args.output_dir)
-    if not output_dir.is_absolute():
-        output_dir = ROOT / output_dir
-    output_dir.mkdir(parents=True, exist_ok=True)
-
-    if profile.get("product") == "ricochet":
-        return proof_ricochet_from_profile(profile, output_dir)
-
-    if profile.get("product") != "nocturne":
-        return {
-            "profile_proof_schema": "sslab-profile-proof-v0",
-            "status": "blocked",
-            "profile": profile.get("key"),
-            "product": profile.get("product"),
-            "reason": "Only Nocturne and Ricochet are implemented on the profile-driven path before portable v2.",
-        }
-
-    capture_frames = [int(frame) for frame in profile.get("capture_frames", [])]
-    if not capture_frames:
-        return {
-            "profile_proof_schema": "sslab-profile-proof-v0",
-            "status": "blocked",
-            "profile": profile.get("key"),
-            "product": profile.get("product"),
-            "reason": "Proof profile does not define capture frames.",
-        }
-
-    render_args = argparse.Namespace(
-        product=profile["product"],
-        preset=profile["preset"],
-        width=int(profile["width"]),
-        height=int(profile["height"]),
-        seed=int(profile["seed"]),
-        frames=max(capture_frames),
-        delta_ms=int(profile["delta_ms"]),
-        output_dir=str(output_dir),
+def proof_nocturne_from_profile(
+    runner_exe: pathlib.Path,
+    profile: dict[str, Any],
+    output_dir: pathlib.Path,
+) -> dict[str, Any]:
+    runner_result = run_runner_proof(
+        runner_exe,
+        str(profile.get("key", "")),
+        output_dir / "runner",
+        output_dir / "runner-proof.json",
     )
-    render = render_nocturne(render_args)
-
-    comparison = {}
+    render = write_nocturne_render_artifacts(profile, output_dir, runner_result)
     baseline_capture = str(profile.get("baseline_capture", ""))
+    comparison: dict[str, Any] = {}
     if baseline_capture:
         comparison_args = argparse.Namespace(
             actual=str(output_dir / "capture.ppm"),
@@ -650,27 +484,12 @@ def proof_from_profile(args: argparse.Namespace) -> dict:
             output_json=str(output_dir / "comparison.json"),
         )
         comparison = compare_captures(comparison_args)
-
-    lifecycle_args = argparse.Namespace(
-        product=profile["product"],
-        preset=profile["preset"],
-        width=int(profile["width"]),
-        height=int(profile["height"]),
-        resize_width=int(profile.get("resize_width", profile["width"])),
-        resize_height=int(profile.get("resize_height", profile["height"])),
-        seed=int(profile["seed"]),
-        frames=max(capture_frames),
-        delta_ms=int(profile["delta_ms"]),
-        output_dir=str(output_dir / "lifecycle"),
-    )
-    lifecycle = lifecycle_nocturne(lifecycle_args)
-
+    lifecycle = lifecycle_payload(profile, output_dir / "lifecycle", runner_result)
     status = "pass"
     if comparison and comparison.get("status") != "pass":
         status = "fail"
     if lifecycle.get("status") != "pass":
         status = "fail"
-
     receipt = {
         "profile_proof_schema": "sslab-profile-proof-v0",
         "status": status,
@@ -678,21 +497,42 @@ def proof_from_profile(args: argparse.Namespace) -> dict:
         "product": profile.get("product"),
         "preset": profile.get("preset"),
         "profile_source": display_path(PROOF_REGISTRY),
-        "capture_frames": capture_frames,
+        "capture_frames": [int(frame) for frame in profile.get("capture_frames", [])],
         "render_ref": render.get("capture", {}).get("path"),
         "render_sha256": render.get("capture", {}).get("sha256"),
         "proof_ref": display_path(output_dir / "proof.json"),
         "comparison_ref": comparison.get("path", display_path(output_dir / "comparison.json")) if comparison else "",
         "comparison_status": comparison.get("status", "not-run") if comparison else "not-run",
-        "lifecycle_ref": lifecycle.get("path", ""),
+        "lifecycle_ref": display_path(output_dir / "lifecycle" / "lifecycle.json"),
         "lifecycle_status": lifecycle.get("status"),
         "claim_boundary": "profile-driven mechanical proof only; not compatibility certification or artistic acceptance",
     }
-    (output_dir / "profile-proof.json").write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    write_json(output_dir / "profile-proof.json", receipt)
     return receipt
 
 
-def compare_pixels(actual: PpmImage, expected: PpmImage) -> dict:
+def proof_from_profile(args: argparse.Namespace) -> dict[str, Any]:
+    profile = find_proof_profile(str(args.profile))
+    output_dir = resolve_output_dir(str(args.output_dir))
+    product = str(profile.get("product", ""))
+    if product == "ricochet":
+        with tempfile.TemporaryDirectory() as temp_root:
+            runner_exe = build_runner(pathlib.Path(temp_root))
+            return proof_ricochet_from_profile(runner_exe, profile, output_dir)
+    if product != "nocturne":
+        return {
+            "profile_proof_schema": "sslab-profile-proof-v0",
+            "status": "blocked",
+            "profile": profile.get("key"),
+            "product": product,
+            "reason": "Only Nocturne and Ricochet are implemented on the profile-driven path before portable v2.",
+        }
+    with tempfile.TemporaryDirectory() as temp_root:
+        runner_exe = build_runner(pathlib.Path(temp_root))
+        return proof_nocturne_from_profile(runner_exe, profile, output_dir)
+
+
+def compare_pixels(actual: PpmImage, expected: PpmImage) -> dict[str, Any]:
     if actual.width != expected.width or actual.height != expected.height:
         return {
             "dimension_match": False,
@@ -731,7 +571,7 @@ def compare_pixels(actual: PpmImage, expected: PpmImage) -> dict:
     }
 
 
-def comparison_status(metrics: dict, comparison_class: str, tolerance: int, mean_tolerance: float) -> str:
+def comparison_status(metrics: dict[str, Any], comparison_class: str, tolerance: int, mean_tolerance: float) -> str:
     if not metrics["dimension_match"]:
         return "fail"
     if comparison_class == "observational":
@@ -745,7 +585,7 @@ def comparison_status(metrics: dict, comparison_class: str, tolerance: int, mean
     return "fail"
 
 
-def compare_captures(args: argparse.Namespace) -> dict:
+def compare_captures(args: argparse.Namespace) -> dict[str, Any]:
     actual_path = pathlib.Path(args.actual)
     expected_path = pathlib.Path(args.expected)
     output_json = pathlib.Path(args.output_json) if args.output_json else None
@@ -791,13 +631,13 @@ def compare_captures(args: argparse.Namespace) -> dict:
         ],
     }
     if output_json is not None:
-        output_json.parent.mkdir(parents=True, exist_ok=True)
-        output_json.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        write_json(output_json, result)
+        result["path"] = display_path(output_json)
     return result
 
 
 def add_render_parser(subparsers: argparse._SubParsersAction[argparse.ArgumentParser]) -> None:
-    parser = subparsers.add_parser("render", help="Render a deterministic proof-kernel canary capture.")
+    parser = subparsers.add_parser("render", help="Render the named Nocturne proof profile through the generic sslab runner.")
     parser.add_argument("--product", default="nocturne", choices=["nocturne"])
     parser.add_argument("--preset", default="observatory_night")
     parser.add_argument("--width", type=int, default=96)
@@ -826,7 +666,7 @@ def add_compare_parser(subparsers: argparse._SubParsersAction[argparse.ArgumentP
 
 
 def add_lifecycle_parser(subparsers: argparse._SubParsersAction[argparse.ArgumentParser]) -> None:
-    parser = subparsers.add_parser("lifecycle", help="Run a create/resize/step/render/destroy lifecycle proof.")
+    parser = subparsers.add_parser("lifecycle", help="Run a named proof-profile lifecycle compatibility alias.")
     parser.add_argument("--product", default="nocturne", choices=["nocturne", "ricochet"])
     parser.add_argument("--preset", default="observatory_night")
     parser.add_argument("--width", type=int, default=96)
@@ -836,13 +676,13 @@ def add_lifecycle_parser(subparsers: argparse._SubParsersAction[argparse.Argumen
     parser.add_argument("--seed", type=int, default=1536)
     parser.add_argument("--frames", type=int, default=8)
     parser.add_argument("--delta-ms", type=int, default=100)
-    parser.add_argument("--create-destroy-cycles", type=int, default=32)
+    parser.add_argument("--create-destroy-cycles", type=int, default=None)
     parser.add_argument("--output-dir", default=str((ROOT / "out" / "proof" / "sslab-lifecycle").relative_to(ROOT)))
     parser.set_defaults(func=lifecycle_product)
 
 
 def add_profile_parser(subparsers: argparse._SubParsersAction[argparse.ArgumentParser]) -> None:
-    parser = subparsers.add_parser("profile", help="Run an informational profile and bounded short-soak receipt.")
+    parser = subparsers.add_parser("profile", help="Run a generic-runner profile compatibility alias.")
     parser.add_argument("--product", default="nocturne", choices=["nocturne", "ricochet"])
     parser.add_argument("--preset", default="observatory_night")
     parser.add_argument("--width", type=int, default=96)
@@ -863,14 +703,14 @@ def add_proof_parser(subparsers: argparse._SubParsersAction[argparse.ArgumentPar
     parser.set_defaults(func=proof_from_profile)
 
 
-def print_result(result: dict) -> None:
+def print_result(result: dict[str, Any]) -> None:
     if result.get("profile_proof_schema") == "sslab-profile-proof-v0":
         if result.get("captures"):
             capture_text = ",".join(
-                f"{capture['frame']}:{capture['raw_rgba_sha256'][:12]}" for capture in result.get("captures", [])
+                f"{capture['frame']}:{str(capture.get('raw_rgba_sha256', ''))[:12]}" for capture in result.get("captures", [])
             )
         else:
-            capture_text = result.get("render_sha256", "")
+            capture_text = str(result.get("render_sha256", ""))
         print(
             "profile-proof "
             f"{result['status']} "

@@ -1,8 +1,19 @@
 #include "runtime.h"
+#include "capture.h"
 
+#include <errno.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+
+#ifdef _WIN32
+#include <direct.h>
+#define SSLAB_MKDIR(path) _mkdir(path)
+#else
+#include <sys/stat.h>
+#define SSLAB_MKDIR(path) mkdir(path, 0777)
+#endif
 
 typedef struct sslab_sha256_context_tag {
     unsigned long state[8];
@@ -245,6 +256,135 @@ static sslab_status sslab_alloc_rgba(
     return SSLAB_STATUS_OK;
 }
 
+static void sslab_profile_path_component(const char *profile_key, char component[128])
+{
+    unsigned int index;
+
+    index = 0U;
+    if (profile_key == 0) {
+        sslab_copy_text(component, 128U, "profile");
+        return;
+    }
+    while (profile_key[index] != '\0' && index + 1U < 128U) {
+        char value;
+
+        value = profile_key[index];
+        if ((value >= 'a' && value <= 'z') ||
+            (value >= 'A' && value <= 'Z') ||
+            (value >= '0' && value <= '9')) {
+            component[index] = value;
+        } else {
+            component[index] = '-';
+        }
+        ++index;
+    }
+    component[index] = '\0';
+}
+
+static int sslab_append_text(char *buffer, unsigned int buffer_size, const char *suffix)
+{
+    unsigned int index;
+    unsigned int suffix_index;
+
+    if (buffer == 0 || buffer_size == 0U || suffix == 0) {
+        return 0;
+    }
+    index = 0U;
+    while (index < buffer_size && buffer[index] != '\0') {
+        ++index;
+    }
+    if (index >= buffer_size) {
+        return 0;
+    }
+    suffix_index = 0U;
+    while (suffix[suffix_index] != '\0') {
+        if (index + 1U >= buffer_size) {
+            return 0;
+        }
+        buffer[index] = suffix[suffix_index];
+        ++index;
+        ++suffix_index;
+    }
+    buffer[index] = '\0';
+    return 1;
+}
+
+static int sslab_ensure_directory(const char *path)
+{
+    char buffer[260];
+    unsigned int index;
+    int result;
+
+    if (!sslab_copy_text(buffer, sizeof(buffer), path)) {
+        return 0;
+    }
+    index = 0U;
+    while (buffer[index] != '\0') {
+        if (buffer[index] == '/' || buffer[index] == '\\') {
+            char saved;
+
+            saved = buffer[index];
+            buffer[index] = '\0';
+            if (index > 0U && !(index == 2U && buffer[1] == ':')) {
+                result = SSLAB_MKDIR(buffer);
+                if (result != 0 && errno != EEXIST) {
+                    return 0;
+                }
+            }
+            buffer[index] = saved;
+        }
+        ++index;
+    }
+    result = SSLAB_MKDIR(buffer);
+    return result == 0 || errno == EEXIST;
+}
+
+static int sslab_make_capture_paths(
+    sslab_context *context,
+    const sslab_proof_profile_desc *profile,
+    sslab_u32 frame_index,
+    char raw_path[260],
+    char ppm_path[260])
+{
+    char profile_component[128];
+    char frame_text[64];
+
+    if (context == 0 || profile == 0 || raw_path == 0 || ppm_path == 0) {
+        return 0;
+    }
+    sslab_profile_path_component(profile->profile_key, profile_component);
+    if (!sslab_copy_text(raw_path, 260U, context->output_root)) {
+        return 0;
+    }
+    if (!sslab_append_text(raw_path, 260U, "/")) {
+        return 0;
+    }
+    if (!sslab_append_text(raw_path, 260U, profile_component)) {
+        return 0;
+    }
+    if (!sslab_ensure_directory(raw_path)) {
+        return 0;
+    }
+    if (!sslab_copy_text(ppm_path, 260U, raw_path)) {
+        return 0;
+    }
+    frame_text[0] = '\0';
+    sprintf(frame_text, "/frame-%04lu", (unsigned long)frame_index);
+    if (!sslab_append_text(raw_path, 260U, frame_text)) {
+        return 0;
+    }
+    if (!sslab_append_text(ppm_path, 260U, frame_text)) {
+        return 0;
+    }
+    if (!sslab_append_text(raw_path, 260U, ".rgba")) {
+        return 0;
+    }
+    if (!sslab_append_text(ppm_path, 260U, ".ppm")) {
+        return 0;
+    }
+    return 1;
+}
+
 static sslab_status sslab_run_rendered_frame(
     sslab_context *context,
     const sslab_run_desc *run,
@@ -358,10 +498,25 @@ sslab_status sslab_run_capture(
         status = sslab_run_rendered_frame(context, &run, frame_index, rgba, stride);
     }
     if (status == SSLAB_STATUS_OK) {
+        screensave_rgba8_surface surface;
+
         sslab_sha256_hex(rgba, byte_count, receipt->rgba_sha256);
         receipt->frame_index = frame_index;
         receipt->width = profile->width;
         receipt->height = profile->height;
+        if (!sslab_make_capture_paths(context, profile, frame_index, receipt->raw_rgba_path, receipt->review_ppm_path)) {
+            status = SSLAB_STATUS_FAIL;
+        }
+        if (status == SSLAB_STATUS_OK) {
+            surface.width = (int)profile->width;
+            surface.height = (int)profile->height;
+            surface.stride_bytes = (int)stride;
+            surface.pixels = rgba;
+            if (!sslab_write_raw_rgba(&surface, receipt->raw_rgba_path) ||
+                !sslab_write_review_ppm(&surface, receipt->review_ppm_path)) {
+                status = SSLAB_STATUS_FAIL;
+            }
+        }
     }
     receipt->status = status;
     free(rgba);

@@ -4,9 +4,9 @@ Purpose: headless ScreenSave proof-kernel command surface.
 
 `sslab` is the command-line runner that Workbench, CI, and optional AIDE
 integration should eventually share. The current implementation is deliberately
-small: it compiles and runs the Nocturne proof-kernel canary through the real
-Nocturne product session and render functions, using a deterministic private
-RGBA8/software path, then emits a proof-bundle v0 JSON record.
+small: it now builds one private `libsslab` archive and one generic
+`sslab_runner` executable, then uses named proof profiles to drive deterministic
+proof output without product-specific Python dispatch.
 
 PAW-B introduces the private `libsslab` ABI v0 at
 `tools/sslab/include/screensave/sslab.h`. That ABI is a current
@@ -43,22 +43,19 @@ python tools\scripts\check_compiled_nocturne_runner.py
 
 The validator compiles `tools\sslab\nocturne_canary_runner.c` with GCC against
 the Nocturne product sources, the private RGBA8 surface, and the soft renderer.
-`sslab.py` is only an orchestrator and comparator for this path; it must not
-carry separate Nocturne RNG, stepping, or rendering semantics. The validator
-runs the fixed Nocturne canary and exact-compares the result with the committed
-capture.
-The lifecycle command runs a separate create, resize, fixed-step, render, and
-destroy scenario through the same compiled product-session runner without
-changing the committed render baseline.
-The proof command loads `catalog/generated/proof_registry.json` and orchestrates
-render, exact comparison, and lifecycle receipts from the named profile. It is
-the PAW-B entry point for moving Nocturne, then Ricochet, onto catalog-owned
-proof profiles.
-The Ricochet profile path compiles a product-session runner, captures canonical
-raw RGBA plus PPM review frames at 0, 4, 8, and 32 fixed-step checkpoints, and
-requires repeated exact raw hashes plus a generalized lifecycle receipt with
-resize evidence and 32 create/destroy cycles. Ricochet profiling and short-soak
-receipts are emitted by `sslab profile` as informational process-level evidence.
+`sslab.py` is only an orchestrator and comparator over the shared generic
+runner path; it must not carry separate product RNG, stepping, or rendering
+semantics. The validator runs the fixed Nocturne canary and exact-compares the
+result with the committed capture.
+The lifecycle, profile, and proof commands are named-profile compatibility
+aliases over the shared `sslab_runner` path. They preserve the established
+Nocturne and Ricochet proof expectations while removing product-specific
+executable dispatch from Python.
+The Ricochet profile path captures canonical raw RGBA plus PPM review frames at
+0, 4, 8, and 32 fixed-step checkpoints, and requires repeated exact raw hashes
+plus a generalized lifecycle receipt with resize evidence and 32
+create/destroy cycles. Ricochet profiling and short-soak receipts are emitted
+by `sslab profile` as informational process-level evidence.
 They are not yet performance qualification gates.
 
 This is not a public saver runtime API and not a compatibility certification.
