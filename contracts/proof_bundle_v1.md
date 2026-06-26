@@ -33,6 +33,7 @@ Every bundle must include these axes:
 | `comparison` | Captures or artifacts were compared under a declared class. |
 | `lifecycle` | Create, resize, step, render, destroy, or equivalent lifecycle evidence. |
 | `performance` | Frame-time, memory, handle, soak, or resource evidence. |
+| `portable_v2_equivalence` | v1/v2 deterministic equivalence evidence for named portable v2 canary profiles. |
 | `artifact_audit` | PE or package audit facts for named artifact profiles. |
 | `compatibility` | Evidence class supported by the mechanical facts. |
 | `artistic_review` | Human visual-quality acceptance or explicit not-reviewed status. |
@@ -60,6 +61,8 @@ The normalizer may consume these ScreenSave-owned receipt classes:
 - lifecycle receipts for create, resize, step, render, and destroy evidence;
 - performance receipts for frame timing, resource, handle, memory, or soak
   evidence.
+- portable v2 equivalence receipts for the fixed Nocturne/Ricochet canary
+  matrix.
 
 If an optional receipt is not supplied, its axis remains `informational` or
 `blocked` according to the axis semantics. Supplying lifecycle or performance

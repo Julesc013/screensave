@@ -133,6 +133,7 @@ def normalize(args: argparse.Namespace) -> dict[str, Any]:
     adapter_path = resolve_input(args.adapter_receipt)
     lifecycle_path = resolve_input(args.lifecycle)
     performance_path = resolve_input(args.performance)
+    portable_v2_equivalence_path = resolve_input(args.portable_v2_equivalence)
 
     proof = load_json(proof_path)
     comparison = load_json(comparison_path)
@@ -141,6 +142,7 @@ def normalize(args: argparse.Namespace) -> dict[str, Any]:
     adapter_receipt = load_json(adapter_path)
     lifecycle = load_json(lifecycle_path)
     performance = load_json(performance_path)
+    portable_v2_equivalence = load_json(portable_v2_equivalence_path)
 
     runtime = proof.get("runtime", {})
     capture = proof.get("capture", {})
@@ -152,6 +154,7 @@ def normalize(args: argparse.Namespace) -> dict[str, Any]:
     adapter_ref = repo_path(adapter_path) if adapter_path else ""
     lifecycle_ref = repo_path(lifecycle_path) if lifecycle_path else ""
     performance_ref = repo_path(performance_path) if performance_path else ""
+    portable_v2_equivalence_ref = repo_path(portable_v2_equivalence_path) if portable_v2_equivalence_path else ""
 
     artifact_count = int(pe_audit.get("artifact_count", 0)) if pe_audit else 0
     pe_audit_status = status_from_input(pe_audit) if pe_audit else "informational"
@@ -218,6 +221,15 @@ def normalize(args: argparse.Namespace) -> dict[str, Any]:
                 checksum=lifecycle.get("checksum"),
             ),
             "performance": performance_axis_payload(performance, performance_ref),
+            "portable_v2_equivalence": axis(
+                status_from_input(portable_v2_equivalence) if portable_v2_equivalence else "informational",
+                "Portable v2 equivalence receipt was supplied." if portable_v2_equivalence else "No portable v2 equivalence receipt was supplied.",
+                [portable_v2_equivalence_ref] if portable_v2_equivalence_ref else [],
+                claim_boundary=portable_v2_equivalence.get(
+                    "claim_boundary",
+                    "v1/v2 deterministic equivalence for named canary profiles only",
+                ),
+            ),
             "artifact_audit": axis(
                 pe_audit_status,
                 "PE audit facts were supplied." if pe_audit else "No PE audit facts were supplied.",
@@ -278,6 +290,7 @@ def build_parser() -> argparse.ArgumentParser:
     normalize_parser.add_argument("--adapter-receipt", help="Optional adapter receipt JSON input.")
     normalize_parser.add_argument("--lifecycle", help="Optional lifecycle JSON input.")
     normalize_parser.add_argument("--performance", help="Optional performance/profile JSON input.")
+    normalize_parser.add_argument("--portable-v2-equivalence", help="Optional portable v2 equivalence JSON input.")
     normalize_parser.add_argument("--output", required=True)
     normalize_parser.set_defaults(func=command_normalize)
 

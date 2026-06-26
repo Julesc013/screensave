@@ -17,10 +17,16 @@
     "exact_comparison",
     "lifecycle",
     "performance_soak",
+    "portable_v2_equivalence",
     "artifact_audit",
+    "v1_win32_artifacts_preserved",
+    "no_aide_runtime_dependency",
     "compatibility_evidence_class",
+    "compatibility_not_certified",
     "artistic_review",
-    "release_promotion"
+    "artistic_acceptance_blocked",
+    "release_promotion",
+    "release_promotion_blocked"
   ],
   "forbidden_claims": [
     "certified_os_support_true_without_runtime_evidence",

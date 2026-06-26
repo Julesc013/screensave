@@ -143,11 +143,14 @@
         "after_source",
         "command_binding",
         "proof_run",
+        "equivalence_run",
         "bundle_run",
         "profile_proof_ref",
         "profile_proof_status",
         "proof_bundle_ref",
         "proof_bundle_status",
+        "portable_v2_equivalence_ref",
+        "portable_v2_equivalence_status",
         "result_axes",
         "claim_boundary"
       ]

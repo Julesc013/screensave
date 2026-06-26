@@ -15,7 +15,9 @@ scope = [
   "compare",
   "audit",
   "proof",
+  "equivalence",
   "proof includes Nocturne render, exact compare, and artifact-profile PE audit facts",
+  "portable v2 equivalence is projected as a separate claim",
   "read-only deterministic commands are ScreenSave-side admitted",
   "generated proof commands are ScreenSave-side admitted only through contained output roots",
 ]

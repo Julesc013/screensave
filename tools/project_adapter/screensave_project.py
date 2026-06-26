@@ -928,6 +928,7 @@ def command_bundle(args: argparse.Namespace) -> int:
     proof_path = proof_dir / "profile-proof.json"
     bundle_path = output_dir / "proof-bundle-v1.json"
     receipt_path = output_dir / "adapter-proof.json"
+    equivalence_path = output_dir / "portable-v2-equivalence.json"
     proof_command = [
         str(SSLAB.relative_to(ROOT)),
         "proof",
@@ -946,7 +947,26 @@ def command_bundle(args: argparse.Namespace) -> int:
         "--output",
         str(bundle_path),
     ]
+    equivalence_command = [
+        str(SSLAB_EQUIVALENCE.relative_to(ROOT)),
+        "--output",
+        str(equivalence_path),
+        "--work-root",
+        str(output_dir / "equivalence-captures"),
+    ]
     proof_run = run_command(proof_command, timeout_seconds=120)
+    equivalence_run = {
+        "command": [sys.executable, *equivalence_command],
+        "returncode": None,
+        "stdout": "",
+        "stderr": "not requested for v1 path",
+        "status": "informational",
+        "timeout_seconds": 180,
+    }
+    if proof_run["returncode"] == 0 and execution_path == "v2":
+        equivalence_run = run_command(equivalence_command, timeout_seconds=180)
+        if equivalence_run["returncode"] == 0:
+            bundle_command.extend(["--portable-v2-equivalence", str(equivalence_path)])
     bundle_run = run_command(bundle_command, timeout_seconds=60) if proof_run["returncode"] == 0 else {
         "command": [sys.executable, *bundle_command],
         "returncode": None,
@@ -957,13 +977,21 @@ def command_bundle(args: argparse.Namespace) -> int:
     }
     profile_proof = load_json(proof_path) if proof_path.exists() else {}
     bundle = load_json(bundle_path) if bundle_path.exists() else {}
-    status = "pass" if proof_run["returncode"] == 0 and bundle_run["returncode"] == 0 else "fail"
+    equivalence = load_json(equivalence_path) if equivalence_path.exists() else {}
+    equivalence_ok = execution_path == "v1" or equivalence_run["returncode"] == 0
+    status = "pass" if proof_run["returncode"] == 0 and bundle_run["returncode"] == 0 and equivalence_ok else "fail"
+    combined_command = proof_run["command"] + ["&&"]
+    if execution_path == "v2":
+        combined_command.extend(equivalence_run["command"])
+        combined_command.append("&&")
+    combined_command.extend(bundle_run["command"])
     manifest_path = write_artifact_manifest(
         output_dir,
         "bundle",
         [
             ("profile_proof", proof_path, "sslab-profile-proof-json"),
             ("proof_bundle_v1", bundle_path, "proof-bundle-v1-json"),
+            ("portable_v2_equivalence", equivalence_path, "portable-v2-equivalence-json"),
             ("adapter_receipt", receipt_path, "adapter-receipt-json"),
         ],
     )
@@ -981,16 +1009,19 @@ def command_bundle(args: argparse.Namespace) -> int:
         "after_source": source_payload(),
         "command_binding": command_binding_payload(
             "bundle",
-            proof_run["command"] + ["&&"] + bundle_run["command"],
+            combined_command,
             [SSLAB, PROOF_BUNDLE, GENERATED_PROOF_REGISTRY],
             capability,
         ),
         "proof_run": proof_run,
+        "equivalence_run": equivalence_run,
         "bundle_run": bundle_run,
         "profile_proof_ref": repo_path(proof_path),
         "profile_proof_status": profile_proof.get("status"),
         "proof_bundle_ref": repo_path(bundle_path),
         "proof_bundle_status": bundle.get("status"),
+        "portable_v2_equivalence_ref": repo_path(equivalence_path) if equivalence else "",
+        "portable_v2_equivalence_status": equivalence.get("status", "not-run"),
         "result_axes": bundle.get("result_axes", {}),
         "claim_boundary": "Proof Bundle v1 projection only; not compatibility certification, artistic acceptance, or release promotion.",
     }

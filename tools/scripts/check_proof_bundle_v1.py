@@ -27,6 +27,7 @@ REQUIRED_AXES = {
     "comparison",
     "lifecycle",
     "performance",
+    "portable_v2_equivalence",
     "artifact_audit",
     "compatibility",
     "artistic_review",
@@ -55,6 +56,7 @@ def main() -> int:
             "`comparison`",
             "`lifecycle`",
             "`performance`",
+            "`portable_v2_equivalence`",
             "`artifact_audit`",
             "`compatibility`",
             "`artistic_review`",
@@ -63,6 +65,7 @@ def main() -> int:
             "does not mean the saver looks good",
             "lifecycle receipts",
             "performance receipts",
+            "portable v2 equivalence receipts",
         ]:
             require(needle in text, f"proof_bundle_v1.md is missing expected text: {needle!r}", errors)
 
@@ -161,6 +164,11 @@ def main() -> int:
         require(
             axes.get("performance", {}).get("frame_count") == 8,
             "performance axis must retain performance frame-count evidence.",
+            errors,
+        )
+        require(
+            axes.get("portable_v2_equivalence", {}).get("status") == "informational",
+            "portable v2 equivalence axis must be present even without supplied equivalence evidence.",
             errors,
         )
         require(axes.get("compatibility", {}).get("certified") is False, "compatibility axis must not certify OS support.", errors)

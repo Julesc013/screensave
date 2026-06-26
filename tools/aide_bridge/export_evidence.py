@@ -55,11 +55,13 @@ def export_packet(args: argparse.Namespace) -> dict[str, Any]:
     proof_bundle_path = resolve_input(args.proof_bundle)
     artifact_manifest_path = resolve_input(args.artifact_manifest)
     pe_audit_path = resolve_input(args.pe_audit_json) if args.pe_audit_json else None
+    portable_v2_equivalence_path = resolve_input(args.portable_v2_equivalence) if args.portable_v2_equivalence else None
 
     adapter_receipt = load_json(adapter_receipt_path)
     proof_bundle = load_json(proof_bundle_path)
     artifact_manifest = load_json(artifact_manifest_path)
     pe_audit = load_json(pe_audit_path)
+    portable_v2_equivalence = load_json(portable_v2_equivalence_path)
     axes = proof_bundle.get("result_axes", {})
     compatibility = axes.get("compatibility", {})
     artistic = axes.get("artistic_review", {})
@@ -86,6 +88,11 @@ def export_packet(args: argparse.Namespace) -> dict[str, Any]:
             "proof_bundle": repo_path(proof_bundle_path),
             "artifact_manifest": repo_path(artifact_manifest_path),
             "pe_audit_json": repo_path(pe_audit_path) if pe_audit_path else "",
+            "portable_v2_equivalence": repo_path(portable_v2_equivalence_path) if portable_v2_equivalence_path else "",
+        },
+        "domain_payload_ref": {
+            "kind": "Proof Bundle v1",
+            "ref": repo_path(proof_bundle_path),
         },
         "claims": {
             "execution": axis_claim(axes.get("execution", {}), "Execution evidence reference."),
@@ -97,6 +104,17 @@ def export_packet(args: argparse.Namespace) -> dict[str, Any]:
             ),
             "lifecycle": axis_claim(axes.get("lifecycle", {}), "Lifecycle evidence reference."),
             "performance_soak": axis_claim(axes.get("performance", {}), "Performance and soak evidence reference."),
+            "portable_v2_equivalence": axis_claim(
+                axes.get("portable_v2_equivalence", portable_v2_equivalence),
+                "Portable v2 equivalence remains a separate deterministic canary claim.",
+                claim_boundary=portable_v2_equivalence.get(
+                    "claim_boundary",
+                    axes.get("portable_v2_equivalence", {}).get(
+                        "claim_boundary",
+                        "v1/v2 deterministic equivalence for named canary profiles only",
+                    ),
+                ),
+            ),
             "artifact_audit": axis_claim(
                 axes.get("artifact_audit", {}),
                 "Artifact audit evidence reference.",
@@ -109,16 +127,45 @@ def export_packet(args: argparse.Namespace) -> dict[str, Any]:
                 evidence_class=compatibility.get("evidence_class", "targeted"),
                 certified_os_support=certified_os_support,
             ),
+            "v1_win32_artifacts_preserved": axis_claim(
+                axes.get("artifact_audit", {}),
+                "Win32 artifact preservation requires native artifact build/audit evidence.",
+                artifact_count=axes.get("artifact_audit", {}).get("artifact_count", pe_audit.get("artifact_count", 0)),
+                violation_count=axes.get("artifact_audit", {}).get("violation_count", pe_audit.get("violation_count", 0)),
+            ),
+            "no_aide_runtime_dependency": {
+                "status": "pass",
+                "summary": "AIDE EvidencePacket projection stores references only and is absent from ScreenSave product/runtime code.",
+                "evidence_refs": [repo_path(adapter_receipt_path), repo_path(proof_bundle_path)],
+            },
+            "compatibility_not_certified": {
+                "status": "pass",
+                "summary": "Mechanical proof and binary facts do not certify operating-system compatibility.",
+                "evidence_refs": [repo_path(proof_bundle_path)],
+                "certified_os_support": False,
+            },
             "artistic_review": axis_claim(
                 artistic,
                 "Human artistic review is separate from mechanical proof.",
                 accepted=False,
             ),
+            "artistic_acceptance_blocked": {
+                "status": artistic.get("status", "blocked"),
+                "summary": "Human artistic acceptance remains blocked unless supplied by a human review record.",
+                "evidence_refs": artistic.get("evidence_refs", []),
+                "accepted": False,
+            },
             "release_promotion": axis_claim(
                 release,
                 "Release promotion is separate from mechanical proof.",
                 promoted=False,
             ),
+            "release_promotion_blocked": {
+                "status": release.get("status", "blocked"),
+                "summary": "Release promotion remains blocked unless supplied by an explicit promotion record.",
+                "evidence_refs": release.get("evidence_refs", []),
+                "promoted": False,
+            },
         },
         "artifact_summary": {
             "manifest_ref": repo_path(artifact_manifest_path),
@@ -153,6 +200,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--proof-bundle", required=True)
     parser.add_argument("--artifact-manifest", required=True)
     parser.add_argument("--pe-audit-json")
+    parser.add_argument("--portable-v2-equivalence")
     parser.add_argument("--output", required=True)
     parser.set_defaults(func=command_export)
     return parser

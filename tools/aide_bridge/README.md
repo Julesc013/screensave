@@ -17,3 +17,9 @@ Output:
 
 The ScreenSave proof bundle remains the domain payload. AIDE receives evidence
 references and separated claim axes only.
+
+Portable v2 exports may also attach a fixed equivalence receipt. The packet
+then records `domain_payload_ref` for the Proof Bundle v1 payload plus explicit
+claims for portable v2 equivalence, v1 Win32 artifact preservation evidence,
+no AIDE runtime dependency, compatibility-not-certified, blocked artistic
+acceptance, and blocked release promotion.
