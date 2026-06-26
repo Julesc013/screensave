@@ -1,0 +1,216 @@
+schema_version = 1
+ledger_id = "screensave-workunit-ledger-v1"
+status = "active"
+as_of = "2026-06-27"
+source_mutation_by_aide = false
+automatic_merge = false
+automatic_promotion = false
+claim_boundary = "ScreenSave WorkUnits may guide human or assistant-driven work; AIDE does not autonomously mutate source, merge, promote, release, certify compatibility, or accept artistic quality."
+
+[[work_units]]
+id = "SS-G0"
+title = "Update AIDE baseline and lock governance"
+task_class = "implementation"
+objective = "Record the newer observed AIDE governance baseline without admitting unsafe runtime behavior."
+allowed_paths = ["PROJECT_STATE.toml", ".aide/aide_lite.lock.toml", ".aide/vendor-lock.yaml", ".aide/ownership/**", ".aide/distribution/**", "tools/scripts/check_aide_vendor_lock.py", "tools/scripts/check_aide_ownership.py", "tools/scripts/check_project_state.py"]
+forbidden_paths = ["products/**", "platform/**", "releases/**"]
+selected_validation_tier = "T1"
+expected_validators = ["py -3 tools/scripts/check_aide_vendor_lock.py", "py -3 tools/scripts/check_aide_ownership.py", "py -3 tools/scripts/check_project_state.py --summary"]
+evidence_outputs = [".aide/vendor-lock.yaml", ".aide/ownership/ownership-ledger.toml", ".aide/distribution/screensave-aide-lite-manifest.json"]
+claim_boundary = "Import governance only; no autonomous source mutation, release, or certification."
+rollback_point = "1b0becd"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"
+
+[[work_units]]
+id = "SS-G1"
+title = "Add ScreenSave WorkUnit ledger and task protocol"
+task_class = "implementation"
+objective = "Create the formal WorkUnit ledger, templates, local CLI, and validator."
+allowed_paths = [".aide/work_units/**", "tools/aideops/workunit.py", "tools/scripts/check_aide_workunits.py", "tools/aideops/screensave_aide.py"]
+forbidden_paths = ["products/**", "platform/**", "releases/**"]
+selected_validation_tier = "T1"
+expected_validators = ["py -3 tools/scripts/check_aide_workunits.py", "py -3 tools/scripts/check_aide_operational.py"]
+evidence_outputs = [".aide/work_units/index.toml"]
+claim_boundary = "WorkUnit protocol only; no product truth transfer."
+rollback_point = "315ce85"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"
+
+[[work_units]]
+id = "SS-G2"
+title = "Add repair queue and failure taxonomy"
+task_class = "repair"
+objective = "Create a deterministic ScreenSave repair queue for validator, docs, catalog, proof, packc, AIDE, CI, artifact, Workbench, and release-readiness drift."
+allowed_paths = [".aide/repairs/**", ".aide/policies/screensave-repair.yaml", "tools/aideops/repair_queue.py", "tools/scripts/check_repair_queue.py"]
+forbidden_paths = ["products/**", "platform/**", "releases/**"]
+selected_validation_tier = "T1"
+expected_validators = ["py -3 tools/scripts/check_repair_queue.py"]
+evidence_outputs = [".aide/repairs/index.toml"]
+claim_boundary = "Repair queue records tasks only; repairs are separate commits."
+rollback_point = "315ce85"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"
+
+[[work_units]]
+id = "SS-G3"
+title = "Enforce ScreenSave commit discipline"
+task_class = "review"
+objective = "Add the PAW-G commit template and metadata validator for frequent detailed commits."
+allowed_paths = [".aide/git/**", ".aide/policies/screensave-commit-discipline.yaml", "tools/scripts/check_commit_metadata.py"]
+forbidden_paths = ["products/**", "platform/**", "releases/**"]
+selected_validation_tier = "T1"
+expected_validators = ["py -3 tools/scripts/check_commit_metadata.py"]
+evidence_outputs = [".aide/git/screensave-commit-template.md"]
+claim_boundary = "Commit discipline guidance only; no branch mutation."
+rollback_point = "315ce85"
+human_review_required = true
+agent_allowed = true
+agent_mode = "proposal-only"
+
+[[work_units]]
+id = "SS-G4"
+title = "Define Plasma v2 release-readiness gate"
+task_class = "release-readiness"
+objective = "Document release-readiness axes and status distinctions without promoting Plasma v2."
+allowed_paths = ["contracts/plasma_release_readiness_v1.md", "products/savers/plasma/docs/plasma-v2-release-readiness.md", "tools/scripts/check_plasma_v2_release_readiness_contract.py"]
+forbidden_paths = ["PROJECT_STATE.toml"]
+selected_validation_tier = "T1"
+expected_validators = ["py -3 tools/scripts/check_plasma_v2_release_readiness_contract.py", "py -3 tools/scripts/check_contracts.py"]
+evidence_outputs = ["contracts/plasma_release_readiness_v1.md"]
+claim_boundary = "Contract only; no stable release."
+rollback_point = "315ce85"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"
+
+[[work_units]]
+id = "SS-G5"
+title = "Stage Plasma v2 preview artifacts"
+task_class = "release-readiness"
+objective = "Create a non-published package stage for Plasma v2 preview artifacts and references."
+allowed_paths = ["packaging/windows/plasma-v2-preview/**", "tools/release/stage_plasma_v2.py", "tools/scripts/check_plasma_v2_package_stage.py"]
+forbidden_paths = ["releases/**"]
+selected_validation_tier = "T2"
+expected_validators = ["py -3 tools/scripts/check_plasma_v2_package_stage.py"]
+evidence_outputs = ["packaging/windows/plasma-v2-preview/manifest.toml"]
+claim_boundary = "Package staging only; no publish."
+rollback_point = "315ce85"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"
+
+[[work_units]]
+id = "SS-G6"
+title = "Add Manager Plasma v2 pack preview model"
+task_class = "implementation"
+objective = "Expose preview-level pack facts without installation mutation."
+allowed_paths = ["products/apps/suite/src/manager_pack_preview.*", "products/apps/suite/tests/manager_pack_preview_smoke.c", "tools/scripts/check_manager_pack_preview.py"]
+forbidden_paths = ["products/apps/suite/src/*install*", "platform/**"]
+selected_validation_tier = "T2"
+expected_validators = ["py -3 tools/scripts/check_manager_pack_preview.py", "py -3 tools/scripts/check_packc.py"]
+evidence_outputs = ["products/apps/suite/tests/manager_pack_preview_smoke.c"]
+claim_boundary = "Preview model only; no install mutation."
+rollback_point = "315ce85"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"
+
+[[work_units]]
+id = "SS-G7"
+title = "Add Workbench release-readiness workspace"
+task_class = "implementation"
+objective = "Show release-readiness facts through Workbench without publication authority."
+allowed_paths = ["products/apps/benchlab/**", "tools/scripts/check_workbench_shell.py"]
+forbidden_paths = ["tools/sslab/src/**", "releases/**"]
+selected_validation_tier = "T2"
+expected_validators = ["py -3 tools/scripts/check_workbench_shell.py", "py -3 tools/scripts/check_plasma_v2_stable_candidate.py"]
+evidence_outputs = ["products/apps/benchlab/tests/workbench_shell_smoke.c"]
+claim_boundary = "Workbench consumes evidence only; no release promotion."
+rollback_point = "315ce85"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"
+
+[[work_units]]
+id = "SS-G8"
+title = "Add final artistic decision packet template"
+task_class = "review"
+objective = "Prepare a release-candidate artistic decision packet without final stable acceptance."
+allowed_paths = ["validation/captures/plasma-v2/final-artistic-decision/**", "tools/scripts/check_plasma_v2_artistic_decision.py"]
+forbidden_paths = ["PROJECT_STATE.toml"]
+selected_validation_tier = "T1"
+expected_validators = ["py -3 tools/scripts/check_plasma_v2_artistic_decision.py"]
+evidence_outputs = ["validation/captures/plasma-v2/final-artistic-decision/decision.template.toml"]
+claim_boundary = "Release-candidate decision packet only; not stable release."
+rollback_point = "315ce85"
+human_review_required = true
+agent_allowed = true
+agent_mode = "proposal-only"
+
+[[work_units]]
+id = "SS-G9"
+title = "Add proposal-only agent session protocol"
+task_class = "agent-session"
+objective = "Allow deterministic proposal receipts while keeping apply, merge, release, and self-approval blocked."
+allowed_paths = [".aide/agentic/**", "tools/aideops/agentic.py", "tools/scripts/check_agentic_policy.py"]
+forbidden_paths = ["products/**", "platform/**", "releases/**"]
+selected_validation_tier = "T1"
+expected_validators = ["py -3 tools/scripts/check_agentic_policy.py"]
+evidence_outputs = [".aide/agentic/policy.toml"]
+claim_boundary = "Proposal-only agent protocol; no automatic apply."
+rollback_point = "315ce85"
+human_review_required = true
+agent_allowed = true
+agent_mode = "proposal-only"
+
+[[work_units]]
+id = "SS-G10"
+title = "Add release-readiness fixed capabilities"
+task_class = "implementation"
+objective = "Expose fixed release-readiness checks without generic command or release capabilities."
+allowed_paths = ["tools/project_adapter/capability_bindings.json", "tools/project_adapter/screensave_project.py", "tools/scripts/check_project_adapter.py"]
+forbidden_paths = ["products/**", "releases/**"]
+selected_validation_tier = "T2"
+expected_validators = ["py -3 tools/scripts/check_project_adapter.py", "py -3 tools/project_adapter/screensave_project.py capabilities"]
+evidence_outputs = ["tools/project_adapter/capability_bindings.json"]
+claim_boundary = "Fixed checks only; no generic command, release, or promotion capability."
+rollback_point = "315ce85"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"
+
+[[work_units]]
+id = "SS-G11"
+title = "Add Plasma v2 release-readiness checker"
+task_class = "release-readiness"
+objective = "Gate the release-readiness-reviewed state without setting Plasma v2 stable."
+allowed_paths = ["tools/scripts/check_plasma_v2_release_readiness.py", "validation/captures/plasma-v2/release-readiness/**"]
+forbidden_paths = ["PROJECT_STATE.toml", "releases/**"]
+selected_validation_tier = "T2"
+expected_validators = ["py -3 tools/scripts/check_plasma_v2_release_readiness.py", "py -3 tools/project_adapter/screensave_project.py validate --tier T2"]
+evidence_outputs = ["validation/captures/plasma-v2/release-readiness/gate-report.json"]
+claim_boundary = "Readiness gate only; no stable release."
+rollback_point = "315ce85"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"
+
+[[work_units]]
+id = "SS-G12"
+title = "Record Plasma v2 release-readiness review"
+task_class = "release-readiness"
+objective = "Update project state to release-readiness-reviewed with stable still false."
+allowed_paths = ["PROJECT_STATE.toml", "VERSION.toml", "README.md", "docs/roadmap/**", "products/savers/plasma/docs/**"]
+forbidden_paths = ["releases/**", "products/savers/plasma/src/**"]
+selected_validation_tier = "T2"
+expected_validators = ["py -3 tools/scripts/check_project_state.py --summary", "py -3 tools/scripts/check_plasma_v2_release_readiness.py", "py -3 tools/scripts/check_docs_basics.py", "py -3 tools/scripts/check_contracts.py"]
+evidence_outputs = ["PROJECT_STATE.toml", "VERSION.toml"]
+claim_boundary = "State transition only; stable remains false."
+rollback_point = "315ce85"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"

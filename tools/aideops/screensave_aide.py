@@ -19,6 +19,7 @@ AIDE_LOCK = ROOT / ".aide" / "aide_lite.lock.toml"
 OPERATION_ROOT = ROOT / "out" / "aide" / "operations"
 WORK_UNIT_FILES = [
     ROOT / ".aide" / "work_units" / "paw-cx-portable-v2.toml",
+    ROOT / ".aide" / "work_units" / "index.toml",
     ROOT / ".aide" / "work_units" / "paw-c1-portable-v2-runtime-equivalence.toml",
     ROOT / ".aide" / "work_units" / "plasma-v2-reference-slice.toml",
     ROOT / ".aide" / "work_units" / "plasma-v2-visual-review-and-packc.toml",

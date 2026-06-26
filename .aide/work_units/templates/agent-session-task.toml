@@ -1,0 +1,15 @@
+schema_version = 1
+id = "SS-TEMPLATE-AGENT-SESSION"
+title = "Agent-session task template"
+task_class = "agent-session"
+objective = "Describe the bounded proposal-only agent objective."
+allowed_paths = []
+forbidden_paths = []
+selected_validation_tier = "T1"
+expected_validators = []
+evidence_outputs = []
+claim_boundary = "Agent session task only; no automatic apply, merge, release, or self-approval."
+rollback_point = "HEAD"
+human_review_required = true
+agent_allowed = true
+agent_mode = "proposal-only"

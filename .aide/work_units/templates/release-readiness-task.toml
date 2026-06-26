@@ -1,0 +1,15 @@
+schema_version = 1
+id = "SS-TEMPLATE-RELEASE-READINESS"
+title = "Release-readiness task template"
+task_class = "release-readiness"
+objective = "Describe the bounded release-readiness objective."
+allowed_paths = []
+forbidden_paths = []
+selected_validation_tier = "T2"
+expected_validators = []
+evidence_outputs = []
+claim_boundary = "Release-readiness task only; no publication or stable promotion."
+rollback_point = "HEAD"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"

@@ -1,0 +1,15 @@
+schema_version = 1
+id = "SS-TEMPLATE-REVIEW"
+title = "Review task template"
+task_class = "review"
+objective = "Describe the bounded review objective."
+allowed_paths = []
+forbidden_paths = []
+selected_validation_tier = "T1"
+expected_validators = []
+evidence_outputs = []
+claim_boundary = "Review task only; no release promotion or compatibility certification."
+rollback_point = "HEAD"
+human_review_required = true
+agent_allowed = true
+agent_mode = "proposal-only"

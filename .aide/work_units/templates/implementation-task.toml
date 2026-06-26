@@ -1,0 +1,15 @@
+schema_version = 1
+id = "SS-TEMPLATE-IMPLEMENTATION"
+title = "Implementation task template"
+task_class = "implementation"
+objective = "Describe the bounded implementation objective."
+allowed_paths = []
+forbidden_paths = []
+selected_validation_tier = "T1"
+expected_validators = []
+evidence_outputs = []
+claim_boundary = "Implementation task only; no release promotion or compatibility certification."
+rollback_point = "HEAD"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"
