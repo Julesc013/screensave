@@ -348,3 +348,26 @@ int benchlab_workbench_shell_author_plasma_v2(benchlab_workbench_plasma_author *
     author_out->preview_checksum = checksum;
     return checksum != 0UL;
 }
+
+int benchlab_workbench_shell_compare_plasma_v2(benchlab_workbench_plasma_compare *compare_out)
+{
+    if (compare_out == 0) {
+        return 0;
+    }
+    memset(compare_out, 0, sizeof(*compare_out));
+
+    compare_out->product_key = "plasma";
+    compare_out->reference_profile_key = "plasma.v2.reference.preview";
+    compare_out->candidate_profile_key = "plasma.v2.visualintent.preview";
+    compare_out->left_capture_ref = "validation/captures/plasma-v2/reference-preview/frame-0090.rgba";
+    compare_out->right_capture_ref = "validation/captures/plasma-v2/matrix/captures/visualintent-preview/frame-0090.rgba";
+    compare_out->left_rgba_sha256 = "df0c70d4c53e9c9bfb0c7c3eaaa81cad5a53596fff68175ef68cc8b3b504d1af";
+    compare_out->right_rgba_sha256 = "a7e33887587706d9375d678f736fd574ac0169490b99131704576727c16233a3";
+    compare_out->diff_ref = "validation/captures/plasma-v2/matrix/contact-sheets/README.md";
+    compare_out->contact_sheet_ref = "validation/captures/plasma-v2/matrix/captures/visualintent-preview/review-contact-sheet.md";
+    compare_out->proof_bundle_ref = "validation/captures/plasma-v2/matrix/proof-bundles/plasma-v2-visualintent-preview.json";
+    compare_out->review_status = "pending-human-preview-review";
+    compare_out->candidate_ranking_notes = "manual-ranking-required";
+    compare_out->claim_boundary = "Workbench Compare shows deterministic capture refs and hashes only; it does not assign artistic scores or promote release.";
+    return 1;
+}

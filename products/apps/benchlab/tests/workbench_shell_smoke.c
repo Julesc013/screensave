@@ -9,6 +9,7 @@ int main(void)
     benchlab_workbench_v2_inspect ricochet_inspect;
     benchlab_workbench_v2_inspect plasma_inspect;
     benchlab_workbench_plasma_author plasma_author;
+    benchlab_workbench_plasma_compare plasma_compare;
     unsigned long nocturne_checksum;
     unsigned long ricochet_checksum;
 
@@ -137,6 +138,24 @@ int main(void)
     }
     if (plasma_author.preview_checksum == 0UL) {
         return 32;
+    }
+    if (!benchlab_workbench_shell_compare_plasma_v2(&plasma_compare)) {
+        return 33;
+    }
+    if (strcmp(plasma_compare.product_key, "plasma") != 0) {
+        return 34;
+    }
+    if (strcmp(plasma_compare.reference_profile_key, "plasma.v2.reference.preview") != 0) {
+        return 35;
+    }
+    if (strcmp(plasma_compare.candidate_profile_key, "plasma.v2.visualintent.preview") != 0) {
+        return 36;
+    }
+    if (strcmp(plasma_compare.review_status, "pending-human-preview-review") != 0) {
+        return 37;
+    }
+    if (plasma_compare.left_rgba_sha256 == 0 || plasma_compare.right_rgba_sha256 == 0) {
+        return 38;
     }
     return 0;
 }
