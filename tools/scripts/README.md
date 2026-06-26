@@ -18,6 +18,7 @@ Current stage:
 - `check_aide_evidence_bridge.py` validates the ScreenSave AIDE EvidencePacket exporter by generating a fixed Ricochet v2 Proof Bundle v1 projection with portable v2 equivalence and checking that compatibility certification, artistic review, release promotion, and AIDE runtime dependency remain separate claims.
 - `check_aide_evidence_index.py` validates `.aide/evidence/index.toml` so AIDE can index ScreenSave proof references without becoming proof authority or a runtime dependency.
 - `check_portable_v2.py` validates the public portable v2 header seam: fixed-width C89-compatible aliases, no native platform terms, no public `long`, and size/version-prefixed public structures.
+- `check_product_core_boundaries.py` validates that Nocturne and Ricochet portable cores stay free of Win32, v1 saver host APIs, renderer APIs, and public or proof-observable `long` usage.
 - `check_contracts.py` validates the ScreenSave doctrine, portable-semantics, renderer-alias, proof-bundle, proof-kernel, and project-adapter contract scaffolding.
 - `check_visual_intent_contract.py` validates the draft VisualIntent v1 contract and example authoring intent.
 - `check_product_architecture.py` validates the active product architecture contract, product-family boundaries, canary sequence, and catalog fit.
