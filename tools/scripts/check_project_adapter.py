@@ -118,8 +118,8 @@ def main() -> int:
         status = run_adapter(["status"])
         require(status.get("adapter_schema") == "screensave-project-adapter-v0", "status must emit adapter schema.", errors)
         require(
-            status.get("payload", {}).get("active_program") == "proof-kernel-v1-ricochet",
-            "status must report proof-kernel-v1-ricochet.",
+            status.get("payload", {}).get("active_program") == "portable-v2-seam",
+            "status must report portable-v2-seam.",
             errors,
         )
 

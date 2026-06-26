@@ -18,9 +18,9 @@ Post-`SS` work now proceeds in the bounded `SX` substrate series.
 - Product catalog: [`catalog/products.toml`](catalog/products.toml)
 - Artifact profiles: [`catalog/artifact_profiles.toml`](catalog/artifact_profiles.toml)
 - Product doctrine: [`contracts/screensave_doctrine_v1.md`](contracts/screensave_doctrine_v1.md)
-- AIDE pilot: [`.aide/pilot.toml`](.aide/pilot.toml)
-- Active milestone: [`docs/roadmap/truth-proof-baseline.md`](docs/roadmap/truth-proof-baseline.md)
-- Active implementation track: [`contracts/proof_kernel_v0.md`](contracts/proof_kernel_v0.md)
+- AIDE Lite operational profile: [`.aide/pilot.toml`](.aide/pilot.toml), [`.aide/aide_lite.lock.toml`](.aide/aide_lite.lock.toml), and [`.aide/profile.yaml`](.aide/profile.yaml)
+- Active milestone: [`docs/roadmap/paw-01-product-acceleration-wave.md`](docs/roadmap/paw-01-product-acceleration-wave.md)
+- Active implementation track: [`contracts/portable_semantics_v2.md`](contracts/portable_semantics_v2.md)
 - Project adapter: [`contracts/project_adapter_v0.md`](contracts/project_adapter_v0.md) and [`tools/project_adapter/screensave_project.py`](tools/project_adapter/screensave_project.py)
 - Released public artifact: `c16-core-baseline`
 - Development-head product truth: Plasma [`U09 Stable Recut`](products/savers/plasma/docs/u09-stable-recut.md) and [`U09 Ship Posture`](products/savers/plasma/docs/u09-ship-posture.md)
@@ -43,12 +43,12 @@ python tools\project_adapter\screensave_project.py validate
 python tools\project_adapter\screensave_project.py proof
 ```
 
-The active implementation track is `ScreenSave Proof Kernel v0`: a private
-RGBA8 surface, minimal software/reference renderer, fixed-step headless
-Nocturne canary, compiled product-session proof path, canonical RGBA8 capture
-hash, exact comparison, lifecycle evidence, non-vacuous PE audit facts, and CI
-proof-kernel lanes. It is ScreenSave-owned; AIDE may consume its evidence but
-must not define its product truth.
+PAW-B is now closed around one shared `libsslab` proof path for Nocturne and
+Ricochet. The active implementation track is the `portable-v2-seam`: preserve
+the current Win32 `.scr` host and proof baselines while introducing host-neutral
+v2 contracts for shared session and surface semantics. That seam remains
+ScreenSave-owned; AIDE may consume its evidence but must not define its product
+truth.
 
 ## Download ScreenSave Core
 
@@ -108,7 +108,7 @@ Universal behavior ships first. If an optional capability is absent, ScreenSave 
 - [`tests/`](tests/): executable verification logic and fixtures
 - [`validation/`](validation/): stored evidence, support notes, and release validation captures
 - [`tools/`](tools/): repository validators and support tooling
-- [`.aide/`](.aide/): report-only development control plane and evidence/work-unit pilot
+- [`.aide/`](.aide/): bounded AIDE Lite operational control plane, imported tooling, and ScreenSave-local evidence/work-unit truth
 - [`assets/`](assets/): shared non-code content and license records
 - [`third_party/`](third_party/): third-party material and license placeholders
 

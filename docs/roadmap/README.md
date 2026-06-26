@@ -39,4 +39,4 @@ Type: explanatory roadmap.
 
 The `C00` through `C16` continuation bridge is complete and closed.
 `SS`, `SX`, `PL`, `PX`, and the Plasma `U09` corrective recut remain part of the lineage record.
-The current active authority is `proof-kernel-v1-ricochet`, with the MX wave queue preserved as historical-superseded control-plane context.
+The current active authority is `portable-v2-seam`, with the MX wave queue preserved as historical-superseded control-plane context.

@@ -95,9 +95,10 @@ Windows build receipts, lifecycle/performance inputs for Proof Bundle v1, and
 CI lanes for proof-kernel, project-adapter, native Windows build/audit,
 adapter proof, and normalized Proof Bundle v1 evidence.
 
-The next active program is `proof-kernel-v1-ricochet`. It must extract the
-generic `libsslab` proof runtime and add Ricochet as the second canary before
-portable v2 or Plasma runtime work begins.
+The next active program was `proof-kernel-v1-ricochet`. That gate is now complete.
+The current active program is `portable-v2-seam`. It must freeze the host-neutral
+portable seam only after Nocturne and Ricochet prove the shared `libsslab`
+mechanics.
 
 Proof Kernel v1 is the target for:
 

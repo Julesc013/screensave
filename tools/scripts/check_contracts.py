@@ -90,7 +90,7 @@ REQUIRED_CONTRACTS = {
         "fixed-step headless canary host",
         "exact repeatability comparison",
         "Proof Kernel v1 is the target for",
-        "The next active program is `proof-kernel-v1-ricochet`.",
+        "The current active program is `portable-v2-seam`.",
         "The first canary is `nocturne`.",
         "AIDE remains an optional evidence consumer",
     ],

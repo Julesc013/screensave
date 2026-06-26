@@ -1,7 +1,7 @@
 # PAW-01 Product Acceleration Wave
 
-Status: active umbrella program; Gate A closed and Gate B
-`proof-kernel-v1-ricochet` is active.
+Status: active umbrella program; Gates A and B are closed and Gate C
+`portable-v2-seam` is active.
 
 ## Purpose
 
@@ -78,7 +78,7 @@ Closeout evidence:
 
 ## Gate B - libsslab And Ricochet
 
-Status: active.
+Status: closed.
 
 Objective: replace the Nocturne-specific proof runner with reusable compiled
 proof infrastructure and a second structurally different canary.
@@ -105,11 +105,12 @@ Deliverables:
 - Ricochet has committed exact baselines for frames 0, 4, 8, and 32, and its
   proof profile is promoted to implemented with baseline references
 
-Remaining Gate B extraction:
+Gate B closeout:
 
-- remove remaining product-specific execution dispatch from `sslab.py` where
-  practical
-- keep portable v2 closed until this Gate B extraction is accepted
+- `sslab.py` no longer compiles product-specific proof executables
+- legacy render, lifecycle, and profile CLI forms now resolve to named proof
+  profiles over the generic `sslab_runner`
+- portable v2 work is now open behind the preserved proof baselines
 
 Exit:
 
@@ -121,6 +122,8 @@ Exit:
 - Workbench can link the same proof library
 
 ## Gate C - Portable v2 Seam
+
+Status: active.
 
 Objective: introduce the host-neutral shared semantic seam only after Nocturne
 and Ricochet prove the mechanics.

@@ -2,7 +2,7 @@
 
 Status: active synthesis and planning report.
 
-Date: 2026-06-25.
+Date: 2026-06-26.
 
 Primary doctrine: [../../contracts/screensave_doctrine_v1.md](../../contracts/screensave_doctrine_v1.md).
 
@@ -58,15 +58,14 @@ The repository has already implemented a substantial baseline:
 - hardened fixed-capability adapter output containment
 - Product Architecture v1 contract for four planes and canary sequence
 - VisualIntent v1 draft authoring contract
-- pinned report-only AIDE Lite lock
-- report-only AIDE pilot integration
+- pinned AIDE Lite operational lock
+- bounded AIDE Lite operational integration
 
 The repository is not complete. The largest remaining work is not more
 architecture prose. It is a sequence of proof-backed product slices:
 
-- finish Proof Kernel v0 as a complete Nocturne vertical slice
-- add Ricochet as the second architectural canary
-- move to a host-neutral portable v2 seam only after multiple products prove it
+- freeze and implement the host-neutral portable v2 seam now that Nocturne and
+  Ricochet prove the shared proof mechanics
 - implement the VisualIntent resolver and safe pack generation after proof exists
 - build Workbench over the same runner as CI
 - evolve Manager from the current suite lineage
@@ -90,7 +89,7 @@ Current authority is split deliberately:
 | RGBA8 surface contract | [../../contracts/surface_rgba8_v0.md](../../contracts/surface_rgba8_v0.md) |
 | Project adapter | [../../contracts/project_adapter_v0.md](../../contracts/project_adapter_v0.md) |
 | VisualIntent draft | [../../contracts/visual_intent_v1.md](../../contracts/visual_intent_v1.md) |
-| Report-only AIDE pilot | [../../.aide/pilot.toml](../../.aide/pilot.toml) |
+| AIDE Lite operational profile | [../../.aide/pilot.toml](../../.aide/pilot.toml) |
 | Pinned AIDE Lite lock | [../../.aide/aide_lite.lock.toml](../../.aide/aide_lite.lock.toml) |
 | Plasma stable truth | [../../products/savers/plasma/docs/u09-stable-recut.md](../../products/savers/plasma/docs/u09-stable-recut.md) |
 | Plasma ship posture | [../../products/savers/plasma/docs/u09-ship-posture.md](../../products/savers/plasma/docs/u09-ship-posture.md) |
@@ -99,7 +98,7 @@ Current state summary:
 
 - released public artifact: `c16-core-baseline`
 - development head: `plasma-u09-corrective-recut`
-- active program: `proof-kernel-v1-ricochet`
+- active program: `portable-v2-seam`
 - release candidate: none
 - queue authority: historical-superseded MX queues
 - compatibility policy: evidence-classed

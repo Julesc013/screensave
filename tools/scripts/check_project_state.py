@@ -24,10 +24,12 @@ REQUIRED_TOP_LEVEL = {
     "compatibility",
     "proof_kernel",
     "proof_kernel_v1",
+    "portable_v2",
     "queues",
     "doctrine",
     "catalog",
     "project_adapter",
+    "aide_lite",
     "plasma",
     "build_profiles",
     "validators",
@@ -67,10 +69,12 @@ def validate_state(state: dict) -> list[str]:
     compatibility = state.get("compatibility", {})
     proof_kernel = state.get("proof_kernel", {})
     proof_kernel_v1 = state.get("proof_kernel_v1", {})
+    portable_v2 = state.get("portable_v2", {})
     queues = state.get("queues", {})
     doctrine = state.get("doctrine", {})
     catalog_state = state.get("catalog", {})
     project_adapter = state.get("project_adapter", {})
+    aide_lite = state.get("aide_lite", {})
     validators = state.get("validators", {})
     plasma = state.get("plasma", {})
     version = load_toml(VERSION_PATH)
@@ -83,21 +87,32 @@ def validate_state(state: dict) -> list[str]:
     require(compatibility.get("policy") == "evidence-classed", "compatibility.policy must be evidence-classed.", errors)
     require(authority.get("version_manifest") == "VERSION.toml", "authority.version_manifest must point to VERSION.toml.", errors)
     require(
-        authority.get("active_program") == "proof-kernel-v1-ricochet",
-        "authority.active_program must be proof-kernel-v1-ricochet.",
+        authority.get("active_program") == "portable-v2-seam",
+        "authority.active_program must be portable-v2-seam.",
         errors,
     )
     require(proof_kernel.get("status") == "complete", "proof_kernel.status must be complete.", errors)
     require(proof_kernel.get("milestone") == "proof-kernel-v0", "proof_kernel.milestone must remain proof-kernel-v0.", errors)
-    require(proof_kernel_v1.get("status") == "active", "proof_kernel_v1.status must be active.", errors)
+    require(proof_kernel_v1.get("status") == "complete", "proof_kernel_v1.status must be complete.", errors)
     require(
         proof_kernel_v1.get("milestone") == "proof-kernel-v1-ricochet",
         "proof_kernel_v1.milestone must be proof-kernel-v1-ricochet.",
         errors,
     )
+    require(proof_kernel_v1.get("completed_on") == "2026-06-26", "proof_kernel_v1.completed_on must be 2026-06-26.", errors)
+    require(proof_kernel_v1.get("opened_next") == "portable-v2-seam", "proof_kernel_v1.opened_next must be portable-v2-seam.", errors)
+    require(list(proof_kernel_v1.get("remaining", [])) == [], "proof_kernel_v1.remaining must be empty after Gate B closeout.", errors)
     require(
         "ricochet" in set(proof_kernel_v1.get("canary_products", [])),
         "proof_kernel_v1.canary_products must include ricochet.",
+        errors,
+    )
+    require(portable_v2.get("status") == "active", "portable_v2.status must be active.", errors)
+    require(portable_v2.get("milestone") == "portable-v2-seam", "portable_v2.milestone must be portable-v2-seam.", errors)
+    require(portable_v2.get("gate") == "PAW-C", "portable_v2.gate must be PAW-C.", errors)
+    require(
+        {"nocturne", "ricochet"} <= set(portable_v2.get("porting_products", [])),
+        "portable_v2.porting_products must include nocturne and ricochet.",
         errors,
     )
 
@@ -115,6 +130,7 @@ def validate_state(state: dict) -> list[str]:
         ("authority.build_controller", authority.get("build_controller")),
         ("authority.aide_pilot", authority.get("aide_pilot")),
         ("authority.aide_lite_lock", authority.get("aide_lite_lock")),
+        ("authority.aide_profile", authority.get("aide_profile")),
         ("authority.aide_integration_plan", authority.get("aide_integration_plan")),
         ("authority.visual_intent_contract", authority.get("visual_intent_contract")),
         ("release.artifact_manifest", release.get("artifact_manifest")),
@@ -131,6 +147,7 @@ def validate_state(state: dict) -> list[str]:
         ("proof_kernel.canary_evidence", proof_kernel.get("canary_evidence")),
         ("proof_kernel_v1.libsslab_abi", proof_kernel_v1.get("libsslab_abi")),
         ("proof_kernel_v1.libsslab_header", proof_kernel_v1.get("libsslab_header")),
+        ("portable_v2.contract", portable_v2.get("contract")),
         ("plasma.stable.source", plasma.get("stable", {}).get("source")),
         ("plasma.experimental.source", plasma.get("experimental", {}).get("source")),
     ):
@@ -214,6 +231,32 @@ def validate_state(state: dict) -> list[str]:
         errors,
     )
 
+    require(aide_lite.get("status") == "aide-lite-operational", "aide_lite.status must be aide-lite-operational.", errors)
+    require(
+        aide_lite.get("admitted_commit") == "492faa4f1a8280ba67954aa4fc252e79f2e19c15",
+        "aide_lite.admitted_commit must match the admitted AIDE Lite pin.",
+        errors,
+    )
+    require(aide_lite.get("import_mode") == "safe", "aide_lite.import_mode must remain safe.", errors)
+    require(
+        aide_lite.get("runtime_mode") == "external-sidecar-only",
+        "aide_lite.runtime_mode must remain external-sidecar-only.",
+        errors,
+    )
+    require(aide_lite.get("source_mutation_allowed") is False, "aide_lite.source_mutation_allowed must remain false.", errors)
+    require(aide_lite.get("automatic_merge_allowed") is False, "aide_lite.automatic_merge_allowed must remain false.", errors)
+    require(aide_lite.get("general_worker_admitted") is False, "aide_lite.general_worker_admitted must remain false.", errors)
+    require(
+        aide_lite.get("distribution_manifest_v1_status") == "unaccepted",
+        "aide_lite.distribution_manifest_v1_status must remain unaccepted.",
+        errors,
+    )
+    require(
+        aide_lite.get("pack_manifest_sha256") == "E02EFBB64036F0E73AF2856EE6066B1B6D4945C490EE0788FA1352A4DB371B4B",
+        "aide_lite.pack_manifest_sha256 must match the regenerated pack manifest digest.",
+        errors,
+    )
+
     for name, value in validators.items():
         require_path(value, f"validators.{name}", errors)
 
@@ -284,6 +327,7 @@ def print_summary(state: dict) -> None:
     development = state["development"]
     compatibility = state["compatibility"]
     queues = state["queues"]
+    portable_v2 = state["portable_v2"]
     plasma = state["plasma"]["stable"]
 
     print(f"State: {state['state_id']} ({state['as_of']})")
@@ -300,6 +344,19 @@ def print_summary(state: dict) -> None:
         print(f"Generated proof registry: {authority['generated_proof_registry']}")
     if "project_adapter" in authority:
         print(f"Project adapter: {authority['project_adapter']}")
+    if state.get("aide_lite"):
+        aide_lite = state["aide_lite"]
+        print(
+            "AIDE Lite: "
+            f"{aide_lite.get('status', 'unknown')} pin {str(aide_lite.get('admitted_commit', ''))[:7]} "
+            f"(latest observed {str(aide_lite.get('latest_observed_head', ''))[:7]}, "
+            f"DistributionManifest v1 {aide_lite.get('distribution_manifest_v1_status', 'unknown')})"
+        )
+    print(
+        "Portable v2: "
+        f"{portable_v2['status']} gate {portable_v2['gate']} "
+        f"for {', '.join(portable_v2.get('porting_products', []))}"
+    )
     print(
         "Plasma stable center: "
         f"{plasma['default_preset']} + {plasma['default_theme']}, "

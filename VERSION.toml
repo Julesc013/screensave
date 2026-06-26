@@ -1,6 +1,6 @@
 schema_version = 1
 version_id = "screensave-version-authority-00"
-as_of = "2026-06-25"
+as_of = "2026-06-26"
 
 [release]
 public_artifact = "c16-core-baseline"
@@ -11,7 +11,7 @@ status = "released-frozen"
 [development]
 current_state = "truth-proof-baseline-00"
 development_head = "plasma-u09-corrective-recut"
-active_milestone = "proof-kernel-v1-ricochet"
+active_milestone = "portable-v2-seam"
 release_candidate = "none"
 
 [abi]

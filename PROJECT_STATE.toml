@@ -6,7 +6,7 @@ as_of = "2026-06-26"
 current_truth = "truth-proof-baseline"
 public_release = "c16-core-baseline"
 development_head = "plasma-u09-corrective-recut"
-active_program = "proof-kernel-v1-ricochet"
+active_program = "portable-v2-seam"
 release_candidate = "none"
 queue_authority = "historical-mx-queue-superseded"
 product_catalog = "catalog/products.toml"
@@ -89,20 +89,22 @@ non_goals = [
 ]
 
 [proof_kernel_v1]
-status = "active"
+status = "complete"
 milestone = "proof-kernel-v1-ricochet"
 gate = "PAW-B"
 objective = "Extract generic libsslab proof runtime and add Ricochet as the second deterministic canary before portable v2 or Plasma runtime work."
 libsslab_abi = "contracts/libsslab_abi_v0.md"
 libsslab_header = "tools/sslab/include/screensave/sslab.h"
 canary_products = ["nocturne", "ricochet"]
+completed_on = "2026-06-26"
+opened_next = "portable-v2-seam"
 implemented = [
   "private libsslab ABI v0 header",
   "shared RGBA8 renderer and capture helpers",
   "generated proof registry from catalog proof profiles",
-  "profile-driven Nocturne proof orchestration",
+  "named-profile Nocturne proof orchestration through the generic sslab runner",
   "Ricochet classic_clean proof profile with frames 0, 4, 8, and 32",
-  "Ricochet compiled product-session proof runner",
+  "Ricochet proof operations routed through the generic sslab runner",
   "Ricochet repeated exact raw RGBA multi-frame proof",
   "generalized Ricochet lifecycle receipt with resize evidence and 32 create/destroy cycles",
   "informational Nocturne and Ricochet profile and short-soak receipts",
@@ -114,19 +116,48 @@ implemented = [
   "Workbench smoke execution through libsslab context, product, session, step, and render calls",
   "compiled capture, lifecycle, profile, and short-soak receipt operations in libsslab ABI v0",
   "generic sslab_runner proof command built over one private static libsslab artifact",
+  "legacy sslab render, lifecycle, and profile forms reduced to named-profile compatibility aliases",
   "CI validation for the generic libsslab runner proof path",
   "committed Ricochet exact baselines for frames 0, 4, 8, and 32",
   "Ricochet proof profile promoted to implemented with baseline capture and proof references",
 ]
-remaining = [
-  "remove remaining product-specific orchestration branches from sslab.py where practical",
-  "only then open portable-v2 work",
-]
+remaining = []
 required_boundaries = [
   "current Windows/32-bit v1 proof only",
   "no portable v2 claim before Gate B exit",
   "no Plasma runtime implementation before Ricochet proof passes",
   "Python may orchestrate profiles but must not own product simulation or rendering semantics",
+]
+
+[portable_v2]
+status = "active"
+milestone = "portable-v2-seam"
+gate = "PAW-C"
+contract = "contracts/portable_semantics_v2.md"
+proof_dependency = "proof-kernel-v1-ricochet"
+porting_products = ["nocturne", "ricochet"]
+compatibility_adapter = "v1-win32-public-host-preserved"
+objective = "Freeze the host-neutral portable v2 seam, implement the v1 compatibility adapter, and adapt Nocturne and Ricochet without changing current Win32 .scr artifacts."
+work_units = [
+  "SS-PV2-00 freeze portable v2 contract",
+  "SS-PV2-01 implement host-neutral base/session/config/surface types",
+  "SS-PV2-02 implement v1 compatibility adapter",
+  "SS-PV2-03 adapt Nocturne",
+  "SS-PV2-04 adapt Ricochet",
+  "SS-PV2-05 prove v1-v2 equivalence",
+  "SS-PV2-06 route libsslab and Workbench through v2",
+  "SS-PV2-07 native build and CI regression",
+  "SS-PV2-08 independent check and Gate C acceptance",
+]
+required_boundaries = [
+  "no Windows types in v2 headers",
+  "public v2 structs are versioned and size-prefixed",
+  "Nocturne output must remain unchanged",
+  "Ricochet four-frame output must remain unchanged",
+  "current Win32 .scr artifacts remain operational during the seam transition",
+  "Workbench and CI continue to share the libsslab execution path",
+  "AIDE remains optional and absent from product or build runtime",
+  "no Plasma runtime implementation before portable v2 acceptance",
 ]
 
 [doctrine]
