@@ -152,6 +152,8 @@ def scan_files(errors: list[str]) -> None:
         "ss_u32 schema_version;",
         "PLASMA_SPEC_V2_SCHEMA_ID",
         "PLASMA_SPEC_V2_SCHEMA_VERSION",
+        "PLASMA_V2_BASIC_CONTROL_FIELD_FAMILY",
+        "plasma_spec_v2_apply_basic_control",
         "PLASMA_V2_PRESENTATION_FLAT",
     ]:
         require(needle in header_text, f"plasma_spec_v2.h missing {needle!r}", errors)

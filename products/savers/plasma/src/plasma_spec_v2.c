@@ -137,6 +137,109 @@ ss_u32 plasma_spec_v2_is_valid(const plasma_spec_v2 *spec)
     return SS_V2_TRUE;
 }
 
+ss_u32 plasma_spec_v2_apply_basic_control(plasma_spec_v2 *spec, ss_u32 control_id, ss_u32 value)
+{
+    if (spec == 0) {
+        return SS_V2_STATUS_BAD_ARGUMENT;
+    }
+
+    if (control_id == PLASMA_V2_BASIC_CONTROL_FIELD_FAMILY) {
+        if (plasma_spec_v2_field_token(value) == 0) {
+            return SS_V2_STATUS_UNSUPPORTED;
+        }
+        spec->field_family = value;
+    } else if (control_id == PLASMA_V2_BASIC_CONTROL_SCALE) {
+        spec->scale = value;
+    } else if (control_id == PLASMA_V2_BASIC_CONTROL_COMPLEXITY) {
+        spec->complexity = value;
+    } else if (control_id == PLASMA_V2_BASIC_CONTROL_MOTION_SPEED) {
+        spec->motion_speed = value;
+    } else if (control_id == PLASMA_V2_BASIC_CONTROL_WARP_AMOUNT) {
+        spec->warp_amount = value;
+    } else if (control_id == PLASMA_V2_BASIC_CONTROL_FEEDBACK_AMOUNT) {
+        spec->feedback_amount = value;
+    } else if (control_id == PLASMA_V2_BASIC_CONTROL_OUTPUT_STYLE) {
+        if (plasma_spec_v2_output_token(value) == 0) {
+            return SS_V2_STATUS_UNSUPPORTED;
+        }
+        spec->output_style = value;
+    } else if (control_id == PLASMA_V2_BASIC_CONTROL_MATERIAL) {
+        if (plasma_spec_v2_material_token(value) == 0) {
+            return SS_V2_STATUS_UNSUPPORTED;
+        }
+        spec->material_id = value;
+    } else if (control_id == PLASMA_V2_BASIC_CONTROL_BRIGHTNESS) {
+        spec->brightness = value;
+    } else if (control_id == PLASMA_V2_BASIC_CONTROL_CONTRAST) {
+        spec->contrast = value;
+    } else if (control_id == PLASMA_V2_BASIC_CONTROL_TREATMENT) {
+        if (plasma_spec_v2_treatment_token(value) == 0) {
+            return SS_V2_STATUS_UNSUPPORTED;
+        }
+        spec->treatment_flags = value;
+    } else if (control_id == PLASMA_V2_BASIC_CONTROL_SEED_POLICY) {
+        if (plasma_spec_v2_seed_policy_token(value) == 0) {
+            return SS_V2_STATUS_UNSUPPORTED;
+        }
+        spec->seed_policy = value;
+    } else if (control_id == PLASMA_V2_BASIC_CONTROL_QUALITY_INTENT) {
+        if (value != PLASMA_V2_QUALITY_SAFE) {
+            return SS_V2_STATUS_UNSUPPORTED;
+        }
+        spec->quality_intent = value;
+    } else {
+        return SS_V2_STATUS_UNSUPPORTED;
+    }
+
+    plasma_spec_v2_clamp(spec);
+    return plasma_spec_v2_is_valid(spec) == SS_V2_TRUE ? SS_V2_STATUS_OK : SS_V2_STATUS_BAD_ARGUMENT;
+}
+
+const char *plasma_spec_v2_basic_control_token(ss_u32 value)
+{
+    if (value == PLASMA_V2_BASIC_CONTROL_FIELD_FAMILY) {
+        return "field_family";
+    }
+    if (value == PLASMA_V2_BASIC_CONTROL_SCALE) {
+        return "scale";
+    }
+    if (value == PLASMA_V2_BASIC_CONTROL_COMPLEXITY) {
+        return "complexity";
+    }
+    if (value == PLASMA_V2_BASIC_CONTROL_MOTION_SPEED) {
+        return "motion_speed";
+    }
+    if (value == PLASMA_V2_BASIC_CONTROL_WARP_AMOUNT) {
+        return "warp_amount";
+    }
+    if (value == PLASMA_V2_BASIC_CONTROL_FEEDBACK_AMOUNT) {
+        return "feedback_amount";
+    }
+    if (value == PLASMA_V2_BASIC_CONTROL_OUTPUT_STYLE) {
+        return "output_style";
+    }
+    if (value == PLASMA_V2_BASIC_CONTROL_MATERIAL) {
+        return "material";
+    }
+    if (value == PLASMA_V2_BASIC_CONTROL_BRIGHTNESS) {
+        return "brightness";
+    }
+    if (value == PLASMA_V2_BASIC_CONTROL_CONTRAST) {
+        return "contrast";
+    }
+    if (value == PLASMA_V2_BASIC_CONTROL_TREATMENT) {
+        return "treatment";
+    }
+    if (value == PLASMA_V2_BASIC_CONTROL_SEED_POLICY) {
+        return "seed_policy";
+    }
+    if (value == PLASMA_V2_BASIC_CONTROL_QUALITY_INTENT) {
+        return "quality_intent";
+    }
+
+    return 0;
+}
+
 const char *plasma_spec_v2_field_token(ss_u32 value)
 {
     if (value == PLASMA_V2_FIELD_CLASSIC_INTERFERENCE) {

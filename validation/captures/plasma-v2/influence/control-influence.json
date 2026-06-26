@@ -1,0 +1,101 @@
+{
+  "baseline_sha256": "13b56766b1a650682b67dfe8ec318bf87a3e0c103b28c9d5cad06b94da20b395",
+  "baseline_variant": "baseline",
+  "claim_boundary": "Basic-control influence for the PAW-DX Plasma v2 reference preview slice only; not artistic acceptance or release promotion.",
+  "controls": [
+    {
+      "baseline_sha256": "13b56766b1a650682b67dfe8ec318bf87a3e0c103b28c9d5cad06b94da20b395",
+      "control": "field_family",
+      "status": "materially_influences_output",
+      "variant": "field_family_radial_warped",
+      "variant_sha256": "87f36b6a54d5f2bc495e7506d449aeba1460a7e0b8f44b58772b0fd80f1993aa"
+    },
+    {
+      "baseline_sha256": "13b56766b1a650682b67dfe8ec318bf87a3e0c103b28c9d5cad06b94da20b395",
+      "control": "scale",
+      "status": "materially_influences_output",
+      "variant": "scale_070",
+      "variant_sha256": "691594571bdf264c35c310188ef7ac850442f8109b93a7a3f7d5f6ec349f947e"
+    },
+    {
+      "baseline_sha256": "13b56766b1a650682b67dfe8ec318bf87a3e0c103b28c9d5cad06b94da20b395",
+      "control": "complexity",
+      "status": "materially_influences_output",
+      "variant": "complexity_088",
+      "variant_sha256": "a27ab6f17bb7a32f6081097dd2bb256c3eecce41c78ed2af4bc95d748551fbec"
+    },
+    {
+      "baseline_sha256": "13b56766b1a650682b67dfe8ec318bf87a3e0c103b28c9d5cad06b94da20b395",
+      "control": "motion_speed",
+      "status": "materially_influences_output",
+      "variant": "motion_speed_085",
+      "variant_sha256": "cf52563742186872aeeb8bd4f64749e27fd045eff41b4e1e3f66371d6b0fd2e7"
+    },
+    {
+      "baseline_sha256": "13b56766b1a650682b67dfe8ec318bf87a3e0c103b28c9d5cad06b94da20b395",
+      "control": "warp_amount",
+      "status": "materially_influences_output",
+      "variant": "warp_amount_060",
+      "variant_sha256": "083a0d7db071605daeaf6417d39b21a997ee04711a68de0f7c5f8b6dfa63e810"
+    },
+    {
+      "baseline_sha256": "13b56766b1a650682b67dfe8ec318bf87a3e0c103b28c9d5cad06b94da20b395",
+      "control": "feedback_amount",
+      "status": "materially_influences_output",
+      "variant": "feedback_amount_045",
+      "variant_sha256": "150a8dc3a11bd9abf4e3969f59ec1f7921dbb31aa57964bd8daca97f7f2f8f67"
+    },
+    {
+      "baseline_sha256": "13b56766b1a650682b67dfe8ec318bf87a3e0c103b28c9d5cad06b94da20b395",
+      "control": "output_style",
+      "status": "materially_influences_output",
+      "variant": "output_style_contour",
+      "variant_sha256": "2e5fa0998d63755051df6cf3dc5ba2ef1b30e7945ea4428af2584a9d300b6e88"
+    },
+    {
+      "baseline_sha256": "13b56766b1a650682b67dfe8ec318bf87a3e0c103b28c9d5cad06b94da20b395",
+      "control": "material",
+      "status": "materially_influences_output",
+      "variant": "material_aurora_cool",
+      "variant_sha256": "5352e970c077a55508cee326cdc0ed0fdc5e6a2763950179f9e6403d1221dabc"
+    },
+    {
+      "baseline_sha256": "13b56766b1a650682b67dfe8ec318bf87a3e0c103b28c9d5cad06b94da20b395",
+      "control": "brightness",
+      "status": "materially_influences_output",
+      "variant": "brightness_070",
+      "variant_sha256": "fe4a234fc12594e6e91dfbd372a5785595edd5b7fc90e00522b4606ac8165cc0"
+    },
+    {
+      "baseline_sha256": "13b56766b1a650682b67dfe8ec318bf87a3e0c103b28c9d5cad06b94da20b395",
+      "control": "contrast",
+      "status": "materially_influences_output",
+      "variant": "contrast_060",
+      "variant_sha256": "761787d156905edf5948058c98402872b70c8fc48d5c2691623ce7b8a9adc2e6"
+    },
+    {
+      "baseline_sha256": "13b56766b1a650682b67dfe8ec318bf87a3e0c103b28c9d5cad06b94da20b395",
+      "control": "treatment",
+      "status": "materially_influences_output",
+      "variant": "treatment_restrained_crt",
+      "variant_sha256": "a19df1ae1325847395c556a67951efbe4a04a03f09969fb1f0aac36b9f6e6036"
+    },
+    {
+      "control": "seed_policy",
+      "note": "metadata-only: host seed selection policy is recorded in the spec but applied before session creation",
+      "status": "metadata_only"
+    },
+    {
+      "control": "quality_intent",
+      "note": "metadata-only: PAW-DX admits only safe quality intent",
+      "status": "metadata_only"
+    }
+  ],
+  "profile": "plasma.v2.reference.preview",
+  "schema_version": "screensave.plasma-v2.influence.v0",
+  "surface": {
+    "format": "rgba8",
+    "height": 18,
+    "width": 32
+  }
+}

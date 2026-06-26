@@ -80,6 +80,7 @@ static ss_u32 plasma_v2_classic_value(const plasma_v2_core_session *session, ss_
     ss_u32 b;
     ss_u32 c;
     ss_u32 phase;
+    ss_u32 warp;
 
     width = session->width == 0U ? 1U : session->width;
     height = session->height == 0U ? 1U : session->height;
@@ -89,7 +90,8 @@ static ss_u32 plasma_v2_classic_value(const plasma_v2_core_session *session, ss_
     }
 
     phase = (session->phase + (session->base_seed & 255U)) & 255U;
-    a = plasma_v2_tri8((((x * (session->spec.scale + 64U)) / width) + phase) & 255U);
+    warp = (plasma_v2_tri8(((y * 5U) + phase) & 255U) * session->spec.warp_amount) / 100U;
+    a = plasma_v2_tri8((((x * (session->spec.scale + 64U)) / width) + phase + warp) & 255U);
     b = plasma_v2_tri8((((y * (session->spec.complexity + 96U)) / height) + (phase * 2U)) & 255U);
     c = plasma_v2_tri8(((((x + y) * 160U) / diagonal) + (phase * 3U) + session->stream_seed) & 255U);
 
