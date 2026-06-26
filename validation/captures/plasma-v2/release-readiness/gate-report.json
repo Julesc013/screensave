@@ -1,0 +1,334 @@
+{
+  "claim_boundary": "Plasma v2 release-readiness review only; not stable release, release publication, compatibility certification, public SDK stability, or automatic promotion.",
+  "product": "plasma",
+  "profile": "plasma.v2.reference.preview",
+  "results": [
+    {
+      "id": "portable-v2-accepted",
+      "payload": {
+        "observed": "accepted"
+      },
+      "status": "pass",
+      "summary": "Portable v2 must be accepted before release-readiness review."
+    },
+    {
+      "id": "plasma-status-input",
+      "payload": {
+        "observed": "stable-candidate"
+      },
+      "status": "pass",
+      "summary": "Plasma v2 must enter as stable-candidate and may exit as release-readiness-reviewed."
+    },
+    {
+      "id": "plasma-not-stable",
+      "payload": {
+        "plasma": {
+          "acceleration_matrix": "validation/captures/plasma-v2/acceleration/matrix.json",
+          "active_profile": "plasma.v2.reference.preview",
+          "artistic_acceptance": "stable-candidate-review",
+          "claim_boundary": "Stable candidate only; not stable release promotion, final artistic acceptance, compatibility certification, public SDK stability, or all-saver migration.",
+          "opened_next": "plasma-v2-release-readiness",
+          "pack_example": "products/savers/plasma/content/v2/examples/plasma_lava_v2.toml",
+          "packc": "v1-candidate",
+          "performance_envelope": "validation/captures/plasma-v2/performance/envelope.json",
+          "preview_gate": "validation/captures/plasma-v2/preview-gate/gate-report.json",
+          "proof": "validation/captures/plasma-v2/reference-preview/profile-proof.json",
+          "proof_bundle": "validation/captures/plasma-v2/reference-preview/proof-bundle-v1.json",
+          "proof_matrix": "validation/captures/plasma-v2/matrix",
+          "release_promotion": "blocked",
+          "review_decision": "validation/captures/plasma-v2/review/reviewer-decision.preview.toml",
+          "review_gate": "validation/captures/plasma-v2/reviewed-preview/gate-report.json",
+          "stable": false,
+          "stable_candidate_gate": "validation/captures/plasma-v2/stable-candidate/gate-report.json",
+          "stable_candidate_review": "validation/captures/plasma-v2/stable-candidate-review/review-summary.json",
+          "status": "stable-candidate",
+          "visual_review": "stable-candidate-round-recorded"
+        }
+      },
+      "status": "pass",
+      "summary": "Plasma v2 must remain not stable and release promotion must remain blocked."
+    },
+    {
+      "id": "path-release_readiness_contract",
+      "payload": {},
+      "status": "pass",
+      "summary": "Required release-readiness evidence exists: contracts/plasma_release_readiness_v1.md"
+    },
+    {
+      "id": "path-package_stage",
+      "payload": {},
+      "status": "pass",
+      "summary": "Required release-readiness evidence exists: packaging/windows/plasma-v2-preview/manifest.toml"
+    },
+    {
+      "id": "path-package_known_limits",
+      "payload": {},
+      "status": "pass",
+      "summary": "Required release-readiness evidence exists: packaging/windows/plasma-v2-preview/known-limits.md"
+    },
+    {
+      "id": "path-manager_preview_source",
+      "payload": {},
+      "status": "pass",
+      "summary": "Required release-readiness evidence exists: products/apps/suite/src/manager_pack_preview.c"
+    },
+    {
+      "id": "path-workbench_shell",
+      "payload": {},
+      "status": "pass",
+      "summary": "Required release-readiness evidence exists: products/apps/benchlab/src/benchlab_workbench_shell.c"
+    },
+    {
+      "id": "path-pack_example",
+      "payload": {},
+      "status": "pass",
+      "summary": "Required release-readiness evidence exists: products/savers/plasma/content/v2/examples/plasma_lava_v2.toml"
+    },
+    {
+      "id": "path-performance_envelope",
+      "payload": {},
+      "status": "pass",
+      "summary": "Required release-readiness evidence exists: validation/captures/plasma-v2/performance/envelope.json"
+    },
+    {
+      "id": "path-artistic_decision",
+      "payload": {},
+      "status": "pass",
+      "summary": "Required release-readiness evidence exists: validation/captures/plasma-v2/final-artistic-decision/decision.release-candidate.toml"
+    },
+    {
+      "id": "path-agentic_policy",
+      "payload": {},
+      "status": "pass",
+      "summary": "Required release-readiness evidence exists: .aide/agentic/policy.toml"
+    },
+    {
+      "id": "path-repair_queue",
+      "payload": {},
+      "status": "pass",
+      "summary": "Required release-readiness evidence exists: .aide/repairs/index.toml"
+    },
+    {
+      "id": "path-capability_bindings",
+      "payload": {},
+      "status": "pass",
+      "summary": "Required release-readiness evidence exists: tools/project_adapter/capability_bindings.json"
+    },
+    {
+      "id": "package-stage-boundary",
+      "payload": {},
+      "status": "pass",
+      "summary": "Package stage must remain unpublished, not stable, and release-blocked."
+    },
+    {
+      "id": "artistic-decision-release-candidate-only",
+      "payload": {
+        "boundaries": {
+          "compatibility_certification": false,
+          "final_stable_artistic_acceptance": false,
+          "public_sdk_stability": false,
+          "release_publication": false,
+          "stable_release": false
+        },
+        "decision_state": "accepted-for-release-candidate"
+      },
+      "status": "pass",
+      "summary": "Artistic decision may accept release-candidate preparation only."
+    },
+    {
+      "id": "fixed-release-readiness-capabilities",
+      "payload": {
+        "missing": []
+      },
+      "status": "pass",
+      "summary": "Fixed release-readiness capabilities must be exposed."
+    },
+    {
+      "id": "no-generic-or-release-capabilities",
+      "payload": {
+        "forbidden_hits": []
+      },
+      "status": "pass",
+      "summary": "Generic command, release, promotion, and agent-apply capabilities must remain absent."
+    },
+    {
+      "id": "no-release-overclaims",
+      "payload": {
+        "hits": []
+      },
+      "status": "pass",
+      "summary": "No stable release, publication, certification, or final acceptance overclaim may exist."
+    },
+    {
+      "id": "no-aide-product-runtime-dependency",
+      "payload": {
+        "hit_count": 0,
+        "hits": []
+      },
+      "status": "pass",
+      "summary": "Product/runtime tree must not depend on AIDE."
+    },
+    {
+      "id": "validator-check_plasma_v2_stable_candidate",
+      "payload": {
+        "run": {
+          "command": "tools/scripts/check_plasma_v2_stable_candidate.py",
+          "returncode": 0,
+          "status": "pass",
+          "stderr_tail": [],
+          "stdout_tail": [
+            "Plasma v2 stable-candidate gate passed: validation/captures/plasma-v2/stable-candidate/gate-report.json"
+          ]
+        }
+      },
+      "status": "pass",
+      "summary": "Required release-readiness validator must pass."
+    },
+    {
+      "id": "validator-check_plasma_v2_package_stage",
+      "payload": {
+        "run": {
+          "command": "tools/scripts/check_plasma_v2_package_stage.py",
+          "returncode": 0,
+          "status": "pass",
+          "stderr_tail": [],
+          "stdout_tail": [
+            "Plasma v2 package stage checks passed."
+          ]
+        }
+      },
+      "status": "pass",
+      "summary": "Required release-readiness validator must pass."
+    },
+    {
+      "id": "validator-check_manager_pack_preview",
+      "payload": {
+        "run": {
+          "command": "tools/scripts/check_manager_pack_preview.py",
+          "returncode": 0,
+          "status": "pass",
+          "stderr_tail": [],
+          "stdout_tail": [
+            "Manager pack preview checks passed."
+          ]
+        }
+      },
+      "status": "pass",
+      "summary": "Required release-readiness validator must pass."
+    },
+    {
+      "id": "validator-check_workbench_shell",
+      "payload": {
+        "run": {
+          "command": "tools/scripts/check_workbench_shell.py",
+          "returncode": 0,
+          "status": "pass",
+          "stderr_tail": [],
+          "stdout_tail": [
+            "Workbench shell checks passed."
+          ]
+        }
+      },
+      "status": "pass",
+      "summary": "Required release-readiness validator must pass."
+    },
+    {
+      "id": "validator-check_packc",
+      "payload": {
+        "run": {
+          "command": "tools/scripts/check_packc.py",
+          "returncode": 0,
+          "status": "pass",
+          "stderr_tail": [],
+          "stdout_tail": [
+            "packc checks passed."
+          ]
+        }
+      },
+      "status": "pass",
+      "summary": "Required release-readiness validator must pass."
+    },
+    {
+      "id": "validator-check_plasma_v2_performance",
+      "payload": {
+        "run": {
+          "command": "tools/scripts/check_plasma_v2_performance.py",
+          "returncode": 0,
+          "status": "pass",
+          "stderr_tail": [],
+          "stdout_tail": [
+            "Plasma v2 performance checks passed."
+          ]
+        }
+      },
+      "status": "pass",
+      "summary": "Required release-readiness validator must pass."
+    },
+    {
+      "id": "validator-check_plasma_v2_artistic_decision",
+      "payload": {
+        "run": {
+          "command": "tools/scripts/check_plasma_v2_artistic_decision.py",
+          "returncode": 0,
+          "status": "pass",
+          "stderr_tail": [],
+          "stdout_tail": [
+            "Plasma v2 artistic decision checks passed."
+          ]
+        }
+      },
+      "status": "pass",
+      "summary": "Required release-readiness validator must pass."
+    },
+    {
+      "id": "validator-check_agentic_policy",
+      "payload": {
+        "run": {
+          "command": "tools/scripts/check_agentic_policy.py",
+          "returncode": 0,
+          "status": "pass",
+          "stderr_tail": [],
+          "stdout_tail": [
+            "AIDE agentic policy checks passed."
+          ]
+        }
+      },
+      "status": "pass",
+      "summary": "Required release-readiness validator must pass."
+    },
+    {
+      "id": "validator-check_repair_queue",
+      "payload": {
+        "run": {
+          "command": "tools/scripts/check_repair_queue.py",
+          "returncode": 0,
+          "status": "pass",
+          "stderr_tail": [],
+          "stdout_tail": [
+            "Repair queue checks passed."
+          ]
+        }
+      },
+      "status": "pass",
+      "summary": "Required release-readiness validator must pass."
+    },
+    {
+      "id": "validator-check_project_adapter",
+      "payload": {
+        "run": {
+          "command": "tools/scripts/check_project_adapter.py",
+          "returncode": 0,
+          "status": "pass",
+          "stderr_tail": [],
+          "stdout_tail": [
+            "Project adapter checks passed."
+          ]
+        }
+      },
+      "status": "pass",
+      "summary": "Required release-readiness validator must pass."
+    }
+  ],
+  "schema_version": "screensave.plasma-v2.release-readiness-gate.v1",
+  "status": "pass"
+}
