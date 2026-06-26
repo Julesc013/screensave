@@ -1,0 +1,340 @@
+schema_version = 1
+id = "SS-PAW-DX-000"
+title = "Plasma v2 reference slice"
+status = "active"
+owner = "repo"
+mode = "aide-lite-operational"
+required_source_revision = "0bc521d"
+roadmap = "docs/roadmap/plasma-v2-reference-slice.md"
+
+[goal]
+summary = "Build one bounded, proof-backed Plasma v2 reference preview slice over the accepted portable v2 seam."
+claim_boundary = "Plasma v2 work may establish a preview reference profile only; it must not imply artistic acceptance, stable release promotion, compatibility certification, public SDK stability, or automatic AIDE worker authority."
+non_goals = [
+  "do not migrate all savers",
+  "do not freeze a public SDK",
+  "do not admit runtime executable plugins",
+  "do not generate source code from VisualIntent",
+  "do not admit an automatic AIDE worker",
+  "do not merge or promote automatically",
+  "do not broaden compatibility certification",
+  "do not rewrite Manager",
+  "do not start macOS or Linux host work",
+  "do not implement premium, glyph, ribbon, or heightfield Plasma lanes",
+]
+
+[aide_operator]
+preflight = "py -3 tools/aideops/screensave_aide.py preflight --task <id> --objective <objective>"
+postflight = "py -3 tools/aideops/screensave_aide.py postflight --task <id>"
+receipt_root = "out/aide/operations"
+provider_calls = false
+model_calls = false
+network_calls = false
+
+[evidence]
+portable_v2_gate = "accepted"
+portable_v2_contract = "contracts/portable_semantics_v2.md"
+u09_authority = "products/savers/plasma/docs/u09-stable-recut.md"
+default_preset = "plasma_lava"
+default_theme = "plasma_lava"
+minimum_kind = "gdi"
+preferred_kind = "gl11"
+quality_class = "safe"
+stable_output = "raster/native_raster"
+stable_presentation = "flat"
+capture_root = "validation/captures/plasma-v2"
+claim_boundary = "Plasma v2 evidence is preview-slice evidence only until later human visual review and release promotion gates pass."
+
+[[work_units]]
+id = "SS-PLV2-00"
+title = "program checkpoint"
+objective = "Open Plasma v2 reference slice without widening runtime, release, or worker claims."
+status = "implemented-local"
+selected_validation_tier = "T1"
+preflight_required = true
+postflight_required = true
+preflight_receipt = "out/aide/operations/SS-PLV2-00-preflight/operation-receipt.json"
+postflight_receipt = "out/aide/operations/SS-PLV2-00-postflight/operation-receipt.json"
+rollback_point = "0bc521d"
+allowed_paths = [
+  ".aide/work_units/plasma-v2-reference-slice.toml",
+  "docs/roadmap/plasma-v2-reference-slice.md",
+  "validation/captures/plasma-v2/README.md",
+  "tools/aideops/screensave_aide.py",
+]
+forbidden_paths = [
+  "products/savers/plasma/src",
+  "catalog/proof_profiles.toml",
+  "tools/packc",
+  "release promotion state",
+  "public SDK declarations",
+]
+expected_validators = [
+  "py -3 tools/scripts/check_project_state.py --summary",
+  "py -3 tools/scripts/check_contracts.py",
+  "py -3 tools/scripts/check_docs_basics.py",
+  "git diff --check",
+]
+baseline_refs = [
+  "PROJECT_STATE.toml [portable_v2.status=accepted]",
+  "PROJECT_STATE.toml [development.active_program=plasma-v2-reference-slice]",
+]
+claim_boundary = "D0 opens bounded development governance only; no Plasma runtime, proof profile, pack compiler, artistic acceptance, or release promotion is claimed."
+
+[[work_units]]
+id = "SS-PLV2-01"
+title = "product spec and migration law"
+objective = "Define plasma_spec_v2 and deterministic U09 migration law."
+status = "pending"
+selected_validation_tier = "T2"
+preflight_required = true
+postflight_required = true
+preflight_receipt = "out/aide/operations/SS-PLV2-01-preflight/operation-receipt.json"
+postflight_receipt = "out/aide/operations/SS-PLV2-01-postflight/operation-receipt.json"
+rollback_point = "SS-PLV2-00"
+allowed_paths = [
+  "contracts/plasma_spec_v2.md",
+  "products/savers/plasma/src/plasma_spec_v2.h",
+  "products/savers/plasma/src/plasma_spec_v2.c",
+  "products/savers/plasma/src/plasma_migration_v2.h",
+  "products/savers/plasma/src/plasma_migration_v2.c",
+  "tools/scripts/check_plasma_spec_v2.py",
+  "docs/roadmap/plasma-v2-reference-slice.md",
+]
+forbidden_paths = [
+  "platform/include/screensave/v2",
+  "platform/src/v2",
+  "products/savers/plasma/src/plasma_v2_core.c",
+  "catalog/proof_profiles.toml",
+  "release promotion state",
+]
+expected_validators = [
+  "py -3 tools/scripts/check_plasma_spec_v2.py",
+  "py -3 tools/scripts/check_contracts.py",
+  "py -3 tools/scripts/check_docs_basics.py",
+]
+baseline_refs = [
+  "products/savers/plasma/docs/u09-stable-recut.md",
+  "products/savers/plasma/docs/u09-experimental-and-deferred.md",
+]
+claim_boundary = "Spec and migration law only; no renderer output or proof baseline change."
+
+[[work_units]]
+id = "SS-PLV2-02"
+title = "stable software reference core"
+objective = "Implement bounded Plasma v2 portable software reference core and adapter."
+status = "pending"
+selected_validation_tier = "T2"
+preflight_required = true
+postflight_required = true
+preflight_receipt = "out/aide/operations/SS-PLV2-02-preflight/operation-receipt.json"
+postflight_receipt = "out/aide/operations/SS-PLV2-02-postflight/operation-receipt.json"
+rollback_point = "SS-PLV2-01"
+allowed_paths = [
+  "products/savers/plasma/src/plasma_v2_core.h",
+  "products/savers/plasma/src/plasma_v2_core.c",
+  "products/savers/plasma/src/plasma_v2_adapter.h",
+  "products/savers/plasma/src/plasma_v2_adapter.c",
+  "tools/scripts/check_plasma_core_boundaries.py",
+]
+forbidden_paths = [
+  "windows.h",
+  "registry code",
+  "platform native host law",
+  "AIDE runtime dependencies in product code",
+  "Workbench execution engines",
+]
+expected_validators = [
+  "py -3 tools/scripts/check_portable_v2.py",
+  "py -3 tools/scripts/check_plasma_core_boundaries.py",
+  "py -3 tools/scripts/check_sslab_runner.py",
+]
+baseline_refs = [
+  "contracts/portable_semantics_v2.md",
+  "validation/captures/plasma-v2/README.md",
+]
+claim_boundary = "Software reference core only; no accelerated realization or stable release claim."
+
+[[work_units]]
+id = "SS-PLV2-03"
+title = "materials and treatments"
+objective = "Implement admitted Plasma v2 materials, restrained treatments, and Basic-control influence proof."
+status = "pending"
+selected_validation_tier = "T2"
+preflight_required = true
+postflight_required = true
+preflight_receipt = "out/aide/operations/SS-PLV2-03-preflight/operation-receipt.json"
+postflight_receipt = "out/aide/operations/SS-PLV2-03-postflight/operation-receipt.json"
+rollback_point = "SS-PLV2-02"
+allowed_paths = [
+  "products/savers/plasma/src/plasma_spec_v2.*",
+  "products/savers/plasma/src/plasma_v2_core.*",
+  "validation/captures/plasma-v2/influence",
+  "validation/captures/plasma-v2/materials",
+  "tools/scripts/check_plasma_v2_influence.py",
+  "tools/scripts/check_plasma_v2_materials.py",
+]
+forbidden_paths = [
+  "premium presentation lanes",
+  "glyph output",
+  "ribbon output",
+  "heightfield output",
+  "stable release state",
+]
+expected_validators = [
+  "py -3 tools/scripts/check_plasma_spec_v2.py",
+  "py -3 tools/scripts/check_plasma_v2_influence.py",
+  "py -3 tools/scripts/check_plasma_v2_materials.py",
+  "py -3 tools/scripts/check_proof_bundle_v1.py",
+]
+baseline_refs = [
+  "products/savers/plasma/docs/u00-settings-influence-matrix.md",
+  "products/savers/plasma/docs/u04-output-treatment-presentation-truth.md",
+]
+claim_boundary = "Controls must either materially influence preview output or be named out of the stable slice."
+
+[[work_units]]
+id = "SS-PLV2-04"
+title = "proof profiles and captures"
+objective = "Add Plasma v2 reference preview proof profile and deterministic captures."
+status = "pending"
+selected_validation_tier = "T2"
+preflight_required = true
+postflight_required = true
+preflight_receipt = "out/aide/operations/SS-PLV2-04-preflight/operation-receipt.json"
+postflight_receipt = "out/aide/operations/SS-PLV2-04-postflight/operation-receipt.json"
+rollback_point = "SS-PLV2-03"
+allowed_paths = [
+  "catalog/proof_profiles.toml",
+  "catalog/generated/proof_registry.*",
+  "tools/sslab",
+  "tools/project_adapter",
+  "tools/proofbundle",
+  "validation/captures/plasma-v2/reference-preview",
+]
+forbidden_paths = [
+  "release promotion state",
+  "compatibility certification claims",
+  "all-saver proof migration",
+]
+expected_validators = [
+  "py -3 tools/scripts/check_catalog_generated.py",
+  "py -3 tools/scripts/check_sslab_runner.py",
+  "py -3 tools/project_adapter/screensave_project.py proof --profile plasma.v2.reference.preview --path v2",
+  "py -3 tools/project_adapter/screensave_project.py bundle --profile plasma.v2.reference.preview --path v2",
+]
+baseline_refs = [
+  "validation/captures/plasma-v2/reference-preview/profile-proof.json",
+  "validation/captures/plasma-v2/reference-preview/proof-bundle-v1.json",
+]
+claim_boundary = "Exact reference preview proof only; not stable promotion or artistic acceptance."
+
+[[work_units]]
+id = "SS-PLV2-05"
+title = "packc Plasma skeleton"
+objective = "Compile bounded data-only Plasma v2 specs through packc."
+status = "pending"
+selected_validation_tier = "T2"
+preflight_required = true
+postflight_required = true
+preflight_receipt = "out/aide/operations/SS-PLV2-05-preflight/operation-receipt.json"
+postflight_receipt = "out/aide/operations/SS-PLV2-05-postflight/operation-receipt.json"
+rollback_point = "SS-PLV2-04"
+allowed_paths = [
+  "contracts/pack_v1.md",
+  "tools/packc",
+  "tools/scripts/check_packc.py",
+  "products/savers/plasma/content/v2/examples/plasma_lava_v2.toml",
+]
+forbidden_paths = [
+  "runtime executable plugins",
+  "scripts in packs",
+  "DLL loading",
+  "macros",
+  "absolute path inputs",
+  "parent traversal inputs",
+]
+expected_validators = [
+  "py -3 tools/scripts/check_packc.py",
+  "py -3 tools/packc/packc.py validate products/savers/plasma/content/v2/examples/plasma_lava_v2.toml",
+  "py -3 tools/packc/packc.py compile products/savers/plasma/content/v2/examples/plasma_lava_v2.toml --out out/packc/plasma_lava_v2",
+]
+baseline_refs = [
+  "contracts/plasma_spec_v2.md",
+  "products/savers/plasma/content/v2/examples/plasma_lava_v2.toml",
+]
+claim_boundary = "Data-only package compilation; no executable plugin or VisualIntent runtime."
+
+[[work_units]]
+id = "SS-PLV2-06"
+title = "Workbench Author and Inspect"
+objective = "Extend Workbench shell to Author and Inspect the Plasma v2 reference slice through the shared proof path."
+status = "pending"
+selected_validation_tier = "T2"
+preflight_required = true
+postflight_required = true
+preflight_receipt = "out/aide/operations/SS-PLV2-06-preflight/operation-receipt.json"
+postflight_receipt = "out/aide/operations/SS-PLV2-06-postflight/operation-receipt.json"
+rollback_point = "SS-PLV2-05"
+allowed_paths = [
+  "tools/workbench",
+  "tools/scripts/check_workbench_shell.py",
+  "docs/roadmap/plasma-v2-reference-slice.md",
+]
+forbidden_paths = [
+  "duplicate proof runners",
+  "release workspace",
+  "automatic promotion",
+]
+expected_validators = [
+  "py -3 tools/scripts/check_workbench_shell.py",
+  "py -3 tools/scripts/check_packc.py",
+  "py -3 tools/scripts/check_plasma_spec_v2.py",
+]
+baseline_refs = [
+  "tools/sslab/include/screensave/sslab_v1.h",
+  "catalog/generated/proof_registry.json",
+]
+claim_boundary = "Workbench is an author/inspect shell over CLI proof paths, not a duplicate execution engine."
+
+[[work_units]]
+id = "SS-PLV2-07"
+title = "AIDE evidence and preview gate"
+objective = "Export Plasma v2 evidence packets, add preview gate, and record reference-preview state without stable promotion."
+status = "pending"
+selected_validation_tier = "T2"
+preflight_required = true
+postflight_required = true
+preflight_receipt = "out/aide/operations/SS-PLV2-07-preflight/operation-receipt.json"
+postflight_receipt = "out/aide/operations/SS-PLV2-07-postflight/operation-receipt.json"
+rollback_point = "SS-PLV2-06"
+allowed_paths = [
+  "tools/aide_bridge",
+  ".aide/evidence/index.toml",
+  "tools/scripts/check_aide_evidence_bridge.py",
+  "tools/scripts/check_aide_evidence_index.py",
+  "tools/scripts/check_plasma_v2_preview_gate.py",
+  "validation/captures/plasma-v2/preview-gate",
+  "PROJECT_STATE.toml",
+  "VERSION.toml",
+  "README.md",
+  "products/savers/plasma/docs/plasma-v2-reference-preview.md",
+]
+forbidden_paths = [
+  "stable release promotion",
+  "artistic acceptance automation",
+  "compatibility certification broadening",
+  "automatic worker admission",
+]
+expected_validators = [
+  "py -3 tools/scripts/check_aide_evidence_bridge.py",
+  "py -3 tools/scripts/check_aide_evidence_index.py",
+  "py -3 tools/scripts/check_aide_operational.py",
+  "py -3 tools/scripts/check_plasma_v2_preview_gate.py",
+  "py -3 tools/project_adapter/screensave_project.py validate --tier T2",
+]
+baseline_refs = [
+  "validation/captures/plasma-v2/preview-gate/gate-report.json",
+  "validation/captures/plasma-v2/reference-preview/proof-bundle-v1.json",
+]
+claim_boundary = "Preview candidate only; artistic acceptance and release promotion remain blocked."

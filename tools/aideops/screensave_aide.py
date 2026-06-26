@@ -20,6 +20,7 @@ OPERATION_ROOT = ROOT / "out" / "aide" / "operations"
 WORK_UNIT_FILES = [
     ROOT / ".aide" / "work_units" / "paw-cx-portable-v2.toml",
     ROOT / ".aide" / "work_units" / "paw-c1-portable-v2-runtime-equivalence.toml",
+    ROOT / ".aide" / "work_units" / "plasma-v2-reference-slice.toml",
 ]
 PORTABLE_EVAL_TASKS = [
     "compact-task-packet-required-sections",
