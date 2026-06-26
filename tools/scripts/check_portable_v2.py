@@ -35,6 +35,7 @@ REQUIRED_SOURCE_FILES = [
     V2_SOURCE_ROOT / "config_view.c",
     V2_SOURCE_ROOT / "surface_view.c",
     V2_SOURCE_ROOT / "draw_target.c",
+    V2_SOURCE_ROOT / "draw_renderer_bridge.c",
     V2_SOURCE_ROOT / "session_helpers.c",
 ]
 
