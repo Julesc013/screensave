@@ -17,6 +17,10 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 AIDE_LITE = ROOT / ".aide" / "scripts" / "aide_lite.py"
 AIDE_LOCK = ROOT / ".aide" / "aide_lite.lock.toml"
 OPERATION_ROOT = ROOT / "out" / "aide" / "operations"
+WORK_UNIT_FILES = [
+    ROOT / ".aide" / "work_units" / "paw-cx-portable-v2.toml",
+    ROOT / ".aide" / "work_units" / "paw-c1-portable-v2-runtime-equivalence.toml",
+]
 PORTABLE_EVAL_TASKS = [
     "compact-task-packet-required-sections",
     "context-packet-no-full-repo-dump",
@@ -61,6 +65,71 @@ def source_revision() -> dict[str, Any]:
         "branch": git_text(["branch", "--show-current"]),
         "dirty": bool(status),
         "status_short": status.splitlines(),
+    }
+
+
+def changed_file_summary(status_short: list[str]) -> dict[str, Any]:
+    summary = {
+        "total": 0,
+        "added": 0,
+        "modified": 0,
+        "deleted": 0,
+        "renamed": 0,
+        "untracked": 0,
+        "files": [],
+    }
+    files: list[dict[str, str]] = []
+    for line in status_short:
+        if len(line) < 4:
+            continue
+        code = line[:2]
+        path = line[3:]
+        if " -> " in path:
+            path = path.split(" -> ", 1)[1]
+        files.append({"status": code, "path": path})
+        if "A" in code:
+            summary["added"] += 1
+        if "M" in code:
+            summary["modified"] += 1
+        if "D" in code:
+            summary["deleted"] += 1
+        if "R" in code:
+            summary["renamed"] += 1
+        if code == "??":
+            summary["untracked"] += 1
+    summary["total"] = len(files)
+    summary["files"] = files[:200]
+    return summary
+
+
+def work_unit_records() -> list[dict[str, Any]]:
+    records: list[dict[str, Any]] = []
+    for path in WORK_UNIT_FILES:
+        if not path.exists():
+            continue
+        payload = load_toml(path)
+        for item in payload.get("work_units", []):
+            if isinstance(item, dict):
+                record = dict(item)
+                record["packet_ref"] = repo_path(path)
+                records.append(record)
+    return records
+
+
+def validation_tier_selection(task_id: str) -> dict[str, Any]:
+    for item in work_unit_records():
+        if item.get("id") == task_id:
+            return {
+                "task": task_id,
+                "selected_validation_tier": item.get("selected_validation_tier", "unknown"),
+                "packet_ref": item.get("packet_ref", ""),
+                "status": item.get("status", "unknown"),
+            }
+    return {
+        "task": task_id,
+        "selected_validation_tier": "unknown",
+        "packet_ref": "",
+        "status": "not-found",
     }
 
 
@@ -220,16 +289,21 @@ def write_receipt(command: str, args: argparse.Namespace) -> tuple[pathlib.Path,
     commands = command_plan(command, args)
     results, blocked = run_sequence(commands, bool(getattr(args, "dry_run", False)), command == "bootstrap")
     after = source_revision()
+    task_id = getattr(args, "task", "")
     receipt = {
         "schema_version": "screensave.aide-operation-receipt.v0",
+        "receipt_kind": f"{command}-receipt",
         "operation_id": op_id,
         "operation": command,
-        "task": getattr(args, "task", ""),
+        "task": task_id,
         "objective": getattr(args, "objective", ""),
         "dry_run": bool(getattr(args, "dry_run", False)),
+        "validation_tier_selection": validation_tier_selection(task_id) if task_id else {},
         "aide": lock_payload(),
         "screensave_source_revision_before": before,
         "screensave_source_revision_after": after,
+        "changed_file_summary_before": changed_file_summary(before.get("status_short", [])),
+        "changed_file_summary_after": changed_file_summary(after.get("status_short", [])),
         "commands_invoked": results,
         "generated_artifact_refs": generated_refs(),
         "warnings": [
@@ -237,6 +311,7 @@ def write_receipt(command: str, args: argparse.Namespace) -> tuple[pathlib.Path,
             "Generated reports are local operation outputs, not product truth.",
         ],
         "blocked_stages": blocked,
+        "blocked_step_list": blocked,
         "provider_calls": False,
         "model_calls": False,
         "network_calls": False,

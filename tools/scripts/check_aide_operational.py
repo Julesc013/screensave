@@ -16,6 +16,8 @@ TEST_MANIFEST = ROOT / ".aide" / "tests" / "test_manifest.yaml"
 TEST_IMPACT_MAP = ROOT / ".aide" / "tests" / "test_impact_map.yaml"
 AIDE_OPS = ROOT / "tools" / "aideops" / "screensave_aide.py"
 AIDE_OPS_README = ROOT / "tools" / "aideops" / "README.md"
+PAW_C1_WORK_UNIT = ROOT / ".aide" / "work_units" / "paw-c1-portable-v2-runtime-equivalence.toml"
+PAW_C1_ROADMAP = ROOT / "docs" / "roadmap" / "paw-c1-portable-v2-runtime-equivalence.md"
 
 EXPECTED_BASELINES = {
     "root_history_baseline",
@@ -93,6 +95,8 @@ def validate_static_files(errors: list[str]) -> None:
         TEST_IMPACT_MAP,
         AIDE_OPS,
         AIDE_OPS_README,
+        PAW_C1_WORK_UNIT,
+        PAW_C1_ROADMAP,
     ]:
         require(path.exists(), f"Missing AIDE operational path: {path.relative_to(ROOT)}", errors)
 
@@ -140,6 +144,11 @@ def validate_operator(errors: list[str]) -> None:
         "provider_calls",
         "network_calls",
         "source_mutation_outside_admitted_paths",
+        "validation_tier_selection",
+        "changed_file_summary_before",
+        "changed_file_summary_after",
+        "receipt_kind",
+        "blocked_step_list",
     ]:
         require(needle in text, f"screensave_aide.py missing expected operator anchor: {needle}", errors)
     for forbidden in ["requests", "openai", "urllib.request", "git push", "git merge"]:
@@ -172,6 +181,26 @@ def validate_operator(errors: list[str]) -> None:
             "operation receipt must include the pinned AIDE source revision.",
             errors,
         )
+
+    if PAW_C1_WORK_UNIT.exists():
+        text = read_text(PAW_C1_WORK_UNIT)
+        for task_id in ["SS-PV2-03", "SS-PV2-04", "SS-PV2-05", "SS-PV2-06", "SS-PV2-07", "SS-PV2-08"]:
+            require(task_id in text, f"PAW-C1 work-unit packet missing {task_id}.", errors)
+        require("d57669d737a2e561f0f86f699be9b280347d683e" in text, "PAW-C1 work-unit packet must pin the d57669d launch point.", errors)
+        require("preflight_required = true" in text, "PAW-C1 work-unit packet must require preflight.", errors)
+        require("postflight_required = true" in text, "PAW-C1 work-unit packet must require postflight.", errors)
+
+    if PAW_C1_ROADMAP.exists():
+        text = read_text(PAW_C1_ROADMAP)
+        for needle in [
+            "Make portable v2 executable through the two proof canaries",
+            "Do not implement Plasma v2 runtime",
+            "Portable meaning.",
+            "Native delivery.",
+            "Deterministic proof.",
+            "Optional automation.",
+        ]:
+            require(needle in text, f"PAW-C1 roadmap missing expected boundary text: {needle}", errors)
 
 
 def main() -> int:

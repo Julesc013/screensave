@@ -87,6 +87,12 @@ title = "AIDE-operational portable v2"
 status = "active"
 path = ".aide/work_units/paw-cx-portable-v2.toml"
 
+[[work_units]]
+id = "SS-PAW-C1-000"
+title = "Portable v2 runtime equivalence"
+status = "active"
+path = ".aide/work_units/paw-c1-portable-v2-runtime-equivalence.toml"
+
 [[evidence_packets]]
 id = "SS-EVIDENCE-PE-000"
 title = "Current PE artifact audit"

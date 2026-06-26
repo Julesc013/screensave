@@ -1,0 +1,130 @@
+schema_version = 1
+id = "SS-PAW-C1-000"
+title = "Portable v2 runtime equivalence"
+status = "active"
+owner = "repo"
+mode = "aide-lite-operational"
+required_source_revision = "d57669d737a2e561f0f86f699be9b280347d683e"
+roadmap = "docs/roadmap/paw-c1-portable-v2-runtime-equivalence.md"
+
+[goal]
+summary = "Make portable v2 executable through Nocturne and Ricochet, prove v1/v2 exact equivalence, and only then accept Gate C and open Plasma v2."
+claim_boundary = "Until Gate C acceptance, portable v2 remains active and partial: no Plasma runtime, no all-saver migration, no public SDK ABI, no generic AIDE worker, and no new compatibility certification."
+non_goals = [
+  "do not implement Plasma v2 runtime",
+  "do not migrate all savers",
+  "do not reorganize the repository",
+  "do not introduce a public SDK ABI",
+  "do not admit generic AIDE command execution",
+  "do not admit a general worker",
+  "do not change current release compatibility claims",
+]
+
+[aide_operator]
+preflight = "py -3 tools/aideops/screensave_aide.py preflight --task <id> --objective <objective>"
+postflight = "py -3 tools/aideops/screensave_aide.py postflight --task <id>"
+receipt_root = "out/aide/operations"
+provider_calls = false
+model_calls = false
+network_calls = false
+
+[evidence]
+nocturne_hash = "5394a14b6622c17bfb10cd5721c08a4c92cdbddfb12f55c954ef1d5f6ef878b2"
+ricochet_frames = ["0", "4", "8", "32"]
+proof_bundle_schema = "proof-bundle-v1"
+claim_boundary = "Deterministic canary equivalence only; not artistic acceptance, release promotion, or operating-system certification."
+
+[[work_units]]
+id = "SS-PV2-00"
+objective = "Implement v2 base/types/ABI guards."
+status = "implemented-local"
+selected_validation_tier = "T2"
+preflight_required = true
+postflight_required = true
+rollback_commit = "d57669d"
+required_checks = ["py -3 tools/scripts/check_portable_v2.py"]
+
+[[work_units]]
+id = "SS-PV2-01"
+objective = "Implement v2 diagnostics, surface and draw contracts."
+status = "implemented-local"
+selected_validation_tier = "T2"
+preflight_required = true
+postflight_required = true
+rollback_commit = "d57669d"
+required_checks = ["py -3 tools/scripts/check_portable_v2.py"]
+
+[[work_units]]
+id = "SS-PV2-02"
+objective = "Implement product/session contracts and generic v1 adapter."
+status = "partial-local"
+selected_validation_tier = "T2"
+preflight_required = true
+postflight_required = true
+rollback_commit = "d57669d"
+remaining = ["generic v1 compatibility adapter runtime"]
+required_checks = ["py -3 tools/scripts/check_portable_v2.py"]
+
+[[work_units]]
+id = "SS-PV2-03"
+objective = "Migrate Nocturne through the v2 product core."
+status = "pending"
+selected_validation_tier = "T2"
+preflight_required = true
+postflight_required = true
+rollback_commit = "pending"
+required_checks = [
+  "py -3 tools/scripts/check_sslab_runner.py",
+  "py -3 tools/scripts/check_proof_kernel.py",
+  "py -3 tools/project_adapter/screensave_project.py proof --profile nocturne.reference.v0",
+]
+
+[[work_units]]
+id = "SS-PV2-04"
+objective = "Migrate Ricochet through the v2 product core."
+status = "pending"
+selected_validation_tier = "T2"
+preflight_required = true
+postflight_required = true
+rollback_commit = "pending"
+required_checks = [
+  "py -3 tools/scripts/check_sslab_runner.py",
+  "py -3 tools/project_adapter/screensave_project.py proof --profile ricochet.reference.v1",
+  "py -3 tools/scripts/check_proof_bundle_v1.py",
+]
+
+[[work_units]]
+id = "SS-PV2-05"
+objective = "Build libsslab ABI v1 over v2."
+status = "pending"
+selected_validation_tier = "T2"
+preflight_required = true
+postflight_required = true
+rollback_commit = "pending"
+
+[[work_units]]
+id = "SS-PV2-06"
+objective = "Prove v1/v2 exact equivalence."
+status = "pending"
+selected_validation_tier = "T2"
+preflight_required = true
+postflight_required = true
+rollback_commit = "pending"
+
+[[work_units]]
+id = "SS-PV2-07"
+objective = "Integrate Workbench and CI."
+status = "pending"
+selected_validation_tier = "T2"
+preflight_required = true
+postflight_required = true
+rollback_commit = "pending"
+
+[[work_units]]
+id = "SS-PV2-08"
+objective = "Independent Gate C check and acceptance."
+status = "pending"
+selected_validation_tier = "T3"
+preflight_required = true
+postflight_required = true
+rollback_commit = "pending"
