@@ -1,0 +1,35 @@
+schema_version = 1
+id = "plasma-v2-review-ledger"
+status = "active"
+as_of = "2026-06-27"
+product = "plasma"
+profile = "plasma.v2.reference.preview"
+truth_boundary = "ScreenSave proof, review records, and validators remain authoritative; AIDE records references only."
+network_calls = false
+provider_or_model_calls = false
+runtime_dependency_allowed = false
+claim_boundary = "AIDE review evidence records PAW-E references only; it does not decide final artistic acceptance, stable release, compatibility certification, or product truth."
+
+[claims]
+plasma_v2_reference_execution = "supported"
+pack_compilation = "supported"
+candidate_generation = "supported"
+control_influence = "supported"
+material_distinctness = "supported"
+visual_review = "recorded-protocol"
+artistic_acceptance = "not-yet-final"
+stable_release_promotion = "blocked"
+compatibility_certification = "not-claimed"
+aide_runtime_dependency = false
+
+[refs]
+visual_review_protocol = "validation/captures/plasma-v2/review/review-protocol.json"
+reviewer_decision_template = "validation/captures/plasma-v2/review/reviewer-decision.template.toml"
+proof_matrix = "validation/captures/plasma-v2/matrix"
+reference_proof = "validation/captures/plasma-v2/reference-preview/profile-proof.json"
+reference_bundle = "validation/captures/plasma-v2/reference-preview/proof-bundle-v1.json"
+material_matrix = "validation/captures/plasma-v2/matrix/material-distinctness.json"
+control_matrix = "validation/captures/plasma-v2/matrix/control-influence.json"
+visualintent_candidates = "validation/captures/plasma-v2/matrix/visualintent-candidates.json"
+pack_example = "products/savers/plasma/content/v2/examples/plasma_lava_v2.toml"
+workbench_check = "tools/scripts/check_workbench_shell.py"
