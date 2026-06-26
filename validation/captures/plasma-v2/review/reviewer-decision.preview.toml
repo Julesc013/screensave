@@ -1,0 +1,36 @@
+schema_version = 1
+template = false
+product = "plasma"
+profile = "plasma.v2.reference.preview"
+decision_class = "accepted-for-preview"
+reviewer_role = "PAW-E preview review"
+reviewed_on = "2026-06-27"
+claim_boundary = "Accepted for reviewed-preview continuation only; not stable release, compatibility certification, Core promotion, all-platform support, or final artistic acceptance."
+
+reviewed_capture_refs = [
+  "validation/captures/plasma-v2/reference-preview/review-contact-sheet.md",
+  "validation/captures/plasma-v2/matrix/contact-sheets/README.md",
+  "validation/captures/plasma-v2/matrix/proof-bundles/plasma-v2-reference-preview.json",
+  "validation/captures/plasma-v2/matrix/proof-bundles/plasma-v2-visualintent-preview.json",
+]
+
+explicit_non_decisions = [
+  "stable_release",
+  "compatibility_certification",
+  "core_promotion",
+  "all_platform_support",
+  "public_sdk_stability",
+  "automatic_product_promotion",
+]
+
+[dimensions]
+composition = "preview-sufficient for candidate review"
+motion_quality = "deterministic preview proof passes; final motion taste remains later review"
+palette_material_quality = "five admitted materials are distinct in preview evidence"
+luminance_safety = "declared preview bounds pass"
+dark_room_comfort = "quiet_darkroom and restrained CRT evidence exists"
+control_influence = "Basic controls materially influence output except explicit metadata-only fields"
+distinctness = "materials and VisualIntent candidates are separated for review"
+artifacting = "no release-blocking artifacting recorded in deterministic preview captures"
+degradation_honesty = "flat lower-band preview claim remains bounded"
+preview_fullscreen_suitability = "preview continuation accepted; fullscreen release remains a later gate"

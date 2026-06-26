@@ -1,0 +1,20 @@
+{
+  "claim_boundary": "Reviewed-preview gate only; not stable release, final artistic acceptance, compatibility certification, or automatic promotion.",
+  "required_checks": [
+    "portable_v2_accepted",
+    "plasma_v2_reference_preview_or_reviewed_preview",
+    "packc_preview_pipeline",
+    "visualintent_bounded_candidates",
+    "plasma_proof_matrix",
+    "materials_proof",
+    "control_influence_proof",
+    "workbench_author_inspect_compare",
+    "visual_review_decision",
+    "aide_review_evidence",
+    "no_generic_command_capability",
+    "no_stable_release_claim",
+    "no_compatibility_certification_broadening"
+  ],
+  "schema_version": "screensave.plasma-v2.reviewed-preview-gate.v0",
+  "status": "pass"
+}
