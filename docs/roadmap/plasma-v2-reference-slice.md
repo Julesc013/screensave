@@ -1,6 +1,6 @@
 # Plasma v2 Reference Slice
 
-Status: active program opened by portable v2 Gate C acceptance.
+Status: reference-preview candidate.
 
 Opened on: 2026-06-26.
 
@@ -80,3 +80,11 @@ migration map, a software reference path, material Basic controls, reference
 captures, a proof bundle, a data-only `packc` example, Workbench
 Author/Inspect support, AIDE EvidencePackets, and a preview gate. The exit
 state is `reference-preview`, not stable.
+
+## Preview Candidate
+
+As of 2026-06-26, the preview profile is `plasma.v2.reference.preview`.
+Evidence is recorded under `validation/captures/plasma-v2/`, including the
+reference-preview captures, material/treatment summary, Proof Bundle v1, and
+preview gate report. The next opened program is
+`plasma-v2-visual-review-and-packc`.

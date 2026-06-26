@@ -8,7 +8,7 @@ Plasma v2 reference preview candidate only; not stable release promotion, artist
 | --- | --- | --- |
 | portable-v2-accepted | pass | Portable v2 must be accepted before Plasma v2 preview. |
 | active-program | pass | Active program must be plasma-v2-reference-slice. |
-| plasma-v2-state-boundary | pass | Plasma v2 state is not yet recorded; preview gate remains pre-state. |
+| plasma-v2-state-boundary | pass | Plasma v2 state, when present, must remain preview-only. |
 | path-plasma_spec_contract | pass | Required path exists: contracts/plasma_spec_v2.md |
 | path-pack_contract | pass | Required path exists: contracts/pack_v1.md |
 | path-migration_header | pass | Required path exists: products/savers/plasma/src/plasma_migration_v2.h |

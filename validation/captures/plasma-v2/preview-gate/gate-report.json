@@ -20,9 +20,23 @@
     },
     {
       "id": "plasma-v2-state-boundary",
-      "payload": {},
+      "payload": {
+        "plasma_v2": {
+          "active_profile": "plasma.v2.reference.preview",
+          "artistic_acceptance": "not-yet-reviewed",
+          "claim_boundary": "Reference preview only; not stable release promotion, artistic acceptance, compatibility certification, public SDK stability, or all-saver migration.",
+          "opened_next": "plasma-v2-visual-review-and-packc",
+          "pack_example": "products/savers/plasma/content/v2/examples/plasma_lava_v2.toml",
+          "preview_gate": "validation/captures/plasma-v2/preview-gate/gate-report.json",
+          "proof": "validation/captures/plasma-v2/reference-preview/profile-proof.json",
+          "proof_bundle": "validation/captures/plasma-v2/reference-preview/proof-bundle-v1.json",
+          "release_promotion": "blocked",
+          "stable": false,
+          "status": "reference-preview"
+        }
+      },
       "status": "pass",
-      "summary": "Plasma v2 state is not yet recorded; preview gate remains pre-state."
+      "summary": "Plasma v2 state, when present, must remain preview-only."
     },
     {
       "id": "path-plasma_spec_contract",
