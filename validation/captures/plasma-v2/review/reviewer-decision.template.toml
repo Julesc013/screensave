@@ -1,0 +1,32 @@
+schema_version = 1
+template = true
+product = "plasma"
+profile = "plasma.v2.reference.preview"
+decision_class = "<accepted-for-preview|request-changes|rejected|defer-to-labs>"
+reviewer_role = "<human-reviewer-role>"
+reviewed_on = "<YYYY-MM-DD>"
+claim_boundary = "Preview review only; not stable release, compatibility certification, Core promotion, all-platform support, or final artistic acceptance."
+
+reviewed_capture_refs = [
+  "validation/captures/plasma-v2/reference-preview/review-contact-sheet.md",
+  "validation/captures/plasma-v2/reference-preview/proof-bundle-v1.json",
+]
+
+explicit_non_decisions = [
+  "stable_release",
+  "compatibility_certification",
+  "core_promotion",
+  "all_platform_support",
+]
+
+[dimensions]
+composition = "<note>"
+motion_quality = "<note>"
+palette_material_quality = "<note>"
+luminance_safety = "<note>"
+dark_room_comfort = "<note>"
+control_influence = "<note>"
+distinctness = "<note>"
+artifacting = "<note>"
+degradation_honesty = "<note>"
+preview_fullscreen_suitability = "<note>"

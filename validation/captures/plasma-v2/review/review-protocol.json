@@ -1,0 +1,33 @@
+{
+  "claim_boundary": "Visual review may record preview decisions only; it does not decide stable release, Core promotion, all-platform support, compatibility certification, or final artistic acceptance.",
+  "decision_classes": [
+    "accepted-for-preview",
+    "request-changes",
+    "rejected",
+    "defer-to-labs"
+  ],
+  "dimensions": [
+    "composition",
+    "motion_quality",
+    "palette_material_quality",
+    "luminance_safety",
+    "dark_room_comfort",
+    "control_influence",
+    "distinctness",
+    "artifacting",
+    "degradation_honesty",
+    "preview_fullscreen_suitability"
+  ],
+  "non_decisions": [
+    "stable_release",
+    "compatibility_certification",
+    "core_promotion",
+    "all_platform_support",
+    "public_sdk_stability",
+    "automatic_product_promotion"
+  ],
+  "product": "plasma",
+  "profile": "plasma.v2.reference.preview",
+  "schema_version": "screensave.visual_review.v1",
+  "status": "active-preview-protocol"
+}

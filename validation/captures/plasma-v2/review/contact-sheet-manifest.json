@@ -1,0 +1,17 @@
+{
+  "claim_boundary": "Contact sheets are review aids over deterministic captures and are not release evidence by themselves.",
+  "contact_sheets": [
+    {
+      "kind": "reference-preview",
+      "path": "validation/captures/plasma-v2/reference-preview/review-contact-sheet.md",
+      "profile": "plasma.v2.reference.preview"
+    }
+  ],
+  "proof_refs": [
+    "validation/captures/plasma-v2/reference-preview/profile-proof.json",
+    "validation/captures/plasma-v2/reference-preview/proof-bundle-v1.json",
+    "validation/captures/plasma-v2/influence/control-influence.json",
+    "validation/captures/plasma-v2/materials/material-treatment-summary.json"
+  ],
+  "schema_version": "screensave.visual_review_contact_sheet_manifest.v1"
+}
