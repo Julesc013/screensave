@@ -1,0 +1,35 @@
+schema_version = 1
+ledger_id = "screensave-aide-ownership-ledger-v1"
+status = "active"
+as_of = "2026-06-27"
+source_commit = "492faa4f1a8280ba67954aa4fc252e79f2e19c15"
+latest_observed_head = "20deb74a59cbf37aed99a95c11dbf6f750430146"
+latest_observed_head_subject = "audit(queue): accept ownership ledger v1"
+claim_boundary = "Ownership records govern imported AIDE Lite files only; this ledger does not authorize source mutation, merge, promotion, release, or compatibility certification."
+
+[[owned_paths]]
+path = ".aide/scripts"
+owner = "aide-lite-import"
+allowed_use = "target-local context and validation tooling"
+
+[[owned_paths]]
+path = ".aide/policies"
+owner = "screensave-local-governance"
+allowed_use = "repo-local AIDE policies"
+
+[[owned_paths]]
+path = ".aide/work_units"
+owner = "screensave-local-governance"
+allowed_use = "bounded ScreenSave WorkUnit records"
+
+[[owned_paths]]
+path = ".aide/evidence"
+owner = "screensave-local-governance"
+allowed_use = "reference-only evidence indexes and ledgers"
+
+[policy]
+source_mutation_by_aide = false
+automatic_merge = false
+automatic_release = false
+compatibility_certification = false
+fixture_worker_only = true

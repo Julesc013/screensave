@@ -1,0 +1,30 @@
+schema_version: screensave.aide.vendor-lock.v0
+status: active
+as_of: 2026-06-27
+source:
+  repository: https://github.com/Julesc013/aide
+  pinned_commit: 492faa4f1a8280ba67954aa4fc252e79f2e19c15
+  latest_observed_head: 20deb74a59cbf37aed99a95c11dbf6f750430146
+  latest_observed_head_subject: "audit(queue): accept ownership ledger v1"
+admitted_use:
+  - aide_lite_pack_update_planning
+  - vendor_import_provenance
+  - ownership_of_imported_aide_files
+  - update_rollback_records_for_aide_tooling
+forbidden_use:
+  - screensave_product_installation
+  - release_decision
+  - autonomous_source_mutation
+  - automatic_merge
+  - automatic_release
+  - compatibility_certification
+boundaries:
+  distribution_manifest_v1_status: accepted-upstream
+  project_lock_v0_status: accepted-upstream
+  ownership_ledger_v1_status: accepted-upstream
+  local_process_host_fixture_status: accepted-upstream-fixture-only
+  general_worker_admitted: false
+  preview_apply_rollback_admitted: false
+  automatic_merge_allowed: false
+  automatic_release_allowed: false
+claim_boundary: "AIDE vendor lock records import governance only; ScreenSave product truth, release, compatibility, and source mutation remain project-controlled."

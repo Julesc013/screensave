@@ -13,8 +13,8 @@ source_mutation_allowed = false
 [source]
 repository = "https://github.com/Julesc013/aide"
 pinned_commit = "492faa4f1a8280ba67954aa4fc252e79f2e19c15"
-latest_observed_head = "dd3f47ea0b4d90f86ca6b4ae93b06aae81cb54f1"
-latest_observed_head_subject = "audit(queue): check distribution manifest v1"
+latest_observed_head = "20deb74a59cbf37aed99a95c11dbf6f750430146"
+latest_observed_head_subject = "audit(queue): accept ownership ledger v1"
 resolution_command = "git ls-remote https://github.com/Julesc013/aide.git HEAD"
 resolution_kind = "public-head-snapshot"
 accepted_capability_baseline = "AIDE Lite governance, context, repo intelligence, and review plus the accepted local Service, trust-enforcement, and durable WorkerRun fixture slice in AIDE; ScreenSave does not admit a general worker."
@@ -39,10 +39,29 @@ safe_mode_excluded_roots = ["core/apply", "core/gateway", "core/providers"]
 
 [distribution_manifest_v1]
 status = "unaccepted"
+upstream_status = "accepted-upstream"
 open_material_findings = 9
 update_protocol_admitted = false
 automatic_update_allowed = false
-note = "Record the current AIDE DistributionManifest v1 as unaccepted for self-update and automatic target-update machinery while ScreenSave-local capability bindings proceed separately."
+note = "Upstream DistributionManifest v1 is accepted, but ScreenSave admits it only for import provenance, vendor planning, ownership records, and rollback records."
+
+[project_lock_v0]
+upstream_status = "accepted-upstream"
+screen_save_admission = "import-governance-only"
+automatic_update_allowed = false
+
+[ownership_ledger_v1]
+upstream_status = "accepted-upstream"
+screen_save_admission = "import-ownership-records-only"
+automatic_update_allowed = false
+
+[local_process_host_fixture]
+upstream_status = "accepted-upstream-fixture-only"
+screen_save_admission = "fixture-only-no-source-mutation"
+general_worker_admitted = false
+preview_apply_rollback_admitted = false
+automatic_merge_allowed = false
+automatic_release_allowed = false
 
 [screen_save_boundary]
 project_truth_owner = "ScreenSave"

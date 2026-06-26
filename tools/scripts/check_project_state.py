@@ -305,10 +305,28 @@ def validate_state(state: dict) -> list[str]:
     require(aide_lite.get("automatic_merge_allowed") is False, "aide_lite.automatic_merge_allowed must remain false.", errors)
     require(aide_lite.get("general_worker_admitted") is False, "aide_lite.general_worker_admitted must remain false.", errors)
     require(
-        aide_lite.get("distribution_manifest_v1_status") == "unaccepted",
-        "aide_lite.distribution_manifest_v1_status must remain unaccepted.",
+        aide_lite.get("distribution_manifest_v1_status") in {"unaccepted", "accepted-upstream"},
+        "aide_lite.distribution_manifest_v1_status must be unaccepted or accepted-upstream.",
         errors,
     )
+    if aide_lite.get("distribution_manifest_v1_status") == "accepted-upstream":
+        require(
+            aide_lite.get("project_lock_v0_status") == "accepted-upstream",
+            "aide_lite.project_lock_v0_status must record accepted-upstream.",
+            errors,
+        )
+        require(
+            aide_lite.get("ownership_ledger_v1_status") == "accepted-upstream",
+            "aide_lite.ownership_ledger_v1_status must record accepted-upstream.",
+            errors,
+        )
+        require(
+            aide_lite.get("local_process_host_fixture_status") == "accepted-upstream-fixture-only",
+            "aide_lite.local_process_host_fixture_status must stay fixture-only.",
+            errors,
+        )
+        require(aide_lite.get("preview_apply_rollback_admitted") is False, "preview/apply/rollback must remain blocked.", errors)
+        require(aide_lite.get("automatic_release_allowed") is False, "automatic release must remain blocked.", errors)
     require(
         aide_lite.get("pack_manifest_sha256") == "E02EFBB64036F0E73AF2856EE6066B1B6D4945C490EE0788FA1352A4DB371B4B",
         "aide_lite.pack_manifest_sha256 must match the regenerated pack manifest digest.",

@@ -1,0 +1,30 @@
+{
+  "admitted_use": [
+    "AIDE Lite pack update planning",
+    "vendor/import provenance",
+    "ownership of imported AIDE files",
+    "update/rollback records for AIDE tooling"
+  ],
+  "automatic_merge_allowed": false,
+  "automatic_release_allowed": false,
+  "claim_boundary": "Distribution manifest records AIDE Lite governance provenance only; it does not install ScreenSave products, certify compatibility, promote releases, or admit autonomous source mutation.",
+  "distribution_manifest_v1_status": "accepted-upstream",
+  "forbidden_use": [
+    "ScreenSave product installation",
+    "release decision",
+    "general worker admission",
+    "automatic apply",
+    "automatic rollback",
+    "compatibility certification"
+  ],
+  "general_worker_admitted": false,
+  "latest_observed_head": "20deb74a59cbf37aed99a95c11dbf6f750430146",
+  "latest_observed_head_subject": "audit(queue): accept ownership ledger v1",
+  "local_process_host_fixture_status": "accepted-upstream-fixture-only",
+  "ownership_ledger_v1_status": "accepted-upstream",
+  "preview_apply_rollback_admitted": false,
+  "project_lock_v0_status": "accepted-upstream",
+  "schema_version": "screensave.aide-lite.distribution-manifest.v0",
+  "source_commit": "492faa4f1a8280ba67954aa4fc252e79f2e19c15",
+  "status": "active"
+}
