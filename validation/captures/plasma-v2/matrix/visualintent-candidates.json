@@ -1,0 +1,91 @@
+{
+  "automatic_promotion": false,
+  "candidate_count": 3,
+  "candidate_policy": "bounded deterministic local resolver",
+  "candidates": [
+    {
+      "candidate_id": "candidate-01-primary",
+      "compiled_manifest": "out/visualintent/plasma_warm_room/candidates/candidate-01-primary/compiled/manifest.json",
+      "hash_manifest": "out/visualintent/plasma_warm_room/candidates/candidate-01-primary/compiled/hash-manifest.json",
+      "pack_toml": "out/visualintent/plasma_warm_room/candidates/candidate-01-primary/pack.toml",
+      "proof_receipt": "out/visualintent/plasma_warm_room/candidates/candidate-01-primary/proof-receipt.json",
+      "resolution_note": "closest material and motion fit",
+      "spec": {
+        "brightness": 42,
+        "complexity": 62,
+        "contrast": 74,
+        "feedback_amount": 9,
+        "field_family": "classic_interference",
+        "material": "plasma_lava",
+        "motion_speed": 22,
+        "output_style": "continuous",
+        "presentation": "flat",
+        "quality_intent": "safe",
+        "scale": 73,
+        "schema_id": "screensave.plasma.spec.v2",
+        "schema_version": 2,
+        "seed_policy": "fixed",
+        "treatment": "restrained_dither",
+        "warp_amount": 12
+      }
+    },
+    {
+      "candidate_id": "candidate-02-structured",
+      "compiled_manifest": "out/visualintent/plasma_warm_room/candidates/candidate-02-structured/compiled/manifest.json",
+      "hash_manifest": "out/visualintent/plasma_warm_room/candidates/candidate-02-structured/compiled/hash-manifest.json",
+      "pack_toml": "out/visualintent/plasma_warm_room/candidates/candidate-02-structured/pack.toml",
+      "proof_receipt": "out/visualintent/plasma_warm_room/candidates/candidate-02-structured/proof-receipt.json",
+      "resolution_note": "structured alternate with bounded warp",
+      "spec": {
+        "brightness": 42,
+        "complexity": 74,
+        "contrast": 74,
+        "feedback_amount": 9,
+        "field_family": "radial_warped",
+        "material": "aurora_cool",
+        "motion_speed": 22,
+        "output_style": "banded",
+        "presentation": "flat",
+        "quality_intent": "safe",
+        "scale": 81,
+        "schema_id": "screensave.plasma.spec.v2",
+        "schema_version": 2,
+        "seed_policy": "fixed",
+        "treatment": "none",
+        "warp_amount": 22
+      }
+    },
+    {
+      "candidate_id": "candidate-03-comfort",
+      "compiled_manifest": "out/visualintent/plasma_warm_room/candidates/candidate-03-comfort/compiled/manifest.json",
+      "hash_manifest": "out/visualintent/plasma_warm_room/candidates/candidate-03-comfort/compiled/hash-manifest.json",
+      "pack_toml": "out/visualintent/plasma_warm_room/candidates/candidate-03-comfort/pack.toml",
+      "proof_receipt": "out/visualintent/plasma_warm_room/candidates/candidate-03-comfort/proof-receipt.json",
+      "resolution_note": "dark-room comfort variant",
+      "spec": {
+        "brightness": 42,
+        "complexity": 62,
+        "contrast": 74,
+        "feedback_amount": 9,
+        "field_family": "classic_interference",
+        "material": "museum_phosphor",
+        "motion_speed": 22,
+        "output_style": "contour",
+        "presentation": "flat",
+        "quality_intent": "safe",
+        "scale": 73,
+        "schema_id": "screensave.plasma.spec.v2",
+        "schema_version": 2,
+        "seed_policy": "fixed",
+        "treatment": "restrained_crt",
+        "warp_amount": 12
+      }
+    }
+  ],
+  "claim_boundary": "VisualIntent candidates are preview inputs only; they are not stable release, artistic acceptance, compatibility certification, or source generation.",
+  "model_calls": false,
+  "network_calls": false,
+  "schema_version": "screensave.visualintent.plasma.resolution.v1",
+  "source": "tools/visualintent/examples/plasma_warm_room.toml",
+  "source_code_generation": false
+}

@@ -1,0 +1,63 @@
+{
+  "abi": "v1",
+  "capture_frames": [
+    0,
+    8,
+    32
+  ],
+  "captures": [
+    {
+      "frame": 0,
+      "raw_rgba_path": "validation/captures/plasma-v2/matrix/captures/materials-preview/frame-0000.rgba",
+      "raw_rgba_sha256": "a34a72c92f0295db4faabcb569347c354cf93258163bd670bcb56c57044bf392",
+      "review_ppm_path": "validation/captures/plasma-v2/matrix/captures/materials-preview/frame-0000.ppm",
+      "status": "pass"
+    },
+    {
+      "frame": 8,
+      "raw_rgba_path": "validation/captures/plasma-v2/matrix/captures/materials-preview/frame-0008.rgba",
+      "raw_rgba_sha256": "13ff7e9e09f3fda2ba2e72deab6913f740bbc493c1ebb3a86f28bf5402268d71",
+      "review_ppm_path": "validation/captures/plasma-v2/matrix/captures/materials-preview/frame-0008.ppm",
+      "status": "pass"
+    },
+    {
+      "frame": 32,
+      "raw_rgba_path": "validation/captures/plasma-v2/matrix/captures/materials-preview/frame-0032.rgba",
+      "raw_rgba_sha256": "0ad38a3df27baee796afb7662dfbd40b5e1daa509f74b1033adb9cc4076f22eb",
+      "review_ppm_path": "validation/captures/plasma-v2/matrix/captures/materials-preview/frame-0032.ppm",
+      "status": "pass"
+    }
+  ],
+  "claim_boundary": "Plasma v2 preview reference proof only; not stable promotion, compatibility certification, or artistic acceptance.",
+  "comparison_class": "exact",
+  "comparison_status": "pass",
+  "execution_path": "v2",
+  "lifecycle_create_destroy_cycles": 1,
+  "lifecycle_ref": "validation/captures/plasma-v2/matrix/captures/materials-preview/lifecycle/lifecycle.json",
+  "lifecycle_status": "pass",
+  "preset": "plasma_lava_material_matrix",
+  "product": "plasma",
+  "profile": "plasma.v2.materials.preview",
+  "profile_proof_schema": "sslab-profile-proof-v0",
+  "profile_source": "catalog/generated/proof_registry.json",
+  "repeat_captures": [
+    {
+      "frame": 0,
+      "raw_rgba_sha256": "a34a72c92f0295db4faabcb569347c354cf93258163bd670bcb56c57044bf392",
+      "status": "pass"
+    },
+    {
+      "frame": 8,
+      "raw_rgba_sha256": "13ff7e9e09f3fda2ba2e72deab6913f740bbc493c1ebb3a86f28bf5402268d71",
+      "status": "pass"
+    },
+    {
+      "frame": 32,
+      "raw_rgba_sha256": "0ad38a3df27baee796afb7662dfbd40b5e1daa509f74b1033adb9cc4076f22eb",
+      "status": "pass"
+    }
+  ],
+  "runner_mode": "generic-libsslab-proof",
+  "runner_stdout": "",
+  "status": "pass"
+}

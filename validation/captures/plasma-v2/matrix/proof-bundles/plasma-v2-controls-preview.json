@@ -1,0 +1,146 @@
+{
+  "claim_boundary": "Normalized proof evidence only; not compatibility certification, artistic acceptance, or release promotion.",
+  "inputs": {
+    "adapter_receipt": "",
+    "build_receipt": "",
+    "comparison": "",
+    "lifecycle": "",
+    "pe_audit_json": "",
+    "performance": "",
+    "proof": "validation/captures/plasma-v2/matrix/captures/controls-preview/profile-proof.json"
+  },
+  "limits": [
+    "Proof Bundle v1 separates result axes but does not rerun proof tools.",
+    "A blocked artistic-review axis is not a mechanical proof failure.",
+    "A binary-audited compatibility class is not certified OS support."
+  ],
+  "proof_schema": "proof-bundle-v1",
+  "result_axes": {
+    "artifact_audit": {
+      "artifact_count": 0,
+      "artifact_manifest": null,
+      "artifact_profile": null,
+      "evidence_refs": [],
+      "status": "informational",
+      "summary": "No PE audit facts were supplied.",
+      "violation_count": 0
+    },
+    "artistic_review": {
+      "evidence_refs": [],
+      "status": "blocked",
+      "summary": "Human visual-artistic review has not been supplied."
+    },
+    "capture": {
+      "canonical_hash_source": "rgba8-bytes",
+      "capture_count": 4,
+      "capture_refs": [
+        "validation/captures/plasma-v2/matrix/captures/controls-preview/frame-0000.rgba",
+        "validation/captures/plasma-v2/matrix/captures/controls-preview/frame-0008.rgba",
+        "validation/captures/plasma-v2/matrix/captures/controls-preview/frame-0032.rgba",
+        "validation/captures/plasma-v2/matrix/captures/controls-preview/frame-0064.rgba"
+      ],
+      "capture_sha256_values": [
+        "48e1d8753942c5fbd1aa2879cbb58a2bc39778b93db7c75a533b5d5f9f34a34a",
+        "48d6d43fb878bf5d48ad05a3c4d3ed18630a7be67d437e0e8b0ad95c803aa5cf",
+        "170b466db5ea2934db57da78707d0b94084a9fa5ce1626bbd7e46dc2d68626c0",
+        "6d490f93dc85dbe59577baa89f8119cfd1cb8fb81c7205bc05df68d4c911921a"
+      ],
+      "evidence_refs": [
+        "validation/captures/plasma-v2/matrix/captures/controls-preview/profile-proof.json"
+      ],
+      "review_refs": [
+        "validation/captures/plasma-v2/matrix/captures/controls-preview/frame-0000.ppm",
+        "validation/captures/plasma-v2/matrix/captures/controls-preview/frame-0008.ppm",
+        "validation/captures/plasma-v2/matrix/captures/controls-preview/frame-0032.ppm",
+        "validation/captures/plasma-v2/matrix/captures/controls-preview/frame-0064.ppm"
+      ],
+      "status": "pass",
+      "summary": "Profile proof captures are present."
+    },
+    "comparison": {
+      "comparison_class": "exact",
+      "evidence_refs": [
+        "validation/captures/plasma-v2/matrix/captures/controls-preview/profile-proof.json"
+      ],
+      "metrics": {},
+      "status": "pass",
+      "summary": "Comparison status was supplied by profile proof."
+    },
+    "compatibility": {
+      "certified": false,
+      "evidence_class": "targeted",
+      "evidence_refs": [],
+      "status": "informational",
+      "summary": "Compatibility evidence class is derived without certifying an operating system."
+    },
+    "execution": {
+      "build_status": "informational",
+      "evidence_refs": [
+        "validation/captures/plasma-v2/matrix/captures/controls-preview/profile-proof.json"
+      ],
+      "runner": null,
+      "runner_mode": null,
+      "status": "informational",
+      "summary": "Execution evidence was normalized from proof and optional build receipts."
+    },
+    "lifecycle": {
+      "checksum": null,
+      "create_destroy_cycles": 1,
+      "create_session": null,
+      "destroy_session": null,
+      "evidence_refs": [
+        "validation/captures/plasma-v2/matrix/captures/controls-preview/lifecycle/lifecycle.json"
+      ],
+      "height": null,
+      "lifecycle_schema": null,
+      "render_session": null,
+      "resize_session": null,
+      "status": "pass",
+      "step_count": null,
+      "summary": "Lifecycle status was supplied by profile proof.",
+      "width": null
+    },
+    "performance": {
+      "evidence_refs": [],
+      "frame_count": null,
+      "frame_time_ms": {},
+      "handles": {},
+      "limits": {},
+      "memory": {},
+      "performance_schema": null,
+      "soak": {
+        "cycles": null,
+        "hashes": [],
+        "status": null
+      },
+      "status": "informational",
+      "summary": "No performance receipt was supplied."
+    },
+    "portable_v2_equivalence": {
+      "claim_boundary": "Named canary v1/v2 deterministic equivalence only.",
+      "evidence_refs": [],
+      "products": [],
+      "profiles": [],
+      "receipt_claim_boundary": "v1/v2 deterministic equivalence for named canary profiles only",
+      "status": "informational",
+      "summary": "No portable v2 equivalence receipt was supplied."
+    },
+    "release_promotion": {
+      "evidence_refs": [],
+      "status": "blocked",
+      "summary": "Release promotion has not been requested or approved."
+    }
+  },
+  "source": {
+    "bundle_generated_at_source": "0d077e0edc6134e115d00b412af59390aba1d78f",
+    "commit": "0d077e0edc6134e115d00b412af59390aba1d78f",
+    "dirty": true
+  },
+  "status": "informational",
+  "subject": {
+    "preset": "plasma_lava_controls_matrix",
+    "product": "plasma",
+    "profile": "plasma.v2.controls.preview",
+    "proof_kernel": null
+  }
+}

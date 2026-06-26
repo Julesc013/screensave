@@ -31,8 +31,39 @@ static sslab_status sslab_plasma_configure(
 
     status = plasma_migration_v2_apply_u09(preset_key, 0, &spec);
     if (status != SS_V2_STATUS_OK) {
-        return SSLAB_STATUS_INVALID_ARGUMENT;
+        status = plasma_migration_v2_apply_u09("plasma_lava", 0, &spec);
+        if (status != SS_V2_STATUS_OK) {
+            return SSLAB_STATUS_INVALID_ARGUMENT;
+        }
     }
+    if (preset_key != 0 && strcmp(preset_key, "plasma_lava_material_matrix") == 0) {
+        spec.material_id = PLASMA_V2_MATERIAL_AURORA_COOL;
+        spec.treatment_flags = PLASMA_V2_TREATMENT_RESTRAINED_DITHER;
+    } else if (preset_key != 0 && strcmp(preset_key, "plasma_lava_controls_matrix") == 0) {
+        spec.field_family = PLASMA_V2_FIELD_RADIAL_WARPED;
+        spec.scale = (ss_u32)70U;
+        spec.complexity = (ss_u32)88U;
+        spec.motion_speed = (ss_u32)85U;
+        spec.warp_amount = (ss_u32)60U;
+        spec.feedback_amount = (ss_u32)45U;
+        spec.output_style = PLASMA_V2_OUTPUT_CONTOUR;
+        spec.brightness = (ss_u32)70U;
+        spec.contrast = (ss_u32)60U;
+        spec.treatment_flags = PLASMA_V2_TREATMENT_RESTRAINED_CRT;
+    } else if (preset_key != 0 && strcmp(preset_key, "plasma_visualintent_candidate_matrix") == 0) {
+        spec.field_family = PLASMA_V2_FIELD_RADIAL_WARPED;
+        spec.scale = (ss_u32)92U;
+        spec.complexity = (ss_u32)72U;
+        spec.motion_speed = (ss_u32)24U;
+        spec.warp_amount = (ss_u32)36U;
+        spec.feedback_amount = (ss_u32)10U;
+        spec.output_style = PLASMA_V2_OUTPUT_BANDED;
+        spec.material_id = PLASMA_V2_MATERIAL_MUSEUM_PHOSPHOR;
+        spec.brightness = (ss_u32)42U;
+        spec.contrast = (ss_u32)74U;
+        spec.treatment_flags = PLASMA_V2_TREATMENT_RESTRAINED_CRT;
+    }
+    plasma_spec_v2_clamp(&spec);
     memcpy(product_config, &spec, sizeof(spec));
     return SSLAB_STATUS_OK;
 }

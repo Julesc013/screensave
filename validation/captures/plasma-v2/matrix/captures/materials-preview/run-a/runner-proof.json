@@ -1,0 +1,32 @@
+{
+  "runner_schema": "sslab-runner-proof-v0",
+  "status": "pass",
+  "profile": "plasma.v2.materials.preview",
+  "product": "plasma",
+  "abi": "v1",
+  "path": "v2",
+  "preset": "plasma_lava_material_matrix",
+  "captures": [
+    { "frame": 0, "status": "pass", "rgba_sha256": "a34a72c92f0295db4faabcb569347c354cf93258163bd670bcb56c57044bf392", "raw_rgba_path": "D:\\Projects\\ScreenSave\\screensave\\validation\\captures\\plasma-v2\\matrix\\captures\\materials-preview\\run-a/plasma-v2-materials-preview/frame-0000.rgba", "review_ppm_path": "D:\\Projects\\ScreenSave\\screensave\\validation\\captures\\plasma-v2\\matrix\\captures\\materials-preview\\run-a/plasma-v2-materials-preview/frame-0000.ppm" },
+    { "frame": 8, "status": "pass", "rgba_sha256": "13ff7e9e09f3fda2ba2e72deab6913f740bbc493c1ebb3a86f28bf5402268d71", "raw_rgba_path": "D:\\Projects\\ScreenSave\\screensave\\validation\\captures\\plasma-v2\\matrix\\captures\\materials-preview\\run-a/plasma-v2-materials-preview/frame-0008.rgba", "review_ppm_path": "D:\\Projects\\ScreenSave\\screensave\\validation\\captures\\plasma-v2\\matrix\\captures\\materials-preview\\run-a/plasma-v2-materials-preview/frame-0008.ppm" },
+    { "frame": 32, "status": "pass", "rgba_sha256": "0ad38a3df27baee796afb7662dfbd40b5e1daa509f74b1033adb9cc4076f22eb", "raw_rgba_path": "D:\\Projects\\ScreenSave\\screensave\\validation\\captures\\plasma-v2\\matrix\\captures\\materials-preview\\run-a/plasma-v2-materials-preview/frame-0032.rgba", "review_ppm_path": "D:\\Projects\\ScreenSave\\screensave\\validation\\captures\\plasma-v2\\matrix\\captures\\materials-preview\\run-a/plasma-v2-materials-preview/frame-0032.ppm" }
+  ],
+  "lifecycle": {
+    "status": "pass",
+    "create_session": 1,
+    "resize_session": 1,
+    "step_count": 32,
+    "render_session": 1,
+    "destroy_session": 1,
+    "create_destroy_cycles": 1,
+    "checksum": 4173460520
+  },
+  "profile_receipt": {
+    "status": "pass",
+    "measured_frames": 8,
+    "short_soak_frames": 8,
+    "frame_time_ms_p50": 0.000000,
+    "frame_time_ms_p95": 1.000000,
+    "frame_time_ms_p99": 1.000000
+  }
+}

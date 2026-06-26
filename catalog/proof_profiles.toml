@@ -59,3 +59,63 @@ artifact_sets = ["windows_current_x86_scr"]
 baseline_capture = "validation/captures/plasma-v2/reference-preview/frame-0090.rgba"
 baseline_proof = "validation/captures/plasma-v2/reference-preview/profile-proof.json"
 claim_boundary = "Plasma v2 preview reference proof only; not stable promotion or artistic acceptance"
+
+[[proof_profiles]]
+key = "plasma.v2.materials.preview"
+status = "implemented"
+product = "plasma"
+preset = "plasma_lava_material_matrix"
+width = 160
+height = 90
+resize_width = 128
+resize_height = 72
+seed = 4104
+delta_ms = 100
+create_destroy_cycles = 1
+capture_frames = [0, 8, 32]
+comparison_class = "exact"
+lifecycle = ["create", "resize", "step", "render", "destroy"]
+artifact_sets = ["windows_current_x86_scr"]
+baseline_capture = "validation/captures/plasma-v2/matrix/captures/materials-preview/frame-0032.rgba"
+baseline_proof = "validation/captures/plasma-v2/matrix/captures/materials-preview/profile-proof.json"
+claim_boundary = "Plasma v2 materials preview proof only; not stable promotion, artistic acceptance, or compatibility certification"
+
+[[proof_profiles]]
+key = "plasma.v2.controls.preview"
+status = "implemented"
+product = "plasma"
+preset = "plasma_lava_controls_matrix"
+width = 160
+height = 90
+resize_width = 128
+resize_height = 72
+seed = 4112
+delta_ms = 100
+create_destroy_cycles = 1
+capture_frames = [0, 8, 32, 64]
+comparison_class = "exact"
+lifecycle = ["create", "resize", "step", "render", "destroy"]
+artifact_sets = ["windows_current_x86_scr"]
+baseline_capture = "validation/captures/plasma-v2/matrix/captures/controls-preview/frame-0064.rgba"
+baseline_proof = "validation/captures/plasma-v2/matrix/captures/controls-preview/profile-proof.json"
+claim_boundary = "Plasma v2 controls preview proof only; not stable promotion, artistic acceptance, or compatibility certification"
+
+[[proof_profiles]]
+key = "plasma.v2.visualintent.preview"
+status = "implemented"
+product = "plasma"
+preset = "plasma_visualintent_candidate_matrix"
+width = 160
+height = 90
+resize_width = 128
+resize_height = 72
+seed = 4120
+delta_ms = 100
+create_destroy_cycles = 1
+capture_frames = [0, 8, 32, 90]
+comparison_class = "exact"
+lifecycle = ["create", "resize", "step", "render", "destroy"]
+artifact_sets = ["windows_current_x86_scr"]
+baseline_capture = "validation/captures/plasma-v2/matrix/captures/visualintent-preview/frame-0090.rgba"
+baseline_proof = "validation/captures/plasma-v2/matrix/captures/visualintent-preview/profile-proof.json"
+claim_boundary = "Plasma v2 VisualIntent candidate preview proof only; not stable promotion, artistic acceptance, or compatibility certification"

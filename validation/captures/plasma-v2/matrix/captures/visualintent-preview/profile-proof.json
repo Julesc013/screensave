@@ -1,0 +1,76 @@
+{
+  "abi": "v1",
+  "capture_frames": [
+    0,
+    8,
+    32,
+    90
+  ],
+  "captures": [
+    {
+      "frame": 0,
+      "raw_rgba_path": "validation/captures/plasma-v2/matrix/captures/visualintent-preview/frame-0000.rgba",
+      "raw_rgba_sha256": "67b3cc1a8f77e895ec912fdc8a6ad27a5ac47fad07445ac30e2c35c028f75077",
+      "review_ppm_path": "validation/captures/plasma-v2/matrix/captures/visualintent-preview/frame-0000.ppm",
+      "status": "pass"
+    },
+    {
+      "frame": 8,
+      "raw_rgba_path": "validation/captures/plasma-v2/matrix/captures/visualintent-preview/frame-0008.rgba",
+      "raw_rgba_sha256": "e0cc64529e64d9fc92ae7fe550b41ce96a3c6e65fc9bb5eb0f3c6f8b749a7e90",
+      "review_ppm_path": "validation/captures/plasma-v2/matrix/captures/visualintent-preview/frame-0008.ppm",
+      "status": "pass"
+    },
+    {
+      "frame": 32,
+      "raw_rgba_path": "validation/captures/plasma-v2/matrix/captures/visualintent-preview/frame-0032.rgba",
+      "raw_rgba_sha256": "67b3cc1a8f77e895ec912fdc8a6ad27a5ac47fad07445ac30e2c35c028f75077",
+      "review_ppm_path": "validation/captures/plasma-v2/matrix/captures/visualintent-preview/frame-0032.ppm",
+      "status": "pass"
+    },
+    {
+      "frame": 90,
+      "raw_rgba_path": "validation/captures/plasma-v2/matrix/captures/visualintent-preview/frame-0090.rgba",
+      "raw_rgba_sha256": "a7e3388758772862b3a638111e922b6125500fe59d0bd33cf808c7e592954082",
+      "review_ppm_path": "validation/captures/plasma-v2/matrix/captures/visualintent-preview/frame-0090.ppm",
+      "status": "pass"
+    }
+  ],
+  "claim_boundary": "Plasma v2 preview reference proof only; not stable promotion, compatibility certification, or artistic acceptance.",
+  "comparison_class": "exact",
+  "comparison_status": "pass",
+  "execution_path": "v2",
+  "lifecycle_create_destroy_cycles": 1,
+  "lifecycle_ref": "validation/captures/plasma-v2/matrix/captures/visualintent-preview/lifecycle/lifecycle.json",
+  "lifecycle_status": "pass",
+  "preset": "plasma_visualintent_candidate_matrix",
+  "product": "plasma",
+  "profile": "plasma.v2.visualintent.preview",
+  "profile_proof_schema": "sslab-profile-proof-v0",
+  "profile_source": "catalog/generated/proof_registry.json",
+  "repeat_captures": [
+    {
+      "frame": 0,
+      "raw_rgba_sha256": "67b3cc1a8f77e895ec912fdc8a6ad27a5ac47fad07445ac30e2c35c028f75077",
+      "status": "pass"
+    },
+    {
+      "frame": 8,
+      "raw_rgba_sha256": "e0cc64529e64d9fc92ae7fe550b41ce96a3c6e65fc9bb5eb0f3c6f8b749a7e90",
+      "status": "pass"
+    },
+    {
+      "frame": 32,
+      "raw_rgba_sha256": "67b3cc1a8f77e895ec912fdc8a6ad27a5ac47fad07445ac30e2c35c028f75077",
+      "status": "pass"
+    },
+    {
+      "frame": 90,
+      "raw_rgba_sha256": "a7e3388758772862b3a638111e922b6125500fe59d0bd33cf808c7e592954082",
+      "status": "pass"
+    }
+  ],
+  "runner_mode": "generic-libsslab-proof",
+  "runner_stdout": "",
+  "status": "pass"
+}

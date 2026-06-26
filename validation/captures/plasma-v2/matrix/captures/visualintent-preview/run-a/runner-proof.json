@@ -1,0 +1,33 @@
+{
+  "runner_schema": "sslab-runner-proof-v0",
+  "status": "pass",
+  "profile": "plasma.v2.visualintent.preview",
+  "product": "plasma",
+  "abi": "v1",
+  "path": "v2",
+  "preset": "plasma_visualintent_candidate_matrix",
+  "captures": [
+    { "frame": 0, "status": "pass", "rgba_sha256": "67b3cc1a8f77e895ec912fdc8a6ad27a5ac47fad07445ac30e2c35c028f75077", "raw_rgba_path": "D:\\Projects\\ScreenSave\\screensave\\validation\\captures\\plasma-v2\\matrix\\captures\\visualintent-preview\\run-a/plasma-v2-visualintent-preview/frame-0000.rgba", "review_ppm_path": "D:\\Projects\\ScreenSave\\screensave\\validation\\captures\\plasma-v2\\matrix\\captures\\visualintent-preview\\run-a/plasma-v2-visualintent-preview/frame-0000.ppm" },
+    { "frame": 8, "status": "pass", "rgba_sha256": "e0cc64529e64d9fc92ae7fe550b41ce96a3c6e65fc9bb5eb0f3c6f8b749a7e90", "raw_rgba_path": "D:\\Projects\\ScreenSave\\screensave\\validation\\captures\\plasma-v2\\matrix\\captures\\visualintent-preview\\run-a/plasma-v2-visualintent-preview/frame-0008.rgba", "review_ppm_path": "D:\\Projects\\ScreenSave\\screensave\\validation\\captures\\plasma-v2\\matrix\\captures\\visualintent-preview\\run-a/plasma-v2-visualintent-preview/frame-0008.ppm" },
+    { "frame": 32, "status": "pass", "rgba_sha256": "67b3cc1a8f77e895ec912fdc8a6ad27a5ac47fad07445ac30e2c35c028f75077", "raw_rgba_path": "D:\\Projects\\ScreenSave\\screensave\\validation\\captures\\plasma-v2\\matrix\\captures\\visualintent-preview\\run-a/plasma-v2-visualintent-preview/frame-0032.rgba", "review_ppm_path": "D:\\Projects\\ScreenSave\\screensave\\validation\\captures\\plasma-v2\\matrix\\captures\\visualintent-preview\\run-a/plasma-v2-visualintent-preview/frame-0032.ppm" },
+    { "frame": 90, "status": "pass", "rgba_sha256": "a7e3388758772862b3a638111e922b6125500fe59d0bd33cf808c7e592954082", "raw_rgba_path": "D:\\Projects\\ScreenSave\\screensave\\validation\\captures\\plasma-v2\\matrix\\captures\\visualintent-preview\\run-a/plasma-v2-visualintent-preview/frame-0090.rgba", "review_ppm_path": "D:\\Projects\\ScreenSave\\screensave\\validation\\captures\\plasma-v2\\matrix\\captures\\visualintent-preview\\run-a/plasma-v2-visualintent-preview/frame-0090.ppm" }
+  ],
+  "lifecycle": {
+    "status": "pass",
+    "create_session": 1,
+    "resize_session": 1,
+    "step_count": 90,
+    "render_session": 1,
+    "destroy_session": 1,
+    "create_destroy_cycles": 1,
+    "checksum": 253798710
+  },
+  "profile_receipt": {
+    "status": "pass",
+    "measured_frames": 8,
+    "short_soak_frames": 8,
+    "frame_time_ms_p50": 1.000000,
+    "frame_time_ms_p95": 1.000000,
+    "frame_time_ms_p99": 1.000000
+  }
+}

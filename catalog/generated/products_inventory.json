@@ -1477,7 +1477,7 @@
       "source_units": []
     }
   ],
-  "proof_profile_count": 3,
+  "proof_profile_count": 6,
   "proof_profiles": [
     {
       "artifact_sets": [
@@ -1572,6 +1572,104 @@
       "resize_height": 72,
       "resize_width": 128,
       "seed": 4096,
+      "status": "implemented",
+      "width": 160
+    },
+    {
+      "artifact_sets": [
+        "windows_current_x86_scr"
+      ],
+      "baseline_capture": "validation/captures/plasma-v2/matrix/captures/materials-preview/frame-0032.rgba",
+      "baseline_proof": "validation/captures/plasma-v2/matrix/captures/materials-preview/profile-proof.json",
+      "capture_frames": [
+        0,
+        8,
+        32
+      ],
+      "claim_boundary": "Plasma v2 materials preview proof only; not stable promotion, artistic acceptance, or compatibility certification",
+      "comparison_class": "exact",
+      "create_destroy_cycles": 1,
+      "delta_ms": 100,
+      "height": 90,
+      "key": "plasma.v2.materials.preview",
+      "lifecycle": [
+        "create",
+        "resize",
+        "step",
+        "render",
+        "destroy"
+      ],
+      "preset": "plasma_lava_material_matrix",
+      "product": "plasma",
+      "resize_height": 72,
+      "resize_width": 128,
+      "seed": 4104,
+      "status": "implemented",
+      "width": 160
+    },
+    {
+      "artifact_sets": [
+        "windows_current_x86_scr"
+      ],
+      "baseline_capture": "validation/captures/plasma-v2/matrix/captures/controls-preview/frame-0064.rgba",
+      "baseline_proof": "validation/captures/plasma-v2/matrix/captures/controls-preview/profile-proof.json",
+      "capture_frames": [
+        0,
+        8,
+        32,
+        64
+      ],
+      "claim_boundary": "Plasma v2 controls preview proof only; not stable promotion, artistic acceptance, or compatibility certification",
+      "comparison_class": "exact",
+      "create_destroy_cycles": 1,
+      "delta_ms": 100,
+      "height": 90,
+      "key": "plasma.v2.controls.preview",
+      "lifecycle": [
+        "create",
+        "resize",
+        "step",
+        "render",
+        "destroy"
+      ],
+      "preset": "plasma_lava_controls_matrix",
+      "product": "plasma",
+      "resize_height": 72,
+      "resize_width": 128,
+      "seed": 4112,
+      "status": "implemented",
+      "width": 160
+    },
+    {
+      "artifact_sets": [
+        "windows_current_x86_scr"
+      ],
+      "baseline_capture": "validation/captures/plasma-v2/matrix/captures/visualintent-preview/frame-0090.rgba",
+      "baseline_proof": "validation/captures/plasma-v2/matrix/captures/visualintent-preview/profile-proof.json",
+      "capture_frames": [
+        0,
+        8,
+        32,
+        90
+      ],
+      "claim_boundary": "Plasma v2 VisualIntent candidate preview proof only; not stable promotion, artistic acceptance, or compatibility certification",
+      "comparison_class": "exact",
+      "create_destroy_cycles": 1,
+      "delta_ms": 100,
+      "height": 90,
+      "key": "plasma.v2.visualintent.preview",
+      "lifecycle": [
+        "create",
+        "resize",
+        "step",
+        "render",
+        "destroy"
+      ],
+      "preset": "plasma_visualintent_candidate_matrix",
+      "product": "plasma",
+      "resize_height": 72,
+      "resize_width": 128,
+      "seed": 4120,
       "status": "implemented",
       "width": 160
     }

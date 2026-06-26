@@ -1,0 +1,33 @@
+{
+  "runner_schema": "sslab-runner-proof-v0",
+  "status": "pass",
+  "profile": "plasma.v2.controls.preview",
+  "product": "plasma",
+  "abi": "v1",
+  "path": "v2",
+  "preset": "plasma_lava_controls_matrix",
+  "captures": [
+    { "frame": 0, "status": "pass", "rgba_sha256": "48e1d8753942c5fbd1aa2879cbb58a2bc39778b93db7c75a533b5d5f9f34a34a", "raw_rgba_path": "D:\\Projects\\ScreenSave\\screensave\\validation\\captures\\plasma-v2\\matrix\\captures\\controls-preview\\run-a/plasma-v2-controls-preview/frame-0000.rgba", "review_ppm_path": "D:\\Projects\\ScreenSave\\screensave\\validation\\captures\\plasma-v2\\matrix\\captures\\controls-preview\\run-a/plasma-v2-controls-preview/frame-0000.ppm" },
+    { "frame": 8, "status": "pass", "rgba_sha256": "48d6d43fb878bf5d48ad05a3c4d3ed18630a7be67d437e0e8b0ad95c803aa5cf", "raw_rgba_path": "D:\\Projects\\ScreenSave\\screensave\\validation\\captures\\plasma-v2\\matrix\\captures\\controls-preview\\run-a/plasma-v2-controls-preview/frame-0008.rgba", "review_ppm_path": "D:\\Projects\\ScreenSave\\screensave\\validation\\captures\\plasma-v2\\matrix\\captures\\controls-preview\\run-a/plasma-v2-controls-preview/frame-0008.ppm" },
+    { "frame": 32, "status": "pass", "rgba_sha256": "170b466db5ea2934db57da78707d0b94084a9fa5ce1626bbd7e46dc2d68626c0", "raw_rgba_path": "D:\\Projects\\ScreenSave\\screensave\\validation\\captures\\plasma-v2\\matrix\\captures\\controls-preview\\run-a/plasma-v2-controls-preview/frame-0032.rgba", "review_ppm_path": "D:\\Projects\\ScreenSave\\screensave\\validation\\captures\\plasma-v2\\matrix\\captures\\controls-preview\\run-a/plasma-v2-controls-preview/frame-0032.ppm" },
+    { "frame": 64, "status": "pass", "rgba_sha256": "6d490f93dc85dbe59577baa89f8119cfd1cb8fb81c7205bc05df68d4c911921a", "raw_rgba_path": "D:\\Projects\\ScreenSave\\screensave\\validation\\captures\\plasma-v2\\matrix\\captures\\controls-preview\\run-a/plasma-v2-controls-preview/frame-0064.rgba", "review_ppm_path": "D:\\Projects\\ScreenSave\\screensave\\validation\\captures\\plasma-v2\\matrix\\captures\\controls-preview\\run-a/plasma-v2-controls-preview/frame-0064.ppm" }
+  ],
+  "lifecycle": {
+    "status": "pass",
+    "create_session": 1,
+    "resize_session": 1,
+    "step_count": 64,
+    "render_session": 1,
+    "destroy_session": 1,
+    "create_destroy_cycles": 1,
+    "checksum": 2833950932
+  },
+  "profile_receipt": {
+    "status": "pass",
+    "measured_frames": 8,
+    "short_soak_frames": 8,
+    "frame_time_ms_p50": 1.000000,
+    "frame_time_ms_p95": 1.000000,
+    "frame_time_ms_p99": 1.000000
+  }
+}

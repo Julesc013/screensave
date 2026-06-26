@@ -2,6 +2,8 @@
 
 #include "nocturne_core.h"
 #include "nocturne_v2_adapter.h"
+#include "plasma_migration_v2.h"
+#include "plasma_v2_adapter.h"
 #include "ricochet_core.h"
 #include "ricochet_v2_adapter.h"
 
@@ -17,6 +19,11 @@ static ss_u32 sslab_v1_nocturne_stream_seed(ss_u32 seed)
 static ss_u32 sslab_v1_ricochet_stream_seed(ss_u32 seed)
 {
     return seed ^ (ss_u32)0x9E3779B9U;
+}
+
+static ss_u32 sslab_v1_plasma_stream_seed(ss_u32 seed)
+{
+    return seed ^ (ss_u32)0x71B54A35U;
 }
 
 static const sslab_v1_product_def g_sslab_v1_products[] = {
@@ -35,6 +42,14 @@ static const sslab_v1_product_def g_sslab_v1_products[] = {
         sslab_v1_ricochet_stream_seed,
         (ss_u32)sizeof(ricochet_config),
         ricochet_v2_product_descriptor
+    },
+    {
+        "plasma",
+        "plasma_lava",
+        SS_V2_SESSION_MODE_SCREEN,
+        sslab_v1_plasma_stream_seed,
+        (ss_u32)sizeof(plasma_spec_v2),
+        plasma_v2_product_descriptor
     }
 };
 
@@ -62,6 +77,7 @@ sslab_v1_status sslab_v1_configure_product(
 {
     nocturne_config nocturne;
     ricochet_config ricochet;
+    plasma_spec_v2 plasma;
 
     if (definition == 0 || config_bytes == 0 || config_size == 0 || config_capacity < definition->config_size) {
         return SSLAB_V1_STATUS_INVALID_ARGUMENT;
@@ -79,6 +95,39 @@ sslab_v1_status sslab_v1_configure_product(
         ricochet.speed_mode = RICOCHET_SPEED_STANDARD;
         ricochet.trail_mode = RICOCHET_TRAIL_SHORT;
         memcpy(config_bytes, &ricochet, sizeof(ricochet));
+    } else if (strcmp(definition->product_key, "plasma") == 0) {
+        if (plasma_migration_v2_apply_u09(preset_key, 0, &plasma) != SS_V2_STATUS_OK) {
+            plasma_migration_v2_apply_u09("plasma_lava", 0, &plasma);
+        }
+        if (preset_key != 0 && strcmp(preset_key, "plasma_lava_material_matrix") == 0) {
+            plasma.material_id = PLASMA_V2_MATERIAL_AURORA_COOL;
+            plasma.treatment_flags = PLASMA_V2_TREATMENT_RESTRAINED_DITHER;
+        } else if (preset_key != 0 && strcmp(preset_key, "plasma_lava_controls_matrix") == 0) {
+            plasma.field_family = PLASMA_V2_FIELD_RADIAL_WARPED;
+            plasma.scale = (ss_u32)70U;
+            plasma.complexity = (ss_u32)88U;
+            plasma.motion_speed = (ss_u32)85U;
+            plasma.warp_amount = (ss_u32)60U;
+            plasma.feedback_amount = (ss_u32)45U;
+            plasma.output_style = PLASMA_V2_OUTPUT_CONTOUR;
+            plasma.brightness = (ss_u32)70U;
+            plasma.contrast = (ss_u32)60U;
+            plasma.treatment_flags = PLASMA_V2_TREATMENT_RESTRAINED_CRT;
+        } else if (preset_key != 0 && strcmp(preset_key, "plasma_visualintent_candidate_matrix") == 0) {
+            plasma.field_family = PLASMA_V2_FIELD_RADIAL_WARPED;
+            plasma.scale = (ss_u32)92U;
+            plasma.complexity = (ss_u32)72U;
+            plasma.motion_speed = (ss_u32)24U;
+            plasma.warp_amount = (ss_u32)36U;
+            plasma.feedback_amount = (ss_u32)10U;
+            plasma.output_style = PLASMA_V2_OUTPUT_BANDED;
+            plasma.material_id = PLASMA_V2_MATERIAL_MUSEUM_PHOSPHOR;
+            plasma.brightness = (ss_u32)42U;
+            plasma.contrast = (ss_u32)74U;
+            plasma.treatment_flags = PLASMA_V2_TREATMENT_RESTRAINED_CRT;
+        }
+        plasma_spec_v2_clamp(&plasma);
+        memcpy(config_bytes, &plasma, sizeof(plasma));
     } else {
         return SSLAB_V1_STATUS_NOT_FOUND;
     }

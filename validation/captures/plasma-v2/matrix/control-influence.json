@@ -1,0 +1,12 @@
+{
+  "claim_boundary": "Plasma v2 control influence matrix evidence is preview-only; metadata-only fields remain explicitly separate.",
+  "materially_influencing_controls": 11,
+  "metadata_only_controls": [
+    "seed_policy",
+    "quality_intent"
+  ],
+  "profile": "plasma.v2.controls.preview",
+  "source_ref": "validation/captures/plasma-v2/influence/control-influence.json",
+  "status": "pass",
+  "total_controls": 13
+}

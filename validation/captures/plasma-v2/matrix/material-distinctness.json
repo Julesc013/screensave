@@ -1,0 +1,20 @@
+{
+  "claim_boundary": "Plasma v2 material and treatment matrix evidence is preview-only; not stable release, compatibility certification, or artistic acceptance.",
+  "material_count": 5,
+  "materials": [
+    "plasma_lava",
+    "aurora_cool",
+    "oceanic_blue",
+    "museum_phosphor",
+    "quiet_darkroom"
+  ],
+  "profile": "plasma.v2.materials.preview",
+  "source_ref": "validation/captures/plasma-v2/materials/material-treatment-summary.json",
+  "status": "pass",
+  "treatment_count": 3,
+  "treatments": [
+    "none",
+    "restrained_dither",
+    "restrained_crt"
+  ]
+}
