@@ -14,10 +14,10 @@
     {
       "id": "plasma-status-input",
       "payload": {
-        "observed": "stable-candidate"
+        "observed": "release-readiness-reviewed"
       },
       "status": "pass",
-      "summary": "Plasma v2 must enter the gate from reviewed-preview and may exit as stable-candidate."
+      "summary": "Plasma v2 must enter the gate from reviewed-preview and may later appear as release-readiness-reviewed."
     },
     {
       "id": "plasma-not-stable",
@@ -25,10 +25,14 @@
         "plasma": {
           "acceleration_matrix": "validation/captures/plasma-v2/acceleration/matrix.json",
           "active_profile": "plasma.v2.reference.preview",
-          "artistic_acceptance": "stable-candidate-review",
-          "claim_boundary": "Stable candidate only; not stable release promotion, final artistic acceptance, compatibility certification, public SDK stability, or all-saver migration.",
-          "opened_next": "plasma-v2-release-readiness",
+          "artistic_acceptance": "accepted-for-release-candidate",
+          "claim_boundary": "Release-readiness reviewed only; not stable release promotion, final stable artistic acceptance, compatibility certification, public SDK stability, or all-saver migration.",
+          "final_artistic_decision": "validation/captures/plasma-v2/final-artistic-decision/decision.release-candidate.toml",
+          "manager_preview": "ready",
+          "manager_preview_model": "products/apps/suite/src/manager_pack_preview.c",
+          "opened_next": "plasma-v2-release-candidate",
           "pack_example": "products/savers/plasma/content/v2/examples/plasma_lava_v2.toml",
+          "package_stage": "packaging/windows/plasma-v2-preview/manifest.toml",
           "packc": "v1-candidate",
           "performance_envelope": "validation/captures/plasma-v2/performance/envelope.json",
           "preview_gate": "validation/captures/plasma-v2/preview-gate/gate-report.json",
@@ -36,13 +40,15 @@
           "proof_bundle": "validation/captures/plasma-v2/reference-preview/proof-bundle-v1.json",
           "proof_matrix": "validation/captures/plasma-v2/matrix",
           "release_promotion": "blocked",
+          "release_readiness_gate": "validation/captures/plasma-v2/release-readiness/gate-report.json",
           "review_decision": "validation/captures/plasma-v2/review/reviewer-decision.preview.toml",
           "review_gate": "validation/captures/plasma-v2/reviewed-preview/gate-report.json",
           "stable": false,
           "stable_candidate_gate": "validation/captures/plasma-v2/stable-candidate/gate-report.json",
           "stable_candidate_review": "validation/captures/plasma-v2/stable-candidate-review/review-summary.json",
-          "status": "stable-candidate",
-          "visual_review": "stable-candidate-round-recorded"
+          "status": "release-readiness-reviewed",
+          "visual_review": "stable-candidate-round-recorded",
+          "workbench_release_readiness": "ready"
         }
       },
       "status": "pass",

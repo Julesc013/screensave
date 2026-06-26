@@ -147,8 +147,8 @@ def build_report() -> dict[str, Any]:
     add_result(
         results,
         "plasma-status-input",
-        plasma.get("status") in {"reviewed-preview", "stable-candidate"},
-        "Plasma v2 must enter the gate from reviewed-preview and may exit as stable-candidate.",
+        plasma.get("status") in {"reviewed-preview", "stable-candidate", "release-readiness-reviewed"},
+        "Plasma v2 must enter the gate from reviewed-preview and may later appear as release-readiness-reviewed.",
         observed=plasma.get("status"),
     )
     add_result(

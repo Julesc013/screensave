@@ -130,6 +130,7 @@ def main() -> int:
                 "portable-v2-seam",
                 "plasma-v2-reference-slice",
                 "plasma-v2-release-readiness",
+                "plasma-v2-release-candidate",
             },
             "status must report the active portable-v2 or Plasma v2 program.",
             errors,

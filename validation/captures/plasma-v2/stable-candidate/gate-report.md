@@ -7,7 +7,7 @@ Plasma v2 stable-candidate gate only; not stable release, final artistic accepta
 | Check | Status | Summary |
 | --- | --- | --- |
 | portable-v2-accepted | pass | Portable v2 must be accepted before Plasma stable-candidate work. |
-| plasma-status-input | pass | Plasma v2 must enter the gate from reviewed-preview and may exit as stable-candidate. |
+| plasma-status-input | pass | Plasma v2 must enter the gate from reviewed-preview and may later appear as release-readiness-reviewed. |
 | plasma-not-stable | pass | Plasma v2 must remain not stable and release promotion must remain blocked. |
 | path-pack_example | pass | Required stable-candidate evidence exists: products/savers/plasma/content/v2/examples/plasma_lava_v2.toml |
 | path-acceleration_matrix | pass | Required stable-candidate evidence exists: validation/captures/plasma-v2/acceleration/matrix.json |
