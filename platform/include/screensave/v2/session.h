@@ -64,4 +64,10 @@ typedef struct ss_v2_session_ops_tag {
     ss_v2_session_render_fn render;
 } ss_v2_session_ops;
 
+ss_u32 ss_v2_session_desc_is_valid(const ss_v2_session_desc *desc);
+ss_u32 ss_v2_resize_desc_is_valid(const ss_v2_resize_desc *desc);
+ss_u32 ss_v2_advance_desc_is_valid(const ss_v2_advance_desc *desc);
+ss_u32 ss_v2_render_desc_is_valid(const ss_v2_render_desc *desc);
+ss_u32 ss_v2_session_ops_is_valid(const ss_v2_session_ops *ops);
+
 #endif /* SCREENSAVE_V2_SESSION_H */

@@ -17,4 +17,6 @@ typedef struct ss_v2_surface_desc_tag {
     ss_u8 *pixels;
 } ss_v2_surface_desc;
 
+ss_u32 ss_v2_surface_desc_is_valid(const ss_v2_surface_desc *surface);
+
 #endif /* SCREENSAVE_V2_SURFACE_H */

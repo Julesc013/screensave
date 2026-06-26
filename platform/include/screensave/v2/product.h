@@ -20,4 +20,6 @@ typedef struct ss_v2_product_descriptor_tag {
     const ss_v2_session_ops *session_ops;
 } ss_v2_product_descriptor;
 
+ss_u32 ss_v2_product_descriptor_is_valid(const ss_v2_product_descriptor *product);
+
 #endif /* SCREENSAVE_V2_PRODUCT_H */

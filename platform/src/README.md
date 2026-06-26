@@ -9,5 +9,6 @@ Key private entry points:
 
 - `core/base/` for public-contract dispatch glue and saver-contract helpers
 - `core/substrate/` for backend selection, capability capture, present-path routing, and future private service seams
+- `v2/` for portable v2 descriptor, validation, diagnostics, surface, draw-target, and session helper implementation
 - `render/` for concrete backend implementations behind the substrate layer
 - `host/` for the Win32 `.scr` host path

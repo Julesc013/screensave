@@ -52,4 +52,7 @@ typedef struct ss_v2_draw_target_tag {
     ss_v2_surface_desc *surface;
 } ss_v2_draw_target;
 
+ss_u32 ss_v2_draw_ops_is_valid(const ss_v2_draw_ops *ops);
+ss_u32 ss_v2_draw_target_is_valid(const ss_v2_draw_target *target);
+
 #endif /* SCREENSAVE_V2_DRAW_H */

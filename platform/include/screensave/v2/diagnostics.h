@@ -35,4 +35,15 @@ typedef struct ss_v2_diag_context_tag {
     ss_u32 minimum_level;
 } ss_v2_diag_context;
 
+void ss_v2_diag_context_init(ss_v2_diag_context *context, ss_u32 minimum_level);
+ss_u32 ss_v2_diag_message_is_valid(const ss_v2_diag_message *message);
+void ss_v2_diag_emit(
+    ss_v2_diag_context *context,
+    ss_u32 level,
+    ss_u32 domain,
+    ss_u32 code,
+    const char *origin,
+    const char *text
+);
+
 #endif /* SCREENSAVE_V2_DIAGNOSTICS_H */

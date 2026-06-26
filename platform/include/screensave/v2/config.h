@@ -12,4 +12,6 @@ typedef struct ss_v2_config_view_tag {
     ss_u32 byte_count;
 } ss_v2_config_view;
 
+ss_u32 ss_v2_config_view_is_valid(const ss_v2_config_view *view);
+
 #endif /* SCREENSAVE_V2_CONFIG_H */
