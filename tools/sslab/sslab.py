@@ -169,6 +169,7 @@ def run_runner_proof(
     profile_key: str,
     output_root: pathlib.Path,
     output_json: pathlib.Path,
+    execution_path: str = "v1",
 ) -> dict[str, Any]:
     output_root.mkdir(parents=True, exist_ok=True)
     output_json.parent.mkdir(parents=True, exist_ok=True)
@@ -178,6 +179,8 @@ def run_runner_proof(
             "proof",
             "--profile",
             profile_key,
+            "--path",
+            execution_path,
             "--output-root",
             str(output_root),
             "--output",
@@ -427,9 +430,22 @@ def proof_ricochet_from_profile(
     runner_exe: pathlib.Path,
     profile: dict[str, Any],
     output_dir: pathlib.Path,
+    execution_path: str,
 ) -> dict[str, Any]:
-    first = run_runner_proof(runner_exe, str(profile.get("key", "")), output_dir / "run-a", output_dir / "run-a" / "runner-proof.json")
-    second = run_runner_proof(runner_exe, str(profile.get("key", "")), output_dir / "run-b", output_dir / "run-b" / "runner-proof.json")
+    first = run_runner_proof(
+        runner_exe,
+        str(profile.get("key", "")),
+        output_dir / "run-a",
+        output_dir / "run-a" / "runner-proof.json",
+        execution_path,
+    )
+    second = run_runner_proof(
+        runner_exe,
+        str(profile.get("key", "")),
+        output_dir / "run-b",
+        output_dir / "run-b" / "runner-proof.json",
+        execution_path,
+    )
     lifecycle = lifecycle_payload(profile, output_dir / "lifecycle", first)
     captures = runner_capture_records(first)
     repeat_captures = runner_capture_records(second)
@@ -443,6 +459,7 @@ def proof_ricochet_from_profile(
         "profile": profile.get("key"),
         "product": profile.get("product"),
         "preset": profile.get("preset"),
+        "execution_path": execution_path,
         "profile_source": display_path(PROOF_REGISTRY),
         "capture_frames": [int(frame) for frame in profile.get("capture_frames", [])],
         "captures": captures,
@@ -464,12 +481,14 @@ def proof_nocturne_from_profile(
     runner_exe: pathlib.Path,
     profile: dict[str, Any],
     output_dir: pathlib.Path,
+    execution_path: str,
 ) -> dict[str, Any]:
     runner_result = run_runner_proof(
         runner_exe,
         str(profile.get("key", "")),
         output_dir / "runner",
         output_dir / "runner-proof.json",
+        execution_path,
     )
     render = write_nocturne_render_artifacts(profile, output_dir, runner_result)
     baseline_capture = str(profile.get("baseline_capture", ""))
@@ -496,6 +515,7 @@ def proof_nocturne_from_profile(
         "profile": profile.get("key"),
         "product": profile.get("product"),
         "preset": profile.get("preset"),
+        "execution_path": execution_path,
         "profile_source": display_path(PROOF_REGISTRY),
         "capture_frames": [int(frame) for frame in profile.get("capture_frames", [])],
         "render_ref": render.get("capture", {}).get("path"),
@@ -515,10 +535,13 @@ def proof_from_profile(args: argparse.Namespace) -> dict[str, Any]:
     profile = find_proof_profile(str(args.profile))
     output_dir = resolve_output_dir(str(args.output_dir))
     product = str(profile.get("product", ""))
+    execution_path = str(getattr(args, "path", "v1"))
+    if execution_path not in ("v1", "v2"):
+        raise ValueError("proof --path must be v1 or v2")
     if product == "ricochet":
         with tempfile.TemporaryDirectory() as temp_root:
             runner_exe = build_runner(pathlib.Path(temp_root))
-            return proof_ricochet_from_profile(runner_exe, profile, output_dir)
+            return proof_ricochet_from_profile(runner_exe, profile, output_dir, execution_path)
     if product != "nocturne":
         return {
             "profile_proof_schema": "sslab-profile-proof-v0",
@@ -529,7 +552,7 @@ def proof_from_profile(args: argparse.Namespace) -> dict[str, Any]:
         }
     with tempfile.TemporaryDirectory() as temp_root:
         runner_exe = build_runner(pathlib.Path(temp_root))
-        return proof_nocturne_from_profile(runner_exe, profile, output_dir)
+        return proof_nocturne_from_profile(runner_exe, profile, output_dir, execution_path)
 
 
 def compare_pixels(actual: PpmImage, expected: PpmImage) -> dict[str, Any]:
@@ -699,6 +722,7 @@ def add_profile_parser(subparsers: argparse._SubParsersAction[argparse.ArgumentP
 def add_proof_parser(subparsers: argparse._SubParsersAction[argparse.ArgumentParser]) -> None:
     parser = subparsers.add_parser("proof", help="Run a generated proof-profile orchestration.")
     parser.add_argument("--profile", default="nocturne.reference.v0")
+    parser.add_argument("--path", choices=("v1", "v2"), default="v1")
     parser.add_argument("--output-dir", default=str((ROOT / "out" / "proof" / "sslab-profile").relative_to(ROOT)))
     parser.set_defaults(func=proof_from_profile)
 
@@ -715,6 +739,7 @@ def print_result(result: dict[str, Any]) -> None:
             "profile-proof "
             f"{result['status']} "
             f"{result['profile']} "
+            f"path={result.get('execution_path', 'v1')} "
             f"capture={capture_text} "
             f"comparison={result.get('comparison_status', '')} "
             f"lifecycle={result.get('lifecycle_status', '')}"
