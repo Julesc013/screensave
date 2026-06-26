@@ -1,0 +1,40 @@
+schema_version = 1
+policy_id = "screensave.aide.agentic.proposal-only.v1"
+status = "active"
+default_agent_mode = "proposal-only"
+source_mutation_by_aide = false
+automatic_apply = false
+automatic_merge = false
+automatic_release = false
+worker_self_approval = false
+compatibility_certification = false
+final_artistic_acceptance = false
+claim_boundary = "AIDE may prepare plans, proposals, validation plans, repair proposals, review summaries, and receipts; it may not apply, merge, release, certify, or self-approve."
+
+agent_modes = [
+  "none",
+  "assistive",
+  "proposal-only",
+  "fixture-worker",
+  "future-worker",
+]
+
+[allowed]
+compile_task_context = true
+generate_implementation_plan = true
+generate_patch_proposal = true
+generate_validation_plan = true
+generate_repair_proposal = true
+generate_review_summary = true
+record_proposal_receipt = true
+invoke_fixed_project_checks = true
+
+[forbidden]
+direct_source_mutation = true
+automatic_apply = true
+automatic_merge = true
+automatic_release = true
+worker_self_approval = true
+compatibility_certification = true
+final_artistic_acceptance = true
+provider_model_network_calls = true

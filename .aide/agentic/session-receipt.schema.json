@@ -1,0 +1,15 @@
+{
+  "schema": "screensave.aide.agentic.session-receipt.v1",
+  "required": [
+    "schema",
+    "task",
+    "objective",
+    "proposal_ref",
+    "created_at_utc",
+    "source_mutation_by_aide",
+    "automatic_apply",
+    "automatic_merge",
+    "automatic_release",
+    "claim_boundary"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "schema": "screensave.aide.agentic.proposal.v1",
+  "required": [
+    "schema",
+    "task",
+    "objective",
+    "agent_mode",
+    "allowed_actions",
+    "forbidden_actions",
+    "validation_plan",
+    "claim_boundary"
+  ],
+  "forbidden_actions": [
+    "direct_source_mutation",
+    "automatic_apply",
+    "automatic_merge",
+    "automatic_release",
+    "compatibility_certification",
+    "final_artistic_acceptance"
+  ]
+}
