@@ -63,7 +63,8 @@
       "files": {
         "headers": [
           "products/savers/nocturne/src/nocturne_internal.h",
-          "products/savers/nocturne/src/nocturne_resource.h"
+          "products/savers/nocturne/src/nocturne_resource.h",
+          "products/savers/nocturne/src/nocturne_v2_adapter.h"
         ],
         "presets": [
           "products/savers/nocturne/presets/defaults.ini",
@@ -81,7 +82,8 @@
           "products/savers/nocturne/src/nocturne_presets.c",
           "products/savers/nocturne/src/nocturne_render.c",
           "products/savers/nocturne/src/nocturne_sim.c",
-          "products/savers/nocturne/src/nocturne_themes.c"
+          "products/savers/nocturne/src/nocturne_themes.c",
+          "products/savers/nocturne/src/nocturne_v2_adapter.c"
         ],
         "tests": [
           "products/savers/nocturne/tests/README.md",
@@ -126,7 +128,8 @@
       "files": {
         "headers": [
           "products/savers/ricochet/src/ricochet_internal.h",
-          "products/savers/ricochet/src/ricochet_resource.h"
+          "products/savers/ricochet/src/ricochet_resource.h",
+          "products/savers/ricochet/src/ricochet_v2_adapter.h"
         ],
         "presets": [
           "products/savers/ricochet/presets/defaults.ini",
@@ -143,7 +146,8 @@
           "products/savers/ricochet/src/ricochet_presets.c",
           "products/savers/ricochet/src/ricochet_render.c",
           "products/savers/ricochet/src/ricochet_sim.c",
-          "products/savers/ricochet/src/ricochet_themes.c"
+          "products/savers/ricochet/src/ricochet_themes.c",
+          "products/savers/ricochet/src/ricochet_v2_adapter.c"
         ],
         "tests": [
           "products/savers/ricochet/tests/README.md",

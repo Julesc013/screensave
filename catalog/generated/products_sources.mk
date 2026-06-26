@@ -4,10 +4,10 @@ SCREENSAVE_PRODUCTS := nocturne ricochet deepfield plasma phosphor pipeworks lif
 SCREENSAVE_SAVERS := nocturne ricochet deepfield plasma phosphor pipeworks lifeforms signals mechanize ecosystems stormglass transit observatory vector explorer city atlas gallery anthology
 SCREENSAVE_APPS := suite benchlab
 
-SCREENSAVE_NOCTURNE_SOURCES := products/savers/nocturne/src/nocturne_config.c products/savers/nocturne/src/nocturne_entry.c products/savers/nocturne/src/nocturne_module.c products/savers/nocturne/src/nocturne_presets.c products/savers/nocturne/src/nocturne_render.c products/savers/nocturne/src/nocturne_sim.c products/savers/nocturne/src/nocturne_themes.c
+SCREENSAVE_NOCTURNE_SOURCES := products/savers/nocturne/src/nocturne_config.c products/savers/nocturne/src/nocturne_entry.c products/savers/nocturne/src/nocturne_module.c products/savers/nocturne/src/nocturne_presets.c products/savers/nocturne/src/nocturne_render.c products/savers/nocturne/src/nocturne_sim.c products/savers/nocturne/src/nocturne_themes.c products/savers/nocturne/src/nocturne_v2_adapter.c
 SCREENSAVE_NOCTURNE_RESOURCES := products/savers/nocturne/src/nocturne_config.rc products/savers/nocturne/src/nocturne_version.rc
 
-SCREENSAVE_RICOCHET_SOURCES := products/savers/ricochet/src/ricochet_config.c products/savers/ricochet/src/ricochet_entry.c products/savers/ricochet/src/ricochet_module.c products/savers/ricochet/src/ricochet_presets.c products/savers/ricochet/src/ricochet_render.c products/savers/ricochet/src/ricochet_sim.c products/savers/ricochet/src/ricochet_themes.c
+SCREENSAVE_RICOCHET_SOURCES := products/savers/ricochet/src/ricochet_config.c products/savers/ricochet/src/ricochet_entry.c products/savers/ricochet/src/ricochet_module.c products/savers/ricochet/src/ricochet_presets.c products/savers/ricochet/src/ricochet_render.c products/savers/ricochet/src/ricochet_sim.c products/savers/ricochet/src/ricochet_themes.c products/savers/ricochet/src/ricochet_v2_adapter.c
 SCREENSAVE_RICOCHET_RESOURCES := products/savers/ricochet/src/ricochet_config.rc products/savers/ricochet/src/ricochet_version.rc
 
 SCREENSAVE_DEEPFIELD_SOURCES := products/savers/deepfield/src/deepfield_config.c products/savers/deepfield/src/deepfield_entry.c products/savers/deepfield/src/deepfield_module.c products/savers/deepfield/src/deepfield_presets.c products/savers/deepfield/src/deepfield_render.c products/savers/deepfield/src/deepfield_sim.c products/savers/deepfield/src/deepfield_themes.c
