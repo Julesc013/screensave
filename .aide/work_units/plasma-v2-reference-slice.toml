@@ -159,12 +159,12 @@ claim_boundary = "Software reference core only; no accelerated realization or st
 id = "SS-PLV2-03"
 title = "materials and treatments"
 objective = "Implement admitted Plasma v2 materials, restrained treatments, and Basic-control influence proof."
-status = "partial-local"
+status = "implemented-local"
 selected_validation_tier = "T2"
 preflight_required = true
 postflight_required = true
-preflight_receipt = "out/aide/operations/SS-PLV2-03-preflight/operation-receipt.json"
-postflight_receipt = "out/aide/operations/SS-PLV2-03-postflight/operation-receipt.json"
+preflight_receipt = "out/aide/operations/SS-PLV2-03-materials-preflight/operation-receipt.json"
+postflight_receipt = "out/aide/operations/SS-PLV2-03-materials-postflight/operation-receipt.json"
 rollback_point = "SS-PLV2-02"
 allowed_paths = [
   "products/savers/plasma/src/plasma_spec_v2.*",
@@ -190,10 +190,10 @@ expected_validators = [
 baseline_refs = [
   "products/savers/plasma/docs/u00-settings-influence-matrix.md",
   "products/savers/plasma/docs/u04-output-treatment-presentation-truth.md",
+  "validation/captures/plasma-v2/influence/control-influence.json",
+  "validation/captures/plasma-v2/materials/material-treatment-summary.json",
 ]
-remaining = [
-  "material distinctness and luminance validation",
-]
+remaining = []
 claim_boundary = "Controls must either materially influence preview output or be named out of the stable slice."
 
 [[work_units]]

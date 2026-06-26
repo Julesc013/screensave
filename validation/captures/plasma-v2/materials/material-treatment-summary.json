@@ -1,0 +1,98 @@
+{
+  "claim_boundary": "Material and restrained treatment proof for the PAW-DX Plasma v2 reference preview slice only; not a presentation-family expansion, artistic acceptance, or release promotion.",
+  "declared_luminance_bounds": {
+    "all_materials": {
+      "max_mean": 180.0,
+      "min_mean": 20.0
+    },
+    "quiet_darkroom": {
+      "max_mean": 85.0
+    }
+  },
+  "materials": [
+    {
+      "max_luminance": 128,
+      "mean_luminance": 80.621,
+      "min_luminance": 30,
+      "name": "plasma_lava",
+      "sha256": "7b0bfaa3909355444e259a21bb57038d0487fb339ec6cddeb1b8a4e23ebe5e76",
+      "variant": "material_plasma_lava"
+    },
+    {
+      "max_luminance": 144,
+      "mean_luminance": 94.678,
+      "min_luminance": 42,
+      "name": "aurora_cool",
+      "sha256": "30ad01966bb27869e794e8664995125ee8c8b73ada37d187b8a2539fb4fc24a7",
+      "variant": "material_aurora_cool"
+    },
+    {
+      "max_luminance": 126,
+      "mean_luminance": 82.428,
+      "min_luminance": 36,
+      "name": "oceanic_blue",
+      "sha256": "da1f185f8d140f191961076eff2f448f89e0dfd542c0d5ff969eb7f3b02097d3",
+      "variant": "material_oceanic_blue"
+    },
+    {
+      "max_luminance": 155,
+      "mean_luminance": 101.097,
+      "min_luminance": 43,
+      "name": "museum_phosphor",
+      "sha256": "99d525bbaee66289aef34e575032be68ed3fe83f87102fd109440a9f1104861d",
+      "variant": "material_museum_phosphor"
+    },
+    {
+      "max_luminance": 61,
+      "mean_luminance": 40.302,
+      "min_luminance": 18,
+      "name": "quiet_darkroom",
+      "sha256": "f65310af9c037d95f8eace46296f7252b85f0d23a8f2be08d3d502f02c0d5efc",
+      "variant": "material_quiet_darkroom"
+    }
+  ],
+  "profile": "plasma.v2.reference.preview",
+  "schema_version": "screensave.plasma-v2.materials.v0",
+  "surface": {
+    "format": "rgba8",
+    "height": 24,
+    "width": 40
+  },
+  "treatment_bounds": {
+    "restrained_crt": {
+      "max_mean_abs_rgb_delta_from_none": 24.0
+    },
+    "restrained_dither": {
+      "max_mean_abs_rgb_delta_from_none": 8.0
+    }
+  },
+  "treatments": [
+    {
+      "max_luminance": 128,
+      "mean_abs_rgb_delta_from_none": 0.0,
+      "mean_luminance": 80.621,
+      "min_luminance": 30,
+      "name": "none",
+      "sha256": "7b0bfaa3909355444e259a21bb57038d0487fb339ec6cddeb1b8a4e23ebe5e76",
+      "variant": "treatment_none"
+    },
+    {
+      "max_luminance": 134,
+      "mean_abs_rgb_delta_from_none": 5.0,
+      "mean_luminance": 81.621,
+      "min_luminance": 26,
+      "name": "restrained_dither",
+      "sha256": "ba300a1fcd897b103647bb9d703a0fd4c03b8167f0cb4fab000cab1dc04142f9",
+      "variant": "treatment_restrained_dither"
+    },
+    {
+      "max_luminance": 128,
+      "mean_abs_rgb_delta_from_none": 6.623,
+      "mean_luminance": 73.042,
+      "min_luminance": 27,
+      "name": "restrained_crt",
+      "sha256": "4f95e9ec42f8804295f99ea5a2f8744e04e0fee3e283da4231b51c8e4b31f9a4",
+      "variant": "treatment_restrained_crt"
+    }
+  ]
+}
