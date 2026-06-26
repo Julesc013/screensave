@@ -1,17 +1,38 @@
 schema_version = 1
 lock_id = "screensave-aide-lite-lock-00"
-as_of = "2026-06-25"
-status = "pinned-report-only"
-install_level = "L0 AIDE Lite profile"
+as_of = "2026-06-26"
+status = "safe-pack-vendored"
+install_level = "L0 AIDE Lite safe pack vendor"
+import_mode = "safe"
 runtime_dependency_allowed = false
 product_runtime_dependency_allowed = false
 automatic_merge_allowed = false
 
 [source]
 repository = "https://github.com/Julesc013/aide"
-pinned_commit = "6a94811b8befd2843aa99b25f4de5e1ee4c2e3fa"
+pinned_commit = "492faa4f1a8280ba67954aa4fc252e79f2e19c15"
+latest_observed_head = "dd3f47ea0b4d90f86ca6b4ae93b06aae81cb54f1"
+latest_observed_head_subject = "audit(queue): check distribution manifest v1"
 resolution_command = "git ls-remote https://github.com/Julesc013/aide.git HEAD"
 resolution_kind = "public-head-snapshot"
+
+[pack]
+pack_id = "aide-lite-pack-v0"
+source_commit = "492faa4f1a8280ba67954aa4fc252e79f2e19c15"
+manifest_sha256 = "E02EFBB64036F0E73AF2856EE6066B1B6D4945C490EE0788FA1352A4DB371B4B"
+source_dirty_state = true
+source_dirty_reason = "The accepted export-pack implementation only writes to the committed .aide/export path, so regenerating the pack at 492faa4 records dirty provenance even from a clean disposable worktree."
+operation_count = 850
+conflicts = 0
+skipped = 16
+imported_paths = [
+  ".aide portable tooling, schemas, templates, and policies",
+  ".aide.local.example target-local state template",
+  "docs/reference AIDE guidance",
+  "managed AGENTS.md portable guidance section",
+  ".gitignore .aide.local ignore rule",
+]
+safe_mode_excluded_roots = ["core/apply", "core/gateway", "core/providers"]
 
 [screen_save_boundary]
 project_truth_owner = "ScreenSave"
@@ -24,8 +45,8 @@ worker_runtime_required = false
 
 [limits]
 notes = [
-  "This lock records the reviewed AIDE Lite source identity for report-only integration.",
-  "It does not vendor AIDE code into ScreenSave.",
+  "This lock records the vendored AIDE Lite safe-pack identity and import record.",
+  "It does not vendor AIDE into ScreenSave runtime products.",
   "It does not make AIDE required for ScreenSave builds, tests, savers, Workbench, Manager, packaging, or releases.",
-  "Coding-agent worker sessions remain blocked until AIDE worker-host gates are accepted elsewhere.",
+  "Operational admission, source-mutation boundaries, and worker controls are recorded separately in the ScreenSave pilot and bridge profile.",
 ]

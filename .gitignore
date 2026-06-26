@@ -49,3 +49,5 @@ ipch/
 
 *.aps
 *.res
+.aide.local/**
+.env
