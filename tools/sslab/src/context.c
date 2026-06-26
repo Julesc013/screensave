@@ -33,6 +33,7 @@ sslab_status sslab_create_context(const sslab_context_desc *desc, sslab_context 
         free(created);
         return SSLAB_STATUS_INVALID_ARGUMENT;
     }
+    created->execution_path = SSLAB_EXECUTION_PATH_V1;
 
     *context = created;
     return SSLAB_STATUS_OK;
@@ -41,4 +42,24 @@ sslab_status sslab_create_context(const sslab_context_desc *desc, sslab_context 
 void sslab_destroy_context(sslab_context *context)
 {
     free(context);
+}
+
+sslab_status sslab_set_execution_path(sslab_context *context, sslab_execution_path path)
+{
+    if (context == 0) {
+        return SSLAB_STATUS_INVALID_ARGUMENT;
+    }
+    if (path != SSLAB_EXECUTION_PATH_V1 && path != SSLAB_EXECUTION_PATH_V2) {
+        return SSLAB_STATUS_INVALID_ARGUMENT;
+    }
+    context->execution_path = path;
+    return SSLAB_STATUS_OK;
+}
+
+sslab_execution_path sslab_get_execution_path(const sslab_context *context)
+{
+    if (context == 0) {
+        return SSLAB_EXECUTION_PATH_V1;
+    }
+    return context->execution_path;
 }

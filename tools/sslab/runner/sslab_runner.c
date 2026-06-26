@@ -39,6 +39,19 @@ static sslab_comparison_class runner_comparison_class(const char *value)
     return SSLAB_COMPARISON_EXACT;
 }
 
+static sslab_execution_path runner_execution_path(const char *value)
+{
+    if (value != 0 && strcmp(value, "v2") == 0) {
+        return SSLAB_EXECUTION_PATH_V2;
+    }
+    return SSLAB_EXECUTION_PATH_V1;
+}
+
+static const char *runner_execution_path_name(sslab_execution_path path)
+{
+    return path == SSLAB_EXECUTION_PATH_V2 ? "v2" : "v1";
+}
+
 static unsigned long runner_profile_max_frame(const screensave_generated_proof_profile *profile)
 {
     unsigned int index;
@@ -123,6 +136,7 @@ static int runner_write_proof_json(
     const sslab_capture_receipt *captures,
     const sslab_lifecycle_receipt *lifecycle,
     const sslab_profile_receipt *profile_receipt,
+    sslab_execution_path execution_path,
     sslab_status aggregate_status)
 {
     unsigned int index;
@@ -137,6 +151,9 @@ static int runner_write_proof_json(
     fprintf(file, ",\n");
     fprintf(file, "  \"product\": ");
     runner_write_json_string(file, generated->product);
+    fprintf(file, ",\n");
+    fprintf(file, "  \"path\": ");
+    runner_write_json_string(file, runner_execution_path_name(execution_path));
     fprintf(file, ",\n");
     fprintf(file, "  \"preset\": ");
     runner_write_json_string(file, generated->preset);
@@ -180,7 +197,11 @@ static int runner_write_proof_json(
     return 1;
 }
 
-static int runner_run_proof(const char *profile_key, const char *output_path, const char *output_root)
+static int runner_run_proof(
+    const char *profile_key,
+    const char *output_path,
+    const char *output_root,
+    sslab_execution_path execution_path)
 {
     const screensave_generated_proof_profile *generated;
     sslab_context_desc context_desc;
@@ -220,6 +241,12 @@ static int runner_run_proof(const char *profile_key, const char *output_path, co
     status = sslab_create_context(&context_desc, &context);
     if (status != SSLAB_STATUS_OK) {
         fprintf(stderr, "failed to create sslab context\n");
+        return 4;
+    }
+    status = sslab_set_execution_path(context, execution_path);
+    if (status != SSLAB_STATUS_OK) {
+        sslab_destroy_context(context);
+        fprintf(stderr, "failed to set sslab execution path\n");
         return 4;
     }
 
@@ -266,7 +293,14 @@ static int runner_run_proof(const char *profile_key, const char *output_path, co
             return 5;
         }
     }
-    runner_write_proof_json(file, generated, captures, &lifecycle_receipt, &profile_receipt, aggregate_status);
+    runner_write_proof_json(
+        file,
+        generated,
+        captures,
+        &lifecycle_receipt,
+        &profile_receipt,
+        execution_path,
+        aggregate_status);
     if (output_path != 0) {
         fclose(file);
     }
@@ -276,7 +310,7 @@ static int runner_run_proof(const char *profile_key, const char *output_path, co
 
 static void runner_usage(void)
 {
-    fprintf(stderr, "usage: sslab_runner proof --profile <profile-key> [--output <path>] [--output-root <path>]\n");
+    fprintf(stderr, "usage: sslab_runner proof --profile <profile-key> [--path v1|v2] [--output <path>] [--output-root <path>]\n");
 }
 
 int main(int argc, char **argv)
@@ -284,11 +318,14 @@ int main(int argc, char **argv)
     const char *profile_key;
     const char *output_path;
     const char *output_root;
+    const char *path_name;
+    sslab_execution_path execution_path;
     int index;
 
     profile_key = 0;
     output_path = 0;
     output_root = 0;
+    path_name = "v1";
     if (argc < 4 || strcmp(argv[1], "proof") != 0) {
         runner_usage();
         return 1;
@@ -303,6 +340,9 @@ int main(int argc, char **argv)
         } else if (strcmp(argv[index], "--output-root") == 0 && (index + 1) < argc) {
             ++index;
             output_root = argv[index];
+        } else if (strcmp(argv[index], "--path") == 0 && (index + 1) < argc) {
+            ++index;
+            path_name = argv[index];
         } else {
             runner_usage();
             return 1;
@@ -312,5 +352,10 @@ int main(int argc, char **argv)
         runner_usage();
         return 1;
     }
-    return runner_run_proof(profile_key, output_path, output_root);
+    if (strcmp(path_name, "v1") != 0 && strcmp(path_name, "v2") != 0) {
+        runner_usage();
+        return 1;
+    }
+    execution_path = runner_execution_path(path_name);
+    return runner_run_proof(profile_key, output_path, output_root, execution_path);
 }

@@ -3,6 +3,7 @@
 
 #include "screensave/sslab.h"
 #include "screensave/saver_api.h"
+#include "screensave/v2/product.h"
 
 typedef struct sslab_product_adapter_v0 {
     unsigned long size;
@@ -31,6 +32,7 @@ typedef struct sslab_product_adapter_v0 {
         screensave_saver_session *session,
         const screensave_saver_environment *environment);
     void (*destroy)(screensave_saver_session *session);
+    const ss_v2_product_descriptor *(*v2_descriptor)(void);
 } sslab_product_adapter_v0;
 
 const sslab_product_adapter_v0 *sslab_nocturne_adapter(void);

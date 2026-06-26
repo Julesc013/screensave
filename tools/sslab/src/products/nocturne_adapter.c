@@ -1,6 +1,7 @@
 #include "../product_adapter.h"
 
 #include "nocturne_internal.h"
+#include "nocturne_v2_adapter.h"
 
 #include <string.h>
 
@@ -58,7 +59,8 @@ static const sslab_product_adapter_v0 g_sslab_nocturne_adapter = {
     nocturne_resize_session,
     nocturne_step_session,
     nocturne_render_session,
-    nocturne_destroy_session
+    nocturne_destroy_session,
+    nocturne_v2_product_descriptor
 };
 
 const sslab_product_adapter_v0 *sslab_nocturne_adapter(void)

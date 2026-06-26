@@ -43,6 +43,11 @@ typedef enum sslab_comparison_class {
     SSLAB_COMPARISON_OBSERVATIONAL = 3
 } sslab_comparison_class;
 
+typedef enum sslab_execution_path {
+    SSLAB_EXECUTION_PATH_V1 = 0,
+    SSLAB_EXECUTION_PATH_V2 = 1
+} sslab_execution_path;
+
 typedef struct sslab_abi_info {
     sslab_u32 size;
     sslab_u32 abi_version;
@@ -155,6 +160,8 @@ sslab_status sslab_check_host_abi(void);
 
 sslab_status sslab_create_context(const sslab_context_desc *desc, sslab_context **context);
 void sslab_destroy_context(sslab_context *context);
+sslab_status sslab_set_execution_path(sslab_context *context, sslab_execution_path path);
+sslab_execution_path sslab_get_execution_path(const sslab_context *context);
 
 sslab_status sslab_open_product(sslab_context *context, const char *product_key, sslab_product **product);
 void sslab_close_product(sslab_product *product);

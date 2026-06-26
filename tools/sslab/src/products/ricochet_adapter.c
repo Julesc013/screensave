@@ -1,6 +1,7 @@
 #include "../product_adapter.h"
 
 #include "ricochet_internal.h"
+#include "ricochet_v2_adapter.h"
 
 static unsigned long sslab_ricochet_stream_seed(unsigned long seed)
 {
@@ -44,7 +45,8 @@ static const sslab_product_adapter_v0 g_sslab_ricochet_adapter = {
     ricochet_resize_session,
     ricochet_step_session,
     ricochet_render_session,
-    ricochet_destroy_session
+    ricochet_destroy_session,
+    ricochet_v2_product_descriptor
 };
 
 const sslab_product_adapter_v0 *sslab_ricochet_adapter(void)

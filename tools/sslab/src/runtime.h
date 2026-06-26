@@ -9,6 +9,7 @@
 struct sslab_context {
     char output_root[260];
     char catalog_root[260];
+    sslab_execution_path execution_path;
 };
 
 struct sslab_product {
@@ -24,6 +25,7 @@ struct sslab_session {
     screensave_saver_environment environment;
     screensave_renderer renderer;
     screensave_saver_session *product_session;
+    ss_v2_session *v2_product_session;
     sslab_u32 width;
     sslab_u32 height;
     sslab_u32 frame_index;
