@@ -52,7 +52,8 @@
       <SDLCheck>true</SDLCheck>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <CompileAs>CompileAsC</CompileAs>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\platform\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>SSLAB_RGBA8_USE_PLATFORM_RENDERER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\platform\include;$(SolutionDir)..\..\..\tools\sslab\include;$(SolutionDir)..\..\..\tools\sslab\src;$(SolutionDir)..\..\..\products\savers\nocturne\src;$(SolutionDir)..\..\..\products\savers\ricochet\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ResourceCompile>
       <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\platform\src\host\win32_scr;$(SolutionDir)..\..\..\products\savers\nocturne\src;$(SolutionDir)..\..\..\products\savers\ricochet\src;$(SolutionDir)..\..\..\products\savers\deepfield\src;$(SolutionDir)..\..\..\products\savers\plasma\src;$(SolutionDir)..\..\..\products\savers\phosphor\src;$(SolutionDir)..\..\..\products\savers\pipeworks\src;$(SolutionDir)..\..\..\products\savers\lifeforms\src;$(SolutionDir)..\..\..\products\savers\signals\src;$(SolutionDir)..\..\..\products\savers\mechanize\src;$(SolutionDir)..\..\..\products\savers\ecosystems\src;$(SolutionDir)..\..\..\products\savers\stormglass\src;$(SolutionDir)..\..\..\products\savers\transit\src;$(SolutionDir)..\..\..\products\savers\observatory\src;$(SolutionDir)..\..\..\products\savers\vector\src;$(SolutionDir)..\..\..\products\savers\explorer\src;$(SolutionDir)..\..\..\products\savers\city\src;$(SolutionDir)..\..\..\products\savers\atlas\src;$(SolutionDir)..\..\..\products\savers\gallery\src;$(SolutionDir)..\..\..\products\savers\anthology\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -71,7 +72,8 @@
       <SDLCheck>true</SDLCheck>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <CompileAs>CompileAsC</CompileAs>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\platform\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>SSLAB_RGBA8_USE_PLATFORM_RENDERER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\platform\include;$(SolutionDir)..\..\..\tools\sslab\include;$(SolutionDir)..\..\..\tools\sslab\src;$(SolutionDir)..\..\..\products\savers\nocturne\src;$(SolutionDir)..\..\..\products\savers\ricochet\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ResourceCompile>
       <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\platform\src\host\win32_scr;$(SolutionDir)..\..\..\products\savers\nocturne\src;$(SolutionDir)..\..\..\products\savers\ricochet\src;$(SolutionDir)..\..\..\products\savers\deepfield\src;$(SolutionDir)..\..\..\products\savers\plasma\src;$(SolutionDir)..\..\..\products\savers\phosphor\src;$(SolutionDir)..\..\..\products\savers\pipeworks\src;$(SolutionDir)..\..\..\products\savers\lifeforms\src;$(SolutionDir)..\..\..\products\savers\signals\src;$(SolutionDir)..\..\..\products\savers\mechanize\src;$(SolutionDir)..\..\..\products\savers\ecosystems\src;$(SolutionDir)..\..\..\products\savers\stormglass\src;$(SolutionDir)..\..\..\products\savers\transit\src;$(SolutionDir)..\..\..\products\savers\observatory\src;$(SolutionDir)..\..\..\products\savers\vector\src;$(SolutionDir)..\..\..\products\savers\explorer\src;$(SolutionDir)..\..\..\products\savers\city\src;$(SolutionDir)..\..\..\products\savers\atlas\src;$(SolutionDir)..\..\..\products\savers\gallery\src;$(SolutionDir)..\..\..\products\savers\anthology\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -94,6 +96,13 @@
     <ClCompile Include="..\..\..\products\apps\benchlab\src\benchlab_session.c" />
     <ClCompile Include="..\..\..\products\apps\benchlab\src\benchlab_workbench_shell.c" />
     <ClCompile Include="..\..\..\catalog\generated\proof_registry.c" />
+    <ClCompile Include="..\..\..\tools\sslab\src\abi.c" />
+    <ClCompile Include="..\..\..\tools\sslab\src\context.c" />
+    <ClCompile Include="..\..\..\tools\sslab\src\product.c" />
+    <ClCompile Include="..\..\..\tools\sslab\src\session.c" />
+    <ClCompile Include="..\..\..\tools\sslab\src\renderer_rgba8_platform.c" />
+    <ClCompile Include="..\..\..\tools\sslab\src\products\nocturne_adapter.c" />
+    <ClCompile Include="..\..\..\tools\sslab\src\products\ricochet_adapter.c" />
     <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_config.c" />
     <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_core.c" />
     <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_module.c" />
@@ -102,6 +111,7 @@
     <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_sim.c" />
     <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_themes.c" />
     <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_v1_adapter.c" />
+    <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_v2_adapter.c" />
     <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_config.c" />
     <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_core.c" />
     <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_module.c" />
@@ -110,6 +120,7 @@
     <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_sim.c" />
     <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_themes.c" />
     <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_v1_adapter.c" />
+    <ClCompile Include="..\..\..\products\savers\ricochet\src\ricochet_v2_adapter.c" />
     <ClCompile Include="..\..\..\products\savers\deepfield\src\deepfield_config.c" />
     <ClCompile Include="..\..\..\products\savers\deepfield\src\deepfield_module.c" />
     <ClCompile Include="..\..\..\products\savers\deepfield\src\deepfield_presets.c" />

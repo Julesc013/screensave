@@ -89,12 +89,16 @@
     <ClCompile Include="..\..\..\platform\src\core\base\saver_registry.c" />
     <ClCompile Include="..\..\..\platform\src\core\config\config.c" />
     <ClCompile Include="..\..\..\platform\src\core\config\settings.c" />
-    <ClCompile Include="..\..\..\platform\src\core\diagnostics\diagnostics.c" />
+    <ClCompile Include="..\..\..\platform\src\core\diagnostics\diagnostics.c">
+      <ObjectFileName>$(IntDir)core_diagnostics.obj</ObjectFileName>
+    </ClCompile>
     <ClCompile Include="..\..\..\platform\src\core\grid\grid_buffer.c" />
     <ClCompile Include="..\..\..\platform\src\core\rng\rng.c" />
     <ClCompile Include="..\..\..\platform\src\core\timing\timing.c" />
     <ClCompile Include="..\..\..\platform\src\core\version\version.c" />
     <ClCompile Include="..\..\..\platform\src\core\visual\visual_buffer.c" />
+    <ClCompile Include="..\..\..\platform\src\surface\rgba8\surface_rgba8.c" />
+    <ClCompile Include="..\..\..\platform\src\render\soft\soft_renderer.c" />
     <ClCompile Include="..\..\..\platform\src\render\gdi\gdi_capture.c" />
     <ClCompile Include="..\..\..\platform\src\render\gdi\gdi_backend.c" />
     <ClCompile Include="..\..\..\platform\src\render\gdi\gdi_bitmap.c" />
@@ -132,6 +136,16 @@
     <ClCompile Include="..\..\..\platform\src\render\gl46\gl46_primitives.c" />
     <ClCompile Include="..\..\..\platform\src\render\gl46\gl46_state.c" />
     <ClCompile Include="..\..\..\platform\src\render\null\null_backend.c" />
+    <ClCompile Include="..\..\..\platform\src\v2\base_validate.c" />
+    <ClCompile Include="..\..\..\platform\src\v2\config_view.c" />
+    <ClCompile Include="..\..\..\platform\src\v2\diagnostics.c">
+      <ObjectFileName>$(IntDir)v2_diagnostics.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\platform\src\v2\draw_renderer_bridge.c" />
+    <ClCompile Include="..\..\..\platform\src\v2\draw_target.c" />
+    <ClCompile Include="..\..\..\platform\src\v2\session_helpers.c" />
+    <ClCompile Include="..\..\..\platform\src\v2\surface_view.c" />
+    <ClCompile Include="..\..\..\platform\src\v2\v1_v2_compat_adapter.c" />
     <ClCompile Include="..\..\..\platform\src\host\win32_scr\scr_args.c" />
     <ClCompile Include="..\..\..\platform\src\host\win32_scr\scr_config_dialog.c" />
     <ClCompile Include="..\..\..\platform\src\host\win32_scr\scr_diagnostics.c" />

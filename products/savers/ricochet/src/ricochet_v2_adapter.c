@@ -310,7 +310,7 @@ static ss_u32 ricochet_v2_render(ss_v2_session *opaque_session, const ss_v2_rend
     if (status != SS_V2_STATUS_OK) {
         return status;
     }
-    if (desc->draw_target == NULL || desc->surface == NULL) {
+    if (desc->draw_target == NULL) {
         return SS_V2_STATUS_BAD_ARGUMENT;
     }
 
