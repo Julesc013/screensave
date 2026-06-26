@@ -26,6 +26,7 @@ The v0 adapter command set is:
 - `proof`: run a fixed Nocturne or Ricochet catalog proof profile.
 - `bundle`: normalize a fixed Nocturne or Ricochet catalog proof profile as
   Proof Bundle v1.
+- `equivalence`: run the fixed Nocturne/Ricochet portable v2 equivalence proof.
 
 ## Fixed Capability Bindings
 
@@ -50,10 +51,16 @@ External coordinators must bind to these fixed capabilities, not to an open
 - `screensave.proof.nocturne.render`
 - `screensave.proof.capture.compare`
 - `screensave.artifact.pe.audit`
-- `screensave.proof.nocturne.reference-v0`
-- `screensave.proof.ricochet.reference-v1`
-- `screensave.bundle.nocturne.reference-v0`
-- `screensave.bundle.ricochet.reference-v1`
+- `screensave.proof.nocturne.reference-v0.v1`
+- `screensave.proof.nocturne.reference-v0.v2`
+- `screensave.proof.ricochet.reference-v1.v1`
+- `screensave.proof.ricochet.reference-v1.v2`
+- `screensave.proof.portable-v2.equivalence`
+- `screensave.bundle.nocturne.reference-v0.v1`
+- `screensave.bundle.nocturne.reference-v0.v2`
+- `screensave.bundle.ricochet.reference-v1.v1`
+- `screensave.bundle.ricochet.reference-v1.v2`
+- `screensave.bundle.portable-v2.equivalence`
 
 Each capability has a declared argv shape, decoder schema, mutation policy,
 output policy, timeout, and state probe. Changes to this file are project
@@ -65,8 +72,8 @@ The ScreenSave-side admission classes are:
 
 - read-only fixed commands: `status`, `capabilities`, `catalog`, and fixed
   `validate --tier T0/T1/T2`
-- contained generated-output commands: `build`, `render`, `compare`, `audit`, and
-  `proof`
+- contained generated-output commands: `build`, `render`, `compare`, `audit`,
+  `proof`, `bundle`, and `equivalence`
 - blocked worker sessions: source patching, data-pack worker proposals,
   autonomous coding sessions, automatic merge, and release promotion
 
@@ -79,8 +86,9 @@ Validation tiers are fixed:
   whitespace.
 - `T1`: `T0` plus catalog, artifact-set, adapter, `libsslab`, proof-kernel,
   Proof Bundle v1, and Workbench shell checks.
-- `T2`: `T0` and `T1` plus the portable v2 header seam check, wider local
-  check-script gate, and fixed Nocturne/Ricochet profile proofs.
+- `T2`: `T0` and `T1` plus the portable v2 header seam and equivalence checks,
+  wider local check-script gate, and fixed Nocturne/Ricochet v1/v2 profile
+  proofs.
 
 T3 is native and extended evidence. It remains an operator-scheduled promotion
 or release gate and is not exposed as an AIDE fixed capability.
@@ -160,9 +168,11 @@ receipt may prove the admitted command plan, but it is not build evidence.
 ## Initial Proof
 
 The fixed profile proof commands call `tools/sslab/sslab.py proof --profile`
-with either `nocturne.reference.v0` or `ricochet.reference.v1`, then write an
-adapter receipt plus artifact manifest. The bundle commands normalize that
-profile proof through `tools/proofbundle/proofbundle.py normalize`.
+with either `nocturne.reference.v0` or `ricochet.reference.v1`, plus a fixed
+`--path v1` or `--path v2`, then write an adapter receipt plus artifact
+manifest. The bundle commands normalize that profile proof through
+`tools/proofbundle/proofbundle.py normalize`. The equivalence command delegates
+to `tools/sslab/sslab_equivalence.py` for the fixed canary profile set only.
 
 This is deterministic proof-kernel evidence. It is not a public compatibility
 certification and not a visual-artistic acceptance decision.

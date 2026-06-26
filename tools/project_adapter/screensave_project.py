@@ -17,6 +17,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 STATE_PATH = ROOT / "PROJECT_STATE.toml"
 VERSION_PATH = ROOT / "VERSION.toml"
 SSLAB = ROOT / "tools" / "sslab" / "sslab.py"
+SSLAB_EQUIVALENCE = ROOT / "tools" / "sslab" / "sslab_equivalence.py"
 PROOF_BUNDLE = ROOT / "tools" / "proofbundle" / "proofbundle.py"
 GENERATED_INVENTORY = ROOT / "catalog" / "generated" / "products_inventory.json"
 GENERATED_PROOF_REGISTRY = ROOT / "catalog" / "generated" / "proof_registry.json"
@@ -79,6 +80,7 @@ VALIDATION_TIERS = {
         ["tools/scripts/check_catalog_profiles.py"],
         ["tools/scripts/check_compiled_nocturne_runner.py"],
         ["tools/scripts/check_portable_v2.py"],
+        ["tools/scripts/check_portable_v2_equivalence.py"],
         ["tools/scripts/check_product_architecture.py"],
         ["tools/scripts/check_project_state.py"],
         ["tools/scripts/check_release_baseline_surface.py"],
@@ -86,7 +88,9 @@ VALIDATION_TIERS = {
         ["tools/scripts/check_release_scaffold.py"],
         ["tools/scripts/check_visual_intent_contract.py"],
         [str(SSLAB.relative_to(ROOT)), "proof", "--profile", "nocturne.reference.v0", "--output-dir", "out/aide/proofs/nocturne-reference-v0"],
+        [str(SSLAB.relative_to(ROOT)), "proof", "--profile", "nocturne.reference.v0", "--path", "v2", "--output-dir", "out/aide/proofs/nocturne-reference-v0-v2"],
         [str(SSLAB.relative_to(ROOT)), "proof", "--profile", "ricochet.reference.v1", "--output-dir", "out/aide/proofs/ricochet-reference-v1"],
+        [str(SSLAB.relative_to(ROOT)), "proof", "--profile", "ricochet.reference.v1", "--path", "v2", "--output-dir", "out/aide/proofs/ricochet-reference-v1-v2"],
     ],
 }
 
@@ -98,13 +102,25 @@ VALIDATION_TIER_CAPABILITIES = {
 
 ADMITTED_PROOF_PROFILES = {
     "nocturne.reference.v0": {
-        "capability": "screensave.proof.nocturne.reference-v0",
-        "bundle_capability": "screensave.bundle.nocturne.reference-v0",
+        "capabilities": {
+            "v1": "screensave.proof.nocturne.reference-v0.v1",
+            "v2": "screensave.proof.nocturne.reference-v0.v2",
+        },
+        "bundle_capabilities": {
+            "v1": "screensave.bundle.nocturne.reference-v0.v1",
+            "v2": "screensave.bundle.nocturne.reference-v0.v2",
+        },
         "slug": "nocturne-reference-v0",
     },
     "ricochet.reference.v1": {
-        "capability": "screensave.proof.ricochet.reference-v1",
-        "bundle_capability": "screensave.bundle.ricochet.reference-v1",
+        "capabilities": {
+            "v1": "screensave.proof.ricochet.reference-v1.v1",
+            "v2": "screensave.proof.ricochet.reference-v1.v2",
+        },
+        "bundle_capabilities": {
+            "v1": "screensave.bundle.ricochet.reference-v1.v1",
+            "v2": "screensave.bundle.ricochet.reference-v1.v2",
+        },
         "slug": "ricochet-reference-v1",
     },
 }
@@ -250,7 +266,7 @@ def proof_profile_by_key(profile_key: str) -> dict[str, Any]:
     )
 
 
-def admitted_profile(profile_key: str) -> dict[str, str]:
+def admitted_profile(profile_key: str) -> dict[str, Any]:
     profile = ADMITTED_PROOF_PROFILES.get(profile_key)
     if profile is None:
         raise AdapterError(
@@ -259,6 +275,14 @@ def admitted_profile(profile_key: str) -> dict[str, str]:
             {"profile": profile_key, "admitted_profiles": sorted(ADMITTED_PROOF_PROFILES)},
         )
     return profile
+
+
+def proof_capability(binding: dict[str, Any], execution_path: str) -> str:
+    return str(binding.get("capabilities", {}).get(execution_path, ""))
+
+
+def bundle_capability(binding: dict[str, Any], execution_path: str) -> str:
+    return str(binding.get("bundle_capabilities", {}).get(execution_path, ""))
 
 
 def git_text(args: list[str]) -> str:
@@ -520,8 +544,8 @@ def command_profiles(_args: argparse.Namespace) -> int:
                 "product": profile.get("product"),
                 "preset": profile.get("preset"),
                 "capture_frames": profile.get("capture_frames", []),
-                "proof_capability": binding["capability"],
-                "bundle_capability": binding["bundle_capability"],
+                "proof_capabilities": binding["capabilities"],
+                "bundle_capabilities": binding["bundle_capabilities"],
                 "claim_boundary": profile.get("claim_boundary"),
             }
         )
@@ -829,6 +853,8 @@ def command_proof(args: argparse.Namespace) -> int:
     except AdapterError as exc:
         return blocked("proof", exc)
     before_source = source_payload()
+    execution_path = str(args.path)
+    capability = proof_capability(profile_binding, execution_path)
     receipt_path = output_dir / "adapter-proof.json"
     profile_proof_path = output_dir / "profile-proof.json"
     command = [
@@ -836,6 +862,8 @@ def command_proof(args: argparse.Namespace) -> int:
         "proof",
         "--profile",
         args.profile,
+        "--path",
+        execution_path,
         "--output-dir",
         str(output_dir),
     ]
@@ -855,10 +883,11 @@ def command_proof(args: argparse.Namespace) -> int:
         ],
     )
     payload = {
-        "capability": profile_binding["capability"],
+        "capability": capability,
         "proof_kind": "catalog-profile-proof",
         "invocation_id": args.invocation_id,
         "profile": args.profile,
+        "execution_path": execution_path,
         "product": profile.get("product"),
         "preset": profile.get("preset"),
         "capture_frames": profile.get("capture_frames", []),
@@ -870,7 +899,7 @@ def command_proof(args: argparse.Namespace) -> int:
             "proof",
             proof_run["command"],
             [SSLAB, GENERATED_PROOF_REGISTRY],
-            profile_binding["capability"],
+            capability,
         ),
         "run": proof_run,
         "profile_proof_ref": repo_path(profile_proof_path),
@@ -893,6 +922,8 @@ def command_bundle(args: argparse.Namespace) -> int:
     except AdapterError as exc:
         return blocked("bundle", exc)
     before_source = source_payload()
+    execution_path = str(args.path)
+    capability = bundle_capability(profile_binding, execution_path)
     proof_dir = output_dir / "proof"
     proof_path = proof_dir / "profile-proof.json"
     bundle_path = output_dir / "proof-bundle-v1.json"
@@ -902,6 +933,8 @@ def command_bundle(args: argparse.Namespace) -> int:
         "proof",
         "--profile",
         args.profile,
+        "--path",
+        execution_path,
         "--output-dir",
         str(proof_dir),
     ]
@@ -935,10 +968,11 @@ def command_bundle(args: argparse.Namespace) -> int:
         ],
     )
     payload = {
-        "capability": profile_binding["bundle_capability"],
+        "capability": capability,
         "bundle_kind": "proof-bundle-v1-from-catalog-profile",
         "invocation_id": args.invocation_id,
         "profile": args.profile,
+        "execution_path": execution_path,
         "product": profile.get("product"),
         "preset": profile.get("preset"),
         "output_dir": repo_path(output_dir),
@@ -949,7 +983,7 @@ def command_bundle(args: argparse.Namespace) -> int:
             "bundle",
             proof_run["command"] + ["&&"] + bundle_run["command"],
             [SSLAB, PROOF_BUNDLE, GENERATED_PROOF_REGISTRY],
-            profile_binding["bundle_capability"],
+            capability,
         ),
         "proof_run": proof_run,
         "bundle_run": bundle_run,
@@ -961,6 +995,64 @@ def command_bundle(args: argparse.Namespace) -> int:
         "claim_boundary": "Proof Bundle v1 projection only; not compatibility certification, artistic acceptance, or release promotion.",
     }
     receipt = envelope("bundle", status, payload)
+    receipt_path.write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    write_json(receipt)
+    return exit_code_for_status(status)
+
+
+def command_equivalence(args: argparse.Namespace) -> int:
+    try:
+        output_dir = invocation_dir("equivalence", args.invocation_id)
+    except AdapterError as exc:
+        return blocked("equivalence", exc)
+    before_source = source_payload()
+    receipt_path = output_dir / "adapter-equivalence.json"
+    equivalence_path = output_dir / "portable-v2-equivalence.json"
+    work_root = output_dir / "captures"
+    command = [
+        str(SSLAB_EQUIVALENCE.relative_to(ROOT)),
+        "--output",
+        str(equivalence_path),
+        "--work-root",
+        str(work_root),
+    ]
+    equivalence_run = run_command(command, timeout_seconds=180)
+    equivalence = load_json(equivalence_path) if equivalence_path.exists() else {}
+    equivalence_status = str(equivalence.get("status", "fail"))
+    status = "pass" if equivalence_run["returncode"] == 0 and equivalence_status == "pass" else "fail"
+    manifest_path = write_artifact_manifest(
+        output_dir,
+        "equivalence",
+        [
+            ("portable_v2_equivalence", equivalence_path, "portable-v2-equivalence-json"),
+            ("adapter_receipt", receipt_path, "adapter-receipt-json"),
+        ],
+    )
+    payload = {
+        "capability": "screensave.proof.portable-v2.equivalence",
+        "bundle_capability": "screensave.bundle.portable-v2.equivalence",
+        "proof_kind": "portable-v2-equivalence",
+        "invocation_id": args.invocation_id,
+        "output_dir": repo_path(output_dir),
+        "artifact_manifest_ref": repo_path(manifest_path),
+        "before_source": before_source,
+        "after_source": source_payload(),
+        "command_binding": command_binding_payload(
+            "equivalence",
+            equivalence_run["command"],
+            [SSLAB_EQUIVALENCE, GENERATED_PROOF_REGISTRY],
+            "screensave.proof.portable-v2.equivalence",
+        ),
+        "run": equivalence_run,
+        "equivalence_ref": repo_path(equivalence_path),
+        "equivalence_status": equivalence_status,
+        "profiles": [item.get("profile") for item in equivalence.get("profiles", [])],
+        "claim_boundary": equivalence.get(
+            "claim_boundary",
+            "v1/v2 deterministic equivalence for Nocturne and Ricochet canary proof profiles only",
+        ),
+    }
+    receipt = envelope("equivalence", status, payload)
     receipt_path.write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     write_json(receipt)
     return exit_code_for_status(status)
@@ -1031,12 +1123,18 @@ def build_parser() -> argparse.ArgumentParser:
     proof = subparsers.add_parser("proof", help="Run a fixed catalog proof profile.")
     proof.add_argument("--invocation-id", default="local", help="Safe id for the contained adapter output root.")
     proof.add_argument("--profile", required=True, choices=sorted(ADMITTED_PROOF_PROFILES))
+    proof.add_argument("--path", choices=("v1", "v2"), default="v1", help="Fixed proof execution path.")
     proof.set_defaults(func=command_proof)
 
     bundle = subparsers.add_parser("bundle", help="Export a fixed catalog proof profile as Proof Bundle v1.")
     bundle.add_argument("--invocation-id", default="local", help="Safe id for the contained adapter output root.")
     bundle.add_argument("--profile", required=True, choices=sorted(ADMITTED_PROOF_PROFILES))
+    bundle.add_argument("--path", choices=("v1", "v2"), default="v1", help="Fixed proof execution path.")
     bundle.set_defaults(func=command_bundle)
+
+    equivalence = subparsers.add_parser("equivalence", help="Run fixed portable v2 equivalence proof.")
+    equivalence.add_argument("--invocation-id", default="local", help="Safe id for the contained adapter output root.")
+    equivalence.set_defaults(func=command_equivalence)
 
     return parser
 

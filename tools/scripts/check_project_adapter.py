@@ -46,6 +46,7 @@ REQUIRED_TEXT = {
         "def command_audit",
         "def command_proof",
         "def command_bundle",
+        "def command_equivalence",
         "APPROVED_COMPARE_INPUT_ROOTS",
         "ARTIFACT_PROFILE_AUDIT_ROOTS",
         "def resolve_audit_profiles",
@@ -63,6 +64,7 @@ REQUIRED_TEXT = {
         "audit",
         "proof",
         "bundle",
+        "equivalence",
         "AIDE may consume receipts",
         "tools/project_adapter/capability_bindings.json",
         "tools/project_adapter/receipt_schemas.json",
@@ -143,10 +145,16 @@ def main() -> int:
         require("screensave.proof.nocturne.render" in names, "capabilities must include screensave.proof.nocturne.render.", errors)
         require("screensave.proof.capture.compare" in names, "capabilities must include screensave.proof.capture.compare.", errors)
         require("screensave.artifact.pe.audit" in names, "capabilities must include screensave.artifact.pe.audit.", errors)
-        require("screensave.proof.nocturne.reference-v0" in names, "capabilities must include screensave.proof.nocturne.reference-v0.", errors)
-        require("screensave.proof.ricochet.reference-v1" in names, "capabilities must include screensave.proof.ricochet.reference-v1.", errors)
-        require("screensave.bundle.nocturne.reference-v0" in names, "capabilities must include screensave.bundle.nocturne.reference-v0.", errors)
-        require("screensave.bundle.ricochet.reference-v1" in names, "capabilities must include screensave.bundle.ricochet.reference-v1.", errors)
+        require("screensave.proof.nocturne.reference-v0.v1" in names, "capabilities must include screensave.proof.nocturne.reference-v0.v1.", errors)
+        require("screensave.proof.nocturne.reference-v0.v2" in names, "capabilities must include screensave.proof.nocturne.reference-v0.v2.", errors)
+        require("screensave.proof.ricochet.reference-v1.v1" in names, "capabilities must include screensave.proof.ricochet.reference-v1.v1.", errors)
+        require("screensave.proof.ricochet.reference-v1.v2" in names, "capabilities must include screensave.proof.ricochet.reference-v1.v2.", errors)
+        require("screensave.proof.portable-v2.equivalence" in names, "capabilities must include screensave.proof.portable-v2.equivalence.", errors)
+        require("screensave.bundle.portable-v2.equivalence" in names, "capabilities must include screensave.bundle.portable-v2.equivalence.", errors)
+        require("screensave.bundle.nocturne.reference-v0.v1" in names, "capabilities must include screensave.bundle.nocturne.reference-v0.v1.", errors)
+        require("screensave.bundle.nocturne.reference-v0.v2" in names, "capabilities must include screensave.bundle.nocturne.reference-v0.v2.", errors)
+        require("screensave.bundle.ricochet.reference-v1.v1" in names, "capabilities must include screensave.bundle.ricochet.reference-v1.v1.", errors)
+        require("screensave.bundle.ricochet.reference-v1.v2" in names, "capabilities must include screensave.bundle.ricochet.reference-v1.v2.", errors)
         require(
             capabilities.get("payload", {}).get("output_root") == "out/aide/screensave-project-adapter/invocations",
             "capabilities must expose the contained invocation output root.",
@@ -275,10 +283,11 @@ def main() -> int:
         proof = run_adapter(["proof", "--invocation-id", "check-proof-nocturne", "--profile", "nocturne.reference.v0"])
         require(proof.get("status") == "pass", "adapter proof must pass.", errors)
         require(
-            proof.get("payload", {}).get("capability") == "screensave.proof.nocturne.reference-v0",
+            proof.get("payload", {}).get("capability") == "screensave.proof.nocturne.reference-v0.v1",
             "adapter proof must report the Nocturne fixed profile capability.",
             errors,
         )
+        require(proof.get("payload", {}).get("execution_path") == "v1", "adapter proof default path must be v1.", errors)
         require(proof.get("payload", {}).get("profile_proof_status") == "pass", "adapter proof profile status must pass.", errors)
         require(proof.get("payload", {}).get("comparison_status") == "pass", "adapter proof comparison must pass.", errors)
         require(proof.get("payload", {}).get("lifecycle_status") == "pass", "adapter proof lifecycle must pass.", errors)
@@ -299,21 +308,43 @@ def main() -> int:
         ricochet_proof = run_adapter(["proof", "--invocation-id", "check-proof-ricochet", "--profile", "ricochet.reference.v1"])
         require(ricochet_proof.get("status") == "pass", "adapter Ricochet proof must pass.", errors)
         require(
-            ricochet_proof.get("payload", {}).get("capability") == "screensave.proof.ricochet.reference-v1",
+            ricochet_proof.get("payload", {}).get("capability") == "screensave.proof.ricochet.reference-v1.v1",
             "adapter Ricochet proof must report the fixed profile capability.",
             errors,
         )
 
-        bundle = run_adapter(["bundle", "--invocation-id", "check-bundle-ricochet", "--profile", "ricochet.reference.v1"])
-        require(bundle.get("status") == "pass", "adapter Ricochet bundle must pass.", errors)
+        ricochet_v2_proof = run_adapter(["proof", "--invocation-id", "check-proof-ricochet-v2", "--profile", "ricochet.reference.v1", "--path", "v2"])
+        require(ricochet_v2_proof.get("status") == "pass", "adapter Ricochet v2 proof must pass.", errors)
         require(
-            bundle.get("payload", {}).get("capability") == "screensave.bundle.ricochet.reference-v1",
-            "adapter bundle must report the fixed Ricochet bundle capability.",
+            ricochet_v2_proof.get("payload", {}).get("capability") == "screensave.proof.ricochet.reference-v1.v2",
+            "adapter Ricochet v2 proof must report the fixed v2 profile capability.",
             errors,
         )
+
+        bundle = run_adapter(["bundle", "--invocation-id", "check-bundle-ricochet", "--profile", "ricochet.reference.v1", "--path", "v2"])
+        require(bundle.get("status") == "pass", "adapter Ricochet bundle must pass.", errors)
+        require(
+            bundle.get("payload", {}).get("capability") == "screensave.bundle.ricochet.reference-v1.v2",
+            "adapter bundle must report the fixed Ricochet v2 bundle capability.",
+            errors,
+        )
+        require(bundle.get("payload", {}).get("execution_path") == "v2", "adapter bundle must record v2 path.", errors)
         require(
             repo_ref_to_path(bundle.get("payload", {}).get("proof_bundle_ref", "")).exists(),
             "adapter bundle must write proof-bundle-v1.json.",
+            errors,
+        )
+
+        equivalence = run_adapter(["equivalence", "--invocation-id", "check-portable-v2-equivalence"])
+        require(equivalence.get("status") == "pass", "adapter portable v2 equivalence must pass.", errors)
+        require(
+            equivalence.get("payload", {}).get("capability") == "screensave.proof.portable-v2.equivalence",
+            "adapter equivalence must report the fixed equivalence capability.",
+            errors,
+        )
+        require(
+            repo_ref_to_path(equivalence.get("payload", {}).get("equivalence_ref", "")).exists(),
+            "adapter equivalence must write portable-v2-equivalence.json.",
             errors,
         )
 
