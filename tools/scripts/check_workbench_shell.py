@@ -9,54 +9,14 @@ import tempfile
 
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "tools" / "sslab"))
+
+from build_support import INCLUDE_ARGS, LIBSSLAB_SOURCES, PROOF_REGISTRY_C  # noqa: E402
+
 SHELL_SOURCE = ROOT / "products" / "apps" / "benchlab" / "src" / "benchlab_workbench_shell.c"
 SHELL_HEADER = ROOT / "products" / "apps" / "benchlab" / "src" / "benchlab_workbench_shell.h"
 SMOKE_SOURCE = ROOT / "products" / "apps" / "benchlab" / "tests" / "workbench_shell_smoke.c"
-PROOF_REGISTRY_C = ROOT / "catalog" / "generated" / "proof_registry.c"
 SSLAB_HEADER = ROOT / "tools" / "sslab" / "include" / "screensave" / "sslab.h"
-SSLAB_INCLUDE = ROOT / "tools" / "sslab" / "include"
-SSLAB_SRC = ROOT / "tools" / "sslab" / "src"
-PLATFORM_INCLUDE = ROOT / "platform" / "include"
-NOCTURNE_SRC = ROOT / "products" / "savers" / "nocturne" / "src"
-RICOCHET_SRC = ROOT / "products" / "savers" / "ricochet" / "src"
-
-LIBSSLAB_SOURCES = [
-    SSLAB_SRC / "abi.c",
-    SSLAB_SRC / "context.c",
-    SSLAB_SRC / "product.c",
-    SSLAB_SRC / "session.c",
-    SSLAB_SRC / "operations.c",
-    SSLAB_SRC / "capture.c",
-    SSLAB_SRC / "renderer_rgba8.c",
-    SSLAB_SRC / "diag_stub.c",
-    SSLAB_SRC / "products" / "nocturne_adapter.c",
-    SSLAB_SRC / "products" / "ricochet_adapter.c",
-    NOCTURNE_SRC / "nocturne_sim.c",
-    NOCTURNE_SRC / "nocturne_render.c",
-    NOCTURNE_SRC / "nocturne_themes.c",
-    NOCTURNE_SRC / "nocturne_presets.c",
-    RICOCHET_SRC / "ricochet_sim.c",
-    RICOCHET_SRC / "ricochet_render.c",
-    RICOCHET_SRC / "ricochet_themes.c",
-    RICOCHET_SRC / "ricochet_presets.c",
-    ROOT / "platform" / "src" / "core" / "config" / "config.c",
-    ROOT / "platform" / "src" / "core" / "visual" / "visual_buffer.c",
-    ROOT / "platform" / "src" / "surface" / "rgba8" / "surface_rgba8.c",
-    ROOT / "platform" / "src" / "render" / "soft" / "soft_renderer.c",
-]
-
-INCLUDE_ARGS = [
-    "-I",
-    str(PLATFORM_INCLUDE),
-    "-I",
-    str(SSLAB_INCLUDE),
-    "-I",
-    str(SSLAB_SRC),
-    "-I",
-    str(NOCTURNE_SRC),
-    "-I",
-    str(RICOCHET_SRC),
-]
 
 
 def require(condition: bool, message: str, errors: list[str]) -> None:
@@ -77,8 +37,12 @@ def main() -> int:
             "inspect",
             "compare",
             "SSLAB_ABI_VERSION",
+            "SSLAB_EXECUTION_PATH_V2",
             "screensave_generated_find_proof_profile",
             "benchlab_workbench_shell_run_profile_once",
+            "benchlab_workbench_shell_inspect_profile_v2",
+            "benchlab_workbench_v2_inspect",
+            "ss_v2_product_descriptor_is_valid",
             "nocturne.reference.v0",
             "ricochet.reference.v1",
         ]:

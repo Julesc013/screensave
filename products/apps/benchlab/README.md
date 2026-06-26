@@ -91,6 +91,12 @@ Continuation `C12` keeps BenchLab diagnostics-focused while normalizing its shar
 - Nocturne and Ricochet proof profiles are the required canary profiles for this shell
 - authoring, release, and Plasma execution remain deferred until the proof runtime and portable seam are ready
 
+`PAW-C1` extends Inspect to the portable v2 canary path:
+
+- Inspect can report the v2 API path, product/profile identity, descriptor version, config schema, seed, dimensions, clock frame, RGBA8 target, diagnostics, equivalence status, and claim boundary
+- the inspection probe selects the same `sslab` v2 execution path used by CI-oriented proof checks
+- Workbench still does not add Author, Release, Plasma execution, compatibility certification, or artistic acceptance
+
 BenchLab is intentionally narrow. It is a validation harness for developers, not the end-user `suite` app.
 C03 leaves that boundary intact: the standalone saver `.scr` line now ships as one saver binary per product, while BenchLab continues to run the saver modules directly as a diagnostics harness instead of becoming a launcher for distributed saver binaries.
 Continuation `C09` keeps that boundary intact: Suite now owns the bounded end-user browse, preview, launch, and saver-settings surface, while BenchLab remains the renderer, runtime, and deterministic diagnostics harness.

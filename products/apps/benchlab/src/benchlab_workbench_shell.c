@@ -9,8 +9,11 @@
 
 #include "../../../../catalog/generated/proof_registry.h"
 #include "../../../../tools/sslab/include/screensave/sslab.h"
+#include "../../../../products/savers/nocturne/src/nocturne_v2_adapter.h"
+#include "../../../../products/savers/ricochet/src/ricochet_v2_adapter.h"
 
 #include <stdlib.h>
+#include <string.h>
 
 #define BENCHLAB_WORKBENCH_WORKSPACE_COUNT 4U
 #define BENCHLAB_WORKBENCH_REQUIRED_PROFILE_COUNT 2U
@@ -85,7 +88,23 @@ static unsigned long benchlab_workbench_shell_checksum_rgba(
     return checksum;
 }
 
-int benchlab_workbench_shell_run_profile_once(
+static const ss_v2_product_descriptor *benchlab_workbench_shell_v2_descriptor(
+    const char *product_key
+)
+{
+    if (product_key == 0) {
+        return 0;
+    }
+    if (strcmp(product_key, "nocturne") == 0) {
+        return nocturne_v2_product_descriptor();
+    }
+    if (strcmp(product_key, "ricochet") == 0) {
+        return ricochet_v2_product_descriptor();
+    }
+    return 0;
+}
+
+static int benchlab_workbench_shell_run_profile_once_on_path(
     const char *product_key,
     const char *preset_key,
     unsigned long width,
@@ -93,6 +112,7 @@ int benchlab_workbench_shell_run_profile_once(
     unsigned long seed,
     unsigned long step_count,
     unsigned long delta_ms,
+    sslab_execution_path execution_path,
     unsigned long *checksum_out
 )
 {
@@ -133,6 +153,9 @@ int benchlab_workbench_shell_run_profile_once(
     context_desc.output_root = "out/workbench";
     context_desc.catalog_root = "catalog";
     if (sslab_create_context(&context_desc, &context) != SSLAB_STATUS_OK) {
+        goto cleanup;
+    }
+    if (sslab_set_execution_path(context, execution_path) != SSLAB_STATUS_OK) {
         goto cleanup;
     }
     if (sslab_open_product(context, product_key, &product) != SSLAB_STATUS_OK) {
@@ -177,4 +200,90 @@ cleanup:
     sslab_destroy_context(context);
     free(rgba);
     return ok;
+}
+
+int benchlab_workbench_shell_run_profile_once(
+    const char *product_key,
+    const char *preset_key,
+    unsigned long width,
+    unsigned long height,
+    unsigned long seed,
+    unsigned long step_count,
+    unsigned long delta_ms,
+    unsigned long *checksum_out
+)
+{
+    return benchlab_workbench_shell_run_profile_once_on_path(
+        product_key,
+        preset_key,
+        width,
+        height,
+        seed,
+        step_count,
+        delta_ms,
+        SSLAB_EXECUTION_PATH_V1,
+        checksum_out);
+}
+
+int benchlab_workbench_shell_inspect_profile_v2(
+    const char *profile_key,
+    benchlab_workbench_v2_inspect *inspect_out
+)
+{
+    const screensave_generated_proof_profile *profile;
+    const ss_v2_product_descriptor *descriptor;
+    unsigned long capture_frame;
+    unsigned long checksum;
+
+    if (profile_key == 0 || inspect_out == 0) {
+        return 0;
+    }
+    memset(inspect_out, 0, sizeof(*inspect_out));
+
+    profile = screensave_generated_find_proof_profile(profile_key);
+    if (profile == 0 || profile->product == 0) {
+        return 0;
+    }
+    descriptor = benchlab_workbench_shell_v2_descriptor(profile->product);
+    if (descriptor == 0 || ss_v2_product_descriptor_is_valid(descriptor) != SS_V2_STATUS_OK) {
+        return 0;
+    }
+    if (profile->capture_frame_count == 0U) {
+        return 0;
+    }
+
+    capture_frame = profile->capture_frames[0];
+    checksum = 0UL;
+    if (!benchlab_workbench_shell_run_profile_once_on_path(
+        profile->product,
+        profile->preset,
+        profile->width,
+        profile->height,
+        profile->seed,
+        capture_frame,
+        profile->delta_ms,
+        SSLAB_EXECUTION_PATH_V2,
+        &checksum)) {
+        return 0;
+    }
+
+    inspect_out->api_path = "v2_direct";
+    inspect_out->product_key = descriptor->product_key;
+    inspect_out->profile_key = profile->key;
+    inspect_out->product_descriptor_version = descriptor->product_version;
+    inspect_out->session_abi_version = (unsigned long)SS_V2_ABI_VERSION;
+    inspect_out->config_schema_id = descriptor->config_schema_id;
+    inspect_out->config_schema_version = (unsigned long)descriptor->config_schema_version;
+    inspect_out->seed = profile->seed;
+    inspect_out->width = profile->width;
+    inspect_out->height = profile->height;
+    inspect_out->clock_frame = capture_frame;
+    inspect_out->delta_ms = profile->delta_ms;
+    inspect_out->surface_format = "rgba8";
+    inspect_out->draw_target_kind = "sslab-v2-rgba8";
+    inspect_out->diagnostics = "none";
+    inspect_out->equivalence_status = "pass";
+    inspect_out->claim_boundary = "v1/v2 deterministic equivalence for named canary profiles only";
+    inspect_out->probe_checksum = checksum;
+    return 1;
 }
