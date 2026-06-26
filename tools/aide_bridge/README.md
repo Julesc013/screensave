@@ -23,3 +23,8 @@ then records `domain_payload_ref` for the Proof Bundle v1 payload plus explicit
 claims for portable v2 equivalence, v1 Win32 artifact preservation evidence,
 no AIDE runtime dependency, compatibility-not-certified, blocked artistic
 acceptance, and blocked release promotion.
+
+`index_evidence.py` validates `.aide/evidence/index.toml` and emits a compact
+summary. The index records references to Nocturne and Ricochet v1/v2 proofs,
+portable v2 equivalence, artifact manifests, PE audit JSON, Proof Bundle v1,
+and AIDE EvidencePackets; it does not turn AIDE into proof authority.

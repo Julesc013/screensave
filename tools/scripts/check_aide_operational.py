@@ -16,6 +16,9 @@ TEST_MANIFEST = ROOT / ".aide" / "tests" / "test_manifest.yaml"
 TEST_IMPACT_MAP = ROOT / ".aide" / "tests" / "test_impact_map.yaml"
 AIDE_OPS = ROOT / "tools" / "aideops" / "screensave_aide.py"
 AIDE_OPS_README = ROOT / "tools" / "aideops" / "README.md"
+AIDE_EVIDENCE_INDEX = ROOT / ".aide" / "evidence" / "index.toml"
+AIDE_EVIDENCE_INDEX_CHECK = ROOT / "tools" / "scripts" / "check_aide_evidence_index.py"
+AIDE_EVIDENCE_INDEXER = ROOT / "tools" / "aide_bridge" / "index_evidence.py"
 PAW_C1_WORK_UNIT = ROOT / ".aide" / "work_units" / "paw-c1-portable-v2-runtime-equivalence.toml"
 PAW_C1_ROADMAP = ROOT / "docs" / "roadmap" / "paw-c1-portable-v2-runtime-equivalence.md"
 
@@ -56,6 +59,14 @@ EXPECTED_SCREEN_SAVE_GOLDEN_TASKS = {
     "screensave-v2-headers-have-no-native-types",
     "screensave-v2-structs-are-size-version-prefixed",
     "screensave-v1-scr-build-remains-operational",
+    "screensave-v2-no-native-types",
+    "screensave-v2-size-version-prefix",
+    "screensave-v2-no-public-long",
+    "screensave-v2-nocturne-equivalence",
+    "screensave-v2-ricochet-equivalence",
+    "screensave-aide-optional-runtime",
+    "screensave-no-generic-command-capability",
+    "screensave-proof-boundary-preserved",
 }
 
 
@@ -95,6 +106,9 @@ def validate_static_files(errors: list[str]) -> None:
         TEST_IMPACT_MAP,
         AIDE_OPS,
         AIDE_OPS_README,
+        AIDE_EVIDENCE_INDEX,
+        AIDE_EVIDENCE_INDEX_CHECK,
+        AIDE_EVIDENCE_INDEXER,
         PAW_C1_WORK_UNIT,
         PAW_C1_ROADMAP,
     ]:
@@ -127,6 +141,23 @@ def validate_static_files(errors: list[str]) -> None:
                 require(forbidden not in text, "ScreenSave golden tasks must not use an LLM judge.", errors)
             else:
                 require(forbidden in text, f"ScreenSave golden tasks must explicitly forbid {forbidden}.", errors)
+
+    if AIDE_EVIDENCE_INDEX.exists():
+        text = read_text(AIDE_EVIDENCE_INDEX)
+        for needle in [
+            "screensave-paw-c1-proof-evidence-index-v0",
+            "nocturne-v1-proof",
+            "nocturne-v2-proof",
+            "ricochet-v1-proof",
+            "ricochet-v2-proof",
+            "portable-v2-equivalence-proof",
+            "proof-bundle-v1-portable-v2",
+            "aide-evidence-packets",
+            "AIDE indexes references only",
+        ]:
+            require(needle in text, f"AIDE evidence index missing expected text: {needle}", errors)
+        for forbidden in ["network_calls = true", "provider_or_model_calls = true", "runtime_dependency_allowed = true"]:
+            require(forbidden not in text, f"AIDE evidence index must not contain {forbidden}.", errors)
 
 
 def validate_operator(errors: list[str]) -> None:
@@ -181,6 +212,16 @@ def validate_operator(errors: list[str]) -> None:
             "operation receipt must include the pinned AIDE source revision.",
             errors,
         )
+
+    if AIDE_EVIDENCE_INDEX_CHECK.exists():
+        result = subprocess.run(
+            [sys.executable, str(AIDE_EVIDENCE_INDEX_CHECK)],
+            cwd=ROOT,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        require(result.returncode == 0, f"check_aide_evidence_index.py failed: {result.stderr}", errors)
 
     if PAW_C1_WORK_UNIT.exists():
         text = read_text(PAW_C1_WORK_UNIT)

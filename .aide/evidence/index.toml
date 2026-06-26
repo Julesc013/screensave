@@ -1,0 +1,116 @@
+schema_version = 1
+index_id = "screensave-paw-c1-proof-evidence-index-v0"
+status = "active"
+as_of = "2026-06-26"
+truth_boundary = "ScreenSave proof bundles and validators remain authoritative; AIDE indexes references only."
+network_calls = false
+provider_or_model_calls = false
+runtime_dependency_allowed = false
+
+[[entries]]
+id = "nocturne-v1-proof"
+kind = "proof"
+product = "nocturne"
+profile = "nocturne.reference.v0"
+path = "v1"
+status = "tracked"
+primary_ref = "validation/captures/proof-kernel-v0/nocturne/proof.json"
+generated_ref = "out/aide/proofs/nocturne-reference-v0-v1/profile-proof.json"
+validator = "py -3 tools/sslab/sslab.py proof --profile nocturne.reference.v0 --path v1"
+claim_boundary = "deterministic Nocturne reference proof only"
+
+[[entries]]
+id = "nocturne-v2-proof"
+kind = "proof"
+product = "nocturne"
+profile = "nocturne.reference.v0"
+path = "v2"
+status = "tracked"
+primary_ref = "out/aide/proofs/nocturne-reference-v0-v2/profile-proof.json"
+generated_ref = "out/aide/proofs/nocturne-reference-v0-v2/profile-proof.json"
+validator = "py -3 tools/sslab/sslab.py proof --profile nocturne.reference.v0 --path v2"
+claim_boundary = "portable v2 canary proof only"
+
+[[entries]]
+id = "ricochet-v1-proof"
+kind = "proof"
+product = "ricochet"
+profile = "ricochet.reference.v1"
+path = "v1"
+status = "tracked"
+primary_ref = "validation/captures/proof-kernel-v1/ricochet/profile-proof.json"
+generated_ref = "out/aide/proofs/ricochet-reference-v1-v1/profile-proof.json"
+validator = "py -3 tools/sslab/sslab.py proof --profile ricochet.reference.v1 --path v1"
+claim_boundary = "Ricochet deterministic frame and lifecycle proof only"
+
+[[entries]]
+id = "ricochet-v2-proof"
+kind = "proof"
+product = "ricochet"
+profile = "ricochet.reference.v1"
+path = "v2"
+status = "tracked"
+primary_ref = "out/aide/proofs/ricochet-reference-v1-v2/profile-proof.json"
+generated_ref = "out/aide/proofs/ricochet-reference-v1-v2/profile-proof.json"
+validator = "py -3 tools/sslab/sslab.py proof --profile ricochet.reference.v1 --path v2"
+claim_boundary = "portable v2 canary proof only"
+
+[[entries]]
+id = "portable-v2-equivalence-proof"
+kind = "equivalence"
+product = "canary-set"
+profile = "nocturne.reference.v0,ricochet.reference.v1"
+path = "v1-v2"
+status = "tracked"
+primary_ref = "out/proof/portable-v2-equivalence/equivalence.json"
+generated_ref = "out/proof/portable-v2-equivalence/equivalence.json"
+validator = "py -3 tools/scripts/check_portable_v2_equivalence.py"
+claim_boundary = "v1/v2 deterministic equivalence for Nocturne and Ricochet canary proof profiles only"
+
+[[entries]]
+id = "windows-current-artifact-manifests"
+kind = "artifact-manifest"
+product = "current-windows-saver-set"
+profile = "windows-current-x86"
+path = "v1-native"
+status = "tracked"
+primary_ref = "out/build/windows-current-x86/artifact-manifest.json"
+generated_ref = "out/build/windows-current-x86/artifact-manifest.json"
+validator = "py -3 tools/buildctl/screensave_build.py build --profile windows-current-x86"
+claim_boundary = "artifact manifest evidence only; not release promotion"
+
+[[entries]]
+id = "windows-current-pe-audit-json"
+kind = "pe-audit"
+product = "current-windows-saver-set"
+profile = "windows_current_x86_scr"
+path = "v1-native"
+status = "tracked"
+primary_ref = "out/aide/screensave-project-adapter/invocations/proof/windows-current-ricochet-v2/pe-audit.json"
+generated_ref = "out/aide/screensave-project-adapter/invocations/proof/windows-current-ricochet-v2/pe-audit.json"
+validator = "py -3 tools/project_adapter/screensave_project.py proof --profile ricochet.reference.v1 --path v2"
+claim_boundary = "PE audit facts only; not compatibility certification"
+
+[[entries]]
+id = "proof-bundle-v1-portable-v2"
+kind = "proof-bundle"
+product = "ricochet"
+profile = "ricochet.reference.v1"
+path = "v2"
+status = "tracked"
+primary_ref = "out/aide/screensave-project-adapter/invocations/bundle/portable-v2-proof-bundle/proof-bundle-v1.json"
+generated_ref = "out/aide/screensave-project-adapter/invocations/bundle/portable-v2-proof-bundle/proof-bundle-v1.json"
+validator = "py -3 tools/project_adapter/screensave_project.py bundle --profile ricochet.reference.v1 --path v2"
+claim_boundary = "Proof Bundle v1 projection only; not compatibility certification, artistic acceptance, or release promotion"
+
+[[entries]]
+id = "aide-evidence-packets"
+kind = "aide-evidence-packet"
+product = "canary-set"
+profile = "portable-v2"
+path = "aide-bridge"
+status = "tracked"
+primary_ref = ".aide/evidence_packets/screensave-fixed-command-bridge.toml"
+generated_ref = "out/aide/evidence-bridge/screensave-evidence-packet.json"
+validator = "py -3 tools/scripts/check_aide_evidence_bridge.py"
+claim_boundary = "AIDE EvidencePacket projection only; ScreenSave proof remains authoritative"
