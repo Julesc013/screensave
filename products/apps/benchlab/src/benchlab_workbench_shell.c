@@ -436,3 +436,29 @@ int benchlab_workbench_shell_release_readiness_plasma_v2(
     release_out->claim_boundary = "Workbench Release-readiness gathers evidence only; no publication, stable release, or compatibility certification is implied.";
     return 1;
 }
+
+int benchlab_workbench_shell_inspect_plasma_v2_instrument(
+    benchlab_workbench_plasma_instrument_inspect *inspect_out
+)
+{
+    if (inspect_out == 0) {
+        return 0;
+    }
+    memset(inspect_out, 0, sizeof(*inspect_out));
+
+    inspect_out->product_key = "plasma";
+    inspect_out->requested_spec = "products/savers/plasma/src/v2/plasma_v2_spec.h";
+    inspect_out->resolved_plan = "validation/captures/plasma-v2/instrument-audit/plan-report.json";
+    inspect_out->degradation_reason = "capability_or_stable_scope_degrade recorded by plasma_v2_plan";
+    inspect_out->field_pipeline = "validation/captures/plasma-v2/instrument-audit/field-pipeline-report.json";
+    inspect_out->material_response = "validation/captures/plasma-v2/instrument-audit/material-response.json";
+    inspect_out->treatment_stack = "post-material treatment stack from plasma_v2_treatment_apply";
+    inspect_out->software_reference_path = "validation/captures/plasma-v2/acceleration/matrix.json";
+    inspect_out->gl11_optionality = "gl11_optional=true; hidden_gl11_minimum=false";
+    inspect_out->capture_refs = "validation/captures/plasma-v2/reference-preview";
+    inspect_out->control_influence_status = "validation/captures/plasma-v2/instrument-audit/control-influence.json";
+    inspect_out->review_status = "request-changes";
+    inspect_out->promotion_status = "release-candidate-hold";
+    inspect_out->claim_boundary = "Workbench Instrument Inspect consumes ScreenSave proof evidence only; it is not a second runtime, artistic judge, or promotion authority.";
+    return 1;
+}

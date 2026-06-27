@@ -105,6 +105,23 @@ typedef struct benchlab_workbench_plasma_release_readiness_tag {
     const char *claim_boundary;
 } benchlab_workbench_plasma_release_readiness;
 
+typedef struct benchlab_workbench_plasma_instrument_inspect_tag {
+    const char *product_key;
+    const char *requested_spec;
+    const char *resolved_plan;
+    const char *degradation_reason;
+    const char *field_pipeline;
+    const char *material_response;
+    const char *treatment_stack;
+    const char *software_reference_path;
+    const char *gl11_optionality;
+    const char *capture_refs;
+    const char *control_influence_status;
+    const char *review_status;
+    const char *promotion_status;
+    const char *claim_boundary;
+} benchlab_workbench_plasma_instrument_inspect;
+
 unsigned int benchlab_workbench_shell_workspace_count(void);
 const benchlab_workbench_workspace *benchlab_workbench_shell_workspace(unsigned int index);
 int benchlab_workbench_shell_validate_binding(void);
@@ -129,6 +146,9 @@ int benchlab_workbench_shell_profile_plasma_v2(benchlab_workbench_plasma_profile
 int benchlab_workbench_shell_review_plasma_v2(benchlab_workbench_plasma_review *review_out);
 int benchlab_workbench_shell_release_readiness_plasma_v2(
     benchlab_workbench_plasma_release_readiness *release_out
+);
+int benchlab_workbench_shell_inspect_plasma_v2_instrument(
+    benchlab_workbench_plasma_instrument_inspect *inspect_out
 );
 
 #endif

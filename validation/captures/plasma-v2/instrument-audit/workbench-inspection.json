@@ -1,0 +1,35 @@
+{
+  "claim_boundary": "Workbench inspection evidence only; Workbench consumes ScreenSave proof and does not own runtime truth, artistic acceptance, or release promotion.",
+  "required_fields": [
+    "requested_spec",
+    "resolved_plan",
+    "degradation_reason",
+    "field_pipeline",
+    "material_response",
+    "treatment_stack",
+    "software_reference_path",
+    "gl11_optionality",
+    "capture_refs",
+    "control_influence_status",
+    "review_status",
+    "promotion_status"
+  ],
+  "required_refs": [
+    "validation/captures/plasma-v2/instrument-audit/plan-report.json",
+    "validation/captures/plasma-v2/instrument-audit/field-pipeline-report.json",
+    "validation/captures/plasma-v2/instrument-audit/material-response.json",
+    "validation/captures/plasma-v2/instrument-audit/control-influence.json",
+    "validation/captures/plasma-v2/acceleration/matrix.json",
+    "release-candidate-hold",
+    "not a second runtime",
+    "promotion authority"
+  ],
+  "schema": "screensave.plasma-v2.workbench-instrument-inspection.v1",
+  "source": {
+    "branch": "main",
+    "commit": "f01acf93673f987203efea0dd0252de178eb7089",
+    "dirty": true
+  },
+  "status": "pass",
+  "validation_errors": []
+}

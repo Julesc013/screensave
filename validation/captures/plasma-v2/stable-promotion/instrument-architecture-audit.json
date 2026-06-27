@@ -314,6 +314,24 @@
         "run": {
           "command": [
             "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+            "tools/scripts/check_plasma_v2_workbench_inspection.py"
+          ],
+          "returncode": 0,
+          "status": "pass",
+          "stderr": "",
+          "stdout": "Plasma v2 Workbench inspection checks passed.",
+          "timeout_seconds": 300
+        }
+      },
+      "id": "workbench-inspection",
+      "status": "pass",
+      "summary": "Command passed."
+    },
+    {
+      "data": {
+        "run": {
+          "command": [
+            "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
             "tools/scripts/check_packc.py"
           ],
           "returncode": 0,
@@ -542,6 +560,16 @@
     {
       "data": {
         "evidence": [
+          "tools/scripts/check_plasma_v2_workbench_inspection.py"
+        ]
+      },
+      "id": "workbench_inspection_passes",
+      "status": "pass",
+      "summary": "Workbench must inspect the real Plasma v2 instrument evidence without becoming runtime truth or promotion authority."
+    },
+    {
+      "data": {
+        "evidence": [
           "tools/scripts/check_packc.py"
         ]
       },
@@ -574,7 +602,7 @@
   "schema": "screensave.plasma-v2.instrument-architecture-audit.v1",
   "source": {
     "branch": "main",
-    "commit": "128713723be8434b5979e9b638c5cc5dd967e25c",
+    "commit": "f01acf93673f987203efea0dd0252de178eb7089",
     "dirty": true
   },
   "stable_eligible": false,

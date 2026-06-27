@@ -13,6 +13,7 @@ int main(void)
     benchlab_workbench_plasma_profile plasma_profile;
     benchlab_workbench_plasma_review plasma_review;
     benchlab_workbench_plasma_release_readiness plasma_release;
+    benchlab_workbench_plasma_instrument_inspect plasma_instrument;
     unsigned long nocturne_checksum;
     unsigned long ricochet_checksum;
 
@@ -201,6 +202,21 @@ int main(void)
     }
     if (strcmp(plasma_release.promotion_status, "blocked") != 0) {
         return 51;
+    }
+    if (!benchlab_workbench_shell_inspect_plasma_v2_instrument(&plasma_instrument)) {
+        return 52;
+    }
+    if (strcmp(plasma_instrument.product_key, "plasma") != 0) {
+        return 53;
+    }
+    if (strcmp(plasma_instrument.promotion_status, "release-candidate-hold") != 0) {
+        return 54;
+    }
+    if (strcmp(plasma_instrument.gl11_optionality, "gl11_optional=true; hidden_gl11_minimum=false") != 0) {
+        return 55;
+    }
+    if (plasma_instrument.control_influence_status == 0 || plasma_instrument.material_response == 0) {
+        return 56;
     }
     return 0;
 }

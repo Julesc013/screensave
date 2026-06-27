@@ -40,6 +40,7 @@ SUBCHECKS = [
     ("material-response", ["tools/scripts/check_plasma_v2_material_response.py"]),
     ("material-treatment", ["tools/scripts/check_plasma_v2_materials.py"]),
     ("acceleration-optionality", ["tools/scripts/check_plasma_v2_acceleration.py"]),
+    ("workbench-inspection", ["tools/scripts/check_plasma_v2_workbench_inspection.py"]),
     ("packc-data-only", ["tools/scripts/check_packc.py"]),
     ("visualintent-contract", ["tools/scripts/check_visual_intent_contract.py"]),
     ("aide-boundary", ["tools/scripts/check_aide_evidence_bridge.py"]),
@@ -56,6 +57,7 @@ REQUIRED_GATE_IDS = [
     "treatment_boundaries_pass",
     "software_reference_is_canonical",
     "gl11_is_not_hidden_minimum",
+    "workbench_inspection_passes",
     "packc_data_only_passes",
     "visualintent_candidates_reduce_to_plasma_spec",
     "aide_not_runtime_or_truth",
@@ -385,6 +387,14 @@ def build_report() -> dict[str, Any]:
         "GDI remains the floor and GL11 remains optional.",
         missing=gl_missing,
         evidence=["tools/scripts/check_plasma_v2_acceleration.py"],
+    )
+
+    gate(
+        gates,
+        "workbench_inspection_passes",
+        "pass" if subcheck_status(subchecks, "workbench-inspection") else "fail",
+        "Workbench must inspect the real Plasma v2 instrument evidence without becoming runtime truth or promotion authority.",
+        evidence=["tools/scripts/check_plasma_v2_workbench_inspection.py"],
     )
 
     gate(
