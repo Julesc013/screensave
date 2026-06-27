@@ -1,0 +1,33 @@
+{
+  "schema": "screensave.plasma-v2.stable-promotion.workbench-review.v1",
+  "status": "pass-with-hold",
+  "candidate_id": "plasma-v2-rc1",
+  "surface": "Workbench stable-promotion inspection",
+  "source_ref": "products/apps/benchlab/src/benchlab_workbench_shell.c",
+  "checker": "tools/scripts/check_workbench_shell.py",
+  "shows": {
+    "proof_status": true,
+    "performance_envelope": true,
+    "visual_decision": true,
+    "support_claims": true,
+    "package_stage": true,
+    "promotion_state": true,
+    "publication_state": true,
+    "stable_hold": true
+  },
+  "authority": {
+    "publishes_release": false,
+    "promotes_stable": false,
+    "certifies_compatibility": false,
+    "duplicates_proof_runner": false,
+    "overrides_artistic_decision": false
+  },
+  "refs": {
+    "proof_bundle": "validation/captures/plasma-v2/stable-promotion/proof-bundle-v1.json",
+    "performance_envelope": "validation/captures/plasma-v2/performance/envelope.json",
+    "artistic_decision": "validation/captures/plasma-v2/final-artistic-decision/decision.stable.toml",
+    "support_claims": "validation/captures/plasma-v2/stable-promotion/support-claims.json",
+    "package_manifest": "packaging/windows/plasma-v2-stable-promotion/manifest.toml"
+  },
+  "claim_boundary": "Workbench stable-promotion review only; no release publication, stable promotion, compatibility certification, duplicate proof authority, or artistic-decision override."
+}

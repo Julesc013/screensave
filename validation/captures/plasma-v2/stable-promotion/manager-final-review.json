@@ -1,0 +1,34 @@
+{
+  "schema": "screensave.plasma-v2.stable-promotion.manager-review.v1",
+  "status": "pass-with-hold",
+  "candidate_id": "plasma-v2-rc1",
+  "surface": "Manager preview",
+  "source_ref": "products/apps/suite/src/manager_pack_preview.c",
+  "checker": "tools/scripts/check_manager_pack_preview.py",
+  "shows": {
+    "package_manifest": true,
+    "pack_manifest": true,
+    "provenance": true,
+    "license": true,
+    "support_class": true,
+    "installability_refusal_status": true,
+    "proof_refs": true,
+    "rollback_notes": true
+  },
+  "mutation": {
+    "install_mutation": false,
+    "release_publication": false,
+    "stable_promotion": false,
+    "compatibility_certification": false
+  },
+  "refs": {
+    "package_manifest": "packaging/windows/plasma-v2-stable-promotion/manifest.toml",
+    "pack_manifest": "products/savers/plasma/content/v2/examples/plasma_lava_v2.toml",
+    "provenance": "packaging/windows/plasma-v2-stable-promotion/provenance.json",
+    "rollback_notes": "packaging/windows/plasma-v2-stable-promotion/rollback-notes.md",
+    "proof_matrix": "validation/captures/plasma-v2/stable-promotion/proof-matrix.json",
+    "support_claims": "validation/captures/plasma-v2/stable-promotion/support-claims.json",
+    "stable_artistic_decision": "validation/captures/plasma-v2/final-artistic-decision/decision.stable.toml"
+  },
+  "claim_boundary": "Manager stable-promotion review only; no install mutation, release publication, stable promotion, or compatibility certification."
+}
