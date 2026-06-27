@@ -5,13 +5,20 @@
     "automatic_merge": false,
     "automatic_release": false,
     "claim_boundary": "Proposal-only AIDE session; no source mutation, automatic apply, merge, release, compatibility certification, or final artistic acceptance.",
-    "proposal_ref": "out/aide/agentic/SS-PLV2-IR12/proposal.json",
-    "receipt_ref": "out/aide/agentic/SS-PLV2-IR12/session-receipt.json",
+    "proposal_ref": "out/aide/agentic/SS-PLV2-IR-REPAIR-001/proposal.json",
+    "receipt_ref": "out/aide/agentic/SS-PLV2-IR-REPAIR-001/session-receipt.json",
     "source_mutation_by_aide": false,
-    "task": "SS-PLV2-IR12"
+    "task": "SS-PLV2-IR-REPAIR-001"
   },
+  "blocker": "legacy_preset_authority_removed",
   "claim_boundary": "AIDE repair evidence only; ScreenSave validators, proof, project policy, and human artistic acceptance remain authoritative.",
+  "legacy_preset_authority_removed": true,
   "plans": {
+    "instrument_architecture_gap": {
+      "matching_count": 1,
+      "output": "out/aide/repairs/plan-instrument_architecture_gap.json",
+      "status": "pass"
+    },
     "proof_baseline_drift": {
       "matching_count": 0,
       "output": "out/aide/repairs/plan-proof_baseline_drift.json",
@@ -30,6 +37,12 @@
   },
   "remaining_blockers": [
     {
+      "claim_boundary": "VisualIntent resolver evidence remains deferred; no executable AI runtime, source generation, automatic promotion, or stable claim.",
+      "id": "visualintent_candidates_reduce_to_plasma_spec",
+      "status": "blocking",
+      "title": "Admit VisualIntent candidates through Plasma v2 specs"
+    },
+    {
       "claim_boundary": "Repair records the missing final stable artistic verdict only; no automatic acceptance, release, promotion, or compatibility certification.",
       "id": "SS-PLV2-I-REPAIR-001",
       "repair_class": "release_readiness_gap",
@@ -37,11 +50,19 @@
       "title": "Record explicit Plasma v2 final stable artistic verdict"
     }
   ],
+  "repair_class": "instrument_architecture_gap",
+  "repair_evidence": [
+    "validation/captures/plasma-v2/instrument-audit/legacy-authority-report.json",
+    "validation/captures/plasma-v2/instrument-audit/migration-report.json",
+    "validation/captures/plasma-v2/instrument-audit/workbench-inspection.json",
+    "validation/captures/plasma-v2/stable-promotion/instrument-architecture-audit.json"
+  ],
   "scan": {
     "output": "out/aide/repairs/scan.json",
-    "repair_count": 2,
+    "repair_count": 3,
     "status": "pass"
   },
   "schema": "screensave.plasma-v2.aide-instrument-repair-summary.v1",
-  "status": "pass"
+  "status": "pass",
+  "work_unit": "SS-PLV2-IR-REPAIR-001"
 }

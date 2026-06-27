@@ -1,7 +1,7 @@
 schema_version = 1
 id = "plasma-v2-instrument-repair-ledger"
 status = "active"
-as_of = "2026-06-27"
+as_of = "2026-06-28"
 product = "plasma"
 profile = "plasma.v2.reference.preview"
 truth_boundary = "ScreenSave proof, instrument validators, and human/project policy remain authoritative; AIDE records repair evidence and proposals only."
@@ -15,26 +15,44 @@ automatic_release = false
 stable_promotion = false
 compatibility_certification = false
 final_artistic_acceptance = false
-claim_boundary = "AIDE instrument-repair evidence records PAW-I-R1 repair scans, plans, and proposal-only receipts; it does not decide product truth, mutate runtime, approve art, certify compatibility, publish, or promote stable."
+claim_boundary = "AIDE instrument-repair evidence records PAW-I-R2 repair scans, plans, and proposal-only receipts; it does not decide product truth, mutate runtime, approve art, certify compatibility, publish, or promote stable."
 
 [claims]
 repair_scan = "pass"
 release_readiness_gap_plan = "blocking-repair-found"
+instrument_architecture_gap_plan = "legacy-authority-repair-recorded"
 proof_baseline_drift_plan = "no-matching-repairs"
 workbench_surface_drift_plan = "no-matching-repairs"
 agentic_session = "proposal-only"
 aide_runtime_dependency = false
 source_mutation_by_aide = false
 automatic_promotion = false
+work_unit = "SS-PLV2-IR-REPAIR-001"
+repair_class = "instrument_architecture_gap"
+blocker = "legacy_preset_authority_removed"
+legacy_preset_authority_removed = true
+legacy_authority_report = "pass"
+migration_report = "pass"
+workbench_shell_validation = "pass"
+instrument_architecture_reaudit = "hold"
 remaining_blocker = "SS-PLV2-I-REPAIR-001"
+remaining_blockers = [
+  "visualintent_candidates_reduce_to_plasma_spec",
+  "final stable artistic acceptance",
+]
 
 [refs]
 repair_scan = "out/aide/repairs/scan.json"
 release_readiness_gap_plan = "out/aide/repairs/plan-release_readiness_gap.json"
+instrument_architecture_gap_plan = "out/aide/repairs/plan-instrument_architecture_gap.json"
 proof_baseline_drift_plan = "out/aide/repairs/plan-proof_baseline_drift.json"
 workbench_surface_drift_plan = "out/aide/repairs/plan-workbench_surface_drift.json"
-agentic_proposal = "out/aide/agentic/SS-PLV2-IR12/proposal.json"
-agentic_receipt = "out/aide/agentic/SS-PLV2-IR12/session-receipt.json"
+agentic_proposal = "out/aide/agentic/SS-PLV2-IR-REPAIR-001/proposal.json"
+agentic_receipt = "out/aide/agentic/SS-PLV2-IR-REPAIR-001/session-receipt.json"
 instrument_summary = "validation/captures/plasma-v2/instrument-audit/aide-repair-summary.json"
+legacy_authority_report = "validation/captures/plasma-v2/instrument-audit/legacy-authority-report.json"
+migration_report = "validation/captures/plasma-v2/instrument-audit/migration-report.json"
+workbench_inspection = "validation/captures/plasma-v2/instrument-audit/workbench-inspection.json"
+instrument_architecture_reaudit = "validation/captures/plasma-v2/stable-promotion/instrument-architecture-audit.json"
 repair_queue = ".aide/repairs/index.toml"
 work_unit = ".aide/work_units/plasma-v2-instrument-repair.toml"

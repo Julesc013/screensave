@@ -21,6 +21,7 @@ repair_classes = [
   "artifact_manifest_drift",
   "package_checksum_drift",
   "workbench_surface_drift",
+  "instrument_architecture_gap",
   "release_readiness_gap",
 ]
 
@@ -35,6 +36,46 @@ expected_validators = ["py -3 tools/scripts/check_repair_queue.py"]
 evidence_outputs = ["out/aide/repairs/scan.json"]
 claim_boundary = "Repair scan only; no source mutation, merge, release, or certification."
 rollback_point = "00f885b"
+
+[[repairs]]
+id = "SS-PLV2-IR-REPAIR-001"
+title = "Contain legacy Plasma preset authority behind v2 instrument truth"
+repair_class = "instrument_architecture_gap"
+status = "completed"
+allowed_paths = [
+  "products/savers/plasma/src/v2/**",
+  "products/savers/plasma/src/plasma_config.c",
+  "products/savers/plasma/src/plasma_presets.c",
+  "products/savers/plasma/src/plasma_themes.c",
+  "products/savers/plasma/src/plasma_content.c",
+  "products/savers/plasma/src/plasma_selection.c",
+  "products/savers/plasma/src/plasma_benchlab.c",
+  "products/savers/plasma/docs/**",
+  "products/apps/benchlab/**",
+  "tools/scripts/check_plasma_legacy_boundary.py",
+  "tools/scripts/check_plasma_product_center.py",
+  "tools/scripts/check_plasma_v2_migration.py",
+  "tools/scripts/check_plasma_v2_workbench_inspection.py",
+  "tools/scripts/check_workbench_shell.py",
+  "validation/captures/plasma-v2/instrument-audit/**",
+  "validation/captures/plasma-v2/stable-promotion/instrument-architecture-audit.*",
+]
+forbidden_paths = ["platform/**", "releases/**"]
+expected_validators = [
+  "py -3 tools/scripts/check_plasma_legacy_boundary.py",
+  "py -3 tools/scripts/check_plasma_product_center.py",
+  "py -3 tools/scripts/check_plasma_v2_migration.py",
+  "py -3 tools/scripts/check_workbench_shell.py",
+  "py -3 tools/scripts/check_plasma_instrument_architecture.py",
+]
+evidence_outputs = [
+  "validation/captures/plasma-v2/instrument-audit/legacy-authority-report.json",
+  "validation/captures/plasma-v2/instrument-audit/migration-report.json",
+  "validation/captures/plasma-v2/instrument-audit/workbench-inspection.json",
+  "validation/captures/plasma-v2/stable-promotion/instrument-architecture-audit.json",
+]
+claim_boundary = "Repair records legacy preset authority containment only; no release, stable promotion, compatibility certification, publication, or final artistic acceptance."
+rollback_point = "8cba4d5"
 
 [[repairs]]
 id = "SS-PLV2-I-REPAIR-001"

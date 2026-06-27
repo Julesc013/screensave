@@ -37,6 +37,7 @@ REQUIRED_IDS = {
     "windows-current-pe-audit-json",
     "proof-bundle-v1-portable-v2",
     "aide-evidence-packets",
+    "plasma-v2-instrument-repair",
 }
 
 
@@ -87,6 +88,7 @@ def main() -> int:
             "plasma-v2-acceleration-candidate",
             "plasma-v2-performance-envelope",
             "plasma-v2-stable-candidate-review",
+            "plasma-v2-instrument-repair",
             "compatibility certification",
             "artistic acceptance",
             "release promotion",

@@ -17,6 +17,7 @@ repair_classes:
   - artifact_manifest_drift
   - package_checksum_drift
   - workbench_surface_drift
+  - instrument_architecture_gap
   - release_readiness_gap
 commit_body_required:
   - WorkUnit

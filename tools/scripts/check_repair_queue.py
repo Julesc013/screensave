@@ -31,6 +31,7 @@ REPAIR_CLASSES = {
     "artifact_manifest_drift",
     "package_checksum_drift",
     "workbench_surface_drift",
+    "instrument_architecture_gap",
     "release_readiness_gap",
 }
 
@@ -92,6 +93,29 @@ def main() -> int:
         for repair in queue.get("repairs", []):
             if isinstance(repair, dict):
                 validate_repair(repair, str(repair.get("id", "repair")), errors)
+        legacy_repair = next(
+            (item for item in queue.get("repairs", []) if isinstance(item, dict) and item.get("id") == "SS-PLV2-IR-REPAIR-001"),
+            None,
+        )
+        require(legacy_repair is not None, "repair queue must record SS-PLV2-IR-REPAIR-001.", errors)
+        if legacy_repair is not None:
+            require(
+                legacy_repair.get("repair_class") == "instrument_architecture_gap",
+                "SS-PLV2-IR-REPAIR-001 must be an instrument_architecture_gap repair.",
+                errors,
+            )
+            require(
+                legacy_repair.get("status") == "completed",
+                "SS-PLV2-IR-REPAIR-001 must be recorded as completed evidence.",
+                errors,
+            )
+            outputs = set(legacy_repair.get("evidence_outputs", []))
+            for ref in [
+                "validation/captures/plasma-v2/instrument-audit/legacy-authority-report.json",
+                "validation/captures/plasma-v2/instrument-audit/migration-report.json",
+                "validation/captures/plasma-v2/instrument-audit/workbench-inspection.json",
+            ]:
+                require(ref in outputs, f"SS-PLV2-IR-REPAIR-001 missing evidence output {ref}.", errors)
         burn = queue.get("release_candidate_burndown", {})
         if burn:
             require(
@@ -128,6 +152,7 @@ def main() -> int:
         for needle in [
             "validator_failure",
             "generated_catalog_drift",
+            "instrument_architecture_gap",
             "release_readiness_gap",
             "source_mutation_by_aide: false",
             "automatic_merge: false",

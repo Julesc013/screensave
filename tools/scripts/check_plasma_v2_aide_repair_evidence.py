@@ -47,14 +47,54 @@ def main() -> int:
         ):
             require(ledger.get(key) is False, f"AIDE instrument repair ledger {key} must be false.", errors)
         claims = ledger.get("claims", {})
+        refs = ledger.get("refs", {})
         require(claims.get("agentic_session") == "proposal-only", "AIDE agentic session must remain proposal-only.", errors)
+        require(claims.get("work_unit") == "SS-PLV2-IR-REPAIR-001", "AIDE ledger must record the PAW-I-R2 repair WorkUnit.", errors)
+        require(claims.get("repair_class") == "instrument_architecture_gap", "AIDE ledger must record the instrument architecture repair class.", errors)
+        require(claims.get("blocker") == "legacy_preset_authority_removed", "AIDE ledger must record the repaired legacy authority blocker.", errors)
+        require(claims.get("legacy_preset_authority_removed") is True, "AIDE ledger must record the legacy authority blocker as cleared.", errors)
+        require(claims.get("legacy_authority_report") == "pass", "AIDE ledger must record the legacy authority report pass.", errors)
+        require(claims.get("migration_report") == "pass", "AIDE ledger must record the migration report pass.", errors)
+        require(claims.get("workbench_shell_validation") == "pass", "AIDE ledger must record the Workbench validation pass.", errors)
         require(claims.get("remaining_blocker") == "SS-PLV2-I-REPAIR-001", "AIDE summary must record the remaining stable artistic verdict blocker.", errors)
+        require(
+            "visualintent_candidates_reduce_to_plasma_spec" in claims.get("remaining_blockers", []),
+            "AIDE ledger must preserve the VisualIntent blocker.",
+            errors,
+        )
+        for ref_key in [
+            "legacy_authority_report",
+            "migration_report",
+            "workbench_inspection",
+            "instrument_architecture_reaudit",
+        ]:
+            require(ref_key in refs, f"AIDE ledger missing repair evidence ref {ref_key}.", errors)
         require(summary.get("status") == "pass", "AIDE repair summary status must pass.", errors)
+        require(summary.get("work_unit") == "SS-PLV2-IR-REPAIR-001", "AIDE repair summary must record SS-PLV2-IR-REPAIR-001.", errors)
+        require(summary.get("repair_class") == "instrument_architecture_gap", "AIDE repair summary must record instrument_architecture_gap.", errors)
+        require(summary.get("blocker") == "legacy_preset_authority_removed", "AIDE repair summary must record the repaired blocker.", errors)
+        require(summary.get("legacy_preset_authority_removed") is True, "AIDE repair summary must record the legacy authority blocker as cleared.", errors)
         require(summary.get("agentic", {}).get("agent_mode") == "proposal-only", "AIDE repair summary must record proposal-only mode.", errors)
+        require(summary.get("agentic", {}).get("task") == "SS-PLV2-IR-REPAIR-001", "AIDE repair summary must record the PAW-I-R2 agentic task.", errors)
         require(summary.get("agentic", {}).get("source_mutation_by_aide") is False, "AIDE repair summary must record no source mutation.", errors)
+        require(summary.get("plans", {}).get("instrument_architecture_gap", {}).get("matching_count") == 1, "AIDE repair summary must record one instrument_architecture_gap repair.", errors)
         require(summary.get("plans", {}).get("release_readiness_gap", {}).get("matching_count") == 1, "AIDE repair summary must record one release_readiness_gap blocker.", errors)
         require(summary.get("plans", {}).get("proof_baseline_drift", {}).get("matching_count") == 0, "AIDE repair summary must record no proof baseline drift repairs.", errors)
         require(summary.get("plans", {}).get("workbench_surface_drift", {}).get("matching_count") == 0, "AIDE repair summary must record no Workbench surface drift repairs.", errors)
+        repair_evidence = set(summary.get("repair_evidence", []))
+        for ref in [
+            "validation/captures/plasma-v2/instrument-audit/legacy-authority-report.json",
+            "validation/captures/plasma-v2/instrument-audit/migration-report.json",
+            "validation/captures/plasma-v2/instrument-audit/workbench-inspection.json",
+            "validation/captures/plasma-v2/stable-promotion/instrument-architecture-audit.json",
+        ]:
+            require(ref in repair_evidence, f"AIDE repair summary missing repair evidence {ref}.", errors)
+        remaining_ids = {item.get("id") for item in summary.get("remaining_blockers", []) if isinstance(item, dict)}
+        require(
+            {"visualintent_candidates_reduce_to_plasma_spec", "SS-PLV2-I-REPAIR-001"} <= remaining_ids,
+            "AIDE repair summary must preserve VisualIntent and final artistic acceptance blockers.",
+            errors,
+        )
         require("plasma-v2-instrument-repair" in index_text, "AIDE evidence index must track the instrument repair ledger.", errors)
         require("human artistic acceptance remain authoritative" in index_text, "AIDE evidence index must preserve the human acceptance boundary.", errors)
 
