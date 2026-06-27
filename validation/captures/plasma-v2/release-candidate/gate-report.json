@@ -1,0 +1,416 @@
+{
+  "candidate_id": "plasma-v2-rc1",
+  "claim_boundary": "Release-candidate gate only; not stable release, release publication, compatibility certification, public SDK stability, all-saver migration, or automatic promotion.",
+  "product": "plasma",
+  "profile": "plasma.v2.reference.preview",
+  "results": [
+    {
+      "id": "portable-v2-accepted",
+      "payload": {
+        "observed": "accepted"
+      },
+      "status": "pass",
+      "summary": "Portable v2 must be accepted before Plasma release-candidate work."
+    },
+    {
+      "id": "plasma-status",
+      "payload": {
+        "observed": "release-readiness-reviewed"
+      },
+      "status": "pass",
+      "summary": "Plasma v2 must be at release-readiness-reviewed before transition or release-candidate after transition."
+    },
+    {
+      "id": "plasma-not-stable",
+      "payload": {
+        "release_promotion": "blocked",
+        "stable": false
+      },
+      "status": "pass",
+      "summary": "Plasma v2 must remain not stable and release promotion must remain blocked."
+    },
+    {
+      "id": "pre-transition-release-candidate",
+      "payload": {
+        "authority_release_candidate": "none",
+        "plasma_release_candidate": "none"
+      },
+      "status": "pass",
+      "summary": "Before transition, the release candidate must still be none."
+    },
+    {
+      "id": "pre-transition-active-program",
+      "payload": {
+        "observed": "plasma-v2-release-candidate"
+      },
+      "status": "pass",
+      "summary": "Before transition, the active program must be plasma-v2-release-candidate."
+    },
+    {
+      "id": "path-contract",
+      "payload": {},
+      "status": "pass",
+      "summary": "Required release-candidate input exists: contracts/plasma_release_candidate_v1.md"
+    },
+    {
+      "id": "path-candidate_package",
+      "payload": {},
+      "status": "pass",
+      "summary": "Required release-candidate input exists: packaging/windows/plasma-v2-release-candidate/manifest.toml"
+    },
+    {
+      "id": "path-candidate_checksums",
+      "payload": {},
+      "status": "pass",
+      "summary": "Required release-candidate input exists: packaging/windows/plasma-v2-release-candidate/checksums.sha256"
+    },
+    {
+      "id": "path-proof_matrix",
+      "payload": {},
+      "status": "pass",
+      "summary": "Required release-candidate input exists: validation/captures/plasma-v2/release-candidate/proof-matrix.json"
+    },
+    {
+      "id": "path-proof_bundle",
+      "payload": {},
+      "status": "pass",
+      "summary": "Required release-candidate input exists: validation/captures/plasma-v2/release-candidate/proof-bundle-v1.json"
+    },
+    {
+      "id": "path-evidence_index",
+      "payload": {},
+      "status": "pass",
+      "summary": "Required release-candidate input exists: validation/captures/plasma-v2/release-candidate/evidence-index.json"
+    },
+    {
+      "id": "path-support_claims",
+      "payload": {},
+      "status": "pass",
+      "summary": "Required release-candidate input exists: validation/captures/plasma-v2/release-candidate/support-claims.json"
+    },
+    {
+      "id": "path-artistic_decision",
+      "payload": {},
+      "status": "pass",
+      "summary": "Required release-candidate input exists: validation/captures/plasma-v2/final-artistic-decision/decision.release-candidate.toml"
+    },
+    {
+      "id": "path-manager_review",
+      "payload": {},
+      "status": "pass",
+      "summary": "Required release-candidate input exists: validation/captures/plasma-v2/release-candidate/manager-review.json"
+    },
+    {
+      "id": "path-workbench_review",
+      "payload": {},
+      "status": "pass",
+      "summary": "Required release-candidate input exists: validation/captures/plasma-v2/release-candidate/workbench-review.json"
+    },
+    {
+      "id": "path-repair_burndown",
+      "payload": {},
+      "status": "pass",
+      "summary": "Required release-candidate input exists: validation/captures/plasma-v2/release-candidate/repair-burndown.json"
+    },
+    {
+      "id": "path-agentic_policy",
+      "payload": {},
+      "status": "pass",
+      "summary": "Required release-candidate input exists: .aide/agentic/release-candidate-policy.toml"
+    },
+    {
+      "id": "artistic-decision",
+      "payload": {
+        "decision_state": "accepted-for-release-candidate"
+      },
+      "status": "pass",
+      "summary": "Artistic decision must accept release-candidate only and block stable/certification claims."
+    },
+    {
+      "id": "support-claims",
+      "payload": {
+        "support": {
+          "candidate_id": "plasma-v2-rc1",
+          "claim_boundary": "Support claims are evidence-classed release-candidate wording only; not stable release, release publication, compatibility certification, or all-saver migration.",
+          "claims": {
+            "current_windows_artifact_evidence": "supports release-candidate readiness only",
+            "gl11_candidate": "first optional acceleration candidate only",
+            "manager_preview": "preview/refusal facts only; no install mutation",
+            "packc_v1_candidate": "data-only packs only; no executable plugin ecosystem",
+            "pe_audit_zero_violations": "binary facts only; not OS certification",
+            "stable_release": "blocked",
+            "workbench_release_readiness": "inspection facts only; no publication"
+          },
+          "compatibility_certification": "not-claimed",
+          "refs": {
+            "compatibility_notes": "docs/compatibility/plasma-v2-release-candidate.md",
+            "compatibility_spec": "specs/compatibility.md",
+            "package_manifest": "packaging/windows/plasma-v2-release-candidate/manifest.toml",
+            "package_support_matrix": "packaging/windows/plasma-v2-release-candidate/support-matrix.md",
+            "product_support_matrix": "products/savers/plasma/docs/plasma-v2-support-matrix.md"
+          },
+          "release_promotion": "blocked",
+          "schema": "screensave.plasma-v2.release-candidate.support-claims.v1",
+          "stable": false,
+          "status": "pass"
+        }
+      },
+      "status": "pass",
+      "summary": "Support claims must remain not-stable, release-blocked, and uncertified."
+    },
+    {
+      "id": "repair-burndown",
+      "payload": {
+        "open_blocking_count": 0
+      },
+      "status": "pass",
+      "summary": "Repair queue must have no open blocking release-candidate repairs."
+    },
+    {
+      "id": "package-not-published",
+      "payload": {
+        "package": {
+          "artifact_refs": {
+            "artifact_evidence_class": "buildable",
+            "build_command": "py -3 tools/buildctl/screensave_build.py build --profile windows-current-x86",
+            "build_profile": "windows-current-x86",
+            "plasma_scr_current": "out/msvc/vs2017_xp/Release/plasma/plasma.scr",
+            "plasma_scr_current_sha256": "72871f8ce5f4b45ba62663c82a32ea30e2beb6973663bd5203884d498bc74ec3"
+          },
+          "candidate_id": "plasma-v2-rc1",
+          "claim_boundary": "Release-candidate package stage only; not publication, stable release, final stable artistic acceptance, compatibility certification, or installer admission.",
+          "compatibility_certification": "not-claimed",
+          "evidence_refs": {
+            "aide_evidence_index": ".aide/evidence/index.toml",
+            "package_check": "tools/scripts/check_plasma_v2_package_stage.py"
+          },
+          "installer_admission": "not-admitted",
+          "pack_refs": {
+            "example_pack": "products/savers/plasma/content/v2/examples/plasma_lava_v2.toml",
+            "packc_check": "py -3 tools/scripts/check_packc.py",
+            "packc_status": "v1-candidate"
+          },
+          "package_id": "screensave.plasma-v2.rc1-stage",
+          "product": "plasma",
+          "profile": "plasma.v2.reference.preview",
+          "proof_refs": {
+            "final_artistic_decision": "validation/captures/plasma-v2/final-artistic-decision/decision.release-candidate.toml",
+            "performance_envelope": "validation/captures/plasma-v2/performance/envelope.json",
+            "profile_proof": "validation/captures/plasma-v2/reference-preview/profile-proof.json",
+            "proof_bundle": "validation/captures/plasma-v2/reference-preview/proof-bundle-v1.json",
+            "release_candidate_contract": "contracts/plasma_release_candidate_v1.md",
+            "release_readiness_gate": "validation/captures/plasma-v2/release-readiness/gate-report.json",
+            "stable_candidate_gate": "validation/captures/plasma-v2/stable-candidate/gate-report.json"
+          },
+          "public_release": false,
+          "published": false,
+          "release_promotion": "blocked",
+          "review_refs": {
+            "manager_preview": "products/apps/suite/src/manager_pack_preview.c",
+            "workbench_release_readiness": "products/apps/benchlab/src/benchlab_workbench_shell.c"
+          },
+          "schema_version": 1,
+          "stable": false,
+          "status": "staged-release-candidate",
+          "support": {
+            "checksums": "packaging/windows/plasma-v2-release-candidate/checksums.sha256",
+            "install_notes": "packaging/windows/plasma-v2-release-candidate/install-notes.md",
+            "known_limits": "packaging/windows/plasma-v2-release-candidate/known-limits.md",
+            "provenance": "packaging/windows/plasma-v2-release-candidate/provenance.json",
+            "rollback_notes": "packaging/windows/plasma-v2-release-candidate/rollback-notes.md",
+            "support_matrix": "packaging/windows/plasma-v2-release-candidate/support-matrix.md"
+          },
+          "support_class": "buildable"
+        }
+      },
+      "status": "pass",
+      "summary": "Release-candidate package must remain staged only."
+    },
+    {
+      "id": "fixed-release-candidate-capabilities",
+      "payload": {
+        "missing": []
+      },
+      "status": "pass",
+      "summary": "Fixed release-candidate capabilities must be exposed."
+    },
+    {
+      "id": "no-generic-or-promotion-capabilities",
+      "payload": {
+        "forbidden_hits": []
+      },
+      "status": "pass",
+      "summary": "Generic command, release, stable-promotion, and agent-apply capabilities must remain absent."
+    },
+    {
+      "id": "no-release-overclaims",
+      "payload": {
+        "hits": []
+      },
+      "status": "pass",
+      "summary": "No publication, stable, certification, or promotion overclaim may exist."
+    },
+    {
+      "id": "validator-check_plasma_v2_release_candidate_contract",
+      "payload": {
+        "run": {
+          "command": "tools/scripts/check_plasma_v2_release_candidate_contract.py",
+          "returncode": 0,
+          "status": "pass",
+          "stderr_tail": [],
+          "stdout_tail": [
+            "Plasma v2 release-candidate contract checks passed."
+          ]
+        }
+      },
+      "status": "pass",
+      "summary": "Required release-candidate validator must pass."
+    },
+    {
+      "id": "validator-check_plasma_v2_package_stage",
+      "payload": {
+        "run": {
+          "command": "tools/scripts/check_plasma_v2_package_stage.py",
+          "returncode": 0,
+          "status": "pass",
+          "stderr_tail": [],
+          "stdout_tail": [
+            "Plasma v2 package stage checks passed."
+          ]
+        }
+      },
+      "status": "pass",
+      "summary": "Required release-candidate validator must pass."
+    },
+    {
+      "id": "validator-check_plasma_v2_release_candidate_evidence",
+      "payload": {
+        "run": {
+          "command": "tools/scripts/check_plasma_v2_release_candidate_evidence.py",
+          "returncode": 0,
+          "status": "pass",
+          "stderr_tail": [],
+          "stdout_tail": [
+            "Plasma v2 release-candidate evidence checks passed."
+          ]
+        }
+      },
+      "status": "pass",
+      "summary": "Required release-candidate validator must pass."
+    },
+    {
+      "id": "validator-check_plasma_v2_artistic_decision",
+      "payload": {
+        "run": {
+          "command": "tools/scripts/check_plasma_v2_artistic_decision.py",
+          "returncode": 0,
+          "status": "pass",
+          "stderr_tail": [],
+          "stdout_tail": [
+            "Plasma v2 artistic decision checks passed."
+          ]
+        }
+      },
+      "status": "pass",
+      "summary": "Required release-candidate validator must pass."
+    },
+    {
+      "id": "validator-check_support_claims",
+      "payload": {
+        "run": {
+          "command": "tools/scripts/check_support_claims.py",
+          "returncode": 0,
+          "status": "pass",
+          "stderr_tail": [],
+          "stdout_tail": [
+            "Plasma v2 support claim checks passed."
+          ]
+        }
+      },
+      "status": "pass",
+      "summary": "Required release-candidate validator must pass."
+    },
+    {
+      "id": "validator-check_plasma_v2_release_candidate_review",
+      "payload": {
+        "run": {
+          "command": "tools/scripts/check_plasma_v2_release_candidate_review.py",
+          "returncode": 0,
+          "status": "pass",
+          "stderr_tail": [],
+          "stdout_tail": [
+            "Plasma v2 release-candidate review checks passed."
+          ]
+        }
+      },
+      "status": "pass",
+      "summary": "Required release-candidate validator must pass."
+    },
+    {
+      "id": "validator-check_agentic_policy",
+      "payload": {
+        "run": {
+          "command": "tools/scripts/check_agentic_policy.py",
+          "returncode": 0,
+          "status": "pass",
+          "stderr_tail": [],
+          "stdout_tail": [
+            "AIDE agentic policy checks passed."
+          ]
+        }
+      },
+      "status": "pass",
+      "summary": "Required release-candidate validator must pass."
+    },
+    {
+      "id": "validator-check_agentic_receipts",
+      "payload": {
+        "run": {
+          "command": "tools/scripts/check_agentic_receipts.py",
+          "returncode": 0,
+          "status": "pass",
+          "stderr_tail": [],
+          "stdout_tail": [
+            "AIDE agentic receipt checks passed."
+          ]
+        }
+      },
+      "status": "pass",
+      "summary": "Required release-candidate validator must pass."
+    },
+    {
+      "id": "validator-check_repair_queue",
+      "payload": {
+        "run": {
+          "command": "tools/scripts/check_repair_queue.py",
+          "returncode": 0,
+          "status": "pass",
+          "stderr_tail": [],
+          "stdout_tail": [
+            "Repair queue checks passed."
+          ]
+        }
+      },
+      "status": "pass",
+      "summary": "Required release-candidate validator must pass."
+    },
+    {
+      "id": "validator-check_project_adapter",
+      "payload": {
+        "run": {
+          "command": "tools/scripts/check_project_adapter.py",
+          "returncode": 0,
+          "status": "pass",
+          "stderr_tail": [],
+          "stdout_tail": [
+            "Project adapter checks passed."
+          ]
+        }
+      },
+      "status": "pass",
+      "summary": "Required release-candidate validator must pass."
+    }
+  ],
+  "schema": "screensave.plasma-v2.release-candidate-gate.v1",
+  "status": "pass"
+}
