@@ -113,13 +113,13 @@
         "role": "new_product_center"
       },
       {
-        "exists": false,
+        "exists": true,
         "kind": "file",
         "path": "products/savers/plasma/src/v2/plasma_v2_plan.h",
         "role": "new_product_center"
       },
       {
-        "exists": false,
+        "exists": true,
         "kind": "file",
         "path": "products/savers/plasma/src/v2/plasma_v2_plan.c",
         "role": "new_product_center"
@@ -153,7 +153,7 @@
   "schema": "screensave.plasma-v2.product-center-report.v1",
   "source": {
     "branch": "main",
-    "commit": "049f643a03decdefc48b767d3819f513d0cdcc44",
+    "commit": "345b52dc652d34263a2975bc1d1f224d54b92f81",
     "dirty": true
   },
   "stable_eligible": false,

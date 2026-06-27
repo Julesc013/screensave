@@ -28,6 +28,7 @@ LEGACY_BOUNDARY_REPORT = INSTRUMENT_AUDIT_DIR / "legacy-boundary-report.json"
 SUBCHECKS = [
     ("direct-spec", ["tools/scripts/check_plasma_v2_direct_spec.py"]),
     ("spec-v2-authority", ["tools/scripts/check_plasma_spec_v2.py"]),
+    ("plan-contract", ["tools/scripts/check_plasma_v2_plan.py"]),
     ("product-center-boundary", ["tools/scripts/check_plasma_product_center.py"]),
     ("legacy-boundary", ["tools/scripts/check_plasma_legacy_boundary.py"]),
     ("legacy-core-boundaries", ["tools/scripts/check_plasma_core_boundaries.py"]),
@@ -267,9 +268,10 @@ def build_report() -> dict[str, Any]:
     gate(
         gates,
         "plasma_v2_plan_contract_passes",
-        "pass" if all(path.exists() for path in plan_files) else "hold",
-        "The direct v2 plan contract must exist in the v2 island before stable promotion.",
+        "pass" if all(path.exists() for path in plan_files) and subcheck_status(subchecks, "plan-contract") else "hold",
+        "The direct v2 plan contract must exist in the v2 island and pass the degradation-law checker before stable promotion.",
         missing=[repo_path(path) for path in plan_files if not path.exists()],
+        evidence=["tools/scripts/check_plasma_v2_plan.py"],
     )
 
     runtime_files = [V2_ISLAND / "plasma_v2_runtime.h", V2_ISLAND / "plasma_v2_runtime.c"]

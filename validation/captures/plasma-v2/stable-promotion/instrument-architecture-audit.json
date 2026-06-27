@@ -98,6 +98,24 @@
         "run": {
           "command": [
             "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+            "tools/scripts/check_plasma_v2_plan.py"
+          ],
+          "returncode": 0,
+          "status": "pass",
+          "stderr": "",
+          "stdout": "Plasma v2 plan checks passed.",
+          "timeout_seconds": 300
+        }
+      },
+      "id": "plan-contract",
+      "status": "pass",
+      "summary": "Command passed."
+    },
+    {
+      "data": {
+        "run": {
+          "command": [
+            "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
             "tools/scripts/check_plasma_product_center.py"
           ],
           "returncode": 0,
@@ -283,7 +301,6 @@
   "claim_boundary": "Instrument-architecture audit only; it does not publish Plasma, certify compatibility, accept final artistic quality, or admit AIDE as runtime truth.",
   "decision": {
     "blocking_gates": [
-      "plasma_v2_plan_contract_passes",
       "plasma_v2_runtime_contract_passes",
       "legacy_preset_authority_removed",
       "field_pipeline_boundaries_pass",
@@ -310,14 +327,14 @@
     },
     {
       "data": {
-        "missing": [
-          "products/savers/plasma/src/v2/plasma_v2_plan.h",
-          "products/savers/plasma/src/v2/plasma_v2_plan.c"
-        ]
+        "evidence": [
+          "tools/scripts/check_plasma_v2_plan.py"
+        ],
+        "missing": []
       },
       "id": "plasma_v2_plan_contract_passes",
-      "status": "hold",
-      "summary": "The direct v2 plan contract must exist in the v2 island before stable promotion."
+      "status": "pass",
+      "summary": "The direct v2 plan contract must exist in the v2 island and pass the degradation-law checker before stable promotion."
     },
     {
       "data": {
@@ -442,7 +459,7 @@
   "schema": "screensave.plasma-v2.instrument-architecture-audit.v1",
   "source": {
     "branch": "main",
-    "commit": "049f643a03decdefc48b767d3819f513d0cdcc44",
+    "commit": "345b52dc652d34263a2975bc1d1f224d54b92f81",
     "dirty": true
   },
   "stable_eligible": false,

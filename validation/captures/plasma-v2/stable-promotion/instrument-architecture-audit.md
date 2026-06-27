@@ -8,7 +8,6 @@
 
 ## Blocking Gates
 
-- plasma_v2_plan_contract_passes
 - plasma_v2_runtime_contract_passes
 - legacy_preset_authority_removed
 - field_pipeline_boundaries_pass
@@ -17,7 +16,7 @@
 ## Gates
 
 - pass: plasma_v2_spec_contract_passes - The direct-control Plasma v2 spec island exists, carries semantic authority, and passes C89 smoke checks.
-- hold: plasma_v2_plan_contract_passes - The direct v2 plan contract must exist in the v2 island before stable promotion.
+- pass: plasma_v2_plan_contract_passes - The direct v2 plan contract must exist in the v2 island and pass the degradation-law checker before stable promotion.
 - hold: plasma_v2_runtime_contract_passes - The direct v2 runtime contract must exist in the v2 island before stable promotion.
 - hold: legacy_preset_authority_removed - Legacy preset/theme files must be migration inputs or wrappers over the direct v2 center, not hidden runtime authority.
 - pass: direct_controls_influence_passes - Basic controls with visual claims produce deterministic output differences.
@@ -42,6 +41,7 @@
 - pass: product-constitution-text - Product-local instrument constitution records the PAW-I-R truth boundary.
 - pass: direct-spec - Command passed.
 - pass: spec-v2-authority - Command passed.
+- pass: plan-contract - Command passed.
 - pass: product-center-boundary - Command passed.
 - pass: legacy-boundary - Command passed.
 - pass: legacy-core-boundaries - Command passed.

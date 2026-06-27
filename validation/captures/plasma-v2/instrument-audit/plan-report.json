@@ -1,0 +1,29 @@
+{
+  "claim_boundary": "Plan compiler proof only; this does not promote Plasma v2 or publish a release.",
+  "required_facts": [
+    "requested_spec",
+    "resolved_spec",
+    "drawable_size",
+    "field_size",
+    "output_size",
+    "requested_renderer",
+    "active_renderer",
+    "capability_flags",
+    "degradation_flags",
+    "base_seed",
+    "stream_seed",
+    "use_fixed_point",
+    "use_software_reference",
+    "use_feedback_buffer",
+    "allow_experimental",
+    "degrade_reason"
+  ],
+  "schema": "screensave.plasma-v2.plan-report.v1",
+  "source": {
+    "branch": "main",
+    "commit": "345b52dc652d34263a2975bc1d1f224d54b92f81",
+    "dirty": true
+  },
+  "status": "pass",
+  "validation_errors": []
+}

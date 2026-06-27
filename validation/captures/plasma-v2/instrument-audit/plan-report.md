@@ -1,0 +1,27 @@
+# Plasma v2 Plan Report
+
+- Status: pass
+- Claim boundary: Plan compiler proof only; this does not promote Plasma v2 or publish a release.
+
+## Required Facts
+
+- requested_spec
+- resolved_spec
+- drawable_size
+- field_size
+- output_size
+- requested_renderer
+- active_renderer
+- capability_flags
+- degradation_flags
+- base_seed
+- stream_seed
+- use_fixed_point
+- use_software_reference
+- use_feedback_buffer
+- allow_experimental
+- degrade_reason
+
+## Errors
+
+- none

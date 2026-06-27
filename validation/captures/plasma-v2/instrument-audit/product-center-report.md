@@ -14,8 +14,8 @@
 ### new_product_center
 - present: products/savers/plasma/src/v2/plasma_v2_spec.h
 - present: products/savers/plasma/src/v2/plasma_v2_spec.c
-- missing: products/savers/plasma/src/v2/plasma_v2_plan.h
-- missing: products/savers/plasma/src/v2/plasma_v2_plan.c
+- present: products/savers/plasma/src/v2/plasma_v2_plan.h
+- present: products/savers/plasma/src/v2/plasma_v2_plan.c
 - missing: products/savers/plasma/src/v2/plasma_v2_runtime.h
 - missing: products/savers/plasma/src/v2/plasma_v2_runtime.c
 - missing: products/savers/plasma/src/v2/field
