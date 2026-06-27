@@ -1,0 +1,40 @@
+schema_version = 1
+id = "plasma-v2-instrument-repair-ledger"
+status = "active"
+as_of = "2026-06-27"
+product = "plasma"
+profile = "plasma.v2.reference.preview"
+truth_boundary = "ScreenSave proof, instrument validators, and human/project policy remain authoritative; AIDE records repair evidence and proposals only."
+network_calls = false
+provider_or_model_calls = false
+runtime_dependency_allowed = false
+source_mutation_by_aide = false
+automatic_apply = false
+automatic_merge = false
+automatic_release = false
+stable_promotion = false
+compatibility_certification = false
+final_artistic_acceptance = false
+claim_boundary = "AIDE instrument-repair evidence records PAW-I-R1 repair scans, plans, and proposal-only receipts; it does not decide product truth, mutate runtime, approve art, certify compatibility, publish, or promote stable."
+
+[claims]
+repair_scan = "pass"
+release_readiness_gap_plan = "blocking-repair-found"
+proof_baseline_drift_plan = "no-matching-repairs"
+workbench_surface_drift_plan = "no-matching-repairs"
+agentic_session = "proposal-only"
+aide_runtime_dependency = false
+source_mutation_by_aide = false
+automatic_promotion = false
+remaining_blocker = "SS-PLV2-I-REPAIR-001"
+
+[refs]
+repair_scan = "out/aide/repairs/scan.json"
+release_readiness_gap_plan = "out/aide/repairs/plan-release_readiness_gap.json"
+proof_baseline_drift_plan = "out/aide/repairs/plan-proof_baseline_drift.json"
+workbench_surface_drift_plan = "out/aide/repairs/plan-workbench_surface_drift.json"
+agentic_proposal = "out/aide/agentic/SS-PLV2-IR12/proposal.json"
+agentic_receipt = "out/aide/agentic/SS-PLV2-IR12/session-receipt.json"
+instrument_summary = "validation/captures/plasma-v2/instrument-audit/aide-repair-summary.json"
+repair_queue = ".aide/repairs/index.toml"
+work_unit = ".aide/work_units/plasma-v2-instrument-repair.toml"

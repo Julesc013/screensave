@@ -1,0 +1,47 @@
+{
+  "agentic": {
+    "agent_mode": "proposal-only",
+    "automatic_apply": false,
+    "automatic_merge": false,
+    "automatic_release": false,
+    "claim_boundary": "Proposal-only AIDE session; no source mutation, automatic apply, merge, release, compatibility certification, or final artistic acceptance.",
+    "proposal_ref": "out/aide/agentic/SS-PLV2-IR12/proposal.json",
+    "receipt_ref": "out/aide/agentic/SS-PLV2-IR12/session-receipt.json",
+    "source_mutation_by_aide": false,
+    "task": "SS-PLV2-IR12"
+  },
+  "claim_boundary": "AIDE repair evidence only; ScreenSave validators, proof, project policy, and human artistic acceptance remain authoritative.",
+  "plans": {
+    "proof_baseline_drift": {
+      "matching_count": 0,
+      "output": "out/aide/repairs/plan-proof_baseline_drift.json",
+      "status": "pass"
+    },
+    "release_readiness_gap": {
+      "matching_count": 1,
+      "output": "out/aide/repairs/plan-release_readiness_gap.json",
+      "status": "pass"
+    },
+    "workbench_surface_drift": {
+      "matching_count": 0,
+      "output": "out/aide/repairs/plan-workbench_surface_drift.json",
+      "status": "pass"
+    }
+  },
+  "remaining_blockers": [
+    {
+      "claim_boundary": "Repair records the missing final stable artistic verdict only; no automatic acceptance, release, promotion, or compatibility certification.",
+      "id": "SS-PLV2-I-REPAIR-001",
+      "repair_class": "release_readiness_gap",
+      "status": "blocking",
+      "title": "Record explicit Plasma v2 final stable artistic verdict"
+    }
+  ],
+  "scan": {
+    "output": "out/aide/repairs/scan.json",
+    "repair_count": 2,
+    "status": "pass"
+  },
+  "schema": "screensave.plasma-v2.aide-instrument-repair-summary.v1",
+  "status": "pass"
+}

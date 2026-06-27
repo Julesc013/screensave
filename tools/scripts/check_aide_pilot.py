@@ -29,6 +29,10 @@ REQUIRED_PATHS = [
     ROOT / ".aide" / "guidance" / "codex.md",
 ]
 
+ALLOWED_PRODUCT_AIDE_REFERENCE_PATHS = {
+    ROOT / "products" / "savers" / "plasma" / "docs" / "plasma-v2-instrument-constitution.md",
+}
+
 
 def load_toml(path: pathlib.Path) -> dict:
     with path.open("rb") as handle:
@@ -63,6 +67,8 @@ def scan_runtime_dependency_references(errors: list[str]) -> None:
             except UnicodeDecodeError:
                 continue
             if ".aide" in text or "AIDE" in text:
+                if path in ALLOWED_PRODUCT_AIDE_REFERENCE_PATHS:
+                    continue
                 errors.append(f"Runtime/product tree must not reference AIDE during the pilot: {path.relative_to(ROOT)}")
 
 

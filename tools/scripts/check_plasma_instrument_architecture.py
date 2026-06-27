@@ -44,6 +44,7 @@ SUBCHECKS = [
     ("packc-data-only", ["tools/scripts/check_packc.py"]),
     ("visualintent-contract", ["tools/scripts/check_visual_intent_contract.py"]),
     ("aide-boundary", ["tools/scripts/check_aide_evidence_bridge.py"]),
+    ("aide-instrument-repair", ["tools/scripts/check_plasma_v2_aide_repair_evidence.py"]),
 ]
 
 REQUIRED_GATE_IDS = [
@@ -416,9 +417,12 @@ def build_report() -> dict[str, Any]:
     gate(
         gates,
         "aide_not_runtime_or_truth",
-        "pass" if subcheck_status(subchecks, "aide-boundary") else "fail",
-        "AIDE remains an evidence and repair coordinator, not product runtime or truth authority.",
-        evidence=["tools/scripts/check_aide_evidence_bridge.py"],
+        "pass"
+        if subcheck_status(subchecks, "aide-boundary")
+        and subcheck_status(subchecks, "aide-instrument-repair")
+        else "fail",
+        "AIDE remains an evidence and repair coordinator, not product runtime, artistic judge, or truth authority.",
+        evidence=["tools/scripts/check_aide_evidence_bridge.py", "tools/scripts/check_plasma_v2_aide_repair_evidence.py"],
     )
 
     present_gate_ids = {item["id"] for item in gates}

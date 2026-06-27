@@ -26,7 +26,7 @@
 - pass: workbench_inspection_passes - Workbench must inspect the real Plasma v2 instrument evidence without becoming runtime truth or promotion authority.
 - pass: packc_data_only_passes - packc validates data-only Plasma packs and rejects executable or unsafe payloads.
 - hold: visualintent_candidates_reduce_to_plasma_spec - VisualIntent is contractually descriptive, but a Plasma v2 candidate resolver to the direct spec is not yet admitted as stable evidence.
-- pass: aide_not_runtime_or_truth - AIDE remains an evidence and repair coordinator, not product runtime or truth authority.
+- pass: aide_not_runtime_or_truth - AIDE remains an evidence and repair coordinator, not product runtime, artistic judge, or truth authority.
 
 ## Structural Checks
 
@@ -56,6 +56,7 @@
 - pass: packc-data-only - Command passed.
 - pass: visualintent-contract - Command passed.
 - pass: aide-boundary - Command passed.
+- pass: aide-instrument-repair - Command passed.
 - pass: product-center-report-outcome - Product-center boundary report is present and has a valid audit status.
 - pass: legacy-boundary-report-outcome - Legacy boundary report is present and has a valid audit status.
 - pass: required-gate-set - Instrument audit emits the required PAW-I gate set.

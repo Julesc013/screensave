@@ -383,6 +383,24 @@
     },
     {
       "data": {
+        "run": {
+          "command": [
+            "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+            "tools/scripts/check_plasma_v2_aide_repair_evidence.py"
+          ],
+          "returncode": 0,
+          "status": "pass",
+          "stderr": "",
+          "stdout": "Plasma v2 AIDE repair evidence checks passed.",
+          "timeout_seconds": 300
+        }
+      },
+      "id": "aide-instrument-repair",
+      "status": "pass",
+      "summary": "Command passed."
+    },
+    {
+      "data": {
         "blocking_reasons": [
           "legacy_bypass_candidates_still_present"
         ],
@@ -590,19 +608,20 @@
     {
       "data": {
         "evidence": [
-          "tools/scripts/check_aide_evidence_bridge.py"
+          "tools/scripts/check_aide_evidence_bridge.py",
+          "tools/scripts/check_plasma_v2_aide_repair_evidence.py"
         ]
       },
       "id": "aide_not_runtime_or_truth",
       "status": "pass",
-      "summary": "AIDE remains an evidence and repair coordinator, not product runtime or truth authority."
+      "summary": "AIDE remains an evidence and repair coordinator, not product runtime, artistic judge, or truth authority."
     }
   ],
   "recommended_state": "release-candidate-hold",
   "schema": "screensave.plasma-v2.instrument-architecture-audit.v1",
   "source": {
     "branch": "main",
-    "commit": "f01acf93673f987203efea0dd0252de178eb7089",
+    "commit": "a7744f6ab961efd9897653acfcae2eae628b109b",
     "dirty": true
   },
   "stable_eligible": false,

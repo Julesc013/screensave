@@ -33,6 +33,7 @@ Current stage:
 - `check_plasma_v2_material_response.py` validates direct Plasma v2 material response, contrast/brightness bounds, softness/treatment post-material behavior, and dark-room comfort.
 - `check_plasma_v2_migration.py` validates legacy Plasma effect/speed/resolution/smoothing/preset/theme migration into direct Plasma v2 specs.
 - `check_plasma_v2_workbench_inspection.py` validates Workbench inspection of requested spec, resolved plan, degradation, pipeline, material response, treatment stack, software reference, GL11 optionality, captures, control influence, review, and promotion status without creating a second runtime.
+- `check_plasma_v2_aide_repair_evidence.py` validates AIDE repair scan, plan, proposal-only receipt, and remaining-blocker evidence for the Plasma v2 instrument repair wave.
 - `check_proof_bundle_v1.py` validates the normalized Proof Bundle v1 contract, lifecycle/performance receipt inputs, and normalizer output axes.
 - `check_workbench_shell.py` validates the minimal PAW-B Workbench shell binding to `sslab` and generated proof profiles.
 - `check_sslab_runner.py` builds one private static `libsslab` artifact and validates the generic `sslab_runner` proof path for Nocturne and Ricochet.
