@@ -15,6 +15,7 @@ STATE = ROOT / "PROJECT_STATE.toml"
 CONTRACT = ROOT / "contracts" / "plasma_instrument_architecture_v1.md"
 STABLE_CONTRACT = ROOT / "contracts" / "plasma_stable_promotion_v1.md"
 PAW_I = ROOT / "docs" / "roadmap" / "paw-i-plasma-v2-stable-promotion.md"
+PRODUCT_CONSTITUTION = ROOT / "products" / "savers" / "plasma" / "docs" / "plasma-v2-instrument-constitution.md"
 REPORT_DIR = ROOT / "validation" / "captures" / "plasma-v2" / "stable-promotion"
 REPORT_JSON = REPORT_DIR / "instrument-architecture-audit.json"
 REPORT_MD = REPORT_DIR / "instrument-architecture-audit.md"
@@ -125,7 +126,7 @@ def build_report() -> dict[str, Any]:
     state = load_toml(STATE)
     plasma = state.get("plasma_v2", {})
 
-    for path in (CONTRACT, STABLE_CONTRACT, PAW_I):
+    for path in (CONTRACT, STABLE_CONTRACT, PAW_I, PRODUCT_CONSTITUTION):
         add_check(checks, f"path:{repo_path(path)}", path.exists(), "Required audit authority path exists.")
 
     contract_ok, contract_missing = text_contains(
@@ -140,6 +141,8 @@ def build_report() -> dict[str, Any]:
             "software_reference_is_canonical",
             "gl11_is_not_hidden_minimum",
             "aide_not_runtime_or_truth",
+            "products/savers/plasma/docs/plasma-v2-instrument-constitution.md",
+            "plasma-v2-instrument-repair",
         ],
     )
     add_check(
@@ -181,6 +184,26 @@ def build_report() -> dict[str, Any]:
         pawi_ok,
         "PAW-I roadmap records the instrument audit as a promotion gate.",
         missing=pawi_missing,
+    )
+
+    constitution_ok, constitution_missing = text_contains(
+        PRODUCT_CONSTITUTION,
+        [
+            "Status: active product constitution for PAW-I-R.",
+            "Plasma is not a preset picker. Plasma is a visual instrument.",
+            "`plasma_v2_spec` is product meaning.",
+            "`plasma_v2_plan` is resolved executable truth.",
+            "`plasma_v2_runtime` owns deterministic state and buffers.",
+            "The software/reference path is canonical.",
+            "AIDE does not own product truth",
+        ],
+    )
+    add_check(
+        checks,
+        "product-constitution-text",
+        constitution_ok,
+        "Product-local instrument constitution records the PAW-I-R truth boundary.",
+        missing=constitution_missing,
     )
 
     subchecks: dict[str, dict[str, Any]] = {}

@@ -195,12 +195,25 @@ If any gate is not satisfied, PAW-I must hold:
 status = "release-candidate-hold"
 stable = false
 release_promotion = "blocked"
-opened_next = "plasma-v2-stable-repair"
+opened_next = "plasma-v2-instrument-repair"
 ```
 
-Instrument-specific repair WorkUnits may be opened under the stable-repair
-program, including direct-control influence repair, material response repair,
-plan/degradation repair, and GL11 hidden-minimum repair.
+Instrument-specific repair WorkUnits must be opened under the
+`plasma-v2-instrument-repair` program, including direct-control influence
+repair, material response repair, plan/degradation repair, runtime-buffer
+repair, field-pipeline repair, legacy migration repair, and GL11 hidden-minimum
+repair.
+
+The product-local constitution is:
+
+```text
+products/savers/plasma/docs/plasma-v2-instrument-constitution.md
+```
+
+That constitution must continue to state that spec is product meaning, plan is
+resolved executable truth, runtime is deterministic, software reference is
+canonical, acceleration is optional, Workbench inspects without owning
+semantics, and AIDE coordinates without owning product truth.
 
 ## Claim Boundary
 

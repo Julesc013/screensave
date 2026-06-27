@@ -64,6 +64,17 @@ REQUIRED_CONTRACTS = {
         "software_reference_is_canonical",
         "gl11_is_not_hidden_minimum",
         "aide_not_runtime_or_truth",
+        "plasma-v2-instrument-repair",
+        "products/savers/plasma/docs/plasma-v2-instrument-constitution.md",
+    ],
+    ROOT / "products" / "savers" / "plasma" / "docs" / "plasma-v2-instrument-constitution.md": [
+        "Status: active product constitution for PAW-I-R.",
+        "Plasma is not a preset picker. Plasma is a visual instrument.",
+        "`plasma_v2_spec` is product meaning.",
+        "`plasma_v2_plan` is resolved executable truth.",
+        "`plasma_v2_runtime` owns deterministic state and buffers.",
+        "The software/reference path is canonical.",
+        "AIDE does not own product truth",
     ],
     ROOT / "contracts" / "proof_bundle_v0.md": [
         "Status: initial contract",

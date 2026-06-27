@@ -35,9 +35,11 @@
 - pass: path:contracts/plasma_instrument_architecture_v1.md - Required audit authority path exists.
 - pass: path:contracts/plasma_stable_promotion_v1.md - Required audit authority path exists.
 - pass: path:docs/roadmap/paw-i-plasma-v2-stable-promotion.md - Required audit authority path exists.
+- pass: path:products/savers/plasma/docs/plasma-v2-instrument-constitution.md - Required audit authority path exists.
 - pass: instrument-contract-text - Instrument contract records the product thesis, pipeline, and blocking gates.
 - pass: stable-contract-fold-in - Stable-promotion contract requires the instrument audit.
 - pass: paw-i-fold-in - PAW-I roadmap records the instrument audit as a promotion gate.
+- pass: product-constitution-text - Product-local instrument constitution records the PAW-I-R truth boundary.
 - pass: direct-spec - Command passed.
 - pass: legacy-core-boundaries - Command passed.
 - pass: direct-control-influence - Command passed.

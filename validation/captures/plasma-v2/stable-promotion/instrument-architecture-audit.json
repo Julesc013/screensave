@@ -20,6 +20,12 @@
       "summary": "Required audit authority path exists."
     },
     {
+      "data": {},
+      "id": "path:products/savers/plasma/docs/plasma-v2-instrument-constitution.md",
+      "status": "pass",
+      "summary": "Required audit authority path exists."
+    },
+    {
       "data": {
         "missing": []
       },
@@ -42,6 +48,14 @@
       "id": "paw-i-fold-in",
       "status": "pass",
       "summary": "PAW-I roadmap records the instrument audit as a promotion gate."
+    },
+    {
+      "data": {
+        "missing": []
+      },
+      "id": "product-constitution-text",
+      "status": "pass",
+      "summary": "Product-local instrument constitution records the PAW-I-R truth boundary."
     },
     {
       "data": {
@@ -344,7 +358,7 @@
   "schema": "screensave.plasma-v2.instrument-architecture-audit.v1",
   "source": {
     "branch": "main",
-    "commit": "428266b7dee3ee02269b603d714b47156c93f960",
+    "commit": "f9bd5af8bf9e04b4492fc918722283ca06e68a3e",
     "dirty": true
   },
   "stable_eligible": false,
