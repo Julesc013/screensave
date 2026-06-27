@@ -14,6 +14,7 @@ POLICY = ROOT / ".aide" / "agentic" / "policy.toml"
 PROPOSAL_SCHEMA = ROOT / ".aide" / "agentic" / "proposal.schema.json"
 RECEIPT_SCHEMA = ROOT / ".aide" / "agentic" / "session-receipt.schema.json"
 README = ROOT / ".aide" / "agentic" / "README.md"
+RC_POLICY = ROOT / ".aide" / "agentic" / "release-candidate-policy.toml"
 AGENTIC = ROOT / "tools" / "aideops" / "agentic.py"
 CHECK_OUT = ROOT / "out" / "aide" / "agentic" / "check-agentic-policy"
 
@@ -29,7 +30,7 @@ def load_json(path: pathlib.Path) -> dict:
 
 def main() -> int:
     errors: list[str] = []
-    for path in (POLICY, PROPOSAL_SCHEMA, RECEIPT_SCHEMA, README, AGENTIC):
+    for path in (POLICY, PROPOSAL_SCHEMA, RECEIPT_SCHEMA, README, RC_POLICY, AGENTIC):
         require(path.exists(), f"Missing agentic policy path {path.relative_to(ROOT)}.", errors)
 
     if not errors:
@@ -55,6 +56,20 @@ def main() -> int:
             "final_artistic_acceptance",
         ):
             require(policy.get("forbidden", {}).get(key) is True, f"agentic policy forbidden.{key} must be true.", errors)
+        rc_policy = tomllib.loads(RC_POLICY.read_text(encoding="utf-8"))
+        require(rc_policy.get("status") == "active", "release-candidate agentic policy must be active.", errors)
+        require(rc_policy.get("default_agent_mode") == "proposal-only", "release-candidate policy must default to proposal-only.", errors)
+        for key in (
+            "source_mutation_by_aide",
+            "automatic_apply",
+            "automatic_merge",
+            "automatic_release",
+            "release_publication",
+            "stable_promotion",
+            "compatibility_certification",
+            "final_artistic_acceptance",
+        ):
+            require(rc_policy.get(key) is False, f"release-candidate policy {key} must be false.", errors)
         readme = README.read_text(encoding="utf-8")
         for phrase in (
             "proposal-only",
@@ -92,6 +107,15 @@ def main() -> int:
             receipt_data = load_json(receipt)
             require(proposal_data.get("agent_mode") == "proposal-only", "proposal must use proposal-only mode.", errors)
             require("direct_source_mutation" in proposal_data.get("forbidden_actions", []), "proposal must forbid direct source mutation.", errors)
+            require(proposal_data.get("repo_facts_used"), "proposal must record repo facts used.", errors)
+            require(proposal_data.get("allowed_paths"), "proposal must record allowed paths.", errors)
+            require(proposal_data.get("forbidden_paths"), "proposal must record forbidden paths.", errors)
+            require(proposal_data.get("patch_plan"), "proposal must record a patch plan.", errors)
+            require(proposal_data.get("expected_evidence"), "proposal must record expected evidence.", errors)
+            require(proposal_data.get("rollback"), "proposal must record rollback guidance.", errors)
+            require(receipt_data.get("agent_mode") == "proposal-only", "receipt must record proposal-only mode.", errors)
+            require(receipt_data.get("policy_ref") == ".aide/agentic/policy.toml", "receipt must record the policy ref.", errors)
+            require(receipt_data.get("expected_evidence"), "receipt must record expected evidence.", errors)
             require(receipt_data.get("source_mutation_by_aide") is False, "receipt must record no AIDE source mutation.", errors)
             require(receipt_data.get("automatic_release") is False, "receipt must record no automatic release.", errors)
 

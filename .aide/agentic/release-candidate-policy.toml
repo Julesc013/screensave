@@ -1,0 +1,34 @@
+schema_version = 1
+policy_id = "screensave.aide.agentic.release-candidate.proposal-only.v1"
+status = "active"
+applies_to = "plasma-v2-release-candidate"
+default_agent_mode = "proposal-only"
+source_mutation_by_aide = false
+automatic_apply = false
+automatic_merge = false
+automatic_release = false
+release_publication = false
+stable_promotion = false
+compatibility_certification = false
+final_artistic_acceptance = false
+claim_boundary = "Release-candidate agentic sessions may propose plans, patches, validation, and evidence only; they may not apply, merge, release, certify, or accept stable artistic quality."
+
+[required_proposal_fields]
+objective = true
+repo_facts_used = true
+allowed_paths = true
+forbidden_paths = true
+patch_plan = true
+validation_plan = true
+expected_evidence = true
+risk_summary = true
+rollback = true
+claim_boundary = true
+
+[hard_refusals]
+release_publication = true
+stable_promotion = true
+compatibility_certification = true
+generic_command_execution = true
+source_mutation_without_operator = true
+worker_self_approval = true

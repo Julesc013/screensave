@@ -50,12 +50,35 @@ def propose(args: argparse.Namespace) -> int:
         out_dir = ROOT / out_dir
     created_at = _dt.datetime.now(_dt.UTC).replace(microsecond=0).isoformat()
 
+    allowed_paths = args.allowed_path or [
+        ".aide/**",
+        "tools/**",
+        "validation/**",
+        "docs/**",
+    ]
+    forbidden_paths = args.forbidden_path or [
+        "releases/**",
+        "platform/**",
+        "products/**/src/**",
+    ]
+    expected_evidence = args.evidence or [
+        "out/aide/agentic/<task>/proposal.json",
+        "out/aide/agentic/<task>/session-receipt.json",
+    ]
+
     proposal = {
         "schema": "screensave.aide.agentic.proposal.v1",
         "task": args.task,
         "objective": args.objective,
         "agent_mode": "proposal-only",
         "policy_ref": str(POLICY.relative_to(ROOT)).replace("\\", "/"),
+        "repo_facts_used": [
+            "PROJECT_STATE.toml is the ScreenSave state authority.",
+            "AIDE source mutation, automatic merge, automatic release, compatibility certification, and final artistic acceptance are blocked.",
+            "Fixed project-adapter capabilities are the only admitted command surface.",
+        ],
+        "allowed_paths": allowed_paths,
+        "forbidden_paths": forbidden_paths,
         "allowed_actions": ALLOWED_ACTIONS,
         "forbidden_actions": FORBIDDEN_ACTIONS,
         "implementation_plan": [
@@ -64,10 +87,24 @@ def propose(args: argparse.Namespace) -> int:
             "List validators required before commit.",
             "Record evidence refs without promotion claims.",
         ],
+        "patch_plan": [
+            "Describe the intended edits without applying them.",
+            "Keep source changes inside allowed paths.",
+            "Split generated evidence from state transitions when possible.",
+        ],
         "validation_plan": [
             "py -3 tools/scripts/check_project_state.py --summary",
             "py -3 tools/scripts/check_docs_basics.py",
             "git diff --check",
+        ],
+        "expected_evidence": expected_evidence,
+        "risk_summary": [
+            "Proposal may be stale if the WorkUnit or repository state changes.",
+            "Proposal receipts are not proof that edits were applied or validated.",
+        ],
+        "rollback": [
+            "Discard generated proposal receipts under the selected out directory.",
+            "Do not merge or promote from proposal output alone.",
         ],
         "patch_proposal": "OPERATOR_OR_ASSISTANT_TO_AUTHOR",
         "claim_boundary": CLAIM_BOUNDARY,
@@ -81,6 +118,9 @@ def propose(args: argparse.Namespace) -> int:
         "objective": args.objective,
         "proposal_ref": str(proposal_path.relative_to(ROOT)).replace("\\", "/"),
         "created_at_utc": created_at,
+        "policy_ref": str(POLICY.relative_to(ROOT)).replace("\\", "/"),
+        "agent_mode": "proposal-only",
+        "expected_evidence": expected_evidence,
         "source_mutation_by_aide": False,
         "automatic_apply": False,
         "automatic_merge": False,
@@ -101,6 +141,9 @@ def build_parser() -> argparse.ArgumentParser:
     propose_parser.add_argument("--task", required=True)
     propose_parser.add_argument("--objective", required=True)
     propose_parser.add_argument("--out", required=True)
+    propose_parser.add_argument("--allowed-path", action="append", default=[])
+    propose_parser.add_argument("--forbidden-path", action="append", default=[])
+    propose_parser.add_argument("--evidence", action="append", default=[])
     propose_parser.set_defaults(func=propose)
     return parser
 

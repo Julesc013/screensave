@@ -1,0 +1,19 @@
+{
+  "agent_mode": "proposal-only",
+  "automatic_apply": false,
+  "automatic_merge": false,
+  "automatic_release": false,
+  "claim_boundary": "Proposal-only AIDE session; no source mutation, automatic apply, merge, release, compatibility certification, or final artistic acceptance.",
+  "created_at_utc": "2026-06-27T00:00:00+00:00",
+  "expected_evidence": [
+    ".aide/agentic/release-candidate-policy.toml",
+    "out/aide/agentic/SS-PLV2-H6/proposal.json",
+    "out/aide/agentic/SS-PLV2-H6/session-receipt.json"
+  ],
+  "objective": "Harden release-candidate proposal-only receipts.",
+  "policy_ref": ".aide/agentic/policy.toml",
+  "proposal_ref": ".aide/agentic/examples/SS-PLV2-H6/proposal.json",
+  "schema": "screensave.aide.agentic.session-receipt.v1",
+  "source_mutation_by_aide": false,
+  "task": "SS-PLV2-H6"
+}

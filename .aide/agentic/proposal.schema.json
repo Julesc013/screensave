@@ -5,9 +5,16 @@
     "task",
     "objective",
     "agent_mode",
+    "repo_facts_used",
+    "allowed_paths",
+    "forbidden_paths",
     "allowed_actions",
     "forbidden_actions",
+    "patch_plan",
     "validation_plan",
+    "expected_evidence",
+    "risk_summary",
+    "rollback",
     "claim_boundary"
   ],
   "forbidden_actions": [

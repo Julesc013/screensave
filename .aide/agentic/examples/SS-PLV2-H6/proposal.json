@@ -1,0 +1,72 @@
+{
+  "agent_mode": "proposal-only",
+  "allowed_actions": [
+    "compile_task_context",
+    "generate_implementation_plan",
+    "generate_patch_proposal",
+    "generate_validation_plan",
+    "generate_repair_proposal",
+    "generate_review_summary",
+    "record_proposal_receipt",
+    "invoke_fixed_project_checks"
+  ],
+  "allowed_paths": [
+    ".aide/agentic/**",
+    "tools/aideops/agentic.py",
+    "tools/scripts/check_agentic_policy.py",
+    "tools/scripts/check_agentic_receipts.py"
+  ],
+  "claim_boundary": "Proposal-only AIDE session; no source mutation, automatic apply, merge, release, compatibility certification, or final artistic acceptance.",
+  "expected_evidence": [
+    ".aide/agentic/release-candidate-policy.toml",
+    "out/aide/agentic/<task>/proposal.json",
+    "out/aide/agentic/<task>/session-receipt.json"
+  ],
+  "forbidden_actions": [
+    "direct_source_mutation",
+    "automatic_apply",
+    "automatic_merge",
+    "automatic_release",
+    "worker_self_approval",
+    "compatibility_certification",
+    "final_artistic_acceptance"
+  ],
+  "forbidden_paths": [
+    "products/**",
+    "platform/**",
+    "releases/**"
+  ],
+  "implementation_plan": [
+    "Inspect the WorkUnit and allowed paths.",
+    "Prepare a minimal patch proposal inside the declared scope.",
+    "List validators required before commit.",
+    "Record evidence refs without promotion claims."
+  ],
+  "objective": "Harden release-candidate proposal-only receipts.",
+  "patch_plan": [
+    "Add release-candidate agentic policy.",
+    "Extend proposal receipts with path scope, risk, rollback, and expected evidence.",
+    "Validate generated receipts without applying source changes."
+  ],
+  "policy_ref": ".aide/agentic/policy.toml",
+  "repo_facts_used": [
+    "PROJECT_STATE.toml records plasma-v2-release-candidate as active before rc1 transition.",
+    "AIDE source mutation, automatic merge, and automatic release remain false.",
+    "PAW-H excludes stable promotion and compatibility certification."
+  ],
+  "risk_summary": [
+    "Proposal receipts can become stale if WorkUnit scope changes.",
+    "Generated receipts must not be mistaken for applied patches."
+  ],
+  "rollback": [
+    "Delete generated proposal receipts under out/aide/agentic.",
+    "Revert .aide/agentic policy changes if the checker fails."
+  ],
+  "schema": "screensave.aide.agentic.proposal.v1",
+  "task": "SS-PLV2-H6",
+  "validation_plan": [
+    "py -3 tools/scripts/check_agentic_policy.py",
+    "py -3 tools/scripts/check_agentic_receipts.py",
+    "git diff --check"
+  ]
+}
