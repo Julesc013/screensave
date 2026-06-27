@@ -3,9 +3,9 @@
   "checks": [
     {
       "data": {
-        "active_program": "plasma-v2-stable-promotion",
-        "development_active_program": "plasma-v2-stable-promotion",
-        "plasma_status": "release-candidate"
+        "active_program": "plasma-v2-stable-repair",
+        "development_active_program": "plasma-v2-stable-repair",
+        "plasma_status": "release-candidate-hold"
       },
       "id": "project-state-before-or-hold",
       "status": "pass",
@@ -346,7 +346,7 @@
   "schema": "screensave.plasma-v2.stable-promotion.gate-report.v1",
   "source": {
     "branch": "main",
-    "commit": "bc241ad729c6bbca621e393f719008970a186971",
+    "commit": "647e712b2e95edec8dc8c9366504015e2882f8e7",
     "dirty": true
   },
   "status": "hold"

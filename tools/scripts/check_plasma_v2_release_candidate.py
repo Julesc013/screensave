@@ -121,8 +121,8 @@ def validate_state(results: list[dict[str, Any]]) -> None:
     add_result(
         results,
         "plasma-status",
-        status in {"release-readiness-reviewed", "release-candidate"},
-        "Plasma v2 must be at release-readiness-reviewed before transition or release-candidate after transition.",
+        status in {"release-readiness-reviewed", "release-candidate", "release-candidate-hold"},
+        "Plasma v2 must be at release-readiness-reviewed before transition, release-candidate after transition, or release-candidate-hold after stable-promotion review.",
         observed=status,
     )
     add_result(
@@ -149,7 +149,8 @@ def validate_state(results: list[dict[str, Any]]) -> None:
             "Before transition, the active program must be plasma-v2-release-candidate.",
             observed=authority.get("active_program"),
         )
-    if status == "release-candidate":
+    if status in {"release-candidate", "release-candidate-hold"}:
+        expected_program = "plasma-v2-stable-repair" if status == "release-candidate-hold" else "plasma-v2-stable-promotion"
         add_result(
             results,
             "post-transition-release-candidate",
@@ -161,9 +162,10 @@ def validate_state(results: list[dict[str, Any]]) -> None:
         add_result(
             results,
             "post-transition-active-program",
-            authority.get("active_program") == "plasma-v2-stable-promotion",
-            "After transition, the next active program must be plasma-v2-stable-promotion.",
+            authority.get("active_program") == expected_program,
+            "After transition, the active program must match the current Plasma v2 decision lane.",
             observed=authority.get("active_program"),
+            expected=expected_program,
         )
 
 

@@ -132,6 +132,7 @@ def main() -> int:
                 "plasma-v2-release-readiness",
                 "plasma-v2-release-candidate",
                 "plasma-v2-stable-promotion",
+                "plasma-v2-stable-repair",
             },
             "status must report the active portable-v2 or Plasma v2 program.",
             errors,

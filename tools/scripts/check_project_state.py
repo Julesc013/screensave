@@ -89,7 +89,9 @@ def validate_state(state: dict) -> list[str]:
     require(authority.get("version_manifest") == "VERSION.toml", "authority.version_manifest must point to VERSION.toml.", errors)
     portable_status = portable_v2.get("status")
     if portable_status == "accepted":
-        if plasma_v2.get("status") == "release-candidate":
+        if plasma_v2.get("status") == "release-candidate-hold":
+            expected_active_program = "plasma-v2-stable-repair"
+        elif plasma_v2.get("status") == "release-candidate":
             expected_active_program = "plasma-v2-stable-promotion"
         elif plasma_v2.get("status") == "release-readiness-reviewed":
             expected_active_program = "plasma-v2-release-candidate"
@@ -143,7 +145,15 @@ def validate_state(state: dict) -> list[str]:
         require(plasma_v2.get("stable") is False, "plasma_v2.stable must remain false before stable release.", errors)
         require(plasma_v2.get("release_promotion") == "blocked", "plasma_v2.release_promotion must remain blocked.", errors)
         require(
-            plasma_v2.get("status") in {"reference-preview", "reviewed-preview", "stable-candidate", "release-readiness-reviewed", "release-candidate"},
+            plasma_v2.get("status")
+            in {
+                "reference-preview",
+                "reviewed-preview",
+                "stable-candidate",
+                "release-readiness-reviewed",
+                "release-candidate",
+                "release-candidate-hold",
+            },
             "plasma_v2.status must be a recognized pre-stable or candidate status.",
             errors,
         )
@@ -252,6 +262,66 @@ def validate_state(state: dict) -> list[str]:
             require(
                 "not stable release" in str(plasma_v2.get("claim_boundary", "")).lower(),
                 "plasma_v2.claim_boundary must block stable release.",
+                errors,
+            )
+        if plasma_v2.get("status") == "release-candidate-hold":
+            require(plasma_v2.get("release_candidate") == "plasma-v2-rc1", "plasma_v2.release_candidate must be plasma-v2-rc1.", errors)
+            require(authority.get("release_candidate") == "plasma-v2-rc1", "authority.release_candidate must be plasma-v2-rc1.", errors)
+            require(plasma_v2.get("packc") == "v1-candidate", "plasma_v2.packc must remain v1-candidate.", errors)
+            require(plasma_v2.get("manager_preview") == "ready", "plasma_v2.manager_preview must be ready.", errors)
+            require(
+                plasma_v2.get("workbench_release_readiness") == "ready",
+                "plasma_v2.workbench_release_readiness must be ready.",
+                errors,
+            )
+            require(
+                plasma_v2.get("artistic_acceptance") == "request-changes",
+                "plasma_v2.artistic_acceptance must record request-changes for the hold.",
+                errors,
+            )
+            require(
+                plasma_v2.get("opened_next") == "plasma-v2-stable-repair",
+                "plasma_v2.opened_next must be plasma-v2-stable-repair.",
+                errors,
+            )
+            require(
+                plasma_v2.get("stable_blocker") == "SS-PLV2-I-REPAIR-001",
+                "plasma_v2.stable_blocker must name the blocking repair WorkUnit.",
+                errors,
+            )
+            for label in (
+                "acceleration_matrix",
+                "performance_envelope",
+                "stable_candidate_review",
+                "stable_candidate_gate",
+                "package_stage",
+                "manager_preview_model",
+                "release_readiness_gate",
+                "final_artistic_decision",
+                "release_candidate_contract",
+                "release_candidate_package",
+                "release_candidate_evidence",
+                "release_candidate_gate",
+                "support_claims",
+                "manager_review",
+                "workbench_review",
+                "repair_burndown",
+                "stable_promotion_contract",
+                "stable_promotion_package",
+                "stable_promotion_evidence",
+                "stable_support_claims",
+                "stable_security_review",
+                "stable_provenance_review",
+                "stable_manager_review",
+                "stable_workbench_review",
+                "stable_artistic_decision",
+                "stable_promotion_gate",
+                "stable_repair_burndown",
+            ):
+                require_path(plasma_v2.get(label), f"plasma_v2.{label}", errors)
+            require(
+                "stable release promotion is blocked" in str(plasma_v2.get("claim_boundary", "")).lower(),
+                "plasma_v2.claim_boundary must record the stable-promotion hold.",
                 errors,
             )
 
