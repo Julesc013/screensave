@@ -1,0 +1,103 @@
+{
+  "schema": "screensave.plasma-v2.stable-promotion.proof-matrix.v1",
+  "status": "hold",
+  "candidate_id": "plasma-v2-rc1",
+  "product": "plasma",
+  "profile": "plasma.v2.reference.preview",
+  "claim_boundary": "Stable-promotion proof and evidence matrix only; stable promotion is blocked by final artistic acceptance hold. Not publication, compatibility certification, public SDK stability, or all-saver migration.",
+  "claim_axes": {
+    "reference_execution": "supported",
+    "gl11_candidate_comparison": "supported",
+    "performance_envelope": "pass-with-warnings",
+    "packc_v1_candidate": "supported",
+    "visualintent_candidates": "supported",
+    "manager_preview": "pass-with-hold",
+    "workbench_release_readiness": "pass-with-hold",
+    "artistic_decision": "request-changes",
+    "artifact_package_audit": "staged",
+    "support_claims": "pass-with-hold",
+    "security_provenance": "pass-with-hold",
+    "stable_promotion": "blocked",
+    "release_publication": "not-performed",
+    "compatibility_certification": "not-claimed"
+  },
+  "rows": [
+    {
+      "id": "reference-software-path",
+      "subject": "software reference path",
+      "status": "pass",
+      "evidence_ref": "validation/captures/plasma-v2/reference-preview/profile-proof.json",
+      "claim": "deterministic reference proof"
+    },
+    {
+      "id": "gl11-candidate-path",
+      "subject": "GL11 acceleration candidate path",
+      "status": "pass",
+      "evidence_ref": "validation/captures/plasma-v2/acceleration/matrix.json",
+      "claim": "accelerated comparison, with software fallback recorded"
+    },
+    {
+      "id": "performance-envelope",
+      "subject": "Plasma v2 performance envelope",
+      "status": "pass",
+      "evidence_ref": "validation/captures/plasma-v2/performance/envelope.json",
+      "claim": "resource envelope evidence only"
+    },
+    {
+      "id": "packc-v1-candidate",
+      "subject": "packc v1-candidate data pack",
+      "status": "pass",
+      "evidence_ref": "products/savers/plasma/content/v2/examples/plasma_lava_v2.toml",
+      "claim": "data-only pack compilation"
+    },
+    {
+      "id": "visualintent-candidates",
+      "subject": "three deterministic VisualIntent candidates",
+      "status": "pass",
+      "evidence_ref": "validation/captures/plasma-v2/matrix/visualintent-candidates.json",
+      "claim": "bounded local candidate generation"
+    },
+    {
+      "id": "manager-preview",
+      "subject": "Manager stable-promotion inspection",
+      "status": "pass-with-hold",
+      "evidence_ref": "validation/captures/plasma-v2/stable-promotion/manager-final-review.json",
+      "claim": "preview and refusal facts only"
+    },
+    {
+      "id": "workbench-release-readiness",
+      "subject": "Workbench stable-promotion inspection",
+      "status": "pass-with-hold",
+      "evidence_ref": "validation/captures/plasma-v2/stable-promotion/workbench-final-review.json",
+      "claim": "inspection and review facts only"
+    },
+    {
+      "id": "final-artistic-stable-hold",
+      "subject": "final stable artistic decision",
+      "status": "hold",
+      "evidence_ref": "validation/captures/plasma-v2/final-artistic-decision/decision.stable.toml",
+      "claim": "request-changes until explicit final human stable acceptance exists"
+    },
+    {
+      "id": "artifact-package-audit",
+      "subject": "stable-promotion package stage",
+      "status": "pass",
+      "evidence_ref": "packaging/windows/plasma-v2-stable-promotion/manifest.toml",
+      "claim": "staged package refs and hashes only"
+    },
+    {
+      "id": "support-claims",
+      "subject": "stable-promotion support claims",
+      "status": "pass-with-hold",
+      "evidence_ref": "validation/captures/plasma-v2/stable-promotion/support-claims.json",
+      "claim": "evidence-classed support wording only"
+    },
+    {
+      "id": "security-provenance",
+      "subject": "stable-promotion security and provenance",
+      "status": "pass-with-hold",
+      "evidence_ref": "validation/captures/plasma-v2/stable-promotion/security-review.json",
+      "claim": "safety and provenance review only"
+    }
+  ]
+}

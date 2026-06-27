@@ -1,0 +1,125 @@
+{
+  "proof_schema": "proof-bundle-v1",
+  "status": "hold",
+  "subject": {
+    "product": "plasma",
+    "profile": "plasma.v2.reference.preview",
+    "candidate_id": "plasma-v2-rc1"
+  },
+  "source": {
+    "input_bundle": "validation/captures/plasma-v2/reference-preview/proof-bundle-v1.json",
+    "release_candidate_gate": "validation/captures/plasma-v2/release-candidate/gate-report.json",
+    "stable_promotion_package": "packaging/windows/plasma-v2-stable-promotion/manifest.toml",
+    "stable_artistic_decision": "validation/captures/plasma-v2/final-artistic-decision/decision.stable.toml"
+  },
+  "result_axes": {
+    "reference_execution": {
+      "status": "pass",
+      "evidence_refs": [
+        "validation/captures/plasma-v2/reference-preview/profile-proof.json"
+      ],
+      "summary": "Stable-promotion projection consumes the existing v2 reference proof."
+    },
+    "gl11_candidate_comparison": {
+      "status": "pass",
+      "comparison_class": "bounded-observational",
+      "evidence_refs": [
+        "validation/captures/plasma-v2/acceleration/matrix.json"
+      ],
+      "summary": "Software reference and GL11 candidate comparison is recorded."
+    },
+    "performance_envelope": {
+      "status": "pass-with-warnings",
+      "evidence_refs": [
+        "validation/captures/plasma-v2/performance/envelope.json"
+      ],
+      "summary": "Performance envelope is present with explicit portable-runner warnings."
+    },
+    "packc_v1_candidate": {
+      "status": "pass",
+      "evidence_refs": [
+        "products/savers/plasma/content/v2/examples/plasma_lava_v2.toml",
+        "tools/scripts/check_packc.py"
+      ],
+      "summary": "Packc remains data-only and bounded."
+    },
+    "visualintent_candidates": {
+      "status": "pass",
+      "evidence_refs": [
+        "validation/captures/plasma-v2/matrix/visualintent-candidates.json"
+      ],
+      "summary": "VisualIntent candidates are bounded local candidates, not source generation."
+    },
+    "manager_preview": {
+      "status": "pass-with-hold",
+      "evidence_refs": [
+        "validation/captures/plasma-v2/stable-promotion/manager-final-review.json"
+      ],
+      "summary": "Manager shows package and refusal facts without install mutation."
+    },
+    "workbench_release_readiness": {
+      "status": "pass-with-hold",
+      "evidence_refs": [
+        "validation/captures/plasma-v2/stable-promotion/workbench-final-review.json"
+      ],
+      "summary": "Workbench shows release-readiness facts without publication authority."
+    },
+    "artistic_decision": {
+      "status": "request-changes",
+      "final_stable_artistic_acceptance": false,
+      "evidence_refs": [
+        "validation/captures/plasma-v2/final-artistic-decision/decision.stable.toml"
+      ],
+      "summary": "Stable promotion is held until explicit final human stable acceptance exists."
+    },
+    "artifact_package_audit": {
+      "status": "pass",
+      "evidence_class": "buildable",
+      "evidence_refs": [
+        "packaging/windows/plasma-v2-stable-promotion/manifest.toml",
+        "packaging/windows/plasma-v2-stable-promotion/checksums.sha256"
+      ],
+      "summary": "The stable-promotion package references and hashes the current `.scr` output without committing it."
+    },
+    "support_claims": {
+      "status": "pass-with-hold",
+      "certified": false,
+      "evidence_refs": [
+        "validation/captures/plasma-v2/stable-promotion/support-claims.json",
+        "docs/compatibility/plasma-v2-stable.md"
+      ],
+      "summary": "Compatibility is evidence-classed and not certified."
+    },
+    "security_provenance": {
+      "status": "pass-with-hold",
+      "evidence_refs": [
+        "validation/captures/plasma-v2/stable-promotion/security-review.json",
+        "validation/captures/plasma-v2/stable-promotion/provenance-review.json"
+      ],
+      "summary": "Security and provenance reviews are recorded for the staged package."
+    },
+    "stable_promotion": {
+      "status": "blocked",
+      "stable_release": false,
+      "evidence_refs": [
+        "validation/captures/plasma-v2/final-artistic-decision/decision.stable.toml"
+      ],
+      "summary": "Stable release promotion is blocked by the artistic acceptance hold."
+    },
+    "release_publication": {
+      "status": "not-performed",
+      "published": false,
+      "evidence_refs": [],
+      "summary": "No public publication occurred."
+    },
+    "compatibility_certification": {
+      "status": "not-claimed",
+      "certified": false,
+      "evidence_refs": [
+        "validation/captures/plasma-v2/stable-promotion/support-claims.json"
+      ],
+      "summary": "Compatibility certification is not claimed."
+    }
+  },
+  "claim_boundary": "Stable-promotion evidence projection only; stable release promotion is blocked, release publication did not occur, compatibility certification is not claimed, and product truth remains ScreenSave-owned."
+}

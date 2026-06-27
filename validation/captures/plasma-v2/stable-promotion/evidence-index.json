@@ -1,0 +1,71 @@
+{
+  "schema": "screensave.plasma-v2.stable-promotion.evidence-index.v1",
+  "status": "active-hold",
+  "candidate_id": "plasma-v2-rc1",
+  "entries": [
+    {
+      "id": "reference-proof",
+      "kind": "proof",
+      "ref": "validation/captures/plasma-v2/reference-preview/profile-proof.json",
+      "status": "tracked",
+      "claim_boundary": "deterministic reference proof only"
+    },
+    {
+      "id": "stable-promotion-proof-bundle",
+      "kind": "proof-bundle",
+      "ref": "validation/captures/plasma-v2/stable-promotion/proof-bundle-v1.json",
+      "status": "tracked",
+      "claim_boundary": "stable-promotion hold projection only"
+    },
+    {
+      "id": "stable-promotion-proof-matrix",
+      "kind": "proof-matrix",
+      "ref": "validation/captures/plasma-v2/stable-promotion/proof-matrix.json",
+      "status": "tracked",
+      "claim_boundary": "stable-promotion evidence matrix only"
+    },
+    {
+      "id": "stable-artistic-decision",
+      "kind": "artistic-decision",
+      "ref": "validation/captures/plasma-v2/final-artistic-decision/decision.stable.toml",
+      "status": "tracked",
+      "claim_boundary": "request-changes; no final stable acceptance"
+    },
+    {
+      "id": "stable-package-stage",
+      "kind": "package",
+      "ref": "packaging/windows/plasma-v2-stable-promotion/manifest.toml",
+      "status": "tracked",
+      "claim_boundary": "staging only; not publication"
+    },
+    {
+      "id": "stable-support-claims",
+      "kind": "support",
+      "ref": "validation/captures/plasma-v2/stable-promotion/support-claims.json",
+      "status": "tracked",
+      "claim_boundary": "evidence-classed support only"
+    },
+    {
+      "id": "stable-security-review",
+      "kind": "security",
+      "ref": "validation/captures/plasma-v2/stable-promotion/security-review.json",
+      "status": "tracked",
+      "claim_boundary": "security review only"
+    },
+    {
+      "id": "stable-manager-review",
+      "kind": "review",
+      "ref": "validation/captures/plasma-v2/stable-promotion/manager-final-review.json",
+      "status": "tracked",
+      "claim_boundary": "Manager inspection only"
+    },
+    {
+      "id": "stable-workbench-review",
+      "kind": "review",
+      "ref": "validation/captures/plasma-v2/stable-promotion/workbench-final-review.json",
+      "status": "tracked",
+      "claim_boundary": "Workbench inspection only"
+    }
+  ],
+  "claim_boundary": "Stable-promotion evidence index only; not publication, stable promotion, compatibility certification, or automatic artistic acceptance."
+}
