@@ -1,0 +1,25 @@
+{
+  "schema": "screensave.plasma-v2.release-candidate.support-claims.v1",
+  "status": "pass",
+  "candidate_id": "plasma-v2-rc1",
+  "stable": false,
+  "release_promotion": "blocked",
+  "compatibility_certification": "not-claimed",
+  "claims": {
+    "current_windows_artifact_evidence": "supports release-candidate readiness only",
+    "pe_audit_zero_violations": "binary facts only; not OS certification",
+    "gl11_candidate": "first optional acceleration candidate only",
+    "packc_v1_candidate": "data-only packs only; no executable plugin ecosystem",
+    "manager_preview": "preview/refusal facts only; no install mutation",
+    "workbench_release_readiness": "inspection facts only; no publication",
+    "stable_release": "blocked"
+  },
+  "refs": {
+    "product_support_matrix": "products/savers/plasma/docs/plasma-v2-support-matrix.md",
+    "compatibility_notes": "docs/compatibility/plasma-v2-release-candidate.md",
+    "package_support_matrix": "packaging/windows/plasma-v2-release-candidate/support-matrix.md",
+    "package_manifest": "packaging/windows/plasma-v2-release-candidate/manifest.toml",
+    "compatibility_spec": "specs/compatibility.md"
+  },
+  "claim_boundary": "Support claims are evidence-classed release-candidate wording only; not stable release, release publication, compatibility certification, or all-saver migration."
+}
