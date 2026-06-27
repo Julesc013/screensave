@@ -1,0 +1,130 @@
+{
+  "allowed_classifications": [
+    "plan-visible",
+    "render-visible",
+    "intentionally structural",
+    "unsupported and hidden"
+  ],
+  "baseline_checksum": "3610565700",
+  "baseline_variant": "baseline",
+  "claim_boundary": "Direct Basic-control influence for the PAW-I-R1 instrument audit only; this does not prove final artistic acceptance or stable promotion.",
+  "controls": [
+    {
+      "baseline_checksum": "3610565700",
+      "classification": "render-visible",
+      "control": "Field",
+      "proof_hash": "0175492be3863d0d5f8abab8ceae208e39d1ff6ab31be5e6ee6eaa64070247c1",
+      "variant": "field_family_fire",
+      "variant_checksum": "811688469"
+    },
+    {
+      "baseline_checksum": "3610565700",
+      "classification": "render-visible",
+      "control": "Scale",
+      "proof_hash": "dc6b96b5d9aca7620ebe58f2d73d253ddd21ee6bc7ec8cb6df064d730216567b",
+      "variant": "scale_900",
+      "variant_checksum": "27801156"
+    },
+    {
+      "baseline_checksum": "3610565700",
+      "classification": "render-visible",
+      "control": "Complexity",
+      "proof_hash": "6a5495e98b9b7fc0a74d378de2497e3ba28a12a3f7306a6ab5041763cb101f78",
+      "variant": "complexity_900",
+      "variant_checksum": "3749886160"
+    },
+    {
+      "baseline_checksum": "3610565700",
+      "classification": "render-visible",
+      "control": "Motion",
+      "proof_hash": "fe6543f3eaee6f9c1cacc02da8b84fee69a2e10d12040b974c69eee8742a9279",
+      "variant": "motion_pulse",
+      "variant_checksum": "123426219"
+    },
+    {
+      "baseline_checksum": "3610565700",
+      "classification": "render-visible",
+      "control": "Speed",
+      "proof_hash": "de25c5ffc35841dfa6c6fd60d8855d117f3d8ebc3142989970446eadc372407f",
+      "variant": "speed_850",
+      "variant_checksum": "454523386"
+    },
+    {
+      "baseline_checksum": "3610565700",
+      "classification": "render-visible",
+      "control": "Warp",
+      "proof_hash": "bd2e98c12f01650325164e2fbaea0495572e36f862c466411c8a14b9255b9e80",
+      "variant": "warp_800",
+      "variant_checksum": "28943776"
+    },
+    {
+      "baseline_checksum": "3610565700",
+      "classification": "render-visible",
+      "control": "Feedback",
+      "proof_hash": "e75df4f04f895fbbacb2e0c51c8a62f4bd74f95b6161956f6c3818d6ec00bf08",
+      "variant": "feedback_800",
+      "variant_checksum": "2408425796"
+    },
+    {
+      "baseline_checksum": "3610565700",
+      "classification": "render-visible",
+      "control": "Material",
+      "proof_hash": "252e8440653c253ab40f26db61d6fc7374c9c8bf1c0dde8c13912b678c42334a",
+      "variant": "material_aurora_cool",
+      "variant_checksum": "2876022578"
+    },
+    {
+      "baseline_checksum": "3610565700",
+      "classification": "render-visible",
+      "control": "Contrast",
+      "proof_hash": "eaacc72533c5cb711c2ab0476d5b33830bdf59b2310f5af268043f6efd649e55",
+      "variant": "contrast_900",
+      "variant_checksum": "1424403351"
+    },
+    {
+      "baseline_checksum": "3610565700",
+      "classification": "render-visible",
+      "control": "Brightness",
+      "proof_hash": "ce23b16d8a6a95797f6945f81051e940ec39419549fa06daad4affcbd9bce087",
+      "variant": "brightness_350",
+      "variant_checksum": "3873050200"
+    },
+    {
+      "baseline_checksum": "3610565700",
+      "classification": "render-visible",
+      "control": "Softness",
+      "proof_hash": "f60137b768ce0f5cffd50bc737aa31c92d4c441b51e818be4fe154f9d0c52b2c",
+      "variant": "softness_900",
+      "variant_checksum": "2532701858"
+    },
+    {
+      "baseline_checksum": "3610565700",
+      "classification": "render-visible",
+      "control": "Treatment",
+      "proof_hash": "37c2835fc16dafc8d7c5052de0f5465a728080d1101fb9ff2238dfc62bd93279",
+      "variant": "treatment_phosphor",
+      "variant_checksum": "3933449330"
+    },
+    {
+      "baseline_checksum": "3610565700",
+      "classification": "render-visible",
+      "control": "Seed",
+      "proof_hash": "3aa347737e861dd3ebedf34027c1d50696bd5b3e535a40c99716884afb5e9899",
+      "variant": "seed_777",
+      "variant_checksum": "3197808401"
+    }
+  ],
+  "schema": "screensave.plasma-v2.instrument-control-influence.v1",
+  "source": {
+    "branch": "main",
+    "commit": "093e679d797fdbad6430aa92c90e9404cb5eacc7",
+    "dirty": true
+  },
+  "status": "pass",
+  "surface": {
+    "format": "rgba8",
+    "height": 24,
+    "width": 32
+  },
+  "validation_errors": []
+}

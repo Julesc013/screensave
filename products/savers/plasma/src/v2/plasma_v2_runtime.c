@@ -54,9 +54,22 @@ static ss_u32 plasma_v2_runtime_next_rng(ss_u32 current)
 static ss_u32 plasma_v2_runtime_phase_step(const plasma_v2_runtime *runtime, ss_u32 delta_millis)
 {
     ss_u32 speed;
+    ss_u32 motion;
+    ss_u32 factor;
 
     speed = runtime->resolved_plan.resolved_spec.speed + (ss_u32)1U;
-    return ((delta_millis + (ss_u32)1U) * speed) / (ss_u32)64U;
+    motion = runtime->resolved_plan.resolved_spec.motion_kind;
+    factor = 3U;
+    if (motion == PLASMA_V2_MOTION_STILL) {
+        factor = 0U;
+    } else if (motion == PLASMA_V2_MOTION_DRIFT) {
+        factor = 1U;
+    } else if (motion == PLASMA_V2_MOTION_PULSE) {
+        factor = 4U;
+    } else if (motion == PLASMA_V2_MOTION_SWIRL) {
+        factor = 5U;
+    }
+    return ((delta_millis + (ss_u32)1U) * speed * (factor + 1U)) / (ss_u32)128U;
 }
 
 ss_u32 plasma_v2_runtime_required_field_cells(const plasma_v2_plan *plan, ss_u32 *cell_count_out)

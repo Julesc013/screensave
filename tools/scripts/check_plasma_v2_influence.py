@@ -1,237 +1,233 @@
-"""Prove Plasma v2 Basic-control output influence where claimed."""
+"""Prove direct Plasma v2 Basic-control influence for the instrument audit."""
 
 from __future__ import annotations
 
-import argparse
 import hashlib
 import json
 import pathlib
 import shutil
 import subprocess
 import sys
+from typing import Any
 
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-SRC_ROOT = ROOT / "products" / "savers" / "plasma" / "src"
-V2_SRC_ROOT = ROOT / "platform" / "src" / "v2"
-CAPTURE_ROOT = ROOT / "validation" / "captures" / "plasma-v2" / "influence"
-SUMMARY_PATH = CAPTURE_ROOT / "control-influence.json"
-SMOKE_ROOT = ROOT / "out" / "checks" / "plasma-v2-influence"
+SRC = ROOT / "products" / "savers" / "plasma" / "src" / "v2"
+FIELD = SRC / "field"
+OUTPUT = SRC / "output"
+REPORT_DIR = ROOT / "validation" / "captures" / "plasma-v2" / "instrument-audit"
+REPORT_JSON = REPORT_DIR / "control-influence.json"
+REPORT_MD = REPORT_DIR / "control-influence.md"
+OUT = ROOT / "out" / "checks" / "plasma-v2-direct-influence"
 
-MATERIAL_CONTROLS = [
-    ("field_family", "field_family_radial_warped"),
-    ("scale", "scale_070"),
-    ("complexity", "complexity_088"),
-    ("motion_speed", "motion_speed_085"),
-    ("warp_amount", "warp_amount_060"),
-    ("feedback_amount", "feedback_amount_045"),
-    ("output_style", "output_style_contour"),
-    ("material", "material_aurora_cool"),
-    ("brightness", "brightness_070"),
-    ("contrast", "contrast_060"),
-    ("treatment", "treatment_restrained_crt"),
+BASIC_CONTROLS = [
+    ("Field", "field_family_fire"),
+    ("Scale", "scale_900"),
+    ("Complexity", "complexity_900"),
+    ("Motion", "motion_pulse"),
+    ("Speed", "speed_850"),
+    ("Warp", "warp_800"),
+    ("Feedback", "feedback_800"),
+    ("Material", "material_aurora_cool"),
+    ("Contrast", "contrast_900"),
+    ("Brightness", "brightness_350"),
+    ("Softness", "softness_900"),
+    ("Treatment", "treatment_phosphor"),
+    ("Seed", "seed_777"),
 ]
 
-METADATA_CONTROLS = [
-    ("seed_policy", "metadata-only: host seed selection policy is recorded in the spec but applied before session creation"),
-    ("quality_intent", "metadata-only: PAW-DX admits only safe quality intent"),
+DIRECT_SOURCES = [
+    SRC / "plasma_v2_spec.c",
+    SRC / "plasma_v2_plan.c",
+    SRC / "plasma_v2_runtime.c",
+    FIELD / "plasma_v2_sources.c",
+    FIELD / "plasma_v2_generators.c",
+    FIELD / "plasma_v2_feedback.c",
+    FIELD / "plasma_v2_modifiers.c",
+    FIELD / "plasma_v2_field.c",
+    OUTPUT / "plasma_v2_output.c",
+    OUTPUT / "plasma_v2_material.c",
+    OUTPUT / "plasma_v2_treatment.c",
+    OUTPUT / "plasma_v2_present.c",
 ]
 
-REQUIRED_SOURCES = [
-    SRC_ROOT / "plasma_spec_v2.c",
-    SRC_ROOT / "plasma_migration_v2.c",
-    SRC_ROOT / "plasma_v2_core.c",
-    SRC_ROOT / "plasma_v2_adapter.c",
-    V2_SRC_ROOT / "base_validate.c",
-    V2_SRC_ROOT / "config_view.c",
-    V2_SRC_ROOT / "surface_view.c",
-    V2_SRC_ROOT / "draw_target.c",
-    V2_SRC_ROOT / "session_helpers.c",
-]
-
-CAPTURE_SOURCE = r'''
+SMOKE_SOURCE = r'''
 #include <stdio.h>
-#include <string.h>
 
-#include "plasma_v2_adapter.h"
-#include "plasma_spec_v2.h"
+#include "plasma_v2_runtime.h"
+#include "field/plasma_v2_field.h"
+#include "output/plasma_v2_output.h"
+#include "output/plasma_v2_material.h"
+#include "output/plasma_v2_treatment.h"
+#include "output/plasma_v2_present.h"
 
-static void fill_size(ss_v2_size *size, ss_u32 width, ss_u32 height)
+#define FIELD_CAPACITY ((ss_u32)(32U * 24U))
+#define BYTE_CAPACITY ((ss_u32)(32U * 24U * 4U))
+
+static ss_u32 field_a[32U * 24U];
+static ss_u32 field_b[32U * 24U];
+static ss_u32 field_history[32U * 24U];
+static ss_u8 material_buffer[32U * 24U * 4U];
+static ss_u8 treatment_buffer[32U * 24U * 4U];
+static ss_u8 present_buffer[32U * 24U * 4U];
+
+static ss_u32 token_equals(const char *left, const char *right)
 {
-    size->struct_size = (ss_u32)sizeof(*size);
-    size->abi_version = SS_V2_ABI_VERSION;
-    size->width = width;
-    size->height = height;
+    if (left == 0 || right == 0) {
+        return SS_V2_FALSE;
+    }
+    while (*left != '\0' && *right != '\0') {
+        if (*left != *right) {
+            return SS_V2_FALSE;
+        }
+        ++left;
+        ++right;
+    }
+    return *left == *right ? SS_V2_TRUE : SS_V2_FALSE;
 }
 
-static void fill_parts(ss_v2_u64_parts *parts, ss_u32 low)
+static ss_u32 apply_variant(plasma_v2_spec *spec, const char *variant)
 {
-    parts->struct_size = (ss_u32)sizeof(*parts);
-    parts->abi_version = SS_V2_ABI_VERSION;
-    parts->low = low;
-    parts->high = 0U;
-}
-
-static void fill_clock(ss_v2_clock *clock, ss_u32 frame, ss_u32 delta_ms)
-{
-    clock->struct_size = (ss_u32)sizeof(*clock);
-    clock->abi_version = SS_V2_ABI_VERSION;
-    fill_parts(&clock->frame_index, frame);
-    fill_parts(&clock->elapsed_ms, frame * delta_ms);
-    clock->delta_ms = delta_ms;
-    clock->fixed_step_ms = delta_ms;
-}
-
-static ss_u32 apply_variant(plasma_spec_v2 *spec, const char *variant)
-{
-    if (strcmp(variant, "baseline") == 0) {
+    if (token_equals(variant, "baseline") == SS_V2_TRUE) {
         return SS_V2_STATUS_OK;
     }
-    if (strcmp(variant, "field_family_radial_warped") == 0) {
-        return plasma_spec_v2_apply_basic_control(spec, PLASMA_V2_BASIC_CONTROL_FIELD_FAMILY, PLASMA_V2_FIELD_RADIAL_WARPED);
+    if (token_equals(variant, "field_family_fire") == SS_V2_TRUE) {
+        spec->field_family = PLASMA_V2_FIELD_FIRE;
+        return SS_V2_STATUS_OK;
     }
-    if (strcmp(variant, "scale_070") == 0) {
-        return plasma_spec_v2_apply_basic_control(spec, PLASMA_V2_BASIC_CONTROL_SCALE, 70U);
+    if (token_equals(variant, "scale_900") == SS_V2_TRUE) {
+        spec->scale = (ss_u32)900U;
+        return SS_V2_STATUS_OK;
     }
-    if (strcmp(variant, "complexity_088") == 0) {
-        return plasma_spec_v2_apply_basic_control(spec, PLASMA_V2_BASIC_CONTROL_COMPLEXITY, 88U);
+    if (token_equals(variant, "complexity_900") == SS_V2_TRUE) {
+        spec->complexity = (ss_u32)900U;
+        return SS_V2_STATUS_OK;
     }
-    if (strcmp(variant, "motion_speed_085") == 0) {
-        return plasma_spec_v2_apply_basic_control(spec, PLASMA_V2_BASIC_CONTROL_MOTION_SPEED, 85U);
+    if (token_equals(variant, "motion_pulse") == SS_V2_TRUE) {
+        spec->motion_kind = PLASMA_V2_MOTION_PULSE;
+        return SS_V2_STATUS_OK;
     }
-    if (strcmp(variant, "warp_amount_060") == 0) {
-        return plasma_spec_v2_apply_basic_control(spec, PLASMA_V2_BASIC_CONTROL_WARP_AMOUNT, 60U);
+    if (token_equals(variant, "speed_850") == SS_V2_TRUE) {
+        spec->speed = (ss_u32)850U;
+        return SS_V2_STATUS_OK;
     }
-    if (strcmp(variant, "feedback_amount_045") == 0) {
-        return plasma_spec_v2_apply_basic_control(spec, PLASMA_V2_BASIC_CONTROL_FEEDBACK_AMOUNT, 45U);
+    if (token_equals(variant, "warp_800") == SS_V2_TRUE) {
+        spec->warp = (ss_u32)800U;
+        return SS_V2_STATUS_OK;
     }
-    if (strcmp(variant, "output_style_contour") == 0) {
-        return plasma_spec_v2_apply_basic_control(spec, PLASMA_V2_BASIC_CONTROL_OUTPUT_STYLE, PLASMA_V2_OUTPUT_CONTOUR);
+    if (token_equals(variant, "feedback_800") == SS_V2_TRUE) {
+        spec->feedback = (ss_u32)800U;
+        return SS_V2_STATUS_OK;
     }
-    if (strcmp(variant, "material_aurora_cool") == 0) {
-        return plasma_spec_v2_apply_basic_control(spec, PLASMA_V2_BASIC_CONTROL_MATERIAL, PLASMA_V2_MATERIAL_AURORA_COOL);
+    if (token_equals(variant, "material_aurora_cool") == SS_V2_TRUE) {
+        return plasma_v2_spec_set_material_key(spec, "aurora_cool");
     }
-    if (strcmp(variant, "brightness_070") == 0) {
-        return plasma_spec_v2_apply_basic_control(spec, PLASMA_V2_BASIC_CONTROL_BRIGHTNESS, 70U);
+    if (token_equals(variant, "contrast_900") == SS_V2_TRUE) {
+        spec->contrast = (ss_u32)900U;
+        return SS_V2_STATUS_OK;
     }
-    if (strcmp(variant, "contrast_060") == 0) {
-        return plasma_spec_v2_apply_basic_control(spec, PLASMA_V2_BASIC_CONTROL_CONTRAST, 60U);
+    if (token_equals(variant, "brightness_350") == SS_V2_TRUE) {
+        spec->brightness = (ss_u32)350U;
+        return SS_V2_STATUS_OK;
     }
-    if (strcmp(variant, "treatment_restrained_crt") == 0) {
-        return plasma_spec_v2_apply_basic_control(spec, PLASMA_V2_BASIC_CONTROL_TREATMENT, PLASMA_V2_TREATMENT_RESTRAINED_CRT);
+    if (token_equals(variant, "softness_900") == SS_V2_TRUE) {
+        spec->softness = (ss_u32)900U;
+        return SS_V2_STATUS_OK;
+    }
+    if (token_equals(variant, "treatment_phosphor") == SS_V2_TRUE) {
+        spec->treatment_kind = PLASMA_V2_TREATMENT_PHOSPHOR;
+        return SS_V2_STATUS_OK;
+    }
+    if (token_equals(variant, "seed_777") == SS_V2_TRUE) {
+        spec->seed = (ss_u32)777U;
+        return SS_V2_STATUS_OK;
     }
     return SS_V2_STATUS_UNSUPPORTED;
 }
 
-static int render_variant(const char *path, const char *variant)
+static ss_u32 render_checksum(const char *variant, ss_u32 *checksum_out)
 {
-    const ss_v2_product_descriptor *product;
-    ss_v2_session *session;
-    ss_v2_session_desc session_desc;
-    ss_v2_advance_desc advance_desc;
-    ss_v2_render_desc render_desc;
-    ss_v2_surface_desc surface;
-    ss_v2_config_view config;
-    ss_v2_seed seed;
-    ss_v2_clock clock;
-    ss_v2_size size;
-    plasma_spec_v2 spec;
-    ss_u8 pixels[32U * 18U * 4U];
+    plasma_v2_spec spec;
+    plasma_v2_plan_request request;
+    plasma_v2_plan plan;
+    plasma_v2_runtime_buffers buffers;
+    plasma_v2_runtime runtime;
     ss_u32 index;
-    FILE *handle;
+    ss_u32 checksum;
 
-    plasma_spec_v2_set_defaults(&spec);
+    plasma_v2_spec_set_defaults(&spec);
     if (apply_variant(&spec, variant) != SS_V2_STATUS_OK) {
-        return 10;
+        return 1U;
     }
-    product = plasma_v2_product_descriptor();
-    if (ss_v2_product_descriptor_is_valid(product) != SS_V2_STATUS_OK) {
-        return 11;
-    }
-
-    fill_size(&size, 32U, 18U);
-    fill_clock(&clock, 0U, 100U);
-    seed.struct_size = (ss_u32)sizeof(seed);
-    seed.abi_version = SS_V2_ABI_VERSION;
-    seed.base_seed = 4096U;
-    seed.stream_seed = 17U;
-    seed.deterministic = SS_V2_TRUE;
-
-    config.struct_size = (ss_u32)sizeof(config);
-    config.abi_version = SS_V2_ABI_VERSION;
-    config.product_schema_id = PLASMA_SPEC_V2_SCHEMA_ID;
-    config.schema_version = PLASMA_SPEC_V2_SCHEMA_VERSION;
-    config.bytes = &spec;
-    config.byte_count = (ss_u32)sizeof(spec);
-
-    session_desc.struct_size = (ss_u32)sizeof(session_desc);
-    session_desc.abi_version = SS_V2_ABI_VERSION;
-    session_desc.mode = SS_V2_SESSION_MODE_PROOF;
-    session_desc.dimensions = size;
-    session_desc.seed = seed;
-    session_desc.clock = clock;
-    session_desc.product_config = config;
-    session_desc.diagnostics = 0;
-    session = 0;
-    if (product->session_ops->create(&session_desc, &session) != SS_V2_STATUS_OK || session == 0) {
-        return 12;
+    plasma_v2_spec_clamp(&spec);
+    request.struct_size = (ss_u32)sizeof(request);
+    request.requested_spec = &spec;
+    request.drawable_size.width = (ss_u32)32U;
+    request.drawable_size.height = (ss_u32)24U;
+    request.requested_renderer = PLASMA_V2_RENDERER_GDI;
+    request.capability_flags = PLASMA_V2_CAP_GDI | PLASMA_V2_CAP_FEEDBACK_BUFFER;
+    request.base_seed = (ss_u32)4096U;
+    request.stream_seed = (ss_u32)17U;
+    request.allow_experimental = SS_V2_FALSE;
+    if (plasma_v2_plan_compile(&request, &plan) != SS_V2_STATUS_OK) {
+        return 2U;
     }
 
-    advance_desc.struct_size = (ss_u32)sizeof(advance_desc);
-    advance_desc.abi_version = SS_V2_ABI_VERSION;
-    fill_clock(&advance_desc.clock, 1U, 100U);
-    advance_desc.diagnostics = 0;
-    if (product->session_ops->advance(session, &advance_desc) != SS_V2_STATUS_OK) {
-        product->session_ops->destroy(session);
-        return 13;
+    buffers.struct_size = (ss_u32)sizeof(buffers);
+    buffers.field_a = field_a;
+    buffers.field_b = field_b;
+    buffers.field_history = field_history;
+    buffers.material_buffer = material_buffer;
+    buffers.treatment_buffer = treatment_buffer;
+    buffers.present_buffer = present_buffer;
+    buffers.field_cell_count = FIELD_CAPACITY;
+    buffers.material_byte_count = BYTE_CAPACITY;
+    buffers.treatment_byte_count = BYTE_CAPACITY;
+    buffers.present_byte_count = BYTE_CAPACITY;
+    if (plasma_v2_runtime_bind(&plan, &buffers, &runtime) != SS_V2_STATUS_OK) {
+        return 3U;
     }
-    if (product->session_ops->advance(session, &advance_desc) != SS_V2_STATUS_OK) {
-        product->session_ops->destroy(session);
-        return 14;
+    if (plasma_v2_runtime_advance(&runtime, (ss_u32)16U) != SS_V2_STATUS_OK) {
+        return 4U;
+    }
+    if (plasma_v2_field_step(&runtime) != SS_V2_STATUS_OK) {
+        return 5U;
+    }
+    if (plasma_v2_output_transform_field(&runtime) != SS_V2_STATUS_OK) {
+        return 6U;
+    }
+    if (plasma_v2_material_map(&runtime) != SS_V2_STATUS_OK) {
+        return 7U;
+    }
+    if (plasma_v2_treatment_apply(&runtime) != SS_V2_STATUS_OK) {
+        return 8U;
+    }
+    if (plasma_v2_present_flat(&runtime) != SS_V2_STATUS_OK) {
+        return 9U;
     }
 
-    for (index = 0U; index < (ss_u32)sizeof(pixels); ++index) {
-        pixels[index] = 0U;
+    checksum = 0U;
+    for (index = 0U; index < BYTE_CAPACITY; ++index) {
+        checksum = (checksum * 33U) ^ (ss_u32)present_buffer[index];
     }
-    surface.struct_size = (ss_u32)sizeof(surface);
-    surface.abi_version = SS_V2_ABI_VERSION;
-    surface.width = 32U;
-    surface.height = 18U;
-    surface.stride_bytes = 32U * 4U;
-    surface.format = SS_V2_SURFACE_FORMAT_RGBA8;
-    surface.origin = SS_V2_SURFACE_ORIGIN_TOP_LEFT;
-    surface.pixels = pixels;
-
-    render_desc.struct_size = (ss_u32)sizeof(render_desc);
-    render_desc.abi_version = SS_V2_ABI_VERSION;
-    fill_clock(&render_desc.clock, 2U, 100U);
-    render_desc.draw_target = 0;
-    render_desc.surface = &surface;
-    render_desc.diagnostics = 0;
-    if (product->session_ops->render(session, &render_desc) != SS_V2_STATUS_OK) {
-        product->session_ops->destroy(session);
-        return 15;
-    }
-    product->session_ops->destroy(session);
-
-    handle = fopen(path, "wb");
-    if (handle == 0) {
-        return 16;
-    }
-    if (fwrite(pixels, 1U, sizeof(pixels), handle) != sizeof(pixels)) {
-        fclose(handle);
-        return 17;
-    }
-    fclose(handle);
-    return 0;
+    *checksum_out = checksum;
+    return checksum == 0U ? 10U : 0U;
 }
 
 int main(int argc, char **argv)
 {
-    if (argc != 3) {
+    ss_u32 checksum;
+    ss_u32 status;
+
+    if (argc != 2) {
         return 1;
     }
-    return render_variant(argv[1], argv[2]);
+    status = render_checksum(argv[1], &checksum);
+    if (status != 0U) {
+        return (int)status;
+    }
+    printf("%u\n", checksum);
+    return 0;
 }
 '''
 
@@ -245,164 +241,154 @@ def require(condition: bool, message: str, errors: list[str]) -> None:
         errors.append(message)
 
 
-def c_compiler() -> str | None:
-    for candidate in ["gcc", "cc", "clang"]:
+def compiler() -> str | None:
+    for candidate in ("gcc", "clang", "cc"):
         resolved = shutil.which(candidate)
         if resolved:
             return resolved
     return None
 
 
-def compile_capture_tool(errors: list[str]) -> pathlib.Path | None:
-    compiler = c_compiler()
-    if compiler is None:
-        errors.append("No C compiler found for Plasma v2 influence capture compile.")
+def compile_tool(errors: list[str]) -> pathlib.Path | None:
+    cc = compiler()
+    if cc is None:
+        errors.append("No C compiler found for Plasma v2 direct influence compile.")
         return None
-    for source in REQUIRED_SOURCES:
-        require(source.exists(), f"Missing source for influence capture: {repo_path(source)}", errors)
+    for source in DIRECT_SOURCES:
+        require(source.exists(), f"Missing source for direct influence capture: {repo_path(source)}", errors)
     if errors:
         return None
 
-    SMOKE_ROOT.mkdir(parents=True, exist_ok=True)
-    source_path = SMOKE_ROOT / "plasma_v2_influence_capture.c"
-    output_path = SMOKE_ROOT / "plasma_v2_influence_capture.exe"
-    source_path.write_text(CAPTURE_SOURCE.strip() + "\n", encoding="utf-8")
-
+    OUT.mkdir(parents=True, exist_ok=True)
+    smoke = OUT / "plasma_v2_direct_influence.c"
+    exe = OUT / "plasma_v2_direct_influence.exe"
+    smoke.write_text(SMOKE_SOURCE.strip() + "\n", encoding="utf-8")
     command = [
-        compiler,
+        cc,
         "-std=c89",
         "-pedantic",
         "-Werror",
         "-I",
         str(ROOT / "platform" / "include"),
         "-I",
-        str(SRC_ROOT),
-        str(source_path),
+        str(SRC),
+        str(smoke),
     ]
-    command.extend(str(source) for source in REQUIRED_SOURCES)
-    command.extend(["-o", str(output_path)])
+    command.extend(str(source) for source in DIRECT_SOURCES)
+    command.extend(["-o", str(exe)])
     result = subprocess.run(command, cwd=ROOT, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     if result.returncode != 0:
-        errors.append(
-            "Plasma v2 influence capture compile failed: "
-            + (result.stdout.strip() + " " + result.stderr.strip()).strip()
-        )
+        errors.append("Plasma v2 direct influence compile failed: " + (result.stdout + result.stderr).strip())
         return None
-    return output_path
+    return exe
 
 
-def render_hashes(tool_path: pathlib.Path, errors: list[str]) -> dict[str, str]:
-    hashes: dict[str, str] = {}
-    variants = [("baseline", "baseline")]
-    variants.extend(MATERIAL_CONTROLS)
-    for _control, variant in variants:
-        output_path = SMOKE_ROOT / f"{variant}.rgba"
-        result = subprocess.run(
-            [str(tool_path), str(output_path), variant],
-            cwd=ROOT,
-            text=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-        )
-        if result.returncode != 0:
-            errors.append(f"Influence capture failed for {variant}: returncode {result.returncode}")
-            continue
-        hashes[variant] = hashlib.sha256(output_path.read_bytes()).hexdigest()
-    return hashes
+def checksum_for(tool: pathlib.Path, variant: str, errors: list[str]) -> str:
+    result = subprocess.run([str(tool), variant], cwd=ROOT, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    if result.returncode != 0:
+        errors.append(f"Direct influence capture failed for {variant}: returncode {result.returncode}")
+        return ""
+    text = result.stdout.strip()
+    if not text:
+        errors.append(f"Direct influence capture produced no checksum for {variant}.")
+        return ""
+    return text
 
 
-def build_summary(hashes: dict[str, str]) -> dict:
-    baseline_hash = hashes["baseline"]
+def git_text(args: list[str]) -> str:
+    try:
+        return subprocess.check_output(["git", *args], cwd=ROOT, text=True, stderr=subprocess.DEVNULL).strip()
+    except Exception:
+        return "unknown"
+
+
+def build_report(checksums: dict[str, str], errors: list[str]) -> dict[str, Any]:
+    baseline = checksums.get("baseline", "")
     controls = []
-    for control, variant in MATERIAL_CONTROLS:
+    for control, variant in BASIC_CONTROLS:
+        variant_checksum = checksums.get(variant, "")
+        status = "render-visible" if variant_checksum and variant_checksum != baseline else "fail"
         controls.append(
             {
                 "control": control,
-                "status": "materially_influences_output",
+                "classification": status,
                 "variant": variant,
-                "baseline_sha256": baseline_hash,
-                "variant_sha256": hashes[variant],
+                "baseline_checksum": baseline,
+                "variant_checksum": variant_checksum,
+                "proof_hash": hashlib.sha256(f"{control}:{baseline}:{variant_checksum}".encode("utf-8")).hexdigest()
+                if variant_checksum
+                else "",
             }
         )
-    for control, note in METADATA_CONTROLS:
-        controls.append(
-            {
-                "control": control,
-                "status": "metadata_only",
-                "note": note,
-            }
-        )
+        if status != "render-visible":
+            errors.append(f"Basic control {control} did not change direct v2 render output.")
     return {
-        "schema_version": "screensave.plasma-v2.influence.v0",
-        "profile": "plasma.v2.reference.preview",
-        "surface": {"width": 32, "height": 18, "format": "rgba8"},
+        "schema": "screensave.plasma-v2.instrument-control-influence.v1",
+        "status": "pass" if not errors else "fail",
+        "source": {
+            "branch": git_text(["branch", "--show-current"]),
+            "commit": git_text(["rev-parse", "HEAD"]),
+            "dirty": bool(git_text(["status", "--short"])),
+        },
+        "surface": {"width": 32, "height": 24, "format": "rgba8"},
         "baseline_variant": "baseline",
-        "baseline_sha256": baseline_hash,
+        "baseline_checksum": baseline,
+        "allowed_classifications": [
+            "plan-visible",
+            "render-visible",
+            "intentionally structural",
+            "unsupported and hidden",
+        ],
         "controls": controls,
-        "claim_boundary": "Basic-control influence for the PAW-DX Plasma v2 reference preview slice only; not artistic acceptance or release promotion.",
+        "validation_errors": errors,
+        "claim_boundary": "Direct Basic-control influence for the PAW-I-R1 instrument audit only; this does not prove final artistic acceptance or stable promotion.",
     }
 
 
-def validate_summary(summary: dict, hashes: dict[str, str], errors: list[str]) -> None:
-    require(summary.get("schema_version") == "screensave.plasma-v2.influence.v0", "Influence summary schema mismatch.", errors)
-    require(summary.get("baseline_sha256") == hashes.get("baseline"), "Influence baseline hash is stale.", errors)
-    seen = set()
-    controls = summary.get("controls", [])
-    require(isinstance(controls, list), "Influence summary controls must be a list.", errors)
-    for item in controls:
-        control = item.get("control")
-        seen.add(control)
-        if item.get("status") == "materially_influences_output":
-            variant = item.get("variant")
-            require(variant in hashes, f"Influence summary references unknown variant {variant!r}.", errors)
-            require(item.get("variant_sha256") == hashes.get(variant), f"Influence hash for {control} is stale.", errors)
-            require(
-                hashes.get(variant) != hashes.get("baseline"),
-                f"Control {control} did not materially change rendered output.",
-                errors,
-            )
-        elif item.get("status") == "metadata_only":
-            require("note" in item, f"Metadata-only control {control} must include a note.", errors)
-        else:
-            errors.append(f"Control {control} has unsupported status {item.get('status')!r}.")
-    for control, _variant in MATERIAL_CONTROLS:
-        require(control in seen, f"Influence summary missing material control {control}.", errors)
-    for control, _note in METADATA_CONTROLS:
-        require(control in seen, f"Influence summary missing metadata control {control}.", errors)
-    require("artistic acceptance" in summary.get("claim_boundary", ""), "Influence claim boundary must block artistic acceptance.", errors)
+def report_markdown(report: dict[str, Any]) -> str:
+    lines = [
+        "# Plasma v2 Direct-Control Influence",
+        "",
+        f"- Status: {report.get('status')}",
+        f"- Claim boundary: {report.get('claim_boundary')}",
+        "",
+        "## Controls",
+        "",
+    ]
+    for item in report.get("controls", []):
+        lines.append(f"- {item.get('classification')}: {item.get('control')} ({item.get('variant')})")
+    lines.extend(["", "## Errors", ""])
+    errors = report.get("validation_errors", [])
+    if errors:
+        for error in errors:
+            lines.append(f"- {error}")
+    else:
+        lines.append("- none")
+    lines.append("")
+    return "\n".join(lines)
+
+
+def write_report(report: dict[str, Any]) -> None:
+    REPORT_DIR.mkdir(parents=True, exist_ok=True)
+    REPORT_JSON.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    REPORT_MD.write_text(report_markdown(report), encoding="utf-8")
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--update", action="store_true", help="Refresh committed influence summary JSON.")
-    args = parser.parse_args()
-
     errors: list[str] = []
-    tool_path = compile_capture_tool(errors)
-    hashes: dict[str, str] = {}
-    if tool_path is not None:
-        hashes = render_hashes(tool_path, errors)
-    if not errors and "baseline" not in hashes:
-        errors.append("Influence capture did not produce a baseline hash.")
-
-    if not errors and args.update:
-        CAPTURE_ROOT.mkdir(parents=True, exist_ok=True)
-        summary = build_summary(hashes)
-        SUMMARY_PATH.write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-
-    if not errors:
-        if not SUMMARY_PATH.exists():
-            errors.append(f"Missing influence summary: {repo_path(SUMMARY_PATH)}")
-        else:
-            summary = json.loads(SUMMARY_PATH.read_text(encoding="utf-8"))
-            validate_summary(summary, hashes, errors)
-
+    checksums: dict[str, str] = {}
+    tool = compile_tool(errors)
+    if tool is not None:
+        checksums["baseline"] = checksum_for(tool, "baseline", errors)
+        for _control, variant in BASIC_CONTROLS:
+            checksums[variant] = checksum_for(tool, variant, errors)
+    report = build_report(checksums, errors)
+    write_report(report)
     if errors:
         for error in errors:
             print(error, file=sys.stderr)
         return 1
-
-    print("Plasma v2 influence checks passed.")
+    print("Plasma v2 direct-control influence checks passed.")
     return 0
 
 
