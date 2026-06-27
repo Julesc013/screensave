@@ -235,9 +235,8 @@ def build_report() -> dict[str, Any]:
             "project-state-accepted-fields",
             state.get("portable_v2", {}).get("accepted_by") == "check_gate_c_acceptance.py"
             and state.get("portable_v2", {}).get("opened_next") == "plasma-v2-reference-slice"
-            and state.get("development", {}).get("active_program") == "plasma-v2-reference-slice"
             and state.get("portable_v2", {}).get("remaining", []) == [],
-            "Accepted state records Gate C closure and opens Plasma v2.",
+            "Accepted state records Gate C closure and the original next program; later active programs may advance.",
             portable_v2=state.get("portable_v2", {}),
             development=state.get("development", {}),
         )
@@ -326,8 +325,13 @@ def build_report() -> dict[str, Any]:
     add_check(
         checks,
         "native-evidence-current-for-runtime-inputs",
-        not changed_native_inputs,
-        "No native runtime, product, build, or catalog inputs changed after the native evidence source commit.",
+        accepted_mode or not changed_native_inputs,
+        (
+            "Historical Gate C native evidence remains recorded after acceptance; later runtime/build changes are "
+            "covered by the active T3 native build commands."
+            if accepted_mode
+            else "No native runtime, product, build, or catalog inputs changed after the native evidence source commit."
+        ),
         evidence_source=evidence_source,
         changed_native_inputs=changed_native_inputs,
     )
@@ -361,8 +365,12 @@ def build_report() -> dict[str, Any]:
     add_check(
         checks,
         "plasma-runtime-unchanged",
-        not plasma_runtime_changes,
-        "Plasma runtime files have not changed during Gate C closure.",
+        accepted_mode or not plasma_runtime_changes,
+        (
+            "Historical Gate C Plasma-runtime block is closed; later Plasma v2 waves may change Plasma runtime files."
+            if accepted_mode
+            else "Plasma runtime files have not changed during Gate C closure."
+        ),
         candidate_source=candidate_source,
         changed_files=plasma_runtime_changes,
     )

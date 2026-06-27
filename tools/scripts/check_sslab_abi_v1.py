@@ -15,6 +15,7 @@ SRC_V1 = ROOT / "tools" / "sslab" / "src_v1"
 SSLAB_SRC = ROOT / "tools" / "sslab" / "src"
 NOCTURNE_SRC = ROOT / "products" / "savers" / "nocturne" / "src"
 RICOCHET_SRC = ROOT / "products" / "savers" / "ricochet" / "src"
+PLASMA_SRC = ROOT / "products" / "savers" / "plasma" / "src"
 
 SOURCES = [
     SRC_V1 / "context.c",
@@ -30,6 +31,10 @@ SOURCES = [
     RICOCHET_SRC / "ricochet_core.c",
     RICOCHET_SRC / "ricochet_v2_adapter.c",
     RICOCHET_SRC / "ricochet_themes.c",
+    PLASMA_SRC / "plasma_spec_v2.c",
+    PLASMA_SRC / "plasma_migration_v2.c",
+    PLASMA_SRC / "plasma_v2_core.c",
+    PLASMA_SRC / "plasma_v2_adapter.c",
     ROOT / "platform" / "src" / "v2" / "base_validate.c",
     ROOT / "platform" / "src" / "v2" / "config_view.c",
     ROOT / "platform" / "src" / "v2" / "surface_view.c",
@@ -53,6 +58,8 @@ INCLUDE_ARGS = [
     str(NOCTURNE_SRC),
     "-I",
     str(RICOCHET_SRC),
+    "-I",
+    str(PLASMA_SRC),
 ]
 
 SMOKE_SOURCE = r'''
