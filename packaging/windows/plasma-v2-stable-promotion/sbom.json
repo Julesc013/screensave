@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "package_id": "screensave.plasma-v2.stable-promotion-stage",
+  "format": "screensave-local-sbom-v0",
+  "components": [
+    {
+      "name": "plasma.scr",
+      "kind": "windows-screensaver-artifact",
+      "path": "out/msvc/vs2017_xp/Release/plasma/plasma.scr",
+      "sha256": "72871f8ce5f4b45ba62663c82a32ea30e2beb6973663bd5203884d498bc74ec3",
+      "build_profile": "windows-current-x86"
+    },
+    {
+      "name": "plasma_lava_v2.toml",
+      "kind": "data-only-pack-example",
+      "path": "products/savers/plasma/content/v2/examples/plasma_lava_v2.toml",
+      "executable_payload": false
+    },
+    {
+      "name": "stable-promotion-proof-bundle",
+      "kind": "proof-reference",
+      "path": "validation/captures/plasma-v2/stable-promotion/proof-bundle-v1.json"
+    }
+  ],
+  "forbidden_payloads": [
+    "scripts",
+    "DLLs",
+    "macros",
+    "network references",
+    "runtime executable plugins"
+  ],
+  "compatibility_certification": "not claimed",
+  "claim_boundary": "SBOM records the stable-promotion staging inputs only; it is not publication or compatibility certification."
+}

@@ -1,0 +1,59 @@
+schema_version = 1
+package_id = "screensave.plasma-v2.stable-promotion-stage"
+status = "staged-stable-promotion"
+candidate_id = "plasma-v2-rc1"
+product = "plasma"
+profile = "plasma.v2.reference.preview"
+support_class = "buildable"
+published = false
+public_release = false
+stable = false
+release_promotion = "pending-gate"
+compatibility_certification = "not-claimed"
+installer_admission = "not-admitted"
+claim_boundary = "Stable-promotion package stage only; not publication, compatibility certification, public SDK stability, all-saver migration, or installer admission. The PROJECT_STATE stable flag changes only after the stable-promotion checker passes."
+
+[artifact_refs]
+plasma_scr_current = "out/msvc/vs2017_xp/Release/plasma/plasma.scr"
+plasma_scr_current_sha256 = "72871f8ce5f4b45ba62663c82a32ea30e2beb6973663bd5203884d498bc74ec3"
+build_profile = "windows-current-x86"
+build_command = "py -3 tools/buildctl/screensave_build.py build --profile windows-current-x86"
+artifact_evidence_class = "buildable"
+toolchain_identity = "packaging/windows/plasma-v2-stable-promotion/provenance.json"
+pe_audit = "validation/captures/portable-v2/native-windows-current/pe-audit-summary.json"
+
+[pack_refs]
+example_pack = "products/savers/plasma/content/v2/examples/plasma_lava_v2.toml"
+packc_status = "v1-candidate"
+packc_check = "py -3 tools/scripts/check_packc.py"
+
+[proof_refs]
+profile_proof = "validation/captures/plasma-v2/reference-preview/profile-proof.json"
+proof_bundle = "validation/captures/plasma-v2/stable-promotion/proof-bundle-v1.json"
+proof_matrix = "validation/captures/plasma-v2/stable-promotion/proof-matrix.json"
+release_candidate_gate = "validation/captures/plasma-v2/release-candidate/gate-report.json"
+stable_promotion_contract = "contracts/plasma_stable_promotion_v1.md"
+final_artistic_acceptance = "validation/captures/plasma-v2/final-artistic-decision/decision.stable.toml"
+support_claims = "validation/captures/plasma-v2/stable-promotion/support-claims.json"
+security_review = "validation/captures/plasma-v2/stable-promotion/security-review.json"
+provenance_review = "validation/captures/plasma-v2/stable-promotion/provenance-review.json"
+manager_final_review = "validation/captures/plasma-v2/stable-promotion/manager-final-review.json"
+workbench_final_review = "validation/captures/plasma-v2/stable-promotion/workbench-final-review.json"
+
+[review_refs]
+manager_preview = "products/apps/suite/src/manager_pack_preview.c"
+workbench_release_readiness = "products/apps/benchlab/src/benchlab_workbench_shell.c"
+
+[evidence_refs]
+aide_evidence_index = ".aide/evidence/index.toml"
+package_check = "tools/scripts/check_plasma_v2_package_stage.py"
+
+[support]
+known_limits = "packaging/windows/plasma-v2-stable-promotion/known-limits.md"
+support_matrix = "packaging/windows/plasma-v2-stable-promotion/support-matrix.md"
+install_notes = "packaging/windows/plasma-v2-stable-promotion/install-notes.md"
+rollback_notes = "packaging/windows/plasma-v2-stable-promotion/rollback-notes.md"
+release_notes_preview = "packaging/windows/plasma-v2-stable-promotion/release-notes.preview.md"
+checksums = "packaging/windows/plasma-v2-stable-promotion/checksums.sha256"
+provenance = "packaging/windows/plasma-v2-stable-promotion/provenance.json"
+sbom = "packaging/windows/plasma-v2-stable-promotion/sbom.json"

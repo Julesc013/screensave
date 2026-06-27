@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "package_id": "screensave.plasma-v2.stable-promotion-stage",
+  "source_commit": "b32c821415585f2be40c012a491c2a9465d759dc",
+  "source_dirty_at_intake": false,
+  "artifact": {
+    "path": "out/msvc/vs2017_xp/Release/plasma/plasma.scr",
+    "sha256": "72871f8ce5f4b45ba62663c82a32ea30e2beb6973663bd5203884d498bc74ec3",
+    "profile": "windows-current-x86",
+    "toolchain": "VS2017 v141_xp Release Win32",
+    "subsystem_floor": "Windows 5.01 evidence class"
+  },
+  "proof_refs": [
+    "validation/captures/plasma-v2/stable-promotion/proof-bundle-v1.json",
+    "validation/captures/plasma-v2/stable-promotion/proof-matrix.json"
+  ],
+  "review_refs": [
+    "validation/captures/plasma-v2/stable-promotion/manager-final-review.json",
+    "validation/captures/plasma-v2/stable-promotion/workbench-final-review.json",
+    "validation/captures/plasma-v2/final-artistic-decision/decision.stable.toml"
+  ],
+  "boundary": {
+    "published": false,
+    "stable_state_transition": "pending checker",
+    "compatibility_certification": "not claimed",
+    "public_sdk_stability": "not claimed"
+  },
+  "claim_boundary": "Stable-promotion provenance review only; not publication or compatibility certification."
+}

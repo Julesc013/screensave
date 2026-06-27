@@ -29,6 +29,20 @@ RC_REQUIRED = [
     RC_STAGE_DIR / "rollback-notes.md",
     RC_STAGE_DIR / "provenance.json",
 ]
+STABLE_STAGE_DIR = ROOT / "packaging" / "windows" / "plasma-v2-stable-promotion"
+STABLE_MANIFEST = STABLE_STAGE_DIR / "manifest.toml"
+STABLE_CHECKSUMS = STABLE_STAGE_DIR / "checksums.sha256"
+STABLE_REQUIRED = [
+    STABLE_MANIFEST,
+    STABLE_CHECKSUMS,
+    STABLE_STAGE_DIR / "provenance.json",
+    STABLE_STAGE_DIR / "sbom.json",
+    STABLE_STAGE_DIR / "known-limits.md",
+    STABLE_STAGE_DIR / "support-matrix.md",
+    STABLE_STAGE_DIR / "install-notes.md",
+    STABLE_STAGE_DIR / "rollback-notes.md",
+    STABLE_STAGE_DIR / "release-notes.preview.md",
+]
 STAGE_TOOL = ROOT / "tools" / "release" / "stage_plasma_v2.py"
 SUMMARY = ROOT / "out" / "release" / "plasma-v2-preview" / "stage-summary.json"
 
@@ -124,6 +138,79 @@ def validate_release_candidate(errors: list[str]) -> None:
             require("compatibility certification" in text or path.name == "checksums.sha256", f"{path.relative_to(ROOT)} must mention compatibility certification boundary.", errors)
 
 
+def validate_stable_promotion(errors: list[str]) -> None:
+    if not STABLE_STAGE_DIR.exists():
+        return
+
+    for path in STABLE_REQUIRED:
+        require(path.exists(), f"Missing stable-promotion package path: {path.relative_to(ROOT)}", errors)
+
+    if STABLE_MANIFEST.exists():
+        manifest = load_toml(STABLE_MANIFEST)
+        require(manifest.get("status") == "staged-stable-promotion", "stable-promotion package status must be staged-stable-promotion.", errors)
+        require(manifest.get("candidate_id") == "plasma-v2-rc1", "stable-promotion package must target plasma-v2-rc1.", errors)
+        require(manifest.get("published") is False, "stable-promotion package must not be published.", errors)
+        require(manifest.get("public_release") is False, "stable-promotion package must not mark public release true.", errors)
+        require(manifest.get("stable") is False, "stable-promotion package staging must not mark stable true before the state gate.", errors)
+        require(manifest.get("release_promotion") == "pending-gate", "stable-promotion package release promotion must remain pending-gate.", errors)
+        require(manifest.get("compatibility_certification") == "not-claimed", "stable-promotion package must not certify compatibility.", errors)
+        require(manifest.get("support_class") == "buildable", "stable-promotion package support class must be buildable.", errors)
+        require("not publication" in manifest.get("claim_boundary", ""), "stable-promotion manifest must preserve publication boundary.", errors)
+
+        artifact_ref = manifest.get("artifact_refs", {}).get("plasma_scr_current", "")
+        require("out/" in artifact_ref, "stable-promotion Plasma .scr must be an output ref, not a committed binary.", errors)
+        for section, key in [
+            ("artifact_refs", "toolchain_identity"),
+            ("artifact_refs", "pe_audit"),
+            ("pack_refs", "example_pack"),
+            ("proof_refs", "release_candidate_gate"),
+            ("proof_refs", "stable_promotion_contract"),
+            ("evidence_refs", "aide_evidence_index"),
+            ("support", "known_limits"),
+            ("support", "support_matrix"),
+            ("support", "install_notes"),
+            ("support", "rollback_notes"),
+            ("support", "release_notes_preview"),
+            ("support", "checksums"),
+            ("support", "provenance"),
+            ("support", "sbom"),
+        ]:
+            ref = manifest.get(section, {}).get(key, "")
+            require(bool(ref) and (ROOT / ref).exists(), f"stable-promotion manifest ref missing or absent: {section}.{key}={ref}", errors)
+        for section, key in [
+            ("proof_refs", "proof_bundle"),
+            ("proof_refs", "proof_matrix"),
+            ("proof_refs", "final_artistic_acceptance"),
+            ("proof_refs", "support_claims"),
+            ("proof_refs", "security_review"),
+            ("proof_refs", "provenance_review"),
+            ("proof_refs", "manager_final_review"),
+            ("proof_refs", "workbench_final_review"),
+        ]:
+            ref = manifest.get(section, {}).get(key, "")
+            require(bool(ref), f"stable-promotion manifest pending ref must be declared: {section}.{key}", errors)
+
+    if STABLE_CHECKSUMS.exists():
+        checksums = parse_sha256_lines(STABLE_CHECKSUMS, errors)
+        require(bool(checksums), "stable-promotion checksum file must list refs.", errors)
+        for ref, expected in checksums.items():
+            path = ROOT / ref
+            require(path.exists(), f"stable-promotion checksum ref missing: {ref}", errors)
+            if path.exists():
+                require(sha256_file(path) == expected, f"stable-promotion checksum mismatch for {ref}", errors)
+
+    for path in STABLE_REQUIRED:
+        if path.exists() and path.suffix.lower() in {".md", ".toml", ".json"}:
+            text = path.read_text(encoding="utf-8", errors="ignore").lower()
+            require("stable = true" not in text, f"{path.relative_to(ROOT)} must not mark stable true in staging.", errors)
+            require("public_release = true" not in text, f"{path.relative_to(ROOT)} must not mark public release true.", errors)
+            require(
+                "compatibility certification" in text or path.name == "checksums.sha256",
+                f"{path.relative_to(ROOT)} must mention compatibility certification boundary.",
+                errors,
+            )
+
+
 def main() -> int:
     errors: list[str] = []
     for path in [MANIFEST, README, KNOWN_LIMITS, CHECKSUMS, STAGE_TOOL]:
@@ -182,6 +269,7 @@ def main() -> int:
             require(summary.get("stable") is False, "stage summary must keep stable false.", errors)
 
     validate_release_candidate(errors)
+    validate_stable_promotion(errors)
 
     if errors:
         for error in errors:
