@@ -12,8 +12,10 @@ repair_classes:
   - proof_baseline_drift
   - packc_schema_drift
   - aide_evidence_drift
+  - evidence_index_drift
   - ci_drift
   - artifact_manifest_drift
+  - package_checksum_drift
   - workbench_surface_drift
   - release_readiness_gap
 commit_body_required:

@@ -17,6 +17,7 @@ POLICY = ROOT / ".aide" / "policies" / "screensave-repair.yaml"
 TOOL = ROOT / "tools" / "aideops" / "repair_queue.py"
 SCAN_OUT = ROOT / "out" / "aide" / "repairs" / "scan.json"
 BURN_DOWN = ROOT / "validation" / "captures" / "plasma-v2" / "release-candidate" / "repair-burndown.json"
+STABLE_BURN_DOWN = ROOT / "validation" / "captures" / "plasma-v2" / "stable-promotion" / "repair-burndown.json"
 
 REPAIR_CLASSES = {
     "validator_failure",
@@ -25,8 +26,10 @@ REPAIR_CLASSES = {
     "proof_baseline_drift",
     "packc_schema_drift",
     "aide_evidence_drift",
+    "evidence_index_drift",
     "ci_drift",
     "artifact_manifest_drift",
+    "package_checksum_drift",
     "workbench_surface_drift",
     "release_readiness_gap",
 }
@@ -98,6 +101,28 @@ def main() -> int:
             )
             require(burn.get("open_blocking_count") == 0, "release-candidate repair burn-down open_blocking_count must be 0.", errors)
             require("compatibility certification" in str(burn.get("claim_boundary", "")), "release-candidate repair burn-down must block certification.", errors)
+        stable_burn = queue.get("stable_promotion_burndown", {})
+        if stable_burn:
+            require(
+                stable_burn.get("status") in {
+                    "no-blocking-stable-promotion-repairs",
+                    "blocking-stable-promotion-repairs-open",
+                },
+                "stable-promotion repair burn-down status invalid.",
+                errors,
+            )
+            require(
+                stable_burn.get("open_blocking_count") in {0, 1},
+                "stable-promotion repair burn-down open_blocking_count must be 0 or 1.",
+                errors,
+            )
+            require("compatibility certification" in str(stable_burn.get("claim_boundary", "")), "stable-promotion repair burn-down must block certification.", errors)
+            for repair_id in stable_burn.get("blocking_repairs", []):
+                require(
+                    any(item.get("id") == repair_id for item in queue.get("repairs", []) if isinstance(item, dict)),
+                    f"stable-promotion blocking repair not listed: {repair_id}",
+                    errors,
+                )
         validate_repair(load_toml(TEMPLATE), "repair template", errors)
         policy_text = POLICY.read_text(encoding="utf-8")
         for needle in [
@@ -134,6 +159,18 @@ def main() -> int:
             )
             require(burn.get("open_blocking_count") == 0, "repair burn-down evidence open_blocking_count must be 0.", errors)
             require("certify compatibility" in burn.get("claim_boundary", ""), "repair burn-down evidence must block certification.", errors)
+        if STABLE_BURN_DOWN.exists():
+            burn = json.loads(STABLE_BURN_DOWN.read_text(encoding="utf-8"))
+            require(
+                burn.get("status") in {
+                    "no-blocking-stable-promotion-repairs",
+                    "blocking-stable-promotion-repairs-open",
+                },
+                "stable repair burn-down evidence status invalid.",
+                errors,
+            )
+            require(burn.get("open_blocking_count") in {0, 1}, "stable repair burn-down evidence open_blocking_count must be 0 or 1.", errors)
+            require("certify compatibility" in burn.get("claim_boundary", ""), "stable repair burn-down evidence must block certification.", errors)
 
     if errors:
         for error in errors:

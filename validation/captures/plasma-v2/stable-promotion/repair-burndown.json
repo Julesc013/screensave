@@ -1,0 +1,24 @@
+{
+  "schema": "screensave.plasma-v2.stable-promotion.repair-burndown.v1",
+  "status": "blocking-stable-promotion-repairs-open",
+  "candidate_id": "plasma-v2-rc1",
+  "open_blocking_count": 1,
+  "blocking_repairs": [
+    {
+      "id": "SS-PLV2-I-REPAIR-001",
+      "repair_class": "release_readiness_gap",
+      "title": "Record explicit Plasma v2 final stable artistic verdict",
+      "reason": "Stable promotion cannot proceed without an explicit final human artistic acceptance verdict."
+    }
+  ],
+  "nonblocking_repairs": [],
+  "proposal_only": true,
+  "aide_source_mutation": false,
+  "automatic_promotion": false,
+  "refs": {
+    "repair_queue": ".aide/repairs/index.toml",
+    "stable_artistic_decision": "validation/captures/plasma-v2/final-artistic-decision/decision.stable.toml",
+    "agentic_proposal": "out/aide/agentic/SS-PLV2-I8/proposal.json"
+  },
+  "claim_boundary": "Stable-promotion repair burn-down records blockers only; it does not promote, release, certify compatibility, or accept artistic quality."
+}
