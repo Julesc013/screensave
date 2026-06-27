@@ -1,0 +1,25 @@
+{
+  "schema": "screensave.plasma-v2.stable-promotion.support-claims.v1",
+  "status": "pass-with-hold",
+  "candidate_id": "plasma-v2-rc1",
+  "stable": false,
+  "release_promotion": "blocked",
+  "compatibility_certification": "not-claimed",
+  "claims": {
+    "current_windows_x86_artifact_evidence": "supports stable-promotion review for plasma-v2-rc1 only",
+    "binary_audited_facts": "PE audit records binary facts only; not OS certification",
+    "buildable_facts": "19 current .scr artifacts and 2 current tools build under fixed profiles",
+    "targeted_preservation_aspirations": "VS2017 v141_xp and ANSI Win32 remain preservation-oriented artifact choices",
+    "unsupported_lanes": "Windows 95/98/ME, NT4, macOS, Linux, GL21/GL33/GL46, D3D, Vulkan, Metal, public SDK, and executable plugins are not certified",
+    "stable_release": "blocked until final stable artistic acceptance exists"
+  },
+  "refs": {
+    "product_stable_support": "products/savers/plasma/docs/plasma-v2-stable-support.md",
+    "compatibility_notes": "docs/compatibility/plasma-v2-stable.md",
+    "package_support_matrix": "packaging/windows/plasma-v2-stable-promotion/support-matrix.md",
+    "package_manifest": "packaging/windows/plasma-v2-stable-promotion/manifest.toml",
+    "compatibility_spec": "specs/compatibility.md",
+    "stable_artistic_decision": "validation/captures/plasma-v2/final-artistic-decision/decision.stable.toml"
+  },
+  "claim_boundary": "Stable-promotion support claims are evidence-classed wording only; not release publication, compatibility certification, public SDK stability, all-saver migration, or final artistic acceptance."
+}
