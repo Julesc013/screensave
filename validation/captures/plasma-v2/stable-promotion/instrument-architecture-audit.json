@@ -152,6 +152,24 @@
         "run": {
           "command": [
             "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+            "tools/scripts/check_plasma_v2_field_pipeline.py"
+          ],
+          "returncode": 0,
+          "status": "pass",
+          "stderr": "",
+          "stdout": "Plasma v2 field pipeline checks passed.",
+          "timeout_seconds": 300
+        }
+      },
+      "id": "field-pipeline",
+      "status": "pass",
+      "summary": "Command passed."
+    },
+    {
+      "data": {
+        "run": {
+          "command": [
+            "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
             "tools/scripts/check_plasma_product_center.py"
           ],
           "returncode": 0,
@@ -294,7 +312,6 @@
     {
       "data": {
         "blocking_reasons": [
-          "new_product_center_incomplete",
           "legacy_bypass_candidates_still_present"
         ],
         "status": "hold"
@@ -338,7 +355,6 @@
   "decision": {
     "blocking_gates": [
       "legacy_preset_authority_removed",
-      "field_pipeline_boundaries_pass",
       "visualintent_candidates_reduce_to_plasma_spec"
     ],
     "failed_gates": [],
@@ -391,7 +407,6 @@
         ],
         "legacy_boundary_status": "hold",
         "product_center_blockers": [
-          "new_product_center_incomplete",
           "legacy_bypass_candidates_still_present"
         ],
         "product_center_status": "hold"
@@ -412,14 +427,14 @@
     },
     {
       "data": {
-        "missing": [
-          "products/savers/plasma/src/v2/field",
-          "products/savers/plasma/src/v2/output"
-        ]
+        "evidence": [
+          "tools/scripts/check_plasma_v2_field_pipeline.py"
+        ],
+        "missing": []
       },
       "id": "field_pipeline_boundaries_pass",
-      "status": "hold",
-      "summary": "Field and output boundaries must be explicit in the v2 island before stable promotion."
+      "status": "pass",
+      "summary": "Field and output boundaries must be explicit and pass the direct field-to-presentation pipeline checker before stable promotion."
     },
     {
       "data": {
@@ -495,7 +510,7 @@
   "schema": "screensave.plasma-v2.instrument-architecture-audit.v1",
   "source": {
     "branch": "main",
-    "commit": "9661ceb1dcbd6fb470a0fc565ec1a2538453ca3a",
+    "commit": "0f3aaf6eefb50b89d9fc8e59c5cc43d7b3f0320b",
     "dirty": true
   },
   "stable_eligible": false,

@@ -31,6 +31,7 @@ SUBCHECKS = [
     ("plan-contract", ["tools/scripts/check_plasma_v2_plan.py"]),
     ("runtime-contract", ["tools/scripts/check_plasma_v2_runtime.py"]),
     ("runtime-hot-loop-hazards", ["tools/scripts/check_plasma_v2_no_hot_loop_hazards.py"]),
+    ("field-pipeline", ["tools/scripts/check_plasma_v2_field_pipeline.py"]),
     ("product-center-boundary", ["tools/scripts/check_plasma_product_center.py"]),
     ("legacy-boundary", ["tools/scripts/check_plasma_legacy_boundary.py"]),
     ("legacy-core-boundaries", ["tools/scripts/check_plasma_core_boundaries.py"]),
@@ -326,9 +327,10 @@ def build_report() -> dict[str, Any]:
     gate(
         gates,
         "field_pipeline_boundaries_pass",
-        "pass" if all(path.exists() for path in field_dirs) else "hold",
-        "Field and output boundaries must be explicit in the v2 island before stable promotion.",
+        "pass" if all(path.exists() for path in field_dirs) and subcheck_status(subchecks, "field-pipeline") else "hold",
+        "Field and output boundaries must be explicit and pass the direct field-to-presentation pipeline checker before stable promotion.",
         missing=[repo_path(path) for path in field_dirs if not path.exists()],
+        evidence=["tools/scripts/check_plasma_v2_field_pipeline.py"],
     )
 
     gate(

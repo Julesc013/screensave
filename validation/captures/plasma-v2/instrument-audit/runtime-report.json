@@ -18,7 +18,7 @@
   "schema": "screensave.plasma-v2.runtime-report.v1",
   "source": {
     "branch": "main",
-    "commit": "9661ceb1dcbd6fb470a0fc565ec1a2538453ca3a",
+    "commit": "0f3aaf6eefb50b89d9fc8e59c5cc43d7b3f0320b",
     "dirty": true
   },
   "status": "pass",

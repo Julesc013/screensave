@@ -9,7 +9,6 @@
 ## Blocking Gates
 
 - legacy_preset_authority_removed
-- field_pipeline_boundaries_pass
 - visualintent_candidates_reduce_to_plasma_spec
 
 ## Gates
@@ -19,7 +18,7 @@
 - pass: plasma_v2_runtime_contract_passes - The direct v2 runtime contract must exist, own deterministic buffers, and pass hot-loop hazard checks before stable promotion.
 - hold: legacy_preset_authority_removed - Legacy preset/theme files must be migration inputs or wrappers over the direct v2 center, not hidden runtime authority.
 - pass: direct_controls_influence_passes - Basic controls with visual claims produce deterministic output differences.
-- hold: field_pipeline_boundaries_pass - Field and output boundaries must be explicit in the v2 island before stable promotion.
+- pass: field_pipeline_boundaries_pass - Field and output boundaries must be explicit and pass the direct field-to-presentation pipeline checker before stable promotion.
 - pass: material_mapping_distinctness_passes - Stable materials have distinct deterministic visual response.
 - pass: treatment_boundaries_pass - Treatment remains post-material and bounded for the stable slice.
 - pass: software_reference_is_canonical - Software/reference execution remains the canonical proof-bearing path.
@@ -43,6 +42,7 @@
 - pass: plan-contract - Command passed.
 - pass: runtime-contract - Command passed.
 - pass: runtime-hot-loop-hazards - Command passed.
+- pass: field-pipeline - Command passed.
 - pass: product-center-boundary - Command passed.
 - pass: legacy-boundary - Command passed.
 - pass: legacy-core-boundaries - Command passed.

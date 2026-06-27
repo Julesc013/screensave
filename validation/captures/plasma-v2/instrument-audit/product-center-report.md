@@ -6,7 +6,6 @@
 
 ## Blocking Reasons
 
-- new_product_center_incomplete
 - legacy_bypass_candidates_still_present
 
 ## File Groups
@@ -18,8 +17,8 @@
 - present: products/savers/plasma/src/v2/plasma_v2_plan.c
 - present: products/savers/plasma/src/v2/plasma_v2_runtime.h
 - present: products/savers/plasma/src/v2/plasma_v2_runtime.c
-- missing: products/savers/plasma/src/v2/field
-- missing: products/savers/plasma/src/v2/output
+- present: products/savers/plasma/src/v2/field
+- present: products/savers/plasma/src/v2/output
 
 ### compatibility_shims
 - present: products/savers/plasma/src/plasma_config.c

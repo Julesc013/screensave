@@ -1,0 +1,42 @@
+{
+  "claim_boundary": "Field-pipeline proof only; this does not prove final artistic acceptance, legacy migration, Workbench inspection, or stable promotion.",
+  "pipeline_stages": [
+    "providers / analytic sources",
+    "field generators",
+    "field modifiers",
+    "output transform",
+    "material mapping",
+    "treatment stack",
+    "presentation"
+  ],
+  "schema": "screensave.plasma-v2.field-pipeline-report.v1",
+  "source": {
+    "branch": "main",
+    "commit": "0f3aaf6eefb50b89d9fc8e59c5cc43d7b3f0320b",
+    "dirty": true
+  },
+  "stable_scope": {
+    "field_families": [
+      "classic",
+      "interference",
+      "fire"
+    ],
+    "modifiers": [
+      "domain warp",
+      "feedback"
+    ],
+    "output": [
+      "continuous raster"
+    ],
+    "presentation": [
+      "flat bitmap"
+    ],
+    "sources": [
+      "sine/wave",
+      "radial",
+      "deterministic noise"
+    ]
+  },
+  "status": "pass",
+  "validation_errors": []
+}
