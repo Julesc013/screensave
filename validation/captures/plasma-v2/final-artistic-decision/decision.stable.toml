@@ -1,0 +1,35 @@
+schema_version = 1
+packet_id = "screensave.plasma-v2.final-artistic-decision.stable"
+product = "plasma"
+profile = "plasma.v2.reference.preview"
+decision_state = "request-changes"
+reviewer = "ScreenSave operator final stable review required"
+reviewed_on = "2026-06-27"
+decision_summary = "Stable promotion is held because final human artistic acceptance for stable release was not supplied. Release-candidate acceptance remains valid."
+
+[accepted_scope]
+product = "none"
+profile = "none"
+channel = "none"
+
+[requested_changes]
+blocking = true
+reason = "Provide an explicit operator verdict of accepted-for-stable, request-changes, defer-to-labs, or rejected after reviewing the stable-promotion packet."
+repair_workunit = "SS-PLV2-I-REPAIR-001"
+
+[evidence_refs]
+proof_bundle = "validation/captures/plasma-v2/reference-preview/proof-bundle-v1.json"
+stable_candidate_review = "validation/captures/plasma-v2/stable-candidate-review/review-summary.json"
+release_candidate_decision = "validation/captures/plasma-v2/final-artistic-decision/decision.release-candidate.toml"
+acceleration_matrix = "validation/captures/plasma-v2/acceleration/matrix.json"
+performance_envelope = "validation/captures/plasma-v2/performance/envelope.json"
+package_stage = "packaging/windows/plasma-v2-stable-promotion/manifest.toml"
+known_limits = "packaging/windows/plasma-v2-stable-promotion/known-limits.md"
+
+[boundaries]
+final_stable_artistic_acceptance = false
+stable_release = false
+release_publication = false
+compatibility_certification = false
+public_sdk_stability = false
+automatic_acceptance = false

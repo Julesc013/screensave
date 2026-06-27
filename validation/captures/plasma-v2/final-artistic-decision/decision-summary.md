@@ -22,3 +22,23 @@ Evidence reviewed:
 - Known limits.
 
 The stable promotion decision remains reserved for PAW-I.
+
+## Stable-Promotion Hold
+
+Decision: `request-changes`
+
+PAW-I did not receive a final human/operator artistic acceptance verdict for
+stable release. The stable-promotion path is therefore held instead of promoted.
+
+Blocking change requested:
+
+- provide an explicit stable artistic verdict after reviewing the
+  stable-promotion packet
+
+Boundaries:
+
+- not final stable artistic acceptance
+- not stable release promotion
+- not release publication
+- not compatibility certification
+- not automatic acceptance
