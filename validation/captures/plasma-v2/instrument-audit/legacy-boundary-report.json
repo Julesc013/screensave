@@ -1,45 +1,51 @@
 {
+  "authority_report": "validation/captures/plasma-v2/instrument-audit/legacy-authority-report.json",
   "blocking_reasons": [
-    "legacy_bypass_candidates_not_wrapped_over_v2",
-    "compatibility_shims_not_explicitly_wrapped_over_v2"
+    "workbench_legacy_migration_facts_missing"
   ],
-  "claim_boundary": "Legacy boundary audit only; hold means old Plasma files are not yet proven to be wrappers or migration-only inputs to the direct v2 instrument center.",
+  "claim_boundary": "Legacy content is migration input only; Plasma v2 spec/plan/runtime own execution truth.",
   "compatibility_shims": [
     {
       "exists": true,
-      "expected_role": "compatibility_shim",
+      "kind": "file",
       "path": "products/savers/plasma/src/plasma_config.c",
-      "references_v2": false
+      "required": true,
+      "role": "compatibility_shim"
     },
     {
       "exists": true,
-      "expected_role": "compatibility_shim",
+      "kind": "file",
       "path": "products/savers/plasma/src/plasma_presets.c",
-      "references_v2": false
+      "required": true,
+      "role": "compatibility_shim"
     },
     {
       "exists": true,
-      "expected_role": "compatibility_shim",
+      "kind": "file",
       "path": "products/savers/plasma/src/plasma_themes.c",
-      "references_v2": false
+      "required": true,
+      "role": "compatibility_shim"
     },
     {
       "exists": true,
-      "expected_role": "compatibility_shim",
+      "kind": "file",
       "path": "products/savers/plasma/src/plasma_content.c",
-      "references_v2": false
+      "required": true,
+      "role": "compatibility_shim"
     },
     {
       "exists": true,
-      "expected_role": "compatibility_shim",
+      "kind": "file",
       "path": "products/savers/plasma/src/plasma_selection.c",
-      "references_v2": false
+      "required": true,
+      "role": "compatibility_shim"
     },
     {
       "exists": true,
-      "expected_role": "compatibility_shim",
+      "kind": "file",
       "path": "products/savers/plasma/src/plasma_benchlab.c",
-      "references_v2": false
+      "required": true,
+      "role": "compatibility_shim"
     }
   ],
   "constitution": {
@@ -51,63 +57,72 @@
   "legacy_bypass_candidates": [
     {
       "exists": true,
-      "expected_role": "legacy_bypass_candidate",
+      "kind": "file",
       "path": "products/savers/plasma/src/plasma_sim.c",
-      "references_v2": false
+      "required": true,
+      "role": "legacy_bypass_candidate"
     },
     {
       "exists": true,
-      "expected_role": "legacy_bypass_candidate",
+      "kind": "file",
       "path": "products/savers/plasma/src/plasma_render.c",
-      "references_v2": false
+      "required": true,
+      "role": "legacy_bypass_candidate"
     },
     {
       "exists": true,
-      "expected_role": "legacy_bypass_candidate",
+      "kind": "file",
       "path": "products/savers/plasma/src/plasma_plan.c",
-      "references_v2": false
+      "required": true,
+      "role": "legacy_bypass_candidate"
     },
     {
       "exists": true,
-      "expected_role": "legacy_bypass_candidate",
+      "kind": "file",
       "path": "products/savers/plasma/src/plasma_advanced.c",
-      "references_v2": false
+      "required": true,
+      "role": "legacy_bypass_candidate"
     },
     {
       "exists": true,
-      "expected_role": "legacy_bypass_candidate",
+      "kind": "file",
       "path": "products/savers/plasma/src/plasma_modern.c",
-      "references_v2": false
+      "required": true,
+      "role": "legacy_bypass_candidate"
     },
     {
       "exists": true,
-      "expected_role": "legacy_bypass_candidate",
+      "kind": "file",
       "path": "products/savers/plasma/src/plasma_premium.c",
-      "references_v2": false
+      "required": true,
+      "role": "legacy_bypass_candidate"
     },
     {
       "exists": true,
-      "expected_role": "legacy_bypass_candidate",
+      "kind": "file",
       "path": "products/savers/plasma/src/plasma_output.c",
-      "references_v2": false
+      "required": true,
+      "role": "legacy_bypass_candidate"
     },
     {
       "exists": true,
-      "expected_role": "legacy_bypass_candidate",
+      "kind": "file",
       "path": "products/savers/plasma/src/plasma_treatment.c",
-      "references_v2": false
+      "required": true,
+      "role": "legacy_bypass_candidate"
     },
     {
       "exists": true,
-      "expected_role": "legacy_bypass_candidate",
+      "kind": "file",
       "path": "products/savers/plasma/src/plasma_presentation.c",
-      "references_v2": false
+      "required": true,
+      "role": "legacy_bypass_candidate"
     }
   ],
-  "schema": "screensave.plasma-v2.legacy-boundary-report.v1",
+  "schema": "screensave.plasma-v2.legacy-boundary-report.v2",
   "source": {
     "branch": "main",
-    "commit": "8b4e897153dceded106e30a4b34d7749c819e4c4",
+    "commit": "fb4ed5e809268554c5c7ff7afaa434772b258d3b",
     "dirty": true
   },
   "status": "hold"

@@ -1,27 +1,15 @@
-# Plasma v2 Product-Center Boundary Report
+# Plasma v2 Legacy Authority Report
 
-- Status: promotion-ready
-- Stable eligible: True
-- Product center: plasma_v2_spec_plan_runtime
-- Claim boundary: Product-center boundary audit only; legacy files may remain as compatibility and migration inputs while Plasma v2 spec/plan/runtime own execution truth.
+- Status: blocked
+- Claim boundary: Legacy content is migration input only; Plasma v2 spec/plan/runtime own execution truth.
 
 ## Blocking Reasons
 
-- none
+- workbench_legacy_migration_facts_missing
 
-## File Groups
+## Authority Groups
 
-### new_product_center
-- present: products/savers/plasma/src/v2/plasma_v2_spec.h
-- present: products/savers/plasma/src/v2/plasma_v2_spec.c
-- present: products/savers/plasma/src/v2/plasma_v2_plan.h
-- present: products/savers/plasma/src/v2/plasma_v2_plan.c
-- present: products/savers/plasma/src/v2/plasma_v2_runtime.h
-- present: products/savers/plasma/src/v2/plasma_v2_runtime.c
-- present: products/savers/plasma/src/v2/field
-- present: products/savers/plasma/src/v2/output
-
-### compatibility_migration_inputs
+### legacy_inputs
 - present: products/savers/plasma/src/plasma_config.c
 - present: products/savers/plasma/src/plasma_presets.c
 - present: products/savers/plasma/src/plasma_themes.c
@@ -31,7 +19,27 @@
 - present: products/savers/plasma/presets
 - missing: products/savers/plasma/themes (optional)
 
-### legacy_bypass_candidates
+### v2_authority_files
+- present: products/savers/plasma/src/v2/plasma_v2_spec.h
+- present: products/savers/plasma/src/v2/plasma_v2_spec.c
+- present: products/savers/plasma/src/v2/plasma_v2_plan.h
+- present: products/savers/plasma/src/v2/plasma_v2_plan.c
+- present: products/savers/plasma/src/v2/plasma_v2_runtime.h
+- present: products/savers/plasma/src/v2/plasma_v2_runtime.c
+- present: products/savers/plasma/src/v2/plasma_v2_migration.h
+- present: products/savers/plasma/src/v2/plasma_v2_migration.c
+- present: products/savers/plasma/src/v2/field
+- present: products/savers/plasma/src/v2/output
+
+### compatibility_shims
+- present: products/savers/plasma/src/plasma_config.c
+- present: products/savers/plasma/src/plasma_presets.c
+- present: products/savers/plasma/src/plasma_themes.c
+- present: products/savers/plasma/src/plasma_content.c
+- present: products/savers/plasma/src/plasma_selection.c
+- present: products/savers/plasma/src/plasma_benchlab.c
+
+### bypass_candidates
 - present: products/savers/plasma/src/plasma_sim.c
 - present: products/savers/plasma/src/plasma_render.c
 - present: products/savers/plasma/src/plasma_plan.c

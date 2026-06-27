@@ -1,31 +1,18 @@
 # Plasma v2 Legacy Boundary Report
 
 - Status: hold
-- Legacy authority removed: False
-- Claim boundary: Legacy boundary audit only; hold means old Plasma files are not yet proven to be wrappers or migration-only inputs to the direct v2 instrument center.
+- Claim boundary: Legacy content is migration input only; Plasma v2 spec/plan/runtime own execution truth.
 
 ## Blocking Reasons
 
-- legacy_bypass_candidates_not_wrapped_over_v2
-- compatibility_shims_not_explicitly_wrapped_over_v2
+- workbench_legacy_migration_facts_missing
 
-## Compatibility Shims
+## Authority Groups
 
-- products/savers/plasma/src/plasma_config.c: references_v2=False
-- products/savers/plasma/src/plasma_presets.c: references_v2=False
-- products/savers/plasma/src/plasma_themes.c: references_v2=False
-- products/savers/plasma/src/plasma_content.c: references_v2=False
-- products/savers/plasma/src/plasma_selection.c: references_v2=False
-- products/savers/plasma/src/plasma_benchlab.c: references_v2=False
-
-## Legacy Bypass Candidates
-
-- products/savers/plasma/src/plasma_sim.c: references_v2=False
-- products/savers/plasma/src/plasma_render.c: references_v2=False
-- products/savers/plasma/src/plasma_plan.c: references_v2=False
-- products/savers/plasma/src/plasma_advanced.c: references_v2=False
-- products/savers/plasma/src/plasma_modern.c: references_v2=False
-- products/savers/plasma/src/plasma_premium.c: references_v2=False
-- products/savers/plasma/src/plasma_output.c: references_v2=False
-- products/savers/plasma/src/plasma_treatment.c: references_v2=False
-- products/savers/plasma/src/plasma_presentation.c: references_v2=False
+### compatibility_shims
+- present: products/savers/plasma/src/plasma_config.c
+- present: products/savers/plasma/src/plasma_presets.c
+- present: products/savers/plasma/src/plasma_themes.c
+- present: products/savers/plasma/src/plasma_content.c
+- present: products/savers/plasma/src/plasma_selection.c
+- present: products/savers/plasma/src/plasma_benchlab.c

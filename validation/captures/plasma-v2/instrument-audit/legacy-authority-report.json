@@ -1,0 +1,268 @@
+{
+  "blocked_reasons": [
+    "workbench_legacy_migration_facts_missing"
+  ],
+  "bypass_candidates": [
+    {
+      "exists": true,
+      "kind": "file",
+      "path": "products/savers/plasma/src/plasma_sim.c",
+      "required": true,
+      "role": "legacy_bypass_candidate"
+    },
+    {
+      "exists": true,
+      "kind": "file",
+      "path": "products/savers/plasma/src/plasma_render.c",
+      "required": true,
+      "role": "legacy_bypass_candidate"
+    },
+    {
+      "exists": true,
+      "kind": "file",
+      "path": "products/savers/plasma/src/plasma_plan.c",
+      "required": true,
+      "role": "legacy_bypass_candidate"
+    },
+    {
+      "exists": true,
+      "kind": "file",
+      "path": "products/savers/plasma/src/plasma_advanced.c",
+      "required": true,
+      "role": "legacy_bypass_candidate"
+    },
+    {
+      "exists": true,
+      "kind": "file",
+      "path": "products/savers/plasma/src/plasma_modern.c",
+      "required": true,
+      "role": "legacy_bypass_candidate"
+    },
+    {
+      "exists": true,
+      "kind": "file",
+      "path": "products/savers/plasma/src/plasma_premium.c",
+      "required": true,
+      "role": "legacy_bypass_candidate"
+    },
+    {
+      "exists": true,
+      "kind": "file",
+      "path": "products/savers/plasma/src/plasma_output.c",
+      "required": true,
+      "role": "legacy_bypass_candidate"
+    },
+    {
+      "exists": true,
+      "kind": "file",
+      "path": "products/savers/plasma/src/plasma_treatment.c",
+      "required": true,
+      "role": "legacy_bypass_candidate"
+    },
+    {
+      "exists": true,
+      "kind": "file",
+      "path": "products/savers/plasma/src/plasma_presentation.c",
+      "required": true,
+      "role": "legacy_bypass_candidate"
+    }
+  ],
+  "claim_boundary": "Legacy content is migration input only; Plasma v2 spec/plan/runtime own execution truth.",
+  "compatibility_shims": [
+    {
+      "exists": true,
+      "kind": "file",
+      "path": "products/savers/plasma/src/plasma_config.c",
+      "required": true,
+      "role": "compatibility_shim"
+    },
+    {
+      "exists": true,
+      "kind": "file",
+      "path": "products/savers/plasma/src/plasma_presets.c",
+      "required": true,
+      "role": "compatibility_shim"
+    },
+    {
+      "exists": true,
+      "kind": "file",
+      "path": "products/savers/plasma/src/plasma_themes.c",
+      "required": true,
+      "role": "compatibility_shim"
+    },
+    {
+      "exists": true,
+      "kind": "file",
+      "path": "products/savers/plasma/src/plasma_content.c",
+      "required": true,
+      "role": "compatibility_shim"
+    },
+    {
+      "exists": true,
+      "kind": "file",
+      "path": "products/savers/plasma/src/plasma_selection.c",
+      "required": true,
+      "role": "compatibility_shim"
+    },
+    {
+      "exists": true,
+      "kind": "file",
+      "path": "products/savers/plasma/src/plasma_benchlab.c",
+      "required": true,
+      "role": "compatibility_shim"
+    }
+  ],
+  "evidence": {
+    "authority_document_missing": [],
+    "constitution_missing": [],
+    "migration_missing": [],
+    "packc_missing": [],
+    "plan_runtime_missing": [],
+    "proof_missing": [],
+    "workbench_missing": [
+      "legacy_source_kind",
+      "legacy_key",
+      "legacy_authority",
+      "migration_input_only",
+      "v2_spec_plan_runtime"
+    ]
+  },
+  "legacy_inputs": [
+    {
+      "exists": true,
+      "kind": "file",
+      "path": "products/savers/plasma/src/plasma_config.c",
+      "required": true,
+      "role": "legacy_input"
+    },
+    {
+      "exists": true,
+      "kind": "file",
+      "path": "products/savers/plasma/src/plasma_presets.c",
+      "required": true,
+      "role": "legacy_input"
+    },
+    {
+      "exists": true,
+      "kind": "file",
+      "path": "products/savers/plasma/src/plasma_themes.c",
+      "required": true,
+      "role": "legacy_input"
+    },
+    {
+      "exists": true,
+      "kind": "file",
+      "path": "products/savers/plasma/src/plasma_content.c",
+      "required": true,
+      "role": "legacy_input"
+    },
+    {
+      "exists": true,
+      "kind": "file",
+      "path": "products/savers/plasma/src/plasma_selection.c",
+      "required": true,
+      "role": "legacy_input"
+    },
+    {
+      "exists": true,
+      "kind": "file",
+      "path": "products/savers/plasma/src/plasma_benchlab.c",
+      "required": true,
+      "role": "legacy_input"
+    },
+    {
+      "exists": true,
+      "kind": "directory",
+      "path": "products/savers/plasma/presets",
+      "required": true,
+      "role": "legacy_input"
+    },
+    {
+      "exists": false,
+      "kind": "file",
+      "path": "products/savers/plasma/themes",
+      "required": false,
+      "role": "legacy_input"
+    }
+  ],
+  "legacy_preset_authority_removed": false,
+  "schema": "screensave.plasma-v2.legacy-authority-report.v1",
+  "source": {
+    "branch": "main",
+    "commit": "fb4ed5e809268554c5c7ff7afaa434772b258d3b",
+    "dirty": true
+  },
+  "status": "blocked",
+  "v2_authority_files": [
+    {
+      "exists": true,
+      "kind": "file",
+      "path": "products/savers/plasma/src/v2/plasma_v2_spec.h",
+      "required": true,
+      "role": "v2_authority"
+    },
+    {
+      "exists": true,
+      "kind": "file",
+      "path": "products/savers/plasma/src/v2/plasma_v2_spec.c",
+      "required": true,
+      "role": "v2_authority"
+    },
+    {
+      "exists": true,
+      "kind": "file",
+      "path": "products/savers/plasma/src/v2/plasma_v2_plan.h",
+      "required": true,
+      "role": "v2_authority"
+    },
+    {
+      "exists": true,
+      "kind": "file",
+      "path": "products/savers/plasma/src/v2/plasma_v2_plan.c",
+      "required": true,
+      "role": "v2_authority"
+    },
+    {
+      "exists": true,
+      "kind": "file",
+      "path": "products/savers/plasma/src/v2/plasma_v2_runtime.h",
+      "required": true,
+      "role": "v2_authority"
+    },
+    {
+      "exists": true,
+      "kind": "file",
+      "path": "products/savers/plasma/src/v2/plasma_v2_runtime.c",
+      "required": true,
+      "role": "v2_authority"
+    },
+    {
+      "exists": true,
+      "kind": "file",
+      "path": "products/savers/plasma/src/v2/plasma_v2_migration.h",
+      "required": true,
+      "role": "v2_authority"
+    },
+    {
+      "exists": true,
+      "kind": "file",
+      "path": "products/savers/plasma/src/v2/plasma_v2_migration.c",
+      "required": true,
+      "role": "v2_authority"
+    },
+    {
+      "exists": true,
+      "kind": "directory",
+      "path": "products/savers/plasma/src/v2/field",
+      "required": true,
+      "role": "v2_authority"
+    },
+    {
+      "exists": true,
+      "kind": "directory",
+      "path": "products/savers/plasma/src/v2/output",
+      "required": true,
+      "role": "v2_authority"
+    }
+  ]
+}
