@@ -80,6 +80,12 @@ exact_capabilities = [
   "screensave.plasma.v2.release-candidate.package",
   "screensave.plasma.v2.release-candidate.evidence",
   "screensave.plasma.v2.release-candidate.review",
+  "screensave.plasma.v2.stable-promotion.check",
+  "screensave.plasma.v2.stable-promotion.proof",
+  "screensave.plasma.v2.stable-promotion.package",
+  "screensave.plasma.v2.stable-promotion.support",
+  "screensave.plasma.v2.stable-promotion.security",
+  "screensave.plasma.v2.stable-promotion.review",
   "screensave.aide.workunits.check",
   "screensave.aide.repairs.check",
   "screensave.aide.agentic.check",
@@ -249,6 +255,36 @@ command = ["python", "tools/scripts/check_plasma_v2_release_candidate_evidence.p
 name = "screensave.plasma.v2.release-candidate.review"
 status = "screensave-side-admitted-contained-output"
 command = ["python", "tools/scripts/check_plasma_v2_release_candidate_review.py"]
+
+[[capabilities]]
+name = "screensave.plasma.v2.stable-promotion.check"
+status = "screensave-side-admitted-contained-output"
+command = ["python", "tools/scripts/check_plasma_v2_stable_promotion.py"]
+
+[[capabilities]]
+name = "screensave.plasma.v2.stable-promotion.proof"
+status = "screensave-side-admitted-contained-output"
+command = ["python", "tools/scripts/check_plasma_v2_stable_promotion_evidence.py"]
+
+[[capabilities]]
+name = "screensave.plasma.v2.stable-promotion.package"
+status = "screensave-side-admitted-contained-output"
+command = ["python", "tools/scripts/check_plasma_v2_package_stage.py"]
+
+[[capabilities]]
+name = "screensave.plasma.v2.stable-promotion.support"
+status = "screensave-side-admitted-contained-output"
+command = ["python", "tools/scripts/check_plasma_v2_stable_support_claims.py"]
+
+[[capabilities]]
+name = "screensave.plasma.v2.stable-promotion.security"
+status = "screensave-side-admitted-contained-output"
+command = ["python", "tools/scripts/check_release_security.py"]
+
+[[capabilities]]
+name = "screensave.plasma.v2.stable-promotion.review"
+status = "screensave-side-admitted-contained-output"
+command = ["python", "tools/scripts/check_plasma_v2_stable_review.py"]
 
 [[capabilities]]
 name = "screensave.aide.workunits.check"

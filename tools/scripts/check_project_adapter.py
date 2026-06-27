@@ -172,6 +172,12 @@ def main() -> int:
         require("screensave.plasma.v2.release-candidate.package" in names, "capabilities must include screensave.plasma.v2.release-candidate.package.", errors)
         require("screensave.plasma.v2.release-candidate.evidence" in names, "capabilities must include screensave.plasma.v2.release-candidate.evidence.", errors)
         require("screensave.plasma.v2.release-candidate.review" in names, "capabilities must include screensave.plasma.v2.release-candidate.review.", errors)
+        require("screensave.plasma.v2.stable-promotion.check" in names, "capabilities must include screensave.plasma.v2.stable-promotion.check.", errors)
+        require("screensave.plasma.v2.stable-promotion.proof" in names, "capabilities must include screensave.plasma.v2.stable-promotion.proof.", errors)
+        require("screensave.plasma.v2.stable-promotion.package" in names, "capabilities must include screensave.plasma.v2.stable-promotion.package.", errors)
+        require("screensave.plasma.v2.stable-promotion.support" in names, "capabilities must include screensave.plasma.v2.stable-promotion.support.", errors)
+        require("screensave.plasma.v2.stable-promotion.security" in names, "capabilities must include screensave.plasma.v2.stable-promotion.security.", errors)
+        require("screensave.plasma.v2.stable-promotion.review" in names, "capabilities must include screensave.plasma.v2.stable-promotion.review.", errors)
         require("screensave.aide.workunits.check" in names, "capabilities must include screensave.aide.workunits.check.", errors)
         require("screensave.aide.repairs.check" in names, "capabilities must include screensave.aide.repairs.check.", errors)
         require("screensave.aide.agentic.check" in names, "capabilities must include screensave.aide.agentic.check.", errors)
@@ -181,6 +187,7 @@ def main() -> int:
             "screensave.exec",
             "screensave.release.publish",
             "screensave.promote.stable",
+            "screensave.promote.stable.unchecked",
             "screensave.agent.apply",
         ):
             require(forbidden_capability not in names, f"capabilities must not include {forbidden_capability}.", errors)

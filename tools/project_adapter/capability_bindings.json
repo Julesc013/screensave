@@ -415,6 +415,78 @@
       "state_probe": "validation/captures/plasma-v2/release-candidate/manager-review.json"
     },
     {
+      "name": "screensave.plasma.v2.stable-promotion.check",
+      "command": "validate",
+      "effect": "run the fixed Plasma v2 stable-promotion checker",
+      "deterministic": true,
+      "argv": ["python", "tools/scripts/check_plasma_v2_stable_promotion.py"],
+      "decoder_schema": "tools/project_adapter/receipt_schemas.json#/commands/validate",
+      "output_policy": "stdout text and deterministic report refresh only",
+      "input_policy": "committed Plasma v2 stable-promotion gate evidence",
+      "timeout_seconds": 480,
+      "state_probe": "validation/captures/plasma-v2/stable-promotion/gate-report.json"
+    },
+    {
+      "name": "screensave.plasma.v2.stable-promotion.proof",
+      "command": "validate",
+      "effect": "run the fixed Plasma v2 stable-promotion proof/evidence checker",
+      "deterministic": true,
+      "argv": ["python", "tools/scripts/check_plasma_v2_stable_promotion_evidence.py"],
+      "decoder_schema": "tools/project_adapter/receipt_schemas.json#/commands/validate",
+      "output_policy": "stdout text only",
+      "input_policy": "validation/captures/plasma-v2/stable-promotion committed proof bundle and matrix",
+      "timeout_seconds": 180,
+      "state_probe": "validation/captures/plasma-v2/stable-promotion/proof-bundle-v1.json"
+    },
+    {
+      "name": "screensave.plasma.v2.stable-promotion.package",
+      "command": "validate",
+      "effect": "run the fixed Plasma v2 package stage checker for stable-promotion refs",
+      "deterministic": true,
+      "argv": ["python", "tools/scripts/check_plasma_v2_package_stage.py"],
+      "decoder_schema": "tools/project_adapter/receipt_schemas.json#/commands/validate",
+      "output_policy": "stdout text and ignored stage summary under out/",
+      "input_policy": "packaging/windows/plasma-v2-stable-promotion committed package-stage refs",
+      "timeout_seconds": 180,
+      "state_probe": "packaging/windows/plasma-v2-stable-promotion/manifest.toml"
+    },
+    {
+      "name": "screensave.plasma.v2.stable-promotion.support",
+      "command": "validate",
+      "effect": "run the fixed Plasma v2 stable support claims checker",
+      "deterministic": true,
+      "argv": ["python", "tools/scripts/check_plasma_v2_stable_support_claims.py"],
+      "decoder_schema": "tools/project_adapter/receipt_schemas.json#/commands/validate",
+      "output_policy": "stdout text only",
+      "input_policy": "committed Plasma v2 stable support claims",
+      "timeout_seconds": 120,
+      "state_probe": "validation/captures/plasma-v2/stable-promotion/support-claims.json"
+    },
+    {
+      "name": "screensave.plasma.v2.stable-promotion.security",
+      "command": "validate",
+      "effect": "run the fixed Plasma v2 stable security and provenance checkers",
+      "deterministic": true,
+      "argv": ["python", "tools/scripts/check_release_security.py"],
+      "decoder_schema": "tools/project_adapter/receipt_schemas.json#/commands/validate",
+      "output_policy": "stdout text only",
+      "input_policy": "committed Plasma v2 stable security and provenance reviews",
+      "timeout_seconds": 120,
+      "state_probe": "validation/captures/plasma-v2/stable-promotion/security-review.json"
+    },
+    {
+      "name": "screensave.plasma.v2.stable-promotion.review",
+      "command": "validate",
+      "effect": "run the fixed Plasma v2 stable Manager and Workbench review checker",
+      "deterministic": true,
+      "argv": ["python", "tools/scripts/check_plasma_v2_stable_review.py"],
+      "decoder_schema": "tools/project_adapter/receipt_schemas.json#/commands/validate",
+      "output_policy": "stdout text only",
+      "input_policy": "committed Plasma v2 stable Manager and Workbench review receipts",
+      "timeout_seconds": 120,
+      "state_probe": "validation/captures/plasma-v2/stable-promotion/manager-final-review.json"
+    },
+    {
       "name": "screensave.aide.workunits.check",
       "command": "validate",
       "effect": "run the fixed ScreenSave AIDE WorkUnit checker",
