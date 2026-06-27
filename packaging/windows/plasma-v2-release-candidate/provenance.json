@@ -1,0 +1,24 @@
+{
+  "schema": "screensave.plasma-v2.release-candidate.provenance.v1",
+  "candidate_id": "plasma-v2-rc1",
+  "created_on": "2026-06-27",
+  "source_commit": "921c6b1b00a61bd01101a4ea9c69631534e116e4",
+  "source_commit_subject": "contracts: define Plasma v2 release-candidate gate",
+  "intake_commit": "06161c9111dff2d06550c237b944fb5bbfb042ed",
+  "artifact_refs": {
+    "plasma_scr_current": "out/msvc/vs2017_xp/Release/plasma/plasma.scr",
+    "plasma_scr_current_sha256": "72871f8ce5f4b45ba62663C82A32EA30E2BEB6973663BD5203884D498BC74EC3"
+  },
+  "evidence_refs": {
+    "release_candidate_contract": "contracts/plasma_release_candidate_v1.md",
+    "release_readiness_gate": "validation/captures/plasma-v2/release-readiness/gate-report.json",
+    "proof_bundle": "validation/captures/plasma-v2/reference-preview/proof-bundle-v1.json",
+    "performance_envelope": "validation/captures/plasma-v2/performance/envelope.json",
+    "artistic_decision": "validation/captures/plasma-v2/final-artistic-decision/decision.release-candidate.toml"
+  },
+  "published": false,
+  "stable": false,
+  "release_promotion": "blocked",
+  "compatibility_certification": "not-claimed",
+  "claim_boundary": "Provenance for a staged release-candidate package only; not publication, stable promotion, or compatibility certification."
+}

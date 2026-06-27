@@ -1,0 +1,51 @@
+schema_version = 1
+package_id = "screensave.plasma-v2.rc1-stage"
+status = "staged-release-candidate"
+candidate_id = "plasma-v2-rc1"
+product = "plasma"
+profile = "plasma.v2.reference.preview"
+support_class = "buildable"
+published = false
+stable = false
+release_promotion = "blocked"
+compatibility_certification = "not-claimed"
+public_release = false
+installer_admission = "not-admitted"
+claim_boundary = "Release-candidate package stage only; not publication, stable release, final stable artistic acceptance, compatibility certification, or installer admission."
+
+[artifact_refs]
+plasma_scr_current = "out/msvc/vs2017_xp/Release/plasma/plasma.scr"
+plasma_scr_current_sha256 = "72871f8ce5f4b45ba62663c82a32ea30e2beb6973663bd5203884d498bc74ec3"
+build_profile = "windows-current-x86"
+build_command = "py -3 tools/buildctl/screensave_build.py build --profile windows-current-x86"
+artifact_evidence_class = "buildable"
+
+[pack_refs]
+example_pack = "products/savers/plasma/content/v2/examples/plasma_lava_v2.toml"
+packc_status = "v1-candidate"
+packc_check = "py -3 tools/scripts/check_packc.py"
+
+[proof_refs]
+profile_proof = "validation/captures/plasma-v2/reference-preview/profile-proof.json"
+proof_bundle = "validation/captures/plasma-v2/reference-preview/proof-bundle-v1.json"
+stable_candidate_gate = "validation/captures/plasma-v2/stable-candidate/gate-report.json"
+release_readiness_gate = "validation/captures/plasma-v2/release-readiness/gate-report.json"
+performance_envelope = "validation/captures/plasma-v2/performance/envelope.json"
+final_artistic_decision = "validation/captures/plasma-v2/final-artistic-decision/decision.release-candidate.toml"
+release_candidate_contract = "contracts/plasma_release_candidate_v1.md"
+
+[review_refs]
+manager_preview = "products/apps/suite/src/manager_pack_preview.c"
+workbench_release_readiness = "products/apps/benchlab/src/benchlab_workbench_shell.c"
+
+[evidence_refs]
+aide_evidence_index = ".aide/evidence/index.toml"
+package_check = "tools/scripts/check_plasma_v2_package_stage.py"
+
+[support]
+known_limits = "packaging/windows/plasma-v2-release-candidate/known-limits.md"
+support_matrix = "packaging/windows/plasma-v2-release-candidate/support-matrix.md"
+install_notes = "packaging/windows/plasma-v2-release-candidate/install-notes.md"
+rollback_notes = "packaging/windows/plasma-v2-release-candidate/rollback-notes.md"
+checksums = "packaging/windows/plasma-v2-release-candidate/checksums.sha256"
+provenance = "packaging/windows/plasma-v2-release-candidate/provenance.json"
