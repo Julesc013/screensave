@@ -296,6 +296,24 @@
         "run": {
           "command": [
             "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+            "tools/scripts/check_plasma_v2_acceleration.py"
+          ],
+          "returncode": 0,
+          "status": "pass",
+          "stderr": "",
+          "stdout": "Plasma v2 acceleration checks passed.",
+          "timeout_seconds": 300
+        }
+      },
+      "id": "acceleration-optionality",
+      "status": "pass",
+      "summary": "Command passed."
+    },
+    {
+      "data": {
+        "run": {
+          "command": [
+            "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
             "tools/scripts/check_packc.py"
           ],
           "returncode": 0,
@@ -502,7 +520,8 @@
     {
       "data": {
         "evidence": [
-          "tools/scripts/check_plasma_core_boundaries.py"
+          "tools/scripts/check_plasma_core_boundaries.py",
+          "tools/scripts/check_plasma_v2_acceleration.py"
         ]
       },
       "id": "software_reference_is_canonical",
@@ -511,6 +530,9 @@
     },
     {
       "data": {
+        "evidence": [
+          "tools/scripts/check_plasma_v2_acceleration.py"
+        ],
         "missing": []
       },
       "id": "gl11_is_not_hidden_minimum",
@@ -552,7 +574,7 @@
   "schema": "screensave.plasma-v2.instrument-architecture-audit.v1",
   "source": {
     "branch": "main",
-    "commit": "8a0b8125a92df0efd3295929017d991474cda946",
+    "commit": "128713723be8434b5979e9b638c5cc5dd967e25c",
     "dirty": true
   },
   "stable_eligible": false,

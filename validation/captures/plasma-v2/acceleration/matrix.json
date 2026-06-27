@@ -1,8 +1,13 @@
 {
   "claim_boundary": "Plasma v2 acceleration evidence is stable-candidate input only; not stable release, final artistic acceptance, or compatibility certification.",
   "comparison_policy": "exact fallback-oracle comparison for the portable proof runner",
+  "fallback_honest": true,
   "fallback_rows": 11,
+  "gdi_stable_floor": true,
+  "gl11_optional": true,
+  "hidden_gl11_minimum": false,
   "native_gl11_measurement": "not-present-in-portable-proof-runner",
+  "performance_truth_source": "separate_performance_envelope",
   "realization": "plasma_v2_realization_gl11_candidate",
   "reference_oracle": "plasma_v2_realization_software_reference",
   "row_count": 11,
@@ -152,5 +157,7 @@
     }
   ],
   "schema_version": "screensave.plasma-v2.acceleration-matrix.v1",
-  "status": "pass"
+  "software_reference_canonical": true,
+  "status": "pass",
+  "visual_truth_source": "software_reference"
 }

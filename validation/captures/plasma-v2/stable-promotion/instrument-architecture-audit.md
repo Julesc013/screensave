@@ -50,6 +50,7 @@
 - pass: direct-control-influence - Command passed.
 - pass: material-response - Command passed.
 - pass: material-treatment - Command passed.
+- pass: acceleration-optionality - Command passed.
 - pass: packc-data-only - Command passed.
 - pass: visualintent-contract - Command passed.
 - pass: aide-boundary - Command passed.

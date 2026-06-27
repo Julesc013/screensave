@@ -39,6 +39,7 @@ SUBCHECKS = [
     ("direct-control-influence", ["tools/scripts/check_plasma_v2_influence.py"]),
     ("material-response", ["tools/scripts/check_plasma_v2_material_response.py"]),
     ("material-treatment", ["tools/scripts/check_plasma_v2_materials.py"]),
+    ("acceleration-optionality", ["tools/scripts/check_plasma_v2_acceleration.py"]),
     ("packc-data-only", ["tools/scripts/check_packc.py"]),
     ("visualintent-contract", ["tools/scripts/check_visual_intent_contract.py"]),
     ("aide-boundary", ["tools/scripts/check_aide_evidence_bridge.py"]),
@@ -364,9 +365,9 @@ def build_report() -> dict[str, Any]:
     gate(
         gates,
         "software_reference_is_canonical",
-        "pass" if subcheck_status(subchecks, "legacy-core-boundaries") else "fail",
+        "pass" if subcheck_status(subchecks, "legacy-core-boundaries") and subcheck_status(subchecks, "acceleration-optionality") else "fail",
         "Software/reference execution remains the canonical proof-bearing path.",
-        evidence=["tools/scripts/check_plasma_core_boundaries.py"],
+        evidence=["tools/scripts/check_plasma_core_boundaries.py", "tools/scripts/check_plasma_v2_acceleration.py"],
     )
 
     gl_doc_ok, gl_missing = text_contains(
@@ -380,9 +381,10 @@ def build_report() -> dict[str, Any]:
     gate(
         gates,
         "gl11_is_not_hidden_minimum",
-        "pass" if gl_doc_ok else "fail",
+        "pass" if gl_doc_ok and subcheck_status(subchecks, "acceleration-optionality") else "fail",
         "GDI remains the floor and GL11 remains optional.",
         missing=gl_missing,
+        evidence=["tools/scripts/check_plasma_v2_acceleration.py"],
     )
 
     gate(

@@ -121,6 +121,13 @@ def build_report() -> dict[str, Any]:
         "status": "pass",
         "realization": "plasma_v2_realization_gl11_candidate",
         "reference_oracle": "plasma_v2_realization_software_reference",
+        "software_reference_canonical": True,
+        "gdi_stable_floor": True,
+        "gl11_optional": True,
+        "hidden_gl11_minimum": False,
+        "fallback_honest": True,
+        "visual_truth_source": "software_reference",
+        "performance_truth_source": "separate_performance_envelope",
         "comparison_policy": "exact fallback-oracle comparison for the portable proof runner",
         "row_count": len(rows),
         "fallback_rows": len([row for row in rows if row.get("fallback_reason")]),
@@ -164,6 +171,20 @@ def validate_report(report: dict[str, Any]) -> list[str]:
     errors: list[str] = []
     if report.get("status") != "pass":
         errors.append("acceleration matrix status must pass")
+    if report.get("software_reference_canonical") is not True:
+        errors.append("software reference must be recorded as canonical")
+    if report.get("gdi_stable_floor") is not True:
+        errors.append("GDI must be recorded as the stable floor")
+    if report.get("gl11_optional") is not True:
+        errors.append("GL11 must be recorded as optional")
+    if report.get("hidden_gl11_minimum") is not False:
+        errors.append("GL11 must not be recorded as a hidden minimum")
+    if report.get("fallback_honest") is not True:
+        errors.append("GL11 fallback must be recorded honestly")
+    if report.get("visual_truth_source") != "software_reference":
+        errors.append("visual truth source must remain software_reference")
+    if report.get("performance_truth_source") != "separate_performance_envelope":
+        errors.append("performance truth source must stay separate from visual truth")
     if report.get("row_count", 0) < 10:
         errors.append("acceleration matrix must cover default, materials, treatments, and three VisualIntent candidates")
     if "stable release" not in str(report.get("claim_boundary", "")):
