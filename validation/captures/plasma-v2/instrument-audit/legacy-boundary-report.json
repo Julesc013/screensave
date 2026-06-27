@@ -1,8 +1,6 @@
 {
   "authority_report": "validation/captures/plasma-v2/instrument-audit/legacy-authority-report.json",
-  "blocking_reasons": [
-    "workbench_legacy_migration_facts_missing"
-  ],
+  "blocking_reasons": [],
   "claim_boundary": "Legacy content is migration input only; Plasma v2 spec/plan/runtime own execution truth.",
   "compatibility_shims": [
     {
@@ -53,7 +51,7 @@
     "path": "products/savers/plasma/docs/plasma-v2-instrument-constitution.md",
     "status": "pass"
   },
-  "legacy_authority_removed": false,
+  "legacy_authority_removed": true,
   "legacy_bypass_candidates": [
     {
       "exists": true,
@@ -122,8 +120,8 @@
   "schema": "screensave.plasma-v2.legacy-boundary-report.v2",
   "source": {
     "branch": "main",
-    "commit": "fb4ed5e809268554c5c7ff7afaa434772b258d3b",
+    "commit": "01c41bd37385b870ddb07f0090fed1f597a067fe",
     "dirty": true
   },
-  "status": "hold"
+  "status": "promotion-ready"
 }

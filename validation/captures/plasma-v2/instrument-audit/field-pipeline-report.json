@@ -12,7 +12,7 @@
   "schema": "screensave.plasma-v2.field-pipeline-report.v1",
   "source": {
     "branch": "main",
-    "commit": "8b4e897153dceded106e30a4b34d7749c819e4c4",
+    "commit": "01c41bd37385b870ddb07f0090fed1f597a067fe",
     "dirty": true
   },
   "stable_scope": {

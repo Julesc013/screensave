@@ -16,13 +16,12 @@
       },
       "id": "instrument-audit-rerun",
       "status": "pass",
-      "summary": "Authoritative Plasma v2 instrument audit reran for PAW-I-R1."
+      "summary": "Authoritative Plasma v2 instrument audit reran for PAW-I-R2."
     },
     {
       "data": {
         "audit_status": "hold",
         "blocking_gates": [
-          "legacy_preset_authority_removed",
           "visualintent_candidates_reduce_to_plasma_spec"
         ],
         "failed_gates": [],
@@ -143,25 +142,20 @@
     {
       "data": {
         "data": {
-          "legacy_boundary_blockers": [
-            "legacy_bypass_candidates_not_wrapped_over_v2",
-            "compatibility_shims_not_explicitly_wrapped_over_v2"
-          ],
-          "legacy_boundary_status": "hold",
+          "legacy_boundary_blockers": [],
+          "legacy_boundary_status": "promotion-ready",
           "migration_check": "pass",
           "migration_evidence": [
             "tools/scripts/check_plasma_v2_migration.py"
           ],
-          "product_center_blockers": [
-            "legacy_bypass_candidates_still_present"
-          ],
-          "product_center_status": "hold"
+          "product_center_blockers": [],
+          "product_center_status": "promotion-ready"
         },
-        "gate_status": "hold",
+        "gate_status": "pass",
         "gate_summary": "Legacy preset/theme files must be migration inputs or wrappers over the direct v2 center, not hidden runtime authority."
       },
       "id": "gate:legacy_preset_authority_removed",
-      "status": "hold",
+      "status": "pass",
       "summary": "Gate is either admitted for stable promotion or explicitly blocking the hold."
     },
     {
@@ -198,16 +192,14 @@
       "summary": "Project state remains a release-candidate hold until the stable-promotion gate admits promotion."
     }
   ],
-  "claim_boundary": "PAW-I-R1 instrument re-audit only; it does not publish, certify compatibility, accept artistic quality, or promote stable release.",
+  "claim_boundary": "PAW-I-R2 instrument re-audit only; it does not publish, certify compatibility, accept artistic quality, or promote stable release.",
   "decision": {
     "blocking_gates": [
-      "legacy_preset_authority_removed",
       "visualintent_candidates_reduce_to_plasma_spec"
     ],
     "failed_checks": [],
     "failed_gates": [],
     "held_checks": [
-      "gate:legacy_preset_authority_removed",
       "gate:visualintent_candidates_reduce_to_plasma_spec"
     ],
     "instrument_architecture": "hold",
@@ -219,7 +211,7 @@
   "schema": "screensave.plasma-v2.instrument-reaudit.v1",
   "source": {
     "branch": "main",
-    "commit": "6a2d01720bc60e006f1cf959e1ef40c5c947ba3d",
+    "commit": "01c41bd37385b870ddb07f0090fed1f597a067fe",
     "dirty": true
   },
   "status": "hold"

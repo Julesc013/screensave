@@ -1,11 +1,11 @@
 # Plasma v2 Legacy Authority Report
 
-- Status: blocked
+- Status: pass
 - Claim boundary: Legacy content is migration input only; Plasma v2 spec/plan/runtime own execution truth.
 
 ## Blocking Reasons
 
-- workbench_legacy_migration_facts_missing
+- none
 
 ## Authority Groups
 

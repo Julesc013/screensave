@@ -324,7 +324,6 @@
     {
       "data": {
         "blocking_gates": [
-          "legacy_preset_authority_removed",
           "visualintent_candidates_reduce_to_plasma_spec"
         ],
         "instrument_status": "hold",
@@ -371,7 +370,6 @@
     "artistic_decision": "request-changes",
     "instrument_architecture": "hold",
     "instrument_blocking_gates": [
-      "legacy_preset_authority_removed",
       "visualintent_candidates_reduce_to_plasma_spec"
     ],
     "instrument_stable_eligible": false,
@@ -383,7 +381,7 @@
   "schema": "screensave.plasma-v2.stable-promotion.gate-report.v1",
   "source": {
     "branch": "main",
-    "commit": "8b4e897153dceded106e30a4b34d7749c819e4c4",
+    "commit": "01c41bd37385b870ddb07f0090fed1f597a067fe",
     "dirty": true
   },
   "status": "hold"

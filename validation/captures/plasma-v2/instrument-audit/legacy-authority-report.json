@@ -1,7 +1,5 @@
 {
-  "blocked_reasons": [
-    "workbench_legacy_migration_facts_missing"
-  ],
+  "blocked_reasons": [],
   "bypass_candidates": [
     {
       "exists": true,
@@ -119,13 +117,7 @@
     "packc_missing": [],
     "plan_runtime_missing": [],
     "proof_missing": [],
-    "workbench_missing": [
-      "legacy_source_kind",
-      "legacy_key",
-      "legacy_authority",
-      "migration_input_only",
-      "v2_spec_plan_runtime"
-    ]
+    "workbench_missing": []
   },
   "legacy_inputs": [
     {
@@ -185,14 +177,14 @@
       "role": "legacy_input"
     }
   ],
-  "legacy_preset_authority_removed": false,
+  "legacy_preset_authority_removed": true,
   "schema": "screensave.plasma-v2.legacy-authority-report.v1",
   "source": {
     "branch": "main",
-    "commit": "fb4ed5e809268554c5c7ff7afaa434772b258d3b",
+    "commit": "01c41bd37385b870ddb07f0090fed1f597a067fe",
     "dirty": true
   },
-  "status": "blocked",
+  "status": "pass",
   "v2_authority_files": [
     {
       "exists": true,

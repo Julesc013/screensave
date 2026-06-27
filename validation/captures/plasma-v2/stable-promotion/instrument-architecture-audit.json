@@ -193,7 +193,7 @@
           "returncode": 0,
           "status": "pass",
           "stderr": "",
-          "stdout": "Plasma v2 product-center boundary audit hold",
+          "stdout": "Plasma v2 product-center boundary audit promotion-ready",
           "timeout_seconds": 300
         }
       },
@@ -211,7 +211,7 @@
           "returncode": 0,
           "status": "pass",
           "stderr": "",
-          "stdout": "Plasma v2 legacy boundary audit hold",
+          "stdout": "Plasma v2 legacy boundary audit promotion-ready",
           "timeout_seconds": 300
         }
       },
@@ -401,10 +401,8 @@
     },
     {
       "data": {
-        "blocking_reasons": [
-          "legacy_bypass_candidates_still_present"
-        ],
-        "status": "hold"
+        "blocking_reasons": [],
+        "status": "promotion-ready"
       },
       "id": "product-center-report-outcome",
       "status": "pass",
@@ -412,11 +410,8 @@
     },
     {
       "data": {
-        "blocking_reasons": [
-          "legacy_bypass_candidates_not_wrapped_over_v2",
-          "compatibility_shims_not_explicitly_wrapped_over_v2"
-        ],
-        "status": "hold"
+        "blocking_reasons": [],
+        "status": "promotion-ready"
       },
       "id": "legacy-boundary-report-outcome",
       "status": "pass",
@@ -444,7 +439,6 @@
   "claim_boundary": "Instrument-architecture audit only; it does not publish Plasma, certify compatibility, accept final artistic quality, or admit AIDE as runtime truth.",
   "decision": {
     "blocking_gates": [
-      "legacy_preset_authority_removed",
       "visualintent_candidates_reduce_to_plasma_spec"
     ],
     "failed_gates": [],
@@ -491,22 +485,17 @@
     },
     {
       "data": {
-        "legacy_boundary_blockers": [
-          "legacy_bypass_candidates_not_wrapped_over_v2",
-          "compatibility_shims_not_explicitly_wrapped_over_v2"
-        ],
-        "legacy_boundary_status": "hold",
+        "legacy_boundary_blockers": [],
+        "legacy_boundary_status": "promotion-ready",
         "migration_check": "pass",
         "migration_evidence": [
           "tools/scripts/check_plasma_v2_migration.py"
         ],
-        "product_center_blockers": [
-          "legacy_bypass_candidates_still_present"
-        ],
-        "product_center_status": "hold"
+        "product_center_blockers": [],
+        "product_center_status": "promotion-ready"
       },
       "id": "legacy_preset_authority_removed",
-      "status": "hold",
+      "status": "pass",
       "summary": "Legacy preset/theme files must be migration inputs or wrappers over the direct v2 center, not hidden runtime authority."
     },
     {
@@ -621,7 +610,7 @@
   "schema": "screensave.plasma-v2.instrument-architecture-audit.v1",
   "source": {
     "branch": "main",
-    "commit": "8b4e897153dceded106e30a4b34d7749c819e4c4",
+    "commit": "01c41bd37385b870ddb07f0090fed1f597a067fe",
     "dirty": true
   },
   "stable_eligible": false,

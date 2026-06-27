@@ -1,4 +1,4 @@
-"""Record the PAW-I-R1 Plasma v2 instrument re-audit outcome."""
+"""Record the PAW-I-R2 Plasma v2 instrument re-audit outcome."""
 
 from __future__ import annotations
 
@@ -110,7 +110,7 @@ def build_report() -> dict[str, Any]:
         checks,
         "instrument-audit-rerun",
         "pass" if audit_run["returncode"] == 0 else "fail",
-        "Authoritative Plasma v2 instrument audit reran for PAW-I-R1.",
+        "Authoritative Plasma v2 instrument audit reran for PAW-I-R2.",
         run=audit_run,
     )
 
@@ -214,7 +214,7 @@ def build_report() -> dict[str, Any]:
             "failed_checks": failed_checks,
             "opened_next": "plasma-v2-publication-prep" if status == "promotion-ready" else "plasma-v2-instrument-repair",
         },
-        "claim_boundary": "PAW-I-R1 instrument re-audit only; it does not publish, certify compatibility, accept artistic quality, or promote stable release.",
+        "claim_boundary": "PAW-I-R2 instrument re-audit only; it does not publish, certify compatibility, accept artistic quality, or promote stable release.",
         "checks": checks,
         "instrument_audit_ref": "validation/captures/plasma-v2/stable-promotion/instrument-architecture-audit.json",
     }
