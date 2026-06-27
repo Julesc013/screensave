@@ -19,7 +19,7 @@
 - pass: plasma_v2_spec_contract_passes - The direct-control Plasma v2 spec island exists and passes its C89 smoke check.
 - hold: plasma_v2_plan_contract_passes - The direct v2 plan contract must exist in the v2 island before stable promotion.
 - hold: plasma_v2_runtime_contract_passes - The direct v2 runtime contract must exist in the v2 island before stable promotion.
-- hold: legacy_preset_authority_removed - Legacy preset/theme files remain compatibility evidence; PAW-I must prove they are migration inputs, not hidden runtime authority.
+- hold: legacy_preset_authority_removed - Legacy preset/theme files must be migration inputs or wrappers over the direct v2 center, not hidden runtime authority.
 - pass: direct_controls_influence_passes - Basic controls with visual claims produce deterministic output differences.
 - hold: field_pipeline_boundaries_pass - Field and output boundaries must be explicit in the v2 island before stable promotion.
 - pass: material_mapping_distinctness_passes - Stable materials have distinct deterministic visual response.
@@ -41,11 +41,15 @@
 - pass: paw-i-fold-in - PAW-I roadmap records the instrument audit as a promotion gate.
 - pass: product-constitution-text - Product-local instrument constitution records the PAW-I-R truth boundary.
 - pass: direct-spec - Command passed.
+- pass: product-center-boundary - Command passed.
+- pass: legacy-boundary - Command passed.
 - pass: legacy-core-boundaries - Command passed.
 - pass: direct-control-influence - Command passed.
 - pass: material-treatment - Command passed.
 - pass: packc-data-only - Command passed.
 - pass: visualintent-contract - Command passed.
 - pass: aide-boundary - Command passed.
+- pass: product-center-report-outcome - Product-center boundary report is present and has a valid audit status.
+- pass: legacy-boundary-report-outcome - Legacy boundary report is present and has a valid audit status.
 - pass: required-gate-set - Instrument audit emits the required PAW-I gate set.
 - pass: project-state-not-overpromoted - Project state does not overclaim stable promotion.

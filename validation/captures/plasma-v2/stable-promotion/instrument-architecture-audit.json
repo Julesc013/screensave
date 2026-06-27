@@ -80,6 +80,42 @@
         "run": {
           "command": [
             "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+            "tools/scripts/check_plasma_product_center.py"
+          ],
+          "returncode": 0,
+          "status": "pass",
+          "stderr": "",
+          "stdout": "Plasma v2 product-center boundary audit hold",
+          "timeout_seconds": 300
+        }
+      },
+      "id": "product-center-boundary",
+      "status": "pass",
+      "summary": "Command passed."
+    },
+    {
+      "data": {
+        "run": {
+          "command": [
+            "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+            "tools/scripts/check_plasma_legacy_boundary.py"
+          ],
+          "returncode": 0,
+          "status": "pass",
+          "stderr": "",
+          "stdout": "Plasma v2 legacy boundary audit hold",
+          "timeout_seconds": 300
+        }
+      },
+      "id": "legacy-boundary",
+      "status": "pass",
+      "summary": "Command passed."
+    },
+    {
+      "data": {
+        "run": {
+          "command": [
+            "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
             "tools/scripts/check_plasma_core_boundaries.py"
           ],
           "returncode": 0,
@@ -185,6 +221,30 @@
     },
     {
       "data": {
+        "blocking_reasons": [
+          "new_product_center_incomplete",
+          "legacy_bypass_candidates_still_present"
+        ],
+        "status": "hold"
+      },
+      "id": "product-center-report-outcome",
+      "status": "pass",
+      "summary": "Product-center boundary report is present and has a valid audit status."
+    },
+    {
+      "data": {
+        "blocking_reasons": [
+          "legacy_bypass_candidates_not_wrapped_over_v2",
+          "compatibility_shims_not_explicitly_wrapped_over_v2"
+        ],
+        "status": "hold"
+      },
+      "id": "legacy-boundary-report-outcome",
+      "status": "pass",
+      "summary": "Legacy boundary report is present and has a valid audit status."
+    },
+    {
+      "data": {
         "extra": [],
         "missing": []
       },
@@ -253,15 +313,20 @@
     },
     {
       "data": {
-        "compatibility_files": [
-          "products/savers/plasma/src/plasma_presets.c",
-          "products/savers/plasma/src/plasma_themes.c",
-          "products/savers/plasma/src/plasma_selection.c"
-        ]
+        "legacy_boundary_blockers": [
+          "legacy_bypass_candidates_not_wrapped_over_v2",
+          "compatibility_shims_not_explicitly_wrapped_over_v2"
+        ],
+        "legacy_boundary_status": "hold",
+        "product_center_blockers": [
+          "new_product_center_incomplete",
+          "legacy_bypass_candidates_still_present"
+        ],
+        "product_center_status": "hold"
       },
       "id": "legacy_preset_authority_removed",
       "status": "hold",
-      "summary": "Legacy preset/theme files remain compatibility evidence; PAW-I must prove they are migration inputs, not hidden runtime authority."
+      "summary": "Legacy preset/theme files must be migration inputs or wrappers over the direct v2 center, not hidden runtime authority."
     },
     {
       "data": {
@@ -358,7 +423,7 @@
   "schema": "screensave.plasma-v2.instrument-architecture-audit.v1",
   "source": {
     "branch": "main",
-    "commit": "f9bd5af8bf9e04b4492fc918722283ca06e68a3e",
+    "commit": "4b72629308e9317cb25a16a62568b9909e2bd899",
     "dirty": true
   },
   "stable_eligible": false,

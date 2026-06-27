@@ -21,9 +21,14 @@ REPORT_JSON = REPORT_DIR / "instrument-architecture-audit.json"
 REPORT_MD = REPORT_DIR / "instrument-architecture-audit.md"
 V2_ISLAND = ROOT / "products" / "savers" / "plasma" / "src" / "v2"
 PLASMA_SRC = ROOT / "products" / "savers" / "plasma" / "src"
+INSTRUMENT_AUDIT_DIR = ROOT / "validation" / "captures" / "plasma-v2" / "instrument-audit"
+PRODUCT_CENTER_REPORT = INSTRUMENT_AUDIT_DIR / "product-center-report.json"
+LEGACY_BOUNDARY_REPORT = INSTRUMENT_AUDIT_DIR / "legacy-boundary-report.json"
 
 SUBCHECKS = [
     ("direct-spec", ["tools/scripts/check_plasma_v2_direct_spec.py"]),
+    ("product-center-boundary", ["tools/scripts/check_plasma_product_center.py"]),
+    ("legacy-boundary", ["tools/scripts/check_plasma_legacy_boundary.py"]),
     ("legacy-core-boundaries", ["tools/scripts/check_plasma_core_boundaries.py"]),
     ("direct-control-influence", ["tools/scripts/check_plasma_v2_influence.py"]),
     ("material-treatment", ["tools/scripts/check_plasma_v2_materials.py"]),
@@ -56,6 +61,12 @@ def repo_path(path: pathlib.Path) -> str:
 def load_toml(path: pathlib.Path) -> dict[str, Any]:
     with path.open("rb") as handle:
         return tomllib.load(handle)
+
+
+def load_json(path: pathlib.Path) -> dict[str, Any]:
+    if not path.exists():
+        return {}
+    return json.loads(path.read_text(encoding="utf-8"))
 
 
 def git_text(args: list[str]) -> str:
@@ -218,6 +229,25 @@ def build_report() -> dict[str, Any]:
             run=result,
         )
 
+    product_center_report = load_json(PRODUCT_CENTER_REPORT)
+    legacy_boundary_report = load_json(LEGACY_BOUNDARY_REPORT)
+    add_check(
+        checks,
+        "product-center-report-outcome",
+        product_center_report.get("status") in {"promotion-ready", "hold"},
+        "Product-center boundary report is present and has a valid audit status.",
+        status=product_center_report.get("status"),
+        blocking_reasons=product_center_report.get("blocking_reasons", []),
+    )
+    add_check(
+        checks,
+        "legacy-boundary-report-outcome",
+        legacy_boundary_report.get("status") in {"promotion-ready", "hold"},
+        "Legacy boundary report is present and has a valid audit status.",
+        status=legacy_boundary_report.get("status"),
+        blocking_reasons=legacy_boundary_report.get("blocking_reasons", []),
+    )
+
     gate(
         gates,
         "plasma_v2_spec_contract_passes",
@@ -249,17 +279,25 @@ def build_report() -> dict[str, Any]:
         missing=[repo_path(path) for path in runtime_files if not path.exists()],
     )
 
-    legacy_files = [
-        PLASMA_SRC / "plasma_presets.c",
-        PLASMA_SRC / "plasma_themes.c",
-        PLASMA_SRC / "plasma_selection.c",
-    ]
+    legacy_ready = (
+        product_center_report.get("stable_eligible") is True
+        and legacy_boundary_report.get("legacy_authority_removed") is True
+    )
+    legacy_structural = (
+        subcheck_status(subchecks, "product-center-boundary")
+        and subcheck_status(subchecks, "legacy-boundary")
+        and product_center_report.get("status") in {"promotion-ready", "hold"}
+        and legacy_boundary_report.get("status") in {"promotion-ready", "hold"}
+    )
     gate(
         gates,
         "legacy_preset_authority_removed",
-        "hold",
-        "Legacy preset/theme files remain compatibility evidence; PAW-I must prove they are migration inputs, not hidden runtime authority.",
-        compatibility_files=[repo_path(path) for path in legacy_files if path.exists()],
+        "pass" if legacy_ready else "hold" if legacy_structural else "fail",
+        "Legacy preset/theme files must be migration inputs or wrappers over the direct v2 center, not hidden runtime authority.",
+        product_center_status=product_center_report.get("status"),
+        legacy_boundary_status=legacy_boundary_report.get("status"),
+        product_center_blockers=product_center_report.get("blocking_reasons", []),
+        legacy_boundary_blockers=legacy_boundary_report.get("blocking_reasons", []),
     )
 
     gate(

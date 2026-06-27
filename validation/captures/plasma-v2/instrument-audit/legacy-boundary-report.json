@@ -1,0 +1,114 @@
+{
+  "blocking_reasons": [
+    "legacy_bypass_candidates_not_wrapped_over_v2",
+    "compatibility_shims_not_explicitly_wrapped_over_v2"
+  ],
+  "claim_boundary": "Legacy boundary audit only; hold means old Plasma files are not yet proven to be wrappers or migration-only inputs to the direct v2 instrument center.",
+  "compatibility_shims": [
+    {
+      "exists": true,
+      "expected_role": "compatibility_shim",
+      "path": "products/savers/plasma/src/plasma_config.c",
+      "references_v2": false
+    },
+    {
+      "exists": true,
+      "expected_role": "compatibility_shim",
+      "path": "products/savers/plasma/src/plasma_presets.c",
+      "references_v2": false
+    },
+    {
+      "exists": true,
+      "expected_role": "compatibility_shim",
+      "path": "products/savers/plasma/src/plasma_themes.c",
+      "references_v2": false
+    },
+    {
+      "exists": true,
+      "expected_role": "compatibility_shim",
+      "path": "products/savers/plasma/src/plasma_content.c",
+      "references_v2": false
+    },
+    {
+      "exists": true,
+      "expected_role": "compatibility_shim",
+      "path": "products/savers/plasma/src/plasma_selection.c",
+      "references_v2": false
+    },
+    {
+      "exists": true,
+      "expected_role": "compatibility_shim",
+      "path": "products/savers/plasma/src/plasma_benchlab.c",
+      "references_v2": false
+    }
+  ],
+  "constitution": {
+    "missing": [],
+    "path": "products/savers/plasma/docs/plasma-v2-instrument-constitution.md",
+    "status": "pass"
+  },
+  "legacy_authority_removed": false,
+  "legacy_bypass_candidates": [
+    {
+      "exists": true,
+      "expected_role": "legacy_bypass_candidate",
+      "path": "products/savers/plasma/src/plasma_sim.c",
+      "references_v2": false
+    },
+    {
+      "exists": true,
+      "expected_role": "legacy_bypass_candidate",
+      "path": "products/savers/plasma/src/plasma_render.c",
+      "references_v2": false
+    },
+    {
+      "exists": true,
+      "expected_role": "legacy_bypass_candidate",
+      "path": "products/savers/plasma/src/plasma_plan.c",
+      "references_v2": false
+    },
+    {
+      "exists": true,
+      "expected_role": "legacy_bypass_candidate",
+      "path": "products/savers/plasma/src/plasma_advanced.c",
+      "references_v2": false
+    },
+    {
+      "exists": true,
+      "expected_role": "legacy_bypass_candidate",
+      "path": "products/savers/plasma/src/plasma_modern.c",
+      "references_v2": false
+    },
+    {
+      "exists": true,
+      "expected_role": "legacy_bypass_candidate",
+      "path": "products/savers/plasma/src/plasma_premium.c",
+      "references_v2": false
+    },
+    {
+      "exists": true,
+      "expected_role": "legacy_bypass_candidate",
+      "path": "products/savers/plasma/src/plasma_output.c",
+      "references_v2": false
+    },
+    {
+      "exists": true,
+      "expected_role": "legacy_bypass_candidate",
+      "path": "products/savers/plasma/src/plasma_treatment.c",
+      "references_v2": false
+    },
+    {
+      "exists": true,
+      "expected_role": "legacy_bypass_candidate",
+      "path": "products/savers/plasma/src/plasma_presentation.c",
+      "references_v2": false
+    }
+  ],
+  "schema": "screensave.plasma-v2.legacy-boundary-report.v1",
+  "source": {
+    "branch": "main",
+    "commit": "4b72629308e9317cb25a16a62568b9909e2bd899",
+    "dirty": true
+  },
+  "status": "hold"
+}

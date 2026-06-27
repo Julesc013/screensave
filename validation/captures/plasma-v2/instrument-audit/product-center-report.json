@@ -1,0 +1,161 @@
+{
+  "blocking_reasons": [
+    "new_product_center_incomplete",
+    "legacy_bypass_candidates_still_present"
+  ],
+  "claim_boundary": "Product-center boundary audit only; hold means legacy files are not yet proven to be wrappers over the direct v2 instrument center.",
+  "groups": {
+    "compatibility_shims": [
+      {
+        "exists": true,
+        "kind": "file",
+        "path": "products/savers/plasma/src/plasma_config.c",
+        "role": "compatibility_shim"
+      },
+      {
+        "exists": true,
+        "kind": "file",
+        "path": "products/savers/plasma/src/plasma_presets.c",
+        "role": "compatibility_shim"
+      },
+      {
+        "exists": true,
+        "kind": "file",
+        "path": "products/savers/plasma/src/plasma_themes.c",
+        "role": "compatibility_shim"
+      },
+      {
+        "exists": true,
+        "kind": "file",
+        "path": "products/savers/plasma/src/plasma_content.c",
+        "role": "compatibility_shim"
+      },
+      {
+        "exists": true,
+        "kind": "file",
+        "path": "products/savers/plasma/src/plasma_selection.c",
+        "role": "compatibility_shim"
+      },
+      {
+        "exists": true,
+        "kind": "file",
+        "path": "products/savers/plasma/src/plasma_benchlab.c",
+        "role": "compatibility_shim"
+      }
+    ],
+    "legacy_bypass_candidates": [
+      {
+        "exists": true,
+        "kind": "file",
+        "path": "products/savers/plasma/src/plasma_sim.c",
+        "role": "legacy_bypass_candidate"
+      },
+      {
+        "exists": true,
+        "kind": "file",
+        "path": "products/savers/plasma/src/plasma_render.c",
+        "role": "legacy_bypass_candidate"
+      },
+      {
+        "exists": true,
+        "kind": "file",
+        "path": "products/savers/plasma/src/plasma_plan.c",
+        "role": "legacy_bypass_candidate"
+      },
+      {
+        "exists": true,
+        "kind": "file",
+        "path": "products/savers/plasma/src/plasma_advanced.c",
+        "role": "legacy_bypass_candidate"
+      },
+      {
+        "exists": true,
+        "kind": "file",
+        "path": "products/savers/plasma/src/plasma_modern.c",
+        "role": "legacy_bypass_candidate"
+      },
+      {
+        "exists": true,
+        "kind": "file",
+        "path": "products/savers/plasma/src/plasma_premium.c",
+        "role": "legacy_bypass_candidate"
+      },
+      {
+        "exists": true,
+        "kind": "file",
+        "path": "products/savers/plasma/src/plasma_output.c",
+        "role": "legacy_bypass_candidate"
+      },
+      {
+        "exists": true,
+        "kind": "file",
+        "path": "products/savers/plasma/src/plasma_treatment.c",
+        "role": "legacy_bypass_candidate"
+      },
+      {
+        "exists": true,
+        "kind": "file",
+        "path": "products/savers/plasma/src/plasma_presentation.c",
+        "role": "legacy_bypass_candidate"
+      }
+    ],
+    "new_product_center": [
+      {
+        "exists": true,
+        "kind": "file",
+        "path": "products/savers/plasma/src/v2/plasma_v2_spec.h",
+        "role": "new_product_center"
+      },
+      {
+        "exists": true,
+        "kind": "file",
+        "path": "products/savers/plasma/src/v2/plasma_v2_spec.c",
+        "role": "new_product_center"
+      },
+      {
+        "exists": false,
+        "kind": "file",
+        "path": "products/savers/plasma/src/v2/plasma_v2_plan.h",
+        "role": "new_product_center"
+      },
+      {
+        "exists": false,
+        "kind": "file",
+        "path": "products/savers/plasma/src/v2/plasma_v2_plan.c",
+        "role": "new_product_center"
+      },
+      {
+        "exists": false,
+        "kind": "file",
+        "path": "products/savers/plasma/src/v2/plasma_v2_runtime.h",
+        "role": "new_product_center"
+      },
+      {
+        "exists": false,
+        "kind": "file",
+        "path": "products/savers/plasma/src/v2/plasma_v2_runtime.c",
+        "role": "new_product_center"
+      },
+      {
+        "exists": false,
+        "kind": "file",
+        "path": "products/savers/plasma/src/v2/field",
+        "role": "new_product_center"
+      },
+      {
+        "exists": false,
+        "kind": "file",
+        "path": "products/savers/plasma/src/v2/output",
+        "role": "new_product_center"
+      }
+    ]
+  },
+  "schema": "screensave.plasma-v2.product-center-report.v1",
+  "source": {
+    "branch": "main",
+    "commit": "4b72629308e9317cb25a16a62568b9909e2bd899",
+    "dirty": true
+  },
+  "stable_eligible": false,
+  "status": "hold"
+}
