@@ -3,8 +3,8 @@
   "checks": [
     {
       "data": {
-        "active_program": "plasma-v2-stable-repair",
-        "development_active_program": "plasma-v2-stable-repair",
+        "active_program": "plasma-v2-instrument-repair",
+        "development_active_program": "plasma-v2-instrument-repair",
         "plasma_status": "release-candidate-hold"
       },
       "id": "project-state-before-or-hold",
@@ -324,10 +324,7 @@
     {
       "data": {
         "blocking_gates": [
-          "plasma_v2_plan_contract_passes",
-          "plasma_v2_runtime_contract_passes",
           "legacy_preset_authority_removed",
-          "field_pipeline_boundaries_pass",
           "visualintent_candidates_reduce_to_plasma_spec"
         ],
         "instrument_status": "hold",
@@ -374,10 +371,7 @@
     "artistic_decision": "request-changes",
     "instrument_architecture": "hold",
     "instrument_blocking_gates": [
-      "plasma_v2_plan_contract_passes",
-      "plasma_v2_runtime_contract_passes",
       "legacy_preset_authority_removed",
-      "field_pipeline_boundaries_pass",
       "visualintent_candidates_reduce_to_plasma_spec"
     ],
     "instrument_stable_eligible": false,
@@ -389,7 +383,7 @@
   "schema": "screensave.plasma-v2.stable-promotion.gate-report.v1",
   "source": {
     "branch": "main",
-    "commit": "83a6c9b1f9cc97e6af428a9cb461461df7bcd11e",
+    "commit": "e5a44dfffd41a50beb493f39bfef9352eb2de898",
     "dirty": true
   },
   "status": "hold"

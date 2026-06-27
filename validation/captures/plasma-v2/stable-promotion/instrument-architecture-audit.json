@@ -621,7 +621,7 @@
   "schema": "screensave.plasma-v2.instrument-architecture-audit.v1",
   "source": {
     "branch": "main",
-    "commit": "6a2d01720bc60e006f1cf959e1ef40c5c947ba3d",
+    "commit": "e5a44dfffd41a50beb493f39bfef9352eb2de898",
     "dirty": true
   },
   "stable_eligible": false,
