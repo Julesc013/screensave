@@ -12,6 +12,8 @@ DECISION_DIR = ROOT / "validation" / "captures" / "plasma-v2" / "final-artistic-
 POLICY = DECISION_DIR / "decision-policy.md"
 TEMPLATE = DECISION_DIR / "decision.template.toml"
 RELEASE_CANDIDATE = DECISION_DIR / "decision.release-candidate.toml"
+SUMMARY = DECISION_DIR / "decision-summary.md"
+REVIEWER_NOTES = DECISION_DIR / "reviewer-notes" / "README.md"
 
 REQUIRED_STATES = {
     "not-started",
@@ -68,10 +70,25 @@ def check_decision_packet(path: pathlib.Path, expected_state: str, errors: list[
 
 def main() -> int:
     errors: list[str] = []
-    for path in (POLICY, TEMPLATE, RELEASE_CANDIDATE):
+    for path in (POLICY, TEMPLATE, RELEASE_CANDIDATE, SUMMARY, REVIEWER_NOTES):
         require(path.exists(), f"Missing artistic decision packet file {path.relative_to(ROOT)}.", errors)
 
     if not errors:
+        summary_text = SUMMARY.read_text(encoding="utf-8")
+        for phrase in (
+            "accepted-for-release-candidate",
+            "not final stable artistic acceptance",
+            "not stable release promotion",
+            "not release publication",
+            "not compatibility certification",
+            "PAW-I",
+        ):
+            require(phrase in summary_text, f"decision-summary.md is missing phrase {phrase!r}.", errors)
+
+        reviewer_text = REVIEWER_NOTES.read_text(encoding="utf-8")
+        require("release-candidate preparation only" in reviewer_text, "reviewer notes must preserve release-candidate-only boundary.", errors)
+        require("future stable acceptance" in reviewer_text, "reviewer notes must reserve future stable acceptance.", errors)
+
         policy_text = POLICY.read_text(encoding="utf-8")
         for state in REQUIRED_STATES:
             require(state in policy_text, f"decision-policy.md is missing state {state}.", errors)
