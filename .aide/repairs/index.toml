@@ -33,3 +33,15 @@ expected_validators = ["py -3 tools/scripts/check_repair_queue.py"]
 evidence_outputs = ["out/aide/repairs/scan.json"]
 claim_boundary = "Repair scan only; no source mutation, merge, release, or certification."
 rollback_point = "00f885b"
+
+[release_candidate_burndown]
+status = "no-blocking-release-candidate-repairs"
+recorded_on = "2026-06-27"
+scan_ref = "out/aide/repairs/scan.json"
+validator_failure_plan = "out/aide/repairs/plan-validator_failure.json"
+doc_drift_plan = "out/aide/repairs/plan-doc_drift.json"
+generated_catalog_drift_plan = "out/aide/repairs/plan-generated_catalog_drift.json"
+release_readiness_gap_plan = "out/aide/repairs/plan-release_readiness_gap.json"
+open_blocking_count = 0
+historical_planned_repairs = ["SS-REPAIR-001"]
+claim_boundary = "Release-candidate burn-down only; no source mutation, merge, promotion, release, or compatibility certification."

@@ -1,0 +1,42 @@
+{
+  "schema": "screensave.plasma-v2.release-candidate.repair-burndown.v1",
+  "status": "no-blocking-release-candidate-repairs",
+  "recorded_on": "2026-06-27",
+  "candidate_id": "plasma-v2-rc1",
+  "scan": {
+    "status": "pass",
+    "ref": "out/aide/repairs/scan.json",
+    "repair_count": 1,
+    "historical_planned_repairs": [
+      "SS-REPAIR-001"
+    ]
+  },
+  "priority_plans": {
+    "validator_failure": {
+      "status": "pass",
+      "matching_count": 1,
+      "blocking_release_candidate_count": 0,
+      "ref": "out/aide/repairs/plan-validator_failure.json"
+    },
+    "doc_drift": {
+      "status": "pass",
+      "matching_count": 0,
+      "blocking_release_candidate_count": 0,
+      "ref": "out/aide/repairs/plan-doc_drift.json"
+    },
+    "generated_catalog_drift": {
+      "status": "pass",
+      "matching_count": 0,
+      "blocking_release_candidate_count": 0,
+      "ref": "out/aide/repairs/plan-generated_catalog_drift.json"
+    },
+    "release_readiness_gap": {
+      "status": "pass",
+      "matching_count": 0,
+      "blocking_release_candidate_count": 0,
+      "ref": "out/aide/repairs/plan-release_readiness_gap.json"
+    }
+  },
+  "open_blocking_count": 0,
+  "claim_boundary": "Repair burn-down records release-candidate readiness only; it does not mutate source, merge, promote, release, or certify compatibility."
+}

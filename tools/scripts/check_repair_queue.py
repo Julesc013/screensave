@@ -16,6 +16,7 @@ TEMPLATE = ROOT / ".aide" / "repairs" / "templates" / "repair-task.toml"
 POLICY = ROOT / ".aide" / "policies" / "screensave-repair.yaml"
 TOOL = ROOT / "tools" / "aideops" / "repair_queue.py"
 SCAN_OUT = ROOT / "out" / "aide" / "repairs" / "scan.json"
+BURN_DOWN = ROOT / "validation" / "captures" / "plasma-v2" / "release-candidate" / "repair-burndown.json"
 
 REPAIR_CLASSES = {
     "validator_failure",
@@ -88,6 +89,15 @@ def main() -> int:
         for repair in queue.get("repairs", []):
             if isinstance(repair, dict):
                 validate_repair(repair, str(repair.get("id", "repair")), errors)
+        burn = queue.get("release_candidate_burndown", {})
+        if burn:
+            require(
+                burn.get("status") == "no-blocking-release-candidate-repairs",
+                "release-candidate repair burn-down status must be no-blocking-release-candidate-repairs.",
+                errors,
+            )
+            require(burn.get("open_blocking_count") == 0, "release-candidate repair burn-down open_blocking_count must be 0.", errors)
+            require("compatibility certification" in str(burn.get("claim_boundary", "")), "release-candidate repair burn-down must block certification.", errors)
         validate_repair(load_toml(TEMPLATE), "repair template", errors)
         policy_text = POLICY.read_text(encoding="utf-8")
         for needle in [
@@ -115,6 +125,15 @@ def main() -> int:
             payload = json.loads(SCAN_OUT.read_text(encoding="utf-8"))
             require(payload.get("status") == "pass", "repair scan status must pass.", errors)
             require(payload.get("repair_count", 0) >= 1, "repair scan must include repair tasks.", errors)
+        if BURN_DOWN.exists():
+            burn = json.loads(BURN_DOWN.read_text(encoding="utf-8"))
+            require(
+                burn.get("status") == "no-blocking-release-candidate-repairs",
+                "repair burn-down evidence status must be no-blocking-release-candidate-repairs.",
+                errors,
+            )
+            require(burn.get("open_blocking_count") == 0, "repair burn-down evidence open_blocking_count must be 0.", errors)
+            require("certify compatibility" in burn.get("claim_boundary", ""), "repair burn-down evidence must block certification.", errors)
 
     if errors:
         for error in errors:
