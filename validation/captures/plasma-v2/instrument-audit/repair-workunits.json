@@ -1,0 +1,48 @@
+{
+  "candidate_id": "plasma-v2-rc1",
+  "claim_boundary": "Repair WorkUnits only; this does not publish, promote stable release, certify compatibility, or accept artistic quality.",
+  "instrument_reaudit": {
+    "blocking_gates": [
+      "legacy_preset_authority_removed",
+      "visualintent_candidates_reduce_to_plasma_spec"
+    ],
+    "report": "validation/captures/plasma-v2/instrument-audit/re-audit-report.json",
+    "status": "hold"
+  },
+  "schema": "screensave.plasma-v2.instrument-repair-workunits.v1",
+  "stable_promotion": {
+    "artistic_decision": "request-changes",
+    "open_blocking_repairs": [
+      "SS-PLV2-I-REPAIR-001"
+    ],
+    "report": "validation/captures/plasma-v2/stable-promotion/gate-report.json",
+    "status": "hold"
+  },
+  "status": "release-candidate-hold",
+  "work_units": [
+    {
+      "blocks": [
+        "legacy_preset_authority_removed"
+      ],
+      "id": "SS-PLV2-IR-REPAIR-001",
+      "title": "Contain legacy Plasma authority behind v2 instrument truth",
+      "work_unit_ref": ".aide/work_units/plasma-v2-instrument-repair.toml"
+    },
+    {
+      "blocks": [
+        "visualintent_candidates_reduce_to_plasma_spec"
+      ],
+      "id": "SS-PLV2-IR-REPAIR-002",
+      "title": "Admit VisualIntent candidates through Plasma v2 specs",
+      "work_unit_ref": ".aide/work_units/plasma-v2-instrument-repair.toml"
+    },
+    {
+      "blocks": [
+        "final_stable_artistic_acceptance"
+      ],
+      "id": "SS-PLV2-IR-REPAIR-003",
+      "title": "Record final stable artistic acceptance after instrument blockers clear",
+      "work_unit_ref": ".aide/work_units/plasma-v2-instrument-repair.toml"
+    }
+  ]
+}
