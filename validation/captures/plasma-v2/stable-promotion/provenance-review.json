@@ -1,0 +1,33 @@
+{
+  "schema": "screensave.plasma-v2.stable-promotion.provenance-review.v1",
+  "status": "pass-with-hold",
+  "candidate_id": "plasma-v2-rc1",
+  "review_source_commit": "dee3b89daa3e402cf04723122bb70612a2ad31a2",
+  "package_source_commit": "b32c821415585f2be40c012a491c2a9465d759dc",
+  "artifact": {
+    "path": "out/msvc/vs2017_xp/Release/plasma/plasma.scr",
+    "sha256": "72871f8ce5f4b45ba62663c82a32ea30e2beb6973663bd5203884d498bc74ec3",
+    "toolchain": "VS2017 v141_xp Release Win32",
+    "profile": "windows-current-x86"
+  },
+  "package_hashes": {
+    "checksums": "packaging/windows/plasma-v2-stable-promotion/checksums.sha256",
+    "manifest": "packaging/windows/plasma-v2-stable-promotion/manifest.toml",
+    "provenance": "packaging/windows/plasma-v2-stable-promotion/provenance.json",
+    "sbom": "packaging/windows/plasma-v2-stable-promotion/sbom.json"
+  },
+  "refs": {
+    "proof_bundle": "validation/captures/plasma-v2/reference-preview/proof-bundle-v1.json",
+    "stable_support_claims": "validation/captures/plasma-v2/stable-promotion/support-claims.json",
+    "package_provenance": "packaging/windows/plasma-v2-stable-promotion/provenance.json",
+    "package_manifest": "packaging/windows/plasma-v2-stable-promotion/manifest.toml",
+    "package_checksums": "packaging/windows/plasma-v2-stable-promotion/checksums.sha256"
+  },
+  "boundary": {
+    "release_publication": false,
+    "stable_release": false,
+    "compatibility_certification": "not claimed",
+    "final_artistic_acceptance": "request-changes"
+  },
+  "claim_boundary": "Provenance review records source, artifact, and package identity only; not release publication or compatibility certification."
+}
