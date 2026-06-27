@@ -1,0 +1,29 @@
+{
+  "schema": "screensave.plasma-v2.release-candidate.manager-review.v1",
+  "status": "pass",
+  "candidate_id": "plasma-v2-rc1",
+  "surface": "Manager preview",
+  "source_ref": "products/apps/suite/src/manager_pack_preview.c",
+  "checker": "tools/scripts/check_manager_pack_preview.py",
+  "shows": {
+    "pack_manifest": true,
+    "provenance": true,
+    "license": true,
+    "compatibility_refusal_status": true,
+    "proof_refs": true,
+    "rollback_notes": true,
+    "installability_class": true
+  },
+  "mutation": {
+    "install_mutation": false,
+    "release_publication": false,
+    "stable_promotion": false
+  },
+  "refs": {
+    "package_manifest": "packaging/windows/plasma-v2-release-candidate/manifest.toml",
+    "provenance": "packaging/windows/plasma-v2-release-candidate/provenance.json",
+    "rollback_notes": "packaging/windows/plasma-v2-release-candidate/rollback-notes.md",
+    "proof_matrix": "validation/captures/plasma-v2/release-candidate/proof-matrix.json"
+  },
+  "claim_boundary": "Manager release-candidate review only; no install mutation, release publication, stable promotion, or compatibility certification."
+}

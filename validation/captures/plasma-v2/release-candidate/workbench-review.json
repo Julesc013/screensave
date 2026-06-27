@@ -1,0 +1,29 @@
+{
+  "schema": "screensave.plasma-v2.release-candidate.workbench-review.v1",
+  "status": "pass",
+  "candidate_id": "plasma-v2-rc1",
+  "surface": "Workbench release-readiness",
+  "source_ref": "products/apps/benchlab/src/benchlab_workbench_shell.c",
+  "checker": "tools/scripts/check_workbench_shell.py",
+  "shows": {
+    "proof_status": true,
+    "performance_envelope": true,
+    "visual_review": true,
+    "package_stage": true,
+    "release_candidate_readiness": true,
+    "promotion_blocked": true
+  },
+  "authority": {
+    "publishes_release": false,
+    "promotes_stable": false,
+    "certifies_compatibility": false,
+    "duplicates_proof_runner": false
+  },
+  "refs": {
+    "proof_bundle": "validation/captures/plasma-v2/release-candidate/proof-bundle-v1.json",
+    "performance_envelope": "validation/captures/plasma-v2/performance/envelope.json",
+    "artistic_decision": "validation/captures/plasma-v2/final-artistic-decision/decision.release-candidate.toml",
+    "package_manifest": "packaging/windows/plasma-v2-release-candidate/manifest.toml"
+  },
+  "claim_boundary": "Workbench release-candidate review only; no release publication, stable promotion, compatibility certification, or duplicate proof authority."
+}
