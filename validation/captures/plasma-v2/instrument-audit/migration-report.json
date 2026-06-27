@@ -1,5 +1,85 @@
 {
-  "claim_boundary": "Legacy migration proof only; this does not prove old Plasma files are wrappers, remove every legacy authority path, or promote stable.",
+  "all_legacy_entries_reduce_to_v2_spec": true,
+  "claim_boundary": "Migration proof only; not stable promotion.",
+  "fixtures": [
+    {
+      "complexity": 520,
+      "feedback": 120,
+      "legacy_preset_key": "plasma_lava",
+      "legacy_theme_key": "plasma_lava",
+      "material_key": "plasma_lava",
+      "output_kind": "continuous",
+      "presentation": "flat",
+      "resulting_v2_field_family": "classic",
+      "scale": 420,
+      "seed_policy": "fixed",
+      "speed": 420,
+      "treatment": "soft",
+      "warp": 180
+    },
+    {
+      "complexity": 600,
+      "feedback": 120,
+      "legacy_preset_key": "aurora_plasma",
+      "legacy_theme_key": "aurora_cool",
+      "material_key": "aurora_cool",
+      "output_kind": "continuous",
+      "presentation": "flat",
+      "resulting_v2_field_family": "aurora",
+      "scale": 560,
+      "seed_policy": "fixed",
+      "speed": 700,
+      "treatment": "soft",
+      "warp": 320
+    },
+    {
+      "complexity": 700,
+      "feedback": 120,
+      "legacy_preset_key": "ocean_interference",
+      "legacy_theme_key": "oceanic_blue",
+      "material_key": "oceanic_blue",
+      "output_kind": "continuous",
+      "presentation": "flat",
+      "resulting_v2_field_family": "interference",
+      "scale": 360,
+      "seed_policy": "fixed",
+      "speed": 700,
+      "treatment": "none",
+      "warp": 280
+    },
+    {
+      "complexity": 520,
+      "feedback": 120,
+      "legacy_preset_key": "museum_phosphor",
+      "legacy_theme_key": "museum_phosphor",
+      "material_key": "museum_phosphor",
+      "output_kind": "continuous",
+      "presentation": "flat",
+      "resulting_v2_field_family": "interference",
+      "scale": 420,
+      "seed_policy": "fixed",
+      "speed": 220,
+      "treatment": "phosphor",
+      "warp": 260
+    },
+    {
+      "complexity": 360,
+      "feedback": 180,
+      "legacy_preset_key": "quiet_darkroom",
+      "legacy_theme_key": "quiet_darkroom",
+      "material_key": "quiet_darkroom",
+      "output_kind": "continuous",
+      "presentation": "flat",
+      "resulting_v2_field_family": "fire",
+      "scale": 680,
+      "seed_policy": "fixed",
+      "speed": 180,
+      "treatment": "none",
+      "warp": 140
+    }
+  ],
+  "fixtures_checked": 5,
+  "hidden_preset_authority_detected": false,
   "migration_rules": [
     {
       "legacy": "effect_mode",
@@ -11,37 +91,37 @@
     },
     {
       "legacy": "resolution_mode",
-      "target": "scale_complexity_softness"
+      "target": "field-size / internal-resolution policy"
     },
     {
       "legacy": "smoothing_mode",
-      "target": "softness_or_treatment"
+      "target": "softness or treatment"
     },
     {
       "legacy": "preset_key",
-      "target": "starter_plasma_v2_spec"
+      "target": "starter plasma_v2_spec"
     },
     {
       "legacy": "theme_key",
-      "target": "material_key"
+      "target": "material key"
     },
     {
       "legacy": "output_mode",
-      "target": "output_kind"
+      "target": "output kind"
     },
     {
       "legacy": "presentation_mode",
-      "target": "presentation_flat_for_stable"
+      "target": "presentation kind"
     },
     {
       "legacy": "deterministic_seed",
-      "target": "seed"
+      "target": "same seed field"
     }
   ],
-  "schema": "screensave.plasma-v2.migration-report.v1",
+  "schema": "screensave.plasma-v2.migration-report.v2",
   "source": {
     "branch": "main",
-    "commit": "8b4e897153dceded106e30a4b34d7749c819e4c4",
+    "commit": "45cb34084a42d8a4d4c4675a0e88fd815068d622",
     "dirty": true
   },
   "status": "pass",
