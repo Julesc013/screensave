@@ -1,0 +1,101 @@
+{
+  "proof_schema": "proof-bundle-v1",
+  "status": "informational",
+  "subject": {
+    "product": "plasma",
+    "profile": "plasma.v2.reference.preview",
+    "candidate_id": "plasma-v2-rc1"
+  },
+  "source": {
+    "input_bundle": "validation/captures/plasma-v2/reference-preview/proof-bundle-v1.json",
+    "release_readiness_gate": "validation/captures/plasma-v2/release-readiness/gate-report.json",
+    "package_stage": "packaging/windows/plasma-v2-release-candidate/manifest.toml"
+  },
+  "result_axes": {
+    "execution": {
+      "status": "informational",
+      "evidence_refs": [
+        "validation/captures/plasma-v2/reference-preview/profile-proof.json"
+      ],
+      "summary": "Release-candidate projection consumes the existing v2 reference proof."
+    },
+    "capture": {
+      "status": "pass",
+      "evidence_refs": [
+        "validation/captures/plasma-v2/reference-preview/proof-bundle-v1.json"
+      ],
+      "summary": "Reference preview captures are already exact for the named profile."
+    },
+    "comparison": {
+      "status": "pass",
+      "comparison_class": "exact",
+      "evidence_refs": [
+        "validation/captures/plasma-v2/acceleration/matrix.json"
+      ],
+      "summary": "Software reference and GL11 candidate comparison is recorded."
+    },
+    "lifecycle": {
+      "status": "pass",
+      "evidence_refs": [
+        "validation/captures/plasma-v2/reference-preview/lifecycle/lifecycle.json"
+      ],
+      "summary": "Lifecycle evidence is inherited from the reference preview profile."
+    },
+    "performance": {
+      "status": "pass-with-warnings",
+      "evidence_refs": [
+        "validation/captures/plasma-v2/performance/envelope.json"
+      ],
+      "summary": "Performance envelope is present with explicit portable-runner warnings."
+    },
+    "artifact_audit": {
+      "status": "informational",
+      "evidence_class": "buildable",
+      "evidence_refs": [
+        "packaging/windows/plasma-v2-release-candidate/manifest.toml",
+        "packaging/windows/plasma-v2-release-candidate/checksums.sha256"
+      ],
+      "summary": "The release-candidate package references and hashes the current `.scr` output without committing it."
+    },
+    "compatibility": {
+      "status": "informational",
+      "certified": false,
+      "evidence_class": "buildable",
+      "evidence_refs": [
+        "packaging/windows/plasma-v2-release-candidate/support-matrix.md"
+      ],
+      "summary": "Compatibility is evidence-classed and not certified."
+    },
+    "artistic_review": {
+      "status": "accepted-for-release-candidate",
+      "final_stable_artistic_acceptance": false,
+      "evidence_refs": [
+        "validation/captures/plasma-v2/final-artistic-decision/decision.release-candidate.toml"
+      ],
+      "summary": "Human review permits release-candidate preparation only."
+    },
+    "release_promotion": {
+      "status": "blocked",
+      "stable_release": false,
+      "evidence_refs": [],
+      "summary": "Stable release promotion remains blocked for PAW-H."
+    },
+    "portable_v2_equivalence": {
+      "status": "informational",
+      "products": [
+        "nocturne",
+        "ricochet"
+      ],
+      "profiles": [
+        "nocturne.reference.v0",
+        "ricochet.reference.v1"
+      ],
+      "claim_boundary": "Named canary v1/v2 deterministic equivalence only.",
+      "evidence_refs": [
+        "validation/captures/portable-v2/gate-c/acceptance-report.json"
+      ],
+      "summary": "Portable v2 acceptance remains a named-canary foundation, not a broad all-saver claim."
+    }
+  },
+  "claim_boundary": "Release-candidate evidence projection only; not stable release promotion, release publication, compatibility certification, or public SDK stability."
+}

@@ -1,0 +1,57 @@
+{
+  "schema": "screensave.plasma-v2.release-candidate.evidence-index.v1",
+  "status": "active",
+  "candidate_id": "plasma-v2-rc1",
+  "entries": [
+    {
+      "id": "reference-proof",
+      "kind": "proof",
+      "ref": "validation/captures/plasma-v2/reference-preview/profile-proof.json",
+      "status": "tracked",
+      "claim_boundary": "deterministic reference proof only"
+    },
+    {
+      "id": "reference-proof-bundle",
+      "kind": "proof-bundle",
+      "ref": "validation/captures/plasma-v2/reference-preview/proof-bundle-v1.json",
+      "status": "tracked",
+      "claim_boundary": "Proof Bundle v1 projection only"
+    },
+    {
+      "id": "release-candidate-proof-bundle",
+      "kind": "proof-bundle",
+      "ref": "validation/captures/plasma-v2/release-candidate/proof-bundle-v1.json",
+      "status": "tracked",
+      "claim_boundary": "Release-candidate projection only"
+    },
+    {
+      "id": "acceleration-matrix",
+      "kind": "acceleration",
+      "ref": "validation/captures/plasma-v2/acceleration/matrix.json",
+      "status": "tracked",
+      "claim_boundary": "GL11 candidate comparison only"
+    },
+    {
+      "id": "performance-envelope",
+      "kind": "performance",
+      "ref": "validation/captures/plasma-v2/performance/envelope.json",
+      "status": "tracked",
+      "claim_boundary": "performance envelope evidence only"
+    },
+    {
+      "id": "package-stage",
+      "kind": "package",
+      "ref": "packaging/windows/plasma-v2-release-candidate/manifest.toml",
+      "status": "tracked",
+      "claim_boundary": "staging only; not publication"
+    },
+    {
+      "id": "aide-evidence-index",
+      "kind": "evidence-index",
+      "ref": ".aide/evidence/index.toml",
+      "status": "tracked",
+      "claim_boundary": "AIDE indexes refs only; ScreenSave owns proof truth"
+    }
+  ],
+  "claim_boundary": "Release-candidate evidence index only; not publication, stable promotion, compatibility certification, or final stable acceptance."
+}

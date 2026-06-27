@@ -1,0 +1,89 @@
+{
+  "schema": "screensave.plasma-v2.release-candidate.proof-matrix.v1",
+  "status": "pass",
+  "candidate_id": "plasma-v2-rc1",
+  "product": "plasma",
+  "profile": "plasma.v2.reference.preview",
+  "claim_boundary": "Release-candidate proof and evidence matrix only; not stable release, release publication, compatibility certification, public SDK stability, or all-saver migration.",
+  "claim_axes": {
+    "deterministic_proof": "supported",
+    "visual_review": "accepted-for-release-candidate",
+    "performance_envelope": "pass-with-warnings",
+    "artifact_build_audit": "buildable",
+    "release_candidate_readiness": "prepared",
+    "stable_release_promotion": "blocked",
+    "compatibility_certification": "not-claimed"
+  },
+  "rows": [
+    {
+      "id": "reference-software-path",
+      "subject": "software reference path",
+      "status": "pass",
+      "evidence_ref": "validation/captures/plasma-v2/reference-preview/profile-proof.json",
+      "claim": "deterministic reference proof"
+    },
+    {
+      "id": "gl11-candidate-path",
+      "subject": "GL11 acceleration candidate path",
+      "status": "pass",
+      "evidence_ref": "validation/captures/plasma-v2/acceleration/matrix.json",
+      "claim": "accelerated comparison, with software fallback recorded"
+    },
+    {
+      "id": "default-plasma-lava",
+      "subject": "default plasma_lava",
+      "status": "pass",
+      "evidence_ref": "validation/captures/plasma-v2/reference-preview/proof-bundle-v1.json",
+      "claim": "default exact capture profile"
+    },
+    {
+      "id": "five-u09-materials",
+      "subject": "five migrated U09 materials",
+      "status": "pass",
+      "evidence_ref": "validation/captures/plasma-v2/materials/material-treatment-summary.json",
+      "claim": "material distinctness and restrained bounds"
+    },
+    {
+      "id": "restrained-dither",
+      "subject": "restrained_dither",
+      "status": "pass",
+      "evidence_ref": "validation/captures/plasma-v2/acceleration/matrix.json",
+      "claim": "restrained treatment comparison"
+    },
+    {
+      "id": "restrained-crt",
+      "subject": "restrained_crt",
+      "status": "pass",
+      "evidence_ref": "validation/captures/plasma-v2/acceleration/matrix.json",
+      "claim": "restrained treatment comparison"
+    },
+    {
+      "id": "visualintent-candidates",
+      "subject": "three deterministic VisualIntent candidates",
+      "status": "pass",
+      "evidence_ref": "validation/captures/plasma-v2/matrix/visualintent-candidates.json",
+      "claim": "bounded local candidate generation"
+    },
+    {
+      "id": "packc-example-packs",
+      "subject": "packc example packs",
+      "status": "pass",
+      "evidence_ref": "products/savers/plasma/content/v2/examples/plasma_lava_v2.toml",
+      "claim": "data-only pack compilation"
+    },
+    {
+      "id": "manager-preview",
+      "subject": "Manager preview model",
+      "status": "pass",
+      "evidence_ref": "products/apps/suite/src/manager_pack_preview.c",
+      "claim": "preview and refusal facts only"
+    },
+    {
+      "id": "workbench-release-readiness",
+      "subject": "Workbench release-readiness workspace",
+      "status": "pass",
+      "evidence_ref": "products/apps/benchlab/src/benchlab_workbench_shell.c",
+      "claim": "inspection and review facts only"
+    }
+  ]
+}
