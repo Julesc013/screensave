@@ -1,0 +1,226 @@
+{
+  "candidate_id": "plasma-v2-rc1",
+  "checks": [
+    {
+      "data": {
+        "run": {
+          "command": [
+            "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+            "tools/scripts/check_plasma_instrument_architecture.py"
+          ],
+          "returncode": 0,
+          "status": "pass",
+          "stderr": "",
+          "stdout": "Plasma v2 instrument architecture audit hold"
+        }
+      },
+      "id": "instrument-audit-rerun",
+      "status": "pass",
+      "summary": "Authoritative Plasma v2 instrument audit reran for PAW-I-R1."
+    },
+    {
+      "data": {
+        "audit_status": "hold",
+        "blocking_gates": [
+          "legacy_preset_authority_removed",
+          "visualintent_candidates_reduce_to_plasma_spec"
+        ],
+        "failed_gates": [],
+        "stable_eligible": false
+      },
+      "id": "instrument-audit-outcome",
+      "status": "pass",
+      "summary": "Instrument audit is either promotion-ready or an explicit non-promotion hold."
+    },
+    {
+      "data": {
+        "gate_status": "pass",
+        "gate_summary": "AIDE remains an evidence and repair coordinator, not product runtime, artistic judge, or truth authority."
+      },
+      "id": "gate:aide_not_runtime_or_truth",
+      "status": "pass",
+      "summary": "Required instrument gate passes."
+    },
+    {
+      "data": {
+        "gate_status": "pass",
+        "gate_summary": "Basic controls with visual claims produce deterministic output differences."
+      },
+      "id": "gate:direct_controls_influence_passes",
+      "status": "pass",
+      "summary": "Required instrument gate passes."
+    },
+    {
+      "data": {
+        "gate_status": "pass",
+        "gate_summary": "Field and output boundaries must be explicit and pass the direct field-to-presentation pipeline checker before stable promotion."
+      },
+      "id": "gate:field_pipeline_boundaries_pass",
+      "status": "pass",
+      "summary": "Required instrument gate passes."
+    },
+    {
+      "data": {
+        "gate_status": "pass",
+        "gate_summary": "GDI remains the floor and GL11 remains optional."
+      },
+      "id": "gate:gl11_is_not_hidden_minimum",
+      "status": "pass",
+      "summary": "Required instrument gate passes."
+    },
+    {
+      "data": {
+        "gate_status": "pass",
+        "gate_summary": "Stable materials have distinct deterministic visual response in both the direct v2 island and the existing proof path."
+      },
+      "id": "gate:material_mapping_distinctness_passes",
+      "status": "pass",
+      "summary": "Required instrument gate passes."
+    },
+    {
+      "data": {
+        "gate_status": "pass",
+        "gate_summary": "packc validates data-only Plasma packs and rejects executable or unsafe payloads."
+      },
+      "id": "gate:packc_data_only_passes",
+      "status": "pass",
+      "summary": "Required instrument gate passes."
+    },
+    {
+      "data": {
+        "gate_status": "pass",
+        "gate_summary": "The direct v2 plan contract must exist in the v2 island and pass the degradation-law checker before stable promotion."
+      },
+      "id": "gate:plasma_v2_plan_contract_passes",
+      "status": "pass",
+      "summary": "Required instrument gate passes."
+    },
+    {
+      "data": {
+        "gate_status": "pass",
+        "gate_summary": "The direct v2 runtime contract must exist, own deterministic buffers, and pass hot-loop hazard checks before stable promotion."
+      },
+      "id": "gate:plasma_v2_runtime_contract_passes",
+      "status": "pass",
+      "summary": "Required instrument gate passes."
+    },
+    {
+      "data": {
+        "gate_status": "pass",
+        "gate_summary": "The direct-control Plasma v2 spec island exists, carries semantic authority, and passes C89 smoke checks."
+      },
+      "id": "gate:plasma_v2_spec_contract_passes",
+      "status": "pass",
+      "summary": "Required instrument gate passes."
+    },
+    {
+      "data": {
+        "gate_status": "pass",
+        "gate_summary": "Software/reference execution remains the canonical proof-bearing path."
+      },
+      "id": "gate:software_reference_is_canonical",
+      "status": "pass",
+      "summary": "Required instrument gate passes."
+    },
+    {
+      "data": {
+        "gate_status": "pass",
+        "gate_summary": "Treatment remains post-material and bounded for the stable slice."
+      },
+      "id": "gate:treatment_boundaries_pass",
+      "status": "pass",
+      "summary": "Required instrument gate passes."
+    },
+    {
+      "data": {
+        "gate_status": "pass",
+        "gate_summary": "Workbench must inspect the real Plasma v2 instrument evidence without becoming runtime truth or promotion authority."
+      },
+      "id": "gate:workbench_inspection_passes",
+      "status": "pass",
+      "summary": "Required instrument gate passes."
+    },
+    {
+      "data": {
+        "data": {
+          "legacy_boundary_blockers": [
+            "legacy_bypass_candidates_not_wrapped_over_v2",
+            "compatibility_shims_not_explicitly_wrapped_over_v2"
+          ],
+          "legacy_boundary_status": "hold",
+          "migration_check": "pass",
+          "migration_evidence": [
+            "tools/scripts/check_plasma_v2_migration.py"
+          ],
+          "product_center_blockers": [
+            "legacy_bypass_candidates_still_present"
+          ],
+          "product_center_status": "hold"
+        },
+        "gate_status": "hold",
+        "gate_summary": "Legacy preset/theme files must be migration inputs or wrappers over the direct v2 center, not hidden runtime authority."
+      },
+      "id": "gate:legacy_preset_authority_removed",
+      "status": "hold",
+      "summary": "Gate is either admitted for stable promotion or explicitly blocking the hold."
+    },
+    {
+      "data": {
+        "data": {
+          "evidence": [
+            "contracts/visual_intent_v1.md"
+          ]
+        },
+        "gate_status": "hold",
+        "gate_summary": "VisualIntent is contractually descriptive, but a Plasma v2 candidate resolver to the direct spec is not yet admitted as stable evidence."
+      },
+      "id": "gate:visualintent_candidates_reduce_to_plasma_spec",
+      "status": "hold",
+      "summary": "Gate is either admitted for stable promotion or explicitly blocking the hold."
+    },
+    {
+      "data": {
+        "present": []
+      },
+      "id": "no-generic-command-capability",
+      "status": "pass",
+      "summary": "Project adapter exposes no generic command, publication, unchecked promotion, or agent-apply capability."
+    },
+    {
+      "data": {
+        "opened_next": "plasma-v2-instrument-repair",
+        "plasma_status": "release-candidate-hold",
+        "release_promotion": "blocked",
+        "stable": false
+      },
+      "id": "no-stable-promotion-yet",
+      "status": "pass",
+      "summary": "Project state remains a release-candidate hold until the stable-promotion gate admits promotion."
+    }
+  ],
+  "claim_boundary": "PAW-I-R1 instrument re-audit only; it does not publish, certify compatibility, accept artistic quality, or promote stable release.",
+  "decision": {
+    "blocking_gates": [
+      "legacy_preset_authority_removed",
+      "visualintent_candidates_reduce_to_plasma_spec"
+    ],
+    "failed_checks": [],
+    "failed_gates": [],
+    "held_checks": [
+      "gate:legacy_preset_authority_removed",
+      "gate:visualintent_candidates_reduce_to_plasma_spec"
+    ],
+    "instrument_architecture": "hold",
+    "opened_next": "plasma-v2-instrument-repair",
+    "stable_eligible": false
+  },
+  "instrument_audit_ref": "validation/captures/plasma-v2/stable-promotion/instrument-architecture-audit.json",
+  "recommended_state": "release-candidate-hold",
+  "schema": "screensave.plasma-v2.instrument-reaudit.v1",
+  "source": {
+    "branch": "main",
+    "commit": "6a2d01720bc60e006f1cf959e1ef40c5c947ba3d",
+    "dirty": true
+  },
+  "status": "hold"
+}
