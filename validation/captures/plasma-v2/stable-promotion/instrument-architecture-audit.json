@@ -80,6 +80,24 @@
         "run": {
           "command": [
             "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+            "tools/scripts/check_plasma_spec_v2.py"
+          ],
+          "returncode": 0,
+          "status": "pass",
+          "stderr": "",
+          "stdout": "Plasma v2 specification checks passed.",
+          "timeout_seconds": 300
+        }
+      },
+      "id": "spec-v2-authority",
+      "status": "pass",
+      "summary": "Command passed."
+    },
+    {
+      "data": {
+        "run": {
+          "command": [
+            "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
             "tools/scripts/check_plasma_product_center.py"
           ],
           "returncode": 0,
@@ -282,12 +300,13 @@
           "products/savers/plasma/src/v2/plasma_v2_types.h",
           "products/savers/plasma/src/v2/plasma_v2_spec.h",
           "products/savers/plasma/src/v2/plasma_v2_spec.c",
-          "tools/scripts/check_plasma_v2_direct_spec.py"
+          "tools/scripts/check_plasma_v2_direct_spec.py",
+          "tools/scripts/check_plasma_spec_v2.py"
         ]
       },
       "id": "plasma_v2_spec_contract_passes",
       "status": "pass",
-      "summary": "The direct-control Plasma v2 spec island exists and passes its C89 smoke check."
+      "summary": "The direct-control Plasma v2 spec island exists, carries semantic authority, and passes C89 smoke checks."
     },
     {
       "data": {
@@ -423,7 +442,7 @@
   "schema": "screensave.plasma-v2.instrument-architecture-audit.v1",
   "source": {
     "branch": "main",
-    "commit": "4b72629308e9317cb25a16a62568b9909e2bd899",
+    "commit": "049f643a03decdefc48b767d3819f513d0cdcc44",
     "dirty": true
   },
   "stable_eligible": false,

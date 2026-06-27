@@ -27,6 +27,7 @@ LEGACY_BOUNDARY_REPORT = INSTRUMENT_AUDIT_DIR / "legacy-boundary-report.json"
 
 SUBCHECKS = [
     ("direct-spec", ["tools/scripts/check_plasma_v2_direct_spec.py"]),
+    ("spec-v2-authority", ["tools/scripts/check_plasma_spec_v2.py"]),
     ("product-center-boundary", ["tools/scripts/check_plasma_product_center.py"]),
     ("legacy-boundary", ["tools/scripts/check_plasma_legacy_boundary.py"]),
     ("legacy-core-boundaries", ["tools/scripts/check_plasma_core_boundaries.py"]),
@@ -251,13 +252,14 @@ def build_report() -> dict[str, Any]:
     gate(
         gates,
         "plasma_v2_spec_contract_passes",
-        "pass" if subcheck_status(subchecks, "direct-spec") else "fail",
-        "The direct-control Plasma v2 spec island exists and passes its C89 smoke check.",
+        "pass" if subcheck_status(subchecks, "direct-spec") and subcheck_status(subchecks, "spec-v2-authority") else "fail",
+        "The direct-control Plasma v2 spec island exists, carries semantic authority, and passes C89 smoke checks.",
         evidence=[
             "products/savers/plasma/src/v2/plasma_v2_types.h",
             "products/savers/plasma/src/v2/plasma_v2_spec.h",
             "products/savers/plasma/src/v2/plasma_v2_spec.c",
             "tools/scripts/check_plasma_v2_direct_spec.py",
+            "tools/scripts/check_plasma_spec_v2.py",
         ],
     )
 
