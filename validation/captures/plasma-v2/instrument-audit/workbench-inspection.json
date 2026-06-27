@@ -1,8 +1,12 @@
 {
   "claim_boundary": "Workbench inspection evidence only; Workbench consumes ScreenSave proof and does not own runtime truth, artistic acceptance, or release promotion.",
   "required_fields": [
+    "legacy_source_kind",
+    "legacy_key",
     "requested_spec",
+    "migrated_spec_summary",
     "resolved_plan",
+    "resolved_plan_summary",
     "degradation_reason",
     "field_pipeline",
     "material_response",
@@ -11,6 +15,8 @@
     "gl11_optionality",
     "capture_refs",
     "control_influence_status",
+    "authority",
+    "legacy_authority",
     "review_status",
     "promotion_status"
   ],
@@ -22,12 +28,15 @@
     "validation/captures/plasma-v2/acceleration/matrix.json",
     "release-candidate-hold",
     "not a second runtime",
-    "promotion authority"
+    "promotion authority",
+    "preset/theme/pack/direct controls",
+    "v2_spec_plan_runtime",
+    "migration_input_only"
   ],
   "schema": "screensave.plasma-v2.workbench-instrument-inspection.v1",
   "source": {
     "branch": "main",
-    "commit": "8b4e897153dceded106e30a4b34d7749c819e4c4",
+    "commit": "399b83359ae77c8b2a496956d397e01bca99d07b",
     "dirty": true
   },
   "status": "pass",

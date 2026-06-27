@@ -5,8 +5,12 @@
 
 ## Required Fields
 
+- legacy_source_kind
+- legacy_key
 - requested_spec
+- migrated_spec_summary
 - resolved_plan
+- resolved_plan_summary
 - degradation_reason
 - field_pipeline
 - material_response
@@ -15,6 +19,8 @@
 - gl11_optionality
 - capture_refs
 - control_influence_status
+- authority
+- legacy_authority
 - review_status
 - promotion_status
 

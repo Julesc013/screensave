@@ -18,8 +18,12 @@ REPORT_JSON = REPORT_DIR / "workbench-inspection.json"
 REPORT_MD = REPORT_DIR / "workbench-inspection.md"
 
 REQUIRED_FIELDS = [
+    "legacy_source_kind",
+    "legacy_key",
     "requested_spec",
+    "migrated_spec_summary",
     "resolved_plan",
+    "resolved_plan_summary",
     "degradation_reason",
     "field_pipeline",
     "material_response",
@@ -28,6 +32,8 @@ REQUIRED_FIELDS = [
     "gl11_optionality",
     "capture_refs",
     "control_influence_status",
+    "authority",
+    "legacy_authority",
     "review_status",
     "promotion_status",
 ]
@@ -41,6 +47,9 @@ REQUIRED_REFS = [
     "release-candidate-hold",
     "not a second runtime",
     "promotion authority",
+    "preset/theme/pack/direct controls",
+    "v2_spec_plan_runtime",
+    "migration_input_only",
 ]
 
 
@@ -79,6 +88,8 @@ def build_report(errors: list[str]) -> dict[str, Any]:
         for ref in REQUIRED_REFS:
             if ref not in text:
                 errors.append(f"Workbench instrument inspection missing evidence ref {ref!r}")
+        if "legacy presets own runtime truth" in text:
+            errors.append("Workbench instrument inspection claims legacy presets own runtime truth")
 
     return {
         "schema": "screensave.plasma-v2.workbench-instrument-inspection.v1",

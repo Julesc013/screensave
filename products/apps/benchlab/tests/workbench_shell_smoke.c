@@ -218,5 +218,20 @@ int main(void)
     if (plasma_instrument.control_influence_status == 0 || plasma_instrument.material_response == 0) {
         return 56;
     }
+    if (strcmp(plasma_instrument.legacy_source_kind, "preset/theme/pack/direct controls") != 0) {
+        return 57;
+    }
+    if (strcmp(plasma_instrument.legacy_key, "plasma_lava") != 0) {
+        return 58;
+    }
+    if (strcmp(plasma_instrument.authority, "v2_spec_plan_runtime") != 0) {
+        return 59;
+    }
+    if (strcmp(plasma_instrument.legacy_authority, "migration_input_only") != 0) {
+        return 60;
+    }
+    if (plasma_instrument.migrated_spec_summary == 0 || plasma_instrument.resolved_plan_summary == 0) {
+        return 61;
+    }
     return 0;
 }

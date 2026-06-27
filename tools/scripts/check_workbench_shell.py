@@ -69,8 +69,12 @@ def main() -> int:
             "packaging/windows/plasma-v2-preview/manifest.toml",
             "preview-ready",
             "promotion_status",
+            "legacy_source_kind",
+            "legacy_key",
             "requested_spec",
+            "migrated_spec_summary",
             "resolved_plan",
+            "resolved_plan_summary",
             "degradation_reason",
             "field_pipeline",
             "material_response",
@@ -79,6 +83,9 @@ def main() -> int:
             "gl11_optionality",
             "capture_refs",
             "control_influence_status",
+            "v2_spec_plan_runtime",
+            "migration_input_only",
+            "preset/theme/pack/direct controls",
             "release-candidate-hold",
             "plasma_v2_realization_gl11_candidate",
             "validation/captures/plasma-v2/instrument-audit/plan-report.json",
@@ -89,6 +96,11 @@ def main() -> int:
             "tools/packc/packc.py",
         ]:
             require(needle in text, f"benchlab_workbench_shell.c is missing expected text: {needle!r}", errors)
+        require(
+            "legacy presets own runtime truth" not in text,
+            "Workbench shell must not claim legacy presets own runtime truth",
+            errors,
+        )
 
     if not errors:
         with tempfile.TemporaryDirectory() as temp_root:

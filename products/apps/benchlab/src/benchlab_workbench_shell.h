@@ -107,8 +107,12 @@ typedef struct benchlab_workbench_plasma_release_readiness_tag {
 
 typedef struct benchlab_workbench_plasma_instrument_inspect_tag {
     const char *product_key;
+    const char *legacy_source_kind;
+    const char *legacy_key;
     const char *requested_spec;
+    const char *migrated_spec_summary;
     const char *resolved_plan;
+    const char *resolved_plan_summary;
     const char *degradation_reason;
     const char *field_pipeline;
     const char *material_response;
@@ -117,6 +121,8 @@ typedef struct benchlab_workbench_plasma_instrument_inspect_tag {
     const char *gl11_optionality;
     const char *capture_refs;
     const char *control_influence_status;
+    const char *authority;
+    const char *legacy_authority;
     const char *review_status;
     const char *promotion_status;
     const char *claim_boundary;
