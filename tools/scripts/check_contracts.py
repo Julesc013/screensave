@@ -54,6 +54,17 @@ REQUIRED_CONTRACTS = {
         "AIDE is optional external development infrastructure.",
         "generic `screensave run anything`",
     ],
+    ROOT / "contracts" / "plasma_instrument_architecture_v1.md": [
+        "Status: active PAW-I instrument-architecture audit contract.",
+        "Plasma is not a preset picker. Plasma is a visual instrument.",
+        "direct controls first",
+        "plasma_v2_spec",
+        "plasma_v2_plan",
+        "plasma_v2_runtime",
+        "software_reference_is_canonical",
+        "gl11_is_not_hidden_minimum",
+        "aide_not_runtime_or_truth",
+    ],
     ROOT / "contracts" / "proof_bundle_v0.md": [
         "Status: initial contract",
         "source commit and dirty status",

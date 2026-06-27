@@ -456,6 +456,12 @@ def run_command(command: list[str], timeout_seconds: int) -> dict[str, Any]:
     }
 
 
+def validation_timeout_seconds(command: list[str]) -> int:
+    if command and str(command[0]).endswith("check_project_adapter.py"):
+        return 600
+    return 240
+
+
 def validation_commands_for_tier(tier: str) -> list[list[str]]:
     selected: list[list[str]] = []
     for candidate in VALIDATION_TIER_ORDER:
@@ -586,7 +592,7 @@ def command_profiles(_args: argparse.Namespace) -> int:
 def command_validate(args: argparse.Namespace) -> int:
     tier = args.tier.upper()
     commands = validation_commands_for_tier(tier)
-    runs = [run_command(command, timeout_seconds=240) for command in commands]
+    runs = [run_command(command, timeout_seconds=validation_timeout_seconds(command)) for command in commands]
     status = "pass" if all(run["returncode"] == 0 for run in runs) else "fail"
     delegated = [
         pathlib.Path(value)

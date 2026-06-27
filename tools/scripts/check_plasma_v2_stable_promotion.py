@@ -18,10 +18,12 @@ REPORT_MD = REPORT_DIR / "gate-report.md"
 DECISION = ROOT / "validation" / "captures" / "plasma-v2" / "final-artistic-decision" / "decision.stable.toml"
 REPAIR_BURN = REPORT_DIR / "repair-burndown.json"
 EVIDENCE = REPORT_DIR / "proof-bundle-v1.json"
+INSTRUMENT_AUDIT = REPORT_DIR / "instrument-architecture-audit.json"
 
 SUBCHECKS = [
     ("release-candidate-gate", ["tools/scripts/check_plasma_v2_release_candidate.py"]),
     ("stable-promotion-contract", ["tools/scripts/check_plasma_v2_stable_promotion_contract.py"]),
+    ("instrument-architecture-audit", ["tools/scripts/check_plasma_instrument_architecture.py"]),
     ("package-stage", ["tools/scripts/check_plasma_v2_package_stage.py"]),
     ("stable-promotion-evidence", ["tools/scripts/check_plasma_v2_stable_promotion_evidence.py"]),
     ("final-artistic-decision", ["tools/scripts/check_plasma_v2_final_artistic_acceptance.py"]),
@@ -99,6 +101,7 @@ def build_report() -> dict[str, Any]:
     decision = load_toml(DECISION) if DECISION.exists() else {}
     repair_burn = load_json(REPAIR_BURN) if REPAIR_BURN.exists() else {}
     proof_bundle = load_json(EVIDENCE) if EVIDENCE.exists() else {}
+    instrument_audit = load_json(INSTRUMENT_AUDIT) if INSTRUMENT_AUDIT.exists() else {}
 
     state_status = plasma.get("status")
     is_pre_transition = state_status == "release-candidate"
@@ -163,6 +166,8 @@ def build_report() -> dict[str, Any]:
     decision_state = decision.get("decision_state")
     blocking_count = int(repair_burn.get("open_blocking_count", 999))
     accepted = decision_state == "accepted-for-stable"
+    instrument_status = instrument_audit.get("status")
+    instrument_ready = instrument_audit.get("stable_eligible") is True
     add_check(
         checks,
         "artistic-decision-outcome",
@@ -177,6 +182,15 @@ def build_report() -> dict[str, Any]:
         "Repair queue outcome matches the artistic decision.",
         open_blocking_count=blocking_count,
         blocking_repairs=repair_burn.get("blocking_repairs", []),
+    )
+    add_check(
+        checks,
+        "instrument-architecture-outcome",
+        instrument_ready or instrument_status == "hold",
+        "Instrument audit is either promotion-ready or a valid non-promotion hold.",
+        instrument_status=instrument_status,
+        stable_eligible=instrument_audit.get("stable_eligible"),
+        blocking_gates=instrument_audit.get("decision", {}).get("blocking_gates", []),
     )
     axes = proof_bundle.get("result_axes", {})
     expected_promotion_status = "ready" if accepted else "blocked"
@@ -206,7 +220,7 @@ def build_report() -> dict[str, Any]:
     if not structural_pass:
         decision_status = "fail"
         recommended_state = "release-candidate-hold"
-    elif accepted and blocking_count == 0:
+    elif accepted and blocking_count == 0 and instrument_ready:
         decision_status = "promotion-ready"
         recommended_state = "stable-promoted"
     else:
@@ -225,9 +239,12 @@ def build_report() -> dict[str, Any]:
         },
         "decision": {
             "artistic_decision": decision_state,
+            "instrument_architecture": instrument_status,
+            "instrument_stable_eligible": instrument_ready,
+            "instrument_blocking_gates": instrument_audit.get("decision", {}).get("blocking_gates", []),
             "open_blocking_repairs": blocking_count,
-            "stable": accepted and blocking_count == 0,
-            "release_promotion": "accepted" if accepted and blocking_count == 0 else "blocked",
+            "stable": accepted and blocking_count == 0 and instrument_ready,
+            "release_promotion": "accepted" if accepted and blocking_count == 0 and instrument_ready else "blocked",
         },
         "claim_boundary": "Stable-promotion gate report only; it does not publish a release, certify compatibility, accept artistic quality automatically, or admit AIDE source mutation.",
         "checks": checks,
@@ -242,6 +259,8 @@ def report_markdown(report: dict[str, Any]) -> str:
         f"- Candidate: {report.get('candidate_id')}",
         f"- Recommended state: {report.get('recommended_state')}",
         f"- Artistic decision: {report.get('decision', {}).get('artistic_decision')}",
+        f"- Instrument architecture: {report.get('decision', {}).get('instrument_architecture')}",
+        f"- Instrument stable eligible: {report.get('decision', {}).get('instrument_stable_eligible')}",
         f"- Open blocking repairs: {report.get('decision', {}).get('open_blocking_repairs')}",
         f"- Claim boundary: {report.get('claim_boundary')}",
         "",

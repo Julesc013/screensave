@@ -52,6 +52,24 @@
         "run": {
           "command": [
             "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+            "tools/scripts/check_plasma_instrument_architecture.py"
+          ],
+          "returncode": 0,
+          "status": "pass",
+          "stderr": "",
+          "stdout": "Plasma v2 instrument architecture audit hold",
+          "timeout_seconds": 300
+        }
+      },
+      "id": "instrument-architecture-audit",
+      "status": "pass",
+      "summary": "Command passed."
+    },
+    {
+      "data": {
+        "run": {
+          "command": [
+            "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
             "tools/scripts/check_plasma_v2_package_stage.py"
           ],
           "returncode": 0,
@@ -305,6 +323,22 @@
     },
     {
       "data": {
+        "blocking_gates": [
+          "plasma_v2_plan_contract_passes",
+          "plasma_v2_runtime_contract_passes",
+          "legacy_preset_authority_removed",
+          "field_pipeline_boundaries_pass",
+          "visualintent_candidates_reduce_to_plasma_spec"
+        ],
+        "instrument_status": "hold",
+        "stable_eligible": false
+      },
+      "id": "instrument-architecture-outcome",
+      "status": "pass",
+      "summary": "Instrument audit is either promotion-ready or a valid non-promotion hold."
+    },
+    {
+      "data": {
         "artistic_decision": {
           "evidence_refs": [
             "validation/captures/plasma-v2/final-artistic-decision/decision.stable.toml"
@@ -338,6 +372,15 @@
   "claim_boundary": "Stable-promotion gate report only; it does not publish a release, certify compatibility, accept artistic quality automatically, or admit AIDE source mutation.",
   "decision": {
     "artistic_decision": "request-changes",
+    "instrument_architecture": "hold",
+    "instrument_blocking_gates": [
+      "plasma_v2_plan_contract_passes",
+      "plasma_v2_runtime_contract_passes",
+      "legacy_preset_authority_removed",
+      "field_pipeline_boundaries_pass",
+      "visualintent_candidates_reduce_to_plasma_spec"
+    ],
+    "instrument_stable_eligible": false,
     "open_blocking_repairs": 1,
     "release_promotion": "blocked",
     "stable": false
@@ -346,7 +389,7 @@
   "schema": "screensave.plasma-v2.stable-promotion.gate-report.v1",
   "source": {
     "branch": "main",
-    "commit": "647e712b2e95edec8dc8c9366504015e2882f8e7",
+    "commit": "2eb96d60810c05837fc3d39d4e41da6f956f7c98",
     "dirty": true
   },
   "status": "hold"

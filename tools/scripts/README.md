@@ -22,6 +22,7 @@ Current stage:
 - `check_contracts.py` validates the ScreenSave doctrine, portable-semantics, renderer-alias, proof-bundle, proof-kernel, and project-adapter contract scaffolding.
 - `check_visual_intent_contract.py` validates the draft VisualIntent v1 contract and example authoring intent.
 - `check_product_architecture.py` validates the active product architecture contract, product-family boundaries, canary sequence, and catalog fit.
+- `check_plasma_instrument_architecture.py` audits whether Plasma v2 stable promotion satisfies the direct-control visual-instrument architecture, emits the PAW-I instrument audit report, and cleanly distinguishes promotion-ready from release-candidate hold.
 - `check_proof_bundle_v1.py` validates the normalized Proof Bundle v1 contract, lifecycle/performance receipt inputs, and normalizer output axes.
 - `check_workbench_shell.py` validates the minimal PAW-B Workbench shell binding to `sslab` and generated proof profiles.
 - `check_sslab_runner.py` builds one private static `libsslab` artifact and validates the generic `sslab_runner` proof path for Nocturne and Ricochet.

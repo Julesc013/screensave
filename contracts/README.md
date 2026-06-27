@@ -13,6 +13,7 @@ Current contracts:
 - [`renderer_aliases_v1.md`](renderer_aliases_v1.md): compatibility mapping for existing renderer names.
 - [`screensave_doctrine_v1.md`](screensave_doctrine_v1.md): active ScreenSave product doctrine and AIDE boundary.
 - [`product_architecture_v1.md`](product_architecture_v1.md): active product-family, four-plane, product-owned semantics, and canary-sequence contract.
+- [`plasma_instrument_architecture_v1.md`](plasma_instrument_architecture_v1.md): active PAW-I Plasma v2 direct-control field-instrument audit contract.
 - [`proof_bundle_v0.md`](proof_bundle_v0.md): initial proof-bundle shape for future Lab Runner, Workbench, CI, and AIDE evidence packets.
 - [`proof_bundle_v1.md`](proof_bundle_v1.md): normalized proof envelope with separate execution, capture, comparison, lifecycle, performance, audit, compatibility, artistic-review, and release-promotion axes.
 - [`surface_rgba8_v0.md`](surface_rgba8_v0.md): private proof-kernel pixel-surface contract.

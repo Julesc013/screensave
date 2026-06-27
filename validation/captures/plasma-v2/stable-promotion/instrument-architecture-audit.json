@@ -1,0 +1,352 @@
+{
+  "candidate_id": "plasma-v2-rc1",
+  "checks": [
+    {
+      "data": {},
+      "id": "path:contracts/plasma_instrument_architecture_v1.md",
+      "status": "pass",
+      "summary": "Required audit authority path exists."
+    },
+    {
+      "data": {},
+      "id": "path:contracts/plasma_stable_promotion_v1.md",
+      "status": "pass",
+      "summary": "Required audit authority path exists."
+    },
+    {
+      "data": {},
+      "id": "path:docs/roadmap/paw-i-plasma-v2-stable-promotion.md",
+      "status": "pass",
+      "summary": "Required audit authority path exists."
+    },
+    {
+      "data": {
+        "missing": []
+      },
+      "id": "instrument-contract-text",
+      "status": "pass",
+      "summary": "Instrument contract records the product thesis, pipeline, and blocking gates."
+    },
+    {
+      "data": {
+        "missing": []
+      },
+      "id": "stable-contract-fold-in",
+      "status": "pass",
+      "summary": "Stable-promotion contract requires the instrument audit."
+    },
+    {
+      "data": {
+        "missing": []
+      },
+      "id": "paw-i-fold-in",
+      "status": "pass",
+      "summary": "PAW-I roadmap records the instrument audit as a promotion gate."
+    },
+    {
+      "data": {
+        "run": {
+          "command": [
+            "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+            "tools/scripts/check_plasma_v2_direct_spec.py"
+          ],
+          "returncode": 0,
+          "status": "pass",
+          "stderr": "",
+          "stdout": "Plasma v2 direct spec checks passed.",
+          "timeout_seconds": 300
+        }
+      },
+      "id": "direct-spec",
+      "status": "pass",
+      "summary": "Command passed."
+    },
+    {
+      "data": {
+        "run": {
+          "command": [
+            "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+            "tools/scripts/check_plasma_core_boundaries.py"
+          ],
+          "returncode": 0,
+          "status": "pass",
+          "stderr": "",
+          "stdout": "Plasma v2 core boundary checks passed.",
+          "timeout_seconds": 300
+        }
+      },
+      "id": "legacy-core-boundaries",
+      "status": "pass",
+      "summary": "Command passed."
+    },
+    {
+      "data": {
+        "run": {
+          "command": [
+            "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+            "tools/scripts/check_plasma_v2_influence.py"
+          ],
+          "returncode": 0,
+          "status": "pass",
+          "stderr": "",
+          "stdout": "Plasma v2 influence checks passed.",
+          "timeout_seconds": 300
+        }
+      },
+      "id": "direct-control-influence",
+      "status": "pass",
+      "summary": "Command passed."
+    },
+    {
+      "data": {
+        "run": {
+          "command": [
+            "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+            "tools/scripts/check_plasma_v2_materials.py"
+          ],
+          "returncode": 0,
+          "status": "pass",
+          "stderr": "",
+          "stdout": "Plasma v2 material checks passed.",
+          "timeout_seconds": 300
+        }
+      },
+      "id": "material-treatment",
+      "status": "pass",
+      "summary": "Command passed."
+    },
+    {
+      "data": {
+        "run": {
+          "command": [
+            "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+            "tools/scripts/check_packc.py"
+          ],
+          "returncode": 0,
+          "status": "pass",
+          "stderr": "",
+          "stdout": "packc checks passed.",
+          "timeout_seconds": 300
+        }
+      },
+      "id": "packc-data-only",
+      "status": "pass",
+      "summary": "Command passed."
+    },
+    {
+      "data": {
+        "run": {
+          "command": [
+            "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+            "tools/scripts/check_visual_intent_contract.py"
+          ],
+          "returncode": 0,
+          "status": "pass",
+          "stderr": "",
+          "stdout": "VisualIntent contract checks passed.",
+          "timeout_seconds": 300
+        }
+      },
+      "id": "visualintent-contract",
+      "status": "pass",
+      "summary": "Command passed."
+    },
+    {
+      "data": {
+        "run": {
+          "command": [
+            "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+            "tools/scripts/check_aide_evidence_bridge.py"
+          ],
+          "returncode": 0,
+          "status": "pass",
+          "stderr": "",
+          "stdout": "AIDE evidence bridge checks passed.",
+          "timeout_seconds": 300
+        }
+      },
+      "id": "aide-boundary",
+      "status": "pass",
+      "summary": "Command passed."
+    },
+    {
+      "data": {
+        "extra": [],
+        "missing": []
+      },
+      "id": "required-gate-set",
+      "status": "pass",
+      "summary": "Instrument audit emits the required PAW-I gate set."
+    },
+    {
+      "data": {
+        "plasma_status": "release-candidate-hold",
+        "release_promotion": "blocked"
+      },
+      "id": "project-state-not-overpromoted",
+      "status": "pass",
+      "summary": "Project state does not overclaim stable promotion."
+    }
+  ],
+  "claim_boundary": "Instrument-architecture audit only; it does not publish Plasma, certify compatibility, accept final artistic quality, or admit AIDE as runtime truth.",
+  "decision": {
+    "blocking_gates": [
+      "plasma_v2_plan_contract_passes",
+      "plasma_v2_runtime_contract_passes",
+      "legacy_preset_authority_removed",
+      "field_pipeline_boundaries_pass",
+      "visualintent_candidates_reduce_to_plasma_spec"
+    ],
+    "failed_gates": [],
+    "instrument_architecture": "hold",
+    "opened_next": "plasma-v2-stable-repair"
+  },
+  "gates": [
+    {
+      "data": {
+        "evidence": [
+          "products/savers/plasma/src/v2/plasma_v2_types.h",
+          "products/savers/plasma/src/v2/plasma_v2_spec.h",
+          "products/savers/plasma/src/v2/plasma_v2_spec.c",
+          "tools/scripts/check_plasma_v2_direct_spec.py"
+        ]
+      },
+      "id": "plasma_v2_spec_contract_passes",
+      "status": "pass",
+      "summary": "The direct-control Plasma v2 spec island exists and passes its C89 smoke check."
+    },
+    {
+      "data": {
+        "missing": [
+          "products/savers/plasma/src/v2/plasma_v2_plan.h",
+          "products/savers/plasma/src/v2/plasma_v2_plan.c"
+        ]
+      },
+      "id": "plasma_v2_plan_contract_passes",
+      "status": "hold",
+      "summary": "The direct v2 plan contract must exist in the v2 island before stable promotion."
+    },
+    {
+      "data": {
+        "missing": [
+          "products/savers/plasma/src/v2/plasma_v2_runtime.h",
+          "products/savers/plasma/src/v2/plasma_v2_runtime.c"
+        ]
+      },
+      "id": "plasma_v2_runtime_contract_passes",
+      "status": "hold",
+      "summary": "The direct v2 runtime contract must exist in the v2 island before stable promotion."
+    },
+    {
+      "data": {
+        "compatibility_files": [
+          "products/savers/plasma/src/plasma_presets.c",
+          "products/savers/plasma/src/plasma_themes.c",
+          "products/savers/plasma/src/plasma_selection.c"
+        ]
+      },
+      "id": "legacy_preset_authority_removed",
+      "status": "hold",
+      "summary": "Legacy preset/theme files remain compatibility evidence; PAW-I must prove they are migration inputs, not hidden runtime authority."
+    },
+    {
+      "data": {
+        "evidence": [
+          "tools/scripts/check_plasma_v2_influence.py"
+        ]
+      },
+      "id": "direct_controls_influence_passes",
+      "status": "pass",
+      "summary": "Basic controls with visual claims produce deterministic output differences."
+    },
+    {
+      "data": {
+        "missing": [
+          "products/savers/plasma/src/v2/field",
+          "products/savers/plasma/src/v2/output"
+        ]
+      },
+      "id": "field_pipeline_boundaries_pass",
+      "status": "hold",
+      "summary": "Field and output boundaries must be explicit in the v2 island before stable promotion."
+    },
+    {
+      "data": {
+        "evidence": [
+          "tools/scripts/check_plasma_v2_materials.py"
+        ]
+      },
+      "id": "material_mapping_distinctness_passes",
+      "status": "pass",
+      "summary": "Stable materials have distinct deterministic visual response."
+    },
+    {
+      "data": {
+        "evidence": [
+          "products/savers/plasma/src/plasma_treatment.h",
+          "tools/scripts/check_plasma_v2_materials.py"
+        ]
+      },
+      "id": "treatment_boundaries_pass",
+      "status": "pass",
+      "summary": "Treatment remains post-material and bounded for the stable slice."
+    },
+    {
+      "data": {
+        "evidence": [
+          "tools/scripts/check_plasma_core_boundaries.py"
+        ]
+      },
+      "id": "software_reference_is_canonical",
+      "status": "pass",
+      "summary": "Software/reference execution remains the canonical proof-bearing path."
+    },
+    {
+      "data": {
+        "missing": []
+      },
+      "id": "gl11_is_not_hidden_minimum",
+      "status": "pass",
+      "summary": "GDI remains the floor and GL11 remains optional."
+    },
+    {
+      "data": {
+        "evidence": [
+          "tools/scripts/check_packc.py"
+        ]
+      },
+      "id": "packc_data_only_passes",
+      "status": "pass",
+      "summary": "packc validates data-only Plasma packs and rejects executable or unsafe payloads."
+    },
+    {
+      "data": {
+        "evidence": [
+          "contracts/visual_intent_v1.md"
+        ]
+      },
+      "id": "visualintent_candidates_reduce_to_plasma_spec",
+      "status": "hold",
+      "summary": "VisualIntent is contractually descriptive, but a Plasma v2 candidate resolver to the direct spec is not yet admitted as stable evidence."
+    },
+    {
+      "data": {
+        "evidence": [
+          "tools/scripts/check_aide_evidence_bridge.py"
+        ]
+      },
+      "id": "aide_not_runtime_or_truth",
+      "status": "pass",
+      "summary": "AIDE remains an evidence and repair coordinator, not product runtime or truth authority."
+    }
+  ],
+  "recommended_state": "release-candidate-hold",
+  "schema": "screensave.plasma-v2.instrument-architecture-audit.v1",
+  "source": {
+    "branch": "main",
+    "commit": "2eb96d60810c05837fc3d39d4e41da6f956f7c98",
+    "dirty": true
+  },
+  "stable_eligible": false,
+  "status": "hold"
+}
