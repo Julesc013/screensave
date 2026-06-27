@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import pathlib
+import re
 import subprocess
 import sys
 import tomllib
@@ -11,9 +12,15 @@ from typing import Any
 
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-LEDGER = ROOT / ".aide" / "work_units" / "index.toml"
-TEMPLATE_DIR = ROOT / ".aide" / "work_units" / "templates"
+WORK_UNITS_DIR = ROOT / ".aide" / "work_units"
+LEDGER = WORK_UNITS_DIR / "index.toml"
+TEMPLATE_DIR = WORK_UNITS_DIR / "templates"
 WORKUNIT = ROOT / "tools" / "aideops" / "workunit.py"
+REFERENCE_SOURCES = [
+    ROOT / "PROJECT_STATE.toml",
+    ROOT / "docs" / "roadmap",
+]
+WORK_UNIT_REF = re.compile(r"(?P<path>\.aide[\\/]+work_units[\\/]+[A-Za-z0-9_.\-]+\.toml)")
 
 REQUIRED_FIELDS = {
     "id",
@@ -35,6 +42,12 @@ TASK_CLASSES = {"implementation", "repair", "review", "release-readiness", "agen
 AGENT_MODES = {"none", "assistive", "proposal-only", "fixture-worker", "future-worker"}
 ALLOWED_AGENT_MODES = {"assistive", "proposal-only"}
 REQUIRED_TASKS = {f"SS-G{index}" for index in range(13)}
+REQUIRED_PRODUCT_TASKS = {
+    "SS-PLV2-IR0",
+    "SS-PLV2-IR-REPAIR-001",
+    "SS-PLV2-IR-REPAIR-002",
+    "SS-PLV2-IR-REPAIR-003",
+}
 TEMPLATES = {
     "implementation-task.toml",
     "repair-task.toml",
@@ -52,6 +65,46 @@ def load_toml(path: pathlib.Path) -> dict[str, Any]:
 def require(condition: bool, message: str, errors: list[str]) -> None:
     if not condition:
         errors.append(message)
+
+
+def repo_path(path: pathlib.Path) -> str:
+    return str(path.resolve().relative_to(ROOT)).replace("\\", "/")
+
+
+def referenced_work_unit_paths() -> list[pathlib.Path]:
+    paths: list[pathlib.Path] = []
+    for source in REFERENCE_SOURCES:
+        if source.is_file():
+            candidates = [source]
+        elif source.is_dir():
+            candidates = list(source.glob("*.md"))
+        else:
+            candidates = []
+        for candidate in candidates:
+            text = candidate.read_text(encoding="utf-8")
+            for match in WORK_UNIT_REF.finditer(text):
+                paths.append(ROOT / match.group("path").replace("\\", "/"))
+    return paths
+
+
+def work_unit_files() -> list[pathlib.Path]:
+    paths = [LEDGER]
+    paths.extend(sorted(path for path in WORK_UNITS_DIR.glob("*.toml") if path.name != "index.toml"))
+    paths.extend(referenced_work_unit_paths())
+    observed: set[pathlib.Path] = set()
+    unique: list[pathlib.Path] = []
+    for path in paths:
+        resolved = path.resolve()
+        if resolved in observed:
+            continue
+        observed.add(resolved)
+        unique.append(path)
+    return unique
+
+
+def packet_units(path: pathlib.Path) -> list[dict[str, Any]]:
+    payload = load_toml(path)
+    return [item for item in payload.get("work_units", []) if isinstance(item, dict)]
 
 
 def validate_unit(unit: dict[str, Any], label: str, errors: list[str]) -> None:
@@ -87,14 +140,38 @@ def validate_cli(errors: list[str]) -> None:
     if result.returncode == 0:
         payload = json.loads(result.stdout)
         require(payload.get("count") >= 13, "workunit.py list must expose PAW-G WorkUnits.", errors)
+        ids = {item.get("id") for item in payload.get("work_units", [])}
+        require(REQUIRED_PRODUCT_TASKS <= ids, "workunit.py list must expose Plasma instrument repair WorkUnits.", errors)
     inspect = subprocess.run(
-        [sys.executable, str(WORKUNIT), "inspect", "--task", "SS-G12"],
+        [sys.executable, str(WORKUNIT), "inspect", "--task", "SS-PLV2-IR-REPAIR-001"],
         cwd=ROOT,
         text=True,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     )
     require(inspect.returncode == 0, f"workunit.py inspect failed: {inspect.stderr}", errors)
+    status = subprocess.run(
+        [sys.executable, str(WORKUNIT), "status", "--task", "SS-PLV2-IR-REPAIR-001"],
+        cwd=ROOT,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    require(status.returncode == 0, f"workunit.py status failed: {status.stderr}", errors)
+    missing = subprocess.run(
+        [sys.executable, str(WORKUNIT), "inspect", "--task", "SS-PLV2-IR-MISSING"],
+        cwd=ROOT,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    require(missing.returncode != 0, "missing WorkUnit inspect must return a nonzero status.", errors)
+    require("Traceback" not in missing.stderr, "missing WorkUnit inspect must not traceback.", errors)
+    if missing.stdout:
+        payload = json.loads(missing.stdout)
+        require(payload.get("status") == "blocked", "missing WorkUnit refusal must be typed as blocked.", errors)
+        require(payload.get("reason") == "workunit_not_found", "missing WorkUnit refusal reason must be workunit_not_found.", errors)
+        require(isinstance(payload.get("searched_roots"), list), "missing WorkUnit refusal must list searched_roots.", errors)
 
 
 def main() -> int:
@@ -113,6 +190,17 @@ def main() -> int:
         for unit in ledger.get("work_units", []):
             if isinstance(unit, dict):
                 validate_unit(unit, str(unit.get("id", "unknown")), errors)
+        all_units: list[dict[str, Any]] = []
+        strict_packets = {LEDGER, WORK_UNITS_DIR / "plasma-v2-instrument-repair.toml"}
+        for path in work_unit_files():
+            require(path.exists(), f"Referenced WorkUnit file is missing: {repo_path(path)}", errors)
+            if path.exists():
+                for unit in packet_units(path):
+                    if path in strict_packets:
+                        validate_unit(unit, f"{repo_path(path)}:{unit.get('id', 'unknown')}", errors)
+                    all_units.append(unit)
+        all_ids = {item.get("id") for item in all_units}
+        require(REQUIRED_PRODUCT_TASKS <= all_ids, "Product-local Plasma repair WorkUnits must be discoverable.", errors)
 
         observed_templates = {path.name for path in TEMPLATE_DIR.glob("*.toml")}
         require(TEMPLATES <= observed_templates, "WorkUnit templates are incomplete.", errors)
