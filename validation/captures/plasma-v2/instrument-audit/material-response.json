@@ -1,0 +1,133 @@
+{
+  "claim_boundary": "Direct material-response proof only; this does not prove final artistic acceptance, publication readiness, or stable promotion.",
+  "records": [
+    {
+      "checksum": "2977656462",
+      "luminance_range": 86,
+      "max_luminance": 132,
+      "mean_luminance": 92.007,
+      "min_luminance": 46,
+      "variant": "material_plasma_lava"
+    },
+    {
+      "checksum": "2009999593",
+      "luminance_range": 97,
+      "max_luminance": 153,
+      "mean_luminance": 108.258,
+      "min_luminance": 56,
+      "variant": "material_aurora_cool"
+    },
+    {
+      "checksum": "4069651193",
+      "luminance_range": 77,
+      "max_luminance": 127,
+      "mean_luminance": 91.858,
+      "min_luminance": 50,
+      "variant": "material_oceanic_blue"
+    },
+    {
+      "checksum": "1567542457",
+      "luminance_range": 103,
+      "max_luminance": 161,
+      "mean_luminance": 113.772,
+      "min_luminance": 58,
+      "variant": "material_museum_phosphor"
+    },
+    {
+      "checksum": "2158212548",
+      "luminance_range": 27,
+      "max_luminance": 57,
+      "mean_luminance": 43.23,
+      "min_luminance": 30,
+      "variant": "material_quiet_darkroom"
+    },
+    {
+      "checksum": "2906453329",
+      "luminance_range": 57,
+      "max_luminance": 130,
+      "mean_luminance": 103.977,
+      "min_luminance": 73,
+      "variant": "contrast_low"
+    },
+    {
+      "checksum": "154242209",
+      "luminance_range": 103,
+      "max_luminance": 136,
+      "mean_luminance": 84.775,
+      "min_luminance": 33,
+      "variant": "contrast_high"
+    },
+    {
+      "checksum": "2439021965",
+      "luminance_range": 64,
+      "max_luminance": 102,
+      "mean_luminance": 72.203,
+      "min_luminance": 38,
+      "variant": "brightness_low"
+    },
+    {
+      "checksum": "2046430824",
+      "luminance_range": 107,
+      "max_luminance": 160,
+      "mean_luminance": 110.43,
+      "min_luminance": 53,
+      "variant": "brightness_high"
+    },
+    {
+      "checksum": "1465489247",
+      "luminance_range": 112,
+      "max_luminance": 135,
+      "mean_luminance": 82.605,
+      "min_luminance": 23,
+      "variant": "softness_low"
+    },
+    {
+      "checksum": "2887447941",
+      "luminance_range": 12,
+      "max_luminance": 128,
+      "mean_luminance": 122.365,
+      "min_luminance": 116,
+      "variant": "softness_high"
+    },
+    {
+      "checksum": "1465489247",
+      "luminance_range": 112,
+      "max_luminance": 135,
+      "mean_luminance": 82.605,
+      "min_luminance": 23,
+      "variant": "treatment_none"
+    },
+    {
+      "checksum": "2977656462",
+      "luminance_range": 86,
+      "max_luminance": 132,
+      "mean_luminance": 92.007,
+      "min_luminance": 46,
+      "variant": "treatment_soft"
+    },
+    {
+      "checksum": "475029241",
+      "luminance_range": 109,
+      "max_luminance": 130,
+      "mean_luminance": 79.381,
+      "min_luminance": 21,
+      "variant": "treatment_phosphor"
+    }
+  ],
+  "requirements": [
+    "material changes field-to-color response",
+    "contrast changes response steepness",
+    "brightness changes output level within bounds",
+    "softness and treatment change post-material output",
+    "dark-room profile remains comfortable",
+    "materials are distinct enough to review"
+  ],
+  "schema": "screensave.plasma-v2.material-response.v1",
+  "source": {
+    "branch": "main",
+    "commit": "85e8b430f5bc8090c8834192b1f044f22a71641f",
+    "dirty": true
+  },
+  "status": "pass",
+  "validation_errors": []
+}

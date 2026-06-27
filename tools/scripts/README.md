@@ -30,6 +30,7 @@ Current stage:
 - `check_plasma_v2_no_hot_loop_hazards.py` rejects heap allocation, file I/O, renderer APIs, Win32 handles, and runtime trig/math hazards from the direct v2 runtime/field/output island.
 - `check_plasma_v2_field_pipeline.py` validates the direct Plasma v2 sources, generators, modifiers, output transform, material mapping, treatment, and flat presentation stages.
 - `check_plasma_v2_influence.py` validates the direct Plasma v2 Basic-control influence matrix for Field, Scale, Complexity, Motion, Speed, Warp, Feedback, Material, Contrast, Brightness, Softness, Treatment, and Seed.
+- `check_plasma_v2_material_response.py` validates direct Plasma v2 material response, contrast/brightness bounds, softness/treatment post-material behavior, and dark-room comfort.
 - `check_proof_bundle_v1.py` validates the normalized Proof Bundle v1 contract, lifecycle/performance receipt inputs, and normalizer output axes.
 - `check_workbench_shell.py` validates the minimal PAW-B Workbench shell binding to `sslab` and generated proof profiles.
 - `check_sslab_runner.py` builds one private static `libsslab` artifact and validates the generic `sslab_runner` proof path for Nocturne and Ricochet.

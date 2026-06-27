@@ -152,7 +152,7 @@
   "schema": "screensave.plasma-v2.product-center-report.v1",
   "source": {
     "branch": "main",
-    "commit": "093e679d797fdbad6430aa92c90e9404cb5eacc7",
+    "commit": "85e8b430f5bc8090c8834192b1f044f22a71641f",
     "dirty": true
   },
   "stable_eligible": false,

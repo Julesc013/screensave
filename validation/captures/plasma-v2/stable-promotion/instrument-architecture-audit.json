@@ -242,6 +242,24 @@
         "run": {
           "command": [
             "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+            "tools/scripts/check_plasma_v2_material_response.py"
+          ],
+          "returncode": 0,
+          "status": "pass",
+          "stderr": "",
+          "stdout": "Plasma v2 material response checks passed.",
+          "timeout_seconds": 300
+        }
+      },
+      "id": "material-response",
+      "status": "pass",
+      "summary": "Command passed."
+    },
+    {
+      "data": {
+        "run": {
+          "command": [
+            "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
             "tools/scripts/check_plasma_v2_materials.py"
           ],
           "returncode": 0,
@@ -439,17 +457,19 @@
     {
       "data": {
         "evidence": [
+          "tools/scripts/check_plasma_v2_material_response.py",
           "tools/scripts/check_plasma_v2_materials.py"
         ]
       },
       "id": "material_mapping_distinctness_passes",
       "status": "pass",
-      "summary": "Stable materials have distinct deterministic visual response."
+      "summary": "Stable materials have distinct deterministic visual response in both the direct v2 island and the existing proof path."
     },
     {
       "data": {
         "evidence": [
           "products/savers/plasma/src/plasma_treatment.h",
+          "tools/scripts/check_plasma_v2_material_response.py",
           "tools/scripts/check_plasma_v2_materials.py"
         ]
       },
@@ -510,7 +530,7 @@
   "schema": "screensave.plasma-v2.instrument-architecture-audit.v1",
   "source": {
     "branch": "main",
-    "commit": "093e679d797fdbad6430aa92c90e9404cb5eacc7",
+    "commit": "85e8b430f5bc8090c8834192b1f044f22a71641f",
     "dirty": true
   },
   "stable_eligible": false,

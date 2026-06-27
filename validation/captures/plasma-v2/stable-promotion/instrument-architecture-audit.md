@@ -19,7 +19,7 @@
 - hold: legacy_preset_authority_removed - Legacy preset/theme files must be migration inputs or wrappers over the direct v2 center, not hidden runtime authority.
 - pass: direct_controls_influence_passes - Basic controls with visual claims produce deterministic output differences.
 - pass: field_pipeline_boundaries_pass - Field and output boundaries must be explicit and pass the direct field-to-presentation pipeline checker before stable promotion.
-- pass: material_mapping_distinctness_passes - Stable materials have distinct deterministic visual response.
+- pass: material_mapping_distinctness_passes - Stable materials have distinct deterministic visual response in both the direct v2 island and the existing proof path.
 - pass: treatment_boundaries_pass - Treatment remains post-material and bounded for the stable slice.
 - pass: software_reference_is_canonical - Software/reference execution remains the canonical proof-bearing path.
 - pass: gl11_is_not_hidden_minimum - GDI remains the floor and GL11 remains optional.
@@ -47,6 +47,7 @@
 - pass: legacy-boundary - Command passed.
 - pass: legacy-core-boundaries - Command passed.
 - pass: direct-control-influence - Command passed.
+- pass: material-response - Command passed.
 - pass: material-treatment - Command passed.
 - pass: packc-data-only - Command passed.
 - pass: visualintent-contract - Command passed.

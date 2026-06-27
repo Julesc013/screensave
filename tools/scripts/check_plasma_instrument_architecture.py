@@ -36,6 +36,7 @@ SUBCHECKS = [
     ("legacy-boundary", ["tools/scripts/check_plasma_legacy_boundary.py"]),
     ("legacy-core-boundaries", ["tools/scripts/check_plasma_core_boundaries.py"]),
     ("direct-control-influence", ["tools/scripts/check_plasma_v2_influence.py"]),
+    ("material-response", ["tools/scripts/check_plasma_v2_material_response.py"]),
     ("material-treatment", ["tools/scripts/check_plasma_v2_materials.py"]),
     ("packc-data-only", ["tools/scripts/check_packc.py"]),
     ("visualintent-contract", ["tools/scripts/check_visual_intent_contract.py"]),
@@ -336,17 +337,25 @@ def build_report() -> dict[str, Any]:
     gate(
         gates,
         "material_mapping_distinctness_passes",
-        "pass" if subcheck_status(subchecks, "material-treatment") else "fail",
-        "Stable materials have distinct deterministic visual response.",
-        evidence=["tools/scripts/check_plasma_v2_materials.py"],
+        "pass" if subcheck_status(subchecks, "material-response") and subcheck_status(subchecks, "material-treatment") else "fail",
+        "Stable materials have distinct deterministic visual response in both the direct v2 island and the existing proof path.",
+        evidence=["tools/scripts/check_plasma_v2_material_response.py", "tools/scripts/check_plasma_v2_materials.py"],
     )
 
     gate(
         gates,
         "treatment_boundaries_pass",
-        "pass" if (PLASMA_SRC / "plasma_treatment.h").exists() and subcheck_status(subchecks, "material-treatment") else "fail",
+        "pass"
+        if (PLASMA_SRC / "plasma_treatment.h").exists()
+        and subcheck_status(subchecks, "material-response")
+        and subcheck_status(subchecks, "material-treatment")
+        else "fail",
         "Treatment remains post-material and bounded for the stable slice.",
-        evidence=[repo_path(PLASMA_SRC / "plasma_treatment.h"), "tools/scripts/check_plasma_v2_materials.py"],
+        evidence=[
+            repo_path(PLASMA_SRC / "plasma_treatment.h"),
+            "tools/scripts/check_plasma_v2_material_response.py",
+            "tools/scripts/check_plasma_v2_materials.py",
+        ],
     )
 
     gate(
