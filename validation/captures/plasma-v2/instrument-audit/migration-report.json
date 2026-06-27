@@ -1,0 +1,49 @@
+{
+  "claim_boundary": "Legacy migration proof only; this does not prove old Plasma files are wrappers, remove every legacy authority path, or promote stable.",
+  "migration_rules": [
+    {
+      "legacy": "effect_mode",
+      "target": "field_family"
+    },
+    {
+      "legacy": "speed_mode",
+      "target": "speed"
+    },
+    {
+      "legacy": "resolution_mode",
+      "target": "scale_complexity_softness"
+    },
+    {
+      "legacy": "smoothing_mode",
+      "target": "softness_or_treatment"
+    },
+    {
+      "legacy": "preset_key",
+      "target": "starter_plasma_v2_spec"
+    },
+    {
+      "legacy": "theme_key",
+      "target": "material_key"
+    },
+    {
+      "legacy": "output_mode",
+      "target": "output_kind"
+    },
+    {
+      "legacy": "presentation_mode",
+      "target": "presentation_flat_for_stable"
+    },
+    {
+      "legacy": "deterministic_seed",
+      "target": "seed"
+    }
+  ],
+  "schema": "screensave.plasma-v2.migration-report.v1",
+  "source": {
+    "branch": "main",
+    "commit": "8a0b8125a92df0efd3295929017d991474cda946",
+    "dirty": true
+  },
+  "status": "pass",
+  "validation_errors": []
+}

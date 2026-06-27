@@ -43,6 +43,7 @@
 - pass: runtime-contract - Command passed.
 - pass: runtime-hot-loop-hazards - Command passed.
 - pass: field-pipeline - Command passed.
+- pass: legacy-migration - Command passed.
 - pass: product-center-boundary - Command passed.
 - pass: legacy-boundary - Command passed.
 - pass: legacy-core-boundaries - Command passed.

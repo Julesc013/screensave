@@ -170,6 +170,24 @@
         "run": {
           "command": [
             "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+            "tools/scripts/check_plasma_v2_migration.py"
+          ],
+          "returncode": 0,
+          "status": "pass",
+          "stderr": "",
+          "stdout": "Plasma v2 migration checks passed.",
+          "timeout_seconds": 300
+        }
+      },
+      "id": "legacy-migration",
+      "status": "pass",
+      "summary": "Command passed."
+    },
+    {
+      "data": {
+        "run": {
+          "command": [
+            "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
             "tools/scripts/check_plasma_product_center.py"
           ],
           "returncode": 0,
@@ -424,6 +442,10 @@
           "compatibility_shims_not_explicitly_wrapped_over_v2"
         ],
         "legacy_boundary_status": "hold",
+        "migration_check": "pass",
+        "migration_evidence": [
+          "tools/scripts/check_plasma_v2_migration.py"
+        ],
         "product_center_blockers": [
           "legacy_bypass_candidates_still_present"
         ],
@@ -530,7 +552,7 @@
   "schema": "screensave.plasma-v2.instrument-architecture-audit.v1",
   "source": {
     "branch": "main",
-    "commit": "85e8b430f5bc8090c8834192b1f044f22a71641f",
+    "commit": "8a0b8125a92df0efd3295929017d991474cda946",
     "dirty": true
   },
   "stable_eligible": false,
