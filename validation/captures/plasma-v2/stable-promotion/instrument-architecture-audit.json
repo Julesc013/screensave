@@ -199,7 +199,7 @@
     ],
     "failed_gates": [],
     "instrument_architecture": "hold",
-    "opened_next": "plasma-v2-stable-repair"
+    "opened_next": "plasma-v2-instrument-repair"
   },
   "gates": [
     {
@@ -344,7 +344,7 @@
   "schema": "screensave.plasma-v2.instrument-architecture-audit.v1",
   "source": {
     "branch": "main",
-    "commit": "83a6c9b1f9cc97e6af428a9cb461461df7bcd11e",
+    "commit": "428266b7dee3ee02269b603d714b47156c93f960",
     "dirty": true
   },
   "stable_eligible": false,

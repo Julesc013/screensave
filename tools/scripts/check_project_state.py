@@ -90,7 +90,7 @@ def validate_state(state: dict) -> list[str]:
     portable_status = portable_v2.get("status")
     if portable_status == "accepted":
         if plasma_v2.get("status") == "release-candidate-hold":
-            expected_active_program = "plasma-v2-stable-repair"
+            expected_active_program = "plasma-v2-instrument-repair"
         elif plasma_v2.get("status") == "release-candidate":
             expected_active_program = "plasma-v2-stable-promotion"
         elif plasma_v2.get("status") == "release-readiness-reviewed":
@@ -280,8 +280,8 @@ def validate_state(state: dict) -> list[str]:
                 errors,
             )
             require(
-                plasma_v2.get("opened_next") == "plasma-v2-stable-repair",
-                "plasma_v2.opened_next must be plasma-v2-stable-repair.",
+                plasma_v2.get("opened_next") == "plasma-v2-instrument-repair",
+                "plasma_v2.opened_next must be plasma-v2-instrument-repair.",
                 errors,
             )
             require(
@@ -309,6 +309,9 @@ def validate_state(state: dict) -> list[str]:
                 "stable_promotion_contract",
                 "instrument_architecture_contract",
                 "instrument_architecture_audit",
+                "instrument_repair_roadmap",
+                "instrument_repair_work_unit",
+                "instrument_repair_intake",
                 "stable_promotion_package",
                 "stable_promotion_evidence",
                 "stable_support_claims",

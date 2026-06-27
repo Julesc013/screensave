@@ -1,0 +1,266 @@
+schema_version = 1
+program_id = "plasma-v2-instrument-repair"
+status = "active"
+as_of = "2026-06-27"
+source_commit = "428266b7dee3ee02269b603d714b47156c93f960"
+source_mutation_by_aide = false
+automatic_merge = false
+automatic_release = false
+automatic_promotion = false
+claim_boundary = "PAW-I-R repairs Plasma v2 instrument-architecture blockers; AIDE remains proposal, preflight, repair, and evidence coordination only."
+
+[[work_units]]
+id = "SS-PLV2-IR0"
+title = "Checkpoint Plasma v2 instrument hold"
+task_class = "repair"
+objective = "Record the PAW-I instrument hold as the PAW-I-R intake state before implementation repairs."
+allowed_paths = ["validation/captures/plasma-v2/instrument-audit/intake-state.json", ".aide/work_units/plasma-v2-instrument-repair.toml", "docs/roadmap/paw-i-r-plasma-v2-instrument-repair.md", "PROJECT_STATE.toml", "VERSION.toml", "tools/scripts/check_project_state.py", "tools/scripts/check_project_adapter.py", "tools/scripts/check_plasma_instrument_architecture.py", "tools/scripts/check_plasma_v2_release_candidate.py", "tools/aideops/screensave_aide.py"]
+forbidden_paths = ["products/savers/plasma/src/**", "platform/**", "releases/**"]
+selected_validation_tier = "T1"
+expected_validators = ["py -3 tools/scripts/check_project_state.py --summary", "py -3 tools/scripts/check_plasma_instrument_architecture.py", "py -3 tools/aideops/screensave_aide.py preflight --task SS-PLV2-IR0 --objective \"Checkpoint Plasma v2 instrument hold\"", "git diff --check"]
+evidence_outputs = ["validation/captures/plasma-v2/instrument-audit/intake-state.json"]
+claim_boundary = "Checkpoint only; no product runtime repair, stable promotion, publication, compatibility certification, or artistic acceptance."
+rollback_point = "428266b"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"
+
+[[work_units]]
+id = "SS-PLV2-IR1"
+title = "Codify Plasma v2 instrument constitution"
+task_class = "repair"
+objective = "Make the Plasma v2 instrument constitution normative for direct controls, spec, plan, runtime, reference truth, Workbench, and AIDE boundaries."
+allowed_paths = ["products/savers/plasma/docs/plasma-v2-instrument-constitution.md", "contracts/plasma_instrument_architecture_v1.md", "tools/scripts/check_plasma_instrument_architecture.py"]
+forbidden_paths = ["products/savers/plasma/src/**", "platform/**", "releases/**"]
+selected_validation_tier = "T1"
+expected_validators = ["py -3 tools/scripts/check_plasma_instrument_architecture.py", "py -3 tools/scripts/check_contracts.py", "git diff --check"]
+evidence_outputs = ["products/savers/plasma/docs/plasma-v2-instrument-constitution.md"]
+claim_boundary = "Doctrine and validator hardening only; no runtime repair or stable promotion."
+rollback_point = "428266b"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"
+
+[[work_units]]
+id = "SS-PLV2-IR2"
+title = "Enforce Plasma v2 product-center boundaries"
+task_class = "repair"
+objective = "Classify v2 product-center files, compatibility shims, and legacy engine centers so the audit can reject hidden legacy product truth."
+allowed_paths = ["tools/scripts/check_plasma_product_center.py", "tools/scripts/check_plasma_legacy_boundary.py", "products/savers/plasma/docs/**"]
+forbidden_paths = ["platform/**", "releases/**"]
+selected_validation_tier = "T1"
+expected_validators = ["py -3 tools/scripts/check_plasma_product_center.py", "py -3 tools/scripts/check_plasma_legacy_boundary.py", "py -3 tools/scripts/check_plasma_instrument_architecture.py"]
+evidence_outputs = ["tools/scripts/check_plasma_product_center.py"]
+claim_boundary = "Boundary audit only; no broad rewrite."
+rollback_point = "428266b"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"
+
+[[work_units]]
+id = "SS-PLV2-IR3"
+title = "Repair v2 spec as direct-control authority"
+task_class = "implementation"
+objective = "Ensure Plasma v2 spec fully expresses direct semantic controls with normalized values and deterministic keys."
+allowed_paths = ["products/savers/plasma/src/v2/plasma_v2_types.h", "products/savers/plasma/src/v2/plasma_v2_spec.*", "products/savers/plasma/tests/plasma_v2_spec_smoke.c", "tools/scripts/check_plasma_v2_direct_spec.py", "tools/scripts/check_plasma_spec_v2.py"]
+forbidden_paths = ["platform/**", "releases/**"]
+selected_validation_tier = "T1"
+expected_validators = ["py -3 tools/scripts/check_plasma_v2_direct_spec.py", "py -3 tools/scripts/check_plasma_spec_v2.py", "py -3 tools/scripts/check_plasma_instrument_architecture.py"]
+evidence_outputs = ["products/savers/plasma/tests/plasma_v2_spec_smoke.c"]
+claim_boundary = "Spec authority repair only; no stable promotion."
+rollback_point = "428266b"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"
+
+[[work_units]]
+id = "SS-PLV2-IR4"
+title = "Repair v2 plan compiler and degradation law"
+task_class = "implementation"
+objective = "Add a direct v2 plan contract that records requested versus resolved spec facts, capabilities, degradation, seeds, renderer facts, and reference requirements."
+allowed_paths = ["products/savers/plasma/src/v2/plasma_v2_plan.*", "products/savers/plasma/tests/**", "tools/scripts/check_plasma_v2_plan.py", "validation/captures/plasma-v2/instrument-audit/plan-report.json"]
+forbidden_paths = ["releases/**"]
+selected_validation_tier = "T2"
+expected_validators = ["py -3 tools/scripts/check_plasma_v2_plan.py", "py -3 tools/scripts/check_plasma_instrument_architecture.py"]
+evidence_outputs = ["validation/captures/plasma-v2/instrument-audit/plan-report.json"]
+claim_boundary = "Plan repair only; no stable promotion."
+rollback_point = "428266b"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"
+
+[[work_units]]
+id = "SS-PLV2-IR5"
+title = "Repair deterministic v2 runtime buffers"
+task_class = "implementation"
+objective = "Add deterministic runtime state and buffer ownership while blocking hot-loop allocation, renderer calls, file I/O, and nondeterministic math hazards."
+allowed_paths = ["products/savers/plasma/src/v2/plasma_v2_runtime.*", "products/savers/plasma/src/v2/field/**", "products/savers/plasma/src/v2/output/**", "tools/scripts/check_plasma_v2_runtime.py", "tools/scripts/check_plasma_v2_no_hot_loop_hazards.py"]
+forbidden_paths = ["releases/**"]
+selected_validation_tier = "T2"
+expected_validators = ["py -3 tools/scripts/check_plasma_v2_runtime.py", "py -3 tools/scripts/check_plasma_v2_no_hot_loop_hazards.py", "py -3 tools/scripts/check_plasma_instrument_architecture.py"]
+evidence_outputs = ["tools/scripts/check_plasma_v2_runtime.py"]
+claim_boundary = "Runtime repair only; software/reference truth remains required."
+rollback_point = "428266b"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"
+
+[[work_units]]
+id = "SS-PLV2-IR6"
+title = "Repair v2 field pipeline stages"
+task_class = "implementation"
+objective = "Make providers, analytic sources, generators, modifiers, output transform, material mapping, treatment, and flat presentation explicit in the v2 island."
+allowed_paths = ["products/savers/plasma/src/v2/field/**", "products/savers/plasma/src/v2/output/**", "products/savers/plasma/tests/**", "tools/scripts/check_plasma_instrument_architecture.py"]
+forbidden_paths = ["releases/**"]
+selected_validation_tier = "T2"
+expected_validators = ["py -3 tools/scripts/check_plasma_instrument_architecture.py", "git diff --check"]
+evidence_outputs = ["products/savers/plasma/src/v2/field", "products/savers/plasma/src/v2/output"]
+claim_boundary = "Stable field pipeline repair only; no heightfield, ribbon, glyph, GL46, or arbitrary graph runtime."
+rollback_point = "428266b"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"
+
+[[work_units]]
+id = "SS-PLV2-IR7"
+title = "Repair Plasma v2 direct-control influence matrix"
+task_class = "repair"
+objective = "Ensure each Basic control is plan-visible, render-visible, intentionally structural, or unsupported and hidden."
+allowed_paths = ["tools/scripts/check_plasma_v2_influence.py", "validation/captures/plasma-v2/influence/**", "products/savers/plasma/tests/**"]
+forbidden_paths = ["releases/**"]
+selected_validation_tier = "T2"
+expected_validators = ["py -3 tools/scripts/check_plasma_v2_influence.py", "py -3 tools/scripts/check_plasma_instrument_architecture.py"]
+evidence_outputs = ["validation/captures/plasma-v2/influence/control-influence.json"]
+claim_boundary = "Control influence proof only; no decorative Basic controls."
+rollback_point = "428266b"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"
+
+[[work_units]]
+id = "SS-PLV2-IR8"
+title = "Repair v2 material response and distinctness"
+task_class = "repair"
+objective = "Prove materials, contrast, brightness, softness, and treatment are bounded, distinct, and reviewable field-to-color responses."
+allowed_paths = ["tools/scripts/check_plasma_v2_materials.py", "validation/captures/plasma-v2/materials/**", "validation/captures/plasma-v2/instrument-audit/material-response.json", "products/savers/plasma/tests/**"]
+forbidden_paths = ["releases/**"]
+selected_validation_tier = "T2"
+expected_validators = ["py -3 tools/scripts/check_plasma_v2_materials.py", "py -3 tools/scripts/check_plasma_instrument_architecture.py"]
+evidence_outputs = ["validation/captures/plasma-v2/instrument-audit/material-response.json"]
+claim_boundary = "Material response proof only; implementation breadth is not promotion evidence."
+rollback_point = "428266b"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"
+
+[[work_units]]
+id = "SS-PLV2-IR9"
+title = "Repair legacy preset migration into v2 specs"
+task_class = "repair"
+objective = "Prove old config, preset, theme, output, presentation, and seed inputs lower into direct v2 specs without reactivating hidden preset authority."
+allowed_paths = ["products/savers/plasma/src/v2/**", "products/savers/plasma/src/plasma_migration_v2.*", "tools/scripts/check_plasma_v2_migration.py", "tools/scripts/check_plasma_product_center.py", "validation/captures/plasma-v2/instrument-audit/**"]
+forbidden_paths = ["releases/**"]
+selected_validation_tier = "T2"
+expected_validators = ["py -3 tools/scripts/check_plasma_v2_migration.py", "py -3 tools/scripts/check_plasma_product_center.py", "py -3 tools/scripts/check_plasma_instrument_architecture.py"]
+evidence_outputs = ["validation/captures/plasma-v2/instrument-audit/migration-report.json"]
+claim_boundary = "Migration authority proof only; presets remain examples and migration anchors."
+rollback_point = "428266b"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"
+
+[[work_units]]
+id = "SS-PLV2-IR10"
+title = "Repair reference and GL11 optionality evidence"
+task_class = "repair"
+objective = "Prove software/reference truth, GDI floor, GL11 optional fallback, and accelerated comparison without treating performance as visual truth."
+allowed_paths = ["tools/scripts/check_plasma_v2_acceleration.py", "tools/scripts/check_plasma_v2_performance.py", "validation/captures/plasma-v2/acceleration/**", "validation/captures/plasma-v2/performance/**"]
+forbidden_paths = ["releases/**"]
+selected_validation_tier = "T2"
+expected_validators = ["py -3 tools/scripts/check_plasma_v2_acceleration.py", "py -3 tools/scripts/check_plasma_v2_performance.py", "py -3 tools/scripts/check_plasma_instrument_architecture.py"]
+evidence_outputs = ["validation/captures/plasma-v2/acceleration/matrix.json"]
+claim_boundary = "Reference and optional acceleration evidence only; no hidden GL11 minimum."
+rollback_point = "428266b"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"
+
+[[work_units]]
+id = "SS-PLV2-IR11"
+title = "Repair Workbench instrument inspection"
+task_class = "implementation"
+objective = "Expose requested spec, resolved plan, degradation, pipeline, material/treatment, software/GL path, capture refs, influence status, and promotion status through Workbench inspection."
+allowed_paths = ["products/apps/benchlab/**", "tools/scripts/check_workbench_shell.py", "tools/scripts/check_plasma_instrument_architecture.py"]
+forbidden_paths = ["tools/sslab/src/**", "releases/**"]
+selected_validation_tier = "T2"
+expected_validators = ["py -3 tools/scripts/check_workbench_shell.py", "py -3 tools/scripts/check_plasma_instrument_architecture.py"]
+evidence_outputs = ["products/apps/benchlab/tests/workbench_shell_smoke.c"]
+claim_boundary = "Workbench inspection only; Workbench does not own Plasma semantics or duplicate runtime."
+rollback_point = "428266b"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"
+
+[[work_units]]
+id = "SS-PLV2-IR12"
+title = "Record Plasma instrument repair evidence through AIDE"
+task_class = "agent-session"
+objective = "Run proposal-only AIDE repair and agentic passes to find remaining instrument architecture blockers."
+allowed_paths = [".aide/repairs/**", "out/aide/agentic/SS-PLV2-IR12/**", "validation/captures/plasma-v2/instrument-audit/**"]
+forbidden_paths = ["products/**", "platform/**", "releases/**"]
+selected_validation_tier = "T1"
+expected_validators = ["py -3 tools/scripts/check_repair_queue.py", "py -3 tools/scripts/check_agentic_policy.py", "py -3 tools/scripts/check_agentic_receipts.py"]
+evidence_outputs = ["out/aide/agentic/SS-PLV2-IR12"]
+claim_boundary = "Proposal-only evidence; no AIDE self-approval, mutation, merge, publication, promotion, or artistic acceptance."
+rollback_point = "428266b"
+human_review_required = true
+agent_allowed = true
+agent_mode = "proposal-only"
+
+[[work_units]]
+id = "SS-PLV2-IR13"
+title = "Rerun Plasma v2 instrument architecture audit"
+task_class = "review"
+objective = "Rerun the hard instrument audit and emit a re-audit report before stable-promotion recheck."
+allowed_paths = ["tools/scripts/check_plasma_instrument_architecture.py", "validation/captures/plasma-v2/instrument-audit/re-audit-report.*", "validation/captures/plasma-v2/stable-promotion/instrument-architecture-audit.*"]
+forbidden_paths = ["releases/**"]
+selected_validation_tier = "T2"
+expected_validators = ["py -3 tools/scripts/check_plasma_instrument_architecture.py", "py -3 tools/project_adapter/screensave_project.py validate --tier T2"]
+evidence_outputs = ["validation/captures/plasma-v2/instrument-audit/re-audit-report.json"]
+claim_boundary = "Instrument re-audit only; no stable promotion yet."
+rollback_point = "428266b"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"
+
+[[work_units]]
+id = "SS-PLV2-IR14"
+title = "Rerun Plasma v2 stable promotion after instrument repairs"
+task_class = "review"
+objective = "Rerun stable promotion after the hard instrument audit is promotion-ready."
+allowed_paths = ["tools/scripts/check_plasma_v2_stable_promotion.py", "validation/captures/plasma-v2/stable-promotion/gate-report.*"]
+forbidden_paths = ["releases/**"]
+selected_validation_tier = "T3"
+expected_validators = ["py -3 tools/scripts/check_plasma_v2_stable_promotion.py", "py -3 tools/project_adapter/screensave_project.py validate --tier T3"]
+evidence_outputs = ["validation/captures/plasma-v2/stable-promotion/gate-report.json"]
+claim_boundary = "Stable-promotion recheck only; publication remains separate."
+rollback_point = "428266b"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"
+
+[[work_units]]
+id = "SS-PLV2-IR15"
+title = "Transition Plasma v2 after PAW-I-R"
+task_class = "review"
+objective = "Either promote Plasma v2 to stable after all gates pass or keep the release candidate held with explicit repair WorkUnits."
+allowed_paths = ["PROJECT_STATE.toml", "VERSION.toml", "docs/roadmap/**", "validation/captures/plasma-v2/instrument-audit/**", "validation/captures/plasma-v2/stable-promotion/**", "tools/scripts/check_project_state.py"]
+forbidden_paths = ["products/savers/plasma/src/**", "platform/**", "releases/**"]
+selected_validation_tier = "T3"
+expected_validators = ["py -3 tools/scripts/check_project_state.py --summary", "py -3 tools/scripts/check_plasma_instrument_architecture.py", "py -3 tools/scripts/check_plasma_v2_stable_promotion.py", "git diff --check"]
+evidence_outputs = ["PROJECT_STATE.toml", "VERSION.toml"]
+claim_boundary = "State transition only; no ambiguous middle state and no publication without a later gate."
+rollback_point = "428266b"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"

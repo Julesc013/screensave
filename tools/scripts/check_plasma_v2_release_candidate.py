@@ -150,7 +150,7 @@ def validate_state(results: list[dict[str, Any]]) -> None:
             observed=authority.get("active_program"),
         )
     if status in {"release-candidate", "release-candidate-hold"}:
-        expected_program = "plasma-v2-stable-repair" if status == "release-candidate-hold" else "plasma-v2-stable-promotion"
+        expected_program = "plasma-v2-instrument-repair" if status == "release-candidate-hold" else "plasma-v2-stable-promotion"
         add_result(
             results,
             "post-transition-release-candidate",

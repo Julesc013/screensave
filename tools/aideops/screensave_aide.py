@@ -24,6 +24,7 @@ WORK_UNIT_FILES = [
     ROOT / ".aide" / "work_units" / "plasma-v2-reference-slice.toml",
     ROOT / ".aide" / "work_units" / "plasma-v2-visual-review-and-packc.toml",
     ROOT / ".aide" / "work_units" / "plasma-v2-accelerated-stable-candidate.toml",
+    ROOT / ".aide" / "work_units" / "plasma-v2-instrument-repair.toml",
 ]
 PORTABLE_EVAL_TASKS = [
     "compact-task-packet-required-sections",

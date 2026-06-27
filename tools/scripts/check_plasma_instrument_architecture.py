@@ -384,7 +384,7 @@ def build_report() -> dict[str, Any]:
             "instrument_architecture": status,
             "blocking_gates": blocking_gates,
             "failed_gates": failed_gates,
-            "opened_next": "plasma-v2-stable-repair" if not stable_eligible else "plasma-v2-publication-prep",
+            "opened_next": "plasma-v2-instrument-repair" if not stable_eligible else "plasma-v2-publication-prep",
         },
         "claim_boundary": "Instrument-architecture audit only; it does not publish Plasma, certify compatibility, accept final artistic quality, or admit AIDE as runtime truth.",
         "checks": checks,

@@ -1,0 +1,55 @@
+{
+  "schema": "screensave.plasma-v2.instrument-repair.intake-state.v1",
+  "captured_on": "2026-06-27",
+  "source": {
+    "commit": "428266b7dee3ee02269b603d714b47156c93f960",
+    "branch": "main",
+    "remote": "origin/main",
+    "source_dirty_at_intake": false
+  },
+  "program": {
+    "id": "plasma-v2-instrument-repair",
+    "wave": "PAW-I-R",
+    "task": "SS-PLV2-IR0",
+    "roadmap": "docs/roadmap/paw-i-r-plasma-v2-instrument-repair.md",
+    "work_unit": ".aide/work_units/plasma-v2-instrument-repair.toml"
+  },
+  "plasma_v2": {
+    "release_candidate": "plasma-v2-rc1",
+    "status": "release-candidate-hold",
+    "stable": false,
+    "release_promotion": "blocked",
+    "active_profile": "plasma.v2.reference.preview",
+    "instrument_audit": "blocked",
+    "opened_next": "plasma-v2-instrument-repair"
+  },
+  "audit_refs": {
+    "instrument_architecture_contract": "contracts/plasma_instrument_architecture_v1.md",
+    "instrument_architecture_audit": "validation/captures/plasma-v2/stable-promotion/instrument-architecture-audit.json",
+    "stable_promotion_gate": "validation/captures/plasma-v2/stable-promotion/gate-report.json"
+  },
+  "blocking_gates": [
+    "plasma_v2_plan_contract_passes",
+    "plasma_v2_runtime_contract_passes",
+    "legacy_preset_authority_removed",
+    "field_pipeline_boundaries_pass",
+    "visualintent_candidates_reduce_to_plasma_spec"
+  ],
+  "passing_gates_to_preserve": [
+    "plasma_v2_spec_contract_passes",
+    "direct_controls_influence_passes",
+    "material_mapping_distinctness_passes",
+    "treatment_boundaries_pass",
+    "software_reference_is_canonical",
+    "gl11_is_not_hidden_minimum",
+    "packc_data_only_passes",
+    "aide_not_runtime_or_truth"
+  ],
+  "claim_boundary": "PAW-I-R intake state only; no product runtime repair, stable promotion, publication, compatibility certification, or artistic acceptance is claimed.",
+  "validation_commands": [
+    "py -3 tools/scripts/check_project_state.py --summary",
+    "py -3 tools/scripts/check_plasma_instrument_architecture.py",
+    "py -3 tools/aideops/screensave_aide.py preflight --task SS-PLV2-IR0 --objective \"Checkpoint Plasma v2 instrument hold\"",
+    "git diff --check"
+  ]
+}

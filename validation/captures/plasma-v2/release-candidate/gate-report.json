@@ -41,8 +41,8 @@
     {
       "id": "post-transition-active-program",
       "payload": {
-        "expected": "plasma-v2-stable-repair",
-        "observed": "plasma-v2-stable-repair"
+        "expected": "plasma-v2-instrument-repair",
+        "observed": "plasma-v2-instrument-repair"
       },
       "status": "pass",
       "summary": "After transition, the active program must match the current Plasma v2 decision lane."

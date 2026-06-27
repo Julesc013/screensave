@@ -83,7 +83,7 @@ instrument architecture are ready. It keeps `stable = false` with
 
 ## Repair Handoff
 
-- Next active program: `plasma-v2-stable-repair`
+- Next active program: `plasma-v2-instrument-repair`
 - Blocking WorkUnit: `SS-PLV2-I-REPAIR-001`
 - Gate report:
   `validation/captures/plasma-v2/stable-promotion/gate-report.json`
