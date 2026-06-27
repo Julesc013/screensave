@@ -87,6 +87,7 @@ VALIDATION_TIERS = {
         ["tools/scripts/check_release_candidate_surface.py"],
         ["tools/scripts/check_release_scaffold.py"],
         ["tools/scripts/check_visual_intent_contract.py"],
+        ["tools/scripts/check_plasma_v2_direct_spec.py"],
         [str(SSLAB.relative_to(ROOT)), "proof", "--profile", "nocturne.reference.v0", "--output-dir", "out/aide/proofs/nocturne-reference-v0"],
         [str(SSLAB.relative_to(ROOT)), "proof", "--profile", "nocturne.reference.v0", "--path", "v2", "--output-dir", "out/aide/proofs/nocturne-reference-v0-v2"],
         [str(SSLAB.relative_to(ROOT)), "proof", "--profile", "ricochet.reference.v1", "--output-dir", "out/aide/proofs/ricochet-reference-v1"],

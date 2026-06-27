@@ -60,6 +60,9 @@ review all exist. PAW-I held at the final stable artistic decision because an
 explicit final human acceptance is still required. Stable promotion,
 publication, compatibility certification, public SDK stability, and all-saver
 migration remain blocked.
+The active repair direction starts with a direct-control-first Plasma v2
+instrument spec island under `products/savers/plasma/src/v2/`, keeping the old
+engine as compatibility evidence rather than the new product center.
 
 ## Download ScreenSave Core
 
