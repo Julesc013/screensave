@@ -1,0 +1,186 @@
+schema_version = 1
+program_id = "plasma-v2-release-candidate"
+status = "active"
+as_of = "2026-06-27"
+source_commit = "06161c9111dff2d06550c237b944fb5bbfb042ed"
+source_mutation_by_aide = false
+automatic_merge = false
+automatic_release = false
+automatic_promotion = false
+claim_boundary = "PAW-H may prepare and review a Plasma v2 release candidate; it must not publish, set stable true, certify compatibility, or allow autonomous AIDE mutation."
+
+[[work_units]]
+id = "SS-PLV2-H0"
+title = "Checkpoint Plasma v2 release-readiness review"
+task_class = "release-candidate"
+objective = "Record the release-readiness-reviewed intake state before release-candidate work."
+allowed_paths = ["validation/captures/plasma-v2/release-candidate/intake-state.json", ".aide/work_units/plasma-v2-release-candidate.toml", "docs/roadmap/paw-h-plasma-v2-release-candidate.md"]
+forbidden_paths = ["products/savers/plasma/src/**", "platform/**", "releases/**"]
+selected_validation_tier = "T1"
+expected_validators = ["py -3 tools/scripts/check_project_state.py --summary", "py -3 tools/scripts/check_plasma_v2_release_readiness.py", "git diff --check"]
+evidence_outputs = ["validation/captures/plasma-v2/release-candidate/intake-state.json"]
+claim_boundary = "Checkpoint only; no release-candidate state transition."
+rollback_point = "06161c9"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"
+
+[[work_units]]
+id = "SS-PLV2-H1"
+title = "Define Plasma v2 release-candidate gate"
+task_class = "release-candidate"
+objective = "Create the release-candidate contract and validator with explicit exclusions."
+allowed_paths = ["contracts/plasma_release_candidate_v1.md", "products/savers/plasma/docs/plasma-v2-release-candidate-policy.md", "tools/scripts/check_plasma_v2_release_candidate_contract.py"]
+forbidden_paths = ["PROJECT_STATE.toml", "releases/**", "products/savers/plasma/src/**"]
+selected_validation_tier = "T1"
+expected_validators = ["py -3 tools/scripts/check_plasma_v2_release_candidate_contract.py", "py -3 tools/scripts/check_contracts.py"]
+evidence_outputs = ["contracts/plasma_release_candidate_v1.md"]
+claim_boundary = "Contract only; no stable release or publication."
+rollback_point = "06161c9"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"
+
+[[work_units]]
+id = "SS-PLV2-H2"
+title = "Stage Plasma v2 release-candidate artifacts"
+task_class = "release-candidate"
+objective = "Create a non-published release-candidate package stage with hashes, support wording, and rollback notes."
+allowed_paths = ["packaging/windows/plasma-v2-release-candidate/**", "tools/scripts/check_plasma_v2_package_stage.py"]
+forbidden_paths = ["releases/**", "products/savers/plasma/src/**"]
+selected_validation_tier = "T1"
+expected_validators = ["py -3 tools/scripts/check_plasma_v2_package_stage.py", "py -3 tools/scripts/check_plasma_v2_release_candidate_contract.py"]
+evidence_outputs = ["packaging/windows/plasma-v2-release-candidate/manifest.toml"]
+claim_boundary = "Package staging only; no publication."
+rollback_point = "06161c9"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"
+
+[[work_units]]
+id = "SS-PLV2-H3"
+title = "Finalize release-candidate proof and evidence matrix"
+task_class = "release-candidate"
+objective = "Record the proof, package, Manager, Workbench, and evidence axes without flattening claims."
+allowed_paths = ["validation/captures/plasma-v2/release-candidate/proof-matrix.*", "validation/captures/plasma-v2/release-candidate/proof-bundle-v1.json", "validation/captures/plasma-v2/release-candidate/evidence-index.json", "tools/scripts/check_plasma_v2_release_candidate_evidence.py"]
+forbidden_paths = ["releases/**", "products/savers/plasma/src/**"]
+selected_validation_tier = "T2"
+expected_validators = ["py -3 tools/scripts/check_plasma_v2_release_candidate_evidence.py", "py -3 tools/scripts/check_proof_bundle_v1.py", "py -3 tools/scripts/check_plasma_v2_acceleration.py", "py -3 tools/scripts/check_plasma_v2_performance.py", "py -3 tools/scripts/check_aide_evidence_index.py"]
+evidence_outputs = ["validation/captures/plasma-v2/release-candidate/proof-matrix.json"]
+claim_boundary = "Evidence matrix only; deterministic proof, review, performance, readiness, and certification remain separate claims."
+rollback_point = "06161c9"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"
+
+[[work_units]]
+id = "SS-PLV2-H4"
+title = "Record release-candidate artistic decision"
+task_class = "review"
+objective = "Record release-candidate artistic acceptance without final stable acceptance."
+allowed_paths = ["validation/captures/plasma-v2/final-artistic-decision/**", "tools/scripts/check_plasma_v2_artistic_decision.py"]
+forbidden_paths = ["PROJECT_STATE.toml", "releases/**"]
+selected_validation_tier = "T1"
+expected_validators = ["py -3 tools/scripts/check_plasma_v2_artistic_decision.py"]
+evidence_outputs = ["validation/captures/plasma-v2/final-artistic-decision/decision.release-candidate.toml"]
+claim_boundary = "Release-candidate artistic decision only; not final stable acceptance."
+rollback_point = "06161c9"
+human_review_required = true
+agent_allowed = true
+agent_mode = "proposal-only"
+
+[[work_units]]
+id = "SS-PLV2-H5"
+title = "Finalize release-candidate support wording"
+task_class = "review"
+objective = "Class release-candidate support claims by evidence and block broad compatibility certification."
+allowed_paths = ["products/savers/plasma/docs/plasma-v2-support-matrix.md", "docs/compatibility/plasma-v2-release-candidate.md", "validation/captures/plasma-v2/release-candidate/support-claims.json", "tools/scripts/check_support_claims.py"]
+forbidden_paths = ["releases/**", "products/savers/plasma/src/**"]
+selected_validation_tier = "T1"
+expected_validators = ["py -3 tools/scripts/check_support_claims.py", "py -3 tools/scripts/check_docs_basics.py"]
+evidence_outputs = ["validation/captures/plasma-v2/release-candidate/support-claims.json"]
+claim_boundary = "Support wording only; no certification."
+rollback_point = "06161c9"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"
+
+[[work_units]]
+id = "SS-PLV2-H6"
+title = "Harden proposal-only agent loop"
+task_class = "agent-session"
+objective = "Add release-candidate proposal policy, examples, and receipt validation while blocking autonomous mutation."
+allowed_paths = [".aide/agentic/**", "tools/aideops/agentic.py", "tools/scripts/check_agentic_policy.py", "tools/scripts/check_agentic_receipts.py"]
+forbidden_paths = ["products/**", "platform/**", "releases/**"]
+selected_validation_tier = "T1"
+expected_validators = ["py -3 tools/scripts/check_agentic_policy.py", "py -3 tools/scripts/check_agentic_receipts.py"]
+evidence_outputs = [".aide/agentic/release-candidate-policy.toml"]
+claim_boundary = "Proposal-only agent loop; no automatic apply."
+rollback_point = "06161c9"
+human_review_required = true
+agent_allowed = true
+agent_mode = "proposal-only"
+
+[[work_units]]
+id = "SS-PLV2-H7"
+title = "Run release-candidate repair queue"
+task_class = "repair"
+objective = "Record release-candidate repair burn-down with no open blocking release-candidate repairs."
+allowed_paths = [".aide/repairs/**", "validation/captures/plasma-v2/release-candidate/repair-burndown.json", "tools/scripts/check_repair_queue.py"]
+forbidden_paths = ["products/**", "platform/**", "releases/**"]
+selected_validation_tier = "T1"
+expected_validators = ["py -3 tools/scripts/check_repair_queue.py"]
+evidence_outputs = ["validation/captures/plasma-v2/release-candidate/repair-burndown.json"]
+claim_boundary = "Repair accounting only; no merge, promotion, release, or certification."
+rollback_point = "06161c9"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"
+
+[[work_units]]
+id = "SS-PLV2-H8"
+title = "Record Manager and Workbench release-candidate inspection"
+task_class = "review"
+objective = "Record Manager preview and Workbench release-candidate inspection facts."
+allowed_paths = ["validation/captures/plasma-v2/release-candidate/manager-review.json", "validation/captures/plasma-v2/release-candidate/workbench-review.json", "tools/scripts/check_plasma_v2_release_candidate_review.py"]
+forbidden_paths = ["products/**", "platform/**", "releases/**"]
+selected_validation_tier = "T2"
+expected_validators = ["py -3 tools/scripts/check_manager_pack_preview.py", "py -3 tools/scripts/check_workbench_shell.py", "py -3 tools/scripts/check_plasma_v2_release_candidate_review.py"]
+evidence_outputs = ["validation/captures/plasma-v2/release-candidate/manager-review.json", "validation/captures/plasma-v2/release-candidate/workbench-review.json"]
+claim_boundary = "Review evidence only; no install mutation or publication."
+rollback_point = "06161c9"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"
+
+[[work_units]]
+id = "SS-PLV2-H9"
+title = "Add release-candidate checker"
+task_class = "release-candidate"
+objective = "Gate the release-candidate transition without stable promotion."
+allowed_paths = ["tools/scripts/check_plasma_v2_release_candidate.py", "validation/captures/plasma-v2/release-candidate/gate-report.*"]
+forbidden_paths = ["PROJECT_STATE.toml", "releases/**"]
+selected_validation_tier = "T2"
+expected_validators = ["py -3 tools/scripts/check_plasma_v2_release_candidate.py", "py -3 tools/project_adapter/screensave_project.py validate --tier T2"]
+evidence_outputs = ["validation/captures/plasma-v2/release-candidate/gate-report.json"]
+claim_boundary = "Release-candidate gate only; stable remains blocked."
+rollback_point = "06161c9"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"
+
+[[work_units]]
+id = "SS-PLV2-H10"
+title = "Record Plasma v2 release candidate"
+task_class = "release-candidate"
+objective = "Transition Plasma v2 to release-candidate rc1 while stable remains false."
+allowed_paths = ["PROJECT_STATE.toml", "VERSION.toml", "README.md", "docs/roadmap/**", "products/savers/plasma/docs/**", "tools/scripts/check_project_state.py", "tools/scripts/check_plasma_v2_release_candidate.py"]
+forbidden_paths = ["releases/**", "products/savers/plasma/src/**", "platform/**"]
+selected_validation_tier = "T2"
+expected_validators = ["py -3 tools/scripts/check_project_state.py --summary", "py -3 tools/scripts/check_plasma_v2_release_candidate.py", "py -3 tools/scripts/check_docs_basics.py", "py -3 tools/scripts/check_contracts.py", "git diff --check"]
+evidence_outputs = ["PROJECT_STATE.toml", "VERSION.toml", "docs/roadmap/plasma-v2-release-candidate.md"]
+claim_boundary = "Release-candidate state only; no stable release or publication."
+rollback_point = "06161c9"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"

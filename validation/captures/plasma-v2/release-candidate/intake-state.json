@@ -1,0 +1,32 @@
+{
+  "schema": "screensave.plasma-v2.release-candidate.intake.v1",
+  "recorded_on": "2026-06-27",
+  "source_commit": "06161c9111dff2d06550c237b944fb5bbfb042ed",
+  "source_commit_subject": "state: record Plasma v2 release-readiness review",
+  "authority": {
+    "active_program": "plasma-v2-release-candidate",
+    "release_candidate": "none",
+    "release_promotion": "blocked"
+  },
+  "plasma_v2": {
+    "status": "release-readiness-reviewed",
+    "stable": false,
+    "release_candidate": "none",
+    "active_profile": "plasma.v2.reference.preview",
+    "packc": "v1-candidate",
+    "manager_preview": "ready",
+    "workbench_release_readiness": "ready",
+    "artistic_acceptance": "accepted-for-release-candidate",
+    "opened_next": "plasma-v2-release-candidate"
+  },
+  "evidence_refs": {
+    "release_readiness_gate": "validation/captures/plasma-v2/release-readiness/gate-report.json",
+    "package_stage": "packaging/windows/plasma-v2-preview/manifest.toml",
+    "performance_envelope": "validation/captures/plasma-v2/performance/envelope.json",
+    "final_artistic_decision": "validation/captures/plasma-v2/final-artistic-decision/decision.release-candidate.toml",
+    "aide_workunit_ledger": ".aide/work_units/index.toml",
+    "aide_repair_queue": ".aide/repairs/index.toml",
+    "aide_agentic_policy": ".aide/agentic/policy.toml"
+  },
+  "claim_boundary": "Release-candidate intake only; not a stable release, release publication, compatibility certification, public SDK promise, all-saver migration, or autonomous AIDE promotion."
+}
