@@ -9,8 +9,8 @@ Release-candidate gate only; not stable release, release publication, compatibil
 | portable-v2-accepted | pass | Portable v2 must be accepted before Plasma release-candidate work. |
 | plasma-status | pass | Plasma v2 must be at release-readiness-reviewed before transition or release-candidate after transition. |
 | plasma-not-stable | pass | Plasma v2 must remain not stable and release promotion must remain blocked. |
-| pre-transition-release-candidate | pass | Before transition, the release candidate must still be none. |
-| pre-transition-active-program | pass | Before transition, the active program must be plasma-v2-release-candidate. |
+| post-transition-release-candidate | pass | After transition, rc1 must be recorded by authority and Plasma state. |
+| post-transition-active-program | pass | After transition, the next active program must be plasma-v2-stable-promotion. |
 | path-contract | pass | Required release-candidate input exists: contracts/plasma_release_candidate_v1.md |
 | path-candidate_package | pass | Required release-candidate input exists: packaging/windows/plasma-v2-release-candidate/manifest.toml |
 | path-candidate_checksums | pass | Required release-candidate input exists: packaging/windows/plasma-v2-release-candidate/checksums.sha256 |

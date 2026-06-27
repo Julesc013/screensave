@@ -19,7 +19,7 @@ Post-`SS` work now proceeds in the bounded `SX` substrate series.
 - Artifact profiles: [`catalog/artifact_profiles.toml`](catalog/artifact_profiles.toml)
 - Product doctrine: [`contracts/screensave_doctrine_v1.md`](contracts/screensave_doctrine_v1.md)
 - AIDE Lite operational profile: [`.aide/pilot.toml`](.aide/pilot.toml), [`.aide/aide_lite.lock.toml`](.aide/aide_lite.lock.toml), and [`.aide/profile.yaml`](.aide/profile.yaml)
-- Active milestone: [`docs/roadmap/plasma-v2-release-readiness-reviewed.md`](docs/roadmap/plasma-v2-release-readiness-reviewed.md)
+- Active milestone: [`docs/roadmap/plasma-v2-release-candidate.md`](docs/roadmap/plasma-v2-release-candidate.md)
 - Accepted portable seam: [`contracts/portable_semantics_v2.md`](contracts/portable_semantics_v2.md)
 - Project adapter: [`contracts/project_adapter_v0.md`](contracts/project_adapter_v0.md) and [`tools/project_adapter/screensave_project.py`](tools/project_adapter/screensave_project.py)
 - Released public artifact: `c16-core-baseline`
@@ -52,16 +52,17 @@ planning and implementation without implying release promotion, public SDK
 stability, all-saver migration, compatibility certification, or artistic
 acceptance.
 
-Plasma v2 is now recorded as release-readiness-reviewed, not a stable release.
-The preview profile remains `plasma.v2.reference.preview`; it has exact
-captures, a Proof Bundle v1 projection, bounded materials/treatments evidence,
-data-only `packc` v1-candidate packs, deterministic VisualIntent candidates, a
-GL11 acceleration candidate with software-reference fallback evidence, a
-performance/resource envelope, Manager pack preview, package staging, Workbench
-Author/Inspect/Compare/Profile/Review/Release-readiness support, and an
-artistic decision packet accepted for release-candidate preparation. Final
-stable artistic acceptance, release promotion, compatibility certification,
-public SDK stability, and all-saver migration remain blocked.
+Plasma v2 is now recorded as `plasma-v2-rc1`, a release candidate, not a
+stable release. The preview profile remains `plasma.v2.reference.preview`; it
+has exact captures, a Proof Bundle v1 projection, bounded materials/treatments
+evidence, data-only `packc` v1-candidate packs, deterministic VisualIntent
+candidates, a GL11 acceleration candidate with software-reference fallback
+evidence, a performance/resource envelope, Manager pack preview, release-
+candidate package staging, Workbench Author/Inspect/Compare/Profile/Review/
+Release-readiness support, and an artistic decision packet accepted for
+release-candidate preparation. Final stable artistic acceptance, release
+promotion, publication, compatibility certification, public SDK stability, and
+all-saver migration remain blocked.
 
 ## Download ScreenSave Core
 

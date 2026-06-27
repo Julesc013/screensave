@@ -15,7 +15,7 @@
     {
       "id": "plasma-status",
       "payload": {
-        "observed": "release-readiness-reviewed"
+        "observed": "release-candidate"
       },
       "status": "pass",
       "summary": "Plasma v2 must be at release-readiness-reviewed before transition or release-candidate after transition."
@@ -30,21 +30,21 @@
       "summary": "Plasma v2 must remain not stable and release promotion must remain blocked."
     },
     {
-      "id": "pre-transition-release-candidate",
+      "id": "post-transition-release-candidate",
       "payload": {
-        "authority_release_candidate": "none",
-        "plasma_release_candidate": "none"
+        "authority_release_candidate": "plasma-v2-rc1",
+        "plasma_release_candidate": "plasma-v2-rc1"
       },
       "status": "pass",
-      "summary": "Before transition, the release candidate must still be none."
+      "summary": "After transition, rc1 must be recorded by authority and Plasma state."
     },
     {
-      "id": "pre-transition-active-program",
+      "id": "post-transition-active-program",
       "payload": {
-        "observed": "plasma-v2-release-candidate"
+        "observed": "plasma-v2-stable-promotion"
       },
       "status": "pass",
-      "summary": "Before transition, the active program must be plasma-v2-release-candidate."
+      "summary": "After transition, the next active program must be plasma-v2-stable-promotion."
     },
     {
       "id": "path-contract",

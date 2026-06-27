@@ -11,12 +11,13 @@ status = "released-frozen"
 [development]
 current_state = "truth-proof-baseline-00"
 development_head = "plasma-u09-corrective-recut"
-active_milestone = "plasma-v2-release-candidate"
-release_candidate = "none"
+active_milestone = "plasma-v2-stable-promotion"
+release_candidate = "plasma-v2-rc1"
 
 [plasma_v2]
-status = "release-readiness-reviewed"
+status = "release-candidate"
 stable = false
+release_candidate = "plasma-v2-rc1"
 active_profile = "plasma.v2.reference.preview"
 packc = "v1-candidate"
 manager_preview = "ready"
@@ -24,7 +25,7 @@ workbench_release_readiness = "ready"
 visual_review = "stable-candidate-round-recorded"
 artistic_acceptance = "accepted-for-release-candidate"
 release_promotion = "blocked"
-opened_next = "plasma-v2-release-candidate"
+opened_next = "plasma-v2-stable-promotion"
 
 [abi]
 platform_api = 1
