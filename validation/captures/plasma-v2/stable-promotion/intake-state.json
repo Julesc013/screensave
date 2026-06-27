@@ -1,0 +1,37 @@
+{
+  "schema": "screensave.plasma-v2.stable-promotion.intake.v1",
+  "recorded_on": "2026-06-27",
+  "source_commit": "c8b5ecf180f3b25adf7fdd2ca67dcd6693b90409",
+  "source_commit_subject": "state: record Plasma v2 release candidate",
+  "authority": {
+    "active_program": "plasma-v2-stable-promotion",
+    "release_candidate": "plasma-v2-rc1",
+    "release_promotion": "blocked"
+  },
+  "plasma_v2": {
+    "status": "release-candidate",
+    "stable": false,
+    "release_candidate": "plasma-v2-rc1",
+    "active_profile": "plasma.v2.reference.preview",
+    "packc": "v1-candidate",
+    "manager_preview": "ready",
+    "workbench_release_readiness": "ready",
+    "artistic_acceptance": "accepted-for-release-candidate",
+    "opened_next": "plasma-v2-stable-promotion"
+  },
+  "evidence_refs": {
+    "release_candidate_gate": "validation/captures/plasma-v2/release-candidate/gate-report.json",
+    "release_candidate_package": "packaging/windows/plasma-v2-release-candidate/manifest.toml",
+    "release_candidate_proof_matrix": "validation/captures/plasma-v2/release-candidate/proof-matrix.json",
+    "release_candidate_support_claims": "validation/captures/plasma-v2/release-candidate/support-claims.json",
+    "release_candidate_manager_review": "validation/captures/plasma-v2/release-candidate/manager-review.json",
+    "release_candidate_workbench_review": "validation/captures/plasma-v2/release-candidate/workbench-review.json"
+  },
+  "allowed_outcomes": [
+    "stable-promoted",
+    "request-changes",
+    "defer-to-labs",
+    "release-candidate-hold"
+  ],
+  "claim_boundary": "Stable-promotion intake only; no stable claim exists until the stable-promotion gate passes and state is explicitly transitioned."
+}
