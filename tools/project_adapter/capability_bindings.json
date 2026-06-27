@@ -367,6 +367,54 @@
       "state_probe": "validation/captures/plasma-v2/release-readiness/gate-report.json"
     },
     {
+      "name": "screensave.plasma.v2.release-candidate.check",
+      "command": "validate",
+      "effect": "run the fixed Plasma v2 release-candidate checker",
+      "deterministic": true,
+      "argv": ["python", "tools/scripts/check_plasma_v2_release_candidate.py"],
+      "decoder_schema": "tools/project_adapter/receipt_schemas.json#/commands/validate",
+      "output_policy": "stdout text and deterministic report refresh only",
+      "input_policy": "committed Plasma v2 release-candidate gate evidence",
+      "timeout_seconds": 360,
+      "state_probe": "validation/captures/plasma-v2/release-candidate/gate-report.json"
+    },
+    {
+      "name": "screensave.plasma.v2.release-candidate.package",
+      "command": "validate",
+      "effect": "run the fixed Plasma v2 package stage checker for release-candidate package refs",
+      "deterministic": true,
+      "argv": ["python", "tools/scripts/check_plasma_v2_package_stage.py"],
+      "decoder_schema": "tools/project_adapter/receipt_schemas.json#/commands/validate",
+      "output_policy": "stdout text and ignored stage summary under out/",
+      "input_policy": "packaging/windows/plasma-v2-release-candidate committed package-stage refs",
+      "timeout_seconds": 120,
+      "state_probe": "packaging/windows/plasma-v2-release-candidate/manifest.toml"
+    },
+    {
+      "name": "screensave.plasma.v2.release-candidate.evidence",
+      "command": "validate",
+      "effect": "run the fixed Plasma v2 release-candidate evidence matrix checker",
+      "deterministic": true,
+      "argv": ["python", "tools/scripts/check_plasma_v2_release_candidate_evidence.py"],
+      "decoder_schema": "tools/project_adapter/receipt_schemas.json#/commands/validate",
+      "output_policy": "stdout text only",
+      "input_policy": "validation/captures/plasma-v2/release-candidate committed evidence matrix",
+      "timeout_seconds": 120,
+      "state_probe": "validation/captures/plasma-v2/release-candidate/proof-matrix.json"
+    },
+    {
+      "name": "screensave.plasma.v2.release-candidate.review",
+      "command": "validate",
+      "effect": "run the fixed Plasma v2 release-candidate Manager and Workbench review checker",
+      "deterministic": true,
+      "argv": ["python", "tools/scripts/check_plasma_v2_release_candidate_review.py"],
+      "decoder_schema": "tools/project_adapter/receipt_schemas.json#/commands/validate",
+      "output_policy": "stdout text only",
+      "input_policy": "validation/captures/plasma-v2/release-candidate committed review receipts",
+      "timeout_seconds": 120,
+      "state_probe": "validation/captures/plasma-v2/release-candidate/manager-review.json"
+    },
+    {
       "name": "screensave.aide.workunits.check",
       "command": "validate",
       "effect": "run the fixed ScreenSave AIDE WorkUnit checker",

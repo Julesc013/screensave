@@ -76,6 +76,10 @@ exact_capabilities = [
   "screensave.plasma.v2.package-stage.check",
   "screensave.plasma.v2.manager-preview.check",
   "screensave.plasma.v2.release-readiness.check",
+  "screensave.plasma.v2.release-candidate.check",
+  "screensave.plasma.v2.release-candidate.package",
+  "screensave.plasma.v2.release-candidate.evidence",
+  "screensave.plasma.v2.release-candidate.review",
   "screensave.aide.workunits.check",
   "screensave.aide.repairs.check",
   "screensave.aide.agentic.check",
@@ -225,6 +229,26 @@ command = ["python", "tools/scripts/check_manager_pack_preview.py"]
 name = "screensave.plasma.v2.release-readiness.check"
 status = "screensave-side-admitted-contained-output"
 command = ["python", "tools/scripts/check_plasma_v2_release_readiness.py"]
+
+[[capabilities]]
+name = "screensave.plasma.v2.release-candidate.check"
+status = "screensave-side-admitted-contained-output"
+command = ["python", "tools/scripts/check_plasma_v2_release_candidate.py"]
+
+[[capabilities]]
+name = "screensave.plasma.v2.release-candidate.package"
+status = "screensave-side-admitted-contained-output"
+command = ["python", "tools/scripts/check_plasma_v2_package_stage.py"]
+
+[[capabilities]]
+name = "screensave.plasma.v2.release-candidate.evidence"
+status = "screensave-side-admitted-contained-output"
+command = ["python", "tools/scripts/check_plasma_v2_release_candidate_evidence.py"]
+
+[[capabilities]]
+name = "screensave.plasma.v2.release-candidate.review"
+status = "screensave-side-admitted-contained-output"
+command = ["python", "tools/scripts/check_plasma_v2_release_candidate_review.py"]
 
 [[capabilities]]
 name = "screensave.aide.workunits.check"
