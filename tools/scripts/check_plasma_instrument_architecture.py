@@ -29,6 +29,8 @@ SUBCHECKS = [
     ("direct-spec", ["tools/scripts/check_plasma_v2_direct_spec.py"]),
     ("spec-v2-authority", ["tools/scripts/check_plasma_spec_v2.py"]),
     ("plan-contract", ["tools/scripts/check_plasma_v2_plan.py"]),
+    ("runtime-contract", ["tools/scripts/check_plasma_v2_runtime.py"]),
+    ("runtime-hot-loop-hazards", ["tools/scripts/check_plasma_v2_no_hot_loop_hazards.py"]),
     ("product-center-boundary", ["tools/scripts/check_plasma_product_center.py"]),
     ("legacy-boundary", ["tools/scripts/check_plasma_legacy_boundary.py"]),
     ("legacy-core-boundaries", ["tools/scripts/check_plasma_core_boundaries.py"]),
@@ -278,9 +280,17 @@ def build_report() -> dict[str, Any]:
     gate(
         gates,
         "plasma_v2_runtime_contract_passes",
-        "pass" if all(path.exists() for path in runtime_files) else "hold",
-        "The direct v2 runtime contract must exist in the v2 island before stable promotion.",
+        "pass"
+        if all(path.exists() for path in runtime_files)
+        and subcheck_status(subchecks, "runtime-contract")
+        and subcheck_status(subchecks, "runtime-hot-loop-hazards")
+        else "hold",
+        "The direct v2 runtime contract must exist, own deterministic buffers, and pass hot-loop hazard checks before stable promotion.",
         missing=[repo_path(path) for path in runtime_files if not path.exists()],
+        evidence=[
+            "tools/scripts/check_plasma_v2_runtime.py",
+            "tools/scripts/check_plasma_v2_no_hot_loop_hazards.py",
+        ],
     )
 
     legacy_ready = (

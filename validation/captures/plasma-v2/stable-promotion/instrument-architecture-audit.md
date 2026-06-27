@@ -8,7 +8,6 @@
 
 ## Blocking Gates
 
-- plasma_v2_runtime_contract_passes
 - legacy_preset_authority_removed
 - field_pipeline_boundaries_pass
 - visualintent_candidates_reduce_to_plasma_spec
@@ -17,7 +16,7 @@
 
 - pass: plasma_v2_spec_contract_passes - The direct-control Plasma v2 spec island exists, carries semantic authority, and passes C89 smoke checks.
 - pass: plasma_v2_plan_contract_passes - The direct v2 plan contract must exist in the v2 island and pass the degradation-law checker before stable promotion.
-- hold: plasma_v2_runtime_contract_passes - The direct v2 runtime contract must exist in the v2 island before stable promotion.
+- pass: plasma_v2_runtime_contract_passes - The direct v2 runtime contract must exist, own deterministic buffers, and pass hot-loop hazard checks before stable promotion.
 - hold: legacy_preset_authority_removed - Legacy preset/theme files must be migration inputs or wrappers over the direct v2 center, not hidden runtime authority.
 - pass: direct_controls_influence_passes - Basic controls with visual claims produce deterministic output differences.
 - hold: field_pipeline_boundaries_pass - Field and output boundaries must be explicit in the v2 island before stable promotion.
@@ -42,6 +41,8 @@
 - pass: direct-spec - Command passed.
 - pass: spec-v2-authority - Command passed.
 - pass: plan-contract - Command passed.
+- pass: runtime-contract - Command passed.
+- pass: runtime-hot-loop-hazards - Command passed.
 - pass: product-center-boundary - Command passed.
 - pass: legacy-boundary - Command passed.
 - pass: legacy-core-boundaries - Command passed.

@@ -1,0 +1,26 @@
+{
+  "claim_boundary": "Runtime buffer proof only; this does not prove field quality, renderer output, artistic acceptance, or stable promotion.",
+  "required_state": [
+    "resolved_plan",
+    "field_a",
+    "field_b",
+    "field_history",
+    "material_buffer",
+    "treatment_buffer",
+    "present_buffer",
+    "frame_index",
+    "elapsed_millis",
+    "phase0",
+    "phase1",
+    "phase2",
+    "rng_state"
+  ],
+  "schema": "screensave.plasma-v2.runtime-report.v1",
+  "source": {
+    "branch": "main",
+    "commit": "9661ceb1dcbd6fb470a0fc565ec1a2538453ca3a",
+    "dirty": true
+  },
+  "status": "pass",
+  "validation_errors": []
+}

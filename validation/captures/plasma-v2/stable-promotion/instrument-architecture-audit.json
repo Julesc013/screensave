@@ -116,6 +116,42 @@
         "run": {
           "command": [
             "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+            "tools/scripts/check_plasma_v2_runtime.py"
+          ],
+          "returncode": 0,
+          "status": "pass",
+          "stderr": "",
+          "stdout": "Plasma v2 runtime checks passed.",
+          "timeout_seconds": 300
+        }
+      },
+      "id": "runtime-contract",
+      "status": "pass",
+      "summary": "Command passed."
+    },
+    {
+      "data": {
+        "run": {
+          "command": [
+            "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+            "tools/scripts/check_plasma_v2_no_hot_loop_hazards.py"
+          ],
+          "returncode": 0,
+          "status": "pass",
+          "stderr": "",
+          "stdout": "Plasma v2 hot-loop hazard checks passed.",
+          "timeout_seconds": 300
+        }
+      },
+      "id": "runtime-hot-loop-hazards",
+      "status": "pass",
+      "summary": "Command passed."
+    },
+    {
+      "data": {
+        "run": {
+          "command": [
+            "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
             "tools/scripts/check_plasma_product_center.py"
           ],
           "returncode": 0,
@@ -301,7 +337,6 @@
   "claim_boundary": "Instrument-architecture audit only; it does not publish Plasma, certify compatibility, accept final artistic quality, or admit AIDE as runtime truth.",
   "decision": {
     "blocking_gates": [
-      "plasma_v2_runtime_contract_passes",
       "legacy_preset_authority_removed",
       "field_pipeline_boundaries_pass",
       "visualintent_candidates_reduce_to_plasma_spec"
@@ -338,14 +373,15 @@
     },
     {
       "data": {
-        "missing": [
-          "products/savers/plasma/src/v2/plasma_v2_runtime.h",
-          "products/savers/plasma/src/v2/plasma_v2_runtime.c"
-        ]
+        "evidence": [
+          "tools/scripts/check_plasma_v2_runtime.py",
+          "tools/scripts/check_plasma_v2_no_hot_loop_hazards.py"
+        ],
+        "missing": []
       },
       "id": "plasma_v2_runtime_contract_passes",
-      "status": "hold",
-      "summary": "The direct v2 runtime contract must exist in the v2 island before stable promotion."
+      "status": "pass",
+      "summary": "The direct v2 runtime contract must exist, own deterministic buffers, and pass hot-loop hazard checks before stable promotion."
     },
     {
       "data": {
@@ -459,7 +495,7 @@
   "schema": "screensave.plasma-v2.instrument-architecture-audit.v1",
   "source": {
     "branch": "main",
-    "commit": "345b52dc652d34263a2975bc1d1f224d54b92f81",
+    "commit": "9661ceb1dcbd6fb470a0fc565ec1a2538453ca3a",
     "dirty": true
   },
   "stable_eligible": false,

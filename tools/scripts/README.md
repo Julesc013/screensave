@@ -26,6 +26,8 @@ Current stage:
 - `check_plasma_product_center.py` audits Plasma v2 product-center file boundaries and records whether legacy Plasma files are still blocking instrument promotion.
 - `check_plasma_legacy_boundary.py` audits that old Plasma files are compatibility shims or migration inputs rather than hidden product truth.
 - `check_plasma_v2_plan.py` validates the direct Plasma v2 plan compiler, requested-versus-resolved spec facts, renderer fallback, explicit degradation flags, seeds, and software/reference requirements.
+- `check_plasma_v2_runtime.py` validates the direct Plasma v2 runtime buffer contract, deterministic frame state, phase streams, RNG state, and C89 smoke coverage.
+- `check_plasma_v2_no_hot_loop_hazards.py` rejects heap allocation, file I/O, renderer APIs, Win32 handles, and runtime trig/math hazards from the direct v2 runtime/field/output island.
 - `check_proof_bundle_v1.py` validates the normalized Proof Bundle v1 contract, lifecycle/performance receipt inputs, and normalizer output axes.
 - `check_workbench_shell.py` validates the minimal PAW-B Workbench shell binding to `sslab` and generated proof profiles.
 - `check_sslab_runner.py` builds one private static `libsslab` artifact and validates the generic `sslab_runner` proof path for Nocturne and Ricochet.
