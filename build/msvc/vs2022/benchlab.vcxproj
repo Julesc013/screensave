@@ -53,7 +53,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <CompileAs>CompileAsC</CompileAs>
       <PreprocessorDefinitions>SSLAB_RGBA8_USE_PLATFORM_RENDERER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\platform\include;$(SolutionDir)..\..\..\tools\sslab\include;$(SolutionDir)..\..\..\tools\sslab\src;$(SolutionDir)..\..\..\products\savers\nocturne\src;$(SolutionDir)..\..\..\products\savers\ricochet\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\platform\include;$(SolutionDir)..\..\..\tools\sslab\include;$(SolutionDir)..\..\..\tools\sslab\src;$(SolutionDir)..\..\..\products\savers\nocturne\src;$(SolutionDir)..\..\..\products\savers\ricochet\src;$(SolutionDir)..\..\..\products\savers\plasma\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ResourceCompile>
       <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\platform\src\host\win32_scr;$(SolutionDir)..\..\..\products\savers\nocturne\src;$(SolutionDir)..\..\..\products\savers\ricochet\src;$(SolutionDir)..\..\..\products\savers\deepfield\src;$(SolutionDir)..\..\..\products\savers\plasma\src;$(SolutionDir)..\..\..\products\savers\phosphor\src;$(SolutionDir)..\..\..\products\savers\pipeworks\src;$(SolutionDir)..\..\..\products\savers\lifeforms\src;$(SolutionDir)..\..\..\products\savers\signals\src;$(SolutionDir)..\..\..\products\savers\mechanize\src;$(SolutionDir)..\..\..\products\savers\ecosystems\src;$(SolutionDir)..\..\..\products\savers\stormglass\src;$(SolutionDir)..\..\..\products\savers\transit\src;$(SolutionDir)..\..\..\products\savers\observatory\src;$(SolutionDir)..\..\..\products\savers\vector\src;$(SolutionDir)..\..\..\products\savers\explorer\src;$(SolutionDir)..\..\..\products\savers\city\src;$(SolutionDir)..\..\..\products\savers\atlas\src;$(SolutionDir)..\..\..\products\savers\gallery\src;$(SolutionDir)..\..\..\products\savers\anthology\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -73,7 +73,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <CompileAs>CompileAsC</CompileAs>
       <PreprocessorDefinitions>SSLAB_RGBA8_USE_PLATFORM_RENDERER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\platform\include;$(SolutionDir)..\..\..\tools\sslab\include;$(SolutionDir)..\..\..\tools\sslab\src;$(SolutionDir)..\..\..\products\savers\nocturne\src;$(SolutionDir)..\..\..\products\savers\ricochet\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\platform\include;$(SolutionDir)..\..\..\tools\sslab\include;$(SolutionDir)..\..\..\tools\sslab\src;$(SolutionDir)..\..\..\products\savers\nocturne\src;$(SolutionDir)..\..\..\products\savers\ricochet\src;$(SolutionDir)..\..\..\products\savers\plasma\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ResourceCompile>
       <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\platform\src\host\win32_scr;$(SolutionDir)..\..\..\products\savers\nocturne\src;$(SolutionDir)..\..\..\products\savers\ricochet\src;$(SolutionDir)..\..\..\products\savers\deepfield\src;$(SolutionDir)..\..\..\products\savers\plasma\src;$(SolutionDir)..\..\..\products\savers\phosphor\src;$(SolutionDir)..\..\..\products\savers\pipeworks\src;$(SolutionDir)..\..\..\products\savers\lifeforms\src;$(SolutionDir)..\..\..\products\savers\signals\src;$(SolutionDir)..\..\..\products\savers\mechanize\src;$(SolutionDir)..\..\..\products\savers\ecosystems\src;$(SolutionDir)..\..\..\products\savers\stormglass\src;$(SolutionDir)..\..\..\products\savers\transit\src;$(SolutionDir)..\..\..\products\savers\observatory\src;$(SolutionDir)..\..\..\products\savers\vector\src;$(SolutionDir)..\..\..\products\savers\explorer\src;$(SolutionDir)..\..\..\products\savers\city\src;$(SolutionDir)..\..\..\products\savers\atlas\src;$(SolutionDir)..\..\..\products\savers\gallery\src;$(SolutionDir)..\..\..\products\savers\anthology\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -103,6 +103,7 @@
     <ClCompile Include="..\..\..\tools\sslab\src\renderer_rgba8_platform.c" />
     <ClCompile Include="..\..\..\tools\sslab\src\products\nocturne_adapter.c" />
     <ClCompile Include="..\..\..\tools\sslab\src\products\ricochet_adapter.c" />
+    <ClCompile Include="..\..\..\tools\sslab\src\products\plasma_adapter.c" />
     <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_config.c" />
     <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_core.c" />
     <ClCompile Include="..\..\..\products\savers\nocturne\src\nocturne_module.c" />
@@ -147,6 +148,12 @@
     <ClCompile Include="..\..\..\products\savers\plasma\src\plasma_transition.c" />
     <ClCompile Include="..\..\..\products\savers\plasma\src\plasma_treatment.c" />
     <ClCompile Include="..\..\..\products\savers\plasma\src\plasma_validate.c" />
+    <ClCompile Include="..\..\..\products\savers\plasma\src\plasma_spec_v2.c" />
+    <ClCompile Include="..\..\..\products\savers\plasma\src\plasma_migration_v2.c" />
+    <ClCompile Include="..\..\..\products\savers\plasma\src\plasma_v2_core.c" />
+    <ClCompile Include="..\..\..\products\savers\plasma\src\plasma_v2_adapter.c" />
+    <ClCompile Include="..\..\..\products\savers\plasma\src\plasma_v2_realization.c" />
+    <ClCompile Include="..\..\..\products\savers\plasma\src\plasma_v2_gl11.c" />
     <ClCompile Include="..\..\..\products\savers\phosphor\src\phosphor_config.c" />
     <ClCompile Include="..\..\..\products\savers\phosphor\src\phosphor_module.c" />
     <ClCompile Include="..\..\..\products\savers\phosphor\src\phosphor_presets.c" />
