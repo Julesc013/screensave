@@ -339,6 +339,7 @@
           "products/savers/plasma/tests/pl12-benchlab-proof.md",
           "products/savers/plasma/tests/pl13-soak-and-proof.md",
           "products/savers/plasma/tests/pl13-transition-validation.md",
+          "products/savers/plasma/tests/plasma_v2_spec_smoke.c",
           "products/savers/plasma/tests/px10-hardware-proof.md",
           "products/savers/plasma/tests/px10-soak-proof.md",
           "products/savers/plasma/tests/px11-promotion-review-proof.md",
