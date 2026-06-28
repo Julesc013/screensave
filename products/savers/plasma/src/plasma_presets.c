@@ -20,9 +20,9 @@ const screensave_preset_descriptor g_plasma_presets[] = {
     {
         "plasma_lava",
         "Plasma Lava",
-        "Warm fire baseline with restrained diffusion, longer-held structure, and cleaner default contrast.",
+        "Calm full-color adaptive high-resolution plasma field with smooth motion, soft diffusion, and longer-held structure.",
         "plasma_lava",
-        SCREENSAVE_DETAIL_LEVEL_STANDARD,
+        SCREENSAVE_DETAIL_LEVEL_HIGH,
         0,
         0UL
     },
@@ -228,9 +228,9 @@ const screensave_preset_descriptor g_plasma_presets[] = {
 
 static const plasma_preset_values g_plasma_preset_values[] = {
     {
-        PLASMA_EFFECT_FIRE,
+        PLASMA_EFFECT_PLASMA,
         PLASMA_SPEED_GENTLE,
-        PLASMA_RESOLUTION_STANDARD,
+        PLASMA_RESOLUTION_FINE,
         PLASMA_SMOOTHING_SOFT,
         PLASMA_OUTPUT_FAMILY_RASTER,
         PLASMA_OUTPUT_MODE_NATIVE_RASTER,

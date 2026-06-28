@@ -117,6 +117,7 @@ typedef struct plasma_execution_state_tag {
     unsigned long source_phase_b;
     unsigned long source_phase_c;
     unsigned long variation_elapsed_millis;
+    unsigned long demo_seed;
 } plasma_execution_state;
 
 struct screensave_saver_session_tag {

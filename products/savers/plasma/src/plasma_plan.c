@@ -9,10 +9,10 @@ void plasma_plan_init(plasma_plan *plan)
     }
 
     ZeroMemory(plan, sizeof(*plan));
-    plan->requested_detail_level = SCREENSAVE_DETAIL_LEVEL_STANDARD;
-    plan->requested_effect_mode = PLASMA_EFFECT_FIRE;
+    plan->requested_detail_level = SCREENSAVE_DETAIL_LEVEL_HIGH;
+    plan->requested_effect_mode = PLASMA_EFFECT_PLASMA;
     plan->requested_speed_mode = PLASMA_SPEED_GENTLE;
-    plan->requested_resolution_mode = PLASMA_RESOLUTION_STANDARD;
+    plan->requested_resolution_mode = PLASMA_RESOLUTION_FINE;
     plan->requested_smoothing_mode = PLASMA_SMOOTHING_SOFT;
     plan->requested_output_family = PLASMA_OUTPUT_FAMILY_RASTER;
     plan->requested_output_mode = PLASMA_OUTPUT_MODE_NATIVE_RASTER;
@@ -21,14 +21,14 @@ void plasma_plan_init(plasma_plan *plan)
     plan->requested_emulation_treatment = PLASMA_EMULATION_TREATMENT_NONE;
     plan->requested_accent_treatment = PLASMA_ACCENT_TREATMENT_NONE;
     plan->requested_presentation_mode = PLASMA_PRESENTATION_MODE_FLAT;
-    plan->effect_mode = PLASMA_EFFECT_FIRE;
+    plan->effect_mode = PLASMA_EFFECT_PLASMA;
     plan->speed_mode = PLASMA_SPEED_GENTLE;
-    plan->resolution_mode = PLASMA_RESOLUTION_STANDARD;
+    plan->resolution_mode = PLASMA_RESOLUTION_FINE;
     plan->smoothing_mode = PLASMA_SMOOTHING_SOFT;
-    plan->detail_level = SCREENSAVE_DETAIL_LEVEL_STANDARD;
+    plan->detail_level = SCREENSAVE_DETAIL_LEVEL_HIGH;
     plan->seed_policy = PLASMA_PLAN_SEED_POLICY_INHERIT;
     plan->minimum_kind = SCREENSAVE_RENDERER_KIND_GDI;
-    plan->preferred_kind = SCREENSAVE_RENDERER_KIND_GL11;
+    plan->preferred_kind = SCREENSAVE_RENDERER_KIND_GL46;
     plan->quality_class = SCREENSAVE_CAPABILITY_QUALITY_SAFE;
     plan->output_family = PLASMA_OUTPUT_FAMILY_RASTER;
     plan->output_mode = PLASMA_OUTPUT_MODE_NATIVE_RASTER;
@@ -252,7 +252,7 @@ int plasma_plan_validate(
 
     if (
         plan->minimum_kind != SCREENSAVE_RENDERER_KIND_GDI ||
-        plan->preferred_kind != SCREENSAVE_RENDERER_KIND_GL11 ||
+        plan->preferred_kind != SCREENSAVE_RENDERER_KIND_GL46 ||
         plan->quality_class != SCREENSAVE_CAPABILITY_QUALITY_SAFE
     ) {
         return 0;

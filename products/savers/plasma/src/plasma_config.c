@@ -5,6 +5,8 @@
 #include "screensave/version.h"
 #include "../../../../platform/src/core/base/saver_registry.h"
 
+#define PLASMA_DEFAULT_DEMO_SCHEMA_VERSION 2UL
+
 typedef struct plasma_dialog_state_tag {
     const screensave_saver_module *module;
     screensave_common_config *common_config;
@@ -414,9 +416,9 @@ static void plasma_config_set_product_defaults(plasma_config *config)
     }
 
     plasma_settings_config_set_defaults(config);
-    config->effect_mode = PLASMA_EFFECT_FIRE;
+    config->effect_mode = PLASMA_EFFECT_PLASMA;
     config->speed_mode = PLASMA_SPEED_GENTLE;
-    config->resolution_mode = PLASMA_RESOLUTION_STANDARD;
+    config->resolution_mode = PLASMA_RESOLUTION_FINE;
     config->smoothing_mode = PLASMA_SMOOTHING_SOFT;
     config->output_family = PLASMA_OUTPUT_FAMILY_RASTER;
     config->output_mode = PLASMA_OUTPUT_MODE_NATIVE_RASTER;
@@ -425,6 +427,22 @@ static void plasma_config_set_product_defaults(plasma_config *config)
     config->emulation_treatment = PLASMA_EMULATION_TREATMENT_NONE;
     config->accent_treatment = PLASMA_ACCENT_TREATMENT_NONE;
     config->presentation_mode = PLASMA_PRESENTATION_MODE_FLAT;
+    plasma_selection_preferences_set_defaults(&config->selection);
+    plasma_transition_preferences_set_defaults(&config->transition);
+    plasma_benchlab_forcing_set_defaults(&config->benchlab);
+}
+
+static void plasma_config_apply_default_demo_schema(
+    screensave_common_config *common_config,
+    plasma_config *config
+)
+{
+    if (common_config == NULL || config == NULL) {
+        return;
+    }
+
+    plasma_config_set_product_defaults(config);
+    plasma_apply_preset_bundle_to_config(PLASMA_DEFAULT_PRESET_KEY, common_config, config);
     plasma_selection_preferences_set_defaults(&config->selection);
     plasma_transition_preferences_set_defaults(&config->transition);
     plasma_benchlab_forcing_set_defaults(&config->benchlab);
@@ -556,6 +574,8 @@ int plasma_config_load(
     char key_list[PLASMA_CONTENT_KEY_LIST_LENGTH];
     char transition_key[PLASMA_TRANSITION_KEY_TEXT_LENGTH];
     int selection_flag;
+    unsigned long default_demo_schema_version;
+    int default_demo_schema_current;
 
     (void)diagnostics;
 
@@ -584,6 +604,11 @@ int plasma_config_load(
             return 1;
         }
     }
+
+    default_demo_schema_version = 0UL;
+    default_demo_schema_current =
+        plasma_read_dword(key, "DefaultDemoSchemaVersion", &default_demo_schema_version) &&
+        default_demo_schema_version >= PLASMA_DEFAULT_DEMO_SCHEMA_VERSION;
 
     preset_key[0] = '\0';
     if (plasma_read_string(key, "PresetKey", preset_key, sizeof(preset_key))) {
@@ -746,6 +771,10 @@ int plasma_config_load(
         );
     }
 
+    if (!default_demo_schema_current) {
+        plasma_config_apply_default_demo_schema(common_config, config);
+    }
+
     RegCloseKey(key);
     plasma_config_clamp(common_config, product_config, product_config_size);
     return 1;
@@ -803,7 +832,10 @@ int plasma_config_save(
         return 0;
     }
 
-    result = plasma_write_dword(key, "DetailLevel", (unsigned long)safe_common_config.detail_level);
+    result = plasma_write_dword(key, "DefaultDemoSchemaVersion", PLASMA_DEFAULT_DEMO_SCHEMA_VERSION);
+    if (result == ERROR_SUCCESS) {
+        result = plasma_write_dword(key, "DetailLevel", (unsigned long)safe_common_config.detail_level);
+    }
     if (result == ERROR_SUCCESS) {
         result = plasma_write_dword(key, "SettingsSurface", (unsigned long)safe_product_config.settings_surface);
     }

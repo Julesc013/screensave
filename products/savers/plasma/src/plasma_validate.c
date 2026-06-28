@@ -843,7 +843,7 @@ int plasma_plan_is_lower_band_baseline(const struct plasma_plan_tag *plan)
 
     if (
         plan->minimum_kind != SCREENSAVE_RENDERER_KIND_GDI ||
-        plan->preferred_kind != SCREENSAVE_RENDERER_KIND_GL11 ||
+        plan->preferred_kind != SCREENSAVE_RENDERER_KIND_GL46 ||
         plan->quality_class != SCREENSAVE_CAPABILITY_QUALITY_SAFE
     ) {
         return 0;
@@ -872,6 +872,18 @@ int plasma_plan_validate_for_renderer_kind(
             !plan->advanced_enabled &&
             !plan->modern_enabled &&
             !plan->premium_enabled;
+    }
+
+    if (
+        plan->active_renderer_kind == renderer_kind &&
+        !plan->advanced_capable &&
+        !plan->modern_capable &&
+        !plan->premium_capable &&
+        !plan->advanced_enabled &&
+        !plan->modern_enabled &&
+        !plan->premium_enabled
+    ) {
+        return 1;
     }
 
     if (renderer_kind == SCREENSAVE_RENDERER_KIND_GL21) {

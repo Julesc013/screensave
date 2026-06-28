@@ -74,11 +74,11 @@ static const plasma_content_preset_entry g_preset_entries[] = {
         &g_plasma_presets[0],
         PLASMA_CONTENT_SOURCE_BUILT_IN,
         PLASMA_CONTENT_CHANNEL_STABLE,
-        PLASMA_PRESET_MORPH_CLASS_FIRE,
+        PLASMA_PRESET_MORPH_CLASS_PLASMA,
         PLASMA_TRANSITION_BRIDGE_CLASS_WARM_CLASSIC,
-        1,
-        1,
-        1,
+        0,
+        0,
+        0,
         NULL
     },
     {

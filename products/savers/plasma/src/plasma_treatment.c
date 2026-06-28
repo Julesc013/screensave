@@ -78,69 +78,321 @@ static unsigned int plasma_treatment_max3(
     return value;
 }
 
+static unsigned int plasma_treatment_triangle_wave(unsigned int phase)
+{
+    phase &= 255U;
+    if (phase < 64U) {
+        return 128U + (phase * 2U);
+    }
+    if (phase < 128U) {
+        return 255U - ((phase - 64U) * 2U);
+    }
+    if (phase < 192U) {
+        return 127U - ((phase - 128U) * 2U);
+    }
+
+    return (phase - 192U) * 2U;
+}
+
+static unsigned int plasma_treatment_mix_u8(
+    unsigned int left,
+    unsigned int right,
+    unsigned int amount
+)
+{
+    if (amount > 255U) {
+        amount = 255U;
+    }
+
+    return ((left * (255U - amount)) + (right * amount)) / 255U;
+}
+
+static unsigned int plasma_treatment_smoothstep_u8(unsigned int amount)
+{
+    unsigned long value;
+
+    if (amount > 255U) {
+        amount = 255U;
+    }
+
+    value = (unsigned long)amount;
+    return (unsigned int)((value * value * (765UL - (2UL * value))) / (255UL * 255UL));
+}
+
+static unsigned int plasma_treatment_curve_wave(unsigned int phase)
+{
+    unsigned int triangle;
+
+    phase &= 255U;
+    if (phase < 128U) {
+        triangle = phase * 2U;
+    } else {
+        triangle = (255U - phase) * 2U;
+    }
+
+    return plasma_treatment_smoothstep_u8(triangle);
+}
+
+static unsigned int plasma_treatment_demo_hash_u8(
+    const struct plasma_execution_state_tag *state,
+    unsigned long cycle_index,
+    unsigned long salt
+)
+{
+    unsigned long value;
+
+    value =
+        state->demo_seed ^
+        (cycle_index * 1103515245UL) ^
+        (salt * 2654435761UL);
+    value ^= value >> 16;
+    value = value * 1664525UL + 1013904223UL;
+    value ^= value >> 13;
+    return (unsigned int)((value >> 8) & 255UL);
+}
+
+static screensave_color plasma_treatment_cycle_color(
+    const struct plasma_execution_state_tag *state,
+    unsigned long cycle_index,
+    unsigned long salt
+)
+{
+    screensave_color color;
+    unsigned int phase;
+    unsigned int red;
+    unsigned int green;
+    unsigned int blue;
+
+    phase = plasma_treatment_demo_hash_u8(state, cycle_index, salt);
+    red = plasma_treatment_triangle_wave(phase);
+    green = plasma_treatment_triangle_wave(phase + 85U);
+    blue = plasma_treatment_triangle_wave(phase + 170U);
+
+    color.red = plasma_treatment_clamp_channel(28U + ((red * 168U) / 255U));
+    color.green = plasma_treatment_clamp_channel(28U + ((green * 168U) / 255U));
+    color.blue = plasma_treatment_clamp_channel(32U + ((blue * 176U) / 255U));
+    color.alpha = 255;
+    return color;
+}
+
+static screensave_color plasma_treatment_morph_color(
+    screensave_color source,
+    screensave_color target,
+    unsigned int amount
+)
+{
+    screensave_color color;
+
+    color.red = (unsigned char)plasma_treatment_mix_u8(source.red, target.red, amount);
+    color.green = (unsigned char)plasma_treatment_mix_u8(source.green, target.green, amount);
+    color.blue = (unsigned char)plasma_treatment_mix_u8(source.blue, target.blue, amount);
+    color.alpha = 255;
+    return color;
+}
+
+typedef struct plasma_treatment_palette_context_tag {
+    screensave_color base_color;
+    screensave_color white_color;
+    screensave_color highlight_color;
+    screensave_color primary_color;
+    screensave_color accent_color;
+    unsigned int palette_phase;
+    int effect_mode;
+} plasma_treatment_palette_context;
+
+static int plasma_treatment_default_classic_path(
+    const struct plasma_plan_tag *plan,
+    const struct plasma_execution_state_tag *state,
+    const plasma_output_frame *output
+)
+{
+    if (plan == NULL || state == NULL || output == NULL) {
+        return 0;
+    }
+
+    return plan->effect_mode == PLASMA_EFFECT_PLASMA &&
+        plan->speed_mode == PLASMA_SPEED_GENTLE &&
+        plan->resolution_mode == PLASMA_RESOLUTION_FINE &&
+        plan->detail_level == SCREENSAVE_DETAIL_LEVEL_HIGH &&
+        plan->output_family == PLASMA_OUTPUT_FAMILY_RASTER &&
+        plan->output_mode == PLASMA_OUTPUT_MODE_NATIVE_RASTER &&
+        plan->presentation_mode == PLASMA_PRESENTATION_MODE_FLAT &&
+        plan->sampling_treatment == PLASMA_SAMPLING_TREATMENT_NONE &&
+        plan->filter_treatment == PLASMA_FILTER_TREATMENT_NONE &&
+        plan->emulation_treatment == PLASMA_EMULATION_TREATMENT_NONE &&
+        plan->accent_treatment == PLASMA_ACCENT_TREATMENT_NONE &&
+        output->family == PLASMA_OUTPUT_FAMILY_RASTER &&
+        output->mode == PLASMA_OUTPUT_MODE_NATIVE_RASTER;
+}
+
+static screensave_color plasma_treatment_classic_demo_color(
+    const struct plasma_execution_state_tag *state,
+    unsigned int value
+)
+{
+    screensave_color color;
+    unsigned int phase;
+    unsigned int red;
+    unsigned int green;
+    unsigned int blue;
+
+    phase = value & 255U;
+    if (state != NULL) {
+        phase = (phase + (unsigned int)((state->phase_millis / 96UL) & 255UL)) & 255U;
+        phase = (phase + (unsigned int)(state->palette_phase & 255UL)) & 255U;
+    }
+
+    red = plasma_treatment_curve_wave(phase);
+    green = plasma_treatment_curve_wave(phase + 85U);
+    blue = plasma_treatment_curve_wave(phase + 170U);
+
+    color.red = plasma_treatment_clamp_channel(18U + ((red * 218U) / 255U));
+    color.green = plasma_treatment_clamp_channel(20U + ((green * 210U) / 255U));
+    color.blue = plasma_treatment_clamp_channel(28U + ((blue * 220U) / 255U));
+    color.alpha = 255;
+    return color;
+}
+
+static void plasma_treatment_palette_context_build(
+    const struct plasma_plan_tag *plan,
+    const struct plasma_execution_state_tag *state,
+    plasma_treatment_palette_context *context
+)
+{
+    if (context == NULL) {
+        return;
+    }
+
+    ZeroMemory(context, sizeof(*context));
+    context->base_color = plasma_treatment_background_color();
+    context->white_color.red = 255;
+    context->white_color.green = 255;
+    context->white_color.blue = 255;
+    context->white_color.alpha = 255;
+    context->effect_mode = plan != NULL ? plan->effect_mode : PLASMA_EFFECT_PLASMA;
+    context->palette_phase = state != NULL
+        ? (unsigned int)(state->palette_phase & 255UL)
+        : 0U;
+
+    plasma_transition_resolve_theme_colors(
+        plan,
+        state,
+        &context->primary_color,
+        &context->accent_color
+    );
+    context->highlight_color = screensave_color_lerp(
+        context->accent_color,
+        context->white_color,
+        112U
+    );
+
+    if (plan != NULL && state != NULL && plan->effect_mode == PLASMA_EFFECT_PLASMA) {
+        unsigned long color_position;
+        unsigned long color_cycle;
+        unsigned int color_amount;
+        screensave_color cycle_primary;
+        screensave_color cycle_accent;
+        screensave_color target_primary;
+        screensave_color target_accent;
+
+        color_position = state->phase_millis / 384UL;
+        color_cycle = color_position / 256UL;
+        color_amount = plasma_treatment_smoothstep_u8((unsigned int)(color_position & 255UL));
+        cycle_primary = plasma_treatment_cycle_color(state, color_cycle, 73UL);
+        cycle_accent = plasma_treatment_cycle_color(state, color_cycle, 149UL);
+        target_primary = plasma_treatment_cycle_color(state, color_cycle + 1UL, 73UL);
+        target_accent = plasma_treatment_cycle_color(state, color_cycle + 1UL, 149UL);
+        cycle_primary = plasma_treatment_morph_color(cycle_primary, target_primary, color_amount);
+        cycle_accent = plasma_treatment_morph_color(cycle_accent, target_accent, color_amount);
+        context->primary_color = screensave_color_lerp(context->primary_color, cycle_primary, 112U);
+        context->accent_color = screensave_color_lerp(context->accent_color, cycle_accent, 128U);
+        context->highlight_color = screensave_color_lerp(context->accent_color, context->white_color, 96U);
+        context->palette_phase = (unsigned int)((state->phase_millis / 512UL) & 255UL);
+    } else if (plan != NULL && state != NULL && plan->effect_mode == PLASMA_EFFECT_FIRE) {
+        context->palette_phase = (unsigned int)((state->palette_phase / 2UL) & 255UL);
+    }
+}
+
+static screensave_color plasma_treatment_palette_color_from_context(
+    const plasma_treatment_palette_context *context,
+    unsigned int value
+)
+{
+    unsigned int palette_index;
+    unsigned int amount;
+
+    if (context == NULL) {
+        return plasma_treatment_background_color();
+    }
+
+    palette_index = (value + context->palette_phase) & 255U;
+
+    if (context->effect_mode == PLASMA_EFFECT_PLASMA) {
+
+        if (palette_index < 80U) {
+            amount = (palette_index * 255U) / 80U;
+            return screensave_color_lerp(context->base_color, context->primary_color, amount);
+        }
+        if (palette_index < 176U) {
+            amount = ((palette_index - 80U) * 255U) / 96U;
+            return screensave_color_lerp(context->primary_color, context->accent_color, amount);
+        }
+
+        amount = ((palette_index - 176U) * 255U) / 79U;
+        return screensave_color_lerp(context->accent_color, context->highlight_color, amount);
+    }
+
+    if (context->effect_mode == PLASMA_EFFECT_FIRE) {
+        if (palette_index < 64U) {
+            amount = (palette_index * 255U) / 64U;
+            return screensave_color_lerp(context->base_color, context->primary_color, amount);
+        }
+        if (palette_index < 176U) {
+            amount = ((palette_index - 64U) * 255U) / 112U;
+            return screensave_color_lerp(context->primary_color, context->accent_color, amount);
+        }
+
+        amount = ((palette_index - 176U) * 255U) / 79U;
+        return screensave_color_lerp(context->accent_color, context->highlight_color, amount);
+    }
+
+    if (context->effect_mode == PLASMA_EFFECT_INTERFERENCE) {
+        if (palette_index < 112U) {
+            amount = (palette_index * 255U) / 112U;
+            return screensave_color_lerp(context->base_color, context->accent_color, amount);
+        }
+        if (palette_index < 208U) {
+            amount = ((palette_index - 112U) * 255U) / 96U;
+            return screensave_color_lerp(context->accent_color, context->primary_color, amount);
+        }
+
+        amount = ((palette_index - 208U) * 255U) / 47U;
+        return screensave_color_lerp(context->primary_color, context->highlight_color, amount);
+    }
+
+    if (palette_index < 96U) {
+        amount = (palette_index * 255U) / 96U;
+        return screensave_color_lerp(context->base_color, context->primary_color, amount);
+    }
+    if (palette_index < 192U) {
+        amount = ((palette_index - 96U) * 255U) / 96U;
+        return screensave_color_lerp(context->primary_color, context->accent_color, amount);
+    }
+
+    amount = ((palette_index - 192U) * 255U) / 63U;
+    return screensave_color_lerp(context->accent_color, context->highlight_color, amount);
+}
+
 static screensave_color plasma_treatment_palette_color(
     const struct plasma_plan_tag *plan,
     const struct plasma_execution_state_tag *state,
     unsigned int value
 )
 {
-    screensave_color base_color;
-    screensave_color white_color;
-    screensave_color highlight_color;
-    screensave_color primary_color;
-    screensave_color accent_color;
-    unsigned int palette_index;
-    unsigned int amount;
+    plasma_treatment_palette_context context;
 
-    base_color = plasma_treatment_background_color();
-    white_color.red = 255;
-    white_color.green = 255;
-    white_color.blue = 255;
-    white_color.alpha = 255;
-    plasma_transition_resolve_theme_colors(plan, state, &primary_color, &accent_color);
-    highlight_color = screensave_color_lerp(accent_color, white_color, 112U);
-
-    palette_index = (value + (unsigned int)(state->palette_phase & 255UL)) & 255U;
-    if (plan->effect_mode == PLASMA_EFFECT_FIRE) {
-        palette_index = (value + (unsigned int)((state->palette_phase / 2UL) & 255UL)) & 255U;
-        if (palette_index < 64U) {
-            amount = (palette_index * 255U) / 64U;
-            return screensave_color_lerp(base_color, primary_color, amount);
-        }
-        if (palette_index < 176U) {
-            amount = ((palette_index - 64U) * 255U) / 112U;
-            return screensave_color_lerp(primary_color, accent_color, amount);
-        }
-
-        amount = ((palette_index - 176U) * 255U) / 79U;
-        return screensave_color_lerp(accent_color, highlight_color, amount);
-    }
-
-    if (plan->effect_mode == PLASMA_EFFECT_INTERFERENCE) {
-        if (palette_index < 112U) {
-            amount = (palette_index * 255U) / 112U;
-            return screensave_color_lerp(base_color, accent_color, amount);
-        }
-        if (palette_index < 208U) {
-            amount = ((palette_index - 112U) * 255U) / 96U;
-            return screensave_color_lerp(accent_color, primary_color, amount);
-        }
-
-        amount = ((palette_index - 208U) * 255U) / 47U;
-        return screensave_color_lerp(primary_color, highlight_color, amount);
-    }
-
-    if (palette_index < 96U) {
-        amount = (palette_index * 255U) / 96U;
-        return screensave_color_lerp(base_color, primary_color, amount);
-    }
-    if (palette_index < 192U) {
-        amount = ((palette_index - 96U) * 255U) / 96U;
-        return screensave_color_lerp(primary_color, accent_color, amount);
-    }
-
-    amount = ((palette_index - 192U) * 255U) / 63U;
-    return screensave_color_lerp(accent_color, highlight_color, amount);
+    plasma_treatment_palette_context_build(plan, state, &context);
+    return plasma_treatment_palette_color_from_context(&context, value);
 }
 
 static unsigned int plasma_treatment_band_count(const struct plasma_plan_tag *plan)
@@ -480,6 +732,7 @@ static int plasma_theme_map_output(
 {
     screensave_color background_color;
     screensave_color white_color;
+    plasma_treatment_palette_context palette_context;
     unsigned int band_count;
     int x;
     int y;
@@ -509,6 +762,7 @@ static int plasma_theme_map_output(
     white_color.blue = 255;
     white_color.alpha = 255;
     band_count = plasma_treatment_band_count(plan);
+    plasma_treatment_palette_context_build(plan, state, &palette_context);
 
     for (y = 0; y < output->size.height; ++y) {
         unsigned char *row;
@@ -526,16 +780,18 @@ static int plasma_theme_map_output(
             band_value = plasma_treatment_band_value(band_index, band_count);
             contour_edge = plasma_treatment_is_contour_edge(output, x, y, band_count);
 
-            if (
+            if (plasma_treatment_default_classic_path(plan, state, output)) {
+                color = plasma_treatment_classic_demo_color(state, value);
+            } else if (
                 output->family == PLASMA_OUTPUT_FAMILY_RASTER &&
                 output->mode == PLASMA_OUTPUT_MODE_NATIVE_RASTER
             ) {
-                color = plasma_treatment_palette_color(plan, state, value);
+                color = plasma_treatment_palette_color_from_context(&palette_context, value);
             } else if (
                 output->family == PLASMA_OUTPUT_FAMILY_BANDED &&
                 output->mode == PLASMA_OUTPUT_MODE_POSTERIZED_BANDS
             ) {
-                color = plasma_treatment_palette_color(plan, state, band_value);
+                color = plasma_treatment_palette_color_from_context(&palette_context, band_value);
                 if ((band_index & 1U) != 0U) {
                     color = screensave_color_lerp(color, plan->theme->accent_color, 112U);
                 } else {
@@ -554,7 +810,7 @@ static int plasma_theme_map_output(
                 output->family == PLASMA_OUTPUT_FAMILY_CONTOUR &&
                 output->mode == PLASMA_OUTPUT_MODE_CONTOUR_BANDS
             ) {
-                color = plasma_treatment_palette_color(plan, state, band_value);
+                color = plasma_treatment_palette_color_from_context(&palette_context, band_value);
                 if (contour_edge) {
                     color = screensave_color_lerp(plan->theme->accent_color, white_color, 136U);
                 } else if ((band_index & 1U) != 0U) {

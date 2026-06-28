@@ -1207,7 +1207,7 @@ int main(void)
     }
     if (
         module->routing_policy.minimum_kind != SCREENSAVE_RENDERER_KIND_GDI ||
-        module->routing_policy.preferred_kind != SCREENSAVE_RENDERER_KIND_GL11 ||
+        module->routing_policy.preferred_kind != SCREENSAVE_RENDERER_KIND_GL46 ||
         module->routing_policy.quality_class != SCREENSAVE_CAPABILITY_QUALITY_SAFE
     ) {
         return 3;
