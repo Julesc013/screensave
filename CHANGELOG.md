@@ -2,6 +2,20 @@
 
 All notable repository changes are recorded here in prompt history order.
 
+## PAW-J - Plasma v2 Publication Prep
+
+### Added
+
+- Local Plasma v2 stable publication-prep packet under `releases/plasma-v2-stable/`, including release and artifact manifests, checksums, provenance, known limits, support matrix, install notes, rollback notes, third-party notices, and a publication checklist.
+- `contracts/plasma_publication_prep_v1.md` and `tools/scripts/check_plasma_v2_publication_prep_contract.py` to keep stable promotion, publication prep, actual publication, compatibility certification, release page publication, and post-release support separate.
+- `docs/releases/plasma-v2-stable.md` and `products/savers/plasma/docs/plasma-v2-publication-policy.md` as the publication-prep release truth surfaces.
+
+### Boundaries
+
+- Plasma v2 is stable-promoted for `plasma-v2-rc1`, but this PAW-J packet does not publish a release.
+- Compatibility certification is not broadened.
+- Workbench graphical MVP, Manager install/apply mutation, all-saver migration, public SDK stability, and platform expansion remain separate gates.
+
 ## SX09 - 2026-04-08
 
 ### Added

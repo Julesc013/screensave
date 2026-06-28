@@ -22,9 +22,15 @@ Plasma v2 is stable-promoted for `plasma-v2-rc1` in profile
   `validation/captures/plasma-v2/stable-promotion/instrument-architecture-audit.json`
 - Stable-promotion gate:
   `validation/captures/plasma-v2/stable-promotion/gate-report.json`
+- Publication-prep packet:
+  `releases/plasma-v2-stable/release-manifest.toml`
 
 ## Boundaries
 
 Stable promotion is not public release publication, compatibility certification
 broadening, public SDK stability, all-saver migration, platform expansion, or
 external automation runtime authority.
+
+Publication prep records the local release packet for a later publication gate.
+It does not upload assets, create a release page, verify public download links,
+or admit Manager install/apply mutation.

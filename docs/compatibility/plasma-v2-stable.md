@@ -1,9 +1,9 @@
-# Plasma v2 Stable-Promotion Compatibility Notes
+# Plasma v2 Stable Compatibility Notes
 
 Status: stable-promotion compatibility wording for `plasma-v2-rc1`.
 
-This document records evidence-classed support facts for the stable-promotion
-review. It is not an operating-system certification and it is not publication.
+This document records evidence-classed support facts for the stable-promoted
+Plasma v2 rc1 scope and its publication-prep packet. It is not an operating-system certification and it is not publication.
 
 Rules:
 
@@ -20,6 +20,10 @@ Rules:
 - Manager preview does not imply install mutation.
 - Workbench release-readiness does not imply publication.
 - final human artistic acceptance is supplied for Plasma v2 rc1 scope, but it does not create operating-system certification, publication, or broader compatibility coverage.
+- Publication-prep manifests and checksums do not publish a release or broaden
+  compatibility certification.
+- macOS and Linux host claims, public SDK stability, all Core saver migration,
+  and runtime executable plugins remain out of scope.
 
 Only evidence explicitly classified as `certified` may be worded as ordinary
 public compatibility coverage.

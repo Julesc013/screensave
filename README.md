@@ -19,7 +19,7 @@ Post-`SS` work now proceeds in the bounded `SX` substrate series.
 - Artifact profiles: [`catalog/artifact_profiles.toml`](catalog/artifact_profiles.toml)
 - Product doctrine: [`contracts/screensave_doctrine_v1.md`](contracts/screensave_doctrine_v1.md)
 - AIDE Lite operational profile: [`.aide/pilot.toml`](.aide/pilot.toml), [`.aide/aide_lite.lock.toml`](.aide/aide_lite.lock.toml), and [`.aide/profile.yaml`](.aide/profile.yaml)
-- Active milestone: [`docs/roadmap/paw-i-plasma-v2-stable-promotion.md`](docs/roadmap/paw-i-plasma-v2-stable-promotion.md)
+- Active milestone: [`docs/roadmap/paw-j-plasma-v2-publication-prep.md`](docs/roadmap/paw-j-plasma-v2-publication-prep.md)
 - Accepted portable seam: [`contracts/portable_semantics_v2.md`](contracts/portable_semantics_v2.md)
 - Project adapter: [`contracts/project_adapter_v0.md`](contracts/project_adapter_v0.md) and [`tools/project_adapter/screensave_project.py`](tools/project_adapter/screensave_project.py)
 - Released public artifact: `c16-core-baseline`
@@ -60,7 +60,9 @@ and project-owned final stable artistic acceptance all pass for that scoped
 slice. Public release publication, compatibility certification broadening,
 public SDK stability, all-saver migration, and platform expansion remain
 separate gates.
-The next active direction is Plasma v2 publication prep. The product remains a
+The next active direction is Plasma v2 publication prep, with the local packet
+under [`releases/plasma-v2-stable/`](releases/plasma-v2-stable/). It is not
+published and does not broaden compatibility certification. The product remains a
 direct-control-first instrument spec island under
 `products/savers/plasma/src/v2/`, keeping the old engine as compatibility
 evidence rather than the new product center.
