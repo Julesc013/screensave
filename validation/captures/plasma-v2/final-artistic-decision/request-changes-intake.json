@@ -43,6 +43,6 @@
       "missing_project_owned_accepted_for_stable_verdict"
     ]
   },
-  "repair_boundary": "The request-changes packet names a missing project-owned stable artistic verdict, not a field, material, motion, luminance, contrast, treatment, or composition defect. Plasma v2 product source must not be changed unless a project-owned decision names an exact visual/artistic blocker.",
+  "repair_boundary": "The request-changes packet names no visual defect; it names a missing project-owned stable artistic verdict, not a field, material, motion, luminance, contrast, treatment, or composition defect. Plasma v2 product source must not be changed unless a project-owned decision names an exact visual/artistic blocker.",
   "claim_boundary": "Request-changes intake only; not stable promotion, release publication, compatibility certification, or AIDE artistic acceptance."
 }
