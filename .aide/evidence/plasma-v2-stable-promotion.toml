@@ -1,0 +1,39 @@
+schema_version = 1
+evidence_id = "screensave.plasma-v2.stable-promotion.decision-evidence.v1"
+status = "blocked"
+work_unit = "SS-PLV2-I-REPAIR-001"
+repair_class = "release_readiness_gap"
+blocker = "final stable artistic acceptance"
+decision_kind = "final stable artistic acceptance"
+decision = "request-changes"
+decision_owner = "ScreenSave / project authority"
+aide_role = "evidence index only"
+recorded_on = "2026-06-28"
+
+[refs]
+intake = "validation/captures/plasma-v2/final-artistic-decision/intake.json"
+review_inputs = "validation/captures/plasma-v2/final-artistic-decision/review-inputs.json"
+review_evidence = "validation/captures/plasma-v2/final-artistic-decision/review-evidence.json"
+decision = "validation/captures/plasma-v2/final-artistic-decision/decision.stable.toml"
+decision_summary = "validation/captures/plasma-v2/final-artistic-decision/decision-summary.md"
+contact_sheet_index = "validation/captures/plasma-v2/final-artistic-decision/contact-sheet-index.json"
+instrument_architecture = "validation/captures/plasma-v2/stable-promotion/instrument-architecture-audit.json"
+stable_promotion_gate = "validation/captures/plasma-v2/stable-promotion/gate-report.json"
+repair_queue = ".aide/repairs/index.toml"
+
+[assertions]
+aide_decided_artistic_acceptance = false
+aide_promoted_release = false
+aide_published_release = false
+aide_certified_compatibility = false
+aide_mutated_source_automatically = false
+screen_save_owns_decision = true
+validators_auto_accepted = false
+proof_hash_auto_accepted = false
+
+[blocker]
+reason = "No explicit ScreenSave/project-owned accepted-for-stable artistic verdict was supplied for Plasma v2 rc1."
+repair_workunit = "SS-PLV2-I-REPAIR-001"
+stable_promotion = "blocked"
+
+claim_boundary = "AIDE records final artistic decision evidence only; ScreenSave/project authority owns artistic acceptance and release decisions, and no publication, compatibility certification, automatic promotion, or source mutation is admitted."

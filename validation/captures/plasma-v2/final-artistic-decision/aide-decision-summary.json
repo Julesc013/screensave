@@ -1,0 +1,31 @@
+{
+  "schema": "screensave.plasma-v2.final-artistic-decision.aide-summary.v1",
+  "status": "blocked",
+  "work_unit": "SS-PLV2-I-REPAIR-001",
+  "repair_class": "release_readiness_gap",
+  "blocker": "final stable artistic acceptance",
+  "decision_kind": "final stable artistic acceptance",
+  "decision": "request-changes",
+  "decision_owner": "ScreenSave / project authority",
+  "aide_role": "evidence index only",
+  "aide_assertions": {
+    "did_not_decide_artistic_acceptance": true,
+    "did_not_promote_release": true,
+    "did_not_publish_release": true,
+    "did_not_certify_compatibility": true,
+    "did_not_mutate_source_automatically": true
+  },
+  "exact_blocker_reasons": [
+    "missing_project_owned_accepted_for_stable_verdict",
+    "final_stable_artistic_acceptance_not_supplied"
+  ],
+  "evidence_refs": {
+    "aide_ledger": ".aide/evidence/plasma-v2-stable-promotion.toml",
+    "decision": "validation/captures/plasma-v2/final-artistic-decision/decision.stable.toml",
+    "review_evidence": "validation/captures/plasma-v2/final-artistic-decision/review-evidence.json",
+    "instrument_architecture": "validation/captures/plasma-v2/stable-promotion/instrument-architecture-audit.json",
+    "stable_promotion_gate": "validation/captures/plasma-v2/stable-promotion/gate-report.json",
+    "repair_queue": ".aide/repairs/index.toml"
+  },
+  "claim_boundary": "AIDE records repair and decision evidence only; ScreenSave validators and project authority own the stable gate, artistic acceptance, and release decisions."
+}

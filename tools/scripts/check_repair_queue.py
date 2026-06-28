@@ -146,6 +146,34 @@ def main() -> int:
                 "SS-PLV2-IR-REPAIR-002 must require the VisualIntent proof checker.",
                 errors,
             )
+        final_repair = next(
+            (item for item in queue.get("repairs", []) if isinstance(item, dict) and item.get("id") == "SS-PLV2-I-REPAIR-001"),
+            None,
+        )
+        require(final_repair is not None, "repair queue must record SS-PLV2-I-REPAIR-001.", errors)
+        if final_repair is not None:
+            require(
+                final_repair.get("repair_class") == "release_readiness_gap",
+                "SS-PLV2-I-REPAIR-001 must be a release_readiness_gap repair.",
+                errors,
+            )
+            require(
+                final_repair.get("status") == "blocking",
+                "SS-PLV2-I-REPAIR-001 must remain blocking until accepted-for-stable is supplied.",
+                errors,
+            )
+            final_outputs = set(final_repair.get("evidence_outputs", []))
+            for ref in [
+                "validation/captures/plasma-v2/final-artistic-decision/intake.json",
+                "validation/captures/plasma-v2/final-artistic-decision/review-evidence.json",
+                "validation/captures/plasma-v2/final-artistic-decision/decision.stable.toml",
+                "validation/captures/plasma-v2/final-artistic-decision/aide-decision-summary.json",
+                "validation/captures/plasma-v2/stable-promotion/hold-report.json",
+            ]:
+                require(ref in final_outputs, f"SS-PLV2-I-REPAIR-001 missing evidence output {ref}.", errors)
+            final_boundary = str(final_repair.get("claim_boundary", ""))
+            for phrase in ("ScreenSave/project authority owns the verdict", "no automatic acceptance", "compatibility certification"):
+                require(phrase in final_boundary, f"SS-PLV2-I-REPAIR-001 boundary missing {phrase!r}.", errors)
         burn = queue.get("release_candidate_burndown", {})
         if burn:
             require(
@@ -175,6 +203,12 @@ def main() -> int:
                 require(
                     any(item.get("id") == repair_id for item in queue.get("repairs", []) if isinstance(item, dict)),
                     f"stable-promotion blocking repair not listed: {repair_id}",
+                    errors,
+                )
+            if stable_burn.get("open_blocking_count") == 1:
+                require(
+                    stable_burn.get("blocking_repairs") == ["SS-PLV2-I-REPAIR-001"],
+                    "stable-promotion burn-down must name only SS-PLV2-I-REPAIR-001 when one repair is open.",
                     errors,
                 )
         validate_repair(load_toml(TEMPLATE), "repair template", errors)
@@ -226,6 +260,11 @@ def main() -> int:
             )
             require(burn.get("open_blocking_count") in {0, 1}, "stable repair burn-down evidence open_blocking_count must be 0 or 1.", errors)
             require("certify compatibility" in burn.get("claim_boundary", ""), "stable repair burn-down evidence must block certification.", errors)
+            if burn.get("open_blocking_count") == 1:
+                blocking_ids = {str(item.get("id")) for item in burn.get("blocking_repairs", [])}
+                require(blocking_ids == {"SS-PLV2-I-REPAIR-001"}, "stable repair burn-down evidence must name SS-PLV2-I-REPAIR-001.", errors)
+                reasons = " ".join(str(item.get("reason", "")) for item in burn.get("blocking_repairs", []))
+                require("explicit final human artistic acceptance verdict" in reasons, "stable repair burn-down evidence must record the missing verdict reason.", errors)
 
     if errors:
         for error in errors:

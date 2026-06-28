@@ -40,6 +40,7 @@ REQUIRED_IDS = {
     "plasma-v2-instrument-repair",
     "plasma-v2-visualintent-spec-reduction",
     "plasma-v2-visualintent-proof-summary",
+    "plasma-v2-stable-promotion-decision",
 }
 
 
@@ -93,9 +94,12 @@ def main() -> int:
             "plasma-v2-instrument-repair",
             "plasma-v2-visualintent-spec-reduction",
             "plasma-v2-visualintent-proof-summary",
+            "plasma-v2-stable-promotion-decision",
             "check_plasma_v2_visualintent_proof.py",
             "VisualIntent-to-Plasma spec reduction evidence only",
             "VisualIntent proof summary evidence only",
+            "AIDE final stable artistic decision evidence only",
+            "ScreenSave/project authority owns acceptance",
             "compatibility certification",
             "artistic acceptance",
             "release promotion",
@@ -104,6 +108,37 @@ def main() -> int:
             require(needle in text, f"evidence index missing expected boundary text: {needle}", errors)
         for forbidden in ["provider_or_model_calls = true", "network_calls = true", "runtime_dependency_allowed = true"]:
             require(forbidden not in text, f"evidence index must not contain {forbidden}.", errors)
+
+    stable_ledger = ROOT / ".aide" / "evidence" / "plasma-v2-stable-promotion.toml"
+    stable_summary = ROOT / "validation" / "captures" / "plasma-v2" / "final-artistic-decision" / "aide-decision-summary.json"
+    for path in [stable_ledger, stable_summary]:
+        require(path.exists(), f"Missing stable-promotion AIDE evidence path: {path.relative_to(ROOT)}", errors)
+    if stable_ledger.exists():
+        text = stable_ledger.read_text(encoding="utf-8")
+        for needle in [
+            'work_unit = "SS-PLV2-I-REPAIR-001"',
+            'decision_kind = "final stable artistic acceptance"',
+            'decision_owner = "ScreenSave / project authority"',
+            'aide_role = "evidence index only"',
+            "aide_decided_artistic_acceptance = false",
+            "aide_promoted_release = false",
+            "aide_published_release = false",
+            "aide_certified_compatibility = false",
+        ]:
+            require(needle in text, f"stable-promotion AIDE ledger missing {needle!r}.", errors)
+    if stable_summary.exists():
+        payload = json.loads(stable_summary.read_text(encoding="utf-8"))
+        require(payload.get("work_unit") == "SS-PLV2-I-REPAIR-001", "stable AIDE summary must name SS-PLV2-I-REPAIR-001.", errors)
+        require(payload.get("decision_owner") == "ScreenSave / project authority", "stable AIDE summary must name ScreenSave/project authority.", errors)
+        assertions = payload.get("aide_assertions", {})
+        for key in (
+            "did_not_decide_artistic_acceptance",
+            "did_not_promote_release",
+            "did_not_publish_release",
+            "did_not_certify_compatibility",
+            "did_not_mutate_source_automatically",
+        ):
+            require(assertions.get(key) is True, f"stable AIDE summary must assert {key}.", errors)
 
     if errors:
         for error in errors:
