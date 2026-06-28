@@ -1,0 +1,39 @@
+{
+  "schema": "screensave.plasma-v2.final-artistic-decision.contact-sheet-index.v1",
+  "status": "ready-for-review",
+  "release_candidate": "plasma-v2-rc1",
+  "profile": "plasma.v2.reference.preview",
+  "contact_sheets": [
+    {
+      "id": "reference-preview",
+      "ref": "validation/captures/plasma-v2/reference-preview/review-contact-sheet.md",
+      "scope": "reference profile visual review"
+    },
+    {
+      "id": "matrix-overview",
+      "ref": "validation/captures/plasma-v2/matrix/contact-sheets/README.md",
+      "scope": "matrix contact sheet overview"
+    },
+    {
+      "id": "controls-preview",
+      "ref": "validation/captures/plasma-v2/matrix/captures/controls-preview/review-contact-sheet.md",
+      "scope": "direct-control influence review"
+    },
+    {
+      "id": "materials-preview",
+      "ref": "validation/captures/plasma-v2/matrix/captures/materials-preview/review-contact-sheet.md",
+      "scope": "material and treatment response review"
+    },
+    {
+      "id": "visualintent-preview",
+      "ref": "validation/captures/plasma-v2/matrix/captures/visualintent-preview/review-contact-sheet.md",
+      "scope": "VisualIntent-to-spec candidate review"
+    },
+    {
+      "id": "stable-candidate-review",
+      "ref": "validation/captures/plasma-v2/stable-candidate-review/contact-sheets/README.md",
+      "scope": "stable-candidate visual review round"
+    }
+  ],
+  "claim_boundary": "Contact-sheet index for final artistic review only; contact sheets are review aids and do not accept stable promotion automatically."
+}

@@ -14,6 +14,9 @@ DECISION_DIR = ROOT / "validation" / "captures" / "plasma-v2" / "final-artistic-
 DECISION = DECISION_DIR / "decision.stable.toml"
 STABLE_TEMPLATE = DECISION_DIR / "decision.stable.template.toml"
 REVIEW_INPUTS = DECISION_DIR / "review-inputs.json"
+REVIEW_EVIDENCE = DECISION_DIR / "review-evidence.json"
+REVIEW_SUMMARY = DECISION_DIR / "review-summary.md"
+CONTACT_SHEET_INDEX = DECISION_DIR / "contact-sheet-index.json"
 SUMMARY = DECISION_DIR / "decision-summary.md"
 POLICY = DECISION_DIR / "decision-policy.md"
 REVIEWER_NOTES = DECISION_DIR / "reviewer-notes" / "stable-review-required.md"
@@ -85,6 +88,29 @@ EXCLUDED_SCOPE_PHRASES = {
     "public SDK stability",
     "runtime executable plugin system",
     "AIDE runtime dependency",
+}
+
+REQUIRED_REVIEW_EVIDENCE = {
+    "reference_proof_bundle",
+    "instrument_architecture_audit",
+    "instrument_reaudit",
+    "legacy_authority_repair",
+    "visualintent_spec_reduction",
+    "material_response",
+    "control_influence",
+    "field_pipeline",
+    "runtime_report",
+    "plan_report",
+    "gl11_optionality_acceleration",
+    "performance_envelope",
+    "workbench_release_readiness_review",
+    "manager_package_preview_review",
+    "release_candidate_package_staging",
+    "stable_promotion_package_staging",
+    "release_candidate_support_claims",
+    "stable_support_claims",
+    "known_limits",
+    "aide_evidence_index",
 }
 
 
@@ -207,6 +233,39 @@ def validate_decision(errors: list[str]) -> None:
         require(boundaries.get(key) is False, f"stable decision boundary {key} must remain false.", errors)
 
 
+def validate_review_evidence(errors: list[str]) -> None:
+    evidence = load_json(REVIEW_EVIDENCE)
+    require(evidence.get("status") == "ready-for-decision", "review evidence must be ready-for-decision.", errors)
+    require(evidence.get("release_candidate") == "plasma-v2-rc1", "review evidence must name plasma-v2-rc1.", errors)
+    require(evidence.get("profile") == "plasma.v2.reference.preview", "review evidence must name the preview profile.", errors)
+    require(evidence.get("evidence_complete") is True, "review evidence must mark evidence_complete true.", errors)
+    require(evidence.get("instrument_audit_status") == "pass", "review evidence must record instrument audit pass.", errors)
+    require(evidence.get("instrument_audit_report_status") == "promotion-ready", "review evidence must record promotion-ready instrument audit.", errors)
+    require(evidence.get("stable_promotion_precheck") == "pending", "review evidence must leave stable promotion precheck pending.", errors)
+    for item in evidence.get("visual_review_inputs", []):
+        require(repo_ref_exists(str(item.get("ref", ""))), f"review evidence visual input missing: {item.get('ref')}", errors)
+    refs = evidence.get("evidence_refs", {})
+    validate_ref_table(refs, REQUIRED_REVIEW_EVIDENCE, "review evidence", errors)
+    require(len(evidence.get("known_limits", [])) >= 5, "review evidence must record known limits.", errors)
+    require(len(evidence.get("excluded_claims", [])) >= 8, "review evidence must record excluded claims.", errors)
+    require(
+        evidence.get("claim_boundary") == "Final artistic decision input only; not release publication or compatibility certification.",
+        "review evidence claim boundary mismatch.",
+        errors,
+    )
+
+
+def validate_contact_sheets(errors: list[str]) -> None:
+    index = load_json(CONTACT_SHEET_INDEX)
+    require(index.get("status") == "ready-for-review", "contact sheet index must be ready-for-review.", errors)
+    sheets = index.get("contact_sheets", [])
+    require(len(sheets) >= 6, "contact sheet index must include the review contact sheets.", errors)
+    for item in sheets:
+        require(repo_ref_exists(str(item.get("ref", ""))), f"contact sheet ref missing: {item.get('ref')}", errors)
+    boundary = str(index.get("claim_boundary", ""))
+    require("do not accept stable promotion automatically" in boundary, "contact sheet boundary must block automatic acceptance.", errors)
+
+
 def validate_text_files(errors: list[str]) -> None:
     summary = SUMMARY.read_text(encoding="utf-8")
     for phrase in (
@@ -238,15 +297,39 @@ def validate_text_files(errors: list[str]) -> None:
     ):
         require(phrase in protocol, f"product protocol missing {phrase!r}.", errors)
 
+    review_summary = REVIEW_SUMMARY.read_text(encoding="utf-8")
+    for phrase in (
+        "ready-for-decision",
+        "Instrument audit status: `promotion-ready`",
+        "Stable-promotion precheck: `pending`",
+        "final stable artistic acceptance is not yet accepted-for-stable",
+        "not release publication",
+        "compatibility certification",
+    ):
+        require(phrase in review_summary, f"review summary missing {phrase!r}.", errors)
+
 
 def main() -> int:
     errors: list[str] = []
-    for path in (DECISION, STABLE_TEMPLATE, REVIEW_INPUTS, SUMMARY, POLICY, REVIEWER_NOTES, PRODUCT_PROTOCOL):
+    for path in (
+        DECISION,
+        STABLE_TEMPLATE,
+        REVIEW_INPUTS,
+        REVIEW_EVIDENCE,
+        REVIEW_SUMMARY,
+        CONTACT_SHEET_INDEX,
+        SUMMARY,
+        POLICY,
+        REVIEWER_NOTES,
+        PRODUCT_PROTOCOL,
+    ):
         require(path.exists(), f"Missing final stable artistic decision file: {path.relative_to(ROOT)}", errors)
 
     if not errors:
         validate_template(errors)
         validate_review_inputs(errors)
+        validate_review_evidence(errors)
+        validate_contact_sheets(errors)
         validate_decision(errors)
         validate_text_files(errors)
 

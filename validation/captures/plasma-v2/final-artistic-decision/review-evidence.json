@@ -1,0 +1,68 @@
+{
+  "schema": "screensave.plasma-v2.final-artistic-decision.review-evidence.v1",
+  "status": "ready-for-decision",
+  "release_candidate": "plasma-v2-rc1",
+  "profile": "plasma.v2.reference.preview",
+  "evidence_complete": true,
+  "instrument_audit_status": "pass",
+  "instrument_audit_report_status": "promotion-ready",
+  "stable_promotion_precheck": "pending",
+  "visual_review_inputs": [
+    {
+      "id": "reference-preview-contact-sheet",
+      "ref": "validation/captures/plasma-v2/reference-preview/review-contact-sheet.md",
+      "purpose": "reference profile visual review"
+    },
+    {
+      "id": "matrix-contact-sheets",
+      "ref": "validation/captures/plasma-v2/matrix/contact-sheets/README.md",
+      "purpose": "control, material, and VisualIntent matrix review"
+    },
+    {
+      "id": "stable-candidate-contact-sheets",
+      "ref": "validation/captures/plasma-v2/stable-candidate-review/contact-sheets/README.md",
+      "purpose": "stable-candidate review round"
+    }
+  ],
+  "evidence_refs": {
+    "reference_proof_bundle": "validation/captures/plasma-v2/reference-preview/proof-bundle-v1.json",
+    "instrument_architecture_audit": "validation/captures/plasma-v2/stable-promotion/instrument-architecture-audit.json",
+    "instrument_reaudit": "validation/captures/plasma-v2/instrument-audit/re-audit-report.json",
+    "legacy_authority_repair": "validation/captures/plasma-v2/instrument-audit/legacy-authority-report.json",
+    "visualintent_spec_reduction": "validation/captures/plasma-v2/instrument-audit/visualintent/spec-reduction-report.json",
+    "material_response": "validation/captures/plasma-v2/instrument-audit/material-response.json",
+    "control_influence": "validation/captures/plasma-v2/instrument-audit/control-influence.json",
+    "field_pipeline": "validation/captures/plasma-v2/instrument-audit/field-pipeline-report.json",
+    "runtime_report": "validation/captures/plasma-v2/instrument-audit/runtime-report.json",
+    "plan_report": "validation/captures/plasma-v2/instrument-audit/plan-report.json",
+    "gl11_optionality_acceleration": "validation/captures/plasma-v2/acceleration/matrix.json",
+    "performance_envelope": "validation/captures/plasma-v2/performance/envelope.json",
+    "workbench_release_readiness_review": "validation/captures/plasma-v2/release-candidate/workbench-review.json",
+    "manager_package_preview_review": "validation/captures/plasma-v2/release-candidate/manager-review.json",
+    "release_candidate_package_staging": "packaging/windows/plasma-v2-release-candidate/manifest.toml",
+    "stable_promotion_package_staging": "packaging/windows/plasma-v2-stable-promotion/manifest.toml",
+    "release_candidate_support_claims": "validation/captures/plasma-v2/release-candidate/support-claims.json",
+    "stable_support_claims": "validation/captures/plasma-v2/stable-promotion/support-claims.json",
+    "known_limits": "packaging/windows/plasma-v2-stable-promotion/known-limits.md",
+    "aide_evidence_index": ".aide/evidence/index.toml"
+  },
+  "known_limits": [
+    "Final stable artistic acceptance is not yet accepted-for-stable.",
+    "GL11 remains optional candidate evidence, not a hidden minimum.",
+    "Compatibility remains evidence-classed and is not Windows preservation certification.",
+    "VisualIntent candidates are review/spec inputs only, not runtime truth.",
+    "Release publication is not in scope for this turn."
+  ],
+  "excluded_claims": [
+    "final public release publication",
+    "Windows preservation certification",
+    "macOS/Linux support",
+    "all Core saver migration",
+    "public SDK stability",
+    "runtime executable plugin system",
+    "premium/glyph/ribbon/heightfield stable claims",
+    "AIDE runtime dependency",
+    "AIDE artistic or release decision authority"
+  ],
+  "claim_boundary": "Final artistic decision input only; not release publication or compatibility certification."
+}
