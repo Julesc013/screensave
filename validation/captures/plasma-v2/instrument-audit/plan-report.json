@@ -21,7 +21,7 @@
   "schema": "screensave.plasma-v2.plan-report.v1",
   "source": {
     "branch": "main",
-    "commit": "4d0f8cb72f689c1e78689d2f96677c212bb418c9",
+    "commit": "eed56fe65becbf8294d74f66f1f26c585416e23f",
     "dirty": true
   },
   "status": "pass",

@@ -248,5 +248,23 @@ int main(void)
     if (plasma_instrument.visualintent_spec_summary == 0 || plasma_instrument.visualintent_proof_refs == 0) {
         return 66;
     }
+    if (strcmp(plasma_instrument.original_artistic_decision, "validation/captures/plasma-v2/final-artistic-decision/decision.stable.toml:request-changes") != 0) {
+        return 67;
+    }
+    if (strcmp(plasma_instrument.repair_workunit, "SS-PLV2-I-REPAIR-001") != 0) {
+        return 68;
+    }
+    if (strcmp(plasma_instrument.repair_classes, "documentation_or_evidence_gap") != 0) {
+        return 69;
+    }
+    if (plasma_instrument.before_repair_evidence_refs == 0 || plasma_instrument.after_repair_evidence_refs == 0) {
+        return 70;
+    }
+    if (plasma_instrument.updated_spec_plan_summary == 0 || plasma_instrument.updated_proof_refs == 0) {
+        return 71;
+    }
+    if (strcmp(plasma_instrument.updated_visual_review_status, "ready-for-project-owned-re-review") != 0) {
+        return 72;
+    }
     return 0;
 }

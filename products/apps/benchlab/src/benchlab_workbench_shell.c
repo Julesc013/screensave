@@ -473,8 +473,17 @@ int benchlab_workbench_shell_inspect_plasma_v2_instrument(
     inspect_out->legacy_authority = "migration_input_only";
     inspect_out->visualintent_authority = "descriptive-only";
     inspect_out->product_authority = "plasma_v2_spec_plan_runtime";
+    inspect_out->original_artistic_decision = "validation/captures/plasma-v2/final-artistic-decision/decision.stable.toml:request-changes";
+    inspect_out->repair_workunit = "SS-PLV2-I-REPAIR-001";
+    inspect_out->repair_classes = "documentation_or_evidence_gap";
+    inspect_out->before_repair_evidence_refs = "validation/captures/plasma-v2/final-artistic-decision/review-evidence.json;validation/captures/plasma-v2/stable-promotion/hold-report.json";
+    inspect_out->after_repair_evidence_refs = "validation/captures/plasma-v2/final-artistic-decision/repair-evidence.json;validation/captures/plasma-v2/final-artistic-decision/repair-summary.md";
+    inspect_out->updated_spec_plan_summary = "no product source repair applied; plasma_v2_spec/plasma_v2_plan/plasma_v2_runtime remain authoritative";
+    inspect_out->updated_material_field_treatment_facts = "field/material/treatment validators reran; no named visual defect was repaired";
+    inspect_out->updated_proof_refs = "validation/captures/plasma-v2/stable-promotion/instrument-architecture-audit.json;validation/captures/plasma-v2/final-artistic-decision/repair-evidence.json";
+    inspect_out->updated_visual_review_status = "ready-for-project-owned-re-review";
     inspect_out->review_status = "request-changes";
     inspect_out->promotion_status = "release-candidate-hold";
-    inspect_out->claim_boundary = "Workbench Instrument Inspect consumes ScreenSave proof evidence only; VisualIntent authority is descriptive-only, product authority is plasma_v2_spec_plan_runtime, and Workbench is not a second runtime, artistic judge, or promotion authority.";
+    inspect_out->claim_boundary = "Workbench Instrument Inspect consumes ScreenSave proof evidence only; VisualIntent authority is descriptive-only, product authority is plasma_v2_spec_plan_runtime, repair evidence does not accept stable, and Workbench is not a second runtime, artistic judge, or promotion authority.";
     return 1;
 }

@@ -133,6 +133,15 @@ typedef struct benchlab_workbench_plasma_instrument_inspect_tag {
     const char *legacy_authority;
     const char *visualintent_authority;
     const char *product_authority;
+    const char *original_artistic_decision;
+    const char *repair_workunit;
+    const char *repair_classes;
+    const char *before_repair_evidence_refs;
+    const char *after_repair_evidence_refs;
+    const char *updated_spec_plan_summary;
+    const char *updated_material_field_treatment_facts;
+    const char *updated_proof_refs;
+    const char *updated_visual_review_status;
     const char *review_status;
     const char *promotion_status;
     const char *claim_boundary;
