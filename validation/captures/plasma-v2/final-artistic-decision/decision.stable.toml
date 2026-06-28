@@ -1,31 +1,42 @@
 schema_version = 1
 packet_id = "screensave.plasma-v2.final-artistic-decision.stable"
-decision_id = "plasma-v2-rc1-stable-artistic-rereview-2026-06-28"
+decision_id = "plasma-v2-rc1-stable-artistic-acceptance"
 product = "plasma"
 profile = "plasma.v2.reference.preview"
 release_candidate = "plasma-v2-rc1"
-source_commit = "c358354b83cb64b203b05906540669e1c63ce751"
-decision = "request-changes"
-decision_state = "request-changes"
-decision_date = "2026-06-28"
-reviewer = "ScreenSave project authority required"
-reviewer_or_project_authority = "ScreenSave project authority required; accepted-for-stable verdict not supplied"
-reviewed_on = "2026-06-28"
-stable_scope = "not accepted; Plasma v2 current release-candidate profile only remains under review"
+source_commit = "44eb2af613f236d84e744b95ae9ae943c4a23973"
+decision = "accepted-for-stable"
+decision_state = "accepted-for-stable"
+decision_date = "2026-06-29"
+reviewer = "ScreenSave project authority"
+reviewer_or_project_authority = "ScreenSave project authority"
+reviewed_on = "2026-06-29"
+stable_scope = "Plasma v2 current release-candidate profile only."
 publication_decision = "not-in-this-turn"
 compatibility_certification = "not-broadened"
 aide_authority = "evidence-only"
-visual_review_summary = "Turn 4 parsed the request-changes decision, found no named field/material/motion/luminance/contrast/treatment/composition defect, refreshed repair evidence and Workbench facts, and still did not receive a final accepted-for-stable artistic verdict."
+visual_review_summary = "ScreenSave project authority reviewed the assembled Plasma v2 rc1 stable-promotion packet and accepts the current reference-preview slice for stable artistic scope."
 instrument_architecture_summary = "Instrument audit is promotion-ready with no instrument blocking gates after legacy authority and VisualIntent-to-spec repairs."
-known_limit_acceptance = "Known limits remain documented for review; they are not accepted for stable because the final project-owned stable artistic verdict is still missing."
-decision_summary = "Stable promotion remains held after Turn 4 because final human/project artistic acceptance for stable release was not supplied. Release-candidate acceptance remains valid."
-claim_boundary = "Request-changes decision only; Plasma v2 remains release-candidate-hold, AIDE indexes evidence only, and stable promotion, release publication, compatibility certification broadening, public SDK stability, and all-saver migration remain blocked."
+known_limit_acceptance = "Known limits remain accepted only within the Plasma v2 rc1 reference-preview stable scope; they do not broaden publication, compatibility certification, SDK stability, all-saver migration, or platform claims."
+decision_summary = "Final stable artistic acceptance is accepted-for-stable for Plasma v2 rc1 reference-preview scope only."
+claim_boundary = "Final stable artistic acceptance for Plasma v2 rc1 only; publication, compatibility certification broadening, SDK stability, all-saver migration, and platform expansion remain separate gates."
 
 [accepted_scope]
-product = "none"
-profile = "none"
-channel = "none"
-reason = "No accepted-for-stable verdict was supplied."
+product = "Plasma v2"
+profile = "plasma.v2.reference.preview"
+release_candidate = "plasma-v2-rc1"
+stable_scope = "Plasma v2 current release-candidate profile only"
+items = [
+  "Plasma v2 release candidate rc1",
+  "profile plasma.v2.reference.preview",
+  "direct-control instrument architecture",
+  "software/reference path",
+  "GDI lower-band path",
+  "GL11 optional candidate",
+  "packc v1-candidate data packs",
+  "VisualIntent-to-spec candidate flow",
+  "current Windows release-candidate evidence",
+]
 
 [excluded_scope]
 final_public_release_publication = true
@@ -38,13 +49,10 @@ premium_glyph_ribbon_heightfield_stable_claims = true
 aide_runtime_dependency = true
 
 [requested_changes]
-blocking = true
-reason = "Provide an explicit ScreenSave/project-owned verdict of accepted-for-stable, request-changes, defer-to-labs, or rejected after reviewing the stable-promotion packet."
+blocking = false
+reason = "No request-changes blocker remains after the project-owned accepted-for-stable verdict."
 repair_workunit = "SS-PLV2-I-REPAIR-001"
-blocker_reasons = [
-  "final_stable_artistic_acceptance_not_accepted",
-  "missing_project_owned_accepted_for_stable_verdict",
-]
+blocker_reasons = []
 
 [evidence_refs]
 intake = "validation/captures/plasma-v2/final-artistic-decision/intake.json"
@@ -75,14 +83,11 @@ repair_evidence = "validation/captures/plasma-v2/final-artistic-decision/repair-
 repair_classes = ["documentation_or_evidence_gap"]
 visual_artistic_blockers_named = false
 product_source_repairs_applied = false
-outcome = "continued-request-changes"
-remaining_blockers = [
-  "final_stable_artistic_acceptance_not_accepted",
-  "missing_project_owned_accepted_for_stable_verdict",
-]
+outcome = "accepted-for-stable"
+remaining_blockers = []
 
 [boundaries]
-final_stable_artistic_acceptance = false
+final_stable_artistic_acceptance = true
 stable_release = false
 release_publication = false
 compatibility_certification = false

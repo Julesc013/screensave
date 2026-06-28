@@ -267,19 +267,36 @@ def validate_contact_sheets(errors: list[str]) -> None:
 
 
 def validate_text_files(errors: list[str]) -> None:
+    decision = load_toml(DECISION)
+    state = decision_state(decision)
     summary = SUMMARY.read_text(encoding="utf-8")
-    for phrase in (
-        "Stable-Promotion Hold",
-        "request-changes",
-        "not automatic acceptance",
-        "not release publication",
-        "not compatibility certification",
-    ):
+    summary_phrases = (
+        (
+            "Stable-Promotion Accepted",
+            "accepted-for-stable",
+            "not AIDE automatic promotion",
+            "not release publication",
+            "not compatibility certification",
+        )
+        if state == "accepted-for-stable"
+        else (
+            "Stable-Promotion Hold",
+            "request-changes",
+            "not automatic acceptance",
+            "not release publication",
+            "not compatibility certification",
+        )
+    )
+    for phrase in summary_phrases:
         require(phrase in summary, f"decision summary is missing phrase {phrase!r}.", errors)
 
     notes = REVIEWER_NOTES.read_text(encoding="utf-8")
-    require("final stable artistic acceptance was not supplied" in notes, "stable reviewer notes must record the missing final acceptance.", errors)
-    require("accepted-for-stable" in notes, "stable reviewer notes must list the accepted-for-stable option.", errors)
+    if state == "accepted-for-stable":
+        require("accepted-for-stable" in notes, "stable reviewer notes must record the accepted final verdict.", errors)
+        require("publication remains `not-in-this-turn`" in notes, "stable reviewer notes must preserve publication boundary.", errors)
+    else:
+        require("final stable artistic acceptance was not supplied" in notes, "stable reviewer notes must record the missing final acceptance.", errors)
+        require("accepted-for-stable" in notes, "stable reviewer notes must list the accepted-for-stable option.", errors)
     require("compatibility certification" in notes, "stable reviewer notes must preserve compatibility certification boundary.", errors)
 
     policy = POLICY.read_text(encoding="utf-8")
@@ -298,14 +315,26 @@ def validate_text_files(errors: list[str]) -> None:
         require(phrase in protocol, f"product protocol missing {phrase!r}.", errors)
 
     review_summary = REVIEW_SUMMARY.read_text(encoding="utf-8")
-    for phrase in (
-        "ready-for-decision",
-        "Instrument audit status: `promotion-ready`",
-        "Stable-promotion precheck: `pending`",
-        "final stable artistic acceptance is not yet accepted-for-stable",
-        "not release publication",
-        "compatibility certification",
-    ):
+    review_phrases = (
+        (
+            "decision-recorded",
+            "Instrument audit status: `promotion-ready`",
+            "Stable-promotion precheck: `ready-for-gate`",
+            "final stable artistic acceptance is accepted",
+            "not release publication",
+            "compatibility certification",
+        )
+        if state == "accepted-for-stable"
+        else (
+            "ready-for-decision",
+            "Instrument audit status: `promotion-ready`",
+            "Stable-promotion precheck: `pending`",
+            "final stable artistic acceptance is not yet accepted-for-stable",
+            "not release publication",
+            "compatibility certification",
+        )
+    )
+    for phrase in review_phrases:
         require(phrase in review_summary, f"review summary missing {phrase!r}.", errors)
 
 

@@ -59,3 +59,32 @@ Boundaries:
 - not release publication
 - not compatibility certification
 - not automatic acceptance
+
+## Stable-Promotion Accepted
+
+Decision: `accepted-for-stable`
+
+The ScreenSave project authority supplied the final stable artistic verdict for
+`plasma-v2-rc1`. The accepted scope is the current Plasma v2 release-candidate
+reference-preview profile only.
+
+Accepted scope:
+
+- Plasma v2 release candidate rc1
+- profile `plasma.v2.reference.preview`
+- direct-control instrument architecture
+- software/reference path
+- GDI lower-band path
+- GL11 optional candidate
+- packc v1-candidate data packs
+- VisualIntent-to-spec candidate flow
+- current Windows release-candidate evidence
+
+Boundaries:
+
+- not release publication
+- not compatibility certification
+- not public SDK stability
+- not all-saver migration
+- not platform expansion
+- not AIDE automatic promotion

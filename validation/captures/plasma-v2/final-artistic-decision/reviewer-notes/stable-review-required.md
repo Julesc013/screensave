@@ -1,11 +1,20 @@
-# Plasma v2 Stable Review Required
+# Plasma v2 Stable Review Verdict
 
-The release-candidate review accepted Plasma v2 for `plasma-v2-rc1`, but this file records that final stable artistic acceptance was not supplied.
+The release-candidate review accepted Plasma v2 for `plasma-v2-rc1`. The
+ScreenSave project authority has now supplied the final stable artistic verdict:
+`accepted-for-stable`.
 
-Required operator action:
+Accepted scope:
 
-- Review the stable-promotion package, proof matrix, support claims, security/provenance review, Manager review, and Workbench review.
-- Record one of `accepted-for-stable`, `request-changes`, `defer-to-labs`, or `rejected`.
-- Keep publication, compatibility certification, and public SDK stability separate from the artistic decision.
+- Plasma v2 rc1
+- profile `plasma.v2.reference.preview`
+- current Windows release-candidate evidence
+- direct-control instrument architecture with software/reference truth first
 
-Until that verdict exists, Plasma v2 remains a release candidate or release-candidate hold.
+Boundaries:
+
+- publication remains `not-in-this-turn`
+- compatibility certification is `not-broadened`
+- public SDK stability, all-saver migration, and platform expansion remain
+  separate gates
+- AIDE remains evidence-only and does not own artistic acceptance

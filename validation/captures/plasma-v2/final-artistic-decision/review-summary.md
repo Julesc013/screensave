@@ -1,6 +1,6 @@
 # Plasma v2 Final Stable Artistic Review Packet
 
-Status: `ready-for-decision`
+Status: `decision-recorded`
 
 Candidate: `plasma-v2-rc1`
 
@@ -12,10 +12,9 @@ decision.
 
 Instrument audit status: `promotion-ready`
 
-Stable-promotion precheck: `pending`
+Stable-promotion precheck: `ready-for-gate`
 
-Decision still required: one of `accepted-for-stable`, `request-changes`,
-`defer-to-labs`, or `rejected`.
+Decision recorded: `accepted-for-stable`
 
 Primary review inputs:
 
@@ -35,12 +34,13 @@ Primary review inputs:
 
 Known limits:
 
-- final stable artistic acceptance is not yet accepted-for-stable
+- final stable artistic acceptance is accepted for the Plasma v2 rc1
+  reference-preview scope only
 - GL11 remains optional and capability-gated
 - compatibility remains evidence-classed, not certified
 - VisualIntent remains descriptive input, not executable runtime truth
 - release publication is outside this turn
 
-Claim boundary: final artistic decision input only; not release publication,
+Claim boundary: final artistic decision record only; not release publication,
 compatibility certification, public SDK stability, all-saver migration, or AIDE
 artistic authority.
