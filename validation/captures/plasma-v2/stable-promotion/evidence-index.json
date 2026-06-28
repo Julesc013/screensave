@@ -1,6 +1,6 @@
 {
   "schema": "screensave.plasma-v2.stable-promotion.evidence-index.v1",
-  "status": "active-hold",
+  "status": "active-accepted",
   "candidate_id": "plasma-v2-rc1",
   "entries": [
     {
@@ -15,7 +15,7 @@
       "kind": "proof-bundle",
       "ref": "validation/captures/plasma-v2/stable-promotion/proof-bundle-v1.json",
       "status": "tracked",
-      "claim_boundary": "stable-promotion hold projection only"
+      "claim_boundary": "stable-promotion accepted projection only"
     },
     {
       "id": "stable-promotion-proof-matrix",
@@ -29,7 +29,7 @@
       "kind": "artistic-decision",
       "ref": "validation/captures/plasma-v2/final-artistic-decision/decision.stable.toml",
       "status": "tracked",
-      "claim_boundary": "request-changes; no final stable acceptance"
+      "claim_boundary": "accepted-for-stable for Plasma v2 rc1 scope only"
     },
     {
       "id": "stable-package-stage",
@@ -67,5 +67,5 @@
       "claim_boundary": "Workbench inspection only"
     }
   ],
-  "claim_boundary": "Stable-promotion evidence index only; not publication, stable promotion, compatibility certification, or automatic artistic acceptance."
+  "claim_boundary": "Stable-promotion evidence index only; not publication, compatibility certification, or automatic artistic acceptance."
 }

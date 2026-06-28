@@ -1,6 +1,6 @@
 {
   "schema": "screensave.plasma-v2.stable-promotion.security-review.v1",
-  "status": "pass-with-hold",
+  "status": "pass",
   "candidate_id": "plasma-v2-rc1",
   "source_commit": "dee3b89daa3e402cf04723122bb70612a2ad31a2",
   "checks": {
@@ -12,7 +12,7 @@
     "known_limits_document": "pass",
     "rollback_notes": "pass",
     "release_publication": "not-performed",
-    "final_artistic_acceptance": "request-changes"
+    "final_artistic_acceptance": "accepted-for-stable"
   },
   "refs": {
     "package_manifest": "packaging/windows/plasma-v2-stable-promotion/manifest.toml",
@@ -22,5 +22,5 @@
     "packc_checker": "tools/scripts/check_packc.py",
     "stable_artistic_decision": "validation/captures/plasma-v2/final-artistic-decision/decision.stable.toml"
   },
-  "claim_boundary": "Security review records stable-promotion staging safety facts only; not publication, compatibility certification, public SDK stability, or final artistic acceptance."
+  "claim_boundary": "Security review records stable-promotion staging safety facts only; not publication, compatibility certification, public SDK stability, or automatic artistic acceptance."
 }

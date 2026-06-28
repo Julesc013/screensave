@@ -5,11 +5,13 @@ from __future__ import annotations
 import json
 import pathlib
 import sys
+import tomllib
 from typing import Any
 
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 REVIEW = ROOT / "validation" / "captures" / "plasma-v2" / "stable-promotion" / "security-review.json"
+DECISION = ROOT / "validation" / "captures" / "plasma-v2" / "final-artistic-decision" / "decision.stable.toml"
 SBOM = ROOT / "packaging" / "windows" / "plasma-v2-stable-promotion" / "sbom.json"
 PACK_MANIFEST = ROOT / "packaging" / "windows" / "plasma-v2-stable-promotion" / "manifest.toml"
 KNOWN_LIMITS = ROOT / "packaging" / "windows" / "plasma-v2-stable-promotion" / "known-limits.md"
@@ -35,6 +37,18 @@ NETWORK_TOKENS = [
 
 def load_json(path: pathlib.Path) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def load_toml(path: pathlib.Path) -> dict[str, Any]:
+    with path.open("rb") as handle:
+        return tomllib.load(handle)
+
+
+def final_artistic_accepted() -> bool:
+    if not DECISION.exists():
+        return False
+    decision = load_toml(DECISION)
+    return str(decision.get("decision_state", decision.get("decision", ""))) == "accepted-for-stable"
 
 
 def require(condition: bool, message: str, errors: list[str]) -> None:
@@ -64,9 +78,12 @@ def main() -> int:
 
     if REVIEW.exists():
         review = load_json(REVIEW)
+        accepted = final_artistic_accepted()
+        expected_status = "pass" if accepted else "pass-with-hold"
+        expected_artistic = "accepted-for-stable" if accepted else "request-changes"
         require(review.get("schema") == "screensave.plasma-v2.stable-promotion.security-review.v1", "security review schema mismatch.", errors)
         require(review.get("candidate_id") == "plasma-v2-rc1", "security review must name rc1.", errors)
-        require(review.get("status") == "pass-with-hold", "security review must preserve the stable hold.", errors)
+        require(review.get("status") == expected_status, f"security review status must be {expected_status}.", errors)
         checks = review.get("checks", {})
         for key in (
             "no_executable_pack_payloads",
@@ -79,7 +96,7 @@ def main() -> int:
         ):
             require(checks.get(key) == "pass", f"security check must pass: {key}", errors)
         require(checks.get("release_publication") == "not-performed", "security review must not record publication.", errors)
-        require(checks.get("final_artistic_acceptance") == "request-changes", "security review must preserve artistic hold.", errors)
+        require(checks.get("final_artistic_acceptance") == expected_artistic, "security review must match artistic decision.", errors)
         require("not publication" in review.get("claim_boundary", ""), "security review must block publication.", errors)
         require("compatibility certification" in review.get("claim_boundary", ""), "security review must block compatibility certification.", errors)
         for key, ref in review.get("refs", {}).items():

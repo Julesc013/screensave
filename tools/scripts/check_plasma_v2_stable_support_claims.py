@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import pathlib
 import sys
+import tomllib
 from typing import Any
 
 
@@ -12,6 +13,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 PRODUCT_DOC = ROOT / "products" / "savers" / "plasma" / "docs" / "plasma-v2-stable-support.md"
 COMPAT_DOC = ROOT / "docs" / "compatibility" / "plasma-v2-stable.md"
 CLAIMS = ROOT / "validation" / "captures" / "plasma-v2" / "stable-promotion" / "support-claims.json"
+DECISION = ROOT / "validation" / "captures" / "plasma-v2" / "final-artistic-decision" / "decision.stable.toml"
 
 PRODUCT_PHRASES = [
     "Status: stable-promotion support packet, release-candidate hold.",
@@ -57,6 +59,18 @@ def load_json(path: pathlib.Path) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def load_toml(path: pathlib.Path) -> dict[str, Any]:
+    with path.open("rb") as handle:
+        return tomllib.load(handle)
+
+
+def final_artistic_accepted() -> bool:
+    if not DECISION.exists():
+        return False
+    decision = load_toml(DECISION)
+    return str(decision.get("decision_state", decision.get("decision", ""))) == "accepted-for-stable"
+
+
 def require(condition: bool, message: str, errors: list[str]) -> None:
     if not condition:
         errors.append(message)
@@ -84,10 +98,15 @@ def main() -> int:
     require(CLAIMS.exists(), f"Missing stable support claims JSON: {CLAIMS.relative_to(ROOT)}", errors)
     if CLAIMS.exists():
         data = load_json(CLAIMS)
+        accepted = final_artistic_accepted()
         require(data.get("schema") == "screensave.plasma-v2.stable-promotion.support-claims.v1", "stable support claims schema mismatch.", errors)
         require(data.get("candidate_id") == "plasma-v2-rc1", "stable support claims must name rc1.", errors)
-        require(data.get("stable") is False, "stable support claims must keep stable false while promotion is held.", errors)
-        require(data.get("release_promotion") == "blocked", "stable support claims must keep release promotion blocked.", errors)
+        require(data.get("stable") is accepted, "stable support claims stable flag must match the final verdict.", errors)
+        require(
+            data.get("release_promotion") == ("accepted" if accepted else "blocked"),
+            "stable support claims release promotion must match the final verdict.",
+            errors,
+        )
         require(data.get("compatibility_certification") == "not-claimed", "stable support claims must not claim certification.", errors)
         require("not release publication" in data.get("claim_boundary", ""), "stable support claim boundary must block publication.", errors)
         claims = data.get("claims", {})
@@ -100,7 +119,10 @@ def main() -> int:
             "stable_release",
         ]:
             require(key in claims, f"stable support claims JSON missing {key}.", errors)
-        require("blocked" in claims.get("stable_release", ""), "stable support claims must keep stable release blocked.", errors)
+        if accepted:
+            require("accepted" in claims.get("stable_release", ""), "stable support claims must record accepted stable scope.", errors)
+        else:
+            require("blocked" in claims.get("stable_release", ""), "stable support claims must keep stable release blocked.", errors)
         refs = data.get("refs", {})
         for key, ref in refs.items():
             require((ROOT / ref).exists(), f"stable support claims ref missing: {key}={ref}", errors)

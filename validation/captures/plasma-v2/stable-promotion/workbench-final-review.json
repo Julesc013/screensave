@@ -1,6 +1,6 @@
 {
   "schema": "screensave.plasma-v2.stable-promotion.workbench-review.v1",
-  "status": "pass-with-hold",
+  "status": "pass",
   "candidate_id": "plasma-v2-rc1",
   "surface": "Workbench stable-promotion inspection",
   "source_ref": "products/apps/benchlab/src/benchlab_workbench_shell.c",
@@ -13,7 +13,7 @@
     "package_stage": true,
     "promotion_state": true,
     "publication_state": true,
-    "stable_hold": true
+    "stable_hold": false
   },
   "authority": {
     "publishes_release": false,

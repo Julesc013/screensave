@@ -14,6 +14,7 @@ from typing import Any
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 STABLE_DIR = ROOT / "validation" / "captures" / "plasma-v2" / "stable-promotion"
 REVIEW = STABLE_DIR / "provenance-review.json"
+DECISION = ROOT / "validation" / "captures" / "plasma-v2" / "final-artistic-decision" / "decision.stable.toml"
 PACKAGE_DIR = ROOT / "packaging" / "windows" / "plasma-v2-stable-promotion"
 MANIFEST = PACKAGE_DIR / "manifest.toml"
 PROVENANCE = PACKAGE_DIR / "provenance.json"
@@ -28,6 +29,13 @@ def load_json(path: pathlib.Path) -> dict[str, Any]:
 def load_toml(path: pathlib.Path) -> dict[str, Any]:
     with path.open("rb") as handle:
         return tomllib.load(handle)
+
+
+def final_artistic_accepted() -> bool:
+    if not DECISION.exists():
+        return False
+    decision = load_toml(DECISION)
+    return str(decision.get("decision_state", decision.get("decision", ""))) == "accepted-for-stable"
 
 
 def sha256_file(path: pathlib.Path) -> str:
@@ -99,14 +107,18 @@ def main() -> int:
 
     if REVIEW.exists():
         review = load_json(REVIEW)
+        accepted = final_artistic_accepted()
+        expected_status = "pass" if accepted else "pass-with-hold"
+        expected_artistic = "accepted-for-stable" if accepted else "request-changes"
         require(review.get("schema") == "screensave.plasma-v2.stable-promotion.provenance-review.v1", "provenance review schema mismatch.", errors)
         require(review.get("candidate_id") == "plasma-v2-rc1", "provenance review must name rc1.", errors)
-        require(review.get("status") == "pass-with-hold", "provenance review must preserve the stable hold.", errors)
+        require(review.get("status") == expected_status, f"provenance review status must be {expected_status}.", errors)
         require(git_commit_exists(review.get("review_source_commit", "")), "review source commit must exist.", errors)
         require(git_commit_exists(review.get("package_source_commit", "")), "package source commit must exist.", errors)
         require(review.get("boundary", {}).get("release_publication") is False, "provenance review must block publication.", errors)
-        require(review.get("boundary", {}).get("stable_release") is False, "provenance review must keep stable release false.", errors)
+        require(review.get("boundary", {}).get("stable_release") is accepted, "provenance review stable release flag must match the final verdict.", errors)
         require(review.get("boundary", {}).get("compatibility_certification") == "not claimed", "provenance review must not claim certification.", errors)
+        require(review.get("boundary", {}).get("final_artistic_acceptance") == expected_artistic, "provenance review must match artistic decision.", errors)
         for key, ref in review.get("refs", {}).items():
             require((ROOT / ref).exists(), f"provenance review ref missing: {key}={ref}", errors)
 

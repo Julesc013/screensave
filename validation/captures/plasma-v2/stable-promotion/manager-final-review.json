@@ -1,6 +1,6 @@
 {
   "schema": "screensave.plasma-v2.stable-promotion.manager-review.v1",
-  "status": "pass-with-hold",
+  "status": "pass",
   "candidate_id": "plasma-v2-rc1",
   "surface": "Manager preview",
   "source_ref": "products/apps/suite/src/manager_pack_preview.c",

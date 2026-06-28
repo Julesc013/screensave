@@ -1,6 +1,6 @@
 {
   "schema": "screensave.plasma-v2.stable-promotion.provenance-review.v1",
-  "status": "pass-with-hold",
+  "status": "pass",
   "candidate_id": "plasma-v2-rc1",
   "review_source_commit": "dee3b89daa3e402cf04723122bb70612a2ad31a2",
   "package_source_commit": "b32c821415585f2be40c012a491c2a9465d759dc",
@@ -25,9 +25,9 @@
   },
   "boundary": {
     "release_publication": false,
-    "stable_release": false,
+    "stable_release": true,
     "compatibility_certification": "not claimed",
-    "final_artistic_acceptance": "request-changes"
+    "final_artistic_acceptance": "accepted-for-stable"
   },
   "claim_boundary": "Provenance review records source, artifact, and package identity only; not release publication or compatibility certification."
 }

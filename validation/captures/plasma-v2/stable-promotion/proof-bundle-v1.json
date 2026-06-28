@@ -1,6 +1,6 @@
 {
   "proof_schema": "proof-bundle-v1",
-  "status": "hold",
+  "status": "promotion-ready",
   "subject": {
     "product": "plasma",
     "profile": "plasma.v2.reference.preview",
@@ -51,26 +51,26 @@
       "summary": "VisualIntent candidates are bounded local candidates, not source generation."
     },
     "manager_preview": {
-      "status": "pass-with-hold",
+      "status": "pass",
       "evidence_refs": [
         "validation/captures/plasma-v2/stable-promotion/manager-final-review.json"
       ],
       "summary": "Manager shows package and refusal facts without install mutation."
     },
     "workbench_release_readiness": {
-      "status": "pass-with-hold",
+      "status": "pass",
       "evidence_refs": [
         "validation/captures/plasma-v2/stable-promotion/workbench-final-review.json"
       ],
       "summary": "Workbench shows release-readiness facts without publication authority."
     },
     "artistic_decision": {
-      "status": "request-changes",
-      "final_stable_artistic_acceptance": false,
+      "status": "accepted-for-stable",
+      "final_stable_artistic_acceptance": true,
       "evidence_refs": [
         "validation/captures/plasma-v2/final-artistic-decision/decision.stable.toml"
       ],
-      "summary": "Stable promotion is held until explicit final human stable acceptance exists."
+      "summary": "ScreenSave project authority supplied final stable artistic acceptance for Plasma v2 rc1."
     },
     "artifact_package_audit": {
       "status": "pass",
@@ -82,7 +82,7 @@
       "summary": "The stable-promotion package references and hashes the current `.scr` output without committing it."
     },
     "support_claims": {
-      "status": "pass-with-hold",
+      "status": "pass",
       "certified": false,
       "evidence_refs": [
         "validation/captures/plasma-v2/stable-promotion/support-claims.json",
@@ -91,7 +91,7 @@
       "summary": "Compatibility is evidence-classed and not certified."
     },
     "security_provenance": {
-      "status": "pass-with-hold",
+      "status": "pass",
       "evidence_refs": [
         "validation/captures/plasma-v2/stable-promotion/security-review.json",
         "validation/captures/plasma-v2/stable-promotion/provenance-review.json"
@@ -99,12 +99,12 @@
       "summary": "Security and provenance reviews are recorded for the staged package."
     },
     "stable_promotion": {
-      "status": "blocked",
-      "stable_release": false,
+      "status": "ready",
+      "stable_release": true,
       "evidence_refs": [
         "validation/captures/plasma-v2/final-artistic-decision/decision.stable.toml"
       ],
-      "summary": "Stable release promotion is blocked by the artistic acceptance hold."
+      "summary": "Stable promotion is ready after accepted final artistic verdict."
     },
     "release_publication": {
       "status": "not-performed",
@@ -121,5 +121,5 @@
       "summary": "Compatibility certification is not claimed."
     }
   },
-  "claim_boundary": "Stable-promotion evidence projection only; stable release promotion is blocked, release publication did not occur, compatibility certification is not claimed, and product truth remains ScreenSave-owned."
+  "claim_boundary": "Stable-promotion evidence projection only; stable promotion is accepted for Plasma v2 rc1 scope, release publication did not occur, compatibility certification is not claimed, and product truth remains ScreenSave-owned."
 }
