@@ -1,0 +1,138 @@
+schema_version = 1
+program_id = "plasma-v2-publication-ready-closeout"
+status = "active"
+as_of = "2026-06-29"
+source_commit = "2fd4c0161c4bcce0f67ce67b585d6539ecb479ea"
+source_mutation_by_aide = false
+automatic_merge = false
+automatic_release = false
+automatic_promotion = false
+claim_boundary = "PAW-JX is pause-safe closeout only; ScreenSave owns product and release truth, and AIDE remains evidence/control-plane coordination."
+
+[[work_units]]
+id = "SS-PLV2-JX0"
+title = "Checkpoint publication-ready pause"
+task_class = "release-readiness"
+objective = "Record the Plasma v2 publication-ready state before pause-safe closeout scans and handoff work."
+allowed_paths = ["validation/captures/plasma-v2/publication-prep/pause-state.json", "docs/roadmap/paw-jx-publication-ready-closeout.md", ".aide/work_units/plasma-v2-publication-ready-closeout.toml"]
+forbidden_paths = ["products/savers/plasma/src/**", "platform/**", "build/**", "packaging/publication/**"]
+selected_validation_tier = "T1"
+expected_validators = ["py -3 tools/scripts/check_project_state.py --summary", "py -3 tools/scripts/check_aide_workunits.py", "py -3 tools/scripts/check_docs_basics.py", "git diff --check"]
+evidence_outputs = ["validation/captures/plasma-v2/publication-prep/pause-state.json"]
+claim_boundary = "Pause checkpoint only; no release publication, upload, compatibility certification broadening, or product runtime change."
+rollback_point = "2fd4c01"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"
+
+[[work_units]]
+id = "SS-PLV2-JX1"
+title = "Run publication-ready closeout scan"
+task_class = "review"
+objective = "Run repair queue, AIDE, and proposal-only closeout scans for safe drift before break."
+allowed_paths = ["validation/captures/plasma-v2/publication-prep/closeout-scan.json", ".aide/repairs/**", ".aide/evidence/**", "out/aide/agentic/SS-PLV2-JX0/**"]
+forbidden_paths = ["products/**", "platform/**", "releases/plasma-v2-stable/publication-receipt.json", "packaging/publication/**"]
+selected_validation_tier = "T1"
+expected_validators = ["py -3 tools/scripts/check_repair_queue.py", "py -3 tools/scripts/check_agentic_policy.py", "py -3 tools/scripts/check_aide_evidence_index.py", "git diff --check"]
+evidence_outputs = ["validation/captures/plasma-v2/publication-prep/closeout-scan.json"]
+claim_boundary = "Scan and proposal evidence only; no automatic source mutation, merge, publication, promotion, or certification."
+rollback_point = "2fd4c01"
+human_review_required = true
+agent_allowed = true
+agent_mode = "proposal-only"
+
+[[work_units]]
+id = "SS-PLV2-JX2"
+title = "Repair safe publication-ready drift"
+task_class = "repair"
+objective = "Repair only safe closeout drift surfaced by validators or repair scans."
+allowed_paths = ["PROJECT_STATE.toml", "VERSION.toml", "README.md", "docs/**", "contracts/**", "catalog/generated/**", "validation/captures/plasma-v2/**", "packaging/windows/plasma-v2-*/**", "releases/plasma-v2-stable/**", ".aide/evidence/**", ".aide/repairs/**", ".aide/work_units/**", "tools/scripts/check_*.py", "tools/project_adapter/**"]
+forbidden_paths = ["products/savers/plasma/src/**", "platform/**", "build/**", "packaging/publication/**"]
+selected_validation_tier = "T2"
+expected_validators = ["py -3 tools/scripts/check_project_state.py --summary", "py -3 tools/scripts/check_docs_basics.py", "py -3 tools/scripts/check_contracts.py", "py -3 tools/scripts/check_aide_evidence_index.py", "git diff --check"]
+evidence_outputs = ["validation/captures/plasma-v2/publication-prep/closeout-scan.json"]
+claim_boundary = "Safe drift repair only; no product runtime, platform, release publication, or compatibility certification change."
+rollback_point = "2fd4c01"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"
+
+[[work_units]]
+id = "SS-PLV2-JX3"
+title = "Verify publication packet without publishing"
+task_class = "release-readiness"
+objective = "Record a publication dry-run over the local Plasma v2 stable packet without publishing or uploading."
+allowed_paths = ["validation/captures/plasma-v2/publication-prep/publication-dry-run.json", "validation/captures/plasma-v2/publication-prep/publication-dry-run.md", "releases/plasma-v2-stable/publication-checklist.md"]
+forbidden_paths = ["releases/plasma-v2-stable/publication-receipt.json", "releases/plasma-v2-stable/github-release.json", "releases/plasma-v2-stable/uploaded-assets.json", "products/**", "platform/**"]
+selected_validation_tier = "T2"
+expected_validators = ["py -3 tools/scripts/check_plasma_v2_publication_prep.py", "py -3 tools/scripts/check_release_provenance.py", "py -3 tools/scripts/check_release_security.py", "py -3 tools/scripts/check_support_claims.py", "git diff --check"]
+evidence_outputs = ["validation/captures/plasma-v2/publication-prep/publication-dry-run.json"]
+claim_boundary = "Dry-run evidence only; no tag, upload, GitHub release, release page publication, or compatibility certification."
+rollback_point = "2fd4c01"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"
+
+[[work_units]]
+id = "SS-PLV2-JX4"
+title = "Add publication-ready pause checker"
+task_class = "release-readiness"
+objective = "Gate pause-safe handoff before recording final break state."
+allowed_paths = ["tools/scripts/check_plasma_v2_pause_handoff.py", "validation/captures/plasma-v2/publication-prep/pause-handoff-report.json", "validation/captures/plasma-v2/publication-prep/pause-handoff-report.md"]
+forbidden_paths = ["products/**", "platform/**", "releases/plasma-v2-stable/publication-receipt.json"]
+selected_validation_tier = "T3"
+expected_validators = ["py -3 tools/scripts/check_plasma_v2_pause_handoff.py", "py -3 tools/scripts/check_plasma_v2_publication_prep.py", "py -3 tools/scripts/check_plasma_v2_stable_promotion.py"]
+evidence_outputs = ["validation/captures/plasma-v2/publication-prep/pause-handoff-report.json"]
+claim_boundary = "Pause checker only; successful handoff is not release publication."
+rollback_point = "2fd4c01"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"
+
+[[work_units]]
+id = "SS-PLV2-JX5"
+title = "Write publication-ready break handoff"
+task_class = "review"
+objective = "Record durable break handoff docs and next-decision boundaries."
+allowed_paths = ["docs/roadmap/break-handoff-2026-06-28.md", "docs/roadmap/plasma-v2-next-decision.md"]
+forbidden_paths = ["products/**", "platform/**", "releases/plasma-v2-stable/publication-receipt.json"]
+selected_validation_tier = "T1"
+expected_validators = ["py -3 tools/scripts/check_docs_basics.py", "py -3 tools/scripts/check_project_state.py --summary", "git diff --check"]
+evidence_outputs = ["docs/roadmap/break-handoff-2026-06-28.md", "docs/roadmap/plasma-v2-next-decision.md"]
+claim_boundary = "Handoff docs only; no publication or new product track is started."
+rollback_point = "2fd4c01"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"
+
+[[work_units]]
+id = "SS-PLV2-JX6"
+title = "Record AIDE break handoff evidence"
+task_class = "review"
+objective = "Index final publication-ready closeout evidence while preserving AIDE as evidence/control plane only."
+allowed_paths = [".aide/evidence/plasma-v2-publication-ready-handoff.toml", ".aide/evidence/index.toml", "validation/captures/plasma-v2/publication-prep/aide-closeout-summary.json", "tools/scripts/check_aide_evidence_index.py"]
+forbidden_paths = ["products/**", "platform/**", "releases/plasma-v2-stable/publication-receipt.json"]
+selected_validation_tier = "T1"
+expected_validators = ["py -3 tools/scripts/check_aide_operational.py", "py -3 tools/scripts/check_aide_workunits.py", "py -3 tools/scripts/check_repair_queue.py", "py -3 tools/scripts/check_aide_evidence_index.py", "git diff --check"]
+evidence_outputs = [".aide/evidence/plasma-v2-publication-ready-handoff.toml", "validation/captures/plasma-v2/publication-prep/aide-closeout-summary.json"]
+claim_boundary = "AIDE closeout evidence only; no publication, certification, promotion, merge, or runtime authority."
+rollback_point = "2fd4c01"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"
+
+[[work_units]]
+id = "SS-PLV2-JX7"
+title = "Record pause-safe publication-ready handoff"
+task_class = "release-readiness"
+objective = "Record pause-safe state only after the pause checker and final validation pass."
+allowed_paths = ["PROJECT_STATE.toml", "VERSION.toml", "validation/captures/plasma-v2/publication-prep/**", "tools/scripts/check_project_state.py", "tools/scripts/check_plasma_v2_pause_handoff.py"]
+forbidden_paths = ["products/savers/plasma/src/**", "platform/**", "releases/plasma-v2-stable/publication-receipt.json", "packaging/publication/**"]
+selected_validation_tier = "T3"
+expected_validators = ["py -3 tools/scripts/check_project_state.py --summary", "py -3 tools/scripts/check_plasma_v2_pause_handoff.py", "py -3 tools/scripts/check_plasma_v2_publication_prep.py", "py -3 tools/scripts/check_plasma_v2_stable_promotion.py", "py -3 tools/project_adapter/screensave_project.py validate --tier T2", "py -3 tools/project_adapter/screensave_project.py validate --tier T3", "git diff --check"]
+evidence_outputs = ["PROJECT_STATE.toml", "validation/captures/plasma-v2/publication-prep/pause-handoff-report.json"]
+claim_boundary = "Pause-safe state only; publication remains not-published and separately gated."
+rollback_point = "2fd4c01"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"
