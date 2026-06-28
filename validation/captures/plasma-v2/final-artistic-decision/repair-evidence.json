@@ -1,0 +1,61 @@
+{
+  "schema": "screensave.plasma-v2.final-artistic-decision.repair-evidence.v1",
+  "status": "ready-for-re-review",
+  "repair_workunit": "SS-PLV2-I-REPAIR-001",
+  "source_decision": "request-changes",
+  "source_decision_ref": "validation/captures/plasma-v2/final-artistic-decision/decision.stable.toml",
+  "source_repair_plan": "validation/captures/plasma-v2/final-artistic-decision/request-changes-repair-plan.json",
+  "source_commit_before_repair": "ba50112c635a2c2c97d5807ffb7ca36bc7ab8edf",
+  "repair_commit_basis": "4d0f8cb5ed0c229990ac017f9d416ec9a6b13d77",
+  "repairs_applied": [],
+  "visual_artistic_blockers_repaired": [],
+  "product_source_repairs_applied": false,
+  "no_product_source_repair_reason": "The project-owned request-changes decision named no field, material, motion, luminance, contrast, treatment, control, composition, artifacting, preview, GL11, or VisualIntent visual defect. It named a missing accepted-for-stable verdict.",
+  "evidence_regenerated": [
+    {
+      "id": "runtime-contract",
+      "validator": "py -3 tools/scripts/check_plasma_v2_runtime.py",
+      "status": "pass"
+    },
+    {
+      "id": "hot-loop-hazards",
+      "validator": "py -3 tools/scripts/check_plasma_v2_no_hot_loop_hazards.py",
+      "status": "pass"
+    },
+    {
+      "id": "field-pipeline",
+      "validator": "py -3 tools/scripts/check_plasma_v2_field_pipeline.py",
+      "status": "pass",
+      "ref": "validation/captures/plasma-v2/instrument-audit/field-pipeline-report.json"
+    },
+    {
+      "id": "materials",
+      "validator": "py -3 tools/scripts/check_plasma_v2_materials.py",
+      "status": "pass"
+    },
+    {
+      "id": "material-response",
+      "validator": "py -3 tools/scripts/check_plasma_v2_material_response.py",
+      "status": "pass",
+      "ref": "validation/captures/plasma-v2/instrument-audit/material-response.json"
+    },
+    {
+      "id": "control-influence",
+      "validator": "py -3 tools/scripts/check_plasma_v2_influence.py",
+      "status": "pass",
+      "ref": "validation/captures/plasma-v2/instrument-audit/control-influence.json"
+    },
+    {
+      "id": "instrument-architecture",
+      "validator": "py -3 tools/scripts/check_plasma_instrument_architecture.py",
+      "status": "promotion-ready",
+      "ref": "validation/captures/plasma-v2/stable-promotion/instrument-architecture-audit.json"
+    }
+  ],
+  "instrument_audit_status": "promotion-ready",
+  "instrument_audit_blockers": [],
+  "known_limit_changes": [],
+  "final_decision_after_repair": "pending-project-owned-re-review",
+  "stable_promotion_allowed": false,
+  "claim_boundary": "Artistic repair evidence only; not stable promotion by itself."
+}
