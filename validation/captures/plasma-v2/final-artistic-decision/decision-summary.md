@@ -27,13 +27,16 @@ The stable promotion decision remains reserved for PAW-I.
 
 Decision: `request-changes`
 
-PAW-I did not receive a final human/operator artistic acceptance verdict for
-stable release. The stable-promotion path is therefore held instead of promoted.
+PAW-I-R2 Turn 3 did not receive a final ScreenSave/project-owned
+`accepted-for-stable` artistic verdict for stable release. The stable-promotion
+path is therefore held instead of promoted.
 
 Blocking change requested:
 
-- provide an explicit stable artistic verdict after reviewing the
-  stable-promotion packet
+- provide an explicit ScreenSave/project-owned stable artistic verdict after
+  reviewing the stable-promotion packet
+- exact blocker:
+  `missing_project_owned_accepted_for_stable_verdict`
 
 Boundaries:
 

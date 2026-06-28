@@ -1,24 +1,61 @@
 schema_version = 1
 packet_id = "screensave.plasma-v2.final-artistic-decision.stable"
+decision_id = "plasma-v2-rc1-stable-artistic-review-2026-06-28"
 product = "plasma"
 profile = "plasma.v2.reference.preview"
+release_candidate = "plasma-v2-rc1"
+source_commit = "49d85f2c942689826df9b36aeeb3455c4df170e4"
+decision = "request-changes"
 decision_state = "request-changes"
-reviewer = "ScreenSave operator final stable review required"
-reviewed_on = "2026-06-27"
-decision_summary = "Stable promotion is held because final human artistic acceptance for stable release was not supplied. Release-candidate acceptance remains valid."
+decision_date = "2026-06-28"
+reviewer = "ScreenSave project authority required"
+reviewer_or_project_authority = "ScreenSave project authority required; accepted-for-stable verdict not supplied"
+reviewed_on = "2026-06-28"
+stable_scope = "not accepted; Plasma v2 current release-candidate profile only remains under review"
+publication_decision = "not-in-this-turn"
+compatibility_certification = "not-broadened"
+aide_authority = "evidence-only"
+visual_review_summary = "Existing release-candidate, stable-candidate, matrix, contact-sheet, Manager, and Workbench review inputs are assembled for final review, but no final accepted-for-stable artistic verdict was supplied."
+instrument_architecture_summary = "Instrument audit is promotion-ready with no instrument blocking gates after legacy authority and VisualIntent-to-spec repairs."
+known_limit_acceptance = "Known limits are documented for review; they are not accepted for stable because the final project-owned stable artistic verdict is missing."
+decision_summary = "Stable promotion remains held because final human/project artistic acceptance for stable release was not supplied. Release-candidate acceptance remains valid."
+claim_boundary = "Request-changes decision only; Plasma v2 remains release-candidate-hold, AIDE indexes evidence only, and stable promotion, release publication, compatibility certification broadening, public SDK stability, and all-saver migration remain blocked."
 
 [accepted_scope]
 product = "none"
 profile = "none"
 channel = "none"
+reason = "No accepted-for-stable verdict was supplied."
+
+[excluded_scope]
+final_public_release_publication = true
+windows_preservation_certification = true
+macos_linux_support = true
+all_core_saver_migration = true
+public_sdk_stability = true
+runtime_executable_plugin_system = true
+premium_glyph_ribbon_heightfield_stable_claims = true
+aide_runtime_dependency = true
 
 [requested_changes]
 blocking = true
-reason = "Provide an explicit operator verdict of accepted-for-stable, request-changes, defer-to-labs, or rejected after reviewing the stable-promotion packet."
+reason = "Provide an explicit ScreenSave/project-owned verdict of accepted-for-stable, request-changes, defer-to-labs, or rejected after reviewing the stable-promotion packet."
 repair_workunit = "SS-PLV2-I-REPAIR-001"
+blocker_reasons = [
+  "missing_project_owned_accepted_for_stable_verdict",
+  "final_stable_artistic_acceptance_not_supplied",
+]
 
 [evidence_refs]
+intake = "validation/captures/plasma-v2/final-artistic-decision/intake.json"
+review_inputs = "validation/captures/plasma-v2/final-artistic-decision/review-inputs.json"
+review_evidence = "validation/captures/plasma-v2/final-artistic-decision/review-evidence.json"
+contact_sheet_index = "validation/captures/plasma-v2/final-artistic-decision/contact-sheet-index.json"
 proof_bundle = "validation/captures/plasma-v2/reference-preview/proof-bundle-v1.json"
+instrument_architecture_audit = "validation/captures/plasma-v2/stable-promotion/instrument-architecture-audit.json"
+instrument_reaudit = "validation/captures/plasma-v2/instrument-audit/re-audit-report.json"
+legacy_authority = "validation/captures/plasma-v2/instrument-audit/legacy-authority-report.json"
+visualintent_spec_reduction = "validation/captures/plasma-v2/instrument-audit/visualintent/spec-reduction-report.json"
 stable_candidate_review = "validation/captures/plasma-v2/stable-candidate-review/review-summary.json"
 release_candidate_decision = "validation/captures/plasma-v2/final-artistic-decision/decision.release-candidate.toml"
 acceleration_matrix = "validation/captures/plasma-v2/acceleration/matrix.json"
