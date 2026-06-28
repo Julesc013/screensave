@@ -415,8 +415,13 @@ void screensave_gl46_context_destroy(screensave_gl46_state *state)
     }
 
     if (context_current) {
+        screensave_gl46_release_bitmap_cache(state);
         screensave_gl46_pipeline_destroy(state);
         screensave_gl46_context_release_current(state);
+    } else if (state->bitmap_upload_pixels != NULL) {
+        free(state->bitmap_upload_pixels);
+        state->bitmap_upload_pixels = NULL;
+        state->bitmap_upload_bytes = 0U;
     }
 
     screensave_gl46_context_release_gl_context(state);

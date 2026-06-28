@@ -16,6 +16,10 @@
 #define GL_BGRA 0x80E1
 #endif
 
+#ifndef GL_BGR
+#define GL_BGR 0x80E0
+#endif
+
 #ifndef GL_ARRAY_BUFFER
 #define GL_ARRAY_BUFFER 0x8892
 #endif
@@ -50,6 +54,10 @@
 
 #ifndef GL_CLAMP_TO_EDGE
 #define GL_CLAMP_TO_EDGE 0x812F
+#endif
+
+#ifndef GL_UNPACK_ROW_LENGTH
+#define GL_UNPACK_ROW_LENGTH 0x0CF2
 #endif
 
 #ifndef WGL_CONTEXT_MAJOR_VERSION_ARB
@@ -247,6 +255,11 @@ typedef struct screensave_gl33_state_tag {
     GLuint vertex_array;
     GLuint color_program;
     GLuint texture_program;
+    GLuint bitmap_texture;
+    int bitmap_texture_width;
+    int bitmap_texture_height;
+    unsigned char *bitmap_upload_pixels;
+    size_t bitmap_upload_bytes;
     GLint color_viewport_location;
     GLint texture_viewport_location;
     GLint texture_sampler_location;
@@ -301,6 +314,7 @@ int screensave_gl33_pipeline_create(
     const char **failure_reason_out
 );
 void screensave_gl33_pipeline_destroy(screensave_gl33_state *state);
+void screensave_gl33_release_bitmap_cache(screensave_gl33_state *state);
 int screensave_gl33_present(screensave_renderer *renderer);
 
 void screensave_gl33_clear_impl(screensave_renderer *renderer, screensave_color color);

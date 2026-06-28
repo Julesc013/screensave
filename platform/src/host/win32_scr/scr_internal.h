@@ -13,7 +13,9 @@
 #define SCR_SETTINGS_ROOTA "Software\\Julesc013\\ScreenSave\\Products\\"
 #define SCR_HOST_REGISTRY_ROOTA "Software\\Julesc013\\ScreenSave\\Host"
 #define SCR_TIMER_ID 1
-#define SCR_TIMER_INTERVAL_MS 33
+#define SCR_TIMER_FALLBACK_INTERVAL_MS 16
+#define SCR_TIMER_MIN_INTERVAL_MS 1
+#define SCR_TIMER_MAX_INTERVAL_MS 33
 #define SCR_EXIT_MOUSE_DELTA 4
 
 #ifndef SM_CMONITORS
@@ -61,6 +63,7 @@ typedef struct scr_host_context_tag {
     HWND preview_parent;
     HWND main_window;
     UINT_PTR timer_id;
+    UINT timer_interval_ms;
     int preview_mode;
     int exit_pending;
     POINT initial_cursor;

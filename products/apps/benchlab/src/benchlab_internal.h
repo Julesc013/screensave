@@ -16,13 +16,15 @@
 #define BENCHLAB_REGISTRY_ROOTA "Software\\Julesc013\\ScreenSave\\Apps\\benchlab"
 #define BENCHLAB_APP_TITLEA "BenchLab"
 #define BENCHLAB_TIMER_ID 1
-#define BENCHLAB_TIMER_INTERVAL_MS 33
+#define BENCHLAB_TIMER_FALLBACK_INTERVAL_MS 16
+#define BENCHLAB_TIMER_MIN_INTERVAL_MS 1
+#define BENCHLAB_TIMER_MAX_INTERVAL_MS 33
 #define BENCHLAB_DEFAULT_CLIENT_WIDTH 640
 #define BENCHLAB_DEFAULT_CLIENT_HEIGHT 480
 #define BENCHLAB_INFO_PANEL_WIDTH 280
 #define BENCHLAB_DEFAULT_FIXED_SEED 0x00000707UL
 #define BENCHLAB_DEFAULT_PRODUCT_KEY "nocturne"
-#define BENCHLAB_STEP_DELTA_MS 33UL
+#define BENCHLAB_STEP_FALLBACK_DELTA_MS 16UL
 #define BENCHLAB_DEFAULT_REPORT_FRAMES 6UL
 #define BENCHLAB_DIAG_LINE_COUNT 6U
 #define BENCHLAB_DIAG_LINE_LENGTH 160
@@ -83,6 +85,7 @@ typedef struct benchlab_app_tag {
     unsigned long current_base_seed;
     unsigned long clock_start_tick;
     unsigned long last_tick;
+    unsigned long timer_interval_ms;
     unsigned long random_seed_counter;
     unsigned long report_frame_count;
     int paused;

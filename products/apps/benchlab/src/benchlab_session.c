@@ -592,7 +592,12 @@ void benchlab_session_step_once(benchlab_app *app)
         return;
     }
 
-    benchlab_advance_clock(app, BENCHLAB_STEP_DELTA_MS);
+    benchlab_advance_clock(
+        app,
+        app->timer_interval_ms != 0UL
+            ? app->timer_interval_ms
+            : BENCHLAB_STEP_FALLBACK_DELTA_MS
+    );
     if (
         app->module != NULL &&
         app->module->callbacks != NULL &&

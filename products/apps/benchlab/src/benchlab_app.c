@@ -27,6 +27,49 @@ static const char *benchlab_renderer_request_label(screensave_renderer_kind requ
     return screensave_renderer_kind_name(requested_kind);
 }
 
+static unsigned int benchlab_clamp_timer_interval_ms(unsigned int interval_ms)
+{
+    if (interval_ms < BENCHLAB_TIMER_MIN_INTERVAL_MS) {
+        return BENCHLAB_TIMER_MIN_INTERVAL_MS;
+    }
+    if (interval_ms > BENCHLAB_TIMER_MAX_INTERVAL_MS) {
+        return BENCHLAB_TIMER_MAX_INTERVAL_MS;
+    }
+    return interval_ms;
+}
+
+static unsigned int benchlab_refresh_to_timer_interval_ms(int refresh_hz)
+{
+    unsigned int interval_ms;
+
+    if (refresh_hz <= 0 || refresh_hz > 1000) {
+        return BENCHLAB_TIMER_FALLBACK_INTERVAL_MS;
+    }
+
+    interval_ms = (unsigned int)((1000 + (refresh_hz / 2)) / refresh_hz);
+    return benchlab_clamp_timer_interval_ms(interval_ms);
+}
+
+static unsigned long benchlab_resolve_timer_interval_ms(HWND window)
+{
+    HDC dc;
+    int refresh_hz;
+
+    if (window == NULL) {
+        return BENCHLAB_TIMER_FALLBACK_INTERVAL_MS;
+    }
+
+    dc = GetDC(window);
+    if (dc == NULL) {
+        return BENCHLAB_TIMER_FALLBACK_INTERVAL_MS;
+    }
+
+    refresh_hz = GetDeviceCaps(dc, VREFRESH);
+    ReleaseDC(window, dc);
+
+    return (unsigned long)benchlab_refresh_to_timer_interval_ms(refresh_hz);
+}
+
 static void benchlab_attach_window_app(HWND window, LPARAM lParam)
 {
     CREATESTRUCTA *create_struct;
@@ -790,7 +833,8 @@ static LRESULT CALLBACK benchlab_window_proc(HWND window, UINT message, WPARAM w
         }
 
         benchlab_update_window_title(app);
-        SetTimer(window, BENCHLAB_TIMER_ID, BENCHLAB_TIMER_INTERVAL_MS, NULL);
+        app->timer_interval_ms = benchlab_resolve_timer_interval_ms(window);
+        SetTimer(window, BENCHLAB_TIMER_ID, (UINT)app->timer_interval_ms, NULL);
         return 0;
 
     case WM_GETMINMAXINFO:
@@ -870,6 +914,7 @@ int benchlab_app_run(HINSTANCE instance, LPSTR command_line, int show_code)
     app.command_line = command_line;
     app.show_code = show_code;
     app.report_frame_count = BENCHLAB_DEFAULT_REPORT_FRAMES;
+    app.timer_interval_ms = BENCHLAB_TIMER_FALLBACK_INTERVAL_MS;
 
     screensave_diag_context_init(&app.diagnostics, SCREENSAVE_DIAG_LEVEL_DEBUG);
     benchlab_diag_attach(&app);

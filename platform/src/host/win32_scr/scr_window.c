@@ -97,6 +97,65 @@ static unsigned long scr_resolve_session_seed(const scr_host_context *context)
     return screensave_rng_seed_from_text(context->module->identity.product_key, fallback_seed);
 }
 
+static UINT scr_clamp_timer_interval_ms(UINT interval_ms)
+{
+    if (interval_ms < SCR_TIMER_MIN_INTERVAL_MS) {
+        return SCR_TIMER_MIN_INTERVAL_MS;
+    }
+    if (interval_ms > SCR_TIMER_MAX_INTERVAL_MS) {
+        return SCR_TIMER_MAX_INTERVAL_MS;
+    }
+    return interval_ms;
+}
+
+static UINT scr_refresh_to_timer_interval_ms(int refresh_hz)
+{
+    UINT interval_ms;
+
+    if (refresh_hz <= 0 || refresh_hz > 1000) {
+        return SCR_TIMER_FALLBACK_INTERVAL_MS;
+    }
+
+    interval_ms = (UINT)((1000 + (refresh_hz / 2)) / refresh_hz);
+    return scr_clamp_timer_interval_ms(interval_ms);
+}
+
+static UINT scr_resolve_timer_interval_ms(HWND window)
+{
+    HDC dc;
+    int refresh_hz;
+
+    if (window == NULL) {
+        return SCR_TIMER_FALLBACK_INTERVAL_MS;
+    }
+
+    dc = GetDC(window);
+    if (dc == NULL) {
+        return SCR_TIMER_FALLBACK_INTERVAL_MS;
+    }
+
+    refresh_hz = GetDeviceCaps(dc, VREFRESH);
+    ReleaseDC(window, dc);
+
+    return scr_refresh_to_timer_interval_ms(refresh_hz);
+}
+
+static int scr_start_or_restart_timer(scr_host_context *context, HWND window)
+{
+    if (context == NULL || window == NULL) {
+        return 0;
+    }
+
+    if (context->timer_id != 0) {
+        KillTimer(window, SCR_TIMER_ID);
+        context->timer_id = 0;
+    }
+
+    context->timer_interval_ms = scr_resolve_timer_interval_ms(window);
+    context->timer_id = SetTimer(window, SCR_TIMER_ID, context->timer_interval_ms, NULL);
+    return context->timer_id != 0;
+}
+
 static int scr_preview_parent_is_valid(const scr_host_context *context)
 {
     return context != NULL && context->preview_parent != NULL && IsWindow(context->preview_parent);
@@ -449,8 +508,7 @@ static LRESULT CALLBACK scr_window_proc(HWND window, UINT message, WPARAM wParam
                 return -1;
             }
             GetCursorPos(&context->initial_cursor);
-            context->timer_id = SetTimer(window, SCR_TIMER_ID, SCR_TIMER_INTERVAL_MS, NULL);
-            if (context->timer_id == 0) {
+            if (!scr_start_or_restart_timer(context, window)) {
                 scr_emit_host_diagnostic(
                     context,
                     SCREENSAVE_DIAG_LEVEL_ERROR,
@@ -506,6 +564,7 @@ static LRESULT CALLBACK scr_window_proc(HWND window, UINT message, WPARAM wParam
                 scr_sync_screen_window(context, window);
             }
             scr_resize_renderer_and_session(context, window);
+            (void)scr_start_or_restart_timer(context, window);
         }
         InvalidateRect(window, NULL, TRUE);
         return 0;

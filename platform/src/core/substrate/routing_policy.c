@@ -293,13 +293,13 @@ int screensave_routing_prepare_backend_request(
     policy_reason = NULL;
 
     if (requested_kind == SCREENSAVE_RENDERER_KIND_UNKNOWN) {
-        effective_kind = preferred_kind;
-        policy_reason = screensave_routing_auto_reason(preferred_kind);
+        effective_kind = highest_kind;
+        policy_reason = screensave_routing_auto_reason(highest_kind);
         screensave_routing_emit_diag(
             diagnostics,
             4110UL,
             module->identity.product_key,
-            "Routing policy applied the saver-preferred renderer lane."
+            "Routing policy applied the highest supported renderer lane."
         );
     } else if (screensave_routing_kind_rank(requested_kind) == 0) {
         effective_kind = requested_kind;

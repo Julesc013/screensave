@@ -533,6 +533,117 @@ static void screensave_gl46_convert_bitmap_to_rgba(
     }
 }
 
+static int screensave_gl46_prepare_bitmap_texture(
+    screensave_gl46_state *state,
+    const screensave_bitmap_view *bitmap
+)
+{
+    if (state == NULL || bitmap == NULL) {
+        return 0;
+    }
+
+    if (
+        state->bitmap_texture != 0U &&
+        (
+            state->bitmap_texture_width != bitmap->size.width ||
+            state->bitmap_texture_height != bitmap->size.height
+        )
+    ) {
+        glDeleteTextures(1, &state->bitmap_texture);
+        state->bitmap_texture = 0U;
+        state->bitmap_texture_width = 0;
+        state->bitmap_texture_height = 0;
+    }
+
+    if (state->bitmap_texture == 0U) {
+        glGenTextures(1, &state->bitmap_texture);
+        if (state->bitmap_texture == 0U) {
+            screensave_gl46_emit_diag(
+                state,
+                SCREENSAVE_DIAG_LEVEL_WARNING,
+                7089UL,
+                "gl46_primitives",
+                "glGenTextures failed for the cached GL46 bitmap blit texture."
+            );
+            return 0;
+        }
+    }
+
+    glBindTexture(GL_TEXTURE_2D, state->bitmap_texture);
+    if (
+        state->bitmap_texture_width != bitmap->size.width ||
+        state->bitmap_texture_height != bitmap->size.height
+    ) {
+        state->tex_storage_2d_fn(
+            GL_TEXTURE_2D,
+            1,
+            GL_RGBA8,
+            (GLsizei)bitmap->size.width,
+            (GLsizei)bitmap->size.height
+        );
+        state->bitmap_texture_width = bitmap->size.width;
+        state->bitmap_texture_height = bitmap->size.height;
+    }
+
+    return 1;
+}
+
+static unsigned char *screensave_gl46_prepare_bitmap_upload_buffer(
+    screensave_gl46_state *state,
+    const screensave_bitmap_view *bitmap
+)
+{
+    size_t needed_bytes;
+    unsigned char *new_pixels;
+
+    if (state == NULL || bitmap == NULL) {
+        return NULL;
+    }
+
+    needed_bytes = (size_t)bitmap->size.width * (size_t)bitmap->size.height * 4U;
+    if (needed_bytes == 0U) {
+        return NULL;
+    }
+
+    if (state->bitmap_upload_pixels == NULL || state->bitmap_upload_bytes < needed_bytes) {
+        new_pixels = (unsigned char *)realloc(state->bitmap_upload_pixels, needed_bytes);
+        if (new_pixels == NULL) {
+            screensave_gl46_emit_diag(
+                state,
+                SCREENSAVE_DIAG_LEVEL_WARNING,
+                7088UL,
+                "gl46_primitives",
+                "GL46 cached bitmap upload memory allocation failed."
+            );
+            return NULL;
+        }
+        state->bitmap_upload_pixels = new_pixels;
+        state->bitmap_upload_bytes = needed_bytes;
+    }
+
+    return state->bitmap_upload_pixels;
+}
+
+void screensave_gl46_release_bitmap_cache(screensave_gl46_state *state)
+{
+    if (state == NULL) {
+        return;
+    }
+
+    if (state->bitmap_texture != 0U) {
+        glDeleteTextures(1, &state->bitmap_texture);
+        state->bitmap_texture = 0U;
+    }
+    state->bitmap_texture_width = 0;
+    state->bitmap_texture_height = 0;
+
+    if (state->bitmap_upload_pixels != NULL) {
+        free(state->bitmap_upload_pixels);
+        state->bitmap_upload_pixels = NULL;
+    }
+    state->bitmap_upload_bytes = 0U;
+}
+
 void screensave_gl46_clear_impl(screensave_renderer *renderer, screensave_color color)
 {
     screensave_gl46_state *state;
@@ -721,13 +832,16 @@ int screensave_gl46_blit_bitmap_impl(
 )
 {
     screensave_gl46_state *state;
-    GLuint texture_id;
-    unsigned char *pixels;
+    unsigned char *upload_pixels;
     unsigned int source_bytes_per_pixel;
+    GLenum upload_format;
+    const void *upload_pixels_const;
     GLfloat left;
     GLfloat top;
     GLfloat right;
     GLfloat bottom;
+    GLfloat top_v;
+    GLfloat bottom_v;
     screensave_gl46_vertex vertices[6];
     screensave_color white;
 
@@ -745,43 +859,26 @@ int screensave_gl46_blit_bitmap_impl(
         return 0;
     }
 
-    pixels = (unsigned char *)malloc(
-        (size_t)bitmap->size.width * (size_t)bitmap->size.height * 4U
-    );
-    if (pixels == NULL) {
-        screensave_gl46_emit_diag(
-            state,
-            SCREENSAVE_DIAG_LEVEL_WARNING,
-            7088UL,
-            "gl46_primitives",
-            "GL46 bitmap upload memory allocation failed."
-        );
+    if (!screensave_gl46_prepare_bitmap_texture(state, bitmap)) {
         return 0;
     }
 
-    screensave_gl46_convert_bitmap_to_rgba(bitmap, pixels);
-    glGenTextures(1, &texture_id);
-    if (texture_id == 0U) {
-        free(pixels);
-        screensave_gl46_emit_diag(
-            state,
-            SCREENSAVE_DIAG_LEVEL_WARNING,
-            7089UL,
-            "gl46_primitives",
-            "glGenTextures failed for a GL46 bitmap blit."
-        );
-        return 0;
-    }
-
-    glBindTexture(GL_TEXTURE_2D, texture_id);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    state->tex_storage_2d_fn(
-        GL_TEXTURE_2D,
-        1,
-        GL_RGBA8,
-        (GLsizei)bitmap->size.width,
-        (GLsizei)bitmap->size.height
-    );
+    if (bitmap->bits_per_pixel == 32U) {
+        upload_format = GL_BGRA;
+        upload_pixels_const = bitmap->pixels;
+        glPixelStorei(GL_UNPACK_ROW_LENGTH, bitmap->stride_bytes / 4);
+    } else {
+        upload_pixels = screensave_gl46_prepare_bitmap_upload_buffer(state, bitmap);
+        if (upload_pixels == NULL) {
+            glBindTexture(GL_TEXTURE_2D, 0U);
+            return 0;
+        }
+        screensave_gl46_convert_bitmap_to_rgba(bitmap, upload_pixels);
+        upload_format = GL_RGBA;
+        upload_pixels_const = upload_pixels;
+        glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+    }
     glTexSubImage2D(
         GL_TEXTURE_2D,
         0,
@@ -789,11 +886,11 @@ int screensave_gl46_blit_bitmap_impl(
         0,
         (GLsizei)bitmap->size.width,
         (GLsizei)bitmap->size.height,
-        GL_RGBA,
+        upload_format,
         GL_UNSIGNED_BYTE,
-        pixels
+        upload_pixels_const
     );
-    free(pixels);
+    glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
 
     if (destination_rect != NULL) {
         left = (GLfloat)destination_rect->x;
@@ -806,28 +903,29 @@ int screensave_gl46_blit_bitmap_impl(
         right = (GLfloat)bitmap->size.width;
         bottom = (GLfloat)bitmap->size.height;
     }
+    top_v = bitmap->origin_top_left ? 0.0f : 1.0f;
+    bottom_v = bitmap->origin_top_left ? 1.0f : 0.0f;
 
     white.red = 255U;
     white.green = 255U;
     white.blue = 255U;
     white.alpha = 255U;
-    screensave_gl46_init_vertex(&vertices[0], left, top, white, 0.0f, 1.0f);
-    screensave_gl46_init_vertex(&vertices[1], right, top, white, 1.0f, 1.0f);
-    screensave_gl46_init_vertex(&vertices[2], right, bottom, white, 1.0f, 0.0f);
-    screensave_gl46_init_vertex(&vertices[3], left, top, white, 0.0f, 1.0f);
-    screensave_gl46_init_vertex(&vertices[4], right, bottom, white, 1.0f, 0.0f);
-    screensave_gl46_init_vertex(&vertices[5], left, bottom, white, 0.0f, 0.0f);
+    screensave_gl46_init_vertex(&vertices[0], left, top, white, 0.0f, top_v);
+    screensave_gl46_init_vertex(&vertices[1], right, top, white, 1.0f, top_v);
+    screensave_gl46_init_vertex(&vertices[2], right, bottom, white, 1.0f, bottom_v);
+    screensave_gl46_init_vertex(&vertices[3], left, top, white, 0.0f, top_v);
+    screensave_gl46_init_vertex(&vertices[4], right, bottom, white, 1.0f, bottom_v);
+    screensave_gl46_init_vertex(&vertices[5], left, bottom, white, 0.0f, bottom_v);
     (void)screensave_gl46_draw_vertices(
         state,
         state->texture_program,
         state->texture_viewport_location,
-        texture_id,
+        state->bitmap_texture,
         vertices,
         6U,
         GL_TRIANGLES
     );
 
     glBindTexture(GL_TEXTURE_2D, 0U);
-    glDeleteTextures(1, &texture_id);
     return 1;
 }
