@@ -5,7 +5,8 @@
 #include "screensave/version.h"
 #include "../../../../platform/src/core/base/saver_registry.h"
 
-#define PLASMA_DEFAULT_DEMO_SCHEMA_VERSION 2UL
+#define PLASMA_DEFAULT_DEMO_SCHEMA_VERSION 3UL
+#define PLASMA_DEFAULT_DEMO_SEED 0x504C5632UL
 
 typedef struct plasma_dialog_state_tag {
     const screensave_saver_module *module;
@@ -432,6 +433,38 @@ static void plasma_config_set_product_defaults(plasma_config *config)
     plasma_benchlab_forcing_set_defaults(&config->benchlab);
 }
 
+static void plasma_config_set_common_first_principles_defaults(
+    screensave_common_config *common_config
+)
+{
+    if (common_config == NULL) {
+        return;
+    }
+
+    screensave_common_config_set_defaults(common_config);
+    common_config->detail_level = SCREENSAVE_DETAIL_LEVEL_HIGH;
+    common_config->diagnostics_overlay_enabled = 0;
+    common_config->use_deterministic_seed = 1;
+    common_config->deterministic_seed = PLASMA_DEFAULT_DEMO_SEED;
+    common_config->randomization_mode = SCREENSAVE_RANDOMIZATION_MODE_OFF;
+    common_config->randomization_scope = 0UL;
+    common_config->preset_key = PLASMA_DEFAULT_PRESET_KEY;
+    common_config->theme_key = PLASMA_DEFAULT_THEME_KEY;
+}
+
+static void plasma_config_apply_first_principles_default(
+    screensave_common_config *common_config,
+    plasma_config *config
+)
+{
+    if (common_config == NULL || config == NULL) {
+        return;
+    }
+
+    plasma_config_set_common_first_principles_defaults(common_config);
+    plasma_config_set_product_defaults(config);
+}
+
 static void plasma_config_apply_default_demo_schema(
     screensave_common_config *common_config,
     plasma_config *config
@@ -441,11 +474,7 @@ static void plasma_config_apply_default_demo_schema(
         return;
     }
 
-    plasma_config_set_product_defaults(config);
-    plasma_apply_preset_bundle_to_config(PLASMA_DEFAULT_PRESET_KEY, common_config, config);
-    plasma_selection_preferences_set_defaults(&config->selection);
-    plasma_transition_preferences_set_defaults(&config->transition);
-    plasma_benchlab_forcing_set_defaults(&config->benchlab);
+    plasma_config_apply_first_principles_default(common_config, config);
 }
 
 static void plasma_config_clamp_runtime_fields(plasma_config *config)
@@ -505,9 +534,7 @@ void plasma_config_set_defaults(
         return;
     }
 
-    screensave_common_config_set_defaults(common_config);
-    plasma_config_set_product_defaults(config);
-    plasma_apply_preset_bundle_to_config(PLASMA_DEFAULT_PRESET_KEY, common_config, config);
+    plasma_config_apply_first_principles_default(common_config, config);
 }
 
 void plasma_config_clamp(
@@ -1979,13 +2006,17 @@ static int plasma_config_has_hidden_advanced_overrides(const plasma_settings_con
         return 0;
     }
 
-    screensave_common_config_set_defaults(&bundle_common_config);
-    plasma_config_set_product_defaults(&bundle_product_config);
     preset_key = settings_context->common_config->preset_key;
     if (!plasma_has_non_empty_text(preset_key) || plasma_find_preset_values(preset_key) == NULL) {
         preset_key = PLASMA_DEFAULT_PRESET_KEY;
     }
-    plasma_apply_preset_bundle_to_config(preset_key, &bundle_common_config, &bundle_product_config);
+    if (lstrcmpiA(preset_key, PLASMA_DEFAULT_PRESET_KEY) == 0) {
+        plasma_config_apply_first_principles_default(&bundle_common_config, &bundle_product_config);
+    } else {
+        screensave_common_config_set_defaults(&bundle_common_config);
+        plasma_config_set_product_defaults(&bundle_product_config);
+        plasma_apply_preset_bundle_to_config(preset_key, &bundle_common_config, &bundle_product_config);
+    }
 
     return
         settings_context->product_config->effect_mode != bundle_product_config.effect_mode ||
@@ -2029,7 +2060,7 @@ static int plasma_config_has_hidden_author_lab_state(const plasma_settings_conte
         settings_context->product_config->transition.interval_millis != transition_defaults.interval_millis ||
         settings_context->product_config->transition.duration_millis != transition_defaults.duration_millis ||
         settings_context->product_config->transition.journey_key[0] != '\0' ||
-        settings_context->common_config->deterministic_seed != 0UL ||
+        settings_context->common_config->deterministic_seed != PLASMA_DEFAULT_DEMO_SEED ||
         settings_context->common_config->diagnostics_overlay_enabled;
 }
 

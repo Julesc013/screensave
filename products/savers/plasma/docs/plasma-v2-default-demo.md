@@ -71,10 +71,24 @@ force a large internal field.
 
 Existing user registry settings from earlier Plasma builds may not carry the
 new default-demo schema marker. On load, those stale product settings migrate
-back to the current calm default path so old experimental output or transition
-state cannot silently make the freshly built `.scr` look like the previous
-months-old demo. Saves write `DefaultDemoSchemaVersion` so explicit new
-settings remain user-owned after the migration boundary is crossed.
+back to the current calm first-principles default path so old experimental
+output, randomization, preset-set, theme-set, journey, transition, treatment,
+or presentation state cannot silently make the freshly built `.scr` look like
+the previous months-old demo. Saves write `DefaultDemoSchemaVersion`, and
+schema version 3 resets older saved Plasma state to:
+
+- deterministic seed `0x504C5632`
+- randomization off
+- transitions off
+- no preset/theme set selection
+- no journey selection
+- high detail, fine resolution, gentle motion
+- native raster output
+- flat presentation
+- no sampling, filter, emulation, or accent treatment
+
+The `plasma_lava` preset/theme keys remain as compatibility identity labels for
+older APIs and the settings UI. They are not the default runtime authority.
 
 The classic default modulation is runtime motion inside the resolved `plasma`
 effect. It does not mutate saved settings and it does not make old presets,

@@ -150,12 +150,21 @@ CHECKS = [
         "id": "stale_registry_state_migrates_to_default_demo",
         "path": PLASMA_SRC / "plasma_config.c",
         "needles": [
-            "PLASMA_DEFAULT_DEMO_SCHEMA_VERSION 2UL",
+            "PLASMA_DEFAULT_DEMO_SCHEMA_VERSION 3UL",
+            "PLASMA_DEFAULT_DEMO_SEED 0x504C5632UL",
             "DefaultDemoSchemaVersion",
+            "plasma_config_set_common_first_principles_defaults",
+            "plasma_config_apply_first_principles_default",
             "plasma_config_apply_default_demo_schema",
-            "plasma_config_set_product_defaults(config);",
+            "common_config->use_deterministic_seed = 1;",
+            "common_config->deterministic_seed = PLASMA_DEFAULT_DEMO_SEED;",
+            "common_config->randomization_mode = SCREENSAVE_RANDOMIZATION_MODE_OFF;",
+            "common_config->randomization_scope = 0UL;",
+            "common_config->preset_key = PLASMA_DEFAULT_PRESET_KEY;",
+            "common_config->theme_key = PLASMA_DEFAULT_THEME_KEY;",
+        ],
+        "forbidden": [
             "plasma_apply_preset_bundle_to_config(PLASMA_DEFAULT_PRESET_KEY, common_config, config);",
-            "plasma_transition_preferences_set_defaults(&config->transition);",
         ],
     },
     {
@@ -327,6 +336,7 @@ def run_checks(errors: list[str]) -> list[dict[str, Any]]:
     for check in CHECKS:
         path = check["path"]
         missing: list[str] = []
+        forbidden_found: list[str] = []
         if not path.exists():
             errors.append(f"Missing source for {check['id']}: {repo_path(path)}")
             results.append({"id": check["id"], "status": "fail", "path": repo_path(path), "missing": ["file"]})
@@ -335,12 +345,21 @@ def run_checks(errors: list[str]) -> list[dict[str, Any]]:
         for needle in check["needles"]:
             if needle not in text:
                 missing.append(needle)
+        for forbidden in check.get("forbidden", []):
+            if forbidden in text:
+                forbidden_found.append(forbidden)
         require(not missing, f"{check['id']} missing required source tokens: {missing}", errors)
+        require(
+            not forbidden_found,
+            f"{check['id']} contains forbidden source tokens: {forbidden_found}",
+            errors,
+        )
         results.append({
             "id": check["id"],
-            "status": "pass" if not missing else "fail",
+            "status": "pass" if not missing and not forbidden_found else "fail",
             "path": repo_path(path),
             "missing": missing,
+            "forbidden_found": forbidden_found,
         })
     return results
 
@@ -414,6 +433,7 @@ def build_report(errors: list[str], checks: list[dict[str, Any]]) -> dict[str, A
             "color": "direct full-color smooth RGB palette cycling from the scalar plasma field",
             "output": "native drawable raster presentation with pixel-sharp renderer scaling and resolution-independent plasma coordinates",
             "presentation": "flat",
+            "seed": "first-principles deterministic default seed 0x504C5632 with session randomization off",
             "minimum_renderer": "gdi",
             "preferred_renderer": "gl46",
             "optional_renderer_ladder": ["gl21", "gl33", "gl46"],
