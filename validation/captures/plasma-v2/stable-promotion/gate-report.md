@@ -33,4 +33,5 @@
 - pass: repair-queue-outcome - Repair queue outcome matches the artistic decision.
 - pass: instrument-architecture-outcome - Instrument audit is either promotion-ready or a valid non-promotion hold.
 - pass: proof-bundle-decision-axis - Proof bundle records the stable-promotion decision axis.
+- pass: hold-report-recorded - Stable-promotion hold report records the exact final artistic decision blocker.
 - pass: no-publication-packet - No stable publication packet has been created during the stable-promotion decision.

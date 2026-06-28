@@ -16,6 +16,7 @@ REPORT_DIR = ROOT / "validation" / "captures" / "plasma-v2" / "stable-promotion"
 REPORT_JSON = REPORT_DIR / "gate-report.json"
 REPORT_MD = REPORT_DIR / "gate-report.md"
 DECISION = ROOT / "validation" / "captures" / "plasma-v2" / "final-artistic-decision" / "decision.stable.toml"
+HOLD_REPORT = REPORT_DIR / "hold-report.json"
 REPAIR_BURN = REPORT_DIR / "repair-burndown.json"
 EVIDENCE = REPORT_DIR / "proof-bundle-v1.json"
 INSTRUMENT_AUDIT = REPORT_DIR / "instrument-architecture-audit.json"
@@ -206,6 +207,24 @@ def build_report() -> dict[str, Any]:
         artistic_decision=axes.get("artistic_decision", {}),
         stable_promotion=axes.get("stable_promotion", {}),
     )
+
+    if not accepted:
+        hold_report = load_json(HOLD_REPORT) if HOLD_REPORT.exists() else {}
+        blocker_ids = {str(item.get("id")) for item in hold_report.get("exact_blockers", []) if isinstance(item, dict)}
+        add_check(
+            checks,
+            "hold-report-recorded",
+            hold_report.get("status") == "hold"
+            and hold_report.get("final_artistic_decision") == decision_state
+            and hold_report.get("stable") is False
+            and hold_report.get("release_promotion") == "blocked"
+            and hold_report.get("repair_workunits") == ["SS-PLV2-I-REPAIR-001"]
+            and "final_stable_artistic_acceptance_not_accepted" in blocker_ids
+            and "missing_project_owned_accepted_for_stable_verdict" in blocker_ids,
+            "Stable-promotion hold report records the exact final artistic decision blocker.",
+            hold_report_ref=str(HOLD_REPORT.relative_to(ROOT)),
+            blocker_ids=sorted(blocker_ids),
+        )
 
     publication_dir = ROOT / "releases" / "plasma-v2-stable"
     add_check(

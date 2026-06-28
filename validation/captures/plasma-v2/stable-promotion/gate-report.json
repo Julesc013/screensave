@@ -356,6 +356,18 @@
     },
     {
       "data": {
+        "blocker_ids": [
+          "final_stable_artistic_acceptance_not_accepted",
+          "missing_project_owned_accepted_for_stable_verdict"
+        ],
+        "hold_report_ref": "validation\\captures\\plasma-v2\\stable-promotion\\hold-report.json"
+      },
+      "id": "hold-report-recorded",
+      "status": "pass",
+      "summary": "Stable-promotion hold report records the exact final artistic decision blocker."
+    },
+    {
+      "data": {
         "release_dir": "releases\\plasma-v2-stable"
       },
       "id": "no-publication-packet",
@@ -377,7 +389,7 @@
   "schema": "screensave.plasma-v2.stable-promotion.gate-report.v1",
   "source": {
     "branch": "main",
-    "commit": "fc6d90026e6969538e7626f794bc488f94397035",
+    "commit": "6927ebe7fc365611981dcccb5560e7cf3f0bab6c",
     "dirty": true
   },
   "status": "hold"

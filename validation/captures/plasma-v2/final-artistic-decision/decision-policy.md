@@ -3,6 +3,7 @@
 This packet prepares ScreenSave-owned artistic decisions for Plasma v2. The
 release-candidate packet records rc1 readiness. The stable packet records the
 separate final stable artistic verdict. Neither packet publishes a release.
+This decision packet does not promote a stable release.
 
 Decision states:
 

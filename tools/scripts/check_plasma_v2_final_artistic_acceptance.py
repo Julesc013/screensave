@@ -289,11 +289,11 @@ def validate_text_files(errors: list[str]) -> None:
     protocol = PRODUCT_PROTOCOL.read_text(encoding="utf-8")
     for phrase in (
         "ScreenSave owns the decision",
-        "AIDE indexes the decision",
+        "External evidence indexes support the decision without owning it.",
         "accepted-for-stable",
         "request-changes",
         "Windows preservation certification",
-        "AIDE runtime dependency",
+        "external automation runtime dependency",
     ):
         require(phrase in protocol, f"product protocol missing {phrase!r}.", errors)
 

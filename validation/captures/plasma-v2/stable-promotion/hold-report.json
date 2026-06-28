@@ -1,0 +1,45 @@
+{
+  "schema": "screensave.plasma-v2.stable-promotion.hold-report.v1",
+  "status": "hold",
+  "candidate_id": "plasma-v2-rc1",
+  "profile": "plasma.v2.reference.preview",
+  "recommended_state": "release-candidate-hold",
+  "stable": false,
+  "release_promotion": "blocked",
+  "final_artistic_decision": "request-changes",
+  "instrument_audit_status": "promotion-ready",
+  "instrument_blocking_gates": [],
+  "stable_promotion_gate_status": "hold",
+  "exact_blockers": [
+    {
+      "id": "final_stable_artistic_acceptance_not_accepted",
+      "reason": "Final stable artistic decision is request-changes because no ScreenSave/project-owned accepted-for-stable verdict was supplied.",
+      "repair_workunit": "SS-PLV2-I-REPAIR-001"
+    },
+    {
+      "id": "missing_project_owned_accepted_for_stable_verdict",
+      "reason": "Stable promotion requires an explicit project-owned accepted-for-stable verdict after review of the final decision packet.",
+      "repair_workunit": "SS-PLV2-I-REPAIR-001"
+    }
+  ],
+  "repair_workunits": [
+    "SS-PLV2-I-REPAIR-001"
+  ],
+  "evidence_refs": {
+    "decision": "validation/captures/plasma-v2/final-artistic-decision/decision.stable.toml",
+    "review_evidence": "validation/captures/plasma-v2/final-artistic-decision/review-evidence.json",
+    "aide_decision_summary": "validation/captures/plasma-v2/final-artistic-decision/aide-decision-summary.json",
+    "instrument_architecture": "validation/captures/plasma-v2/stable-promotion/instrument-architecture-audit.json",
+    "stable_promotion_gate": "validation/captures/plasma-v2/stable-promotion/gate-report.json",
+    "repair_queue": ".aide/repairs/index.toml"
+  },
+  "not_performed": [
+    "stable promotion",
+    "release publication",
+    "compatibility certification broadening",
+    "public SDK stability",
+    "all-saver migration",
+    "graphical Workbench MVP"
+  ],
+  "claim_boundary": "Hold report only; Plasma v2 remains release-candidate-hold and this does not publish, certify compatibility, accept artistic quality automatically, or grant AIDE release authority."
+}

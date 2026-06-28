@@ -4,8 +4,8 @@ Status: active PAW-I-R2 Turn 3 protocol.
 
 Plasma v2 final stable artistic acceptance is a ScreenSave product decision.
 Proof bundles, capture matrices, Workbench facts, Manager/package preview facts,
-instrument audit reports, and AIDE evidence references can support the review,
-but none of them owns the artistic verdict.
+instrument audit reports, and external evidence references can support the
+review, but none of them owns the artistic verdict.
 
 The allowed final decisions are:
 
@@ -45,7 +45,8 @@ Excluded scope remains explicit:
 - public SDK stability
 - runtime executable plugin system
 - premium, glyph, ribbon, or heightfield stable claims unless separately proved
-- AIDE runtime dependency or AIDE artistic authority
+- external automation runtime dependency or external automation artistic
+  authority
 
 If the decision is not `accepted-for-stable`, Plasma v2 remains on
 release-candidate hold and the repair queue must carry the exact blocker reason.
@@ -56,5 +57,5 @@ Core rule:
 Proof supports the decision.
 Review records the decision.
 ScreenSave owns the decision.
-AIDE indexes the decision.
+External evidence indexes support the decision without owning it.
 ```
