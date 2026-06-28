@@ -1,0 +1,77 @@
+{
+  "schema": "screensave.plasma-v2.publication-ready.closeout-scan.v1",
+  "status": "pass",
+  "work_unit": "SS-PLV2-JX0",
+  "source_commit": "5df795f2ee6e3bdb48301585e89e6ba1848dcc1d",
+  "publication_state": {
+    "plasma_v2_status": "publication-ready",
+    "stable": true,
+    "release_promotion": "accepted",
+    "publication_prep": "ready",
+    "publication": "not-published",
+    "opened_next": "plasma-v2-publication"
+  },
+  "repair_queue_scan": {
+    "scan_ref": "out/aide/repairs/scan.json",
+    "scan_status": "pass",
+    "repair_count": 4,
+    "blocking_repairs": [],
+    "open_blocking_count": 0,
+    "uncommitted_out_files": true
+  },
+  "plans_checked": [
+    {
+      "repair_class": "doc_drift",
+      "plan_ref": "out/aide/repairs/plan-doc_drift.json",
+      "matching_count": 0,
+      "status": "pass"
+    },
+    {
+      "repair_class": "evidence_index_drift",
+      "plan_ref": "out/aide/repairs/plan-evidence_index_drift.json",
+      "matching_count": 0,
+      "status": "pass"
+    },
+    {
+      "repair_class": "package_checksum_drift",
+      "plan_ref": "out/aide/repairs/plan-package_checksum_drift.json",
+      "matching_count": 0,
+      "status": "pass"
+    },
+    {
+      "repair_class": "generated_catalog_drift",
+      "plan_ref": "out/aide/repairs/plan-generated_catalog_drift.json",
+      "matching_count": 0,
+      "status": "pass"
+    },
+    {
+      "repair_class": "release_readiness_gap",
+      "plan_ref": "out/aide/repairs/plan-release_readiness_gap.json",
+      "matching_count": 1,
+      "matching_repairs": [
+        "SS-PLV2-I-REPAIR-001"
+      ],
+      "status": "pass",
+      "resolution": "historical stable artistic acceptance repair is completed; no publication-prep blocker remains"
+    }
+  ],
+  "agentic_proposal": {
+    "receipt_ref": "out/aide/agentic/SS-PLV2-JX0/session-receipt.json",
+    "proposal_ref": "out/aide/agentic/SS-PLV2-JX0/proposal.json",
+    "automatic_apply": false,
+    "automatic_merge": false,
+    "automatic_release": false,
+    "source_mutation_by_aide": false
+  },
+  "closeout_findings": {
+    "safe_drift_detected": false,
+    "publication_prep_blocking_repairs": [],
+    "release_publication_performed": false,
+    "compatibility_certification_broadened": false,
+    "workbench_mvp_started": false,
+    "manager_install_apply_mutation_started": false,
+    "all_saver_migration_started": false,
+    "aide_role": "evidence/control-plane only"
+  },
+  "claim_boundary": "Closeout scan records AIDE and repair-queue evidence only; it does not publish a release, broaden compatibility certification, start Workbench MVP, start Manager install/apply mutation, start all-saver migration, or give AIDE product authority."
+}
