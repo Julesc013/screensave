@@ -5,7 +5,7 @@
 #include "screensave/version.h"
 #include "../../../../platform/src/core/base/saver_registry.h"
 
-#define PLASMA_DEFAULT_DEMO_SCHEMA_VERSION 3UL
+#define PLASMA_DEFAULT_DEMO_SCHEMA_VERSION 4UL
 #define PLASMA_DEFAULT_DEMO_SEED 0x504C5632UL
 
 typedef struct plasma_dialog_state_tag {

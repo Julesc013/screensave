@@ -75,7 +75,7 @@ back to the current calm first-principles default path so old experimental
 output, randomization, preset-set, theme-set, journey, transition, treatment,
 or presentation state cannot silently make the freshly built `.scr` look like
 the previous months-old demo. Saves write `DefaultDemoSchemaVersion`, and
-schema version 3 resets older saved Plasma state to:
+schema version 4 resets older saved Plasma state to:
 
 - deterministic seed `0x504C5632`
 - randomization off

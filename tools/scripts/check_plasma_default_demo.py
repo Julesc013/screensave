@@ -150,7 +150,7 @@ CHECKS = [
         "id": "stale_registry_state_migrates_to_default_demo",
         "path": PLASMA_SRC / "plasma_config.c",
         "needles": [
-            "PLASMA_DEFAULT_DEMO_SCHEMA_VERSION 3UL",
+            "PLASMA_DEFAULT_DEMO_SCHEMA_VERSION 4UL",
             "PLASMA_DEFAULT_DEMO_SEED 0x504C5632UL",
             "DefaultDemoSchemaVersion",
             "plasma_config_set_common_first_principles_defaults",
