@@ -216,8 +216,8 @@
   "schema": "screensave.plasma.default-demo.v1",
   "source": {
     "branch": "main",
-    "commit": "63c26011b1bb72650ed2ff4759b8e559f333fa23",
-    "dirty": true
+    "commit": "a0470815ce9343e3a2734822dde19c50979fa313",
+    "dirty": false
   },
   "status": "pass",
   "validation_errors": []
