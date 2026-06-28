@@ -1,0 +1,299 @@
+{
+  "candidate_id": "plasma-v2-rc1",
+  "checks": [
+    {
+      "id": "publication-packet-paths",
+      "message": "Publication-prep packet paths exist.",
+      "missing": [],
+      "status": "pass"
+    },
+    {
+      "active_program": "plasma-v2-publication-prep",
+      "expected_active_program": "plasma-v2-publication-prep",
+      "id": "project-state",
+      "message": "Project state is stable-promoted for prep or publication-ready after prep.",
+      "plasma_status": "stable-promoted",
+      "release_promotion": "accepted",
+      "stable": true,
+      "status": "pass"
+    },
+    {
+      "id": "release-manifest",
+      "manifest": {
+        "all_saver_migration": "not-claimed",
+        "artifacts": {
+          "artifact_manifest": "releases/plasma-v2-stable/artifact-manifest.toml",
+          "checksums": "releases/plasma-v2-stable/checksums.sha256",
+          "provenance": "releases/plasma-v2-stable/provenance.json",
+          "stable_promotion_stage": "packaging/windows/plasma-v2-stable-promotion/manifest.toml"
+        },
+        "claim_boundary": "Publication-prep manifest only; public release publication, compatibility certification broadening, SDK stability, all-saver migration, Manager install mutation, Workbench MVP, and platform expansion remain separate gates.",
+        "compatibility_certification": "not-broadened",
+        "dirty_state_at_packet_start": false,
+        "documents": {
+          "install_notes": "releases/plasma-v2-stable/install-notes.md",
+          "known_limits": "releases/plasma-v2-stable/known-limits.md",
+          "publication_checklist": "releases/plasma-v2-stable/publication-checklist.md",
+          "rollback_notes": "releases/plasma-v2-stable/rollback-notes.md",
+          "support_matrix": "releases/plasma-v2-stable/support-matrix.md",
+          "third_party_notices": "releases/plasma-v2-stable/third-party-notices.md"
+        },
+        "evidence": {
+          "final_artistic_decision": "validation/captures/plasma-v2/final-artistic-decision/decision.stable.toml",
+          "instrument_audit": "validation/captures/plasma-v2/instrument-audit/re-audit-report.json",
+          "manager_preview": "validation/captures/plasma-v2/stable-promotion/manager-final-review.json",
+          "package_checksums": "packaging/windows/plasma-v2-stable-promotion/checksums.sha256",
+          "package_manifest": "packaging/windows/plasma-v2-stable-promotion/manifest.toml",
+          "proof_bundle": "validation/captures/plasma-v2/stable-promotion/proof-bundle-v1.json",
+          "provenance_review": "validation/captures/plasma-v2/stable-promotion/provenance-review.json",
+          "security_review": "validation/captures/plasma-v2/stable-promotion/security-review.json",
+          "stable_promotion_gate": "validation/captures/plasma-v2/stable-promotion/gate-report.json",
+          "support_claims": "validation/captures/plasma-v2/stable-promotion/support-claims.json",
+          "workbench_review": "validation/captures/plasma-v2/stable-promotion/workbench-final-review.json"
+        },
+        "packet_id": "screensave.plasma-v2.publication-prep.packet",
+        "platform_expansion": "not-claimed",
+        "product": "plasma",
+        "profile": "plasma.v2.reference.preview",
+        "public_sdk_stability": "not-claimed",
+        "publication": {
+          "download_links_verified": false,
+          "github_release_created": false,
+          "public_upload": false,
+          "publication_receipt": "not-created",
+          "release_page_published": false
+        },
+        "publication_prep_base_commit": "30b2ffe1ee4f030c22b8b1d07353f8cc631b3b84",
+        "publication_status": "not-published",
+        "release_candidate": "plasma-v2-rc1",
+        "release_id": "screensave.plasma-v2.stable",
+        "release_scope": {
+          "gdi": "mandatory baseline",
+          "gl11": "optional candidate",
+          "packc": "v1-candidate data packs",
+          "software_reference": "canonical",
+          "stable_scope": "Plasma v2 current release-candidate profile only.",
+          "visualintent": "candidate flow reduces to Plasma v2 specs"
+        },
+        "schema_version": 1,
+        "stable_promoted_source_commit": "9182f348a4a306ee3499758824da1af7f13432e1",
+        "stable_promotion": "accepted",
+        "status": "publication-prep"
+      },
+      "message": "Release manifest records publication-prep only.",
+      "status": "pass"
+    },
+    {
+      "id": "release-manifest-artifacts-refs",
+      "message": "Release manifest artifacts refs exist.",
+      "missing": [],
+      "status": "pass"
+    },
+    {
+      "id": "release-manifest-evidence-refs",
+      "message": "Release manifest evidence refs exist.",
+      "missing": [],
+      "status": "pass"
+    },
+    {
+      "id": "release-manifest-documents-refs",
+      "message": "Release manifest documents refs exist.",
+      "missing": [],
+      "status": "pass"
+    },
+    {
+      "artifact_paths": [
+        "out/msvc/vs2017_xp/Release/plasma/plasma.scr",
+        "products/savers/plasma/content/v2/examples/plasma_lava_v2.toml",
+        "validation/captures/plasma-v2/stable-promotion/proof-bundle-v1.json",
+        "releases/plasma-v2-stable/release-manifest.toml"
+      ],
+      "id": "artifact-manifest",
+      "message": "Artifact manifest records unpublished publication-prep artifacts.",
+      "published": [],
+      "status": "pass"
+    },
+    {
+      "id": "artifact-manifest-refs",
+      "message": "Artifact manifest paths exist.",
+      "missing": [],
+      "status": "pass"
+    },
+    {
+      "count": 13,
+      "errors": [],
+      "id": "checksum-file-format",
+      "message": "Publication-prep checksum file is parseable.",
+      "status": "pass"
+    },
+    {
+      "id": "checksums-match",
+      "message": "Publication-prep checksums match referenced files.",
+      "mismatches": [],
+      "missing": [],
+      "status": "pass"
+    },
+    {
+      "id": "doc-known-limits",
+      "message": "releases\\plasma-v2-stable\\known-limits.md records required publication-prep wording.",
+      "missing": [],
+      "status": "pass"
+    },
+    {
+      "id": "doc-support-matrix",
+      "message": "releases\\plasma-v2-stable\\support-matrix.md records required publication-prep wording.",
+      "missing": [],
+      "status": "pass"
+    },
+    {
+      "id": "doc-install-notes",
+      "message": "releases\\plasma-v2-stable\\install-notes.md records required publication-prep wording.",
+      "missing": [],
+      "status": "pass"
+    },
+    {
+      "id": "doc-rollback-notes",
+      "message": "releases\\plasma-v2-stable\\rollback-notes.md records required publication-prep wording.",
+      "missing": [],
+      "status": "pass"
+    },
+    {
+      "id": "doc-third-party-notices",
+      "message": "releases\\plasma-v2-stable\\third-party-notices.md records required publication-prep wording.",
+      "missing": [],
+      "status": "pass"
+    },
+    {
+      "id": "doc-publication-checklist",
+      "message": "releases\\plasma-v2-stable\\publication-checklist.md records required publication-prep wording.",
+      "missing": [],
+      "status": "pass"
+    },
+    {
+      "artifact_ok": true,
+      "boundaries": {
+        "all_saver_migration": "not claimed",
+        "compatibility_certification_broadened": false,
+        "public_sdk_stability": "not claimed",
+        "public_upload": false,
+        "release_page_published": false
+      },
+      "id": "publication-provenance",
+      "message": "Publication-prep provenance records artifact and boundary facts.",
+      "status": "pass"
+    },
+    {
+      "id": "publication-provenance-refs",
+      "message": "Publication-prep provenance refs exist.",
+      "missing": [],
+      "status": "pass"
+    },
+    {
+      "id": "stable-promotion-accepted",
+      "message": "Stable-promotion gate remains accepted before publication prep.",
+      "recommended_state": "stable-promoted",
+      "stable_gate_status": "promotion-ready",
+      "status": "pass"
+    },
+    {
+      "id": "aide-publication-summary",
+      "message": "AIDE publication summary records evidence-only posture.",
+      "status": "pass",
+      "summary": {
+        "aide_assertions": {
+          "did_not_become_runtime_dependency": true,
+          "did_not_certify_compatibility": true,
+          "did_not_mutate_source_automatically": true,
+          "did_not_promote_release": true,
+          "did_not_publish_release": true
+        },
+        "aide_runtime_dependency": false,
+        "claim_boundary": "AIDE publication-prep summary records evidence references only; publication, compatibility certification broadening, SDK stability, all-saver migration, and platform expansion remain ScreenSave gates.",
+        "compatibility_certification_broadening": false,
+        "publication_prep": "recorded",
+        "publication_upload": "not-performed",
+        "refs": {
+          "evidence_ledger": ".aide/evidence/plasma-v2-publication-prep.toml",
+          "publication_contract": "contracts/plasma_publication_prep_v1.md",
+          "release_manifest": "releases/plasma-v2-stable/release-manifest.toml",
+          "stable_promotion_gate": "validation/captures/plasma-v2/stable-promotion/gate-report.json"
+        },
+        "release_page_publication": "not-performed",
+        "schema": "screensave.plasma-v2.publication-prep.aide-summary.v1",
+        "stable_promotion": "accepted",
+        "status": "pass",
+        "work_unit": "SS-PLV2-J4"
+      }
+    },
+    {
+      "existing": [],
+      "id": "no-publication-receipts",
+      "message": "No publication/upload receipt exists in PAW-J.",
+      "status": "pass"
+    },
+    {
+      "id": "publication-prep-contract",
+      "message": "Command passed.",
+      "run": {
+        "command": "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe tools/scripts/check_plasma_v2_publication_prep_contract.py",
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "Plasma v2 publication-prep contract checks passed."
+      },
+      "status": "pass"
+    },
+    {
+      "id": "release-provenance",
+      "message": "Command passed.",
+      "run": {
+        "command": "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe tools/scripts/check_release_provenance.py",
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "Plasma v2 release provenance checks passed."
+      },
+      "status": "pass"
+    },
+    {
+      "id": "release-security",
+      "message": "Command passed.",
+      "run": {
+        "command": "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe tools/scripts/check_release_security.py",
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "Plasma v2 release security checks passed."
+      },
+      "status": "pass"
+    },
+    {
+      "id": "package-stage",
+      "message": "Command passed.",
+      "run": {
+        "command": "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe tools/scripts/check_plasma_v2_package_stage.py",
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "Plasma v2 package stage checks passed."
+      },
+      "status": "pass"
+    },
+    {
+      "id": "aide-evidence-index",
+      "message": "Command passed.",
+      "run": {
+        "command": "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe tools/scripts/check_aide_evidence_index.py",
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "AIDE evidence index checks passed."
+      },
+      "status": "pass"
+    }
+  ],
+  "claim_boundary": "Publication-prep gate only; no public release publication, compatibility certification broadening, SDK stability, all-saver migration, Manager install mutation, Workbench MVP, platform expansion, or AIDE runtime authority is admitted.",
+  "recommended_state": "publication-ready",
+  "schema": "screensave.plasma-v2.publication-prep.gate-report.v1",
+  "source": {
+    "branch": "main",
+    "commit": "7ee0d505de5be02f1617a7f632d9db880950b9ac",
+    "dirty": true
+  },
+  "status": "publication-ready"
+}

@@ -1,7 +1,6 @@
 # Plasma v2 Stable Third-Party Notices
 
-This publication-prep packet does not add mandatory third-party runtime
-dependencies.
+This publication-prep packet does not add mandatory third-party runtime dependencies.
 
 Notices:
 
