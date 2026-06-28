@@ -7,7 +7,7 @@
   "intake_commit": "06161c9111dff2d06550c237b944fb5bbfb042ed",
   "artifact_refs": {
     "plasma_scr_current": "out/msvc/vs2017_xp/Release/plasma/plasma.scr",
-    "plasma_scr_current_sha256": "72871f8ce5f4b45ba62663C82A32EA30E2BEB6973663BD5203884D498BC74EC3"
+    "plasma_scr_current_sha256": "DC5355824B0ACE7DED97D9DC082D5CF1AD2B808E0AFF071703953103C154B7F6"
   },
   "evidence_refs": {
     "release_candidate_contract": "contracts/plasma_release_candidate_v1.md",
