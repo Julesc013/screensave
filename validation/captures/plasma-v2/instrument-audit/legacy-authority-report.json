@@ -181,7 +181,7 @@
   "schema": "screensave.plasma-v2.legacy-authority-report.v1",
   "source": {
     "branch": "main",
-    "commit": "d70ee3c4d3d153e1ba798c2c200af032f4b8dbec",
+    "commit": "2051d85678b98fe45ecfeda8d36fb74595d26305",
     "dirty": true
   },
   "status": "pass",
