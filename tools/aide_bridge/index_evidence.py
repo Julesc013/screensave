@@ -37,6 +37,7 @@ REQUIRED_ENTRY_IDS = {
     "windows-current-pe-audit-json",
     "proof-bundle-v1-portable-v2",
     "aide-evidence-packets",
+    "plasma-v2-publication-prep",
 }
 
 FORBIDDEN_CLAIM_WORDS = {

@@ -42,6 +42,7 @@ REQUIRED_IDS = {
     "plasma-v2-visualintent-proof-summary",
     "plasma-v2-stable-promotion-decision",
     "plasma-v2-artistic-repair-evidence",
+    "plasma-v2-publication-prep",
 }
 
 
@@ -103,7 +104,9 @@ def main() -> int:
             "VisualIntent proof summary evidence only",
             "AIDE final stable artistic decision evidence only",
             "AIDE indexes final artistic repair evidence only",
+            "AIDE indexes Plasma v2 publication-prep evidence only",
             "ScreenSave/project authority owns acceptance",
+            "ScreenSave release gates own publication",
             "compatibility certification",
             "artistic acceptance",
             "release promotion",
@@ -114,9 +117,11 @@ def main() -> int:
             require(forbidden not in text, f"evidence index must not contain {forbidden}.", errors)
 
     stable_ledger = ROOT / ".aide" / "evidence" / "plasma-v2-stable-promotion.toml"
+    publication_ledger = ROOT / ".aide" / "evidence" / "plasma-v2-publication-prep.toml"
     stable_summary = ROOT / "validation" / "captures" / "plasma-v2" / "final-artistic-decision" / "aide-decision-summary.json"
     repair_summary = ROOT / "validation" / "captures" / "plasma-v2" / "final-artistic-decision" / "aide-repair-summary.json"
-    for path in [stable_ledger, stable_summary, repair_summary]:
+    publication_summary = ROOT / "validation" / "captures" / "plasma-v2" / "publication-prep" / "aide-publication-summary.json"
+    for path in [stable_ledger, publication_ledger, stable_summary, repair_summary, publication_summary]:
         require(path.exists(), f"Missing stable-promotion AIDE evidence path: {path.relative_to(ROOT)}", errors)
     if stable_ledger.exists():
         text = stable_ledger.read_text(encoding="utf-8")
@@ -165,6 +170,41 @@ def main() -> int:
             "did_not_apply_visual_repair_without_project_blocker",
         ):
             require(assertions.get(key) is True, f"repair AIDE summary must assert {key}.", errors)
+    if publication_ledger.exists():
+        text = publication_ledger.read_text(encoding="utf-8")
+        for needle in [
+            'work_unit = "SS-PLV2-J4"',
+            'decision_kind = "publication-prep evidence index"',
+            'decision_owner = "ScreenSave release gates"',
+            'aide_role = "evidence index only"',
+            'release_manifest = "releases/plasma-v2-stable/release-manifest.toml"',
+            'publication_upload = "not-performed"',
+            'release_page_publication = "not-performed"',
+            "compatibility_certification_broadening = false",
+            "aide_runtime_dependency = false",
+            "aide_published_release = false",
+            "aide_certified_compatibility = false",
+            "aide_promoted_release = false",
+        ]:
+            require(needle in text, f"publication-prep AIDE ledger missing {needle!r}.", errors)
+    if publication_summary.exists():
+        payload = json.loads(publication_summary.read_text(encoding="utf-8"))
+        require(payload.get("work_unit") == "SS-PLV2-J4", "publication AIDE summary must name SS-PLV2-J4.", errors)
+        require(payload.get("stable_promotion") == "accepted", "publication AIDE summary must record accepted stable promotion.", errors)
+        require(payload.get("publication_prep") == "recorded", "publication AIDE summary must record publication prep.", errors)
+        require(payload.get("publication_upload") == "not-performed", "publication AIDE summary must block upload.", errors)
+        require(payload.get("release_page_publication") == "not-performed", "publication AIDE summary must block release page publication.", errors)
+        require(payload.get("compatibility_certification_broadening") is False, "publication AIDE summary must block certification broadening.", errors)
+        require(payload.get("aide_runtime_dependency") is False, "publication AIDE summary must block AIDE runtime dependency.", errors)
+        assertions = payload.get("aide_assertions", {})
+        for key in (
+            "did_not_publish_release",
+            "did_not_certify_compatibility",
+            "did_not_promote_release",
+            "did_not_mutate_source_automatically",
+            "did_not_become_runtime_dependency",
+        ):
+            require(assertions.get(key) is True, f"publication AIDE summary must assert {key}.", errors)
 
     if errors:
         for error in errors:

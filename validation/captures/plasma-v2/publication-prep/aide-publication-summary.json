@@ -1,0 +1,25 @@
+{
+  "schema": "screensave.plasma-v2.publication-prep.aide-summary.v1",
+  "status": "pass",
+  "work_unit": "SS-PLV2-J4",
+  "stable_promotion": "accepted",
+  "publication_prep": "recorded",
+  "publication_upload": "not-performed",
+  "release_page_publication": "not-performed",
+  "compatibility_certification_broadening": false,
+  "aide_runtime_dependency": false,
+  "aide_assertions": {
+    "did_not_publish_release": true,
+    "did_not_certify_compatibility": true,
+    "did_not_promote_release": true,
+    "did_not_mutate_source_automatically": true,
+    "did_not_become_runtime_dependency": true
+  },
+  "refs": {
+    "evidence_ledger": ".aide/evidence/plasma-v2-publication-prep.toml",
+    "release_manifest": "releases/plasma-v2-stable/release-manifest.toml",
+    "publication_contract": "contracts/plasma_publication_prep_v1.md",
+    "stable_promotion_gate": "validation/captures/plasma-v2/stable-promotion/gate-report.json"
+  },
+  "claim_boundary": "AIDE publication-prep summary records evidence references only; publication, compatibility certification broadening, SDK stability, all-saver migration, and platform expansion remain ScreenSave gates."
+}

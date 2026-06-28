@@ -1,7 +1,7 @@
 schema_version = 1
 index_id = "screensave-paw-c1-proof-evidence-index-v0"
 status = "active"
-as_of = "2026-06-26"
+as_of = "2026-06-29"
 truth_boundary = "ScreenSave proof bundles and validators remain authoritative; AIDE indexes references only."
 network_calls = false
 provider_or_model_calls = false
@@ -342,3 +342,15 @@ primary_ref = "validation/captures/plasma-v2/final-artistic-decision/repair-evid
 generated_ref = "out/aide/evidence/plasma-v2-artistic-repair-summary.json"
 validator = "py -3 tools/scripts/check_plasma_v2_artistic_repair_plan.py"
 claim_boundary = "AIDE indexes final artistic repair evidence only; ScreenSave/project authority owns acceptance, stable-promotion blockers are resolved by the project verdict, and no compatibility certification or release publication is implied"
+
+[[entries]]
+id = "plasma-v2-publication-prep"
+kind = "aide-publication-prep-evidence"
+product = "plasma"
+profile = "plasma.v2.reference.preview"
+path = "publication-prep"
+status = "tracked"
+primary_ref = ".aide/evidence/plasma-v2-publication-prep.toml"
+generated_ref = "out/aide/evidence/plasma-v2-publication-prep-summary.json"
+validator = "py -3 tools/scripts/check_plasma_v2_publication_prep.py"
+claim_boundary = "AIDE indexes Plasma v2 publication-prep evidence only; ScreenSave release gates own publication, no release upload is performed, and no compatibility certification, public SDK stability, all-saver migration, or runtime dependency is implied"

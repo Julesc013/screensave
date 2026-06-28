@@ -1,0 +1,40 @@
+schema_version = 1
+evidence_id = "screensave.plasma-v2.publication-prep.evidence.v1"
+status = "publication-prep-recorded"
+work_unit = "SS-PLV2-J4"
+decision_kind = "publication-prep evidence index"
+decision_owner = "ScreenSave release gates"
+aide_role = "evidence index only"
+recorded_on = "2026-06-29"
+
+[refs]
+intake = "validation/captures/plasma-v2/publication-prep/intake-state.json"
+publication_contract = "contracts/plasma_publication_prep_v1.md"
+publication_policy = "products/savers/plasma/docs/plasma-v2-publication-policy.md"
+release_manifest = "releases/plasma-v2-stable/release-manifest.toml"
+artifact_manifest = "releases/plasma-v2-stable/artifact-manifest.toml"
+checksums = "releases/plasma-v2-stable/checksums.sha256"
+provenance = "releases/plasma-v2-stable/provenance.json"
+known_limits = "releases/plasma-v2-stable/known-limits.md"
+support_matrix = "releases/plasma-v2-stable/support-matrix.md"
+install_notes = "releases/plasma-v2-stable/install-notes.md"
+rollback_notes = "releases/plasma-v2-stable/rollback-notes.md"
+third_party_notices = "releases/plasma-v2-stable/third-party-notices.md"
+publication_checklist = "releases/plasma-v2-stable/publication-checklist.md"
+stable_promotion_gate = "validation/captures/plasma-v2/stable-promotion/gate-report.json"
+stable_promotion_package = "packaging/windows/plasma-v2-stable-promotion/manifest.toml"
+final_artistic_decision = "validation/captures/plasma-v2/final-artistic-decision/decision.stable.toml"
+aide_publication_summary = "validation/captures/plasma-v2/publication-prep/aide-publication-summary.json"
+
+[assertions]
+stable_promotion = "accepted"
+publication_prep = "recorded"
+publication_upload = "not-performed"
+release_page_publication = "not-performed"
+compatibility_certification_broadening = false
+aide_runtime_dependency = false
+aide_published_release = false
+aide_certified_compatibility = false
+aide_promoted_release = false
+
+claim_boundary = "AIDE indexes Plasma v2 publication-prep evidence only; ScreenSave release gates own publication, and no upload, compatibility certification broadening, public SDK stability, all-saver migration, or runtime dependency is admitted."
