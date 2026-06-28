@@ -2,7 +2,7 @@
   "artifact": {
     "exists": true,
     "path": "out/msvc/vs2017_xp/Release/plasma/plasma.scr",
-    "sha256": "8e7a7dddf132d35451c3391f638c2d0b763478653762ed422070c5163645e465"
+    "sha256": "df83baec3bf76a41d8922407172efffc0603bc3aff6265fe4e45eef40bb7e089"
   },
   "checks": [
     {
@@ -216,8 +216,8 @@
   "schema": "screensave.plasma.default-demo.v1",
   "source": {
     "branch": "main",
-    "commit": "a0470815ce9343e3a2734822dde19c50979fa313",
-    "dirty": false
+    "commit": "42d6426a748606913b1de2cb86e38dce4f4e029a",
+    "dirty": true
   },
   "status": "pass",
   "validation_errors": []

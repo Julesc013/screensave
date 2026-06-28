@@ -8,7 +8,7 @@
 - Output: native drawable raster presentation with pixel-sharp renderer scaling and resolution-independent plasma coordinates
 - Renderers: gdi floor, gl46 preferred, optional gl21, gl33, gl46
 - Artifact: out/msvc/vs2017_xp/Release/plasma/plasma.scr
-- Artifact SHA256: 8e7a7dddf132d35451c3391f638c2d0b763478653762ed422070c5163645e465
+- Artifact SHA256: df83baec3bf76a41d8922407172efffc0603bc3aff6265fe4e45eef40bb7e089
 - Claim boundary: Post-stable local demo rebuild evidence only; this does not publish a release, broaden compatibility certification, or replace Plasma v2 proof/publication gates.
 
 ## Checks

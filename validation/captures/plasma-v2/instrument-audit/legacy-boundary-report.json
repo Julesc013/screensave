@@ -120,7 +120,7 @@
   "schema": "screensave.plasma-v2.legacy-boundary-report.v2",
   "source": {
     "branch": "main",
-    "commit": "63c26011b1bb72650ed2ff4759b8e559f333fa23",
+    "commit": "42d6426a748606913b1de2cb86e38dce4f4e029a",
     "dirty": true
   },
   "status": "promotion-ready"
