@@ -1,0 +1,48 @@
+{
+  "schema": "screensave.plasma-v2.final-artistic-decision.request-changes-intake.v1",
+  "status": "parsed",
+  "work_unit": "SS-PLV2-I-REPAIR-001",
+  "source_decision": "validation/captures/plasma-v2/final-artistic-decision/decision.stable.toml",
+  "decision": "request-changes",
+  "source_commit": "ba50112c635a2c2c97d5807ffb7ca36bc7ab8edf",
+  "parsed_on": "2026-06-28",
+  "project_owned_decision_required": true,
+  "accepted_for_stable_verdict_present": false,
+  "exact_blockers": [
+    {
+      "id": "final_stable_artistic_acceptance_not_accepted",
+      "source_ref": "validation/captures/plasma-v2/stable-promotion/hold-report.json",
+      "source_field": "exact_blockers[0].id",
+      "reason": "Final stable artistic decision is request-changes because no ScreenSave/project-owned accepted-for-stable verdict was supplied."
+    },
+    {
+      "id": "missing_project_owned_accepted_for_stable_verdict",
+      "source_ref": "validation/captures/plasma-v2/final-artistic-decision/decision.stable.toml",
+      "source_field": "requested_changes.blocker_reasons",
+      "reason": "Stable promotion requires an explicit project-owned accepted-for-stable verdict after review of the final decision packet."
+    }
+  ],
+  "decision_aliases": {
+    "final_stable_artistic_acceptance_not_supplied": "final_stable_artistic_acceptance_not_accepted"
+  },
+  "visual_artistic_blockers_named": false,
+  "visual_artistic_blockers": [],
+  "supporting_reports": {
+    "review_evidence": "validation/captures/plasma-v2/final-artistic-decision/review-evidence.json",
+    "review_summary": "validation/captures/plasma-v2/final-artistic-decision/review-summary.md",
+    "stable_promotion_gate": "validation/captures/plasma-v2/stable-promotion/gate-report.json",
+    "instrument_reaudit": "validation/captures/plasma-v2/instrument-audit/re-audit-report.json"
+  },
+  "supporting_report_summary": {
+    "review_evidence_status": "ready-for-decision",
+    "instrument_audit_status": "promotion-ready",
+    "stable_promotion_gate_status": "hold",
+    "instrument_blockers": [],
+    "stable_promotion_blockers": [
+      "final_stable_artistic_acceptance_not_accepted",
+      "missing_project_owned_accepted_for_stable_verdict"
+    ]
+  },
+  "repair_boundary": "The request-changes packet names a missing project-owned stable artistic verdict, not a field, material, motion, luminance, contrast, treatment, or composition defect. Plasma v2 product source must not be changed unless a project-owned decision names an exact visual/artistic blocker.",
+  "claim_boundary": "Request-changes intake only; not stable promotion, release publication, compatibility certification, or AIDE artistic acceptance."
+}

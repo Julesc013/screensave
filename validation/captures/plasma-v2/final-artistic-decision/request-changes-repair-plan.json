@@ -1,0 +1,57 @@
+{
+  "schema": "screensave.plasma-v2.final-artistic-decision.request-changes-repair-plan.v1",
+  "status": "active",
+  "work_unit": "SS-PLV2-I-REPAIR-001",
+  "source_decision": "validation/captures/plasma-v2/final-artistic-decision/decision.stable.toml",
+  "decision": "request-changes",
+  "source_commit": "ba50112c635a2c2c97d5807ffb7ca36bc7ab8edf",
+  "plan_date": "2026-06-28",
+  "blockers": [
+    {
+      "id": "final_stable_artistic_acceptance_not_accepted",
+      "class": "documentation_or_evidence_gap",
+      "source_ref": "validation/captures/plasma-v2/stable-promotion/hold-report.json",
+      "repair_strategy": "Regenerate the re-review packet and keep the candidate held until a ScreenSave/project-owned accepted-for-stable verdict is supplied. Do not alter Plasma v2 visuals because the decision names no visual defect.",
+      "allowed_files": [
+        "validation/captures/plasma-v2/final-artistic-decision/**",
+        "validation/captures/plasma-v2/stable-promotion/**",
+        ".aide/evidence/**",
+        ".aide/repairs/**",
+        ".aide/work_units/**"
+      ],
+      "expected_evidence": [
+        "validation/captures/plasma-v2/final-artistic-decision/repair-evidence.json",
+        "validation/captures/plasma-v2/final-artistic-decision/repair-summary.md",
+        "validation/captures/plasma-v2/final-artistic-decision/decision.stable.toml",
+        "validation/captures/plasma-v2/stable-promotion/hold-report.json"
+      ],
+      "claim_boundary": "Evidence and decision-path repair only; not a validator substitute for final artistic acceptance."
+    },
+    {
+      "id": "missing_project_owned_accepted_for_stable_verdict",
+      "class": "documentation_or_evidence_gap",
+      "source_ref": "validation/captures/plasma-v2/final-artistic-decision/decision.stable.toml",
+      "repair_strategy": "Keep the accepted-for-stable decision field false and require an explicit project-owned verdict. If the next project verdict is request-changes, defer-to-labs, or rejected, keep release_promotion blocked.",
+      "allowed_files": [
+        "validation/captures/plasma-v2/final-artistic-decision/**",
+        "validation/captures/plasma-v2/stable-promotion/**",
+        ".aide/evidence/**",
+        ".aide/repairs/**",
+        ".aide/work_units/**"
+      ],
+      "expected_evidence": [
+        "validation/captures/plasma-v2/final-artistic-decision/request-changes-intake.json",
+        "validation/captures/plasma-v2/final-artistic-decision/request-changes-repair-plan.json",
+        "validation/captures/plasma-v2/final-artistic-decision/aide-repair-summary.json",
+        "validation/captures/plasma-v2/stable-promotion/gate-report.json"
+      ],
+      "claim_boundary": "Project-owned verdict requirement only; AIDE, Workbench, validators, proof hashes, and packc do not own acceptance."
+    }
+  ],
+  "visual_artistic_blockers_named": false,
+  "source_visual_defects": [],
+  "product_source_repairs_allowed": false,
+  "product_source_repairs_applied": false,
+  "stable_promotion_allowed_before_repair": false,
+  "claim_boundary": "Repair plan is derived from the request-changes decision and supporting reports only; it does not invent visual defects, publish a release, broaden compatibility certification, or promote stable."
+}

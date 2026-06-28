@@ -162,12 +162,35 @@ def main() -> int:
                 "SS-PLV2-I-REPAIR-001 must remain blocking until accepted-for-stable is supplied.",
                 errors,
             )
+            require(
+                final_repair.get("blocker_reasons") == [
+                    "final_stable_artistic_acceptance_not_accepted",
+                    "missing_project_owned_accepted_for_stable_verdict",
+                ],
+                "SS-PLV2-I-REPAIR-001 must record the Turn 4 request-changes blocker reasons.",
+                errors,
+            )
+            require(
+                "products/savers/plasma/src/v2/**" in final_repair.get("allowed_paths", []),
+                "SS-PLV2-I-REPAIR-001 must allow only bounded Plasma v2 island product repair.",
+                errors,
+            )
+            require(
+                "platform/**" in final_repair.get("forbidden_paths", []),
+                "SS-PLV2-I-REPAIR-001 must forbid platform edits.",
+                errors,
+            )
             final_outputs = set(final_repair.get("evidence_outputs", []))
             for ref in [
+                "validation/captures/plasma-v2/final-artistic-decision/request-changes-intake.json",
+                "validation/captures/plasma-v2/final-artistic-decision/request-changes-repair-plan.json",
                 "validation/captures/plasma-v2/final-artistic-decision/intake.json",
                 "validation/captures/plasma-v2/final-artistic-decision/review-evidence.json",
+                "validation/captures/plasma-v2/final-artistic-decision/repair-evidence.json",
+                "validation/captures/plasma-v2/final-artistic-decision/repair-summary.md",
                 "validation/captures/plasma-v2/final-artistic-decision/decision.stable.toml",
                 "validation/captures/plasma-v2/final-artistic-decision/aide-decision-summary.json",
+                "validation/captures/plasma-v2/final-artistic-decision/aide-repair-summary.json",
                 "validation/captures/plasma-v2/stable-promotion/hold-report.json",
             ]:
                 require(ref in final_outputs, f"SS-PLV2-I-REPAIR-001 missing evidence output {ref}.", errors)

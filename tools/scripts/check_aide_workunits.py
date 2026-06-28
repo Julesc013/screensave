@@ -180,10 +180,29 @@ def validate_cli(errors: list[str]) -> None:
             errors,
         )
         require(
-            "products/savers/plasma/src/**" in payload.get("forbidden_paths", []),
-            "final artistic WorkUnit must forbid Plasma source edits.",
+            "products/savers/plasma/src/v2/**" in payload.get("allowed_paths", []),
+            "final artistic repair WorkUnit must allow bounded Plasma v2 island edits.",
             errors,
         )
+        require(
+            "products/savers/plasma/content/v2/**" in payload.get("allowed_paths", []),
+            "final artistic repair WorkUnit must allow bounded Plasma v2 content edits.",
+            errors,
+        )
+        require(
+            "platform/**" in payload.get("forbidden_paths", []),
+            "final artistic repair WorkUnit must forbid platform edits.",
+            errors,
+        )
+        for ref in [
+            "validation/captures/plasma-v2/final-artistic-decision/request-changes-intake.json",
+            "validation/captures/plasma-v2/final-artistic-decision/request-changes-repair-plan.json",
+        ]:
+            require(
+                ref in payload.get("evidence_outputs", []),
+                f"final artistic repair WorkUnit must emit {ref}.",
+                errors,
+            )
         require(
             "compatibility certification" in str(payload.get("claim_boundary", "")),
             "final artistic WorkUnit must preserve the compatibility certification boundary.",

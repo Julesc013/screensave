@@ -121,20 +121,27 @@ rollback_point = "5a8cbe4"
 
 [[repairs]]
 id = "SS-PLV2-I-REPAIR-001"
-title = "Record explicit Plasma v2 final stable artistic verdict"
+title = "Repair Plasma v2 final stable artistic request changes"
 repair_class = "release_readiness_gap"
 status = "blocking"
+blocker_reasons = [
+  "final_stable_artistic_acceptance_not_accepted",
+  "missing_project_owned_accepted_for_stable_verdict",
+]
 allowed_paths = [
   "validation/captures/plasma-v2/final-artistic-decision/**",
   "validation/captures/plasma-v2/stable-promotion/**",
   "validation/captures/plasma-v2/instrument-audit/**",
-  "PROJECT_STATE.toml",
-  "VERSION.toml",
-  "docs/roadmap/**",
+  "validation/captures/plasma-v2/materials/**",
+  "validation/captures/plasma-v2/matrix/**",
+  "validation/captures/plasma-v2/review/**",
+  "validation/captures/plasma-v2/stable-candidate-review/**",
+  "products/savers/plasma/src/v2/**",
+  "products/savers/plasma/content/v2/**",
   "products/savers/plasma/docs/**",
-  "tools/scripts/check_plasma_v2_final_artistic_acceptance.py",
-  "tools/scripts/check_plasma_v2_stable_promotion.py",
-  "tools/scripts/check_plasma_instrument_architecture.py",
+  "products/apps/benchlab/**",
+  "tools/scripts/check_plasma_*.py",
+  "tools/aide_bridge/**",
   "tools/scripts/check_aide_evidence_index.py",
   "tools/scripts/check_repair_queue.py",
   ".aide/evidence/**",
@@ -142,7 +149,9 @@ allowed_paths = [
   ".aide/work_units/**",
 ]
 forbidden_paths = [
-  "products/savers/plasma/src/**",
+  "platform/include/screensave/v2/**",
+  "platform/src/host/**",
+  "platform/src/render/**",
   "platform/**",
   "build/**",
   "releases/**",
@@ -154,21 +163,28 @@ expected_validators = [
   "py -3 tools/scripts/check_aide_workunits.py",
   "py -3 tools/scripts/check_repair_queue.py",
   "py -3 tools/scripts/check_aide_evidence_index.py",
+  "py -3 tools/scripts/check_agentic_policy.py",
+  "py -3 tools/scripts/check_plasma_v2_artistic_repair_plan.py",
   "py -3 tools/scripts/check_plasma_v2_final_artistic_acceptance.py",
   "py -3 tools/scripts/check_plasma_instrument_architecture.py",
   "py -3 tools/scripts/check_plasma_v2_stable_promotion.py",
   "py -3 tools/project_adapter/screensave_project.py validate --tier T3",
 ]
 evidence_outputs = [
+  "validation/captures/plasma-v2/final-artistic-decision/request-changes-intake.json",
+  "validation/captures/plasma-v2/final-artistic-decision/request-changes-repair-plan.json",
   "validation/captures/plasma-v2/final-artistic-decision/intake.json",
   "validation/captures/plasma-v2/final-artistic-decision/review-evidence.json",
+  "validation/captures/plasma-v2/final-artistic-decision/repair-evidence.json",
+  "validation/captures/plasma-v2/final-artistic-decision/repair-summary.md",
   "validation/captures/plasma-v2/final-artistic-decision/decision.stable.toml",
   "validation/captures/plasma-v2/final-artistic-decision/aide-decision-summary.json",
+  "validation/captures/plasma-v2/final-artistic-decision/aide-repair-summary.json",
   "validation/captures/plasma-v2/stable-promotion/gate-report.json",
   "validation/captures/plasma-v2/stable-promotion/hold-report.json",
 ]
-claim_boundary = "Repair records the missing final stable artistic verdict and supporting evidence only; ScreenSave/project authority owns the verdict, AIDE indexes evidence only, and no automatic acceptance, release, promotion, or compatibility certification is admitted."
-rollback_point = "f410b4e"
+claim_boundary = "Repair records the final stable artistic request-changes blocker and bounded evidence only; ScreenSave/project authority owns the verdict, AIDE indexes evidence only, and no automatic acceptance, release, promotion, or compatibility certification is admitted."
+rollback_point = "ba50112"
 
 [release_candidate_burndown]
 status = "no-blocking-release-candidate-repairs"
