@@ -1,91 +1,257 @@
 {
   "automatic_promotion": false,
-  "candidate_count": 3,
+  "candidate_count": 12,
+  "candidate_count_per_fixture": 3,
   "candidate_policy": "bounded deterministic local resolver",
   "candidates": [
     {
-      "candidate_id": "candidate-01-primary",
-      "compiled_manifest": "out/visualintent/plasma_warm_room/candidates/candidate-01-primary/compiled/manifest.json",
-      "hash_manifest": "out/visualintent/plasma_warm_room/candidates/candidate-01-primary/compiled/hash-manifest.json",
-      "pack_toml": "out/visualintent/plasma_warm_room/candidates/candidate-01-primary/pack.toml",
-      "proof_receipt": "out/visualintent/plasma_warm_room/candidates/candidate-01-primary/proof-receipt.json",
-      "resolution_note": "closest material and motion fit",
-      "spec": {
-        "brightness": 42,
-        "complexity": 62,
-        "contrast": 74,
-        "feedback_amount": 9,
+      "candidate_id": "plasma-calm-dark-room-01-primary-11bf6d6d73",
+      "fixture": "tools/visualintent/examples/plasma/calm_dark.toml",
+      "packc_status": "pass",
+      "plasma_v2_spec_summary": {
+        "complexity": 37,
+        "field_family": "classic_interference",
+        "material": "quiet_darkroom",
+        "motion_speed": 14,
+        "output_style": "continuous",
+        "presentation": "flat",
+        "quality_intent": "safe",
+        "scale": 52,
+        "schema_id": "screensave.plasma.spec.v2",
+        "treatment": "restrained_dither"
+      },
+      "product": "plasma",
+      "proof_profile": "plasma.v2.visualintent.preview",
+      "variant": "primary"
+    },
+    {
+      "candidate_id": "plasma-calm-dark-room-02-structured-11bf6d6d73",
+      "fixture": "tools/visualintent/examples/plasma/calm_dark.toml",
+      "packc_status": "pass",
+      "plasma_v2_spec_summary": {
+        "complexity": 47,
+        "field_family": "radial_warped",
+        "material": "plasma_lava",
+        "motion_speed": 14,
+        "output_style": "banded",
+        "presentation": "flat",
+        "quality_intent": "safe",
+        "scale": 60,
+        "schema_id": "screensave.plasma.spec.v2",
+        "treatment": "none"
+      },
+      "product": "plasma",
+      "proof_profile": "plasma.v2.visualintent.preview",
+      "variant": "structured"
+    },
+    {
+      "candidate_id": "plasma-calm-dark-room-03-comfort-11bf6d6d73",
+      "fixture": "tools/visualintent/examples/plasma/calm_dark.toml",
+      "packc_status": "pass",
+      "plasma_v2_spec_summary": {
+        "complexity": 37,
+        "field_family": "classic_interference",
+        "material": "quiet_darkroom",
+        "motion_speed": 14,
+        "output_style": "contour",
+        "presentation": "flat",
+        "quality_intent": "safe",
+        "scale": 52,
+        "schema_id": "screensave.plasma.spec.v2",
+        "treatment": "none"
+      },
+      "product": "plasma",
+      "proof_profile": "plasma.v2.visualintent.preview",
+      "variant": "comfort"
+    },
+    {
+      "candidate_id": "plasma-warm-slow-lava-01-primary-921d5c1f57",
+      "fixture": "tools/visualintent/examples/plasma/warm_slow_lava.toml",
+      "packc_status": "pass",
+      "plasma_v2_spec_summary": {
+        "complexity": 57,
         "field_family": "classic_interference",
         "material": "plasma_lava",
         "motion_speed": 22,
         "output_style": "continuous",
         "presentation": "flat",
         "quality_intent": "safe",
-        "scale": 73,
+        "scale": 61,
         "schema_id": "screensave.plasma.spec.v2",
-        "schema_version": 2,
-        "seed_policy": "fixed",
-        "treatment": "restrained_dither",
-        "warp_amount": 12
-      }
+        "treatment": "none"
+      },
+      "product": "plasma",
+      "proof_profile": "plasma.v2.visualintent.preview",
+      "variant": "primary"
     },
     {
-      "candidate_id": "candidate-02-structured",
-      "compiled_manifest": "out/visualintent/plasma_warm_room/candidates/candidate-02-structured/compiled/manifest.json",
-      "hash_manifest": "out/visualintent/plasma_warm_room/candidates/candidate-02-structured/compiled/hash-manifest.json",
-      "pack_toml": "out/visualintent/plasma_warm_room/candidates/candidate-02-structured/pack.toml",
-      "proof_receipt": "out/visualintent/plasma_warm_room/candidates/candidate-02-structured/proof-receipt.json",
-      "resolution_note": "structured alternate with bounded warp",
-      "spec": {
-        "brightness": 42,
-        "complexity": 74,
-        "contrast": 74,
-        "feedback_amount": 9,
+      "candidate_id": "plasma-warm-slow-lava-02-structured-921d5c1f57",
+      "fixture": "tools/visualintent/examples/plasma/warm_slow_lava.toml",
+      "packc_status": "pass",
+      "plasma_v2_spec_summary": {
+        "complexity": 67,
         "field_family": "radial_warped",
         "material": "aurora_cool",
         "motion_speed": 22,
         "output_style": "banded",
         "presentation": "flat",
         "quality_intent": "safe",
-        "scale": 81,
+        "scale": 69,
         "schema_id": "screensave.plasma.spec.v2",
-        "schema_version": 2,
-        "seed_policy": "fixed",
-        "treatment": "none",
-        "warp_amount": 22
-      }
+        "treatment": "none"
+      },
+      "product": "plasma",
+      "proof_profile": "plasma.v2.visualintent.preview",
+      "variant": "structured"
     },
     {
-      "candidate_id": "candidate-03-comfort",
-      "compiled_manifest": "out/visualintent/plasma_warm_room/candidates/candidate-03-comfort/compiled/manifest.json",
-      "hash_manifest": "out/visualintent/plasma_warm_room/candidates/candidate-03-comfort/compiled/hash-manifest.json",
-      "pack_toml": "out/visualintent/plasma_warm_room/candidates/candidate-03-comfort/pack.toml",
-      "proof_receipt": "out/visualintent/plasma_warm_room/candidates/candidate-03-comfort/proof-receipt.json",
-      "resolution_note": "dark-room comfort variant",
-      "spec": {
-        "brightness": 42,
-        "complexity": 62,
-        "contrast": 74,
-        "feedback_amount": 9,
+      "candidate_id": "plasma-warm-slow-lava-03-comfort-921d5c1f57",
+      "fixture": "tools/visualintent/examples/plasma/warm_slow_lava.toml",
+      "packc_status": "pass",
+      "plasma_v2_spec_summary": {
+        "complexity": 57,
         "field_family": "classic_interference",
         "material": "museum_phosphor",
         "motion_speed": 22,
         "output_style": "contour",
         "presentation": "flat",
         "quality_intent": "safe",
+        "scale": 61,
+        "schema_id": "screensave.plasma.spec.v2",
+        "treatment": "restrained_crt"
+      },
+      "product": "plasma",
+      "proof_profile": "plasma.v2.visualintent.preview",
+      "variant": "comfort"
+    },
+    {
+      "candidate_id": "plasma-cool-aurora-veil-01-primary-ae7cbf6cec",
+      "fixture": "tools/visualintent/examples/plasma/cool_aurora.toml",
+      "packc_status": "pass",
+      "plasma_v2_spec_summary": {
+        "complexity": 68,
+        "field_family": "radial_warped",
+        "material": "aurora_cool",
+        "motion_speed": 28,
+        "output_style": "continuous",
+        "presentation": "flat",
+        "quality_intent": "safe",
+        "scale": 65,
+        "schema_id": "screensave.plasma.spec.v2",
+        "treatment": "restrained_dither"
+      },
+      "product": "plasma",
+      "proof_profile": "plasma.v2.visualintent.preview",
+      "variant": "primary"
+    },
+    {
+      "candidate_id": "plasma-cool-aurora-veil-02-structured-ae7cbf6cec",
+      "fixture": "tools/visualintent/examples/plasma/cool_aurora.toml",
+      "packc_status": "pass",
+      "plasma_v2_spec_summary": {
+        "complexity": 78,
+        "field_family": "classic_interference",
+        "material": "oceanic_blue",
+        "motion_speed": 28,
+        "output_style": "banded",
+        "presentation": "flat",
+        "quality_intent": "safe",
         "scale": 73,
         "schema_id": "screensave.plasma.spec.v2",
-        "schema_version": 2,
-        "seed_policy": "fixed",
-        "treatment": "restrained_crt",
-        "warp_amount": 12
-      }
+        "treatment": "none"
+      },
+      "product": "plasma",
+      "proof_profile": "plasma.v2.visualintent.preview",
+      "variant": "structured"
+    },
+    {
+      "candidate_id": "plasma-cool-aurora-veil-03-comfort-ae7cbf6cec",
+      "fixture": "tools/visualintent/examples/plasma/cool_aurora.toml",
+      "packc_status": "pass",
+      "plasma_v2_spec_summary": {
+        "complexity": 68,
+        "field_family": "classic_interference",
+        "material": "museum_phosphor",
+        "motion_speed": 28,
+        "output_style": "contour",
+        "presentation": "flat",
+        "quality_intent": "safe",
+        "scale": 65,
+        "schema_id": "screensave.plasma.spec.v2",
+        "treatment": "restrained_crt"
+      },
+      "product": "plasma",
+      "proof_profile": "plasma.v2.visualintent.preview",
+      "variant": "comfort"
+    },
+    {
+      "candidate_id": "plasma-high-contrast-phosphor-01-primary-2ae9a1aeb9",
+      "fixture": "tools/visualintent/examples/plasma/high_contrast_phosphor.toml",
+      "packc_status": "pass",
+      "plasma_v2_spec_summary": {
+        "complexity": 54,
+        "field_family": "classic_interference",
+        "material": "museum_phosphor",
+        "motion_speed": 20,
+        "output_style": "continuous",
+        "presentation": "flat",
+        "quality_intent": "safe",
+        "scale": 58,
+        "schema_id": "screensave.plasma.spec.v2",
+        "treatment": "restrained_crt"
+      },
+      "product": "plasma",
+      "proof_profile": "plasma.v2.visualintent.preview",
+      "variant": "primary"
+    },
+    {
+      "candidate_id": "plasma-high-contrast-phosphor-02-structured-2ae9a1aeb9",
+      "fixture": "tools/visualintent/examples/plasma/high_contrast_phosphor.toml",
+      "packc_status": "pass",
+      "plasma_v2_spec_summary": {
+        "complexity": 64,
+        "field_family": "radial_warped",
+        "material": "quiet_darkroom",
+        "motion_speed": 20,
+        "output_style": "banded",
+        "presentation": "flat",
+        "quality_intent": "safe",
+        "scale": 66,
+        "schema_id": "screensave.plasma.spec.v2",
+        "treatment": "none"
+      },
+      "product": "plasma",
+      "proof_profile": "plasma.v2.visualintent.preview",
+      "variant": "structured"
+    },
+    {
+      "candidate_id": "plasma-high-contrast-phosphor-03-comfort-2ae9a1aeb9",
+      "fixture": "tools/visualintent/examples/plasma/high_contrast_phosphor.toml",
+      "packc_status": "pass",
+      "plasma_v2_spec_summary": {
+        "complexity": 54,
+        "field_family": "classic_interference",
+        "material": "museum_phosphor",
+        "motion_speed": 20,
+        "output_style": "contour",
+        "presentation": "flat",
+        "quality_intent": "safe",
+        "scale": 58,
+        "schema_id": "screensave.plasma.spec.v2",
+        "treatment": "restrained_crt"
+      },
+      "product": "plasma",
+      "proof_profile": "plasma.v2.visualintent.preview",
+      "variant": "comfort"
     }
   ],
-  "claim_boundary": "VisualIntent candidates are preview inputs only; they are not stable release, artistic acceptance, compatibility certification, or source generation.",
+  "claim_boundary": "VisualIntent candidates are bounded data/spec preview evidence only; not artistic acceptance, compatibility certification, runtime truth, or stable promotion.",
+  "fixture_count": 4,
   "model_calls": false,
   "network_calls": false,
-  "schema_version": "screensave.visualintent.plasma.resolution.v1",
-  "source": "tools/visualintent/examples/plasma_warm_room.toml",
-  "source_code_generation": false
+  "proof_bundle_ref": "validation/captures/plasma-v2/matrix/proof-bundles/plasma-v2-visualintent-preview.json",
+  "proof_status": "packc-and-spec-proof-only",
+  "schema_version": "screensave.plasma-v2.visualintent-candidate-matrix.v1",
+  "source_code_generation": false,
+  "status": "pass"
 }

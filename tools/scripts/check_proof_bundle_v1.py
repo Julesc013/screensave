@@ -22,6 +22,9 @@ RICOCHET_PROFILE_DIR = ROOT / "out" / "proof" / "proof-bundle-v1" / "check-ricoc
 RICOCHET_BUNDLE = ROOT / "out" / "proof" / "proof-bundle-v1" / "check-ricochet.json"
 PORTABLE_V2_EQUIVALENCE = ROOT / "out" / "proof" / "proof-bundle-v1" / "check-portable-v2-equivalence.json"
 PORTABLE_V2_EQUIVALENCE_WORK = ROOT / "out" / "proof" / "proof-bundle-v1" / "check-portable-v2-equivalence-captures"
+VISUALINTENT_PROOF_SUMMARY = ROOT / "validation" / "captures" / "plasma-v2" / "instrument-audit" / "visualintent" / "proof-summary.json"
+VISUALINTENT_MATRIX = ROOT / "validation" / "captures" / "plasma-v2" / "matrix" / "visualintent-candidates.json"
+VISUALINTENT_BUNDLE = ROOT / "validation" / "captures" / "plasma-v2" / "matrix" / "proof-bundles" / "plasma-v2-visualintent-preview.json"
 
 REQUIRED_AXES = {
     "execution",
@@ -45,7 +48,7 @@ def require(condition: bool, message: str, errors: list[str]) -> None:
 def main() -> int:
     errors: list[str] = []
 
-    for path in (CONTRACT, TOOL, README, NOCTURNE_PROOF):
+    for path in (CONTRACT, TOOL, README, NOCTURNE_PROOF, VISUALINTENT_PROOF_SUMMARY, VISUALINTENT_MATRIX, VISUALINTENT_BUNDLE):
         require(path.exists(), f"Missing Proof Bundle v1 path: {path.relative_to(ROOT)}", errors)
 
     if CONTRACT.exists():
@@ -290,6 +293,33 @@ def main() -> int:
         require(
             portable_axis.get("claim_boundary") == "Named canary v1/v2 deterministic equivalence only.",
             "portable v2 equivalence axis must keep the named-canary claim boundary.",
+            errors,
+        )
+
+        visual_summary = json.loads(VISUALINTENT_PROOF_SUMMARY.read_text(encoding="utf-8"))
+        visual_matrix = json.loads(VISUALINTENT_MATRIX.read_text(encoding="utf-8"))
+        visual_bundle = json.loads(VISUALINTENT_BUNDLE.read_text(encoding="utf-8"))
+        require(visual_summary.get("status") == "pass", "VisualIntent proof summary must pass.", errors)
+        require(
+            visual_summary.get("proof_status") == "packc-and-spec-proof-only",
+            "VisualIntent proof summary must honestly record packc/spec-only proof status.",
+            errors,
+        )
+        require(
+            visual_summary.get("all_candidate_capture_refs_generated") is False,
+            "VisualIntent proof summary must not claim per-candidate captures.",
+            errors,
+        )
+        require(visual_matrix.get("candidate_count") == 12, "VisualIntent matrix must record twelve candidates.", errors)
+        require(
+            visual_matrix.get("proof_bundle_ref") == "validation/captures/plasma-v2/matrix/proof-bundles/plasma-v2-visualintent-preview.json",
+            "VisualIntent matrix must reference the committed preview proof bundle.",
+            errors,
+        )
+        require(visual_bundle.get("proof_schema") == "proof-bundle-v1", "VisualIntent preview bundle must be Proof Bundle v1.", errors)
+        require(
+            visual_bundle.get("subject", {}).get("profile") == "plasma.v2.visualintent.preview",
+            "VisualIntent preview bundle must record the VisualIntent proof profile.",
             errors,
         )
 

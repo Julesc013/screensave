@@ -1,0 +1,25 @@
+{
+  "all_candidate_capture_refs_generated": false,
+  "candidate_count_per_fixture": 3,
+  "candidate_specs_are_deterministic": true,
+  "candidate_specs_compile": true,
+  "capture_hash_refs": [
+    "67b3cc1a8f77e895ec912fdc8a6ad27a5ac47fad07445ac30e2c35c028f75077",
+    "e0cc64529e64d9fc92ae7fe550b41ce96a3c6e65fc9bb5eb0f3c6f8b749a7e90",
+    "67b3cc1a8f77e895ec912fdc8a6ad27a5ac47fad07445ac30e2c35c028f75077",
+    "a7e3388758772862b3a638111e922b6125500fe59d0bd33cf808c7e592954082"
+  ],
+  "capture_ref_boundary": "Existing profile-level VisualIntent preview captures are recorded; this turn does not fabricate per-candidate captures.",
+  "claim_boundary": "VisualIntent proof evidence is preview/instrument evidence only; not artistic acceptance, not compatibility certification, and not stable promotion.",
+  "fixtures_checked": 4,
+  "generated_output_policy": "Candidate compile artifacts are generated under out/ by check_visual_intent_resolver.py and are not committed.",
+  "limitation": "Every generated candidate is reduced to a Plasma v2 spec and packc-compiled during validation; current committed capture evidence is profile-level, not one capture bundle per candidate.",
+  "matrix_ref": "validation/captures/plasma-v2/matrix/visualintent-candidates.json",
+  "proof_bundle_ref": "validation/captures/plasma-v2/matrix/proof-bundles/plasma-v2-visualintent-preview.json",
+  "proof_profile": "plasma.v2.visualintent.preview",
+  "proof_profile_path_exists": true,
+  "proof_status": "packc-and-spec-proof-only",
+  "schema": "screensave.plasma-v2.visualintent-proof-summary.v1",
+  "spec_reduction_report": "validation/captures/plasma-v2/instrument-audit/visualintent/spec-reduction-report.json",
+  "status": "pass"
+}
