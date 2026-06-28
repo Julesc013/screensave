@@ -28,5 +28,10 @@
     "max_string_length": 96,
     "max_expanded_bytes": 65536,
     "max_output_files": 4
-  }
+  },
+  "admitted_proof_profiles": [
+    "plasma.v2.reference.preview",
+    "plasma.v2.visualintent.preview"
+  ],
+  "claim_boundary": "VisualIntent profile references compile as data-only Plasma v2 spec candidates; they do not execute, mutate runtime, certify compatibility, or promote release."
 }

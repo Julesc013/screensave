@@ -73,6 +73,17 @@ ALLOWED_CONSTRAINTS = {
     "deterministic",
     "maximum_brightness",
 }
+ALLOWED_PALETTE_HINTS = {
+    "aurora",
+    "cool",
+    "darkroom",
+    "lava",
+    "neutral",
+    "ocean",
+    "phosphor",
+    "quiet darkroom",
+    "warm",
+}
 
 MATERIALS = [
     "plasma_lava",
@@ -214,6 +225,10 @@ def normalize_intent(data: dict[str, Any]) -> dict[str, Any]:
         require(isinstance(value, str) and HEX_COLOR_RE.match(value) is not None, f"Invalid palette value: {value!r}.")
 
     palette_hint = check_safe_string("appearance.palette_hint", appearance.get("palette_hint", "neutral"))
+    require(
+        palette_hint.lower() in ALLOWED_PALETTE_HINTS,
+        f"appearance.palette_hint must be one of {', '.join(sorted(ALLOWED_PALETTE_HINTS))}.",
+    )
     texture = check_safe_string("appearance.texture", appearance.get("texture", "soft-grain"))
     warmth = optional_float(appearance.get("warmth"), 0.5, "appearance.warmth")
     softness = optional_float(appearance.get("softness"), 0.5, "appearance.softness")
@@ -424,7 +439,7 @@ def pack_toml(pack_id: str, name: str, spec: dict[str, Any]) -> str:
         'author = "ScreenSave"',
         'license = "ScreenSave sample content"',
         'provenance = "VisualIntent deterministic resolver"',
-        'proof_profile = "plasma.v2.reference.preview"',
+        'proof_profile = "plasma.v2.visualintent.preview"',
         "",
         "[compatibility]",
         "minimum_schema_version = 2",

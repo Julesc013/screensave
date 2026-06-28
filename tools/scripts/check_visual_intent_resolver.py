@@ -16,6 +16,7 @@ SCHEMA = ROOT / "tools" / "visualintent" / "schemas" / "visual_intent_v1.schema.
 EXAMPLES = ROOT / "tools" / "visualintent" / "examples" / "plasma"
 CONTRACT = ROOT / "contracts" / "visual_intent_v1.md"
 OUT_DIR = ROOT / "out" / "checks" / "visualintent"
+SPEC_REDUCTION_REPORT = ROOT / "validation" / "captures" / "plasma-v2" / "instrument-audit" / "visualintent" / "spec-reduction-report.json"
 FIXTURES = [
     "calm_dark.toml",
     "warm_slow_lava.toml",
@@ -132,6 +133,21 @@ def validate_summary(summary: dict[str, Any], errors: list[str], label: str) -> 
         for key in ["pack_toml", "compiled_manifest", "hash_manifest", "proof_receipt", "spec_json"]:
             require(key in candidate, f"{label}: candidate record missing {key}.", errors)
             require(repo_ref_exists(candidate.get(key)), f"{label}: candidate ref does not exist: {candidate.get(key)}", errors)
+        compiled_manifest_ref = candidate.get("compiled_manifest")
+        if repo_ref_exists(compiled_manifest_ref):
+            compiled_manifest_path = ROOT / str(compiled_manifest_ref)
+            compiled_manifest = load_json(compiled_manifest_path)
+            require(compiled_manifest.get("proof_profile") == "plasma.v2.visualintent.preview", f"{label}: compiled candidate manifest must retain the VisualIntent proof profile.", errors)
+            compiled_spec_path = compiled_manifest_path.parent / "plasma-spec-v2.json"
+            proof_ref_path = compiled_manifest_path.parent / "proof-profile-ref.json"
+            require(compiled_spec_path.exists(), f"{label}: compiled candidate spec must exist.", errors)
+            require(proof_ref_path.exists(), f"{label}: compiled candidate proof-profile ref must exist.", errors)
+            if compiled_spec_path.exists():
+                compiled_spec = load_json(compiled_spec_path)
+                require(compiled_spec.get("proof_profile") == "plasma.v2.visualintent.preview", f"{label}: compiled candidate spec must retain the VisualIntent proof profile.", errors)
+            if proof_ref_path.exists():
+                proof_ref = load_json(proof_ref_path)
+                require(proof_ref.get("proof_profile") == "plasma.v2.visualintent.preview", f"{label}: compiled proof ref must retain the VisualIntent proof profile.", errors)
         spec = candidate.get("plasma_v2_spec", {})
         require(set(spec) == SPEC_KEYS, f"{label}: candidate spec must carry exactly the admitted Plasma v2 spec keys.", errors)
         require(spec.get("schema_id") == "screensave.plasma.spec.v2", f"{label}: candidate spec must use Plasma v2 schema.", errors)
@@ -143,7 +159,7 @@ def validate_summary(summary: dict[str, Any], errors: list[str], label: str) -> 
 
 def main() -> int:
     errors: list[str] = []
-    for path in [RESOLVER, SCHEMA, EXAMPLES, CONTRACT]:
+    for path in [RESOLVER, SCHEMA, EXAMPLES, CONTRACT, SPEC_REDUCTION_REPORT]:
         require(path.exists(), f"Missing VisualIntent resolver input {path.relative_to(ROOT)}.", errors)
     for fixture in FIXTURES:
         require((EXAMPLES / fixture).exists(), f"Missing VisualIntent fixture tools/visualintent/examples/plasma/{fixture}.", errors)
@@ -155,6 +171,15 @@ def main() -> int:
     schema = load_json(SCHEMA)
     require(schema.get("properties", {}).get("candidate_count", {}).get("default") == 3, "VisualIntent schema must record candidate_count default 3.", errors)
     require(schema.get("properties", {}).get("candidate_count", {}).get("maximum") == 5, "VisualIntent schema must cap candidate_count at 5.", errors)
+    report = load_json(SPEC_REDUCTION_REPORT)
+    require(report.get("status") == "pass", "VisualIntent spec-reduction report must pass.", errors)
+    require(report.get("visualintent_candidates_reduce_to_plasma_spec") is True, "VisualIntent spec-reduction report must clear the spec-reduction claim.", errors)
+    require(report.get("fixtures_checked") == 4, "VisualIntent spec-reduction report must record four fixtures.", errors)
+    require(report.get("candidate_count_per_fixture") == 3, "VisualIntent spec-reduction report must record three candidates per fixture.", errors)
+    require(report.get("all_candidates_packc_valid") is True, "VisualIntent spec-reduction report must record packc-valid candidates.", errors)
+    require(report.get("all_candidates_have_plasma_v2_spec") is True, "VisualIntent spec-reduction report must record explicit Plasma specs.", errors)
+    require(report.get("executable_payloads_detected") is False, "VisualIntent spec-reduction report must deny executable payloads.", errors)
+    require(report.get("network_or_model_calls") is False, "VisualIntent spec-reduction report must deny network/model calls.", errors)
 
     contract_text = CONTRACT.read_text(encoding="utf-8")
     for needle in [
@@ -196,38 +221,45 @@ def main() -> int:
                 errors,
             )
 
-    outside = run_resolver(["resolve", str(EXAMPLES / FIXTURES[0]), "--out", str(pathlib.Path("..") / "visualintent-outside")])
-    require(outside.returncode != 0, "VisualIntent resolver must reject output outside out/.", errors)
+    parent_out = run_resolver(["resolve", str(EXAMPLES / FIXTURES[0]), "--out", str(pathlib.Path("..") / "visualintent-outside")])
+    require(parent_out.returncode != 0, "VisualIntent resolver must reject parent traversal output outside out/.", errors)
+    absolute_out = run_resolver(["resolve", str(EXAMPLES / FIXTURES[0]), "--out", str(pathlib.Path.home() / "visualintent-outside")])
+    require(absolute_out.returncode != 0, "VisualIntent resolver must reject absolute output outside out/.", errors)
 
-    invalid = OUT_DIR / "invalid_network.toml"
-    invalid.write_text(
-        "\n".join(
-            [
-                "visual_intent_version = 1",
-                'target_product = "plasma"',
-                'mood = "http://example.invalid"',
-                "[appearance]",
-                "brightness = 0.4",
-                "contrast = 0.5",
-                "density = 0.5",
-                'palette = ["#010203"]',
-                'palette_hint = "neutral"',
-                "warmth = 0.5",
-                "softness = 0.5",
-                "complexity = 0.5",
-                "[motion]",
-                'motion_character = "slow"',
-                "motion_speed = 0.2",
-                "[constraints]",
-                "avoid_flashing = true",
-                "deterministic = true",
-            ]
-        )
-        + "\n",
-        encoding="utf-8",
-    )
-    invalid_result = run_resolver(["resolve", str(invalid), "--out", str(OUT_DIR / "invalid_out")])
-    require(invalid_result.returncode != 0, "VisualIntent resolver must reject network-like text in admitted fields.", errors)
+    base_lines = [
+        "visual_intent_version = 1",
+        'target_product = "plasma"',
+        'mood = "safe test"',
+        "candidate_count = 3",
+        "[appearance]",
+        "brightness = 0.4",
+        "contrast = 0.5",
+        "density = 0.5",
+        'palette = ["#010203"]',
+        'palette_hint = "neutral"',
+        "warmth = 0.5",
+        "softness = 0.5",
+        "complexity = 0.5",
+        "[motion]",
+        'motion_character = "slow"',
+        "motion_speed = 0.2",
+        "[constraints]",
+        "avoid_flashing = true",
+        "deterministic = true",
+    ]
+    negative_cases = {
+        "candidate_count_too_high.toml": [line if line != "candidate_count = 3" else "candidate_count = 6" for line in base_lines],
+        "unknown_target_product.toml": [line if line != 'target_product = "plasma"' else 'target_product = "nocturne"' for line in base_lines],
+        "missing_required_field.toml": [line for line in base_lines if line != "brightness = 0.4"],
+        "invalid_palette_hint.toml": [line if line != 'palette_hint = "neutral"' else 'palette_hint = "shader magic"' for line in base_lines],
+        "attempted_executable_payload.toml": [line if line != 'mood = "safe test"' else 'mood = "run payload.exe"' for line in base_lines],
+        "network_url_payload.toml": [line if line != 'mood = "safe test"' else 'mood = "http://example.invalid"' for line in base_lines],
+    }
+    for name, lines in negative_cases.items():
+        invalid = OUT_DIR / name
+        invalid.write_text("\n".join(lines) + "\n", encoding="utf-8")
+        invalid_result = run_resolver(["resolve", str(invalid), "--out", str(OUT_DIR / (invalid.stem + "_out"))])
+        require(invalid_result.returncode != 0, f"VisualIntent resolver must reject negative fixture {name}.", errors)
 
     if errors:
         for error in errors:

@@ -1,0 +1,55 @@
+{
+  "all_candidates_have_plasma_v2_spec": true,
+  "all_candidates_packc_valid": true,
+  "candidate_count_per_fixture": 3,
+  "claim_boundary": "VisualIntent candidates are bounded data/spec candidates only; not artistic acceptance or stable promotion.",
+  "executable_payloads_detected": false,
+  "fixtures": [
+    {
+      "candidate_count": 3,
+      "fixture": "tools/visualintent/examples/plasma/calm_dark.toml",
+      "packc_examples": [
+        "products/savers/plasma/content/v2/visualintent/calm_dark_primary.toml"
+      ],
+      "status": "pass"
+    },
+    {
+      "candidate_count": 3,
+      "fixture": "tools/visualintent/examples/plasma/warm_slow_lava.toml",
+      "packc_examples": [
+        "products/savers/plasma/content/v2/visualintent/warm_slow_lava_primary.toml"
+      ],
+      "status": "pass"
+    },
+    {
+      "candidate_count": 3,
+      "fixture": "tools/visualintent/examples/plasma/cool_aurora.toml",
+      "packc_examples": [
+        "products/savers/plasma/content/v2/visualintent/cool_aurora_primary.toml"
+      ],
+      "status": "pass"
+    },
+    {
+      "candidate_count": 3,
+      "fixture": "tools/visualintent/examples/plasma/high_contrast_phosphor.toml",
+      "packc_examples": [
+        "products/savers/plasma/content/v2/visualintent/high_contrast_phosphor_primary.toml"
+      ],
+      "status": "pass"
+    }
+  ],
+  "fixtures_checked": 4,
+  "network_or_model_calls": false,
+  "negative_fixtures": [
+    "candidate_count too high",
+    "unknown target_product",
+    "missing required fields",
+    "invalid palette hint",
+    "attempted executable payload",
+    "absolute output path",
+    "parent traversal",
+    "network URL as payload"
+  ],
+  "status": "pass",
+  "visualintent_candidates_reduce_to_plasma_spec": true
+}

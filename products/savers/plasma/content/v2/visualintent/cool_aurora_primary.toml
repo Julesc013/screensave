@@ -1,0 +1,32 @@
+schema_version = 1
+pack_id = "screensave.plasma.visualintent.cool_aurora_primary"
+kind = "screensave.plasma.v2"
+product = "plasma"
+name = "VisualIntent Cool Aurora Primary"
+author = "ScreenSave"
+license = "ScreenSave sample content"
+provenance = "VisualIntent deterministic resolver"
+proof_profile = "plasma.v2.visualintent.preview"
+
+[compatibility]
+minimum_schema_version = 2
+maximum_schema_version = 2
+pack_status = "v1-candidate"
+
+[plasma_spec_v2]
+schema_id = "screensave.plasma.spec.v2"
+schema_version = 2
+field_family = "radial_warped"
+scale = 65
+complexity = 68
+motion_speed = 28
+warp_amount = 12
+feedback_amount = 8
+output_style = "continuous"
+material = "aurora_cool"
+brightness = 40
+contrast = 64
+treatment = "restrained_dither"
+quality_intent = "safe"
+seed_policy = "fixed"
+presentation = "flat"

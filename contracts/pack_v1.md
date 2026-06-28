@@ -14,8 +14,10 @@ The first admitted pack kind is:
 
 Pack v1 can carry one bounded `plasma_spec_v2` payload plus author,
 provenance, license, compatibility range, candidate status, and a
-proof-profile reference. It does not compile source code or load runtime
-behavior.
+proof-profile reference. VisualIntent-derived Plasma candidates may use the
+`plasma.v2.visualintent.preview` proof-profile reference only when they still
+carry explicit `plasma_spec_v2` data and compile through the same bounded
+data-only path. Pack v1 does not compile source code or load runtime behavior.
 
 ## Pipeline
 
@@ -64,12 +66,18 @@ These schemas document the bounded compiler surface. The compiler itself remains
 the local deterministic authority for accepted tokens, canonical output, content
 hashes, proof-profile references, and output-root enforcement.
 
+Admitted proof-profile references are:
+
+- `plasma.v2.reference.preview`
+- `plasma.v2.visualintent.preview`
+
 ## Boundaries
 
 Pack v1 does not imply:
 
 - VisualIntent text-to-code generation,
 - runtime executable plugins,
+- VisualIntent runtime authority,
 - compatibility certification,
 - artistic acceptance,
 - stable release promotion,

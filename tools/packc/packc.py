@@ -25,7 +25,10 @@ PACK_MANIFEST_SCHEMA = "screensave.pack_manifest.v1"
 PACK_KIND = "screensave.plasma.v2"
 PLASMA_SCHEMA_ID = "screensave.plasma.spec.v2"
 PLASMA_SCHEMA_VERSION = 2
-ADMITTED_PROOF_PROFILE = "plasma.v2.reference.preview"
+ADMITTED_PROOF_PROFILES = {
+    "plasma.v2.reference.preview",
+    "plasma.v2.visualintent.preview",
+}
 PACK_STATUS = "v1-candidate"
 
 FIELD_FAMILY = {
@@ -208,8 +211,8 @@ def validate_and_resolve(data: dict[str, Any], source: pathlib.Path) -> dict[str
     if product != "plasma":
         raise PackError("product must be plasma.")
     proof_profile = ensure_safe_string("proof_profile", data.get("proof_profile"))
-    if proof_profile != ADMITTED_PROOF_PROFILE:
-        raise PackError(f"proof_profile must be {ADMITTED_PROOF_PROFILE}.")
+    if proof_profile not in ADMITTED_PROOF_PROFILES:
+        raise PackError(f"proof_profile must be one of {', '.join(sorted(ADMITTED_PROOF_PROFILES))}.")
 
     compatibility = data.get("compatibility")
     if not isinstance(compatibility, dict):
@@ -315,6 +318,7 @@ def compile_pack(source: pathlib.Path, output_dir: pathlib.Path) -> dict[str, An
             "license": canonical_pack["license"],
             "provenance": canonical_pack["provenance"],
             "compatibility_range": canonical_pack["compatibility"],
+            "proof_profile": canonical_pack["proof_profile"],
             "file_count": MAX_OUTPUT_FILES,
             "data_only": True,
             "content_sha256": content_hash,

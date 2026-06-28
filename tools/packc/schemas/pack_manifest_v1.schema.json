@@ -68,6 +68,13 @@
       "const": "plasma",
       "type": "string"
     },
+    "proof_profile": {
+      "enum": [
+        "plasma.v2.reference.preview",
+        "plasma.v2.visualintent.preview"
+      ],
+      "type": "string"
+    },
     "source_ref": {
       "type": "string"
     }
@@ -83,6 +90,7 @@
     "license",
     "provenance",
     "compatibility_range",
+    "proof_profile",
     "file_count",
     "data_only",
     "content_sha256",

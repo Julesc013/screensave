@@ -34,6 +34,17 @@
           "type": "array"
         },
         "palette_hint": {
+          "enum": [
+            "aurora",
+            "cool",
+            "darkroom",
+            "lava",
+            "neutral",
+            "ocean",
+            "phosphor",
+            "quiet darkroom",
+            "warm"
+          ],
           "type": "string"
         },
         "softness": {
