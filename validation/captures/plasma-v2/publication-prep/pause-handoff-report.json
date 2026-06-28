@@ -1,0 +1,167 @@
+{
+  "checks": [
+    {
+      "active_program": "plasma-v2-publication",
+      "id": "publication-ready-project-state",
+      "message": "Project state records publication-ready Plasma v2 without publication.",
+      "opened_next": "plasma-v2-publication",
+      "plasma_status": "publication-ready",
+      "publication": "not-published",
+      "publication_prep": "ready",
+      "release_promotion": "accepted",
+      "stable": true,
+      "status": "pass"
+    },
+    {
+      "id": "pause-evidence-paths",
+      "message": "Pause handoff evidence paths exist.",
+      "missing": [],
+      "status": "pass"
+    },
+    {
+      "id": "release-manifest-boundary",
+      "message": "Release manifest remains publication-prep only.",
+      "status": "pass"
+    },
+    {
+      "id": "artifact-manifest-unpublished",
+      "message": "Artifact manifest has no published entries.",
+      "published": [],
+      "status": "pass"
+    },
+    {
+      "id": "closeout-scan",
+      "message": "Closeout scan records no blocking publication-prep repairs.",
+      "status": "pass"
+    },
+    {
+      "id": "publication-dry-run",
+      "message": "Publication dry run verifies the packet without publishing.",
+      "status": "pass"
+    },
+    {
+      "existing": [],
+      "id": "no-publication-receipts",
+      "message": "No publication/upload receipt files exist.",
+      "status": "pass"
+    },
+    {
+      "id": "no-plasma-release-tags",
+      "message": "No local Plasma v2 release tag exists.",
+      "status": "pass",
+      "tags": []
+    },
+    {
+      "id": "repair-queue-closeout-marker",
+      "marker": {
+        "agentic_receipt": "out/aide/agentic/SS-PLV2-JX0/session-receipt.json",
+        "blocking_repairs": [],
+        "claim_boundary": "Publication-ready closeout records pause-safe scan evidence only; no release publication, upload, tag, compatibility broadening, Workbench MVP, Manager install mutation, all-saver migration, or AIDE automatic promotion.",
+        "closeout_scan": "validation/captures/plasma-v2/publication-prep/closeout-scan.json",
+        "doc_drift_plan": "out/aide/repairs/plan-doc_drift.json",
+        "evidence_index_drift_plan": "out/aide/repairs/plan-evidence_index_drift.json",
+        "generated_catalog_drift_plan": "out/aide/repairs/plan-generated_catalog_drift.json",
+        "open_blocking_count": 0,
+        "package_checksum_drift_plan": "out/aide/repairs/plan-package_checksum_drift.json",
+        "recorded_on": "2026-06-29",
+        "release_readiness_gap_plan": "out/aide/repairs/plan-release_readiness_gap.json",
+        "resolved_repairs": [
+          "SS-PLV2-I-REPAIR-001"
+        ],
+        "scan_ref": "out/aide/repairs/scan.json",
+        "status": "no-blocking-publication-prep-repairs",
+        "work_unit": "SS-PLV2-JX0"
+      },
+      "message": "Repair queue records no blocking publication-prep closeout repairs.",
+      "status": "pass"
+    },
+    {
+      "id": "publication-prep-gate",
+      "message": "Command passed.",
+      "run": {
+        "command": "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe tools/scripts/check_plasma_v2_publication_prep.py",
+        "returncode": 0,
+        "stderr_tail": "",
+        "stdout_tail": "Plasma v2 publication-prep gate publication-ready",
+        "timed_out": false,
+        "timeout_seconds": 600
+      },
+      "status": "pass"
+    },
+    {
+      "id": "stable-promotion-gate",
+      "message": "Command passed.",
+      "run": {
+        "command": "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe tools/scripts/check_plasma_v2_stable_promotion.py",
+        "returncode": 0,
+        "stderr_tail": "",
+        "stdout_tail": "Plasma v2 stable-promotion gate promotion-ready",
+        "timed_out": false,
+        "timeout_seconds": 900
+      },
+      "status": "pass"
+    },
+    {
+      "id": "aide-evidence-index",
+      "message": "Command passed.",
+      "run": {
+        "command": "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe tools/scripts/check_aide_evidence_index.py",
+        "returncode": 0,
+        "stderr_tail": "",
+        "stdout_tail": "AIDE evidence index checks passed.",
+        "timed_out": false,
+        "timeout_seconds": 180
+      },
+      "status": "pass"
+    },
+    {
+      "id": "repair-queue",
+      "message": "Command passed.",
+      "run": {
+        "command": "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe tools/scripts/check_repair_queue.py",
+        "returncode": 0,
+        "stderr_tail": "",
+        "stdout_tail": "Repair queue checks passed.",
+        "timed_out": false,
+        "timeout_seconds": 180
+      },
+      "status": "pass"
+    },
+    {
+      "id": "project-adapter-t2",
+      "message": "Command passed.",
+      "run": {
+        "command": "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe tools/project_adapter/screensave_project.py validate --tier T2",
+        "returncode": 0,
+        "stderr_tail": "",
+        "stdout_tail": "E.md`: present\\n- `packaging\\\\release_notes\\\\core-baseline-notes.md`: present\\n- `validation\\\\README.md`: present\\n- `validation\\\\notes\\\\c16-release-baseline.md`: present\\n- `.github\\\\workflows\\\\release.yml`: present\\n\\n## Changelog note\\n- Provided version label present in changelog: no\\n\\n## Current deferrals\\n- This workflow does not build binaries.\\n- This workflow does not publish releases.\\n- Frozen Core and Installer packaging depend on locally available release-build saver binaries.\",\n        \"timeout_seconds\": 240\n      },\n      {\n        \"command\": [\n          \"C:\\\\Users\\\\Jules\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python311\\\\python.exe\",\n          \"tools/scripts/check_visual_intent_contract.py\"\n        ],\n        \"returncode\": 0,\n        \"status\": \"pass\",\n        \"stderr\": \"\",\n        \"stdout\": \"VisualIntent contract checks passed.\",\n        \"timeout_seconds\": 240\n      },\n      {\n        \"command\": [\n          \"C:\\\\Users\\\\Jules\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python311\\\\python.exe\",\n          \"tools/scripts/check_plasma_v2_direct_spec.py\"\n        ],\n        \"returncode\": 0,\n        \"status\": \"pass\",\n        \"stderr\": \"\",\n        \"stdout\": \"Plasma v2 direct spec checks passed.\",\n        \"timeout_seconds\": 240\n      },\n      {\n        \"command\": [\n          \"C:\\\\Users\\\\Jules\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python311\\\\python.exe\",\n          \"tools\\\\sslab\\\\sslab.py\",\n          \"proof\",\n          \"--profile\",\n          \"nocturne.reference.v0\",\n          \"--output-dir\",\n          \"out/aide/proofs/nocturne-reference-v0\"\n        ],\n        \"returncode\": 0,\n        \"status\": \"pass\",\n        \"stderr\": \"\",\n        \"stdout\": \"profile-proof pass nocturne.reference.v0 abi=v0 path=v1 capture=5394a14b6622c17bfb10cd5721c08a4c92cdbddfb12f55c954ef1d5f6ef878b2 comparison=pass lifecycle=pass\",\n        \"timeout_seconds\": 240\n      },\n      {\n        \"command\": [\n          \"C:\\\\Users\\\\Jules\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python311\\\\python.exe\",\n          \"tools\\\\sslab\\\\sslab.py\",\n          \"proof\",\n          \"--profile\",\n          \"nocturne.reference.v0\",\n          \"--path\",\n          \"v2\",\n          \"--output-dir\",\n          \"out/aide/proofs/nocturne-reference-v0-v2\"\n        ],\n        \"returncode\": 0,\n        \"status\": \"pass\",\n        \"stderr\": \"\",\n        \"stdout\": \"profile-proof pass nocturne.reference.v0 abi=v0 path=v2 capture=5394a14b6622c17bfb10cd5721c08a4c92cdbddfb12f55c954ef1d5f6ef878b2 comparison=pass lifecycle=pass\",\n        \"timeout_seconds\": 240\n      },\n      {\n        \"command\": [\n          \"C:\\\\Users\\\\Jules\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python311\\\\python.exe\",\n          \"tools\\\\sslab\\\\sslab.py\",\n          \"proof\",\n          \"--profile\",\n          \"ricochet.reference.v1\",\n          \"--output-dir\",\n          \"out/aide/proofs/ricochet-reference-v1\"\n        ],\n        \"returncode\": 0,\n        \"status\": \"pass\",\n        \"stderr\": \"\",\n        \"stdout\": \"profile-proof pass ricochet.reference.v1 abi=v0 path=v1 capture=0:b8c7c0ea922b,4:7a1615e04d27,8:a50582e8e8f5,32:65c37015993c comparison=pass lifecycle=pass\",\n        \"timeout_seconds\": 240\n      },\n      {\n        \"command\": [\n          \"C:\\\\Users\\\\Jules\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python311\\\\python.exe\",\n          \"tools\\\\sslab\\\\sslab.py\",\n          \"proof\",\n          \"--profile\",\n          \"ricochet.reference.v1\",\n          \"--path\",\n          \"v2\",\n          \"--output-dir\",\n          \"out/aide/proofs/ricochet-reference-v1-v2\"\n        ],\n        \"returncode\": 0,\n        \"status\": \"pass\",\n        \"stderr\": \"\",\n        \"stdout\": \"profile-proof pass ricochet.reference.v1 abi=v0 path=v2 capture=0:b8c7c0ea922b,4:7a1615e04d27,8:a50582e8e8f5,32:65c37015993c comparison=pass lifecycle=pass\",\n        \"timeout_seconds\": 240\n      }\n    ],\n    \"tier\": \"T2\",\n    \"validation_class\": \"screensave-fixed-tier\"\n  },\n  \"project\": \"screensave\",\n  \"source\": {\n    \"branch\": \"main\",\n    \"commit\": \"d70ee3c4d3d153e1ba798c2c200af032f4b8dbec\",\n    \"dirty\": true\n  },\n  \"status\": \"pass\"\n}",
+        "timed_out": false,
+        "timeout_seconds": 900
+      },
+      "status": "pass"
+    },
+    {
+      "id": "project-adapter-t3",
+      "message": "Command passed.",
+      "run": {
+        "command": "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe tools/project_adapter/screensave_project.py validate --tier T3",
+        "returncode": 0,
+        "stderr_tail": "",
+        "stdout_tail": "\": 588288,\\n            \\\"exists\\\": true,\\n            \\\"expected\\\": true,\\n            \\\"path\\\": \\\"out/msvc/vs2022/Release/suite/suite.exe\\\",\\n            \\\"sha256\\\": \\\"f20b34614f19a7925adc52471807c29a42931d2e66476722d69d2623406c20fb\\\"\\n          },\\n          {\\n            \\\"bytes\\\": 608768,\\n            \\\"exists\\\": true,\\n            \\\"expected\\\": true,\\n            \\\"path\\\": \\\"out/msvc/vs2022/Release/benchlab/benchlab.exe\\\",\\n            \\\"sha256\\\": \\\"130999d63b33900a9f3a9f6451c27a9078bc396f8ca439afba595cd66cc52e05\\\"\\n          }\\n        ],\\n        \\\"limits\\\": [\\n          \\\"This manifest records file identity and exact artifact-set membership only.\\\",\\n          \\\"PE architecture, subsystem, and imports require a separate PE audit.\\\",\\n          \\\"Runtime compatibility and artistic acceptance are not implied.\\\"\\n        ],\\n        \\\"manifest_schema\\\": \\\"screensave-artifact-set-manifest-v0\\\",\\n        \\\"missing_artifacts\\\": [],\\n        \\\"observed_artifacts\\\": [\\n          {\\n            \\\"bytes\\\": 608768,\\n            \\\"exists\\\": true,\\n            \\\"expected\\\": true,\\n            \\\"path\\\": \\\"out/msvc/vs2022/Release/benchlab/benchlab.exe\\\",\\n            \\\"sha256\\\": \\\"130999d63b33900a9f3a9f6451c27a9078bc396f8ca439afba595cd66cc52e05\\\"\\n          },\\n          {\\n            \\\"bytes\\\": 588288,\\n            \\\"exists\\\": true,\\n            \\\"expected\\\": true,\\n            \\\"path\\\": \\\"out/msvc/vs2022/Release/suite/suite.exe\\\",\\n            \\\"sha256\\\": \\\"f20b34614f19a7925adc52471807c29a42931d2e66476722d69d2623406c20fb\\\"\\n          }\\n        ],\\n        \\\"source\\\": {\\n          \\\"branch\\\": \\\"main\\\",\\n          \\\"commit\\\": \\\"d70ee3c4d3d153e1ba798c2c200af032f4b8dbec\\\",\\n          \\\"dirty\\\": true\\n        },\\n        \\\"status\\\": \\\"pass\\\",\\n        \\\"unexpected_artifacts\\\": []\\n      },\\n      \\\"manifest_ref\\\": \\\"out/aide/t3/windows-current-tools/windows_current_tools.manifest.json\\\",\\n      \\\"manifest_status\\\": \\\"pass\\\",\\n      \\\"run\\\": {\\n        \\\"command\\\": [\\n          \\\"C:\\\\\\\\Users\\\\\\\\Jules\\\\\\\\AppData\\\\\\\\Local\\\\\\\\Programs\\\\\\\\Python\\\\\\\\Python311\\\\\\\\python.exe\\\",\\n          \\\"D:\\\\\\\\Projects\\\\\\\\ScreenSave\\\\\\\\screensave\\\\\\\\tools\\\\\\\\artifactmanifest\\\\\\\\artifactmanifest.py\\\",\\n          \\\"generate\\\",\\n          \\\"--artifact-set\\\",\\n          \\\"windows_current_tools\\\",\\n          \\\"--output\\\",\\n          \\\"D:\\\\\\\\Projects\\\\\\\\ScreenSave\\\\\\\\screensave\\\\\\\\out\\\\\\\\aide\\\\\\\\t3\\\\\\\\windows-current-tools\\\\\\\\windows_current_tools.manifest.json\\\"\\n        ],\\n        \\\"returncode\\\": 0,\\n        \\\"status\\\": \\\"pass\\\",\\n        \\\"stderr\\\": \\\"\\\",\\n        \\\"stdout\\\": \\\"pass windows_current_tools out/aide/t3/windows-current-tools/windows_current_tools.manifest.json\\\",\\n        \\\"timeout_seconds\\\": 120\\n      }\\n    }\\n  ],\\n  \\\"output_dir\\\": \\\"out/aide/t3/windows-current-tools\\\",\\n  \\\"profile\\\": \\\"windows-current-tools\\\",\\n  \\\"source\\\": {\\n    \\\"branch\\\": \\\"main\\\",\\n    \\\"commit\\\": \\\"d70ee3c4d3d153e1ba798c2c200af032f4b8dbec\\\",\\n    \\\"dirty\\\": true\\n  },\\n  \\\"status\\\": \\\"pass\\\"\\n}\",\n        \"timeout_seconds\": 240\n      },\n      {\n        \"command\": [\n          \"C:\\\\Users\\\\Jules\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python311\\\\python.exe\",\n          \"tools/scripts/check_aide_evidence_bridge.py\"\n        ],\n        \"returncode\": 0,\n        \"status\": \"pass\",\n        \"stderr\": \"\",\n        \"stdout\": \"AIDE evidence bridge checks passed.\",\n        \"timeout_seconds\": 240\n      },\n      {\n        \"command\": [\n          \"C:\\\\Users\\\\Jules\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python311\\\\python.exe\",\n          \"tools/scripts/check_aide_evidence_index.py\"\n        ],\n        \"returncode\": 0,\n        \"status\": \"pass\",\n        \"stderr\": \"\",\n        \"stdout\": \"AIDE evidence index checks passed.\",\n        \"timeout_seconds\": 240\n      }\n    ],\n    \"tier\": \"T3\",\n    \"validation_class\": \"screensave-fixed-tier\"\n  },\n  \"project\": \"screensave\",\n  \"source\": {\n    \"branch\": \"main\",\n    \"commit\": \"d70ee3c4d3d153e1ba798c2c200af032f4b8dbec\",\n    \"dirty\": true\n  },\n  \"status\": \"pass\"\n}",
+        "timed_out": false,
+        "timeout_seconds": 900
+      },
+      "status": "pass"
+    }
+  ],
+  "claim_boundary": "Pause handoff only; publication-ready is not publication, stable promotion is not compatibility certification broadening, AIDE evidence is not product truth, and Workbench shell evidence is not a graphical Workbench MVP.",
+  "release_candidate": "plasma-v2-rc1",
+  "schema": "screensave.plasma-v2.publication-ready.pause-handoff.v1",
+  "source": {
+    "branch": "main",
+    "commit": "d70ee3c4d3d153e1ba798c2c200af032f4b8dbec",
+    "dirty": true
+  },
+  "status": "pause-ready",
+  "work_unit": "SS-PLV2-JX0"
+}

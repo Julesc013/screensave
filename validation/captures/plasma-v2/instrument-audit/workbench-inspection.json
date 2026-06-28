@@ -54,7 +54,7 @@
   "schema": "screensave.plasma-v2.workbench-instrument-inspection.v1",
   "source": {
     "branch": "main",
-    "commit": "77236f6f8e325afbcef8a519bf62d053e91a5487",
+    "commit": "d70ee3c4d3d153e1ba798c2c200af032f4b8dbec",
     "dirty": true
   },
   "status": "pass",
