@@ -1,0 +1,122 @@
+schema_version = 1
+program_id = "plasma-v2-publication-prep"
+status = "active"
+as_of = "2026-06-29"
+source_commit = "9182f348a4a306ee3499758824da1af7f13432e1"
+source_mutation_by_aide = false
+automatic_merge = false
+automatic_release = false
+automatic_promotion = false
+claim_boundary = "PAW-J prepares a publication packet only; ScreenSave owns product and release truth, and AIDE remains evidence/control-plane coordination."
+
+[[work_units]]
+id = "SS-PLV2-J0"
+title = "Checkpoint Plasma v2 stable promotion"
+task_class = "release-readiness"
+objective = "Record the stable-promoted Plasma v2 source state before publication-prep work begins."
+allowed_paths = ["validation/captures/plasma-v2/publication-prep/intake-state.json", ".aide/work_units/plasma-v2-publication-prep.toml", "docs/roadmap/paw-j-plasma-v2-publication-prep.md"]
+forbidden_paths = ["products/savers/plasma/src/**", "platform/**", "releases/plasma-v2-stable/**", "packaging/publication/**"]
+selected_validation_tier = "T1"
+expected_validators = ["py -3 tools/scripts/check_project_state.py --summary", "py -3 tools/scripts/check_plasma_v2_stable_promotion.py", "py -3 tools/aideops/screensave_aide.py preflight --task SS-PLV2-J0 --objective \"Checkpoint Plasma v2 stable promotion before publication prep\"", "git diff --check"]
+evidence_outputs = ["validation/captures/plasma-v2/publication-prep/intake-state.json"]
+claim_boundary = "Checkpoint only; no publication upload, no compatibility certification broadening, and no new product runtime authority."
+rollback_point = "9182f34"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"
+
+[[work_units]]
+id = "SS-PLV2-J1"
+title = "Define Plasma v2 publication-prep gate"
+task_class = "release-readiness"
+objective = "Define the publication-prep contract and validator without publishing Plasma v2."
+allowed_paths = ["contracts/plasma_publication_prep_v1.md", "tools/scripts/check_plasma_v2_publication_prep_contract.py", "products/savers/plasma/docs/plasma-v2-publication-policy.md"]
+forbidden_paths = ["PROJECT_STATE.toml", "VERSION.toml", "products/savers/plasma/src/**", "platform/**", "releases/plasma-v2-stable/**"]
+selected_validation_tier = "T1"
+expected_validators = ["py -3 tools/scripts/check_plasma_v2_publication_prep_contract.py", "py -3 tools/scripts/check_contracts.py"]
+evidence_outputs = ["contracts/plasma_publication_prep_v1.md"]
+claim_boundary = "Contract only; publication upload, release page publication, and compatibility certification broadening remain out of scope."
+rollback_point = "9182f34"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"
+
+[[work_units]]
+id = "SS-PLV2-J2"
+title = "Assemble Plasma v2 publication manifest"
+task_class = "release-readiness"
+objective = "Assemble a local publication packet that references existing staged artifacts and evidence."
+allowed_paths = ["releases/plasma-v2-stable/**"]
+forbidden_paths = ["products/savers/plasma/src/**", "platform/**", "packaging/publication/**"]
+selected_validation_tier = "T2"
+expected_validators = ["py -3 tools/scripts/check_release_provenance.py", "py -3 tools/scripts/check_release_security.py", "py -3 tools/scripts/check_plasma_v2_package_stage.py"]
+evidence_outputs = ["releases/plasma-v2-stable/release-manifest.toml", "releases/plasma-v2-stable/artifact-manifest.toml", "releases/plasma-v2-stable/checksums.sha256"]
+claim_boundary = "Manifest assembly only; it records a local publication-prep packet and does not publish release assets."
+rollback_point = "9182f34"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"
+
+[[work_units]]
+id = "SS-PLV2-J3"
+title = "Prepare Plasma v2 stable release notes"
+task_class = "release-readiness"
+objective = "Prepare public-facing release notes and compatibility wording with evidence-classed boundaries."
+allowed_paths = ["docs/releases/plasma-v2-stable.md", "docs/compatibility/plasma-v2-stable.md", "products/savers/plasma/docs/plasma-v2-stable.md", "README.md", "CHANGELOG.md"]
+forbidden_paths = ["products/savers/plasma/src/**", "platform/**", "releases/plasma-v2-stable/**"]
+selected_validation_tier = "T1"
+expected_validators = ["py -3 tools/scripts/check_docs_basics.py", "py -3 tools/scripts/check_support_claims.py", "py -3 tools/scripts/check_plasma_v2_stable_support_claims.py"]
+evidence_outputs = ["docs/releases/plasma-v2-stable.md", "docs/compatibility/plasma-v2-stable.md"]
+claim_boundary = "Documentation only; no preservation certification, SDK stability, macOS/Linux support, or all-saver stable claim is added."
+rollback_point = "9182f34"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"
+
+[[work_units]]
+id = "SS-PLV2-J4"
+title = "Index Plasma v2 publication-prep evidence"
+task_class = "release-readiness"
+objective = "Record publication-prep evidence references while preserving AIDE as evidence/control plane only."
+allowed_paths = [".aide/evidence/plasma-v2-publication-prep.toml", ".aide/evidence/index.toml", "validation/captures/plasma-v2/publication-prep/aide-publication-summary.json", "tools/scripts/check_aide_evidence_index.py"]
+forbidden_paths = ["products/**", "platform/**", "releases/plasma-v2-stable/**"]
+selected_validation_tier = "T1"
+expected_validators = ["py -3 tools/scripts/check_aide_evidence_index.py", "py -3 tools/scripts/check_aide_operational.py"]
+evidence_outputs = [".aide/evidence/plasma-v2-publication-prep.toml", "validation/captures/plasma-v2/publication-prep/aide-publication-summary.json"]
+claim_boundary = "Evidence indexing only; AIDE does not publish, certify compatibility, or become a product runtime dependency."
+rollback_point = "9182f34"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"
+
+[[work_units]]
+id = "SS-PLV2-J5"
+title = "Add Plasma v2 publication-prep checker"
+task_class = "release-readiness"
+objective = "Gate publication-prep readiness before any publication state transition."
+allowed_paths = ["tools/scripts/check_plasma_v2_publication_prep.py", "validation/captures/plasma-v2/publication-prep/gate-report.json", "validation/captures/plasma-v2/publication-prep/gate-report.md"]
+forbidden_paths = ["PROJECT_STATE.toml", "VERSION.toml", "products/**", "platform/**"]
+selected_validation_tier = "T3"
+expected_validators = ["py -3 tools/scripts/check_plasma_v2_publication_prep.py", "py -3 tools/project_adapter/screensave_project.py validate --tier T2", "py -3 tools/project_adapter/screensave_project.py validate --tier T3"]
+evidence_outputs = ["validation/captures/plasma-v2/publication-prep/gate-report.json", "validation/captures/plasma-v2/publication-prep/gate-report.md"]
+claim_boundary = "Publication-prep gate only; successful prep does not upload or publish a release."
+rollback_point = "9182f34"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"
+
+[[work_units]]
+id = "SS-PLV2-J6"
+title = "Record Plasma v2 publication-ready or hold"
+task_class = "release-readiness"
+objective = "Transition state to publication-ready only if the publication-prep checker passes, otherwise record exact hold blockers."
+allowed_paths = ["PROJECT_STATE.toml", "VERSION.toml", "README.md", "docs/roadmap/**", "products/savers/plasma/docs/**", "validation/captures/plasma-v2/publication-prep/**", ".aide/repairs/**", ".aide/work_units/plasma-v2-publication-prep.toml", "tools/scripts/check_project_state.py", "tools/scripts/check_plasma_v2_stable_promotion.py", "tools/scripts/check_plasma_v2_publication_prep.py"]
+forbidden_paths = ["products/savers/plasma/src/**", "platform/**", "packaging/publication/**"]
+selected_validation_tier = "T3"
+expected_validators = ["py -3 tools/scripts/check_project_state.py --summary", "py -3 tools/scripts/check_plasma_v2_publication_prep.py", "py -3 tools/scripts/check_docs_basics.py", "py -3 tools/scripts/check_contracts.py", "py -3 tools/aideops/screensave_aide.py postflight --task SS-PLV2-J6", "git diff --check"]
+evidence_outputs = ["PROJECT_STATE.toml", "VERSION.toml", "validation/captures/plasma-v2/publication-prep/gate-report.json"]
+claim_boundary = "State transition only; public publication remains separately gated and unperformed in PAW-J."
+rollback_point = "9182f34"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"

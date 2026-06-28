@@ -1,0 +1,56 @@
+{
+  "schema": "screensave.plasma-v2.publication-prep.intake.v1",
+  "recorded_on": "2026-06-29",
+  "source_commit": "9182f348a4a306ee3499758824da1af7f13432e1",
+  "source_commit_subject": "docs: refresh Plasma stable-promotion validation reports",
+  "program": "plasma-v2-publication-prep",
+  "work_unit": "SS-PLV2-J0",
+  "publication": {
+    "status": "not-started",
+    "public_upload": "not-performed",
+    "release_page": "not-published",
+    "publication_packet": "not-yet-created"
+  },
+  "authority": {
+    "active_program": "plasma-v2-publication-prep",
+    "release_candidate": "plasma-v2-rc1",
+    "release_promotion": "accepted"
+  },
+  "plasma_v2": {
+    "status": "stable-promoted",
+    "stable": true,
+    "release_candidate": "plasma-v2-rc1",
+    "active_profile": "plasma.v2.reference.preview",
+    "packc": "v1-candidate",
+    "manager_preview": "ready",
+    "workbench_release_readiness": "ready",
+    "artistic_acceptance": "accepted-for-stable",
+    "release_promotion": "accepted",
+    "opened_next": "plasma-v2-publication-prep"
+  },
+  "evidence_refs": {
+    "project_state": "PROJECT_STATE.toml",
+    "version_manifest": "VERSION.toml",
+    "final_artistic_decision": "validation/captures/plasma-v2/final-artistic-decision/decision.stable.toml",
+    "instrument_audit": "validation/captures/plasma-v2/instrument-audit/re-audit-report.json",
+    "stable_promotion_gate": "validation/captures/plasma-v2/stable-promotion/gate-report.json",
+    "stable_promotion_package_stage": "packaging/windows/plasma-v2-stable-promotion/manifest.toml",
+    "stable_promotion_proof_bundle": "validation/captures/plasma-v2/stable-promotion/proof-bundle-v1.json",
+    "stable_support_claims": "validation/captures/plasma-v2/stable-promotion/support-claims.json",
+    "stable_manager_review": "validation/captures/plasma-v2/stable-promotion/manager-final-review.json",
+    "stable_workbench_review": "validation/captures/plasma-v2/stable-promotion/workbench-final-review.json"
+  },
+  "boundaries": {
+    "release_publication": "not-performed",
+    "compatibility_certification_broadened": false,
+    "all_saver_migration": "not-started",
+    "workbench_mvp": "not-started",
+    "manager_install_mutation": "not-started",
+    "aide_role": "evidence-control-plane-only"
+  },
+  "allowed_outcomes": [
+    "publication-ready",
+    "publication-hold"
+  ],
+  "claim_boundary": "Publication-prep intake only; Plasma v2 is stable-promoted, but public release publication, compatibility certification broadening, SDK stability, all-saver migration, Workbench MVP, Manager install mutation, and platform expansion remain separate gates."
+}
