@@ -2,118 +2,137 @@
   "artifact": {
     "exists": true,
     "path": "out/msvc/vs2017_xp/Release/plasma/plasma.scr",
-    "sha256": "dc5355824b0ace7ded97d9dc082d5cf1ad2b808e0aff071703953103c154b7f6"
+    "sha256": "8e7a7dddf132d35451c3391f638c2d0b763478653762ed422070c5163645e465"
   },
   "checks": [
     {
+      "forbidden_found": [],
       "id": "default_keys_preserved",
       "missing": [],
       "path": "products/savers/plasma/src/plasma_internal.h",
       "status": "pass"
     },
     {
+      "forbidden_found": [],
       "id": "product_defaults_are_calm_native_raster",
       "missing": [],
       "path": "products/savers/plasma/src/plasma_config.c",
       "status": "pass"
     },
     {
+      "forbidden_found": [],
       "id": "default_preset_resolves_high_fine",
       "missing": [],
       "path": "products/savers/plasma/src/plasma_presets.c",
       "status": "pass"
     },
     {
+      "forbidden_found": [],
       "id": "default_content_is_pure_classic_plasma",
       "missing": [],
       "path": "products/savers/plasma/src/plasma_content.c",
       "status": "pass"
     },
     {
+      "forbidden_found": [],
       "id": "plan_defaults_match_demo",
       "missing": [],
       "path": "products/savers/plasma/src/plasma_plan.c",
       "status": "pass"
     },
     {
+      "forbidden_found": [],
       "id": "settings_remain_user_customizable",
       "missing": [],
       "path": "products/savers/plasma/src/plasma_settings.c",
       "status": "pass"
     },
     {
+      "forbidden_found": [],
       "id": "adaptive_high_resolution_field_path",
       "missing": [],
       "path": "products/savers/plasma/src/plasma_sim.c",
       "status": "pass"
     },
     {
+      "forbidden_found": [],
       "id": "stale_registry_state_migrates_to_default_demo",
       "missing": [],
       "path": "products/savers/plasma/src/plasma_config.c",
       "status": "pass"
     },
     {
+      "forbidden_found": [],
       "id": "host_requests_display_refresh_pacing",
       "missing": [],
       "path": "platform/src/host/win32_scr/scr_internal.h",
       "status": "pass"
     },
     {
+      "forbidden_found": [],
       "id": "benchlab_requests_display_refresh_pacing",
       "missing": [],
       "path": "products/apps/benchlab/src/benchlab_internal.h",
       "status": "pass"
     },
     {
+      "forbidden_found": [],
       "id": "host_uses_display_refresh_timer_request",
       "missing": [],
       "path": "platform/src/host/win32_scr/scr_window.c",
       "status": "pass"
     },
     {
+      "forbidden_found": [],
       "id": "benchlab_uses_display_refresh_timer_request",
       "missing": [],
       "path": "products/apps/benchlab/src/benchlab_app.c",
       "status": "pass"
     },
     {
+      "forbidden_found": [],
       "id": "slow_classic_demo_field_cycling",
       "missing": [],
       "path": "products/savers/plasma/src/plasma_sim.c",
       "status": "pass"
     },
     {
+      "forbidden_found": [],
       "id": "full_color_procedural_palette_cycling",
       "missing": [],
       "path": "products/savers/plasma/src/plasma_treatment.c",
       "status": "pass"
     },
     {
+      "forbidden_found": [],
       "id": "renderer_ladder_exposed",
       "missing": [],
       "path": "products/savers/plasma/src/plasma_module.c",
       "status": "pass"
     },
     {
+      "forbidden_found": [],
       "id": "auto_policy_uses_highest_supported_renderer",
       "missing": [],
       "path": "platform/src/core/substrate/routing_policy.c",
       "status": "pass"
     },
     {
+      "forbidden_found": [],
       "id": "gl33_bitmap_blit_avoids_hot_loop_texture_allocation",
       "missing": [],
       "path": "platform/src/render/gl33/gl33_primitives.c",
       "status": "pass"
     },
     {
+      "forbidden_found": [],
       "id": "gl46_bitmap_blit_avoids_hot_loop_texture_allocation",
       "missing": [],
       "path": "platform/src/render/gl46/gl46_primitives.c",
       "status": "pass"
     },
     {
+      "forbidden_found": [],
       "id": "renderer_validation_keeps_optional_tiers",
       "missing": [],
       "path": "products/savers/plasma/src/plasma_validate.c",
@@ -144,7 +163,8 @@
     "output": "native drawable raster presentation with pixel-sharp renderer scaling and resolution-independent plasma coordinates",
     "pacing": "host and BenchLab request the active display refresh interval with a 16ms fallback and 1ms minimum",
     "preferred_renderer": "gl46",
-    "presentation": "flat"
+    "presentation": "flat",
+    "seed": "first-principles deterministic default seed 0x504C5632 with session randomization off"
   },
   "future_work": [
     "Capture and visually review the rebuilt .scr on target Windows hardware.",
@@ -196,7 +216,7 @@
   "schema": "screensave.plasma.default-demo.v1",
   "source": {
     "branch": "main",
-    "commit": "e278e6cd3aad61c253606b6c641ed1419c44463f",
+    "commit": "63c26011b1bb72650ed2ff4759b8e559f333fa23",
     "dirty": true
   },
   "status": "pass",

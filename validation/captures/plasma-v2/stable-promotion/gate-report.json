@@ -371,7 +371,7 @@
   "schema": "screensave.plasma-v2.stable-promotion.gate-report.v1",
   "source": {
     "branch": "main",
-    "commit": "e278e6cd3aad61c253606b6c641ed1419c44463f",
+    "commit": "9a1e7d9cd0dc617333531d2382c87a97a28a17e8",
     "dirty": true
   },
   "status": "promotion-ready"

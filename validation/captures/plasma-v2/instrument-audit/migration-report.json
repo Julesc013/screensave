@@ -121,7 +121,7 @@
   "schema": "screensave.plasma-v2.migration-report.v2",
   "source": {
     "branch": "main",
-    "commit": "e278e6cd3aad61c253606b6c641ed1419c44463f",
+    "commit": "63c26011b1bb72650ed2ff4759b8e559f333fa23",
     "dirty": true
   },
   "status": "pass",
