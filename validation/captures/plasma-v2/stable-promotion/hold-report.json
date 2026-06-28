@@ -27,11 +27,25 @@
   ],
   "evidence_refs": {
     "decision": "validation/captures/plasma-v2/final-artistic-decision/decision.stable.toml",
+    "final_artistic_hold": "validation/captures/plasma-v2/final-artistic-decision/hold-report.json",
+    "request_changes_repair_plan": "validation/captures/plasma-v2/final-artistic-decision/request-changes-repair-plan.json",
+    "repair_evidence": "validation/captures/plasma-v2/final-artistic-decision/repair-evidence.json",
+    "repair_summary": "validation/captures/plasma-v2/final-artistic-decision/repair-summary.md",
     "review_evidence": "validation/captures/plasma-v2/final-artistic-decision/review-evidence.json",
     "aide_decision_summary": "validation/captures/plasma-v2/final-artistic-decision/aide-decision-summary.json",
+    "aide_repair_summary": "validation/captures/plasma-v2/final-artistic-decision/aide-repair-summary.json",
     "instrument_architecture": "validation/captures/plasma-v2/stable-promotion/instrument-architecture-audit.json",
     "stable_promotion_gate": "validation/captures/plasma-v2/stable-promotion/gate-report.json",
     "repair_queue": ".aide/repairs/index.toml"
+  },
+  "turn4_repair_review": {
+    "repair_workunit": "SS-PLV2-I-REPAIR-001",
+    "repair_classes": [
+      "documentation_or_evidence_gap"
+    ],
+    "visual_artistic_blockers_named": false,
+    "product_source_repairs_applied": false,
+    "outcome": "continued-request-changes"
   },
   "not_performed": [
     "stable promotion",

@@ -1,0 +1,51 @@
+{
+  "schema": "screensave.plasma-v2.final-artistic-decision.hold-report.v1",
+  "status": "hold",
+  "candidate_id": "plasma-v2-rc1",
+  "profile": "plasma.v2.reference.preview",
+  "recommended_state": "release-candidate-hold",
+  "stable": false,
+  "release_promotion": "blocked",
+  "final_artistic_decision": "request-changes",
+  "repair_workunit": "SS-PLV2-I-REPAIR-001",
+  "repair_classes": [
+    "documentation_or_evidence_gap"
+  ],
+  "visual_artistic_blockers_named": false,
+  "product_source_repairs_applied": false,
+  "exact_blockers": [
+    {
+      "id": "final_stable_artistic_acceptance_not_accepted",
+      "reason": "Final stable artistic decision remains request-changes after Turn 4 because no ScreenSave/project-owned accepted-for-stable verdict was supplied.",
+      "repair_workunit": "SS-PLV2-I-REPAIR-001"
+    },
+    {
+      "id": "missing_project_owned_accepted_for_stable_verdict",
+      "reason": "Stable promotion requires an explicit project-owned accepted-for-stable verdict after review of the final decision and repair evidence packet.",
+      "repair_workunit": "SS-PLV2-I-REPAIR-001"
+    }
+  ],
+  "repair_workunits": [
+    "SS-PLV2-I-REPAIR-001"
+  ],
+  "evidence_refs": {
+    "decision": "validation/captures/plasma-v2/final-artistic-decision/decision.stable.toml",
+    "request_changes_intake": "validation/captures/plasma-v2/final-artistic-decision/request-changes-intake.json",
+    "request_changes_repair_plan": "validation/captures/plasma-v2/final-artistic-decision/request-changes-repair-plan.json",
+    "repair_evidence": "validation/captures/plasma-v2/final-artistic-decision/repair-evidence.json",
+    "repair_summary": "validation/captures/plasma-v2/final-artistic-decision/repair-summary.md",
+    "aide_repair_summary": "validation/captures/plasma-v2/final-artistic-decision/aide-repair-summary.json",
+    "workbench_repair_facts": "products/apps/benchlab/src/benchlab_workbench_shell.c",
+    "stable_promotion_hold": "validation/captures/plasma-v2/stable-promotion/hold-report.json"
+  },
+  "not_performed": [
+    "stable promotion",
+    "release publication",
+    "compatibility certification broadening",
+    "public SDK stability",
+    "all-saver migration",
+    "graphical Workbench MVP",
+    "platform contract mutation"
+  ],
+  "claim_boundary": "Final artistic hold report only; Plasma v2 remains release-candidate-hold and this does not publish, certify compatibility, accept artistic quality automatically, or grant AIDE release authority."
+}
