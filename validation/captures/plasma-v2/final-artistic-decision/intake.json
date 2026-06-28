@@ -1,0 +1,41 @@
+{
+  "schema": "screensave.plasma-v2.final-artistic-decision.intake.v1",
+  "status": "ready-for-final-review",
+  "work_unit": "SS-PLV2-I-REPAIR-001",
+  "candidate_id": "plasma-v2-rc1",
+  "profile": "plasma.v2.reference.preview",
+  "source_commit": "f410b4e797523f98d98689bc79214b776347e1a1",
+  "project_state": {
+    "plasma_v2_status": "release-candidate-hold",
+    "stable": false,
+    "release_promotion": "blocked",
+    "opened_next": "plasma-v2-instrument-repair"
+  },
+  "instrument_audit": {
+    "status": "promotion-ready",
+    "blocking_gates": [],
+    "cleared_in_prior_turns": [
+      "legacy_preset_authority_removed",
+      "visualintent_candidates_reduce_to_plasma_spec"
+    ]
+  },
+  "remaining_project_blocker": "final stable artistic acceptance",
+  "required_decisions": [
+    "accepted-for-stable",
+    "request-changes",
+    "defer-to-labs",
+    "rejected"
+  ],
+  "current_decision_state": "request-changes",
+  "current_blocker_reason": "No explicit ScreenSave/project-owned accepted-for-stable verdict has been supplied for Plasma v2 rc1.",
+  "aide_role": "evidence-index-and-control-plane-only",
+  "non_goals": [
+    "release publication",
+    "compatibility certification broadening",
+    "all-saver migration",
+    "graphical Workbench MVP",
+    "AIDE artistic acceptance",
+    "AIDE automatic promotion"
+  ],
+  "claim_boundary": "Final artistic decision intake only; proof supports the decision, ScreenSave owns the decision, and AIDE only indexes bounded evidence."
+}

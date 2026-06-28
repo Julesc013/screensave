@@ -127,22 +127,48 @@ status = "blocking"
 allowed_paths = [
   "validation/captures/plasma-v2/final-artistic-decision/**",
   "validation/captures/plasma-v2/stable-promotion/**",
+  "validation/captures/plasma-v2/instrument-audit/**",
   "PROJECT_STATE.toml",
   "VERSION.toml",
   "docs/roadmap/**",
   "products/savers/plasma/docs/**",
+  "tools/scripts/check_plasma_v2_final_artistic_acceptance.py",
+  "tools/scripts/check_plasma_v2_stable_promotion.py",
+  "tools/scripts/check_plasma_instrument_architecture.py",
+  "tools/scripts/check_aide_evidence_index.py",
+  "tools/scripts/check_repair_queue.py",
+  ".aide/evidence/**",
+  ".aide/repairs/**",
+  ".aide/work_units/**",
 ]
-forbidden_paths = ["products/savers/plasma/src/**", "platform/**", "releases/**"]
+forbidden_paths = [
+  "products/savers/plasma/src/**",
+  "platform/**",
+  "build/**",
+  "releases/**",
+  "packaging/windows/plasma-v2-publication/**",
+  "packaging/windows/plasma-v2-stable-publication/**",
+  "docs/compatibility/**",
+]
 expected_validators = [
+  "py -3 tools/scripts/check_aide_workunits.py",
+  "py -3 tools/scripts/check_repair_queue.py",
+  "py -3 tools/scripts/check_aide_evidence_index.py",
   "py -3 tools/scripts/check_plasma_v2_final_artistic_acceptance.py",
+  "py -3 tools/scripts/check_plasma_instrument_architecture.py",
   "py -3 tools/scripts/check_plasma_v2_stable_promotion.py",
+  "py -3 tools/project_adapter/screensave_project.py validate --tier T3",
 ]
 evidence_outputs = [
+  "validation/captures/plasma-v2/final-artistic-decision/intake.json",
+  "validation/captures/plasma-v2/final-artistic-decision/review-evidence.json",
   "validation/captures/plasma-v2/final-artistic-decision/decision.stable.toml",
+  "validation/captures/plasma-v2/final-artistic-decision/aide-decision-summary.json",
   "validation/captures/plasma-v2/stable-promotion/gate-report.json",
+  "validation/captures/plasma-v2/stable-promotion/hold-report.json",
 ]
-claim_boundary = "Repair records the missing final stable artistic verdict only; no automatic acceptance, release, promotion, or compatibility certification."
-rollback_point = "f9568dd"
+claim_boundary = "Repair records the missing final stable artistic verdict and supporting evidence only; ScreenSave/project authority owns the verdict, AIDE indexes evidence only, and no automatic acceptance, release, promotion, or compatibility certification is admitted."
+rollback_point = "f410b4e"
 
 [release_candidate_burndown]
 status = "no-blocking-release-candidate-repairs"

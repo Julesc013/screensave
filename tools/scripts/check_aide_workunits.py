@@ -47,6 +47,7 @@ REQUIRED_PRODUCT_TASKS = {
     "SS-PLV2-IR-REPAIR-001",
     "SS-PLV2-IR-REPAIR-002",
     "SS-PLV2-IR-REPAIR-003",
+    "SS-PLV2-I-REPAIR-001",
 }
 TEMPLATES = {
     "implementation-task.toml",
@@ -158,6 +159,36 @@ def validate_cli(errors: list[str]) -> None:
         stderr=subprocess.PIPE,
     )
     require(status.returncode == 0, f"workunit.py status failed: {status.stderr}", errors)
+    final_acceptance = subprocess.run(
+        [sys.executable, str(WORKUNIT), "inspect", "--task", "SS-PLV2-I-REPAIR-001"],
+        cwd=ROOT,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    require(final_acceptance.returncode == 0, f"final artistic WorkUnit inspect failed: {final_acceptance.stderr}", errors)
+    if final_acceptance.returncode == 0:
+        payload = json.loads(final_acceptance.stdout)
+        require(
+            payload.get("id") == "SS-PLV2-I-REPAIR-001",
+            "final artistic WorkUnit inspect returned the wrong task.",
+            errors,
+        )
+        require(
+            "validation/captures/plasma-v2/final-artistic-decision/**" in payload.get("allowed_paths", []),
+            "final artistic WorkUnit must allow final decision evidence.",
+            errors,
+        )
+        require(
+            "products/savers/plasma/src/**" in payload.get("forbidden_paths", []),
+            "final artistic WorkUnit must forbid Plasma source edits.",
+            errors,
+        )
+        require(
+            "compatibility certification" in str(payload.get("claim_boundary", "")),
+            "final artistic WorkUnit must preserve the compatibility certification boundary.",
+            errors,
+        )
     missing = subprocess.run(
         [sys.executable, str(WORKUNIT), "inspect", "--task", "SS-PLV2-IR-MISSING"],
         cwd=ROOT,
