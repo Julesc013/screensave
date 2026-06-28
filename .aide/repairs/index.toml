@@ -78,6 +78,47 @@ claim_boundary = "Repair records legacy preset authority containment only; no re
 rollback_point = "8cba4d5"
 
 [[repairs]]
+id = "SS-PLV2-IR-REPAIR-002"
+title = "Admit VisualIntent candidates through Plasma v2 specs"
+repair_class = "instrument_architecture_gap"
+status = "planned"
+allowed_paths = [
+  "contracts/visual_intent_v1.md",
+  "contracts/plasma_instrument_architecture_v1.md",
+  "tools/visualintent/**",
+  "tools/scripts/check_visual_intent_resolver.py",
+  "tools/scripts/check_plasma_instrument_architecture.py",
+  "products/savers/plasma/content/v2/**",
+  "validation/captures/plasma-v2/instrument-audit/**",
+  "products/apps/benchlab/**",
+  "tools/aide_bridge/**",
+  ".aide/evidence/**",
+  ".aide/repairs/**",
+  ".aide/work_units/**",
+]
+forbidden_paths = [
+  "products/savers/plasma/src/plasma_v2_core.*",
+  "platform/include/screensave/v2/**",
+  "releases/**",
+  "docs/compatibility/**",
+]
+expected_validators = [
+  "py -3 tools/scripts/check_visual_intent_resolver.py",
+  "py -3 tools/scripts/check_packc.py",
+  "py -3 tools/scripts/check_workbench_shell.py",
+  "py -3 tools/scripts/check_plasma_instrument_architecture.py",
+]
+evidence_outputs = [
+  "validation/captures/plasma-v2/instrument-audit/visualintent-intake.json",
+  "validation/captures/plasma-v2/instrument-audit/visualintent/spec-reduction-report.json",
+  "validation/captures/plasma-v2/instrument-audit/visualintent/proof-summary.json",
+  "validation/captures/plasma-v2/instrument-audit/workbench-inspection.json",
+  "validation/captures/plasma-v2/instrument-audit/re-audit-report.json",
+]
+claim_boundary = "Repair admits bounded VisualIntent-to-Plasma-v2-spec evidence only; no release, stable promotion, compatibility certification, publication, executable payloads, model calls, or final artistic acceptance."
+rollback_point = "5a8cbe4"
+
+[[repairs]]
 id = "SS-PLV2-I-REPAIR-001"
 title = "Record explicit Plasma v2 final stable artistic verdict"
 repair_class = "release_readiness_gap"

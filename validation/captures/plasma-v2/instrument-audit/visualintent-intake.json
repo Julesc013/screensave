@@ -1,0 +1,32 @@
+{
+  "schema": "screensave.plasma-v2.visualintent-intake.v1",
+  "status": "blocked",
+  "turn": "PAW-I-R2 Turn 2",
+  "source_commit": "5a8cbe4965edb7e525697e01a857d1f1eb73a653",
+  "work_unit": {
+    "id": "SS-PLV2-IR-REPAIR-002",
+    "ref": ".aide/work_units/plasma-v2-instrument-repair.toml",
+    "repair_class": "instrument_architecture_gap"
+  },
+  "project_state": {
+    "plasma_v2": "release-candidate-hold",
+    "stable": false,
+    "release_promotion": "blocked",
+    "opened_next": "plasma-v2-instrument-repair"
+  },
+  "cleared_before_turn": [
+    "legacy_preset_authority_removed"
+  ],
+  "blocked_gate": "visualintent_candidates_reduce_to_plasma_spec",
+  "required_evidence": [
+    "contracts/visual_intent_v1.md",
+    "contracts/plasma_instrument_architecture_v1.md",
+    "tools/visualintent/resolve_plasma.py",
+    "tools/scripts/check_visual_intent_resolver.py",
+    "validation/captures/plasma-v2/instrument-audit/visualintent/spec-reduction-report.json",
+    "validation/captures/plasma-v2/instrument-audit/visualintent/proof-summary.json",
+    "validation/captures/plasma-v2/instrument-audit/workbench-inspection.json",
+    "validation/captures/plasma-v2/stable-promotion/instrument-architecture-audit.json"
+  ],
+  "claim_boundary": "Intake evidence only; VisualIntent admission is still blocked until deterministic product-owned spec reduction, packc admission, Workbench inspection, proof evidence, and instrument re-audit pass. This intake does not promote stable or accept final artistic quality."
+}
