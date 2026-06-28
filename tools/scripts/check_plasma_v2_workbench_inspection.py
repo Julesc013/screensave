@@ -20,10 +20,16 @@ REPORT_MD = REPORT_DIR / "workbench-inspection.md"
 REQUIRED_FIELDS = [
     "legacy_source_kind",
     "legacy_key",
+    "visualintent_source_path",
+    "visualintent_candidate_count",
+    "selected_candidate_id",
+    "candidate_product",
     "requested_spec",
     "migrated_spec_summary",
+    "visualintent_spec_summary",
     "resolved_plan",
     "resolved_plan_summary",
+    "visualintent_plan_summary",
     "degradation_reason",
     "field_pipeline",
     "material_response",
@@ -31,9 +37,13 @@ REQUIRED_FIELDS = [
     "software_reference_path",
     "gl11_optionality",
     "capture_refs",
+    "packc_status",
+    "visualintent_proof_refs",
     "control_influence_status",
     "authority",
     "legacy_authority",
+    "visualintent_authority",
+    "product_authority",
     "review_status",
     "promotion_status",
 ]
@@ -50,6 +60,14 @@ REQUIRED_REFS = [
     "preset/theme/pack/direct controls",
     "v2_spec_plan_runtime",
     "migration_input_only",
+    "descriptive-only",
+    "plasma_v2_spec_plan_runtime",
+    "tools/visualintent/examples/plasma/calm_dark.toml",
+    "plasma-calm-dark-room-01-primary-11bf6d6d73",
+    "candidate_product",
+    "validation/captures/plasma-v2/instrument-audit/visualintent/spec-reduction-report.json",
+    "validation/captures/plasma-v2/instrument-audit/visualintent/proof-summary.json",
+    "validation/captures/plasma-v2/matrix/proof-bundles/plasma-v2-visualintent-preview.json",
 ]
 
 
@@ -90,6 +108,8 @@ def build_report(errors: list[str]) -> dict[str, Any]:
                 errors.append(f"Workbench instrument inspection missing evidence ref {ref!r}")
         if "legacy presets own runtime truth" in text:
             errors.append("Workbench instrument inspection claims legacy presets own runtime truth")
+        if "VisualIntent owns runtime truth" in text:
+            errors.append("Workbench instrument inspection claims VisualIntent owns runtime truth")
 
     return {
         "schema": "screensave.plasma-v2.workbench-instrument-inspection.v1",

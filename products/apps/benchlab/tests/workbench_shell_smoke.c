@@ -233,5 +233,20 @@ int main(void)
     if (plasma_instrument.migrated_spec_summary == 0 || plasma_instrument.resolved_plan_summary == 0) {
         return 61;
     }
+    if (plasma_instrument.visualintent_candidate_count != 3UL) {
+        return 62;
+    }
+    if (strcmp(plasma_instrument.selected_candidate_id, "plasma-calm-dark-room-01-primary-11bf6d6d73") != 0) {
+        return 63;
+    }
+    if (strcmp(plasma_instrument.visualintent_authority, "descriptive-only") != 0) {
+        return 64;
+    }
+    if (strcmp(plasma_instrument.product_authority, "plasma_v2_spec_plan_runtime") != 0) {
+        return 65;
+    }
+    if (plasma_instrument.visualintent_spec_summary == 0 || plasma_instrument.visualintent_proof_refs == 0) {
+        return 66;
+    }
     return 0;
 }

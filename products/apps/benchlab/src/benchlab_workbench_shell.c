@@ -449,10 +449,16 @@ int benchlab_workbench_shell_inspect_plasma_v2_instrument(
     inspect_out->product_key = "plasma";
     inspect_out->legacy_source_kind = "preset/theme/pack/direct controls";
     inspect_out->legacy_key = "plasma_lava";
+    inspect_out->visualintent_source_path = "tools/visualintent/examples/plasma/calm_dark.toml";
+    inspect_out->visualintent_candidate_count = 3UL;
+    inspect_out->selected_candidate_id = "plasma-calm-dark-room-01-primary-11bf6d6d73";
+    inspect_out->candidate_product = "plasma";
     inspect_out->requested_spec = "products/savers/plasma/src/v2/plasma_v2_spec.h";
     inspect_out->migrated_spec_summary = "field=classic material=plasma_lava speed=420 scale=420 complexity=520 warp=180 feedback=120 treatment=soft output=continuous presentation=flat seed_policy=fixed";
+    inspect_out->visualintent_spec_summary = "field=classic_interference material=quiet_darkroom output=continuous treatment=restrained_dither scale=52 complexity=37 speed=14";
     inspect_out->resolved_plan = "validation/captures/plasma-v2/instrument-audit/plan-report.json";
     inspect_out->resolved_plan_summary = "requested=plasma_v2_spec resolved=plasma_v2_plan runtime=plasma_v2_runtime";
+    inspect_out->visualintent_plan_summary = "VisualIntent candidate reduced to plasma_v2_spec then resolved through plasma_v2_plan; preview evidence only";
     inspect_out->degradation_reason = "capability_or_stable_scope_degrade recorded by plasma_v2_plan";
     inspect_out->field_pipeline = "validation/captures/plasma-v2/instrument-audit/field-pipeline-report.json";
     inspect_out->material_response = "validation/captures/plasma-v2/instrument-audit/material-response.json";
@@ -460,11 +466,15 @@ int benchlab_workbench_shell_inspect_plasma_v2_instrument(
     inspect_out->software_reference_path = "validation/captures/plasma-v2/acceleration/matrix.json";
     inspect_out->gl11_optionality = "gl11_optional=true; hidden_gl11_minimum=false";
     inspect_out->capture_refs = "validation/captures/plasma-v2/reference-preview";
+    inspect_out->packc_status = "validation/captures/plasma-v2/instrument-audit/visualintent/spec-reduction-report.json";
+    inspect_out->visualintent_proof_refs = "validation/captures/plasma-v2/instrument-audit/visualintent/proof-summary.json;validation/captures/plasma-v2/matrix/proof-bundles/plasma-v2-visualintent-preview.json";
     inspect_out->control_influence_status = "validation/captures/plasma-v2/instrument-audit/control-influence.json";
     inspect_out->authority = "v2_spec_plan_runtime";
     inspect_out->legacy_authority = "migration_input_only";
+    inspect_out->visualintent_authority = "descriptive-only";
+    inspect_out->product_authority = "plasma_v2_spec_plan_runtime";
     inspect_out->review_status = "request-changes";
     inspect_out->promotion_status = "release-candidate-hold";
-    inspect_out->claim_boundary = "Workbench Instrument Inspect consumes ScreenSave proof evidence only; it is not a second runtime, artistic judge, or promotion authority.";
+    inspect_out->claim_boundary = "Workbench Instrument Inspect consumes ScreenSave proof evidence only; VisualIntent authority is descriptive-only, product authority is plasma_v2_spec_plan_runtime, and Workbench is not a second runtime, artistic judge, or promotion authority.";
     return 1;
 }
