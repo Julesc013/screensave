@@ -1,10 +1,10 @@
 schema_version = 1
 packet_id = "screensave.plasma-v2.final-artistic-decision.stable"
-decision_id = "plasma-v2-rc1-stable-artistic-review-2026-06-28"
+decision_id = "plasma-v2-rc1-stable-artistic-rereview-2026-06-28"
 product = "plasma"
 profile = "plasma.v2.reference.preview"
 release_candidate = "plasma-v2-rc1"
-source_commit = "49d85f2c942689826df9b36aeeb3455c4df170e4"
+source_commit = "c358354b83cb64b203b05906540669e1c63ce751"
 decision = "request-changes"
 decision_state = "request-changes"
 decision_date = "2026-06-28"
@@ -15,10 +15,10 @@ stable_scope = "not accepted; Plasma v2 current release-candidate profile only r
 publication_decision = "not-in-this-turn"
 compatibility_certification = "not-broadened"
 aide_authority = "evidence-only"
-visual_review_summary = "Existing release-candidate, stable-candidate, matrix, contact-sheet, Manager, and Workbench review inputs are assembled for final review, but no final accepted-for-stable artistic verdict was supplied."
+visual_review_summary = "Turn 4 parsed the request-changes decision, found no named field/material/motion/luminance/contrast/treatment/composition defect, refreshed repair evidence and Workbench facts, and still did not receive a final accepted-for-stable artistic verdict."
 instrument_architecture_summary = "Instrument audit is promotion-ready with no instrument blocking gates after legacy authority and VisualIntent-to-spec repairs."
-known_limit_acceptance = "Known limits are documented for review; they are not accepted for stable because the final project-owned stable artistic verdict is missing."
-decision_summary = "Stable promotion remains held because final human/project artistic acceptance for stable release was not supplied. Release-candidate acceptance remains valid."
+known_limit_acceptance = "Known limits remain documented for review; they are not accepted for stable because the final project-owned stable artistic verdict is still missing."
+decision_summary = "Stable promotion remains held after Turn 4 because final human/project artistic acceptance for stable release was not supplied. Release-candidate acceptance remains valid."
 claim_boundary = "Request-changes decision only; Plasma v2 remains release-candidate-hold, AIDE indexes evidence only, and stable promotion, release publication, compatibility certification broadening, public SDK stability, and all-saver migration remain blocked."
 
 [accepted_scope]
@@ -42,14 +42,19 @@ blocking = true
 reason = "Provide an explicit ScreenSave/project-owned verdict of accepted-for-stable, request-changes, defer-to-labs, or rejected after reviewing the stable-promotion packet."
 repair_workunit = "SS-PLV2-I-REPAIR-001"
 blocker_reasons = [
+  "final_stable_artistic_acceptance_not_accepted",
   "missing_project_owned_accepted_for_stable_verdict",
-  "final_stable_artistic_acceptance_not_supplied",
 ]
 
 [evidence_refs]
 intake = "validation/captures/plasma-v2/final-artistic-decision/intake.json"
+request_changes_intake = "validation/captures/plasma-v2/final-artistic-decision/request-changes-intake.json"
+request_changes_repair_plan = "validation/captures/plasma-v2/final-artistic-decision/request-changes-repair-plan.json"
 review_inputs = "validation/captures/plasma-v2/final-artistic-decision/review-inputs.json"
 review_evidence = "validation/captures/plasma-v2/final-artistic-decision/review-evidence.json"
+repair_evidence = "validation/captures/plasma-v2/final-artistic-decision/repair-evidence.json"
+repair_summary = "validation/captures/plasma-v2/final-artistic-decision/repair-summary.md"
+aide_repair_summary = "validation/captures/plasma-v2/final-artistic-decision/aide-repair-summary.json"
 contact_sheet_index = "validation/captures/plasma-v2/final-artistic-decision/contact-sheet-index.json"
 proof_bundle = "validation/captures/plasma-v2/reference-preview/proof-bundle-v1.json"
 instrument_architecture_audit = "validation/captures/plasma-v2/stable-promotion/instrument-architecture-audit.json"
@@ -62,6 +67,19 @@ acceleration_matrix = "validation/captures/plasma-v2/acceleration/matrix.json"
 performance_envelope = "validation/captures/plasma-v2/performance/envelope.json"
 package_stage = "packaging/windows/plasma-v2-stable-promotion/manifest.toml"
 known_limits = "packaging/windows/plasma-v2-stable-promotion/known-limits.md"
+
+[repair_review]
+workunit = "SS-PLV2-I-REPAIR-001"
+repair_plan = "validation/captures/plasma-v2/final-artistic-decision/request-changes-repair-plan.json"
+repair_evidence = "validation/captures/plasma-v2/final-artistic-decision/repair-evidence.json"
+repair_classes = ["documentation_or_evidence_gap"]
+visual_artistic_blockers_named = false
+product_source_repairs_applied = false
+outcome = "continued-request-changes"
+remaining_blockers = [
+  "final_stable_artistic_acceptance_not_accepted",
+  "missing_project_owned_accepted_for_stable_verdict",
+]
 
 [boundaries]
 final_stable_artistic_acceptance = false

@@ -31,11 +31,25 @@ PAW-I-R2 Turn 3 did not receive a final ScreenSave/project-owned
 `accepted-for-stable` artistic verdict for stable release. The stable-promotion
 path is therefore held instead of promoted.
 
+## Turn 4 Re-Review
+
+Decision: `request-changes`
+
+PAW-I-R2 Turn 4 parsed the request-changes decision and supporting stable gate
+reports. The packet did not name a field, material, motion, luminance, contrast,
+treatment, control-influence, VisualIntent, GL11, dark-room, preview-legibility,
+composition, artifacting, or banding defect. It named a missing project-owned
+stable artistic verdict.
+
+Repair evidence and Workbench repair facts were refreshed. No Plasma v2 product
+source repair was applied because no exact visual defect was recorded.
+
 Blocking change requested:
 
 - provide an explicit ScreenSave/project-owned stable artistic verdict after
   reviewing the stable-promotion packet
-- exact blocker:
+- exact blockers:
+  `final_stable_artistic_acceptance_not_accepted`
   `missing_project_owned_accepted_for_stable_verdict`
 
 Boundaries:
