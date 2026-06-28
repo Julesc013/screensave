@@ -123,11 +123,8 @@ rollback_point = "5a8cbe4"
 id = "SS-PLV2-I-REPAIR-001"
 title = "Repair Plasma v2 final stable artistic request changes"
 repair_class = "release_readiness_gap"
-status = "blocking"
-blocker_reasons = [
-  "final_stable_artistic_acceptance_not_accepted",
-  "missing_project_owned_accepted_for_stable_verdict",
-]
+status = "completed"
+blocker_reasons = []
 allowed_paths = [
   "validation/captures/plasma-v2/final-artistic-decision/**",
   "validation/captures/plasma-v2/stable-promotion/**",
@@ -183,7 +180,7 @@ evidence_outputs = [
   "validation/captures/plasma-v2/stable-promotion/gate-report.json",
   "validation/captures/plasma-v2/stable-promotion/hold-report.json",
 ]
-claim_boundary = "Repair records the final stable artistic request-changes blocker and bounded evidence only; ScreenSave/project authority owns the verdict, AIDE indexes evidence only, and no automatic acceptance, release, promotion, or compatibility certification is admitted."
+claim_boundary = "Repair records the final stable artistic verdict resolution and bounded evidence only; ScreenSave/project authority owns the verdict, AIDE indexes evidence only, and no automatic acceptance, release publication, or compatibility certification is admitted."
 rollback_point = "ba50112"
 
 [release_candidate_burndown]
@@ -199,8 +196,8 @@ historical_planned_repairs = ["SS-REPAIR-001"]
 claim_boundary = "Release-candidate burn-down only; no source mutation, merge, promotion, release, or compatibility certification."
 
 [stable_promotion_burndown]
-status = "blocking-stable-promotion-repairs-open"
-recorded_on = "2026-06-27"
+status = "no-blocking-stable-promotion-repairs"
+recorded_on = "2026-06-29"
 scan_ref = "out/aide/repairs/scan.json"
 release_readiness_gap_plan = "out/aide/repairs/plan-release_readiness_gap.json"
 evidence_index_drift_plan = "out/aide/repairs/plan-evidence_index_drift.json"
@@ -208,6 +205,7 @@ package_checksum_drift_plan = "out/aide/repairs/plan-package_checksum_drift.json
 doc_drift_plan = "out/aide/repairs/plan-doc_drift.json"
 artistic_repair_plan = "validation/captures/plasma-v2/final-artistic-decision/request-changes-repair-plan.json"
 artistic_repair_evidence = "validation/captures/plasma-v2/final-artistic-decision/repair-evidence.json"
-open_blocking_count = 1
-blocking_repairs = ["SS-PLV2-I-REPAIR-001"]
-claim_boundary = "Stable-promotion burn-down records the artistic verdict blocker; no source mutation, merge, promotion, release, or compatibility certification."
+open_blocking_count = 0
+blocking_repairs = []
+resolved_repairs = ["SS-PLV2-I-REPAIR-001"]
+claim_boundary = "Stable-promotion burn-down records the resolved artistic verdict blocker; no source mutation, merge, release publication, or compatibility certification."

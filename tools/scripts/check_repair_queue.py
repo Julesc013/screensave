@@ -18,6 +18,7 @@ TOOL = ROOT / "tools" / "aideops" / "repair_queue.py"
 SCAN_OUT = ROOT / "out" / "aide" / "repairs" / "scan.json"
 BURN_DOWN = ROOT / "validation" / "captures" / "plasma-v2" / "release-candidate" / "repair-burndown.json"
 STABLE_BURN_DOWN = ROOT / "validation" / "captures" / "plasma-v2" / "stable-promotion" / "repair-burndown.json"
+FINAL_DECISION = ROOT / "validation" / "captures" / "plasma-v2" / "final-artistic-decision" / "decision.stable.toml"
 
 REPAIR_CLASSES = {
     "validator_failure",
@@ -39,6 +40,13 @@ REPAIR_CLASSES = {
 def load_toml(path: pathlib.Path) -> dict[str, Any]:
     with path.open("rb") as handle:
         return tomllib.load(handle)
+
+
+def final_artistic_accepted() -> bool:
+    if not FINAL_DECISION.exists():
+        return False
+    decision = load_toml(FINAL_DECISION)
+    return str(decision.get("decision_state", decision.get("decision", ""))) == "accepted-for-stable"
 
 
 def require(condition: bool, message: str, errors: list[str]) -> None:
@@ -146,6 +154,7 @@ def main() -> int:
                 "SS-PLV2-IR-REPAIR-002 must require the VisualIntent proof checker.",
                 errors,
             )
+        accepted_final_verdict = final_artistic_accepted()
         final_repair = next(
             (item for item in queue.get("repairs", []) if isinstance(item, dict) and item.get("id") == "SS-PLV2-I-REPAIR-001"),
             None,
@@ -158,18 +167,25 @@ def main() -> int:
                 errors,
             )
             require(
-                final_repair.get("status") == "blocking",
-                "SS-PLV2-I-REPAIR-001 must remain blocking until accepted-for-stable is supplied.",
+                final_repair.get("status") == ("completed" if accepted_final_verdict else "blocking"),
+                "SS-PLV2-I-REPAIR-001 status must match the final stable artistic verdict.",
                 errors,
             )
-            require(
-                final_repair.get("blocker_reasons") == [
-                    "final_stable_artistic_acceptance_not_accepted",
-                    "missing_project_owned_accepted_for_stable_verdict",
-                ],
-                "SS-PLV2-I-REPAIR-001 must record the Turn 4 request-changes blocker reasons.",
-                errors,
-            )
+            if accepted_final_verdict:
+                require(
+                    final_repair.get("blocker_reasons") == [],
+                    "SS-PLV2-I-REPAIR-001 must clear blocker reasons after accepted-for-stable.",
+                    errors,
+                )
+            else:
+                require(
+                    final_repair.get("blocker_reasons") == [
+                        "final_stable_artistic_acceptance_not_accepted",
+                        "missing_project_owned_accepted_for_stable_verdict",
+                    ],
+                    "SS-PLV2-I-REPAIR-001 must record the Turn 4 request-changes blocker reasons.",
+                    errors,
+                )
             require(
                 "products/savers/plasma/src/v2/**" in final_repair.get("allowed_paths", []),
                 "SS-PLV2-I-REPAIR-001 must allow only bounded Plasma v2 island product repair.",

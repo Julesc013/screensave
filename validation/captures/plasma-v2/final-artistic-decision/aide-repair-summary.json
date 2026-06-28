@@ -1,11 +1,11 @@
 {
   "schema": "screensave.plasma-v2.final-artistic-decision.aide-repair-summary.v1",
-  "status": "blocked",
+  "status": "accepted",
   "work_unit": "SS-PLV2-I-REPAIR-001",
   "repair_class": "final_stable_artistic_acceptance",
   "repair_queue_class": "release_readiness_gap",
   "decision_before": "request-changes",
-  "decision_after": "request-changes",
+  "decision_after": "accepted-for-stable",
   "decision_owner": "ScreenSave / project authority",
   "aide_role": "evidence/control-plane only",
   "repair_evidence": "validation/captures/plasma-v2/final-artistic-decision/repair-evidence.json",
@@ -19,10 +19,7 @@
     "did_not_mutate_source_automatically": true,
     "did_not_apply_visual_repair_without_project_blocker": true
   },
-  "exact_blocker_reasons": [
-    "final_stable_artistic_acceptance_not_accepted",
-    "missing_project_owned_accepted_for_stable_verdict"
-  ],
+  "exact_blocker_reasons": [],
   "evidence_refs": {
     "aide_ledger": ".aide/evidence/plasma-v2-stable-promotion.toml",
     "request_changes_intake": "validation/captures/plasma-v2/final-artistic-decision/request-changes-intake.json",

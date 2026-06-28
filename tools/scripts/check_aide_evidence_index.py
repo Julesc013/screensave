@@ -153,7 +153,7 @@ def main() -> int:
         require(payload.get("work_unit") == "SS-PLV2-I-REPAIR-001", "repair AIDE summary must name SS-PLV2-I-REPAIR-001.", errors)
         require(payload.get("repair_class") == "final_stable_artistic_acceptance", "repair AIDE summary must record the final artistic repair class.", errors)
         require(payload.get("decision_before") == "request-changes", "repair AIDE summary must record decision_before.", errors)
-        require(payload.get("decision_after") == "request-changes", "repair AIDE summary must record decision_after.", errors)
+        require(payload.get("decision_after") == "accepted-for-stable", "repair AIDE summary must record accepted decision_after.", errors)
         require(payload.get("stable_promotion_before_project_decision") is False, "repair AIDE summary must block stable promotion before project decision.", errors)
         assertions = payload.get("aide_assertions", {})
         for key in (

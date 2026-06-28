@@ -1,14 +1,15 @@
 {
   "schema": "screensave.plasma-v2.stable-promotion.repair-burndown.v1",
-  "status": "blocking-stable-promotion-repairs-open",
+  "status": "no-blocking-stable-promotion-repairs",
   "candidate_id": "plasma-v2-rc1",
-  "open_blocking_count": 1,
-  "blocking_repairs": [
+  "open_blocking_count": 0,
+  "blocking_repairs": [],
+  "resolved_repairs": [
     {
       "id": "SS-PLV2-I-REPAIR-001",
       "repair_class": "release_readiness_gap",
       "title": "Record explicit Plasma v2 final stable artistic verdict",
-      "reason": "Stable promotion cannot proceed without an explicit final human artistic acceptance verdict."
+      "resolution": "ScreenSave project authority supplied accepted-for-stable verdict for Plasma v2 rc1."
     }
   ],
   "nonblocking_repairs": [],
@@ -20,5 +21,5 @@
     "stable_artistic_decision": "validation/captures/plasma-v2/final-artistic-decision/decision.stable.toml",
     "agentic_proposal": "out/aide/agentic/SS-PLV2-I8/proposal.json"
   },
-  "claim_boundary": "Stable-promotion repair burn-down records blockers only; it does not promote, release, certify compatibility, or accept artistic quality."
+  "claim_boundary": "Stable-promotion repair burn-down records blocker resolution only; it does not publish, certify compatibility, or let AIDE accept artistic quality."
 }

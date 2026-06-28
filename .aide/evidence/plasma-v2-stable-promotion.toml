@@ -1,16 +1,16 @@
 schema_version = 1
 evidence_id = "screensave.plasma-v2.stable-promotion.decision-evidence.v1"
-status = "blocked"
+status = "accepted"
 work_unit = "SS-PLV2-I-REPAIR-001"
 repair_queue_class = "release_readiness_gap"
 repair_class = "final_stable_artistic_acceptance"
 blocker = "final stable artistic acceptance"
 decision_kind = "final stable artistic acceptance"
 decision_before_repair = "request-changes"
-decision = "request-changes"
+decision = "accepted-for-stable"
 decision_owner = "ScreenSave / project authority"
 aide_role = "evidence index only"
-recorded_on = "2026-06-28"
+recorded_on = "2026-06-29"
 
 [refs]
 intake = "validation/captures/plasma-v2/final-artistic-decision/intake.json"
@@ -41,8 +41,8 @@ stable_promotion_before_project_decision = false
 workbench_decided_artistic_acceptance = false
 
 [blocker]
-reason = "No explicit ScreenSave/project-owned accepted-for-stable artistic verdict was supplied for Plasma v2 rc1."
+reason = "Resolved by explicit ScreenSave/project-owned accepted-for-stable artistic verdict for Plasma v2 rc1."
 repair_workunit = "SS-PLV2-I-REPAIR-001"
-stable_promotion = "blocked"
+stable_promotion = "ready-for-gate"
 
-claim_boundary = "AIDE records final artistic decision and repair evidence only; ScreenSave/project authority owns artistic acceptance and release decisions, no stable promotion occurs before project-owned acceptance, and no publication, compatibility certification, automatic promotion, or source mutation is admitted."
+claim_boundary = "AIDE records final artistic decision and repair evidence only; ScreenSave/project authority owns artistic acceptance and release decisions, and no publication, compatibility certification, automatic promotion, or source mutation is admitted."
