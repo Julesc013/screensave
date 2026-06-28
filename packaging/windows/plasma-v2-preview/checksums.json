@@ -2,7 +2,7 @@
   "claim_boundary": "Checksums identify staged references only; they do not publish, certify compatibility, or promote release.",
   "schema_version": "screensave.package-stage.checksums.v1",
   "sha256": {
-    ".aide/evidence/index.toml": "2be7c44912da0481703a6e324c750b362c3e18369b5b323007cd4c5cc8c43889",
+    ".aide/evidence/index.toml": "2b4fa7e17d9694b6bc6eff9a8ac1b071bc4b014989c049c10f70f37eca8a43ff",
     "products/savers/plasma/content/v2/examples/plasma_lava_v2.toml": "98097642419ebef984a1e1395fc4788fa433ad64c3a0a1ba6bc60e0ccf58de73",
     "validation/captures/plasma-v2/reference-preview/proof-bundle-v1.json": "89c3900a60ac29c3da7d8c570fe7fdb10eba6ff55b9a356407007b33bdba935e",
     "validation/captures/plasma-v2/stable-candidate/gate-report.json": "bcdb9f93589cd4b8b10386c82a51753459b5ca74626ae9090c4b6c78810da2fa"

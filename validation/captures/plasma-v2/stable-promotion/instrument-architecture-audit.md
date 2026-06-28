@@ -1,14 +1,14 @@
 # Plasma v2 Instrument-Architecture Audit
 
-- Status: hold
+- Status: promotion-ready
 - Candidate: plasma-v2-rc1
-- Stable eligible: False
-- Recommended state: release-candidate-hold
+- Stable eligible: True
+- Recommended state: stable-promoted
 - Claim boundary: Instrument-architecture audit only; it does not publish Plasma, certify compatibility, accept final artistic quality, or admit AIDE as runtime truth.
 
 ## Blocking Gates
 
-- visualintent_candidates_reduce_to_plasma_spec
+- none
 
 ## Gates
 
@@ -24,7 +24,7 @@
 - pass: gl11_is_not_hidden_minimum - GDI remains the floor and GL11 remains optional.
 - pass: workbench_inspection_passes - Workbench must inspect the real Plasma v2 instrument evidence without becoming runtime truth or promotion authority.
 - pass: packc_data_only_passes - packc validates data-only Plasma packs and rejects executable or unsafe payloads.
-- hold: visualintent_candidates_reduce_to_plasma_spec - VisualIntent is contractually descriptive, but a Plasma v2 candidate resolver to the direct spec is not yet admitted as stable evidence.
+- pass: visualintent_candidates_reduce_to_plasma_spec - VisualIntent candidates reduce through a bounded local resolver into explicit Plasma v2 specs, packc data, and preview proof evidence.
 - pass: aide_not_runtime_or_truth - AIDE remains an evidence and repair coordinator, not product runtime, artistic judge, or truth authority.
 
 ## Structural Checks
@@ -54,9 +54,13 @@
 - pass: workbench-inspection - Command passed.
 - pass: packc-data-only - Command passed.
 - pass: visualintent-contract - Command passed.
+- pass: visualintent-resolver - Command passed.
+- pass: visualintent-proof - Command passed.
 - pass: aide-boundary - Command passed.
 - pass: aide-instrument-repair - Command passed.
 - pass: product-center-report-outcome - Product-center boundary report is present and has a valid audit status.
 - pass: legacy-boundary-report-outcome - Legacy boundary report is present and has a valid audit status.
+- pass: visualintent-spec-reduction-report-outcome - VisualIntent spec-reduction report proves bounded candidates reduce to Plasma v2 specs.
+- pass: visualintent-proof-summary-outcome - VisualIntent proof summary records deterministic spec/pack proof and explicit capture limits.
 - pass: required-gate-set - Instrument audit emits the required PAW-I gate set.
 - pass: project-state-not-overpromoted - Project state does not overclaim stable promotion.

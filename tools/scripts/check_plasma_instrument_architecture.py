@@ -24,6 +24,8 @@ PLASMA_SRC = ROOT / "products" / "savers" / "plasma" / "src"
 INSTRUMENT_AUDIT_DIR = ROOT / "validation" / "captures" / "plasma-v2" / "instrument-audit"
 PRODUCT_CENTER_REPORT = INSTRUMENT_AUDIT_DIR / "product-center-report.json"
 LEGACY_BOUNDARY_REPORT = INSTRUMENT_AUDIT_DIR / "legacy-boundary-report.json"
+VISUALINTENT_SPEC_REDUCTION_REPORT = INSTRUMENT_AUDIT_DIR / "visualintent" / "spec-reduction-report.json"
+VISUALINTENT_PROOF_SUMMARY = INSTRUMENT_AUDIT_DIR / "visualintent" / "proof-summary.json"
 
 SUBCHECKS = [
     ("direct-spec", ["tools/scripts/check_plasma_v2_direct_spec.py"]),
@@ -43,6 +45,8 @@ SUBCHECKS = [
     ("workbench-inspection", ["tools/scripts/check_plasma_v2_workbench_inspection.py"]),
     ("packc-data-only", ["tools/scripts/check_packc.py"]),
     ("visualintent-contract", ["tools/scripts/check_visual_intent_contract.py"]),
+    ("visualintent-resolver", ["tools/scripts/check_visual_intent_resolver.py"]),
+    ("visualintent-proof", ["tools/scripts/check_plasma_v2_visualintent_proof.py"]),
     ("aide-boundary", ["tools/scripts/check_aide_evidence_bridge.py"]),
     ("aide-instrument-repair", ["tools/scripts/check_plasma_v2_aide_repair_evidence.py"]),
 ]
@@ -246,6 +250,8 @@ def build_report() -> dict[str, Any]:
 
     product_center_report = load_json(PRODUCT_CENTER_REPORT)
     legacy_boundary_report = load_json(LEGACY_BOUNDARY_REPORT)
+    visualintent_spec_report = load_json(VISUALINTENT_SPEC_REDUCTION_REPORT)
+    visualintent_proof_summary = load_json(VISUALINTENT_PROOF_SUMMARY)
     add_check(
         checks,
         "product-center-report-outcome",
@@ -261,6 +267,33 @@ def build_report() -> dict[str, Any]:
         "Legacy boundary report is present and has a valid audit status.",
         status=legacy_boundary_report.get("status"),
         blocking_reasons=legacy_boundary_report.get("blocking_reasons", []),
+    )
+    add_check(
+        checks,
+        "visualintent-spec-reduction-report-outcome",
+        visualintent_spec_report.get("status") == "pass"
+        and visualintent_spec_report.get("visualintent_candidates_reduce_to_plasma_spec") is True
+        and visualintent_spec_report.get("all_candidates_packc_valid") is True
+        and visualintent_spec_report.get("all_candidates_have_plasma_v2_spec") is True
+        and visualintent_spec_report.get("executable_payloads_detected") is False
+        and visualintent_spec_report.get("network_or_model_calls") is False,
+        "VisualIntent spec-reduction report proves bounded candidates reduce to Plasma v2 specs.",
+        status=visualintent_spec_report.get("status"),
+        fixtures_checked=visualintent_spec_report.get("fixtures_checked"),
+        candidate_count_per_fixture=visualintent_spec_report.get("candidate_count_per_fixture"),
+    )
+    add_check(
+        checks,
+        "visualintent-proof-summary-outcome",
+        visualintent_proof_summary.get("status") == "pass"
+        and visualintent_proof_summary.get("candidate_specs_are_deterministic") is True
+        and visualintent_proof_summary.get("candidate_specs_compile") is True
+        and visualintent_proof_summary.get("proof_status") == "packc-and-spec-proof-only"
+        and visualintent_proof_summary.get("all_candidate_capture_refs_generated") is False,
+        "VisualIntent proof summary records deterministic spec/pack proof and explicit capture limits.",
+        status=visualintent_proof_summary.get("status"),
+        proof_status=visualintent_proof_summary.get("proof_status"),
+        proof_profile=visualintent_proof_summary.get("proof_profile"),
     )
 
     gate(
@@ -410,12 +443,43 @@ def build_report() -> dict[str, Any]:
         evidence=["tools/scripts/check_packc.py"],
     )
 
+    visualintent_ready = (
+        subcheck_status(subchecks, "visualintent-contract")
+        and subcheck_status(subchecks, "visualintent-resolver")
+        and subcheck_status(subchecks, "visualintent-proof")
+        and subcheck_status(subchecks, "packc-data-only")
+        and subcheck_status(subchecks, "workbench-inspection")
+        and visualintent_spec_report.get("status") == "pass"
+        and visualintent_spec_report.get("visualintent_candidates_reduce_to_plasma_spec") is True
+        and visualintent_spec_report.get("all_candidates_packc_valid") is True
+        and visualintent_spec_report.get("all_candidates_have_plasma_v2_spec") is True
+        and visualintent_spec_report.get("executable_payloads_detected") is False
+        and visualintent_spec_report.get("network_or_model_calls") is False
+        and visualintent_proof_summary.get("status") == "pass"
+        and visualintent_proof_summary.get("candidate_specs_are_deterministic") is True
+        and visualintent_proof_summary.get("candidate_specs_compile") is True
+    )
+    visualintent_structural = (
+        subcheck_status(subchecks, "visualintent-contract")
+        and subcheck_status(subchecks, "visualintent-resolver")
+        and subcheck_status(subchecks, "visualintent-proof")
+        and visualintent_spec_report.get("status") in {"pass", "blocked"}
+        and visualintent_proof_summary.get("status") in {"pass", "blocked"}
+    )
     gate(
         gates,
         "visualintent_candidates_reduce_to_plasma_spec",
-        "hold",
-        "VisualIntent is contractually descriptive, but a Plasma v2 candidate resolver to the direct spec is not yet admitted as stable evidence.",
-        evidence=["contracts/visual_intent_v1.md"],
+        "pass" if visualintent_ready else "hold" if visualintent_structural else "fail",
+        "VisualIntent candidates reduce through a bounded local resolver into explicit Plasma v2 specs, packc data, and preview proof evidence.",
+        evidence=[
+            "contracts/visual_intent_v1.md",
+            "tools/scripts/check_visual_intent_resolver.py",
+            "tools/scripts/check_plasma_v2_visualintent_proof.py",
+            "validation/captures/plasma-v2/instrument-audit/visualintent/spec-reduction-report.json",
+            "validation/captures/plasma-v2/instrument-audit/visualintent/proof-summary.json",
+            "validation/captures/plasma-v2/instrument-audit/workbench-inspection.json",
+        ],
+        claim_boundary="VisualIntent candidates are bounded data/spec review inputs only; not runtime truth, artistic acceptance, compatibility certification, or stable promotion.",
     )
 
     gate(

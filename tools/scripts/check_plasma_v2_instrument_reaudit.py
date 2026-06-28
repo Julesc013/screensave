@@ -185,12 +185,18 @@ def build_report() -> dict[str, Any]:
 
     failed_checks = [item["id"] for item in checks if item["status"] == "fail"]
     held_checks = [item["id"] for item in checks if item["status"] == "hold"]
+    remaining_blockers: list[str] = []
     if failed_checks:
         status = "fail"
         recommended_state = "release-candidate-hold"
     elif held_checks or audit.get("stable_eligible") is not True:
         status = "hold"
         recommended_state = "release-candidate-hold"
+        remaining_blockers = blocking_gates
+    elif state_holds:
+        status = "hold"
+        recommended_state = "release-candidate-hold"
+        remaining_blockers = ["final stable artistic acceptance"]
     else:
         status = "promotion-ready"
         recommended_state = "stable-promoted"
@@ -210,6 +216,7 @@ def build_report() -> dict[str, Any]:
             "stable_eligible": audit.get("stable_eligible"),
             "blocking_gates": blocking_gates,
             "failed_gates": failed_gates,
+            "remaining_blockers": remaining_blockers,
             "held_checks": held_checks,
             "failed_checks": failed_checks,
             "opened_next": "plasma-v2-publication-prep" if status == "promotion-ready" else "plasma-v2-instrument-repair",
@@ -239,6 +246,13 @@ def report_markdown(report: dict[str, Any]) -> str:
     if blocking:
         for gate_id in blocking:
             lines.append(f"- {gate_id}")
+    else:
+        lines.append("- none")
+    lines.extend(["", "## Remaining Project Blockers", ""])
+    remaining = decision.get("remaining_blockers", [])
+    if remaining:
+        for blocker in remaining:
+            lines.append(f"- {blocker}")
     else:
         lines.append("- none")
     lines.extend(["", "## Checks", ""])

@@ -11,7 +11,7 @@
           "returncode": 0,
           "status": "pass",
           "stderr": "",
-          "stdout": "Plasma v2 instrument architecture audit hold"
+          "stdout": "Plasma v2 instrument architecture audit promotion-ready"
         }
       },
       "id": "instrument-audit-rerun",
@@ -20,12 +20,10 @@
     },
     {
       "data": {
-        "audit_status": "hold",
-        "blocking_gates": [
-          "visualintent_candidates_reduce_to_plasma_spec"
-        ],
+        "audit_status": "promotion-ready",
+        "blocking_gates": [],
         "failed_gates": [],
-        "stable_eligible": false
+        "stable_eligible": true
       },
       "id": "instrument-audit-outcome",
       "status": "pass",
@@ -161,15 +159,21 @@
     {
       "data": {
         "data": {
+          "claim_boundary": "VisualIntent candidates are bounded data/spec review inputs only; not runtime truth, artistic acceptance, compatibility certification, or stable promotion.",
           "evidence": [
-            "contracts/visual_intent_v1.md"
+            "contracts/visual_intent_v1.md",
+            "tools/scripts/check_visual_intent_resolver.py",
+            "tools/scripts/check_plasma_v2_visualintent_proof.py",
+            "validation/captures/plasma-v2/instrument-audit/visualintent/spec-reduction-report.json",
+            "validation/captures/plasma-v2/instrument-audit/visualintent/proof-summary.json",
+            "validation/captures/plasma-v2/instrument-audit/workbench-inspection.json"
           ]
         },
-        "gate_status": "hold",
-        "gate_summary": "VisualIntent is contractually descriptive, but a Plasma v2 candidate resolver to the direct spec is not yet admitted as stable evidence."
+        "gate_status": "pass",
+        "gate_summary": "VisualIntent candidates reduce through a bounded local resolver into explicit Plasma v2 specs, packc data, and preview proof evidence."
       },
       "id": "gate:visualintent_candidates_reduce_to_plasma_spec",
-      "status": "hold",
+      "status": "pass",
       "summary": "Gate is either admitted for stable promotion or explicitly blocking the hold."
     },
     {
@@ -194,24 +198,23 @@
   ],
   "claim_boundary": "PAW-I-R2 instrument re-audit only; it does not publish, certify compatibility, accept artistic quality, or promote stable release.",
   "decision": {
-    "blocking_gates": [
-      "visualintent_candidates_reduce_to_plasma_spec"
-    ],
+    "blocking_gates": [],
     "failed_checks": [],
     "failed_gates": [],
-    "held_checks": [
-      "gate:visualintent_candidates_reduce_to_plasma_spec"
-    ],
-    "instrument_architecture": "hold",
+    "held_checks": [],
+    "instrument_architecture": "promotion-ready",
     "opened_next": "plasma-v2-instrument-repair",
-    "stable_eligible": false
+    "remaining_blockers": [
+      "final stable artistic acceptance"
+    ],
+    "stable_eligible": true
   },
   "instrument_audit_ref": "validation/captures/plasma-v2/stable-promotion/instrument-architecture-audit.json",
   "recommended_state": "release-candidate-hold",
   "schema": "screensave.plasma-v2.instrument-reaudit.v1",
   "source": {
     "branch": "main",
-    "commit": "01c41bd37385b870ddb07f0090fed1f597a067fe",
+    "commit": "fc6d90026e6969538e7626f794bc488f94397035",
     "dirty": true
   },
   "status": "hold"

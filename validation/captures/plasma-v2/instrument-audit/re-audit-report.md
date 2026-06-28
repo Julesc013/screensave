@@ -3,13 +3,17 @@
 - Status: hold
 - Candidate: plasma-v2-rc1
 - Recommended state: release-candidate-hold
-- Instrument architecture: hold
-- Stable eligible: False
+- Instrument architecture: promotion-ready
+- Stable eligible: True
 - Claim boundary: PAW-I-R2 instrument re-audit only; it does not publish, certify compatibility, accept artistic quality, or promote stable release.
 
 ## Blocking Gates
 
-- visualintent_candidates_reduce_to_plasma_spec
+- none
+
+## Remaining Project Blockers
+
+- final stable artistic acceptance
 
 ## Checks
 
@@ -28,6 +32,6 @@
 - pass: gate:treatment_boundaries_pass - Required instrument gate passes.
 - pass: gate:workbench_inspection_passes - Required instrument gate passes.
 - pass: gate:legacy_preset_authority_removed - Gate is either admitted for stable promotion or explicitly blocking the hold.
-- hold: gate:visualintent_candidates_reduce_to_plasma_spec - Gate is either admitted for stable promotion or explicitly blocking the hold.
+- pass: gate:visualintent_candidates_reduce_to_plasma_spec - Gate is either admitted for stable promotion or explicitly blocking the hold.
 - pass: no-generic-command-capability - Project adapter exposes no generic command, publication, unchecked promotion, or agent-apply capability.
 - pass: no-stable-promotion-yet - Project state remains a release-candidate hold until the stable-promotion gate admits promotion.

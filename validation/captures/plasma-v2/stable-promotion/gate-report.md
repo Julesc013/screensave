@@ -4,8 +4,8 @@
 - Candidate: plasma-v2-rc1
 - Recommended state: release-candidate-hold
 - Artistic decision: request-changes
-- Instrument architecture: hold
-- Instrument stable eligible: False
+- Instrument architecture: promotion-ready
+- Instrument stable eligible: True
 - Open blocking repairs: 1
 - Claim boundary: Stable-promotion gate report only; it does not publish a release, certify compatibility, accept artistic quality automatically, or admit AIDE source mutation.
 

@@ -57,7 +57,7 @@
           "returncode": 0,
           "status": "pass",
           "stderr": "",
-          "stdout": "Plasma v2 instrument architecture audit hold",
+          "stdout": "Plasma v2 instrument architecture audit promotion-ready",
           "timeout_seconds": 300
         }
       },
@@ -323,11 +323,9 @@
     },
     {
       "data": {
-        "blocking_gates": [
-          "visualintent_candidates_reduce_to_plasma_spec"
-        ],
-        "instrument_status": "hold",
-        "stable_eligible": false
+        "blocking_gates": [],
+        "instrument_status": "promotion-ready",
+        "stable_eligible": true
       },
       "id": "instrument-architecture-outcome",
       "status": "pass",
@@ -368,11 +366,9 @@
   "claim_boundary": "Stable-promotion gate report only; it does not publish a release, certify compatibility, accept artistic quality automatically, or admit AIDE source mutation.",
   "decision": {
     "artistic_decision": "request-changes",
-    "instrument_architecture": "hold",
-    "instrument_blocking_gates": [
-      "visualintent_candidates_reduce_to_plasma_spec"
-    ],
-    "instrument_stable_eligible": false,
+    "instrument_architecture": "promotion-ready",
+    "instrument_blocking_gates": [],
+    "instrument_stable_eligible": true,
     "open_blocking_repairs": 1,
     "release_promotion": "blocked",
     "stable": false
@@ -381,7 +377,7 @@
   "schema": "screensave.plasma-v2.stable-promotion.gate-report.v1",
   "source": {
     "branch": "main",
-    "commit": "01c41bd37385b870ddb07f0090fed1f597a067fe",
+    "commit": "fc6d90026e6969538e7626f794bc488f94397035",
     "dirty": true
   },
   "status": "hold"

@@ -368,6 +368,42 @@
         "run": {
           "command": [
             "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+            "tools/scripts/check_visual_intent_resolver.py"
+          ],
+          "returncode": 0,
+          "status": "pass",
+          "stderr": "",
+          "stdout": "VisualIntent resolver checks passed.",
+          "timeout_seconds": 300
+        }
+      },
+      "id": "visualintent-resolver",
+      "status": "pass",
+      "summary": "Command passed."
+    },
+    {
+      "data": {
+        "run": {
+          "command": [
+            "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+            "tools/scripts/check_plasma_v2_visualintent_proof.py"
+          ],
+          "returncode": 0,
+          "status": "pass",
+          "stderr": "",
+          "stdout": "Plasma v2 VisualIntent proof checks passed.",
+          "timeout_seconds": 300
+        }
+      },
+      "id": "visualintent-proof",
+      "status": "pass",
+      "summary": "Command passed."
+    },
+    {
+      "data": {
+        "run": {
+          "command": [
+            "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
             "tools/scripts/check_aide_evidence_bridge.py"
           ],
           "returncode": 0,
@@ -419,6 +455,26 @@
     },
     {
       "data": {
+        "candidate_count_per_fixture": 3,
+        "fixtures_checked": 4,
+        "status": "pass"
+      },
+      "id": "visualintent-spec-reduction-report-outcome",
+      "status": "pass",
+      "summary": "VisualIntent spec-reduction report proves bounded candidates reduce to Plasma v2 specs."
+    },
+    {
+      "data": {
+        "proof_profile": "plasma.v2.visualintent.preview",
+        "proof_status": "packc-and-spec-proof-only",
+        "status": "pass"
+      },
+      "id": "visualintent-proof-summary-outcome",
+      "status": "pass",
+      "summary": "VisualIntent proof summary records deterministic spec/pack proof and explicit capture limits."
+    },
+    {
+      "data": {
         "extra": [],
         "missing": []
       },
@@ -438,12 +494,10 @@
   ],
   "claim_boundary": "Instrument-architecture audit only; it does not publish Plasma, certify compatibility, accept final artistic quality, or admit AIDE as runtime truth.",
   "decision": {
-    "blocking_gates": [
-      "visualintent_candidates_reduce_to_plasma_spec"
-    ],
+    "blocking_gates": [],
     "failed_gates": [],
-    "instrument_architecture": "hold",
-    "opened_next": "plasma-v2-instrument-repair"
+    "instrument_architecture": "promotion-ready",
+    "opened_next": "plasma-v2-publication-prep"
   },
   "gates": [
     {
@@ -586,13 +640,19 @@
     },
     {
       "data": {
+        "claim_boundary": "VisualIntent candidates are bounded data/spec review inputs only; not runtime truth, artistic acceptance, compatibility certification, or stable promotion.",
         "evidence": [
-          "contracts/visual_intent_v1.md"
+          "contracts/visual_intent_v1.md",
+          "tools/scripts/check_visual_intent_resolver.py",
+          "tools/scripts/check_plasma_v2_visualintent_proof.py",
+          "validation/captures/plasma-v2/instrument-audit/visualintent/spec-reduction-report.json",
+          "validation/captures/plasma-v2/instrument-audit/visualintent/proof-summary.json",
+          "validation/captures/plasma-v2/instrument-audit/workbench-inspection.json"
         ]
       },
       "id": "visualintent_candidates_reduce_to_plasma_spec",
-      "status": "hold",
-      "summary": "VisualIntent is contractually descriptive, but a Plasma v2 candidate resolver to the direct spec is not yet admitted as stable evidence."
+      "status": "pass",
+      "summary": "VisualIntent candidates reduce through a bounded local resolver into explicit Plasma v2 specs, packc data, and preview proof evidence."
     },
     {
       "data": {
@@ -606,13 +666,13 @@
       "summary": "AIDE remains an evidence and repair coordinator, not product runtime, artistic judge, or truth authority."
     }
   ],
-  "recommended_state": "release-candidate-hold",
+  "recommended_state": "stable-promoted",
   "schema": "screensave.plasma-v2.instrument-architecture-audit.v1",
   "source": {
     "branch": "main",
-    "commit": "01c41bd37385b870ddb07f0090fed1f597a067fe",
+    "commit": "fc6d90026e6969538e7626f794bc488f94397035",
     "dirty": true
   },
-  "stable_eligible": false,
-  "status": "hold"
+  "stable_eligible": true,
+  "status": "promotion-ready"
 }
