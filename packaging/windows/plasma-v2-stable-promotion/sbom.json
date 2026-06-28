@@ -7,7 +7,7 @@
       "name": "plasma.scr",
       "kind": "windows-screensaver-artifact",
       "path": "out/msvc/vs2017_xp/Release/plasma/plasma.scr",
-      "sha256": "df83baec3bf76a41d8922407172efffc0603bc3aff6265fe4e45eef40bb7e089",
+      "sha256": "d4e58fd8ed10d67704c7cb58205f27d61fb5c10ded3c1b904abddf414ac25d41",
       "build_profile": "windows-current-x86"
     },
     {
