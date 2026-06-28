@@ -2,9 +2,11 @@ schema_version = 1
 evidence_id = "screensave.plasma-v2.stable-promotion.decision-evidence.v1"
 status = "blocked"
 work_unit = "SS-PLV2-I-REPAIR-001"
-repair_class = "release_readiness_gap"
+repair_queue_class = "release_readiness_gap"
+repair_class = "final_stable_artistic_acceptance"
 blocker = "final stable artistic acceptance"
 decision_kind = "final stable artistic acceptance"
+decision_before_repair = "request-changes"
 decision = "request-changes"
 decision_owner = "ScreenSave / project authority"
 aide_role = "evidence index only"
@@ -12,11 +14,16 @@ recorded_on = "2026-06-28"
 
 [refs]
 intake = "validation/captures/plasma-v2/final-artistic-decision/intake.json"
+request_changes_intake = "validation/captures/plasma-v2/final-artistic-decision/request-changes-intake.json"
+request_changes_repair_plan = "validation/captures/plasma-v2/final-artistic-decision/request-changes-repair-plan.json"
 review_inputs = "validation/captures/plasma-v2/final-artistic-decision/review-inputs.json"
 review_evidence = "validation/captures/plasma-v2/final-artistic-decision/review-evidence.json"
+repair_evidence = "validation/captures/plasma-v2/final-artistic-decision/repair-evidence.json"
+repair_summary = "validation/captures/plasma-v2/final-artistic-decision/repair-summary.md"
 decision = "validation/captures/plasma-v2/final-artistic-decision/decision.stable.toml"
 decision_summary = "validation/captures/plasma-v2/final-artistic-decision/decision-summary.md"
 contact_sheet_index = "validation/captures/plasma-v2/final-artistic-decision/contact-sheet-index.json"
+workbench_repair_facts = "products/apps/benchlab/src/benchlab_workbench_shell.c"
 instrument_architecture = "validation/captures/plasma-v2/stable-promotion/instrument-architecture-audit.json"
 stable_promotion_gate = "validation/captures/plasma-v2/stable-promotion/gate-report.json"
 repair_queue = ".aide/repairs/index.toml"
@@ -30,10 +37,12 @@ aide_mutated_source_automatically = false
 screen_save_owns_decision = true
 validators_auto_accepted = false
 proof_hash_auto_accepted = false
+stable_promotion_before_project_decision = false
+workbench_decided_artistic_acceptance = false
 
 [blocker]
 reason = "No explicit ScreenSave/project-owned accepted-for-stable artistic verdict was supplied for Plasma v2 rc1."
 repair_workunit = "SS-PLV2-I-REPAIR-001"
 stable_promotion = "blocked"
 
-claim_boundary = "AIDE records final artistic decision evidence only; ScreenSave/project authority owns artistic acceptance and release decisions, and no publication, compatibility certification, automatic promotion, or source mutation is admitted."
+claim_boundary = "AIDE records final artistic decision and repair evidence only; ScreenSave/project authority owns artistic acceptance and release decisions, no stable promotion occurs before project-owned acceptance, and no publication, compatibility certification, automatic promotion, or source mutation is admitted."

@@ -41,6 +41,7 @@ REQUIRED_IDS = {
     "plasma-v2-visualintent-spec-reduction",
     "plasma-v2-visualintent-proof-summary",
     "plasma-v2-stable-promotion-decision",
+    "plasma-v2-artistic-repair-evidence",
 }
 
 
@@ -95,10 +96,13 @@ def main() -> int:
             "plasma-v2-visualintent-spec-reduction",
             "plasma-v2-visualintent-proof-summary",
             "plasma-v2-stable-promotion-decision",
+            "plasma-v2-artistic-repair-evidence",
             "check_plasma_v2_visualintent_proof.py",
+            "check_plasma_v2_artistic_repair_plan.py",
             "VisualIntent-to-Plasma spec reduction evidence only",
             "VisualIntent proof summary evidence only",
             "AIDE final stable artistic decision evidence only",
+            "AIDE indexes final artistic repair evidence only",
             "ScreenSave/project authority owns acceptance",
             "compatibility certification",
             "artistic acceptance",
@@ -111,19 +115,24 @@ def main() -> int:
 
     stable_ledger = ROOT / ".aide" / "evidence" / "plasma-v2-stable-promotion.toml"
     stable_summary = ROOT / "validation" / "captures" / "plasma-v2" / "final-artistic-decision" / "aide-decision-summary.json"
-    for path in [stable_ledger, stable_summary]:
+    repair_summary = ROOT / "validation" / "captures" / "plasma-v2" / "final-artistic-decision" / "aide-repair-summary.json"
+    for path in [stable_ledger, stable_summary, repair_summary]:
         require(path.exists(), f"Missing stable-promotion AIDE evidence path: {path.relative_to(ROOT)}", errors)
     if stable_ledger.exists():
         text = stable_ledger.read_text(encoding="utf-8")
         for needle in [
             'work_unit = "SS-PLV2-I-REPAIR-001"',
+            'repair_class = "final_stable_artistic_acceptance"',
             'decision_kind = "final stable artistic acceptance"',
             'decision_owner = "ScreenSave / project authority"',
             'aide_role = "evidence index only"',
+            'request_changes_repair_plan = "validation/captures/plasma-v2/final-artistic-decision/request-changes-repair-plan.json"',
+            'repair_evidence = "validation/captures/plasma-v2/final-artistic-decision/repair-evidence.json"',
             "aide_decided_artistic_acceptance = false",
             "aide_promoted_release = false",
             "aide_published_release = false",
             "aide_certified_compatibility = false",
+            "stable_promotion_before_project_decision = false",
         ]:
             require(needle in text, f"stable-promotion AIDE ledger missing {needle!r}.", errors)
     if stable_summary.exists():
@@ -139,6 +148,23 @@ def main() -> int:
             "did_not_mutate_source_automatically",
         ):
             require(assertions.get(key) is True, f"stable AIDE summary must assert {key}.", errors)
+    if repair_summary.exists():
+        payload = json.loads(repair_summary.read_text(encoding="utf-8"))
+        require(payload.get("work_unit") == "SS-PLV2-I-REPAIR-001", "repair AIDE summary must name SS-PLV2-I-REPAIR-001.", errors)
+        require(payload.get("repair_class") == "final_stable_artistic_acceptance", "repair AIDE summary must record the final artistic repair class.", errors)
+        require(payload.get("decision_before") == "request-changes", "repair AIDE summary must record decision_before.", errors)
+        require(payload.get("decision_after") == "request-changes", "repair AIDE summary must record decision_after.", errors)
+        require(payload.get("stable_promotion_before_project_decision") is False, "repair AIDE summary must block stable promotion before project decision.", errors)
+        assertions = payload.get("aide_assertions", {})
+        for key in (
+            "did_not_decide_artistic_acceptance",
+            "did_not_promote_release",
+            "did_not_publish_release",
+            "did_not_certify_compatibility",
+            "did_not_mutate_source_automatically",
+            "did_not_apply_visual_repair_without_project_blocker",
+        ):
+            require(assertions.get(key) is True, f"repair AIDE summary must assert {key}.", errors)
 
     if errors:
         for error in errors:
