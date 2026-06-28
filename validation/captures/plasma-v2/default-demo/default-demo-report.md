@@ -2,13 +2,13 @@
 
 - Status: pass
 - Default: plasma_lava + plasma_lava
-- Field: adaptive high-resolution fine plasma field capped by renderer tier with classic layered wave synthesis
+- Field: adaptive high-resolution fine plasma field capped by renderer tier with edge-guarded virtual-desktop coordinates and classic layered wave synthesis
 - Motion: slower gentle phase motion tuned for display-refresh-facing flow
 - Color: direct full-color smooth RGB palette cycling from the scalar plasma field
 - Output: native drawable raster presentation with pixel-sharp renderer scaling and resolution-independent plasma coordinates
 - Renderers: gdi floor, gl46 preferred, optional gl21, gl33, gl46
 - Artifact: out/msvc/vs2017_xp/Release/plasma/plasma.scr
-- Artifact SHA256: df83baec3bf76a41d8922407172efffc0603bc3aff6265fe4e45eef40bb7e089
+- Artifact SHA256: d4e58fd8ed10d67704c7cb58205f27d61fb5c10ded3c1b904abddf414ac25d41
 - Claim boundary: Post-stable local demo rebuild evidence only; this does not publish a release, broaden compatibility certification, or replace Plasma v2 proof/publication gates.
 
 ## Checks

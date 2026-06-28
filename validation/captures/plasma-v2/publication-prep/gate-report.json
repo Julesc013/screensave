@@ -292,7 +292,7 @@
   "schema": "screensave.plasma-v2.publication-prep.gate-report.v1",
   "source": {
     "branch": "main",
-    "commit": "42d6426a748606913b1de2cb86e38dce4f4e029a",
+    "commit": "6b680b4fc1ad42390c57ea61a1e546e2e926c2a0",
     "dirty": true
   },
   "status": "publication-ready"

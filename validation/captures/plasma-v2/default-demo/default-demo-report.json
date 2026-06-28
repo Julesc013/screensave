@@ -2,7 +2,7 @@
   "artifact": {
     "exists": true,
     "path": "out/msvc/vs2017_xp/Release/plasma/plasma.scr",
-    "sha256": "df83baec3bf76a41d8922407172efffc0603bc3aff6265fe4e45eef40bb7e089"
+    "sha256": "d4e58fd8ed10d67704c7cb58205f27d61fb5c10ded3c1b904abddf414ac25d41"
   },
   "checks": [
     {
@@ -145,7 +145,7 @@
     "customization_boundary": "All existing Plasma settings remain explicit config inputs; presets remain starting points.",
     "default_preset": "plasma_lava",
     "default_theme": "plasma_lava",
-    "field": "adaptive high-resolution fine plasma field capped by renderer tier with classic layered wave synthesis",
+    "field": "adaptive high-resolution fine plasma field capped by renderer tier with edge-guarded virtual-desktop coordinates and classic layered wave synthesis",
     "forced_renderer_smoke": [
       "gdi",
       "gl11",
@@ -216,7 +216,7 @@
   "schema": "screensave.plasma.default-demo.v1",
   "source": {
     "branch": "main",
-    "commit": "42d6426a748606913b1de2cb86e38dce4f4e029a",
+    "commit": "6b680b4fc1ad42390c57ea61a1e546e2e926c2a0",
     "dirty": true
   },
   "status": "pass",
