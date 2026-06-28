@@ -1,12 +1,12 @@
 # Plasma v2 Stable-Promotion Gate Report
 
-- Status: hold
+- Status: promotion-ready
 - Candidate: plasma-v2-rc1
-- Recommended state: release-candidate-hold
-- Artistic decision: request-changes
+- Recommended state: stable-promoted
+- Artistic decision: accepted-for-stable
 - Instrument architecture: promotion-ready
 - Instrument stable eligible: True
-- Open blocking repairs: 1
+- Open blocking repairs: 0
 - Claim boundary: Stable-promotion gate report only; it does not publish a release, certify compatibility, accept artistic quality automatically, or admit AIDE source mutation.
 
 ## Checks
@@ -33,5 +33,4 @@
 - pass: repair-queue-outcome - Repair queue outcome matches the artistic decision.
 - pass: instrument-architecture-outcome - Instrument audit is either promotion-ready or a valid non-promotion hold.
 - pass: proof-bundle-decision-axis - Proof bundle records the stable-promotion decision axis.
-- pass: hold-report-recorded - Stable-promotion hold report records the exact final artistic decision blocker.
 - pass: no-publication-packet - No stable publication packet has been created during the stable-promotion decision.

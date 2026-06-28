@@ -299,7 +299,7 @@
     },
     {
       "data": {
-        "decision_state": "request-changes"
+        "decision_state": "accepted-for-stable"
       },
       "id": "artistic-decision-outcome",
       "status": "pass",
@@ -307,15 +307,8 @@
     },
     {
       "data": {
-        "blocking_repairs": [
-          {
-            "id": "SS-PLV2-I-REPAIR-001",
-            "reason": "Stable promotion cannot proceed without an explicit final human artistic acceptance verdict.",
-            "repair_class": "release_readiness_gap",
-            "title": "Record explicit Plasma v2 final stable artistic verdict"
-          }
-        ],
-        "open_blocking_count": 1
+        "blocking_repairs": [],
+        "open_blocking_count": 0
       },
       "id": "repair-queue-outcome",
       "status": "pass",
@@ -337,34 +330,22 @@
           "evidence_refs": [
             "validation/captures/plasma-v2/final-artistic-decision/decision.stable.toml"
           ],
-          "final_stable_artistic_acceptance": false,
-          "status": "request-changes",
-          "summary": "Stable promotion is held until explicit final human stable acceptance exists."
+          "final_stable_artistic_acceptance": true,
+          "status": "accepted-for-stable",
+          "summary": "ScreenSave project authority supplied final stable artistic acceptance for Plasma v2 rc1."
         },
         "stable_promotion": {
           "evidence_refs": [
             "validation/captures/plasma-v2/final-artistic-decision/decision.stable.toml"
           ],
-          "stable_release": false,
-          "status": "blocked",
-          "summary": "Stable release promotion is blocked by the artistic acceptance hold."
+          "stable_release": true,
+          "status": "ready",
+          "summary": "Stable promotion is ready after accepted final artistic verdict."
         }
       },
       "id": "proof-bundle-decision-axis",
       "status": "pass",
       "summary": "Proof bundle records the stable-promotion decision axis."
-    },
-    {
-      "data": {
-        "blocker_ids": [
-          "final_stable_artistic_acceptance_not_accepted",
-          "missing_project_owned_accepted_for_stable_verdict"
-        ],
-        "hold_report_ref": "validation\\captures\\plasma-v2\\stable-promotion\\hold-report.json"
-      },
-      "id": "hold-report-recorded",
-      "status": "pass",
-      "summary": "Stable-promotion hold report records the exact final artistic decision blocker."
     },
     {
       "data": {
@@ -377,20 +358,20 @@
   ],
   "claim_boundary": "Stable-promotion gate report only; it does not publish a release, certify compatibility, accept artistic quality automatically, or admit AIDE source mutation.",
   "decision": {
-    "artistic_decision": "request-changes",
+    "artistic_decision": "accepted-for-stable",
     "instrument_architecture": "promotion-ready",
     "instrument_blocking_gates": [],
     "instrument_stable_eligible": true,
-    "open_blocking_repairs": 1,
-    "release_promotion": "blocked",
-    "stable": false
+    "open_blocking_repairs": 0,
+    "release_promotion": "accepted",
+    "stable": true
   },
-  "recommended_state": "release-candidate-hold",
+  "recommended_state": "stable-promoted",
   "schema": "screensave.plasma-v2.stable-promotion.gate-report.v1",
   "source": {
     "branch": "main",
-    "commit": "e59cbe7a7ece891d983e5fb668302ce6227bfd1e",
+    "commit": "90f6f77b0ef6de870a3b58d9a3b0879fa4812593",
     "dirty": true
   },
-  "status": "hold"
+  "status": "promotion-ready"
 }
