@@ -155,6 +155,306 @@ static int plasma_benchlab_parse_bool(const char *text, int *value_out)
     return 0;
 }
 
+static int plasma_benchlab_parse_randomization_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "off") == 0 || lstrcmpiA(text, "0") == 0) {
+        *value_out = SCREENSAVE_RANDOMIZATION_MODE_OFF;
+        return 1;
+    }
+    if (lstrcmpiA(text, "session") == 0 || lstrcmpiA(text, "1") == 0) {
+        *value_out = SCREENSAVE_RANDOMIZATION_MODE_SESSION;
+        return 1;
+    }
+    return 0;
+}
+
+static int plasma_benchlab_parse_detail_level(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "low") == 0) {
+        *value_out = SCREENSAVE_DETAIL_LEVEL_LOW;
+        return 1;
+    }
+    if (lstrcmpiA(text, "standard") == 0 || lstrcmpiA(text, "medium") == 0) {
+        *value_out = SCREENSAVE_DETAIL_LEVEL_STANDARD;
+        return 1;
+    }
+    if (lstrcmpiA(text, "high") == 0) {
+        *value_out = SCREENSAVE_DETAIL_LEVEL_HIGH;
+        return 1;
+    }
+    return 0;
+}
+
+static int plasma_benchlab_parse_effect_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "plasma") == 0) {
+        *value_out = PLASMA_EFFECT_PLASMA;
+        return 1;
+    }
+    if (lstrcmpiA(text, "fire") == 0) {
+        *value_out = PLASMA_EFFECT_FIRE;
+        return 1;
+    }
+    if (lstrcmpiA(text, "interference") == 0) {
+        *value_out = PLASMA_EFFECT_INTERFERENCE;
+        return 1;
+    }
+    if (lstrcmpiA(text, "chemical") == 0 || lstrcmpiA(text, "chemical_cellular_growth") == 0) {
+        *value_out = PLASMA_EFFECT_CHEMICAL;
+        return 1;
+    }
+    if (lstrcmpiA(text, "lattice") == 0 || lstrcmpiA(text, "lattice_quasi_crystal") == 0) {
+        *value_out = PLASMA_EFFECT_LATTICE;
+        return 1;
+    }
+    if (lstrcmpiA(text, "caustic") == 0 || lstrcmpiA(text, "caustic_marbling") == 0) {
+        *value_out = PLASMA_EFFECT_CAUSTIC;
+        return 1;
+    }
+    if (lstrcmpiA(text, "aurora") == 0 || lstrcmpiA(text, "aurora_curtain_ribbon") == 0) {
+        *value_out = PLASMA_EFFECT_AURORA;
+        return 1;
+    }
+    if (lstrcmpiA(text, "substrate") == 0 || lstrcmpiA(text, "substrate_vein_coral") == 0) {
+        *value_out = PLASMA_EFFECT_SUBSTRATE;
+        return 1;
+    }
+    if (lstrcmpiA(text, "arc") == 0 || lstrcmpiA(text, "arc_discharge") == 0) {
+        *value_out = PLASMA_EFFECT_ARC;
+        return 1;
+    }
+    return 0;
+}
+
+static int plasma_benchlab_parse_speed_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "gentle") == 0) {
+        *value_out = PLASMA_SPEED_GENTLE;
+        return 1;
+    }
+    if (lstrcmpiA(text, "standard") == 0) {
+        *value_out = PLASMA_SPEED_STANDARD;
+        return 1;
+    }
+    if (lstrcmpiA(text, "lively") == 0) {
+        *value_out = PLASMA_SPEED_LIVELY;
+        return 1;
+    }
+    return 0;
+}
+
+static int plasma_benchlab_parse_resolution_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "coarse") == 0) {
+        *value_out = PLASMA_RESOLUTION_COARSE;
+        return 1;
+    }
+    if (lstrcmpiA(text, "standard") == 0) {
+        *value_out = PLASMA_RESOLUTION_STANDARD;
+        return 1;
+    }
+    if (lstrcmpiA(text, "fine") == 0) {
+        *value_out = PLASMA_RESOLUTION_FINE;
+        return 1;
+    }
+    return 0;
+}
+
+static int plasma_benchlab_parse_smoothing_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "off") == 0) {
+        *value_out = PLASMA_SMOOTHING_OFF;
+        return 1;
+    }
+    if (lstrcmpiA(text, "soft") == 0) {
+        *value_out = PLASMA_SMOOTHING_SOFT;
+        return 1;
+    }
+    if (lstrcmpiA(text, "glow") == 0) {
+        *value_out = PLASMA_SMOOTHING_GLOW;
+        return 1;
+    }
+    return 0;
+}
+
+static int plasma_benchlab_parse_output_family(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "raster") == 0) {
+        *value_out = PLASMA_OUTPUT_FAMILY_RASTER;
+        return 1;
+    }
+    if (lstrcmpiA(text, "banded") == 0) {
+        *value_out = PLASMA_OUTPUT_FAMILY_BANDED;
+        return 1;
+    }
+    if (lstrcmpiA(text, "contour") == 0) {
+        *value_out = PLASMA_OUTPUT_FAMILY_CONTOUR;
+        return 1;
+    }
+    if (lstrcmpiA(text, "glyph") == 0) {
+        *value_out = PLASMA_OUTPUT_FAMILY_GLYPH;
+        return 1;
+    }
+    return 0;
+}
+
+static int plasma_benchlab_parse_output_mode(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "native_raster") == 0 || lstrcmpiA(text, "native") == 0) {
+        *value_out = PLASMA_OUTPUT_MODE_NATIVE_RASTER;
+        return 1;
+    }
+    if (lstrcmpiA(text, "dithered_raster") == 0 || lstrcmpiA(text, "dithered") == 0) {
+        *value_out = PLASMA_OUTPUT_MODE_DITHERED_RASTER;
+        return 1;
+    }
+    if (lstrcmpiA(text, "posterized_bands") == 0 || lstrcmpiA(text, "bands") == 0) {
+        *value_out = PLASMA_OUTPUT_MODE_POSTERIZED_BANDS;
+        return 1;
+    }
+    if (lstrcmpiA(text, "contour_only") == 0) {
+        *value_out = PLASMA_OUTPUT_MODE_CONTOUR_ONLY;
+        return 1;
+    }
+    if (lstrcmpiA(text, "contour_bands") == 0) {
+        *value_out = PLASMA_OUTPUT_MODE_CONTOUR_BANDS;
+        return 1;
+    }
+    if (lstrcmpiA(text, "ascii_glyph") == 0 || lstrcmpiA(text, "ascii") == 0) {
+        *value_out = PLASMA_OUTPUT_MODE_ASCII_GLYPH;
+        return 1;
+    }
+    if (lstrcmpiA(text, "matrix_glyph") == 0 || lstrcmpiA(text, "matrix") == 0) {
+        *value_out = PLASMA_OUTPUT_MODE_MATRIX_GLYPH;
+        return 1;
+    }
+    return 0;
+}
+
+static int plasma_benchlab_parse_sampling_treatment(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "none") == 0) {
+        *value_out = PLASMA_SAMPLING_TREATMENT_NONE;
+        return 1;
+    }
+    if (lstrcmpiA(text, "nearest") == 0) {
+        *value_out = PLASMA_SAMPLING_TREATMENT_NEAREST;
+        return 1;
+    }
+    if (lstrcmpiA(text, "soft") == 0) {
+        *value_out = PLASMA_SAMPLING_TREATMENT_SOFT;
+        return 1;
+    }
+    if (lstrcmpiA(text, "dither") == 0) {
+        *value_out = PLASMA_SAMPLING_TREATMENT_DITHER;
+        return 1;
+    }
+    return 0;
+}
+
+static int plasma_benchlab_parse_filter_treatment(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "none") == 0) {
+        *value_out = PLASMA_FILTER_TREATMENT_NONE;
+        return 1;
+    }
+    if (lstrcmpiA(text, "blur") == 0) {
+        *value_out = PLASMA_FILTER_TREATMENT_BLUR;
+        return 1;
+    }
+    if (lstrcmpiA(text, "glow_edge") == 0) {
+        *value_out = PLASMA_FILTER_TREATMENT_GLOW_EDGE;
+        return 1;
+    }
+    if (lstrcmpiA(text, "halftone_stipple") == 0) {
+        *value_out = PLASMA_FILTER_TREATMENT_HALFTONE_STIPPLE;
+        return 1;
+    }
+    if (lstrcmpiA(text, "kaleidoscope_mirror") == 0) {
+        *value_out = PLASMA_FILTER_TREATMENT_KALEIDOSCOPE_MIRROR;
+        return 1;
+    }
+    if (lstrcmpiA(text, "restrained_glitch") == 0) {
+        *value_out = PLASMA_FILTER_TREATMENT_RESTRAINED_GLITCH;
+        return 1;
+    }
+    if (lstrcmpiA(text, "emboss_edge") == 0) {
+        *value_out = PLASMA_FILTER_TREATMENT_EMBOSS_EDGE;
+        return 1;
+    }
+    return 0;
+}
+
+static int plasma_benchlab_parse_emulation_treatment(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "none") == 0) {
+        *value_out = PLASMA_EMULATION_TREATMENT_NONE;
+        return 1;
+    }
+    if (lstrcmpiA(text, "phosphor") == 0) {
+        *value_out = PLASMA_EMULATION_TREATMENT_PHOSPHOR;
+        return 1;
+    }
+    if (lstrcmpiA(text, "crt") == 0) {
+        *value_out = PLASMA_EMULATION_TREATMENT_CRT;
+        return 1;
+    }
+    return 0;
+}
+
+static int plasma_benchlab_parse_accent_treatment(const char *text, int *value_out)
+{
+    if (text == NULL || value_out == NULL) {
+        return 0;
+    }
+    if (lstrcmpiA(text, "none") == 0) {
+        *value_out = PLASMA_ACCENT_TREATMENT_NONE;
+        return 1;
+    }
+    if (lstrcmpiA(text, "overlay_pass") == 0) {
+        *value_out = PLASMA_ACCENT_TREATMENT_OVERLAY_PASS;
+        return 1;
+    }
+    if (lstrcmpiA(text, "accent_pass") == 0) {
+        *value_out = PLASMA_ACCENT_TREATMENT_ACCENT_PASS;
+        return 1;
+    }
+    return 0;
+}
+
 static int plasma_benchlab_command_starts_with(
     const char *token,
     const char *prefix
@@ -728,6 +1028,10 @@ static int plasma_benchlab_parse_presentation_request(
         *request_out = PLASMA_BENCHLAB_PRESENTATION_AUTO;
         return 1;
     }
+    if (lstrcmpiA(text, "flat") == 0) {
+        *request_out = PLASMA_BENCHLAB_PRESENTATION_FLAT;
+        return 1;
+    }
     if (lstrcmpiA(text, "heightfield") == 0) {
         *request_out = PLASMA_BENCHLAB_PRESENTATION_HEIGHTFIELD;
         return 1;
@@ -778,6 +1082,9 @@ static plasma_presentation_mode plasma_benchlab_requested_presentation_mode(
     case PLASMA_BENCHLAB_PRESENTATION_BOUNDED_SURFACE:
         return PLASMA_PRESENTATION_MODE_BOUNDED_SURFACE;
 
+    case PLASMA_BENCHLAB_PRESENTATION_FLAT:
+        return PLASMA_PRESENTATION_MODE_FLAT;
+
     case PLASMA_BENCHLAB_PRESENTATION_AUTO:
     default:
         return PLASMA_PRESENTATION_MODE_FLAT;
@@ -826,6 +1133,18 @@ void plasma_benchlab_forcing_set_defaults(plasma_benchlab_forcing *forcing)
     forcing->transition_fallback_override = -1;
     forcing->transition_seed_policy_override = -1;
     forcing->presentation_request = PLASMA_BENCHLAB_PRESENTATION_AUTO;
+    forcing->randomization_mode_override = -1;
+    forcing->detail_level_override = -1;
+    forcing->effect_mode_override = -1;
+    forcing->speed_mode_override = -1;
+    forcing->resolution_mode_override = -1;
+    forcing->smoothing_mode_override = -1;
+    forcing->output_family_override = -1;
+    forcing->output_mode_override = -1;
+    forcing->sampling_treatment_override = -1;
+    forcing->filter_treatment_override = -1;
+    forcing->emulation_treatment_override = -1;
+    forcing->accent_treatment_override = -1;
 }
 
 void plasma_benchlab_forcing_clamp(plasma_benchlab_forcing *forcing)
@@ -935,6 +1254,90 @@ void plasma_benchlab_forcing_clamp(plasma_benchlab_forcing *forcing)
         forcing->transition_seed_policy_override = -1;
         forcing->clamp_flags |= PLASMA_BENCHLAB_CLAMP_TRANSITION_SEED;
     }
+    if (
+        forcing->randomization_mode_override < -1 ||
+        forcing->randomization_mode_override > (int)SCREENSAVE_RANDOMIZATION_MODE_SESSION
+    ) {
+        forcing->randomization_mode_override = -1;
+        forcing->clamp_flags |= PLASMA_BENCHLAB_CLAMP_RANDOMIZATION;
+    }
+    if (
+        forcing->detail_level_override < -1 ||
+        forcing->detail_level_override > (int)SCREENSAVE_DETAIL_LEVEL_HIGH
+    ) {
+        forcing->detail_level_override = -1;
+        forcing->clamp_flags |= PLASMA_BENCHLAB_CLAMP_DETAIL_LEVEL;
+    }
+    if (
+        forcing->effect_mode_override < -1 ||
+        forcing->effect_mode_override > (int)PLASMA_EFFECT_ARC
+    ) {
+        forcing->effect_mode_override = -1;
+        forcing->clamp_flags |= PLASMA_BENCHLAB_CLAMP_EFFECT_MODE;
+    }
+    if (
+        forcing->speed_mode_override < -1 ||
+        forcing->speed_mode_override > (int)PLASMA_SPEED_LIVELY
+    ) {
+        forcing->speed_mode_override = -1;
+        forcing->clamp_flags |= PLASMA_BENCHLAB_CLAMP_SPEED_MODE;
+    }
+    if (
+        forcing->resolution_mode_override < -1 ||
+        forcing->resolution_mode_override > (int)PLASMA_RESOLUTION_FINE
+    ) {
+        forcing->resolution_mode_override = -1;
+        forcing->clamp_flags |= PLASMA_BENCHLAB_CLAMP_RESOLUTION_MODE;
+    }
+    if (
+        forcing->smoothing_mode_override < -1 ||
+        forcing->smoothing_mode_override > (int)PLASMA_SMOOTHING_GLOW
+    ) {
+        forcing->smoothing_mode_override = -1;
+        forcing->clamp_flags |= PLASMA_BENCHLAB_CLAMP_SMOOTHING_MODE;
+    }
+    if (
+        forcing->output_family_override < -1 ||
+        forcing->output_family_override > (int)PLASMA_OUTPUT_FAMILY_SURFACE
+    ) {
+        forcing->output_family_override = -1;
+        forcing->clamp_flags |= PLASMA_BENCHLAB_CLAMP_OUTPUT_FAMILY;
+    }
+    if (
+        forcing->output_mode_override < -1 ||
+        forcing->output_mode_override > (int)PLASMA_OUTPUT_MODE_POSTERIZED_BANDS
+    ) {
+        forcing->output_mode_override = -1;
+        forcing->clamp_flags |= PLASMA_BENCHLAB_CLAMP_OUTPUT_MODE;
+    }
+    if (
+        forcing->sampling_treatment_override < -1 ||
+        forcing->sampling_treatment_override > (int)PLASMA_SAMPLING_TREATMENT_DITHER
+    ) {
+        forcing->sampling_treatment_override = -1;
+        forcing->clamp_flags |= PLASMA_BENCHLAB_CLAMP_SAMPLING_TREATMENT;
+    }
+    if (
+        forcing->filter_treatment_override < -1 ||
+        forcing->filter_treatment_override > (int)PLASMA_FILTER_TREATMENT_EMBOSS_EDGE
+    ) {
+        forcing->filter_treatment_override = -1;
+        forcing->clamp_flags |= PLASMA_BENCHLAB_CLAMP_FILTER_TREATMENT;
+    }
+    if (
+        forcing->emulation_treatment_override < -1 ||
+        forcing->emulation_treatment_override > (int)PLASMA_EMULATION_TREATMENT_CRT
+    ) {
+        forcing->emulation_treatment_override = -1;
+        forcing->clamp_flags |= PLASMA_BENCHLAB_CLAMP_EMULATION_TREATMENT;
+    }
+    if (
+        forcing->accent_treatment_override < -1 ||
+        forcing->accent_treatment_override > (int)PLASMA_ACCENT_TREATMENT_ACCENT_PASS
+    ) {
+        forcing->accent_treatment_override = -1;
+        forcing->clamp_flags |= PLASMA_BENCHLAB_CLAMP_ACCENT_TREATMENT;
+    }
 
     plasma_transition_preferences_set_defaults(&transition_defaults);
     if (forcing->transition_duration_override_enabled) {
@@ -960,7 +1363,7 @@ void plasma_benchlab_forcing_clamp(plasma_benchlab_forcing *forcing)
 
     if (
         forcing->presentation_request < PLASMA_BENCHLAB_PRESENTATION_AUTO ||
-        forcing->presentation_request > PLASMA_BENCHLAB_PRESENTATION_BOUNDED_SURFACE
+        forcing->presentation_request > PLASMA_BENCHLAB_PRESENTATION_FLAT
     ) {
         forcing->presentation_request = PLASMA_BENCHLAB_PRESENTATION_AUTO;
         forcing->clamp_flags |= PLASMA_BENCHLAB_CLAMP_PRESENTATION;
@@ -981,6 +1384,18 @@ void plasma_benchlab_forcing_clamp(plasma_benchlab_forcing *forcing)
         forcing->transition_interval_override_enabled ||
         forcing->transition_duration_override_enabled ||
         forcing->presentation_request != PLASMA_BENCHLAB_PRESENTATION_AUTO ||
+        forcing->randomization_mode_override >= 0 ||
+        forcing->detail_level_override >= 0 ||
+        forcing->effect_mode_override >= 0 ||
+        forcing->speed_mode_override >= 0 ||
+        forcing->resolution_mode_override >= 0 ||
+        forcing->smoothing_mode_override >= 0 ||
+        forcing->output_family_override >= 0 ||
+        forcing->output_mode_override >= 0 ||
+        forcing->sampling_treatment_override >= 0 ||
+        forcing->filter_treatment_override >= 0 ||
+        forcing->emulation_treatment_override >= 0 ||
+        forcing->accent_treatment_override >= 0 ||
         forcing->clamp_flags != 0UL;
     forcing->active = has_explicit_override ? 1 : 0;
 }
@@ -1364,6 +1779,261 @@ int plasma_benchlab_parse_command_line(
             }
             continue;
         }
+
+        if (
+            plasma_benchlab_command_starts_with(token, "plasma-randomization:") ||
+            plasma_benchlab_command_starts_with(token, "plasma_randomization:")
+        ) {
+            const char *payload;
+
+            payload = plasma_benchlab_command_payload(token, "plasma-randomization", "plasma_randomization");
+            if (
+                payload != NULL &&
+                plasma_benchlab_parse_randomization_mode(payload, &forcing->randomization_mode_override)
+            ) {
+                forcing->active = 1;
+            } else {
+                plasma_benchlab_forcing_mark_invalid(forcing, PLASMA_BENCHLAB_CLAMP_RANDOMIZATION);
+                plasma_benchlab_emit_diag(
+                    diagnostics,
+                    SCREENSAVE_DIAG_LEVEL_WARNING,
+                    6815UL,
+                    "Plasma BenchLab ignored an invalid randomization override."
+                );
+            }
+            continue;
+        }
+
+        if (
+            plasma_benchlab_command_starts_with(token, "plasma-detail:") ||
+            plasma_benchlab_command_starts_with(token, "plasma_detail:")
+        ) {
+            const char *payload;
+
+            payload = plasma_benchlab_command_payload(token, "plasma-detail", "plasma_detail");
+            if (payload != NULL && plasma_benchlab_parse_detail_level(payload, &forcing->detail_level_override)) {
+                forcing->active = 1;
+            } else {
+                plasma_benchlab_forcing_mark_invalid(forcing, PLASMA_BENCHLAB_CLAMP_DETAIL_LEVEL);
+                plasma_benchlab_emit_diag(
+                    diagnostics,
+                    SCREENSAVE_DIAG_LEVEL_WARNING,
+                    6816UL,
+                    "Plasma BenchLab ignored an invalid detail override."
+                );
+            }
+            continue;
+        }
+
+        if (
+            plasma_benchlab_command_starts_with(token, "plasma-effect:") ||
+            plasma_benchlab_command_starts_with(token, "plasma_effect:")
+        ) {
+            const char *payload;
+
+            payload = plasma_benchlab_command_payload(token, "plasma-effect", "plasma_effect");
+            if (payload != NULL && plasma_benchlab_parse_effect_mode(payload, &forcing->effect_mode_override)) {
+                forcing->active = 1;
+            } else {
+                plasma_benchlab_forcing_mark_invalid(forcing, PLASMA_BENCHLAB_CLAMP_EFFECT_MODE);
+                plasma_benchlab_emit_diag(
+                    diagnostics,
+                    SCREENSAVE_DIAG_LEVEL_WARNING,
+                    6817UL,
+                    "Plasma BenchLab ignored an invalid effect override."
+                );
+            }
+            continue;
+        }
+
+        if (
+            plasma_benchlab_command_starts_with(token, "plasma-speed:") ||
+            plasma_benchlab_command_starts_with(token, "plasma_speed:")
+        ) {
+            const char *payload;
+
+            payload = plasma_benchlab_command_payload(token, "plasma-speed", "plasma_speed");
+            if (payload != NULL && plasma_benchlab_parse_speed_mode(payload, &forcing->speed_mode_override)) {
+                forcing->active = 1;
+            } else {
+                plasma_benchlab_forcing_mark_invalid(forcing, PLASMA_BENCHLAB_CLAMP_SPEED_MODE);
+                plasma_benchlab_emit_diag(
+                    diagnostics,
+                    SCREENSAVE_DIAG_LEVEL_WARNING,
+                    6818UL,
+                    "Plasma BenchLab ignored an invalid speed override."
+                );
+            }
+            continue;
+        }
+
+        if (
+            plasma_benchlab_command_starts_with(token, "plasma-resolution:") ||
+            plasma_benchlab_command_starts_with(token, "plasma_resolution:")
+        ) {
+            const char *payload;
+
+            payload = plasma_benchlab_command_payload(token, "plasma-resolution", "plasma_resolution");
+            if (payload != NULL && plasma_benchlab_parse_resolution_mode(payload, &forcing->resolution_mode_override)) {
+                forcing->active = 1;
+            } else {
+                plasma_benchlab_forcing_mark_invalid(forcing, PLASMA_BENCHLAB_CLAMP_RESOLUTION_MODE);
+                plasma_benchlab_emit_diag(
+                    diagnostics,
+                    SCREENSAVE_DIAG_LEVEL_WARNING,
+                    6819UL,
+                    "Plasma BenchLab ignored an invalid resolution override."
+                );
+            }
+            continue;
+        }
+
+        if (
+            plasma_benchlab_command_starts_with(token, "plasma-smoothing:") ||
+            plasma_benchlab_command_starts_with(token, "plasma_smoothing:")
+        ) {
+            const char *payload;
+
+            payload = plasma_benchlab_command_payload(token, "plasma-smoothing", "plasma_smoothing");
+            if (payload != NULL && plasma_benchlab_parse_smoothing_mode(payload, &forcing->smoothing_mode_override)) {
+                forcing->active = 1;
+            } else {
+                plasma_benchlab_forcing_mark_invalid(forcing, PLASMA_BENCHLAB_CLAMP_SMOOTHING_MODE);
+                plasma_benchlab_emit_diag(
+                    diagnostics,
+                    SCREENSAVE_DIAG_LEVEL_WARNING,
+                    6820UL,
+                    "Plasma BenchLab ignored an invalid smoothing override."
+                );
+            }
+            continue;
+        }
+
+        if (
+            plasma_benchlab_command_starts_with(token, "plasma-output-family:") ||
+            plasma_benchlab_command_starts_with(token, "plasma_output_family:")
+        ) {
+            const char *payload;
+
+            payload = plasma_benchlab_command_payload(token, "plasma-output-family", "plasma_output_family");
+            if (payload != NULL && plasma_benchlab_parse_output_family(payload, &forcing->output_family_override)) {
+                forcing->active = 1;
+            } else {
+                plasma_benchlab_forcing_mark_invalid(forcing, PLASMA_BENCHLAB_CLAMP_OUTPUT_FAMILY);
+                plasma_benchlab_emit_diag(
+                    diagnostics,
+                    SCREENSAVE_DIAG_LEVEL_WARNING,
+                    6821UL,
+                    "Plasma BenchLab ignored an invalid output-family override."
+                );
+            }
+            continue;
+        }
+
+        if (
+            plasma_benchlab_command_starts_with(token, "plasma-output-mode:") ||
+            plasma_benchlab_command_starts_with(token, "plasma_output_mode:")
+        ) {
+            const char *payload;
+
+            payload = plasma_benchlab_command_payload(token, "plasma-output-mode", "plasma_output_mode");
+            if (payload != NULL && plasma_benchlab_parse_output_mode(payload, &forcing->output_mode_override)) {
+                forcing->active = 1;
+            } else {
+                plasma_benchlab_forcing_mark_invalid(forcing, PLASMA_BENCHLAB_CLAMP_OUTPUT_MODE);
+                plasma_benchlab_emit_diag(
+                    diagnostics,
+                    SCREENSAVE_DIAG_LEVEL_WARNING,
+                    6822UL,
+                    "Plasma BenchLab ignored an invalid output-mode override."
+                );
+            }
+            continue;
+        }
+
+        if (
+            plasma_benchlab_command_starts_with(token, "plasma-sampling:") ||
+            plasma_benchlab_command_starts_with(token, "plasma_sampling:")
+        ) {
+            const char *payload;
+
+            payload = plasma_benchlab_command_payload(token, "plasma-sampling", "plasma_sampling");
+            if (payload != NULL && plasma_benchlab_parse_sampling_treatment(payload, &forcing->sampling_treatment_override)) {
+                forcing->active = 1;
+            } else {
+                plasma_benchlab_forcing_mark_invalid(forcing, PLASMA_BENCHLAB_CLAMP_SAMPLING_TREATMENT);
+                plasma_benchlab_emit_diag(
+                    diagnostics,
+                    SCREENSAVE_DIAG_LEVEL_WARNING,
+                    6823UL,
+                    "Plasma BenchLab ignored an invalid sampling-treatment override."
+                );
+            }
+            continue;
+        }
+
+        if (
+            plasma_benchlab_command_starts_with(token, "plasma-filter:") ||
+            plasma_benchlab_command_starts_with(token, "plasma_filter:")
+        ) {
+            const char *payload;
+
+            payload = plasma_benchlab_command_payload(token, "plasma-filter", "plasma_filter");
+            if (payload != NULL && plasma_benchlab_parse_filter_treatment(payload, &forcing->filter_treatment_override)) {
+                forcing->active = 1;
+            } else {
+                plasma_benchlab_forcing_mark_invalid(forcing, PLASMA_BENCHLAB_CLAMP_FILTER_TREATMENT);
+                plasma_benchlab_emit_diag(
+                    diagnostics,
+                    SCREENSAVE_DIAG_LEVEL_WARNING,
+                    6824UL,
+                    "Plasma BenchLab ignored an invalid filter-treatment override."
+                );
+            }
+            continue;
+        }
+
+        if (
+            plasma_benchlab_command_starts_with(token, "plasma-emulation:") ||
+            plasma_benchlab_command_starts_with(token, "plasma_emulation:")
+        ) {
+            const char *payload;
+
+            payload = plasma_benchlab_command_payload(token, "plasma-emulation", "plasma_emulation");
+            if (payload != NULL && plasma_benchlab_parse_emulation_treatment(payload, &forcing->emulation_treatment_override)) {
+                forcing->active = 1;
+            } else {
+                plasma_benchlab_forcing_mark_invalid(forcing, PLASMA_BENCHLAB_CLAMP_EMULATION_TREATMENT);
+                plasma_benchlab_emit_diag(
+                    diagnostics,
+                    SCREENSAVE_DIAG_LEVEL_WARNING,
+                    6825UL,
+                    "Plasma BenchLab ignored an invalid emulation-treatment override."
+                );
+            }
+            continue;
+        }
+
+        if (
+            plasma_benchlab_command_starts_with(token, "plasma-accent:") ||
+            plasma_benchlab_command_starts_with(token, "plasma_accent:")
+        ) {
+            const char *payload;
+
+            payload = plasma_benchlab_command_payload(token, "plasma-accent", "plasma_accent");
+            if (payload != NULL && plasma_benchlab_parse_accent_treatment(payload, &forcing->accent_treatment_override)) {
+                forcing->active = 1;
+            } else {
+                plasma_benchlab_forcing_mark_invalid(forcing, PLASMA_BENCHLAB_CLAMP_ACCENT_TREATMENT);
+                plasma_benchlab_emit_diag(
+                    diagnostics,
+                    SCREENSAVE_DIAG_LEVEL_WARNING,
+                    6826UL,
+                    "Plasma BenchLab ignored an invalid accent-treatment override."
+                );
+            }
+            continue;
+        }
     }
 
     plasma_benchlab_forcing_clamp(forcing);
@@ -1439,6 +2109,54 @@ void plasma_benchlab_apply_forcing_to_config(
     }
     if (forcing->transition_duration_override_enabled) {
         product_config->transition.duration_millis = forcing->transition_duration_millis;
+    }
+    if (forcing->randomization_mode_override >= 0) {
+        common_config->randomization_mode =
+            (screensave_randomization_mode)forcing->randomization_mode_override;
+        common_config->randomization_scope =
+            forcing->randomization_mode_override == (int)SCREENSAVE_RANDOMIZATION_MODE_OFF
+                ? 0UL
+                : screensave_randomization_default_scope();
+    }
+    if (forcing->detail_level_override >= 0) {
+        common_config->detail_level =
+            (screensave_detail_level)forcing->detail_level_override;
+    }
+    if (forcing->effect_mode_override >= 0) {
+        product_config->effect_mode = forcing->effect_mode_override;
+    }
+    if (forcing->speed_mode_override >= 0) {
+        product_config->speed_mode = forcing->speed_mode_override;
+    }
+    if (forcing->resolution_mode_override >= 0) {
+        product_config->resolution_mode = forcing->resolution_mode_override;
+    }
+    if (forcing->smoothing_mode_override >= 0) {
+        product_config->smoothing_mode = forcing->smoothing_mode_override;
+    }
+    if (forcing->output_family_override >= 0) {
+        product_config->output_family =
+            (plasma_output_family)forcing->output_family_override;
+    }
+    if (forcing->output_mode_override >= 0) {
+        product_config->output_mode =
+            (plasma_output_mode)forcing->output_mode_override;
+    }
+    if (forcing->sampling_treatment_override >= 0) {
+        product_config->sampling_treatment =
+            (plasma_sampling_treatment)forcing->sampling_treatment_override;
+    }
+    if (forcing->filter_treatment_override >= 0) {
+        product_config->filter_treatment =
+            (plasma_filter_treatment)forcing->filter_treatment_override;
+    }
+    if (forcing->emulation_treatment_override >= 0) {
+        product_config->emulation_treatment =
+            (plasma_emulation_treatment)forcing->emulation_treatment_override;
+    }
+    if (forcing->accent_treatment_override >= 0) {
+        product_config->accent_treatment =
+            (plasma_accent_treatment)forcing->accent_treatment_override;
     }
 }
 
@@ -1584,6 +2302,72 @@ static unsigned long plasma_benchlab_build_clamp_flags(
     ) {
         flags |= PLASMA_BENCHLAB_CLAMP_PRESENTATION;
     }
+    if (
+        forcing->detail_level_override >= 0 &&
+        (int)plan->requested_detail_level != forcing->detail_level_override
+    ) {
+        flags |= PLASMA_BENCHLAB_CLAMP_DETAIL_LEVEL;
+    }
+    if (
+        forcing->effect_mode_override >= 0 &&
+        plan->requested_effect_mode != forcing->effect_mode_override
+    ) {
+        flags |= PLASMA_BENCHLAB_CLAMP_EFFECT_MODE;
+    }
+    if (
+        forcing->speed_mode_override >= 0 &&
+        plan->requested_speed_mode != forcing->speed_mode_override
+    ) {
+        flags |= PLASMA_BENCHLAB_CLAMP_SPEED_MODE;
+    }
+    if (
+        forcing->resolution_mode_override >= 0 &&
+        plan->requested_resolution_mode != forcing->resolution_mode_override
+    ) {
+        flags |= PLASMA_BENCHLAB_CLAMP_RESOLUTION_MODE;
+    }
+    if (
+        forcing->smoothing_mode_override >= 0 &&
+        plan->requested_smoothing_mode != forcing->smoothing_mode_override
+    ) {
+        flags |= PLASMA_BENCHLAB_CLAMP_SMOOTHING_MODE;
+    }
+    if (
+        forcing->output_family_override >= 0 &&
+        (int)plan->requested_output_family != forcing->output_family_override
+    ) {
+        flags |= PLASMA_BENCHLAB_CLAMP_OUTPUT_FAMILY;
+    }
+    if (
+        forcing->output_mode_override >= 0 &&
+        (int)plan->requested_output_mode != forcing->output_mode_override
+    ) {
+        flags |= PLASMA_BENCHLAB_CLAMP_OUTPUT_MODE;
+    }
+    if (
+        forcing->sampling_treatment_override >= 0 &&
+        (int)plan->requested_sampling_treatment != forcing->sampling_treatment_override
+    ) {
+        flags |= PLASMA_BENCHLAB_CLAMP_SAMPLING_TREATMENT;
+    }
+    if (
+        forcing->filter_treatment_override >= 0 &&
+        (int)plan->requested_filter_treatment != forcing->filter_treatment_override
+    ) {
+        flags |= PLASMA_BENCHLAB_CLAMP_FILTER_TREATMENT;
+    }
+    if (
+        forcing->emulation_treatment_override >= 0 &&
+        (int)plan->requested_emulation_treatment != forcing->emulation_treatment_override
+    ) {
+        flags |= PLASMA_BENCHLAB_CLAMP_EMULATION_TREATMENT;
+    }
+    if (
+        forcing->accent_treatment_override >= 0 &&
+        (int)plan->requested_accent_treatment != forcing->accent_treatment_override
+    ) {
+        flags |= PLASMA_BENCHLAB_CLAMP_ACCENT_TREATMENT;
+    }
 
     return flags;
 }
@@ -1645,6 +2429,42 @@ static void plasma_benchlab_build_clamp_summary(
     }
     if ((clamp_flags & PLASMA_BENCHLAB_CLAMP_PRESENTATION) != 0UL) {
         (void)plasma_benchlab_append_flag_name(buffer, buffer_size, "presentation");
+    }
+    if ((clamp_flags & PLASMA_BENCHLAB_CLAMP_RANDOMIZATION) != 0UL) {
+        (void)plasma_benchlab_append_flag_name(buffer, buffer_size, "randomization");
+    }
+    if ((clamp_flags & PLASMA_BENCHLAB_CLAMP_DETAIL_LEVEL) != 0UL) {
+        (void)plasma_benchlab_append_flag_name(buffer, buffer_size, "detail_level");
+    }
+    if ((clamp_flags & PLASMA_BENCHLAB_CLAMP_EFFECT_MODE) != 0UL) {
+        (void)plasma_benchlab_append_flag_name(buffer, buffer_size, "effect_mode");
+    }
+    if ((clamp_flags & PLASMA_BENCHLAB_CLAMP_SPEED_MODE) != 0UL) {
+        (void)plasma_benchlab_append_flag_name(buffer, buffer_size, "speed_mode");
+    }
+    if ((clamp_flags & PLASMA_BENCHLAB_CLAMP_RESOLUTION_MODE) != 0UL) {
+        (void)plasma_benchlab_append_flag_name(buffer, buffer_size, "resolution_mode");
+    }
+    if ((clamp_flags & PLASMA_BENCHLAB_CLAMP_SMOOTHING_MODE) != 0UL) {
+        (void)plasma_benchlab_append_flag_name(buffer, buffer_size, "smoothing_mode");
+    }
+    if ((clamp_flags & PLASMA_BENCHLAB_CLAMP_OUTPUT_FAMILY) != 0UL) {
+        (void)plasma_benchlab_append_flag_name(buffer, buffer_size, "output_family");
+    }
+    if ((clamp_flags & PLASMA_BENCHLAB_CLAMP_OUTPUT_MODE) != 0UL) {
+        (void)plasma_benchlab_append_flag_name(buffer, buffer_size, "output_mode");
+    }
+    if ((clamp_flags & PLASMA_BENCHLAB_CLAMP_SAMPLING_TREATMENT) != 0UL) {
+        (void)plasma_benchlab_append_flag_name(buffer, buffer_size, "sampling_treatment");
+    }
+    if ((clamp_flags & PLASMA_BENCHLAB_CLAMP_FILTER_TREATMENT) != 0UL) {
+        (void)plasma_benchlab_append_flag_name(buffer, buffer_size, "filter_treatment");
+    }
+    if ((clamp_flags & PLASMA_BENCHLAB_CLAMP_EMULATION_TREATMENT) != 0UL) {
+        (void)plasma_benchlab_append_flag_name(buffer, buffer_size, "emulation_treatment");
+    }
+    if ((clamp_flags & PLASMA_BENCHLAB_CLAMP_ACCENT_TREATMENT) != 0UL) {
+        (void)plasma_benchlab_append_flag_name(buffer, buffer_size, "accent_treatment");
     }
 }
 

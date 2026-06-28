@@ -21,6 +21,18 @@
 #define PLASMA_BENCHLAB_CLAMP_TRANSITION_DURATION 0x00000800UL
 #define PLASMA_BENCHLAB_CLAMP_JOURNEY_KEY 0x00001000UL
 #define PLASMA_BENCHLAB_CLAMP_PRESENTATION 0x00002000UL
+#define PLASMA_BENCHLAB_CLAMP_RANDOMIZATION 0x00004000UL
+#define PLASMA_BENCHLAB_CLAMP_DETAIL_LEVEL 0x00008000UL
+#define PLASMA_BENCHLAB_CLAMP_EFFECT_MODE 0x00010000UL
+#define PLASMA_BENCHLAB_CLAMP_SPEED_MODE 0x00020000UL
+#define PLASMA_BENCHLAB_CLAMP_RESOLUTION_MODE 0x00040000UL
+#define PLASMA_BENCHLAB_CLAMP_SMOOTHING_MODE 0x00080000UL
+#define PLASMA_BENCHLAB_CLAMP_OUTPUT_FAMILY 0x00100000UL
+#define PLASMA_BENCHLAB_CLAMP_OUTPUT_MODE 0x00200000UL
+#define PLASMA_BENCHLAB_CLAMP_SAMPLING_TREATMENT 0x00400000UL
+#define PLASMA_BENCHLAB_CLAMP_FILTER_TREATMENT 0x00800000UL
+#define PLASMA_BENCHLAB_CLAMP_EMULATION_TREATMENT 0x01000000UL
+#define PLASMA_BENCHLAB_CLAMP_ACCENT_TREATMENT 0x02000000UL
 
 struct plasma_config_tag;
 struct plasma_plan_tag;
@@ -31,7 +43,8 @@ typedef enum plasma_benchlab_presentation_request_tag {
     PLASMA_BENCHLAB_PRESENTATION_CURTAIN = 2,
     PLASMA_BENCHLAB_PRESENTATION_RIBBON = 3,
     PLASMA_BENCHLAB_PRESENTATION_CONTOUR_EXTRUSION = 4,
-    PLASMA_BENCHLAB_PRESENTATION_BOUNDED_SURFACE = 5
+    PLASMA_BENCHLAB_PRESENTATION_BOUNDED_SURFACE = 5,
+    PLASMA_BENCHLAB_PRESENTATION_FLAT = 6
 } plasma_benchlab_presentation_request;
 
 typedef struct plasma_benchlab_forcing_tag {
@@ -53,6 +66,18 @@ typedef struct plasma_benchlab_forcing_tag {
     int transition_duration_override_enabled;
     unsigned long transition_duration_millis;
     plasma_benchlab_presentation_request presentation_request;
+    int randomization_mode_override;
+    int detail_level_override;
+    int effect_mode_override;
+    int speed_mode_override;
+    int resolution_mode_override;
+    int smoothing_mode_override;
+    int output_family_override;
+    int output_mode_override;
+    int sampling_treatment_override;
+    int filter_treatment_override;
+    int emulation_treatment_override;
+    int accent_treatment_override;
 } plasma_benchlab_forcing;
 
 typedef struct plasma_benchlab_snapshot_tag {

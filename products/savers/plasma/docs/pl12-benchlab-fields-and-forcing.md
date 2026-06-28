@@ -99,7 +99,19 @@ Implemented forcing subset:
 | `/plasma-transition-seed:` | Requests transition seed continuity policy | policy must parse |
 | `/plasma-transition-interval:` | Requests transition interval | value is clamped into supported bounds |
 | `/plasma-transition-duration:` | Requests transition duration | value is clamped into supported bounds |
-| `/plasma-presentation:` | Requests bounded product-local presentation uplift | `auto`, `heightfield`, `curtain`, `ribbon`, `contour_extrusion`, and `bounded_surface` are supported |
+| `/plasma-presentation:` | Requests bounded product-local presentation uplift or the flat stable path | `auto`, `flat`, `heightfield`, `curtain`, `ribbon`, `contour_extrusion`, and `bounded_surface` are supported |
+| `/plasma-randomization:` | Overrides randomization posture | `off` and `session` are supported |
+| `/plasma-detail:` | Overrides detail level | `low`, `standard`, and `high` are supported |
+| `/plasma-effect:` | Overrides field/equation family | product field family token must parse |
+| `/plasma-speed:` | Overrides speed mode | `gentle`, `standard`, and `lively` are supported |
+| `/plasma-resolution:` | Overrides field resolution policy | `coarse`, `standard`, and `fine` are supported |
+| `/plasma-smoothing:` | Overrides smoothing mode | `off`, `soft`, and `glow` are supported |
+| `/plasma-output-family:` | Overrides output family | stable proof use should prefer `raster`; other supported families remain bounded experiments |
+| `/plasma-output-mode:` | Overrides output mode | mode must parse and remain valid for the output family |
+| `/plasma-sampling:` | Overrides sampling treatment | `none`, `nearest`, `soft`, and `dither` are supported |
+| `/plasma-filter:` | Overrides filter treatment | product treatment token must parse and remain supported |
+| `/plasma-emulation:` | Overrides emulation treatment | `none`, `phosphor`, and `crt` are supported |
+| `/plasma-accent:` | Overrides accent treatment | `none`, `overlay_pass`, and `accent_pass` are supported |
 
 Shared BenchLab controls still used:
 
@@ -115,6 +127,8 @@ Key availability rules in the current implementation:
 - transition interval and duration overrides are bounded and clamped
 - product-local forcing still flows through normal config clamping and plan validation
 - a requested premium-only presentation uplift only becomes real if the resolved lane and current plan actually support it
+- direct-control forcing changes the requested config/spec inputs used by the normal plan path; it does not mutate the renderer or runtime behind the compiled plan
+- the default-demo smoke posture is expressed with direct-control forcing rather than a hidden BenchLab preset
 
 ## Resolved, Clamped, And Degraded Reporting Rules
 
@@ -125,6 +139,7 @@ Reporting follows these rules:
 - resolved values describe what Plasma actually executed
 - `degraded_from` and `degraded_to` identify lane degrade outcomes
 - clamp flags and clamp summary identify invalid or unsupported forcing outcomes
+- direct-control clamps include detail, effect, speed, resolution, smoothing, output, and treatment-slot controls
 
 This keeps impossible or unsupported requests visible instead of silently disappearing.
 
@@ -150,6 +165,7 @@ Implemented now:
 Prepared for later:
 
 - broader forcing coverage
+- screenshot capture assertions for direct-control forcing reports
 - richer inspection depth
 - deeper validation automation
 - final release-grade evidence layers
