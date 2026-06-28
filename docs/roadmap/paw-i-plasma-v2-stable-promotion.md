@@ -28,11 +28,11 @@ Plasma is not a preset picker. Plasma is a visual instrument.
 
 ## Intake State
 
-- Active program: `plasma-v2-stable-promotion`
-- Plasma v2 status: `release-candidate`
+- Active program: `plasma-v2-publication-prep`
+- Plasma v2 status: `stable-promoted`
 - Release candidate: `plasma-v2-rc1`
-- Stable: `false`
-- Release promotion: `blocked`
+- Stable: `true`
+- Release promotion: `accepted`
 - Active proof profile: `plasma.v2.reference.preview`
 
 ## Allowed Outcomes
@@ -72,19 +72,19 @@ separately gated unless an explicit publication-prep packet is added.
 
 ## PAW-I Decision
 
-PAW-I ended in `release-candidate-hold`, not stable promotion.
+PAW-I ended in `stable-promoted` for the Plasma v2 rc1 reference-preview
+scope.
 
-The stable-promotion gate remains structurally runnable, but the final stable
-artistic decision remained `request-changes` and the instrument-architecture
-audit is now a distinct promotion requirement. The stable-promotion report must
-recommend `release-candidate-hold` unless both final artistic acceptance and
-instrument architecture are ready. It keeps `stable = false` with
-`release_promotion = "blocked"`.
+The stable-promotion gate is promotion-ready, the final stable artistic
+decision is `accepted-for-stable`, the instrument-architecture audit is
+promotion-ready with no blocking gates, and the repair burn-down has no open
+stable-promotion blockers. The project state records `stable = true` with
+`release_promotion = "accepted"`.
 
-## Repair Handoff
+## Publication-Prep Handoff
 
-- Next active program: `plasma-v2-instrument-repair`
-- Blocking WorkUnit: `SS-PLV2-I-REPAIR-001`
+- Next active program: `plasma-v2-publication-prep`
+- Stable scope: `plasma-v2-rc1` / `plasma.v2.reference.preview`
 - Gate report:
   `validation/captures/plasma-v2/stable-promotion/gate-report.json`
 - Instrument architecture audit:
@@ -92,5 +92,6 @@ instrument architecture are ready. It keeps `stable = false` with
 - Repair burndown:
   `validation/captures/plasma-v2/stable-promotion/repair-burndown.json`
 
-No publication packet, broad compatibility certification, public SDK stability
-claim, automatic AIDE promotion, or all-saver migration was admitted.
+No public release publication, broad compatibility certification, public SDK
+stability claim, automatic AIDE promotion, platform expansion, or all-saver
+migration was admitted.

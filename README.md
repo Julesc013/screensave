@@ -52,17 +52,18 @@ planning and implementation without implying release promotion, public SDK
 stability, all-saver migration, compatibility certification, or artistic
 acceptance.
 
-Plasma v2 is now recorded as `plasma-v2-rc1` in `release-candidate-hold`, not
-a stable release. The preview profile remains `plasma.v2.reference.preview`;
-the release-candidate package, proof matrix, stable-promotion package staging,
-support wording, provenance/security review, Manager review, and Workbench
-review all exist. PAW-I held at the final stable artistic decision because an
-explicit final human acceptance is still required. Stable promotion,
-publication, compatibility certification, public SDK stability, and all-saver
-migration remain blocked.
-The active repair direction starts with a direct-control-first Plasma v2
-instrument spec island under `products/savers/plasma/src/v2/`, keeping the old
-engine as compatibility evidence rather than the new product center.
+Plasma v2 is now recorded as `plasma-v2-rc1` in `stable-promoted` state for
+the `plasma.v2.reference.preview` profile. The release-candidate package,
+proof matrix, stable-promotion package staging, support wording,
+provenance/security review, Manager review, Workbench review, instrument audit,
+and project-owned final stable artistic acceptance all pass for that scoped
+slice. Public release publication, compatibility certification broadening,
+public SDK stability, all-saver migration, and platform expansion remain
+separate gates.
+The next active direction is Plasma v2 publication prep. The product remains a
+direct-control-first instrument spec island under
+`products/savers/plasma/src/v2/`, keeping the old engine as compatibility
+evidence rather than the new product center.
 
 ## Download ScreenSave Core
 

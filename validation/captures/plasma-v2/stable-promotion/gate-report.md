@@ -11,7 +11,7 @@
 
 ## Checks
 
-- pass: project-state-before-or-hold - Project state is a release candidate before the decision or a non-stable hold after the decision.
+- pass: project-state-transition - Project state is a release candidate, a valid hold, or the accepted stable-promoted transition.
 - pass: release-candidate-gate - Command passed.
 - pass: stable-promotion-contract - Command passed.
 - pass: instrument-architecture-audit - Command passed.

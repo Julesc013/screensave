@@ -16,14 +16,14 @@ CLAIMS = ROOT / "validation" / "captures" / "plasma-v2" / "stable-promotion" / "
 DECISION = ROOT / "validation" / "captures" / "plasma-v2" / "final-artistic-decision" / "decision.stable.toml"
 
 PRODUCT_PHRASES = [
-    "Status: stable-promotion support packet, release-candidate hold.",
+    "Status: stable-promotion support packet, stable-promoted for Plasma v2 rc1",
     "buildable",
     "targeted",
     "experimental",
     "GDI remains the universal floor",
     "GL11 candidate evidence is compared against the software reference",
     "does not make a compatibility certification claim",
-    "does not turn release-candidate readiness into stable release promotion",
+    "does not publish a public release",
 ]
 
 COMPAT_PHRASES = [
@@ -35,7 +35,7 @@ COMPAT_PHRASES = [
     "`packc` v1-candidate remains data-only",
     "Manager preview does not imply install mutation",
     "Workbench release-readiness does not imply publication",
-    "held until final human artistic acceptance is supplied",
+    "final human artistic acceptance is supplied",
 ]
 
 FORBIDDEN_TEXT = [

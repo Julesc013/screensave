@@ -1,13 +1,14 @@
-# Plasma v2 Stable Hold
+# Plasma v2 Stable Hold Resolution
 
-Plasma v2 rc1 is held before stable promotion.
+Plasma v2 rc1 was previously held before stable promotion. That hold is now
+resolved by the project-owned `accepted-for-stable` verdict.
 
 ## Status
 
 - Product candidate: `plasma-v2-rc1`
-- State: `release-candidate-hold`
-- Stable: `false`
-- Release promotion: `blocked`
+- State: `stable-promoted`
+- Stable: `true`
+- Release promotion: `accepted`
 - Active profile: `plasma.v2.reference.preview`
 
 ## What Exists
@@ -18,12 +19,13 @@ Plasma v2 rc1 is held before stable promotion.
 - Support, known-limits, provenance, security, Manager, and Workbench review
   records
 
-## Why It Is Held
+## Resolution
 
-The final stable artistic decision is `request-changes`. The release candidate
-therefore remains a candidate until explicit final stable acceptance exists.
+The final stable artistic decision is `accepted-for-stable` for Plasma v2 rc1
+reference-preview scope. The stable-promotion gate reports `promotion-ready`
+and the repair burn-down has no open stable-promotion blockers.
 
 ## Boundaries
 
-This hold does not publish a release, certify broad compatibility, freeze a
-public SDK, or widen Plasma v2 beyond the reviewed rc1 scope.
+This resolution does not publish a release, certify broad compatibility, freeze
+a public SDK, or widen Plasma v2 beyond the reviewed rc1 scope.

@@ -6,7 +6,7 @@ as_of = "2026-06-27"
 current_truth = "truth-proof-baseline"
 public_release = "c16-core-baseline"
 development_head = "plasma-u09-corrective-recut"
-active_program = "plasma-v2-instrument-repair"
+active_program = "plasma-v2-publication-prep"
 release_candidate = "plasma-v2-rc1"
 queue_authority = "historical-mx-queue-superseded"
 product_catalog = "catalog/products.toml"
@@ -39,7 +39,7 @@ artifact_currency = "frozen-release-artifacts-do-not-represent-u09-development-h
 
 [development]
 status = "post-c16-development-head"
-active_program = "plasma-v2-instrument-repair"
+active_program = "plasma-v2-publication-prep"
 current_product_truth = "products/savers/plasma/docs/u09-stable-recut.md"
 ship_posture = "GO_WITH_CAVEATS"
 ship_posture_source = "products/savers/plasma/docs/u09-ship-posture.md"
@@ -194,17 +194,17 @@ required_boundaries = [
 ]
 
 [plasma_v2]
-status = "release-candidate-hold"
-stable = false
+status = "stable-promoted"
+stable = true
 release_candidate = "plasma-v2-rc1"
 active_profile = "plasma.v2.reference.preview"
 packc = "v1-candidate"
 manager_preview = "ready"
 workbench_release_readiness = "ready"
 visual_review = "stable-candidate-round-recorded"
-artistic_acceptance = "request-changes"
-release_promotion = "blocked"
-opened_next = "plasma-v2-instrument-repair"
+artistic_acceptance = "accepted-for-stable"
+release_promotion = "accepted"
+opened_next = "plasma-v2-publication-prep"
 proof = "validation/captures/plasma-v2/reference-preview/profile-proof.json"
 proof_bundle = "validation/captures/plasma-v2/reference-preview/proof-bundle-v1.json"
 preview_gate = "validation/captures/plasma-v2/preview-gate/gate-report.json"
@@ -245,8 +245,7 @@ stable_workbench_review = "validation/captures/plasma-v2/stable-promotion/workbe
 stable_artistic_decision = "validation/captures/plasma-v2/final-artistic-decision/decision.stable.toml"
 stable_promotion_gate = "validation/captures/plasma-v2/stable-promotion/gate-report.json"
 stable_repair_burndown = "validation/captures/plasma-v2/stable-promotion/repair-burndown.json"
-stable_blocker = "SS-PLV2-I-REPAIR-001"
-claim_boundary = "Release candidate hold only; stable release promotion is blocked pending explicit final stable artistic acceptance and instrument architecture audit readiness. No publication, compatibility certification, public SDK stability, or all-saver migration is claimed."
+claim_boundary = "Stable promotion accepted for Plasma v2 rc1 profile only; release publication, compatibility certification broadening, public SDK stability, all-saver migration, and platform expansion remain separate gates."
 
 [doctrine]
 schema_version = 1

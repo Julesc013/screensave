@@ -121,15 +121,25 @@ def validate_state(results: list[dict[str, Any]]) -> None:
     add_result(
         results,
         "plasma-status",
-        status in {"release-readiness-reviewed", "release-candidate", "release-candidate-hold"},
-        "Plasma v2 must be at release-readiness-reviewed before transition, release-candidate after transition, or release-candidate-hold after stable-promotion review.",
+        status in {"release-readiness-reviewed", "release-candidate", "release-candidate-hold", "stable-promoted"},
+        "Plasma v2 must be at release-readiness-reviewed, release-candidate, release-candidate-hold, or stable-promoted.",
         observed=status,
     )
+    stable_promoted = status == "stable-promoted"
     add_result(
         results,
-        "plasma-not-stable",
-        plasma.get("stable") is False and plasma.get("release_promotion") == "blocked",
-        "Plasma v2 must remain not stable and release promotion must remain blocked.",
+        "plasma-stability-state",
+        (
+            stable_promoted
+            and plasma.get("stable") is True
+            and plasma.get("release_promotion") == "accepted"
+        )
+        or (
+            not stable_promoted
+            and plasma.get("stable") is False
+            and plasma.get("release_promotion") == "blocked"
+        ),
+        "Plasma v2 stability fields must match the current lifecycle state.",
         stable=plasma.get("stable"),
         release_promotion=plasma.get("release_promotion"),
     )
@@ -149,8 +159,11 @@ def validate_state(results: list[dict[str, Any]]) -> None:
             "Before transition, the active program must be plasma-v2-release-candidate.",
             observed=authority.get("active_program"),
         )
-    if status in {"release-candidate", "release-candidate-hold"}:
-        expected_program = "plasma-v2-instrument-repair" if status == "release-candidate-hold" else "plasma-v2-stable-promotion"
+    if status in {"release-candidate", "release-candidate-hold", "stable-promoted"}:
+        if status == "stable-promoted":
+            expected_program = "plasma-v2-publication-prep"
+        else:
+            expected_program = "plasma-v2-instrument-repair" if status == "release-candidate-hold" else "plasma-v2-stable-promotion"
         add_result(
             results,
             "post-transition-release-candidate",
@@ -240,6 +253,8 @@ def validate_capabilities(results: list[dict[str, Any]]) -> None:
 
 
 def scan_overclaims(results: list[dict[str, Any]]) -> None:
+    state = load_toml(STATE)
+    stable_promoted = state.get("plasma_v2", {}).get("status") == "stable-promoted"
     paths = [
         ROOT / "PROJECT_STATE.toml",
         ROOT / "VERSION.toml",
@@ -248,16 +263,21 @@ def scan_overclaims(results: list[dict[str, Any]]) -> None:
         ROOT / "validation" / "captures" / "plasma-v2" / "release-candidate" / "support-claims.json",
     ]
     forbidden = [
-        "stable = true",
-        "release_promotion = \"accepted\"",
         "compatibility_certification = \"certified\"",
         "public_release = true",
         "published = true",
         "stable-release-published",
         "screensave.release.publish",
-        "screensave.promote.stable",
         "screensave.agent.apply",
     ]
+    if not stable_promoted:
+        forbidden.extend(
+            [
+                "stable = true",
+                "release_promotion = \"accepted\"",
+                "screensave.promote.stable",
+            ]
+        )
     hits: list[str] = []
     for path in paths:
         if not path.exists():

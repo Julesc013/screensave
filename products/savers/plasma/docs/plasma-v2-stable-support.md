@@ -1,6 +1,7 @@
 # Plasma v2 Stable-Promotion Support
 
-Status: stable-promotion support packet, release-candidate hold.
+Status: stable-promotion support packet, stable-promoted for Plasma v2 rc1
+reference-preview scope.
 
 Plasma v2 stable-promotion support is evidence-classed:
 
@@ -12,8 +13,8 @@ Plasma v2 stable-promotion support is evidence-classed:
 | Pack data | buildable | `packc` v1-candidate compiles bounded data-only Plasma packs. |
 | Manager | experimental | Manager can preview pack facts and refusal reasons without installation mutation. |
 | Workbench | experimental | Workbench can inspect release-readiness facts without publication authority. |
-| Final stable artistic decision | blocked | The stable-promotion review is held until an explicit operator verdict is supplied. |
+| Final stable artistic decision | accepted | ScreenSave project authority supplied `accepted-for-stable` for Plasma v2 rc1. |
 
 This support packet does not make a compatibility certification claim.
-It does not turn release-candidate readiness into stable release promotion.
+It does not publish a public release.
 It does not broaden Plasma v2 beyond the current Windows candidate scope.

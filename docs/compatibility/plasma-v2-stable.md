@@ -19,7 +19,7 @@ Rules:
   plugin ecosystem.
 - Manager preview does not imply install mutation.
 - Workbench release-readiness does not imply publication.
-- The current stable-promotion review is held until final human artistic acceptance is supplied.
+- final human artistic acceptance is supplied for Plasma v2 rc1 scope, but it does not create operating-system certification, publication, or broader compatibility coverage.
 
 Only evidence explicitly classified as `certified` may be worded as ordinary
 public compatibility coverage.

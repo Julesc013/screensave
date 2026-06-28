@@ -3,13 +3,13 @@
   "checks": [
     {
       "data": {
-        "active_program": "plasma-v2-instrument-repair",
-        "development_active_program": "plasma-v2-instrument-repair",
-        "plasma_status": "release-candidate-hold"
+        "active_program": "plasma-v2-publication-prep",
+        "development_active_program": "plasma-v2-publication-prep",
+        "plasma_status": "stable-promoted"
       },
-      "id": "project-state-before-or-hold",
+      "id": "project-state-transition",
       "status": "pass",
-      "summary": "Project state is a release candidate before the decision or a non-stable hold after the decision."
+      "summary": "Project state is a release candidate, a valid hold, or the accepted stable-promoted transition."
     },
     {
       "data": {
@@ -370,7 +370,7 @@
   "schema": "screensave.plasma-v2.stable-promotion.gate-report.v1",
   "source": {
     "branch": "main",
-    "commit": "90f6f77b0ef6de870a3b58d9a3b0879fa4812593",
+    "commit": "91e9e99fb2b6b31323f6917dd357fffff92c4dba",
     "dirty": true
   },
   "status": "promotion-ready"

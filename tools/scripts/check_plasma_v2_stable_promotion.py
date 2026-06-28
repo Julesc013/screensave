@@ -107,15 +107,27 @@ def build_report() -> dict[str, Any]:
     state_status = plasma.get("status")
     is_pre_transition = state_status == "release-candidate"
     is_hold_transition = state_status in {"release-candidate-hold", "request-changes", "defer-to-labs"}
+    is_promoted_transition = state_status == "stable-promoted"
     add_check(
         checks,
-        "project-state-before-or-hold",
-        (is_pre_transition or is_hold_transition)
-        and plasma.get("stable") is False
-        and plasma.get("release_promotion") == "blocked"
+        "project-state-transition",
+        (
+            (
+                (is_pre_transition or is_hold_transition)
+                and plasma.get("stable") is False
+                and plasma.get("release_promotion") == "blocked"
+            )
+            or (
+                is_promoted_transition
+                and plasma.get("stable") is True
+                and plasma.get("release_promotion") == "accepted"
+                and authority.get("active_program") == "plasma-v2-publication-prep"
+                and development.get("active_program") == "plasma-v2-publication-prep"
+            )
+        )
         and plasma.get("release_candidate") == "plasma-v2-rc1"
         and authority.get("release_candidate") == "plasma-v2-rc1",
-        "Project state is a release candidate before the decision or a non-stable hold after the decision.",
+        "Project state is a release candidate, a valid hold, or the accepted stable-promoted transition.",
         plasma_status=state_status,
         active_program=authority.get("active_program"),
         development_active_program=development.get("active_program"),
