@@ -50,9 +50,16 @@ For the default `plasma` effect, the runtime now favors:
   monitor or virtual desktop surface, so 1440p, 1080p, 4K, VGA, and mixed
   monitor layouts receive a native output surface from the host
 - adaptive high-resolution field sizing outside preview mode when high detail
-  and fine resolution are selected, capped around a 960x540 internal field on
-  GDI and a 1280x720 internal field on optional GL presentation tiers so
-  fullscreen HD/FHD/UHD displays do not stall on desktop-pixel field synthesis
+  and fine resolution are selected. The default demo now uses tiered caps:
+  1280x720 for GDI, 1920x1080 for GL11, 2560x1440 for GL21, and up to
+  6144x2304 for GL33/GL46. Smaller drawable surfaces run at native field
+  resolution; larger virtual desktops are scaled down as one continuous field
+  instead of tiled per-monitor chunks.
+- aspect-aware virtual-desktop coordinates with an edge guard. The visible
+  field maps into a larger procedural domain so sharp mathematical fold
+  boundaries are pushed outside the drawable or aligned to the outer virtual
+  desktop edges, reducing visible seams and repeated bands across mixed
+  monitor layouts.
 - renderer-side presentation from the internal semantic field to the native
   drawable surface, with the same equation/material/treatment state across
   GDI, GL11, GL21, GL33, and GL46 where those lanes are available
@@ -60,6 +67,9 @@ For the default `plasma` effect, the runtime now favors:
   reading as a stream of still fields
 - classic layered plasma wave synthesis: horizontal, vertical, diagonal, and
   two slowly drifting radial wave sources resolved into one scalar field
+- slow equation morphing inside the default lava field. The lava equation
+  remains the visual anchor, while secondary field families blend into it
+  procedurally instead of cutting or fading between presets.
 - no random composition jumps in the default plasma effect; non-default effects
   can still use composition refresh as explicit alternate modes
 - direct smooth RGB palette cycling from the scalar plasma field, instead of
@@ -136,8 +146,9 @@ display refresh (`VREFRESH`) with a 16ms fallback. A 155Hz panel therefore gets
 an approximately 6ms timer request, while a 60Hz display gets an approximately
 17ms timer request. This is a request, not a guarantee: the real frame cadence
 still depends on Windows timer delivery, display refresh, driver behavior,
-renderer initialization, and machine load. The Plasma field budget is therefore
-kept below desktop-pixel cost by default.
+renderer initialization, and machine load. The Plasma field budget is tiered by
+renderer capability. GL33/GL46 can now receive much larger field surfaces than
+the earlier 720p cap, while GDI remains bounded as the compatibility floor.
 
 GL33 and GL46 bitmap presentation now reuse a renderer-owned texture and upload
 buffer instead of allocating a conversion buffer and texture every frame. The
@@ -148,16 +159,17 @@ unchanged while removing a major jitter source from the higher renderer lanes.
 The adaptive field cap is the product-local foundation for broad monitor
 coverage:
 
-- VGA and small preview sizes can run close to native field resolution.
-- HD and FHD displays use a high-resolution internal field sized for smooth
-  per-frame synthesis.
-- UHD/4K and larger displays avoid linear desktop-pixel cost and rely on
-  renderer presentation into the native drawable surface.
+- VGA, HD, and FHD displays can run close to or exactly at native field
+  resolution depending on renderer tier.
+- 1440p displays are covered natively on GL21 and higher.
+- 4K and broad mixed-monitor layouts are covered by the high GL33/GL46 field
+  budget when they fit within the 6144x2304 cap; larger desktop walls remain
+  one continuous scaled field rather than mirrored or repeated tiles.
 - Multiple monitors are treated through the host-provided virtual desktop
   drawable size. This covers mixed monitor layouts, but the current host still
   owns one timer for one saver window. Per-monitor timing, per-monitor windows,
-  and explicit vsync control are future platform work for heterogeneous
-  155Hz/60Hz setups.
+  explicit vsync control, and shader-side field synthesis are future platform
+  work for heterogeneous 155Hz/60Hz setups and arbitrarily large monitor walls.
 
 The next platform-level optimization should be a shared renderer capability and
 frame-budget service that lets products request a semantic quality target while
@@ -174,15 +186,17 @@ GL shader or texture-pipeline work must never become the only way Plasma runs.
 - Design shared per-monitor frame-budget, vsync, and renderer capability
   services as separate platform gates; this repair keeps the product-local
   runtime smooth under the existing host frame contract.
-- Add shader/native-field implementations for GL33/GL46 if CPU field synthesis
-  remains too expensive for native high-refresh targets.
+- Add shader/native-field implementations for GL33/GL46 so arbitrarily large
+  native-resolution monitor walls can stay high-refresh without relying on CPU
+  desktop-pixel synthesis.
 - Refresh release/package manifests only if the rebuilt artifact replaces the
   staged publication artifact.
 - Add renderer-tier comparison captures for GL11, GL21, and GL33 where local
   hardware exposes those paths.
 - Add explicit UI controls for field wavelength, radial-source drift, palette
-  drift, and future equation morphing if the project wants these as named direct
-  controls rather than just default-demo runtime posture.
+  drift, edge guard, field cap policy, and equation morphing if the project
+  wants these as named direct controls rather than just default-demo runtime
+  posture.
 - Surface this default posture through a future Workbench direct-control panel.
 - Keep graph-style authoring, if added later, lowering into the same
   spec/plan/runtime path rather than becoming runtime authority.

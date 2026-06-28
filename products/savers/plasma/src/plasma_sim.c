@@ -3,13 +3,19 @@
 
 #include "plasma_internal.h"
 
-#define PLASMA_DEFAULT_DEMO_GDI_MAX_FIELD_WIDTH 960
-#define PLASMA_DEFAULT_DEMO_GDI_MAX_FIELD_HEIGHT 540
-#define PLASMA_DEFAULT_DEMO_GL_MAX_FIELD_WIDTH 1280
-#define PLASMA_DEFAULT_DEMO_GL_MAX_FIELD_HEIGHT 720
+#define PLASMA_DEFAULT_DEMO_GDI_MAX_FIELD_WIDTH 1280
+#define PLASMA_DEFAULT_DEMO_GDI_MAX_FIELD_HEIGHT 720
+#define PLASMA_DEFAULT_DEMO_GL11_MAX_FIELD_WIDTH 1920
+#define PLASMA_DEFAULT_DEMO_GL11_MAX_FIELD_HEIGHT 1080
+#define PLASMA_DEFAULT_DEMO_GL21_MAX_FIELD_WIDTH 2560
+#define PLASMA_DEFAULT_DEMO_GL21_MAX_FIELD_HEIGHT 1440
+#define PLASMA_DEFAULT_DEMO_GL_HIGH_MAX_FIELD_WIDTH 6144
+#define PLASMA_DEFAULT_DEMO_GL_HIGH_MAX_FIELD_HEIGHT 2304
 #define PLASMA_DEFAULT_DEMO_MIN_FIELD_WIDTH 320
 #define PLASMA_DEFAULT_DEMO_MIN_FIELD_HEIGHT 180
-#define PLASMA_DEFAULT_DEMO_DOMAIN_SIZE 1024
+#define PLASMA_DEFAULT_DEMO_DOMAIN_SIZE 3072
+#define PLASMA_DEFAULT_DEMO_DOMAIN_MAX 8192
+#define PLASMA_DEFAULT_DEMO_EDGE_GUARD 192
 
 static int plasma_field_size_is_safe(const screensave_sizei *size)
 {
@@ -151,14 +157,18 @@ static void plasma_compute_default_demo_field_size(
     source_height = state->drawable_size.height > 0 ? state->drawable_size.height : 1;
     max_width = PLASMA_DEFAULT_DEMO_GDI_MAX_FIELD_WIDTH;
     max_height = PLASMA_DEFAULT_DEMO_GDI_MAX_FIELD_HEIGHT;
-    if (
-        state->active_renderer_kind == SCREENSAVE_RENDERER_KIND_GL11 ||
-        state->active_renderer_kind == SCREENSAVE_RENDERER_KIND_GL21 ||
+    if (state->active_renderer_kind == SCREENSAVE_RENDERER_KIND_GL11) {
+        max_width = PLASMA_DEFAULT_DEMO_GL11_MAX_FIELD_WIDTH;
+        max_height = PLASMA_DEFAULT_DEMO_GL11_MAX_FIELD_HEIGHT;
+    } else if (state->active_renderer_kind == SCREENSAVE_RENDERER_KIND_GL21) {
+        max_width = PLASMA_DEFAULT_DEMO_GL21_MAX_FIELD_WIDTH;
+        max_height = PLASMA_DEFAULT_DEMO_GL21_MAX_FIELD_HEIGHT;
+    } else if (
         state->active_renderer_kind == SCREENSAVE_RENDERER_KIND_GL33 ||
         state->active_renderer_kind == SCREENSAVE_RENDERER_KIND_GL46
     ) {
-        max_width = PLASMA_DEFAULT_DEMO_GL_MAX_FIELD_WIDTH;
-        max_height = PLASMA_DEFAULT_DEMO_GL_MAX_FIELD_HEIGHT;
+        max_width = PLASMA_DEFAULT_DEMO_GL_HIGH_MAX_FIELD_WIDTH;
+        max_height = PLASMA_DEFAULT_DEMO_GL_HIGH_MAX_FIELD_HEIGHT;
     }
 
     field_size->width = source_width;
@@ -743,6 +753,8 @@ typedef struct plasma_demo_runtime_wave_tag {
 typedef struct plasma_demo_morph_context_tag {
     plasma_demo_runtime_wave waves[4];
     plasma_demo_profile profile;
+    int domain_width;
+    int domain_height;
     unsigned int warp_base;
     unsigned int extra_phase_base;
 } plasma_demo_morph_context;
@@ -845,15 +857,74 @@ static void plasma_demo_profile_morph(
     profile->phase_bias = plasma_mix_u8(source->phase_bias, target->phase_bias, amount);
 }
 
+static int plasma_demo_clamp_domain_size(long value)
+{
+    if (value < (long)PLASMA_DEFAULT_DEMO_DOMAIN_SIZE) {
+        return PLASMA_DEFAULT_DEMO_DOMAIN_SIZE;
+    }
+    if (value > (long)PLASMA_DEFAULT_DEMO_DOMAIN_MAX) {
+        return PLASMA_DEFAULT_DEMO_DOMAIN_MAX;
+    }
+    return (int)value;
+}
+
+static void plasma_demo_domain_size(
+    const plasma_execution_state *state,
+    int *width_out,
+    int *height_out
+)
+{
+    int source_width;
+    int source_height;
+    long domain_width;
+    long domain_height;
+
+    if (width_out == NULL || height_out == NULL) {
+        return;
+    }
+
+    source_width = 1;
+    source_height = 1;
+    if (state != NULL) {
+        source_width = state->drawable_size.width > 0 ? state->drawable_size.width : state->field_size.width;
+        source_height = state->drawable_size.height > 0 ? state->drawable_size.height : state->field_size.height;
+    }
+    if (source_width <= 0) {
+        source_width = 1;
+    }
+    if (source_height <= 0) {
+        source_height = 1;
+    }
+
+    if (source_width >= source_height) {
+        domain_height = PLASMA_DEFAULT_DEMO_DOMAIN_SIZE;
+        domain_width =
+            ((long)PLASMA_DEFAULT_DEMO_DOMAIN_SIZE * (long)source_width) /
+            (long)source_height;
+    } else {
+        domain_width = PLASMA_DEFAULT_DEMO_DOMAIN_SIZE;
+        domain_height =
+            ((long)PLASMA_DEFAULT_DEMO_DOMAIN_SIZE * (long)source_height) /
+            (long)source_width;
+    }
+
+    *width_out = plasma_demo_clamp_domain_size(domain_width);
+    *height_out = plasma_demo_clamp_domain_size(domain_height);
+}
+
 static void plasma_demo_source_position(
     const plasma_execution_state *state,
     unsigned int source_id,
+    int domain_width,
+    int domain_height,
     int *x_out,
     int *y_out
 )
 {
     unsigned int phase_x;
     unsigned int phase_y;
+    long span_x;
+    long span_y;
 
     if (x_out == NULL || y_out == NULL) {
         return;
@@ -870,8 +941,19 @@ static void plasma_demo_source_position(
         phase_y = (unsigned int)(((state->source_phase_a / 8UL) + 42UL) & 255UL);
     }
 
-    *x_out = (int)(((unsigned long)PLASMA_DEFAULT_DEMO_DOMAIN_SIZE * plasma_triangle_wave(phase_x)) / 255UL);
-    *y_out = (int)(((unsigned long)PLASMA_DEFAULT_DEMO_DOMAIN_SIZE * plasma_triangle_wave(phase_y)) / 255UL);
+    if (domain_width <= 0) {
+        domain_width = PLASMA_DEFAULT_DEMO_DOMAIN_SIZE;
+    }
+    if (domain_height <= 0) {
+        domain_height = PLASMA_DEFAULT_DEMO_DOMAIN_SIZE;
+    }
+
+    span_x = ((long)domain_width * 58L) / 100L;
+    span_y = ((long)domain_height * 58L) / 100L;
+    *x_out = (domain_width / 2) +
+        (int)(((span_x * (long)plasma_triangle_wave(phase_x)) / 255L) - (span_x / 2L));
+    *y_out = (domain_height / 2) +
+        (int)(((span_y * (long)plasma_triangle_wave(phase_y)) / 255L) - (span_y / 2L));
 }
 
 static void plasma_demo_runtime_wave_morph(
@@ -880,6 +962,8 @@ static void plasma_demo_runtime_wave_morph(
     const plasma_demo_wave_params *target_wave,
     const plasma_demo_profile *profile,
     unsigned int amount,
+    int domain_width,
+    int domain_height,
     plasma_demo_runtime_wave *runtime_wave
 )
 {
@@ -932,6 +1016,8 @@ static void plasma_demo_runtime_wave_morph(
     plasma_demo_source_position(
         state,
         source_id,
+        domain_width,
+        domain_height,
         &runtime_wave->source_x,
         &runtime_wave->source_y
     );
@@ -946,6 +1032,8 @@ static void plasma_demo_morph_context_build(
     unsigned int family_index,
     unsigned int target_family_index,
     unsigned int amount,
+    int domain_width,
+    int domain_height,
     plasma_demo_morph_context *context
 )
 {
@@ -965,6 +1053,8 @@ static void plasma_demo_morph_context_build(
     source_family = &g_plasma_demo_families[family_index % family_count];
     target_family = &g_plasma_demo_families[target_family_index % family_count];
     cycle_index = (state->phase_millis / 160UL) / 256UL;
+    context->domain_width = domain_width > 0 ? domain_width : PLASMA_DEFAULT_DEMO_DOMAIN_SIZE;
+    context->domain_height = domain_height > 0 ? domain_height : PLASMA_DEFAULT_DEMO_DOMAIN_SIZE;
 
     plasma_demo_profile_for_cycle(state, cycle_index, &source_profile);
     plasma_demo_profile_for_cycle(state, cycle_index + 1UL, &target_profile);
@@ -983,6 +1073,8 @@ static void plasma_demo_morph_context_build(
             &target_family->waves[index],
             &context->profile,
             amount,
+            context->domain_width,
+            context->domain_height,
             &context->waves[index]
         );
     }
@@ -1016,7 +1108,7 @@ static unsigned int plasma_demo_wave_value(
     domain_phase = plasma_mix_int(linear_phase, source_phase, wave->source_weight);
     warp_phase =
         (((int)plasma_triangle_wave(
-            (unsigned int)((x + y) * 2) +
+            (unsigned int)(((x / 13) + (y / 17)) * 5) +
             context->warp_base
         ) - 128) * (int)context->profile.warp_amount) / 128;
     phase =
@@ -1027,15 +1119,21 @@ static unsigned int plasma_demo_wave_value(
     return plasma_triangle_wave((unsigned int)phase);
 }
 
-static int plasma_demo_normalize_coord(int value, int size)
+static int plasma_demo_normalize_coord(int value, int size, int domain_size)
 {
+    long range;
+
     if (size <= 1) {
         return 0;
     }
+    if (domain_size <= (PLASMA_DEFAULT_DEMO_EDGE_GUARD * 2) + 1) {
+        domain_size = PLASMA_DEFAULT_DEMO_DOMAIN_SIZE;
+    }
 
+    range = (long)domain_size - 1L - ((long)PLASMA_DEFAULT_DEMO_EDGE_GUARD * 2L);
     return (int)(
-        ((long)value * (long)(PLASMA_DEFAULT_DEMO_DOMAIN_SIZE - 1)) /
-        (long)(size - 1)
+        (long)PLASMA_DEFAULT_DEMO_EDGE_GUARD +
+        (((long)value * range) / (long)(size - 1))
     );
 }
 
@@ -1071,7 +1169,9 @@ static unsigned int plasma_classic_demo_equation_value(
 static unsigned int plasma_classic_demo_field_value(
     const plasma_execution_state *state,
     int x,
-    int y
+    int y,
+    int domain_width,
+    int domain_height
 )
 {
     unsigned int phase_a;
@@ -1090,9 +1190,19 @@ static unsigned int plasma_classic_demo_field_value(
     unsigned int value;
     int distance_a;
     int distance_b;
+    int center_x;
+    int center_y;
+    int span_x;
+    int span_y;
 
     if (state == NULL) {
         return 0U;
+    }
+    if (domain_width <= 0) {
+        domain_width = PLASMA_DEFAULT_DEMO_DOMAIN_SIZE;
+    }
+    if (domain_height <= 0) {
+        domain_height = PLASMA_DEFAULT_DEMO_DOMAIN_SIZE;
     }
 
     phase_a = (unsigned int)((state->phase_millis / 24UL) & 255UL);
@@ -1100,19 +1210,46 @@ static unsigned int plasma_classic_demo_field_value(
     phase_c = (unsigned int)((state->phase_millis / 43UL) & 255UL);
     phase_d = (unsigned int)((state->phase_millis / 59UL) & 255UL);
 
-    source_a_x = 512U + ((plasma_classic_demo_curve_wave(phase_a + 33U) * 256U) / 255U) - 128U;
-    source_a_y = 512U + ((plasma_classic_demo_curve_wave(phase_b + 97U) * 224U) / 255U) - 112U;
-    source_b_x = 512U + ((plasma_classic_demo_curve_wave(phase_c + 151U) * 288U) / 255U) - 144U;
-    source_b_y = 512U + ((plasma_classic_demo_curve_wave(phase_d + 211U) * 240U) / 255U) - 120U;
+    center_x = domain_width / 2;
+    center_y = domain_height / 2;
+    span_x = (domain_width * 31) / 100;
+    span_y = (domain_height * 31) / 100;
+    if (span_x < 1) {
+        span_x = 1;
+    }
+    if (span_y < 1) {
+        span_y = 1;
+    }
+
+    source_a_x = (unsigned int)(
+        center_x +
+        ((int)(plasma_classic_demo_curve_wave(phase_a + 33U) * (unsigned int)span_x) / 255) -
+        (span_x / 2)
+    );
+    source_a_y = (unsigned int)(
+        center_y +
+        ((int)(plasma_classic_demo_curve_wave(phase_b + 97U) * (unsigned int)span_y) / 255) -
+        (span_y / 2)
+    );
+    source_b_x = (unsigned int)(
+        center_x +
+        ((int)(plasma_classic_demo_curve_wave(phase_c + 151U) * (unsigned int)span_x) / 255) -
+        (span_x / 2)
+    );
+    source_b_y = (unsigned int)(
+        center_y +
+        ((int)(plasma_classic_demo_curve_wave(phase_d + 211U) * (unsigned int)span_y) / 255) -
+        (span_y / 2)
+    );
 
     distance_a = plasma_abs_int(x - (int)source_a_x) + plasma_abs_int(y - (int)source_a_y);
     distance_b = plasma_abs_int(x - (int)source_b_x) + plasma_abs_int(y - (int)source_b_y);
 
-    wave_a = plasma_classic_demo_curve_wave((unsigned int)(x / 3) + phase_a);
-    wave_b = plasma_classic_demo_curve_wave((unsigned int)(y / 3) + phase_b + 37U);
-    wave_c = plasma_classic_demo_curve_wave((unsigned int)((x + y) / 5) + phase_c + 73U);
-    wave_d = plasma_classic_demo_curve_wave((unsigned int)(distance_a / 4) + phase_d + 109U);
-    wave_e = plasma_classic_demo_curve_wave((unsigned int)(distance_b / 5) + phase_b + 149U);
+    wave_a = plasma_classic_demo_curve_wave((unsigned int)(x / 11) + phase_a);
+    wave_b = plasma_classic_demo_curve_wave((unsigned int)(y / 13) + phase_b + 37U);
+    wave_c = plasma_classic_demo_curve_wave((unsigned int)((x + y) / 17) + phase_c + 73U);
+    wave_d = plasma_classic_demo_curve_wave((unsigned int)(distance_a / 19) + phase_d + 109U);
+    wave_e = plasma_classic_demo_curve_wave((unsigned int)(distance_b / 23) + phase_b + 149U);
 
     value = (wave_a + wave_b + wave_c + wave_d + wave_e) / 5U;
     value = plasma_mix_u8(value, plasma_classic_demo_curve_wave(value + phase_c), 56U);
@@ -1127,21 +1264,66 @@ static void plasma_update_plasma(plasma_execution_state *state)
 {
     int width;
     int height;
+    int domain_width;
+    int domain_height;
     int x;
     int y;
+    unsigned long family_position;
+    unsigned long family_cycle;
+    unsigned int family_amount;
+    unsigned int family_index;
+    unsigned int target_family_index;
+    unsigned int family_count;
+    plasma_demo_morph_context morph_context;
 
     width = state->field_size.width;
     height = state->field_size.height;
+    plasma_demo_domain_size(state, &domain_width, &domain_height);
+
+    family_position = state->phase_millis / 192UL;
+    family_cycle = family_position / 256UL;
+    family_amount = plasma_smoothstep_u8((unsigned int)(family_position & 255UL));
+    family_count = (unsigned int)(sizeof(g_plasma_demo_families) / sizeof(g_plasma_demo_families[0]));
+    family_index = plasma_demo_family_for_cycle(state, family_cycle);
+    target_family_index = plasma_demo_family_for_cycle(state, family_cycle + 1UL);
+    if (family_count == 0U) {
+        family_index = 0U;
+        target_family_index = 0U;
+    }
+    plasma_demo_morph_context_build(
+        state,
+        family_index,
+        target_family_index,
+        family_amount,
+        domain_width,
+        domain_height,
+        &morph_context
+    );
 
     for (y = 0; y < height; ++y) {
         for (x = 0; x < width; ++x) {
             int domain_x;
             int domain_y;
+            unsigned int lava_value;
+            unsigned int morph_value;
             unsigned int value;
 
-            domain_x = plasma_demo_normalize_coord(x, width);
-            domain_y = plasma_demo_normalize_coord(y, height);
-            value = plasma_classic_demo_field_value(state, domain_x, domain_y);
+            domain_x = plasma_demo_normalize_coord(x, width, domain_width);
+            domain_y = plasma_demo_normalize_coord(y, height, domain_height);
+            lava_value = plasma_classic_demo_field_value(
+                state,
+                domain_x,
+                domain_y,
+                domain_width,
+                domain_height
+            );
+            morph_value = plasma_classic_demo_equation_value(
+                state,
+                domain_x,
+                domain_y,
+                &morph_context
+            );
+            value = plasma_mix_u8(lava_value, morph_value, 96U);
             state->field_primary[(y * width) + x] = (unsigned char)value;
         }
     }
