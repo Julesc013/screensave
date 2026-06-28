@@ -262,6 +262,7 @@ publication_third_party_notices = "releases/plasma-v2-stable/third-party-notices
 publication_checklist = "releases/plasma-v2-stable/publication-checklist.md"
 publication_prep_gate = "validation/captures/plasma-v2/publication-prep/gate-report.json"
 publication_aide_evidence = ".aide/evidence/plasma-v2-publication-prep.toml"
+pause_handoff = "validation/captures/plasma-v2/publication-prep/pause-handoff-report.json"
 claim_boundary = "Publication-ready packet accepted for Plasma v2 rc1 profile only; actual release publication, release upload, compatibility certification broadening, public SDK stability, all-saver migration, Manager install mutation, Workbench MVP, and platform expansion remain separate gates."
 
 [doctrine]
