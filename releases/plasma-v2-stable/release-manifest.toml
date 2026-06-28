@@ -1,0 +1,59 @@
+schema_version = 1
+release_id = "screensave.plasma-v2.stable"
+packet_id = "screensave.plasma-v2.publication-prep.packet"
+status = "publication-prep"
+publication_status = "not-published"
+product = "plasma"
+release_candidate = "plasma-v2-rc1"
+profile = "plasma.v2.reference.preview"
+stable_promotion = "accepted"
+stable_promoted_source_commit = "9182f348a4a306ee3499758824da1af7f13432e1"
+publication_prep_base_commit = "30b2ffe1ee4f030c22b8b1d07353f8cc631b3b84"
+dirty_state_at_packet_start = false
+compatibility_certification = "not-broadened"
+public_sdk_stability = "not-claimed"
+all_saver_migration = "not-claimed"
+platform_expansion = "not-claimed"
+claim_boundary = "Publication-prep manifest only; public release publication, compatibility certification broadening, SDK stability, all-saver migration, Manager install mutation, Workbench MVP, and platform expansion remain separate gates."
+
+[release_scope]
+stable_scope = "Plasma v2 current release-candidate profile only."
+software_reference = "canonical"
+gdi = "mandatory baseline"
+gl11 = "optional candidate"
+packc = "v1-candidate data packs"
+visualintent = "candidate flow reduces to Plasma v2 specs"
+
+[artifacts]
+artifact_manifest = "releases/plasma-v2-stable/artifact-manifest.toml"
+checksums = "releases/plasma-v2-stable/checksums.sha256"
+provenance = "releases/plasma-v2-stable/provenance.json"
+stable_promotion_stage = "packaging/windows/plasma-v2-stable-promotion/manifest.toml"
+
+[evidence]
+stable_promotion_gate = "validation/captures/plasma-v2/stable-promotion/gate-report.json"
+instrument_audit = "validation/captures/plasma-v2/instrument-audit/re-audit-report.json"
+proof_bundle = "validation/captures/plasma-v2/stable-promotion/proof-bundle-v1.json"
+package_manifest = "packaging/windows/plasma-v2-stable-promotion/manifest.toml"
+package_checksums = "packaging/windows/plasma-v2-stable-promotion/checksums.sha256"
+final_artistic_decision = "validation/captures/plasma-v2/final-artistic-decision/decision.stable.toml"
+support_claims = "validation/captures/plasma-v2/stable-promotion/support-claims.json"
+security_review = "validation/captures/plasma-v2/stable-promotion/security-review.json"
+provenance_review = "validation/captures/plasma-v2/stable-promotion/provenance-review.json"
+manager_preview = "validation/captures/plasma-v2/stable-promotion/manager-final-review.json"
+workbench_review = "validation/captures/plasma-v2/stable-promotion/workbench-final-review.json"
+
+[documents]
+known_limits = "releases/plasma-v2-stable/known-limits.md"
+support_matrix = "releases/plasma-v2-stable/support-matrix.md"
+install_notes = "releases/plasma-v2-stable/install-notes.md"
+rollback_notes = "releases/plasma-v2-stable/rollback-notes.md"
+third_party_notices = "releases/plasma-v2-stable/third-party-notices.md"
+publication_checklist = "releases/plasma-v2-stable/publication-checklist.md"
+
+[publication]
+public_upload = false
+release_page_published = false
+github_release_created = false
+download_links_verified = false
+publication_receipt = "not-created"

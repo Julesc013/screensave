@@ -1,0 +1,34 @@
+{
+  "schema": "screensave.plasma-v2.publication-prep.provenance.v1",
+  "release_id": "screensave.plasma-v2.stable",
+  "status": "publication-prep",
+  "publication_status": "not-published",
+  "stable_promoted_source_commit": "9182f348a4a306ee3499758824da1af7f13432e1",
+  "publication_prep_base_commit": "30b2ffe1ee4f030c22b8b1d07353f8cc631b3b84",
+  "source_dirty_at_packet_start": false,
+  "artifact": {
+    "path": "out/msvc/vs2017_xp/Release/plasma/plasma.scr",
+    "sha256": "72871f8ce5f4b45ba62663c82a32ea30e2beb6973663bd5203884d498bc74ec3",
+    "profile": "windows-current-x86",
+    "toolchain": "VS2017 v141_xp Release Win32",
+    "subsystem_floor": "Windows 5.01 evidence class",
+    "package_stage": "packaging/windows/plasma-v2-stable-promotion/manifest.toml"
+  },
+  "evidence_refs": [
+    "validation/captures/plasma-v2/stable-promotion/gate-report.json",
+    "validation/captures/plasma-v2/stable-promotion/proof-bundle-v1.json",
+    "validation/captures/plasma-v2/stable-promotion/support-claims.json",
+    "validation/captures/plasma-v2/stable-promotion/security-review.json",
+    "validation/captures/plasma-v2/stable-promotion/provenance-review.json",
+    "validation/captures/plasma-v2/final-artistic-decision/decision.stable.toml",
+    "packaging/windows/plasma-v2-stable-promotion/manifest.toml"
+  ],
+  "boundaries": {
+    "public_upload": false,
+    "release_page_published": false,
+    "compatibility_certification_broadened": false,
+    "public_sdk_stability": "not claimed",
+    "all_saver_migration": "not claimed"
+  },
+  "claim_boundary": "Publication-prep provenance only; not a publication receipt, compatibility certification, SDK stability claim, all-saver migration claim, or platform expansion claim."
+}

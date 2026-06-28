@@ -1,0 +1,39 @@
+schema_version = 1
+artifact_manifest_id = "screensave.plasma-v2.stable.artifacts"
+status = "publication-prep"
+publication_status = "not-published"
+release_candidate = "plasma-v2-rc1"
+profile = "plasma.v2.reference.preview"
+claim_boundary = "Artifact manifest records local publication-prep references only; it does not publish, upload, or certify compatibility."
+
+[[artifacts]]
+id = "plasma-v2-current-windows-x86-scr"
+kind = "screensaver-binary"
+path = "out/msvc/vs2017_xp/Release/plasma/plasma.scr"
+sha256 = "72871f8ce5f4b45ba62663c82a32ea30e2beb6973663bd5203884d498bc74ec3"
+evidence_class = "buildable"
+toolchain = "VS2017 v141_xp Release Win32"
+package_stage_ref = "packaging/windows/plasma-v2-stable-promotion/manifest.toml"
+published = false
+
+[[artifacts]]
+id = "plasma-v2-pack-example"
+kind = "packc-data-pack"
+path = "products/savers/plasma/content/v2/examples/plasma_lava_v2.toml"
+evidence_class = "data-only-packc-v1-candidate"
+checker = "py -3 tools/scripts/check_packc.py"
+published = false
+
+[[artifacts]]
+id = "plasma-v2-stable-promotion-proof-bundle"
+kind = "proof-bundle"
+path = "validation/captures/plasma-v2/stable-promotion/proof-bundle-v1.json"
+evidence_class = "proof-bundle-v1"
+published = false
+
+[[artifacts]]
+id = "plasma-v2-publication-prep-doc-packet"
+kind = "release-documentation"
+path = "releases/plasma-v2-stable/release-manifest.toml"
+evidence_class = "publication-prep"
+published = false
