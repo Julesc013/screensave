@@ -1,0 +1,27 @@
+visual_intent_version = 1
+target_product = "plasma"
+candidate_count = 3
+mood = "calm dark room"
+seed = 12001
+
+[appearance]
+brightness = 0.22
+contrast = 0.48
+density = 0.38
+palette = ["#05070b", "#142032", "#5c788e"]
+palette_hint = "quiet darkroom"
+texture = "soft-grain"
+warmth = 0.18
+softness = 0.74
+complexity = 0.36
+
+[motion]
+motion_character = "slow-drifting"
+motion_speed = 0.14
+continuity = 0.92
+loop_seconds = 120
+
+[constraints]
+avoid_flashing = true
+deterministic = true
+maximum_brightness = 0.42

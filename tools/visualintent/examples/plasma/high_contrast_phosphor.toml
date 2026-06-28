@@ -1,0 +1,27 @@
+visual_intent_version = 1
+target_product = "plasma"
+candidate_count = 3
+mood = "high contrast phosphor"
+seed = 12004
+
+[appearance]
+brightness = 0.38
+contrast = 0.88
+density = 0.52
+palette = ["#020402", "#31a65a", "#d8ffd5"]
+palette_hint = "phosphor"
+texture = "crt-bloom"
+warmth = 0.36
+softness = 0.48
+complexity = 0.55
+
+[motion]
+motion_character = "measured interference"
+motion_speed = 0.20
+continuity = 0.84
+loop_seconds = 100
+
+[constraints]
+avoid_flashing = true
+deterministic = true
+maximum_brightness = 0.48

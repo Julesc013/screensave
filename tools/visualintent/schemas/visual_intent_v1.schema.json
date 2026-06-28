@@ -1,0 +1,143 @@
+{
+  "additionalProperties": false,
+  "description": "Bounded local VisualIntent v1 authoring input for product-specific ScreenSave reducers.",
+  "properties": {
+    "appearance": {
+      "additionalProperties": false,
+      "properties": {
+        "brightness": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "type": "number"
+        },
+        "complexity": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "type": "number"
+        },
+        "contrast": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "type": "number"
+        },
+        "density": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "type": "number"
+        },
+        "palette": {
+          "items": {
+            "pattern": "^#[0-9a-fA-F]{6}$",
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "palette_hint": {
+          "type": "string"
+        },
+        "softness": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "type": "number"
+        },
+        "texture": {
+          "type": "string"
+        },
+        "warmth": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "type": "number"
+        }
+      },
+      "required": [
+        "brightness",
+        "contrast",
+        "density",
+        "palette",
+        "palette_hint",
+        "warmth",
+        "softness",
+        "complexity"
+      ],
+      "type": "object"
+    },
+    "candidate_count": {
+      "default": 3,
+      "maximum": 5,
+      "minimum": 1,
+      "type": "integer"
+    },
+    "constraints": {
+      "additionalProperties": false,
+      "properties": {
+        "avoid_flashing": {
+          "const": true
+        },
+        "deterministic": {
+          "const": true
+        },
+        "maximum_brightness": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "type": "number"
+        }
+      },
+      "required": [
+        "avoid_flashing",
+        "deterministic"
+      ],
+      "type": "object"
+    },
+    "mood": {
+      "type": "string"
+    },
+    "motion": {
+      "additionalProperties": false,
+      "properties": {
+        "continuity": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "type": "number"
+        },
+        "loop_seconds": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "motion_character": {
+          "type": "string"
+        },
+        "motion_speed": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "type": "number"
+        }
+      },
+      "required": [
+        "motion_character",
+        "motion_speed"
+      ],
+      "type": "object"
+    },
+    "seed": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "target_product": {
+      "const": "plasma"
+    },
+    "visual_intent_version": {
+      "const": 1
+    }
+  },
+  "required": [
+    "visual_intent_version",
+    "target_product",
+    "mood",
+    "appearance",
+    "motion",
+    "constraints"
+  ],
+  "title": "ScreenSave VisualIntent v1",
+  "type": "object"
+}

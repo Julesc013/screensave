@@ -1,0 +1,27 @@
+visual_intent_version = 1
+target_product = "plasma"
+candidate_count = 3
+mood = "warm slow lava"
+seed = 12002
+
+[appearance]
+brightness = 0.46
+contrast = 0.72
+density = 0.58
+palette = ["#120403", "#7a1f08", "#db7430"]
+palette_hint = "lava"
+texture = "soft-grain"
+warmth = 0.88
+softness = 0.42
+complexity = 0.56
+
+[motion]
+motion_character = "slow-flowing"
+motion_speed = 0.22
+continuity = 0.86
+loop_seconds = 96
+
+[constraints]
+avoid_flashing = true
+deterministic = true
+maximum_brightness = 0.58

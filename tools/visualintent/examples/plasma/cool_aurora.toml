@@ -1,0 +1,27 @@
+visual_intent_version = 1
+target_product = "plasma"
+candidate_count = 3
+mood = "cool aurora veil"
+seed = 12003
+
+[appearance]
+brightness = 0.40
+contrast = 0.64
+density = 0.66
+palette = ["#07121d", "#176f72", "#79d6be"]
+palette_hint = "aurora"
+texture = "smooth"
+warmth = 0.24
+softness = 0.64
+complexity = 0.70
+
+[motion]
+motion_character = "ribbon drift"
+motion_speed = 0.28
+continuity = 0.88
+loop_seconds = 108
+
+[constraints]
+avoid_flashing = true
+deterministic = true
+maximum_brightness = 0.55
