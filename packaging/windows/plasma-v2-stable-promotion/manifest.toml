@@ -15,7 +15,7 @@ claim_boundary = "Stable-promotion package stage only; not publication, compatib
 
 [artifact_refs]
 plasma_scr_current = "out/msvc/vs2017_xp/Release/plasma/plasma.scr"
-plasma_scr_current_sha256 = "8e7a7dddf132d35451c3391f638c2d0b763478653762ed422070c5163645e465"
+plasma_scr_current_sha256 = "df83baec3bf76a41d8922407172efffc0603bc3aff6265fe4e45eef40bb7e089"
 build_profile = "windows-current-x86"
 build_command = "py -3 tools/buildctl/screensave_build.py build --profile windows-current-x86"
 artifact_evidence_class = "buildable"

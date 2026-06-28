@@ -6,7 +6,7 @@
   "package_source_commit": "b32c821415585f2be40c012a491c2a9465d759dc",
   "artifact": {
     "path": "out/msvc/vs2017_xp/Release/plasma/plasma.scr",
-    "sha256": "8e7a7dddf132d35451c3391f638c2d0b763478653762ed422070c5163645e465",
+    "sha256": "df83baec3bf76a41d8922407172efffc0603bc3aff6265fe4e45eef40bb7e089",
     "toolchain": "VS2017 v141_xp Release Win32",
     "profile": "windows-current-x86"
   },
