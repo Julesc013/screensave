@@ -1,0 +1,56 @@
+schema_version = 1
+template_id = "screensave.plasma-v2.final-artistic-decision.stable.template"
+decision_id = "OPERATOR_REQUIRED"
+decision = "OPERATOR_REQUIRED"
+decision_date = "OPERATOR_REQUIRED"
+reviewer_or_project_authority = "OPERATOR_REQUIRED"
+source_commit = "OPERATOR_REQUIRED"
+release_candidate = "plasma-v2-rc1"
+profile = "plasma.v2.reference.preview"
+visual_review_summary = "OPERATOR_REQUIRED"
+instrument_architecture_summary = "OPERATOR_REQUIRED"
+known_limit_acceptance = "OPERATOR_REQUIRED"
+publication_decision = "not-in-this-turn"
+compatibility_certification = "not-broadened"
+aide_authority = "evidence-only"
+claim_boundary = "Final stable artistic decision template only; ScreenSave/project authority must record the verdict, and release publication, compatibility certification broadening, public SDK stability, all-saver migration, and AIDE automatic acceptance remain separate gates."
+
+decision_options = [
+  "accepted-for-stable",
+  "request-changes",
+  "defer-to-labs",
+  "rejected",
+]
+
+[accepted_scope]
+plasma_v2_release_candidate = "plasma-v2-rc1"
+profile = "plasma.v2.reference.preview"
+architecture = "direct-control instrument architecture"
+software_reference_path = "included"
+gdi_lower_band_path = "included"
+gl11_optional_candidate = "included"
+packc_v1_candidate = "included"
+visualintent_to_spec_candidate_flow = "included"
+current_windows_release_candidate_evidence = "included"
+
+[excluded_scope]
+final_public_release_publication = true
+windows_preservation_certification = true
+macos_linux_support = true
+all_core_saver_migration = true
+public_sdk_stability = true
+runtime_executable_plugin_system = true
+premium_glyph_ribbon_heightfield_stable_claims = true
+aide_runtime_dependency = true
+
+[evidence_refs]
+proof_bundle = "validation/captures/plasma-v2/reference-preview/proof-bundle-v1.json"
+instrument_architecture_audit = "validation/captures/plasma-v2/stable-promotion/instrument-architecture-audit.json"
+instrument_reaudit = "validation/captures/plasma-v2/instrument-audit/re-audit-report.json"
+legacy_authority = "validation/captures/plasma-v2/instrument-audit/legacy-authority-report.json"
+visualintent_spec_reduction = "validation/captures/plasma-v2/instrument-audit/visualintent/spec-reduction-report.json"
+stable_candidate_review = "validation/captures/plasma-v2/stable-candidate-review/review-summary.json"
+acceleration_matrix = "validation/captures/plasma-v2/acceleration/matrix.json"
+performance_envelope = "validation/captures/plasma-v2/performance/envelope.json"
+package_stage = "packaging/windows/plasma-v2-stable-promotion/manifest.toml"
+known_limits = "packaging/windows/plasma-v2-stable-promotion/known-limits.md"

@@ -1,0 +1,73 @@
+{
+  "schema": "screensave.plasma-v2.final-artistic-decision.review-inputs.v1",
+  "status": "protocol-defined",
+  "release_candidate": "plasma-v2-rc1",
+  "profile": "plasma.v2.reference.preview",
+  "decision_owner": "ScreenSave/project authority",
+  "aide_role": "evidence-index-only",
+  "decision_options": [
+    "accepted-for-stable",
+    "request-changes",
+    "defer-to-labs",
+    "rejected"
+  ],
+  "required_decision_fields": [
+    "decision_id",
+    "decision_date",
+    "reviewer_or_project_authority",
+    "source_commit",
+    "release_candidate",
+    "profile",
+    "accepted_scope",
+    "excluded_scope",
+    "evidence_refs",
+    "visual_review_summary",
+    "instrument_architecture_summary",
+    "known_limit_acceptance",
+    "claim_boundary"
+  ],
+  "accepted_scope": [
+    "Plasma v2 release candidate rc1",
+    "profile plasma.v2.reference.preview",
+    "direct-control instrument architecture",
+    "software/reference path",
+    "GDI lower-band path",
+    "GL11 optional candidate",
+    "packc v1-candidate data packs",
+    "VisualIntent-to-spec candidate flow",
+    "current Windows release-candidate evidence"
+  ],
+  "excluded_scope": [
+    "final public release publication",
+    "Windows preservation certification",
+    "macOS/Linux support",
+    "all Core saver migration",
+    "public SDK stability",
+    "runtime executable plugin system",
+    "premium/glyph/ribbon/heightfield stable claims unless separately proved",
+    "AIDE runtime dependency"
+  ],
+  "evidence_refs": [
+    "validation/captures/plasma-v2/reference-preview/proof-bundle-v1.json",
+    "validation/captures/plasma-v2/stable-promotion/instrument-architecture-audit.json",
+    "validation/captures/plasma-v2/instrument-audit/re-audit-report.json",
+    "validation/captures/plasma-v2/instrument-audit/legacy-authority-report.json",
+    "validation/captures/plasma-v2/instrument-audit/visualintent/spec-reduction-report.json",
+    "validation/captures/plasma-v2/stable-candidate-review/review-summary.json",
+    "validation/captures/plasma-v2/acceleration/matrix.json",
+    "validation/captures/plasma-v2/performance/envelope.json",
+    "packaging/windows/plasma-v2-stable-promotion/manifest.toml",
+    "packaging/windows/plasma-v2-stable-promotion/known-limits.md"
+  ],
+  "protocol": {
+    "proof_supports_decision": true,
+    "review_records_decision": true,
+    "screensave_owns_decision": true,
+    "aide_indexes_decision": true,
+    "validators_auto_accept": false,
+    "aide_auto_accept": false,
+    "publication_in_scope": false,
+    "compatibility_certification_broadened": false
+  },
+  "claim_boundary": "Review inputs only; final artistic acceptance requires a ScreenSave/project-owned verdict and does not publish, certify compatibility, or authorize AIDE promotion."
+}
