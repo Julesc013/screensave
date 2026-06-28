@@ -89,7 +89,9 @@ def validate_state(state: dict) -> list[str]:
     require(authority.get("version_manifest") == "VERSION.toml", "authority.version_manifest must point to VERSION.toml.", errors)
     portable_status = portable_v2.get("status")
     if portable_status == "accepted":
-        if plasma_v2.get("status") == "stable-promoted":
+        if plasma_v2.get("status") == "publication-ready":
+            expected_active_program = "plasma-v2-publication"
+        elif plasma_v2.get("status") == "stable-promoted":
             expected_active_program = "plasma-v2-publication-prep"
         elif plasma_v2.get("status") == "release-candidate-hold":
             expected_active_program = "plasma-v2-instrument-repair"
@@ -144,11 +146,11 @@ def validate_state(state: dict) -> list[str]:
         require(list(portable_v2.get("remaining", [])) == [], "portable_v2.remaining must be empty after Gate C acceptance.", errors)
 
     if plasma_v2:
-        stable_promoted = plasma_v2.get("status") == "stable-promoted"
-        require(plasma_v2.get("stable") is stable_promoted, "plasma_v2.stable must match stable-promoted state.", errors)
+        stable_promoted = plasma_v2.get("status") in {"stable-promoted", "publication-ready"}
+        require(plasma_v2.get("stable") is stable_promoted, "plasma_v2.stable must match stable-promoted/publication-ready state.", errors)
         require(
             plasma_v2.get("release_promotion") == ("accepted" if stable_promoted else "blocked"),
-            "plasma_v2.release_promotion must match stable-promoted state.",
+            "plasma_v2.release_promotion must match stable-promoted/publication-ready state.",
             errors,
         )
         require(
@@ -161,8 +163,9 @@ def validate_state(state: dict) -> list[str]:
                 "release-candidate",
                 "release-candidate-hold",
                 "stable-promoted",
+                "publication-ready",
             },
-            "plasma_v2.status must be a recognized candidate or stable-promoted status.",
+            "plasma_v2.status must be a recognized candidate, stable-promoted, or publication-ready status.",
             errors,
         )
         if plasma_v2.get("status") == "stable-candidate":
@@ -337,7 +340,7 @@ def validate_state(state: dict) -> list[str]:
                 "plasma_v2.claim_boundary must record the stable-promotion hold.",
                 errors,
             )
-        if plasma_v2.get("status") == "stable-promoted":
+        if plasma_v2.get("status") in {"stable-promoted", "publication-ready"}:
             require(plasma_v2.get("release_candidate") == "plasma-v2-rc1", "plasma_v2.release_candidate must be plasma-v2-rc1.", errors)
             require(authority.get("release_candidate") == "plasma-v2-rc1", "authority.release_candidate must be plasma-v2-rc1.", errors)
             require(plasma_v2.get("packc") == "v1-candidate", "plasma_v2.packc must remain v1-candidate.", errors)
@@ -352,11 +355,20 @@ def validate_state(state: dict) -> list[str]:
                 "plasma_v2.artistic_acceptance must record accepted-for-stable.",
                 errors,
             )
-            require(
-                plasma_v2.get("opened_next") == "plasma-v2-publication-prep",
-                "plasma_v2.opened_next must be plasma-v2-publication-prep.",
-                errors,
-            )
+            if plasma_v2.get("status") == "stable-promoted":
+                require(
+                    plasma_v2.get("opened_next") == "plasma-v2-publication-prep",
+                    "plasma_v2.opened_next must be plasma-v2-publication-prep.",
+                    errors,
+                )
+            else:
+                require(plasma_v2.get("publication_prep") == "ready", "plasma_v2.publication_prep must be ready.", errors)
+                require(plasma_v2.get("publication") == "not-published", "plasma_v2.publication must remain not-published.", errors)
+                require(
+                    plasma_v2.get("opened_next") == "plasma-v2-publication",
+                    "plasma_v2.opened_next must be plasma-v2-publication.",
+                    errors,
+                )
             require(
                 plasma_v2.get("stable_blocker") in {None, "none"},
                 "plasma_v2.stable_blocker must be absent or none after stable promotion.",
@@ -397,9 +409,33 @@ def validate_state(state: dict) -> list[str]:
                 "stable_repair_burndown",
             ):
                 require_path(plasma_v2.get(label), f"plasma_v2.{label}", errors)
+            if plasma_v2.get("status") == "publication-ready":
+                for label in (
+                    "publication_prep_contract",
+                    "publication_policy",
+                    "publication_packet",
+                    "publication_manifest",
+                    "publication_artifact_manifest",
+                    "publication_checksums",
+                    "publication_provenance",
+                    "publication_known_limits",
+                    "publication_support_matrix",
+                    "publication_install_notes",
+                    "publication_rollback_notes",
+                    "publication_third_party_notices",
+                    "publication_checklist",
+                    "publication_prep_gate",
+                    "publication_aide_evidence",
+                ):
+                    require_path(plasma_v2.get(label), f"plasma_v2.{label}", errors)
             boundary = str(plasma_v2.get("claim_boundary", "")).lower()
-            require("stable promotion accepted" in boundary, "plasma_v2.claim_boundary must record stable promotion acceptance.", errors)
-            require("release publication" in boundary, "plasma_v2.claim_boundary must keep publication separate.", errors)
+            if plasma_v2.get("status") == "stable-promoted":
+                require("stable promotion accepted" in boundary, "plasma_v2.claim_boundary must record stable promotion acceptance.", errors)
+            else:
+                require("publication-ready packet accepted" in boundary, "plasma_v2.claim_boundary must record publication-ready acceptance.", errors)
+                require("actual release publication" in boundary, "plasma_v2.claim_boundary must keep actual publication separate.", errors)
+                require("release upload" in boundary, "plasma_v2.claim_boundary must keep release upload separate.", errors)
+            require("compatibility certification broadening" in boundary, "plasma_v2.claim_boundary must keep certification broadening separate.", errors)
 
     for label, value in (
         ("authority.product_catalog", authority.get("product_catalog")),

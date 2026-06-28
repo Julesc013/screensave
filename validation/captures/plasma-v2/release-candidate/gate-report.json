@@ -15,10 +15,10 @@
     {
       "id": "plasma-status",
       "payload": {
-        "observed": "stable-promoted"
+        "observed": "publication-ready"
       },
       "status": "pass",
-      "summary": "Plasma v2 must be at release-readiness-reviewed, release-candidate, release-candidate-hold, or stable-promoted."
+      "summary": "Plasma v2 must be at release-readiness-reviewed, release-candidate, release-candidate-hold, stable-promoted, or publication-ready."
     },
     {
       "id": "plasma-stability-state",
@@ -41,8 +41,8 @@
     {
       "id": "post-transition-active-program",
       "payload": {
-        "expected": "plasma-v2-publication-prep",
-        "observed": "plasma-v2-publication-prep"
+        "expected": "plasma-v2-publication",
+        "observed": "plasma-v2-publication"
       },
       "status": "pass",
       "summary": "After transition, the active program must match the current Plasma v2 decision lane."

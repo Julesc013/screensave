@@ -121,11 +121,11 @@ def validate_state(results: list[dict[str, Any]]) -> None:
     add_result(
         results,
         "plasma-status",
-        status in {"release-readiness-reviewed", "release-candidate", "release-candidate-hold", "stable-promoted"},
-        "Plasma v2 must be at release-readiness-reviewed, release-candidate, release-candidate-hold, or stable-promoted.",
+        status in {"release-readiness-reviewed", "release-candidate", "release-candidate-hold", "stable-promoted", "publication-ready"},
+        "Plasma v2 must be at release-readiness-reviewed, release-candidate, release-candidate-hold, stable-promoted, or publication-ready.",
         observed=status,
     )
-    stable_promoted = status == "stable-promoted"
+    stable_promoted = status in {"stable-promoted", "publication-ready"}
     add_result(
         results,
         "plasma-stability-state",
@@ -159,9 +159,11 @@ def validate_state(results: list[dict[str, Any]]) -> None:
             "Before transition, the active program must be plasma-v2-release-candidate.",
             observed=authority.get("active_program"),
         )
-    if status in {"release-candidate", "release-candidate-hold", "stable-promoted"}:
+    if status in {"release-candidate", "release-candidate-hold", "stable-promoted", "publication-ready"}:
         if status == "stable-promoted":
             expected_program = "plasma-v2-publication-prep"
+        elif status == "publication-ready":
+            expected_program = "plasma-v2-publication"
         else:
             expected_program = "plasma-v2-instrument-repair" if status == "release-candidate-hold" else "plasma-v2-stable-promotion"
         add_result(
@@ -254,7 +256,7 @@ def validate_capabilities(results: list[dict[str, Any]]) -> None:
 
 def scan_overclaims(results: list[dict[str, Any]]) -> None:
     state = load_toml(STATE)
-    stable_promoted = state.get("plasma_v2", {}).get("status") == "stable-promoted"
+    stable_promoted = state.get("plasma_v2", {}).get("status") in {"stable-promoted", "publication-ready"}
     paths = [
         ROOT / "PROJECT_STATE.toml",
         ROOT / "VERSION.toml",

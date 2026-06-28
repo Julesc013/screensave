@@ -6,7 +6,7 @@ as_of = "2026-06-27"
 current_truth = "truth-proof-baseline"
 public_release = "c16-core-baseline"
 development_head = "plasma-u09-corrective-recut"
-active_program = "plasma-v2-publication-prep"
+active_program = "plasma-v2-publication"
 release_candidate = "plasma-v2-rc1"
 queue_authority = "historical-mx-queue-superseded"
 product_catalog = "catalog/products.toml"
@@ -39,7 +39,7 @@ artifact_currency = "frozen-release-artifacts-do-not-represent-u09-development-h
 
 [development]
 status = "post-c16-development-head"
-active_program = "plasma-v2-publication-prep"
+active_program = "plasma-v2-publication"
 current_product_truth = "products/savers/plasma/docs/u09-stable-recut.md"
 ship_posture = "GO_WITH_CAVEATS"
 ship_posture_source = "products/savers/plasma/docs/u09-ship-posture.md"
@@ -194,7 +194,7 @@ required_boundaries = [
 ]
 
 [plasma_v2]
-status = "stable-promoted"
+status = "publication-ready"
 stable = true
 release_candidate = "plasma-v2-rc1"
 active_profile = "plasma.v2.reference.preview"
@@ -204,7 +204,9 @@ workbench_release_readiness = "ready"
 visual_review = "stable-candidate-round-recorded"
 artistic_acceptance = "accepted-for-stable"
 release_promotion = "accepted"
-opened_next = "plasma-v2-publication-prep"
+publication_prep = "ready"
+publication = "not-published"
+opened_next = "plasma-v2-publication"
 proof = "validation/captures/plasma-v2/reference-preview/profile-proof.json"
 proof_bundle = "validation/captures/plasma-v2/reference-preview/proof-bundle-v1.json"
 preview_gate = "validation/captures/plasma-v2/preview-gate/gate-report.json"
@@ -245,7 +247,22 @@ stable_workbench_review = "validation/captures/plasma-v2/stable-promotion/workbe
 stable_artistic_decision = "validation/captures/plasma-v2/final-artistic-decision/decision.stable.toml"
 stable_promotion_gate = "validation/captures/plasma-v2/stable-promotion/gate-report.json"
 stable_repair_burndown = "validation/captures/plasma-v2/stable-promotion/repair-burndown.json"
-claim_boundary = "Stable promotion accepted for Plasma v2 rc1 profile only; release publication, compatibility certification broadening, public SDK stability, all-saver migration, and platform expansion remain separate gates."
+publication_prep_contract = "contracts/plasma_publication_prep_v1.md"
+publication_policy = "products/savers/plasma/docs/plasma-v2-publication-policy.md"
+publication_packet = "releases/plasma-v2-stable/release-manifest.toml"
+publication_manifest = "releases/plasma-v2-stable/release-manifest.toml"
+publication_artifact_manifest = "releases/plasma-v2-stable/artifact-manifest.toml"
+publication_checksums = "releases/plasma-v2-stable/checksums.sha256"
+publication_provenance = "releases/plasma-v2-stable/provenance.json"
+publication_known_limits = "releases/plasma-v2-stable/known-limits.md"
+publication_support_matrix = "releases/plasma-v2-stable/support-matrix.md"
+publication_install_notes = "releases/plasma-v2-stable/install-notes.md"
+publication_rollback_notes = "releases/plasma-v2-stable/rollback-notes.md"
+publication_third_party_notices = "releases/plasma-v2-stable/third-party-notices.md"
+publication_checklist = "releases/plasma-v2-stable/publication-checklist.md"
+publication_prep_gate = "validation/captures/plasma-v2/publication-prep/gate-report.json"
+publication_aide_evidence = ".aide/evidence/plasma-v2-publication-prep.toml"
+claim_boundary = "Publication-ready packet accepted for Plasma v2 rc1 profile only; actual release publication, release upload, compatibility certification broadening, public SDK stability, all-saver migration, Manager install mutation, Workbench MVP, and platform expansion remain separate gates."
 
 [doctrine]
 schema_version = 1

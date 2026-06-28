@@ -11,7 +11,7 @@
 
 ## Checks
 
-- pass: project-state-transition - Project state is a release candidate, a valid hold, or the accepted stable-promoted transition.
+- pass: project-state-transition - Project state is a release candidate, a valid hold, or an accepted post-stable transition.
 - pass: release-candidate-gate - Command passed.
 - pass: stable-promotion-contract - Command passed.
 - pass: instrument-architecture-audit - Command passed.
@@ -33,4 +33,4 @@
 - pass: repair-queue-outcome - Repair queue outcome matches the artistic decision.
 - pass: instrument-architecture-outcome - Instrument audit is either promotion-ready or a valid non-promotion hold.
 - pass: proof-bundle-decision-axis - Proof bundle records the stable-promotion decision axis.
-- pass: no-publication-packet - No stable publication packet has been created during the stable-promotion decision.
+- pass: publication-boundary - Any stable publication packet remains local, non-published, and upload-free.

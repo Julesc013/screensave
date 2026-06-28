@@ -2,6 +2,8 @@
 
 PAW-J starts from the stable-promoted Plasma v2 rc1 state and prepares a local publication packet. It does not publish a release, upload artifacts, broaden compatibility certification, start Workbench MVP, mutate Manager install state, migrate all savers, or expand platform support.
 
+Status: publication-ready recorded.
+
 ## Source State
 
 - Source commit: `9182f348a4a306ee3499758824da1af7f13432e1`
@@ -11,6 +13,8 @@ PAW-J starts from the stable-promoted Plasma v2 rc1 state and prepares a local p
 - Opened next: plasma-v2-publication-prep
 - Publication: not started
 - Compatibility certification broadening: false
+- Publication-prep result: ready
+- Publication: not published
 
 ## WorkUnits
 
@@ -25,6 +29,8 @@ PAW-J starts from the stable-promoted Plasma v2 rc1 state and prepares a local p
 ## Boundary
 
 Stable promotion is a product state decision that has already been accepted for the bounded Plasma v2 rc1 profile. Publication prep is a release packet decision. Actual public publication, compatibility certification broadening, public SDK stability, all-saver migration, Workbench graphical authoring, Manager install/apply mutation, and platform expansion remain separate gates.
+
+PAW-K Plasma v2 Publication is the next release gate. It is not performed by PAW-J.
 
 ## Required Validation
 

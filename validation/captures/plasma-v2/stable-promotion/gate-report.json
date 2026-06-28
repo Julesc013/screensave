@@ -3,13 +3,13 @@
   "checks": [
     {
       "data": {
-        "active_program": "plasma-v2-publication-prep",
-        "development_active_program": "plasma-v2-publication-prep",
-        "plasma_status": "stable-promoted"
+        "active_program": "plasma-v2-publication",
+        "development_active_program": "plasma-v2-publication",
+        "plasma_status": "publication-ready"
       },
       "id": "project-state-transition",
       "status": "pass",
-      "summary": "Project state is a release candidate, a valid hold, or the accepted stable-promoted transition."
+      "summary": "Project state is a release candidate, a valid hold, or an accepted post-stable transition."
     },
     {
       "data": {
@@ -349,11 +349,12 @@
     },
     {
       "data": {
+        "publication_status": "not-published",
         "release_dir": "releases\\plasma-v2-stable"
       },
-      "id": "no-publication-packet",
+      "id": "publication-boundary",
       "status": "pass",
-      "summary": "No stable publication packet has been created during the stable-promotion decision."
+      "summary": "Any stable publication packet remains local, non-published, and upload-free."
     }
   ],
   "claim_boundary": "Stable-promotion gate report only; it does not publish a release, certify compatibility, accept artistic quality automatically, or admit AIDE source mutation.",
@@ -370,7 +371,7 @@
   "schema": "screensave.plasma-v2.stable-promotion.gate-report.v1",
   "source": {
     "branch": "main",
-    "commit": "0e0aae5fd8ca711e75e6cf70e78210f546589c2d",
+    "commit": "e85c173c92a18876be79f7e8a981bfb2875a098d",
     "dirty": true
   },
   "status": "promotion-ready"

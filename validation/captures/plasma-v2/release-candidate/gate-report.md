@@ -7,7 +7,7 @@ Release-candidate gate only; not stable release, release publication, compatibil
 | Check | Status | Summary |
 | --- | --- | --- |
 | portable-v2-accepted | pass | Portable v2 must be accepted before Plasma release-candidate work. |
-| plasma-status | pass | Plasma v2 must be at release-readiness-reviewed, release-candidate, release-candidate-hold, or stable-promoted. |
+| plasma-status | pass | Plasma v2 must be at release-readiness-reviewed, release-candidate, release-candidate-hold, stable-promoted, or publication-ready. |
 | plasma-stability-state | pass | Plasma v2 stability fields must match the current lifecycle state. |
 | post-transition-release-candidate | pass | After transition, rc1 must be recorded by authority and Plasma state. |
 | post-transition-active-program | pass | After transition, the active program must match the current Plasma v2 decision lane. |

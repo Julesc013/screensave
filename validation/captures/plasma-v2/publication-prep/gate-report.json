@@ -8,11 +8,11 @@
       "status": "pass"
     },
     {
-      "active_program": "plasma-v2-publication-prep",
-      "expected_active_program": "plasma-v2-publication-prep",
+      "active_program": "plasma-v2-publication",
+      "expected_active_program": "plasma-v2-publication",
       "id": "project-state",
       "message": "Project state is stable-promoted for prep or publication-ready after prep.",
-      "plasma_status": "stable-promoted",
+      "plasma_status": "publication-ready",
       "release_promotion": "accepted",
       "stable": true,
       "status": "pass"
@@ -292,7 +292,7 @@
   "schema": "screensave.plasma-v2.publication-prep.gate-report.v1",
   "source": {
     "branch": "main",
-    "commit": "7ee0d505de5be02f1617a7f632d9db880950b9ac",
+    "commit": "e85c173c92a18876be79f7e8a981bfb2875a098d",
     "dirty": true
   },
   "status": "publication-ready"

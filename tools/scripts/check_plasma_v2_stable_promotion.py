@@ -107,7 +107,11 @@ def build_report() -> dict[str, Any]:
     state_status = plasma.get("status")
     is_pre_transition = state_status == "release-candidate"
     is_hold_transition = state_status in {"release-candidate-hold", "request-changes", "defer-to-labs"}
-    is_promoted_transition = state_status == "stable-promoted"
+    is_promoted_transition = state_status in {"stable-promoted", "publication-ready"}
+    expected_promoted_program = {
+        "stable-promoted": "plasma-v2-publication-prep",
+        "publication-ready": "plasma-v2-publication",
+    }.get(str(state_status))
     add_check(
         checks,
         "project-state-transition",
@@ -121,13 +125,13 @@ def build_report() -> dict[str, Any]:
                 is_promoted_transition
                 and plasma.get("stable") is True
                 and plasma.get("release_promotion") == "accepted"
-                and authority.get("active_program") == "plasma-v2-publication-prep"
-                and development.get("active_program") == "plasma-v2-publication-prep"
+                and authority.get("active_program") == expected_promoted_program
+                and development.get("active_program") == expected_promoted_program
             )
         )
         and plasma.get("release_candidate") == "plasma-v2-rc1"
         and authority.get("release_candidate") == "plasma-v2-rc1",
-        "Project state is a release candidate, a valid hold, or the accepted stable-promoted transition.",
+        "Project state is a release candidate, a valid hold, or an accepted post-stable transition.",
         plasma_status=state_status,
         active_program=authority.get("active_program"),
         development_active_program=development.get("active_program"),
@@ -239,12 +243,25 @@ def build_report() -> dict[str, Any]:
         )
 
     publication_dir = ROOT / "releases" / "plasma-v2-stable"
+    publication_manifest = publication_dir / "release-manifest.toml"
+    publication_payload = load_toml(publication_manifest) if publication_manifest.exists() else {}
+    publication_state_ok = (
+        not publication_dir.exists()
+        or (
+            publication_manifest.exists()
+            and publication_payload.get("publication_status") == "not-published"
+            and publication_payload.get("publication", {}).get("public_upload") is False
+            and publication_payload.get("publication", {}).get("release_page_published") is False
+            and publication_payload.get("publication", {}).get("github_release_created") is False
+        )
+    )
     add_check(
         checks,
-        "no-publication-packet",
-        not publication_dir.exists(),
-        "No stable publication packet has been created during the stable-promotion decision.",
+        "publication-boundary",
+        publication_state_ok,
+        "Any stable publication packet remains local, non-published, and upload-free.",
         release_dir=str(publication_dir.relative_to(ROOT)),
+        publication_status=publication_payload.get("publication_status"),
     )
 
     structural_pass = all(item.get("status") == "pass" for item in checks)
