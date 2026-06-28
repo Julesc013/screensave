@@ -125,7 +125,7 @@
   "schema": "screensave.plasma-v2.material-response.v1",
   "source": {
     "branch": "main",
-    "commit": "2051d85678b98fe45ecfeda8d36fb74595d26305",
+    "commit": "e278e6cd3aad61c253606b6c641ed1419c44463f",
     "dirty": true
   },
   "status": "pass",

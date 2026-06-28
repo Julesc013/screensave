@@ -176,7 +176,7 @@
             "build_command": "py -3 tools/buildctl/screensave_build.py build --profile windows-current-x86",
             "build_profile": "windows-current-x86",
             "plasma_scr_current": "out/msvc/vs2017_xp/Release/plasma/plasma.scr",
-            "plasma_scr_current_sha256": "72871f8ce5f4b45ba62663c82a32ea30e2beb6973663bd5203884d498bc74ec3"
+            "plasma_scr_current_sha256": "dc5355824b0ace7ded97d9dc082d5cf1ad2b808e0aff071703953103c154b7f6"
           },
           "candidate_id": "plasma-v2-rc1",
           "claim_boundary": "Release-candidate package stage only; not publication, stable release, final stable artistic acceptance, compatibility certification, or installer admission.",

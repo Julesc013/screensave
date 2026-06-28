@@ -1,0 +1,155 @@
+BenchLab SX09 report
+Product key: plasma
+Display name: Plasma
+Requested renderer: OpenGL 1.1
+Policy target: OpenGL 1.1
+Active renderer: OpenGL 1.1
+Selected band: compat
+Degraded path: None
+Selection path: Requested OpenGL 1.1 within saver policy
+Fallback cause: None
+Renderer backend: gl11
+Renderer status: Presented with OpenGL buffer swap
+Backend vendor: NVIDIA Corporation
+Backend renderer: NVIDIA GeForce RTX 2070/PCIe/SSE2
+Backend detail: gl=4.6.0 NVIDIA 591.86 pf=10 dbl=1 gdi=0 gen=0 p=120 s=120 f=0
+Deterministic mode: yes
+Base seed: 0x000002E7
+Stream seed: 0x8626231A
+Frames exercised: 120
+Final frame: 120
+Command line: /deterministic /seed:743 /saver:plasma /frames:120 /report:validation\captures\plasma-v2\default-demo\benchlab-default-gl11.txt /renderer:gl11
+
+Overlay snapshot
+----------------
+BenchLab
+Saver: Plasma
+Runtime: 0.15.0
+Renderer preference: OpenGL 1.1
+Routing profile: min GDI pref OpenGL 1.1 quality safe
+Active renderer: OpenGL 1.1
+Policy target: OpenGL 1.1
+Selected band: compat
+Degraded path: None
+Renderer backend: gl11
+Selection path: Requested OpenGL 1.1 within saver policy
+Fallback cause: None
+Backend vendor: NVIDIA Corporation
+Backend renderer: NVIDIA GeForce RTX 2070/PCIe/SSE2
+Backend detail: gl=4.6.0 NVIDIA 591.86 pf=10 dbl=1 gdi=0 gen=0 p=120 s=120 f=0
+Drawable: 640x480
+Renderer status: Presented with OpenGL buffer swap
+Run mode: deterministic running
+Seed: 0x000002E7
+Stream seed: 0x8626231A
+Frame: 120 elapsed=3960ms delta=33ms
+Detail level: Low
+Preset key: ribbon_aurora
+Theme key: oceanic_blue
+Randomization mode: Session
+Plasma BenchLab
+Requested lane: compat
+Resolved lane: compat
+Degrade: none
+Preset: ribbon_aurora
+Theme: oceanic_blue
+Preset set: none
+Theme set: none
+Journey: dark_room_cycle
+Profile: experimental / safe
+Output: banded / posterized_bands
+Treatments: none | none | none | accent_pass
+Presentation: flat
+Transition: enabled / none
+Settings surface: advanced
+Content filter: stable_and_experimental
+Forcing active: no
+Clamps: none
+
+Diag: emitted=123 dropped=0
+debug/renderer 6304 gl=4.6.0 NVIDIA 591.86 pf=10 dbl=1 gdi=0 gen=0 p=120 s=120 f=0
+debug/renderer 6304 gl=4.6.0 NVIDIA 591.86 pf=10 dbl=1 gdi=0 gen=0 p=119 s=119 f=0
+debug/renderer 6304 gl=4.6.0 NVIDIA 591.86 pf=10 dbl=1 gdi=0 gen=0 p=118 s=118 f=0
+Keys: F5 restart F6 reseed F7 deterministic F8 pause F9 step
+
+Recent diagnostics
+------------------
+- debug/renderer 6304 gl=4.6.0 NVIDIA 591.86 pf=10 dbl=1 gdi=0 gen=0 p=120 s=120 f=0
+- debug/renderer 6304 gl=4.6.0 NVIDIA 591.86 pf=10 dbl=1 gdi=0 gen=0 p=119 s=119 f=0
+- debug/renderer 6304 gl=4.6.0 NVIDIA 591.86 pf=10 dbl=1 gdi=0 gen=0 p=118 s=118 f=0
+- debug/renderer 6304 gl=4.6.0 NVIDIA 591.86 pf=10 dbl=1 gdi=0 gen=0 p=117 s=117 f=0
+- debug/renderer 6304 gl=4.6.0 NVIDIA 591.86 pf=10 dbl=1 gdi=0 gen=0 p=116 s=116 f=0
+- debug/renderer 6304 gl=4.6.0 NVIDIA 591.86 pf=10 dbl=1 gdi=0 gen=0 p=115 s=115 f=0
+
+
+Plasma BenchLab
+----------------
+Requested lane: compat
+Resolved lane: compat
+Degraded from: none
+Degraded to: none
+Preset key: ribbon_aurora
+Theme key: oceanic_blue
+Preset set key: none
+Theme set key: none
+Journey key: dark_room_cycle
+Profile class: experimental
+Quality class: safe
+Preset source: built_in
+Preset channel: experimental
+Theme source: built_in
+Theme channel: stable
+Requested detail level: low
+Detail level: low
+Requested generator family: fire
+Generator family: fire
+Requested speed mode: standard
+Speed mode: standard
+Requested resolution mode: standard
+Resolution mode: standard
+Requested smoothing mode: off
+Smoothing mode: off
+Requested output family: banded
+Output family: banded
+Requested output mode: posterized_bands
+Output mode: posterized_bands
+Requested sampling treatment: none
+Sampling treatment: none
+Requested filter treatment: none
+Filter treatment: none
+Requested emulation treatment: none
+Emulation treatment: none
+Requested accent treatment: accent_pass
+Accent treatment: accent_pass
+Requested presentation mode: ribbon
+Presentation mode: flat
+Transition requested: yes
+Transition enabled: yes
+Transition policy: journey
+Transition type: none
+Transition requested type: none
+Transition resolved type: none
+Transition fallback type: none
+Transition fallback: theme_morph
+Transition seed policy: keep_stream
+Transition source preset: ribbon_aurora
+Transition target preset: none
+Transition source theme: oceanic_blue
+Transition target theme: none
+Preset morph class: none
+Theme morph class: cool
+Bridge class: none
+Seed policy: fixed
+Configured seed: 0x00000A41
+Base seed: 0x000002E7
+Stream seed: 0x8626231A
+Resolved RNG seed: 0x862621FD
+Settings surface: advanced
+Content filter: stable_and_experimental
+Favorites requested: no
+Favorites applied: no
+BenchLab forcing active: no
+Clamp flags: 0x00000000
+Clamp summary: none
+Requested/resolved/degraded: compat / compat / none
+

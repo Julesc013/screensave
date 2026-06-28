@@ -1,0 +1,155 @@
+BenchLab SX09 report
+Product key: plasma
+Display name: Plasma
+Requested renderer: OpenGL 4.6
+Policy target: OpenGL 4.6
+Active renderer: OpenGL 4.6
+Selected band: premium
+Degraded path: None
+Selection path: Requested OpenGL 4.6 within saver policy
+Fallback cause: None
+Renderer backend: gl46
+Renderer status: Presented with OpenGL buffer swap
+Backend vendor: NVIDIA Corporation
+Backend renderer: NVIDIA GeForce RTX 2070/PCIe/SSE2
+Backend detail: gl=4.6 pf=10 rgba=32 depth=24 dbl=1 req=1 tex=1 samp=1 bsto=1 fbo=1 p=180 s=180 f=0
+Deterministic mode: yes
+Base seed: 0x000002E7
+Stream seed: 0x8626231A
+Frames exercised: 180
+Final frame: 180
+Command line: /deterministic /seed:743 /saver:plasma /frames:180 /plasma-randomization:off /plasma-preset:plasma_lava /plasma-theme:plasma_lava /plasma-detail:high /plasma-effect:plasma /plasma-speed:gentle /plasma-resolution:fine /plasma-smoothing:soft /plasma-output-family:raster /plasma-output-mode:native_raster /plasma-sampling:none /plasma-filter:none /plasma-emulation:none /plasma-accent:none /plasma-transitions:off /plasma-presentation:flat /renderer:gl46 /report:validation\captures\plasma-v2\default-demo\benchlab-default-forced-gl46.txt
+
+Overlay snapshot
+----------------
+BenchLab
+Saver: Plasma
+Runtime: 0.15.0
+Renderer preference: OpenGL 4.6
+Routing profile: min GDI pref OpenGL 4.6 quality safe
+Active renderer: OpenGL 4.6
+Policy target: OpenGL 4.6
+Selected band: premium
+Degraded path: None
+Renderer backend: gl46
+Selection path: Requested OpenGL 4.6 within saver policy
+Fallback cause: None
+Backend vendor: NVIDIA Corporation
+Backend renderer: NVIDIA GeForce RTX 2070/PCIe/SSE2
+Backend detail: gl=4.6 pf=10 rgba=32 depth=24 dbl=1 req=1 tex=1 samp=1 bsto=1 fbo=1 p=180 s=180 f=0
+Drawable: 640x480
+Renderer status: Presented with OpenGL buffer swap
+Run mode: deterministic running
+Seed: 0x000002E7
+Stream seed: 0x8626231A
+Frame: 180 elapsed=1080ms delta=6ms
+Detail level: High
+Preset key: plasma_lava
+Theme key: plasma_lava
+Randomization mode: Off
+Plasma BenchLab
+Requested lane: premium
+Resolved lane: unknown
+Degrade: premium -> unknown
+Preset: plasma_lava
+Theme: plasma_lava
+Preset set: none
+Theme set: none
+Journey: none
+Profile: stable / safe
+Output: raster / native_raster
+Treatments: none | none | none | none
+Presentation: flat
+Transition: disabled / none
+Settings surface: basic
+Content filter: stable_only
+Forcing active: yes
+Clamps: none
+
+Diag: emitted=184 dropped=0
+debug/renderer 7073 gl=4.6 pf=10 rgba=32 depth=24 dbl=1 req=1 tex=1 samp=1 bsto=1 fbo=1 p=180 s=180 f=0
+debug/renderer 7073 gl=4.6 pf=10 rgba=32 depth=24 dbl=1 req=1 tex=1 samp=1 bsto=1 fbo=1 p=179 s=179 f=0
+debug/renderer 7073 gl=4.6 pf=10 rgba=32 depth=24 dbl=1 req=1 tex=1 samp=1 bsto=1 fbo=1 p=178 s=178 f=0
+Keys: F5 restart F6 reseed F7 deterministic F8 pause F9 step
+
+Recent diagnostics
+------------------
+- debug/renderer 7073 gl=4.6 pf=10 rgba=32 depth=24 dbl=1 req=1 tex=1 samp=1 bsto=1 fbo=1 p=180 s=180 f=0
+- debug/renderer 7073 gl=4.6 pf=10 rgba=32 depth=24 dbl=1 req=1 tex=1 samp=1 bsto=1 fbo=1 p=179 s=179 f=0
+- debug/renderer 7073 gl=4.6 pf=10 rgba=32 depth=24 dbl=1 req=1 tex=1 samp=1 bsto=1 fbo=1 p=178 s=178 f=0
+- debug/renderer 7073 gl=4.6 pf=10 rgba=32 depth=24 dbl=1 req=1 tex=1 samp=1 bsto=1 fbo=1 p=177 s=177 f=0
+- debug/renderer 7073 gl=4.6 pf=10 rgba=32 depth=24 dbl=1 req=1 tex=1 samp=1 bsto=1 fbo=1 p=176 s=176 f=0
+- debug/renderer 7073 gl=4.6 pf=10 rgba=32 depth=24 dbl=1 req=1 tex=1 samp=1 bsto=1 fbo=1 p=175 s=175 f=0
+
+
+Plasma BenchLab
+----------------
+Requested lane: premium
+Resolved lane: unknown
+Degraded from: premium
+Degraded to: unknown
+Preset key: plasma_lava
+Theme key: plasma_lava
+Preset set key: none
+Theme set key: none
+Journey key: none
+Profile class: stable
+Quality class: safe
+Preset source: built_in
+Preset channel: stable
+Theme source: built_in
+Theme channel: stable
+Requested detail level: high
+Detail level: high
+Requested generator family: plasma
+Generator family: plasma
+Requested speed mode: gentle
+Speed mode: gentle
+Requested resolution mode: fine
+Resolution mode: fine
+Requested smoothing mode: soft
+Smoothing mode: soft
+Requested output family: raster
+Output family: raster
+Requested output mode: native_raster
+Output mode: native_raster
+Requested sampling treatment: none
+Sampling treatment: none
+Requested filter treatment: none
+Filter treatment: none
+Requested emulation treatment: none
+Emulation treatment: none
+Requested accent treatment: none
+Accent treatment: none
+Requested presentation mode: flat
+Presentation mode: flat
+Transition requested: no
+Transition enabled: no
+Transition policy: disabled
+Transition type: none
+Transition requested type: none
+Transition resolved type: none
+Transition fallback type: none
+Transition fallback: theme_morph
+Transition seed policy: keep_stream
+Transition source preset: plasma_lava
+Transition target preset: none
+Transition source theme: plasma_lava
+Transition target theme: none
+Preset morph class: plasma
+Theme morph class: warm
+Bridge class: warm_classic
+Seed policy: fixed
+Configured seed: 0x00000A41
+Base seed: 0x000002E7
+Stream seed: 0x8626231A
+Resolved RNG seed: 0x862621FD
+Settings surface: basic
+Content filter: stable_only
+Favorites requested: no
+Favorites applied: no
+BenchLab forcing active: yes
+Clamp flags: 0x00000000
+Clamp summary: none
+Requested/resolved/degraded: premium / unknown / unknown
+

@@ -1,0 +1,155 @@
+BenchLab SX09 report
+Product key: plasma
+Display name: Plasma
+Requested renderer: GDI
+Policy target: GDI
+Active renderer: GDI
+Selected band: universal
+Degraded path: None
+Selection path: Requested GDI within saver policy
+Fallback cause: None
+Renderer backend: gdi
+Renderer status: Presented
+Backend vendor: Win32
+Backend renderer: GDI DIB32 floor
+Backend detail: surface=1 presents=120 sig=AF207D8C
+Deterministic mode: yes
+Base seed: 0x000002E7
+Stream seed: 0x8626231A
+Frames exercised: 120
+Final frame: 120
+Command line: /deterministic /seed:743 /saver:plasma /frames:120 /report:validation\captures\plasma-v2\default-demo\benchlab-default-gdi.txt /renderer:gdi
+
+Overlay snapshot
+----------------
+BenchLab
+Saver: Plasma
+Runtime: 0.15.0
+Renderer preference: GDI
+Routing profile: min GDI pref OpenGL 1.1 quality safe
+Active renderer: GDI
+Policy target: GDI
+Selected band: universal
+Degraded path: None
+Renderer backend: gdi
+Selection path: Requested GDI within saver policy
+Fallback cause: None
+Backend vendor: Win32
+Backend renderer: GDI DIB32 floor
+Backend detail: surface=1 presents=120 sig=AF207D8C
+Drawable: 640x480
+Renderer status: Presented
+Run mode: deterministic running
+Seed: 0x000002E7
+Stream seed: 0x8626231A
+Frame: 120 elapsed=3960ms delta=33ms
+Detail level: Low
+Preset key: ribbon_aurora
+Theme key: oceanic_blue
+Randomization mode: Session
+Plasma BenchLab
+Requested lane: universal
+Resolved lane: universal
+Degrade: none
+Preset: ribbon_aurora
+Theme: oceanic_blue
+Preset set: none
+Theme set: none
+Journey: dark_room_cycle
+Profile: experimental / safe
+Output: banded / posterized_bands
+Treatments: none | none | none | accent_pass
+Presentation: flat
+Transition: enabled / none
+Settings surface: advanced
+Content filter: stable_and_experimental
+Forcing active: no
+Clamps: none
+
+Diag: emitted=123 dropped=0
+debug/renderer 5401 surface=1 presents=120 sig=AF207D8C
+debug/renderer 5401 surface=1 presents=119 sig=0BF27E2D
+debug/renderer 5401 surface=1 presents=118 sig=FACF3B2D
+Keys: F5 restart F6 reseed F7 deterministic F8 pause F9 step
+
+Recent diagnostics
+------------------
+- debug/renderer 5401 surface=1 presents=120 sig=AF207D8C
+- debug/renderer 5401 surface=1 presents=119 sig=0BF27E2D
+- debug/renderer 5401 surface=1 presents=118 sig=FACF3B2D
+- debug/renderer 5401 surface=1 presents=117 sig=921CFF80
+- debug/renderer 5401 surface=1 presents=116 sig=7187E150
+- debug/renderer 5401 surface=1 presents=115 sig=20895F07
+
+
+Plasma BenchLab
+----------------
+Requested lane: universal
+Resolved lane: universal
+Degraded from: none
+Degraded to: none
+Preset key: ribbon_aurora
+Theme key: oceanic_blue
+Preset set key: none
+Theme set key: none
+Journey key: dark_room_cycle
+Profile class: experimental
+Quality class: safe
+Preset source: built_in
+Preset channel: experimental
+Theme source: built_in
+Theme channel: stable
+Requested detail level: low
+Detail level: low
+Requested generator family: fire
+Generator family: fire
+Requested speed mode: standard
+Speed mode: standard
+Requested resolution mode: standard
+Resolution mode: standard
+Requested smoothing mode: off
+Smoothing mode: off
+Requested output family: banded
+Output family: banded
+Requested output mode: posterized_bands
+Output mode: posterized_bands
+Requested sampling treatment: none
+Sampling treatment: none
+Requested filter treatment: none
+Filter treatment: none
+Requested emulation treatment: none
+Emulation treatment: none
+Requested accent treatment: accent_pass
+Accent treatment: accent_pass
+Requested presentation mode: ribbon
+Presentation mode: flat
+Transition requested: yes
+Transition enabled: yes
+Transition policy: journey
+Transition type: none
+Transition requested type: none
+Transition resolved type: none
+Transition fallback type: none
+Transition fallback: theme_morph
+Transition seed policy: keep_stream
+Transition source preset: ribbon_aurora
+Transition target preset: none
+Transition source theme: oceanic_blue
+Transition target theme: none
+Preset morph class: none
+Theme morph class: cool
+Bridge class: none
+Seed policy: fixed
+Configured seed: 0x00000A41
+Base seed: 0x000002E7
+Stream seed: 0x8626231A
+Resolved RNG seed: 0x862621FD
+Settings surface: advanced
+Content filter: stable_and_experimental
+Favorites requested: no
+Favorites applied: no
+BenchLab forcing active: no
+Clamp flags: 0x00000000
+Clamp summary: none
+Requested/resolved/degraded: universal / universal / none
+

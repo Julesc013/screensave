@@ -1,0 +1,204 @@
+{
+  "artifact": {
+    "exists": true,
+    "path": "out/msvc/vs2017_xp/Release/plasma/plasma.scr",
+    "sha256": "dc5355824b0ace7ded97d9dc082d5cf1ad2b808e0aff071703953103c154b7f6"
+  },
+  "checks": [
+    {
+      "id": "default_keys_preserved",
+      "missing": [],
+      "path": "products/savers/plasma/src/plasma_internal.h",
+      "status": "pass"
+    },
+    {
+      "id": "product_defaults_are_calm_native_raster",
+      "missing": [],
+      "path": "products/savers/plasma/src/plasma_config.c",
+      "status": "pass"
+    },
+    {
+      "id": "default_preset_resolves_high_fine",
+      "missing": [],
+      "path": "products/savers/plasma/src/plasma_presets.c",
+      "status": "pass"
+    },
+    {
+      "id": "default_content_is_pure_classic_plasma",
+      "missing": [],
+      "path": "products/savers/plasma/src/plasma_content.c",
+      "status": "pass"
+    },
+    {
+      "id": "plan_defaults_match_demo",
+      "missing": [],
+      "path": "products/savers/plasma/src/plasma_plan.c",
+      "status": "pass"
+    },
+    {
+      "id": "settings_remain_user_customizable",
+      "missing": [],
+      "path": "products/savers/plasma/src/plasma_settings.c",
+      "status": "pass"
+    },
+    {
+      "id": "adaptive_high_resolution_field_path",
+      "missing": [],
+      "path": "products/savers/plasma/src/plasma_sim.c",
+      "status": "pass"
+    },
+    {
+      "id": "stale_registry_state_migrates_to_default_demo",
+      "missing": [],
+      "path": "products/savers/plasma/src/plasma_config.c",
+      "status": "pass"
+    },
+    {
+      "id": "host_requests_display_refresh_pacing",
+      "missing": [],
+      "path": "platform/src/host/win32_scr/scr_internal.h",
+      "status": "pass"
+    },
+    {
+      "id": "benchlab_requests_display_refresh_pacing",
+      "missing": [],
+      "path": "products/apps/benchlab/src/benchlab_internal.h",
+      "status": "pass"
+    },
+    {
+      "id": "host_uses_display_refresh_timer_request",
+      "missing": [],
+      "path": "platform/src/host/win32_scr/scr_window.c",
+      "status": "pass"
+    },
+    {
+      "id": "benchlab_uses_display_refresh_timer_request",
+      "missing": [],
+      "path": "products/apps/benchlab/src/benchlab_app.c",
+      "status": "pass"
+    },
+    {
+      "id": "slow_classic_demo_field_cycling",
+      "missing": [],
+      "path": "products/savers/plasma/src/plasma_sim.c",
+      "status": "pass"
+    },
+    {
+      "id": "full_color_procedural_palette_cycling",
+      "missing": [],
+      "path": "products/savers/plasma/src/plasma_treatment.c",
+      "status": "pass"
+    },
+    {
+      "id": "renderer_ladder_exposed",
+      "missing": [],
+      "path": "products/savers/plasma/src/plasma_module.c",
+      "status": "pass"
+    },
+    {
+      "id": "auto_policy_uses_highest_supported_renderer",
+      "missing": [],
+      "path": "platform/src/core/substrate/routing_policy.c",
+      "status": "pass"
+    },
+    {
+      "id": "gl33_bitmap_blit_avoids_hot_loop_texture_allocation",
+      "missing": [],
+      "path": "platform/src/render/gl33/gl33_primitives.c",
+      "status": "pass"
+    },
+    {
+      "id": "gl46_bitmap_blit_avoids_hot_loop_texture_allocation",
+      "missing": [],
+      "path": "platform/src/render/gl46/gl46_primitives.c",
+      "status": "pass"
+    },
+    {
+      "id": "renderer_validation_keeps_optional_tiers",
+      "missing": [],
+      "path": "products/savers/plasma/src/plasma_validate.c",
+      "status": "pass"
+    }
+  ],
+  "claim_boundary": "Post-stable local demo rebuild evidence only; this does not publish a release, broaden compatibility certification, or replace Plasma v2 proof/publication gates.",
+  "demo_profile": {
+    "color": "direct full-color smooth RGB palette cycling from the scalar plasma field",
+    "customization_boundary": "All existing Plasma settings remain explicit config inputs; presets remain starting points.",
+    "default_preset": "plasma_lava",
+    "default_theme": "plasma_lava",
+    "field": "adaptive high-resolution fine plasma field capped by renderer tier with classic layered wave synthesis",
+    "forced_renderer_smoke": [
+      "gdi",
+      "gl11",
+      "gl21",
+      "gl33",
+      "gl46"
+    ],
+    "minimum_renderer": "gdi",
+    "motion": "slower gentle phase motion tuned for display-refresh-facing flow",
+    "optional_renderer_ladder": [
+      "gl21",
+      "gl33",
+      "gl46"
+    ],
+    "output": "native drawable raster presentation with pixel-sharp renderer scaling and resolution-independent plasma coordinates",
+    "pacing": "host and BenchLab request the active display refresh interval with a 16ms fallback and 1ms minimum",
+    "preferred_renderer": "gl46",
+    "presentation": "flat"
+  },
+  "future_work": [
+    "Capture and visually review the rebuilt .scr on target Windows hardware.",
+    "Add fullscreen frame-time telemetry and contact-sheet captures; BenchLab text smoke does not replace human visual acceptance.",
+    "Add per-monitor timing windows for heterogeneous multi-monitor refresh rates; the current host is one virtual-desktop window with one timer request.",
+    "Refresh publication manifests only after the project chooses to replace the staged artifact.",
+    "Add renderer-tier visual comparison captures for GL11/GL21/GL33 where local hardware exposes them.",
+    "Add shader/native-field implementations for GL33/GL46 if CPU field synthesis remains too expensive at native high-refresh targets.",
+    "Expose the new default posture through future Workbench direct-control UI without making Workbench runtime authority."
+  ],
+  "renderer_smoke": [
+    {
+      "missing": [],
+      "path": "validation/captures/plasma-v2/default-demo/benchlab-default-auto.txt",
+      "renderer": "auto",
+      "status": "pass"
+    },
+    {
+      "missing": [],
+      "path": "validation/captures/plasma-v2/default-demo/benchlab-default-forced-gdi.txt",
+      "renderer": "gdi",
+      "status": "pass"
+    },
+    {
+      "missing": [],
+      "path": "validation/captures/plasma-v2/default-demo/benchlab-default-forced-gl11.txt",
+      "renderer": "gl11",
+      "status": "pass"
+    },
+    {
+      "missing": [],
+      "path": "validation/captures/plasma-v2/default-demo/benchlab-default-forced-gl21.txt",
+      "renderer": "gl21",
+      "status": "pass"
+    },
+    {
+      "missing": [],
+      "path": "validation/captures/plasma-v2/default-demo/benchlab-default-forced-gl33.txt",
+      "renderer": "gl33",
+      "status": "pass"
+    },
+    {
+      "missing": [],
+      "path": "validation/captures/plasma-v2/default-demo/benchlab-default-forced-gl46.txt",
+      "renderer": "gl46",
+      "status": "pass"
+    }
+  ],
+  "schema": "screensave.plasma.default-demo.v1",
+  "source": {
+    "branch": "main",
+    "commit": "e278e6cd3aad61c253606b6c641ed1419c44463f",
+    "dirty": true
+  },
+  "status": "pass",
+  "validation_errors": []
+}
