@@ -1,0 +1,30 @@
+{
+  "agentic": {
+    "agent_mode": "proposal-only",
+    "agentic_proposal": "out/aide/agentic/SS-PLV2-IR-REPAIR-002/proposal.json",
+    "agentic_receipt": "out/aide/agentic/SS-PLV2-IR-REPAIR-002/session-receipt.json",
+    "source_mutation_by_aide": false,
+    "task": "SS-PLV2-IR-REPAIR-002"
+  },
+  "blocker": "visualintent_candidates_reduce_to_plasma_spec",
+  "claim_boundary": "AIDE records VisualIntent admission evidence only; ScreenSave validators own the gate.",
+  "compatibility_certification": false,
+  "final_artistic_acceptance": false,
+  "repair_class": "instrument_architecture_gap",
+  "repair_evidence": [
+    "validation/captures/plasma-v2/instrument-audit/visualintent/spec-reduction-report.json",
+    "validation/captures/plasma-v2/instrument-audit/visualintent/proof-summary.json",
+    "validation/captures/plasma-v2/instrument-audit/workbench-inspection.json",
+    "validation/captures/plasma-v2/stable-promotion/instrument-architecture-audit.json"
+  ],
+  "remaining_blockers": [
+    {
+      "id": "SS-PLV2-I-REPAIR-001",
+      "reason": "final stable artistic acceptance remains a human/project-policy gate"
+    }
+  ],
+  "stable_promotion": false,
+  "status": "pass",
+  "visualintent_candidates_reduce_to_plasma_spec": true,
+  "work_unit": "SS-PLV2-IR-REPAIR-002"
+}

@@ -81,7 +81,7 @@ rollback_point = "8cba4d5"
 id = "SS-PLV2-IR-REPAIR-002"
 title = "Admit VisualIntent candidates through Plasma v2 specs"
 repair_class = "instrument_architecture_gap"
-status = "planned"
+status = "completed"
 allowed_paths = [
   "contracts/visual_intent_v1.md",
   "contracts/plasma_instrument_architecture_v1.md",
@@ -105,6 +105,7 @@ forbidden_paths = [
 expected_validators = [
   "py -3 tools/scripts/check_visual_intent_resolver.py",
   "py -3 tools/scripts/check_packc.py",
+  "py -3 tools/scripts/check_plasma_v2_visualintent_proof.py",
   "py -3 tools/scripts/check_workbench_shell.py",
   "py -3 tools/scripts/check_plasma_instrument_architecture.py",
 ]

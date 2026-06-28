@@ -116,6 +116,36 @@ def main() -> int:
                 "validation/captures/plasma-v2/instrument-audit/workbench-inspection.json",
             ]:
                 require(ref in outputs, f"SS-PLV2-IR-REPAIR-001 missing evidence output {ref}.", errors)
+        visualintent_repair = next(
+            (item for item in queue.get("repairs", []) if isinstance(item, dict) and item.get("id") == "SS-PLV2-IR-REPAIR-002"),
+            None,
+        )
+        require(visualintent_repair is not None, "repair queue must record SS-PLV2-IR-REPAIR-002.", errors)
+        if visualintent_repair is not None:
+            require(
+                visualintent_repair.get("repair_class") == "instrument_architecture_gap",
+                "SS-PLV2-IR-REPAIR-002 must be an instrument_architecture_gap repair.",
+                errors,
+            )
+            require(
+                visualintent_repair.get("status") == "completed",
+                "SS-PLV2-IR-REPAIR-002 must be recorded as completed evidence.",
+                errors,
+            )
+            outputs = set(visualintent_repair.get("evidence_outputs", []))
+            for ref in [
+                "validation/captures/plasma-v2/instrument-audit/visualintent/spec-reduction-report.json",
+                "validation/captures/plasma-v2/instrument-audit/visualintent/proof-summary.json",
+                "validation/captures/plasma-v2/instrument-audit/workbench-inspection.json",
+                "validation/captures/plasma-v2/instrument-audit/re-audit-report.json",
+            ]:
+                require(ref in outputs, f"SS-PLV2-IR-REPAIR-002 missing evidence output {ref}.", errors)
+            validators = set(visualintent_repair.get("expected_validators", []))
+            require(
+                "py -3 tools/scripts/check_plasma_v2_visualintent_proof.py" in validators,
+                "SS-PLV2-IR-REPAIR-002 must require the VisualIntent proof checker.",
+                errors,
+            )
         burn = queue.get("release_candidate_burndown", {})
         if burn:
             require(

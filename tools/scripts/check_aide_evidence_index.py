@@ -38,6 +38,8 @@ REQUIRED_IDS = {
     "proof-bundle-v1-portable-v2",
     "aide-evidence-packets",
     "plasma-v2-instrument-repair",
+    "plasma-v2-visualintent-spec-reduction",
+    "plasma-v2-visualintent-proof-summary",
 }
 
 
@@ -89,6 +91,11 @@ def main() -> int:
             "plasma-v2-performance-envelope",
             "plasma-v2-stable-candidate-review",
             "plasma-v2-instrument-repair",
+            "plasma-v2-visualintent-spec-reduction",
+            "plasma-v2-visualintent-proof-summary",
+            "check_plasma_v2_visualintent_proof.py",
+            "VisualIntent-to-Plasma spec reduction evidence only",
+            "VisualIntent proof summary evidence only",
             "compatibility certification",
             "artistic acceptance",
             "release promotion",

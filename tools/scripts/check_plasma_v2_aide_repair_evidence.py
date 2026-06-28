@@ -12,6 +12,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 LEDGER = ROOT / ".aide" / "evidence" / "plasma-v2-instrument-repair.toml"
 INDEX = ROOT / ".aide" / "evidence" / "index.toml"
 SUMMARY = ROOT / "validation" / "captures" / "plasma-v2" / "instrument-audit" / "aide-repair-summary.json"
+VISUALINTENT_SUMMARY = ROOT / "validation" / "captures" / "plasma-v2" / "instrument-audit" / "visualintent" / "aide-repair-summary.json"
 
 
 def require(condition: bool, message: str, errors: list[str]) -> None:
@@ -26,11 +27,12 @@ def load_toml(path: pathlib.Path) -> dict:
 
 def main() -> int:
     errors: list[str] = []
-    for path in (LEDGER, INDEX, SUMMARY):
+    for path in (LEDGER, INDEX, SUMMARY, VISUALINTENT_SUMMARY):
         require(path.exists(), f"Missing AIDE instrument repair evidence path: {path.relative_to(ROOT)}", errors)
     if not errors:
         ledger = load_toml(LEDGER)
         summary = json.loads(SUMMARY.read_text(encoding="utf-8"))
+        visualintent_summary = json.loads(VISUALINTENT_SUMMARY.read_text(encoding="utf-8"))
         index_text = INDEX.read_text(encoding="utf-8")
         require(ledger.get("status") == "active", "AIDE instrument repair ledger must be active.", errors)
         require(ledger.get("network_calls") is False, "AIDE instrument repair ledger must be network-free.", errors)
@@ -48,6 +50,8 @@ def main() -> int:
             require(ledger.get(key) is False, f"AIDE instrument repair ledger {key} must be false.", errors)
         claims = ledger.get("claims", {})
         refs = ledger.get("refs", {})
+        visualintent = ledger.get("visualintent", {})
+        visualintent_refs = ledger.get("visualintent_refs", {})
         require(claims.get("agentic_session") == "proposal-only", "AIDE agentic session must remain proposal-only.", errors)
         require(claims.get("work_unit") == "SS-PLV2-IR-REPAIR-001", "AIDE ledger must record the PAW-I-R2 repair WorkUnit.", errors)
         require(claims.get("repair_class") == "instrument_architecture_gap", "AIDE ledger must record the instrument architecture repair class.", errors)
@@ -58,8 +62,8 @@ def main() -> int:
         require(claims.get("workbench_shell_validation") == "pass", "AIDE ledger must record the Workbench validation pass.", errors)
         require(claims.get("remaining_blocker") == "SS-PLV2-I-REPAIR-001", "AIDE summary must record the remaining stable artistic verdict blocker.", errors)
         require(
-            "visualintent_candidates_reduce_to_plasma_spec" in claims.get("remaining_blockers", []),
-            "AIDE ledger must preserve the VisualIntent blocker.",
+            "visualintent_candidates_reduce_to_plasma_spec" not in claims.get("remaining_blockers", []),
+            "AIDE legacy ledger remaining blockers must no longer list the VisualIntent blocker after Turn 2.",
             errors,
         )
         for ref_key in [
@@ -96,6 +100,81 @@ def main() -> int:
             errors,
         )
         require("plasma-v2-instrument-repair" in index_text, "AIDE evidence index must track the instrument repair ledger.", errors)
+        require(
+            visualintent.get("work_unit") == "SS-PLV2-IR-REPAIR-002",
+            "AIDE ledger must record the VisualIntent repair WorkUnit.",
+            errors,
+        )
+        require(
+            visualintent.get("repair_class") == "instrument_architecture_gap",
+            "AIDE ledger must record the VisualIntent repair class.",
+            errors,
+        )
+        require(
+            visualintent.get("blocker") == "visualintent_candidates_reduce_to_plasma_spec",
+            "AIDE ledger must record the VisualIntent blocker.",
+            errors,
+        )
+        require(
+            visualintent.get("visualintent_candidates_reduce_to_plasma_spec") is True,
+            "AIDE ledger must record the VisualIntent blocker as cleared.",
+            errors,
+        )
+        require(visualintent.get("spec_reduction_report") == "pass", "AIDE ledger must record the spec reduction report pass.", errors)
+        require(visualintent.get("proof_summary") == "pass", "AIDE ledger must record the proof summary pass.", errors)
+        require(visualintent.get("workbench_shell_validation") == "pass", "AIDE ledger must record Workbench validation pass for VisualIntent.", errors)
+        require(visualintent.get("agentic_session") == "proposal-only", "AIDE VisualIntent agentic session must remain proposal-only.", errors)
+        require(visualintent.get("source_mutation_by_aide") is False, "AIDE VisualIntent ledger must record no source mutation.", errors)
+        require(visualintent.get("remaining_blockers") == ["final stable artistic acceptance"], "AIDE VisualIntent ledger must leave only final artistic acceptance.", errors)
+        for ref_key in [
+            "spec_reduction_report",
+            "proof_summary",
+            "workbench_inspection",
+            "instrument_architecture_reaudit",
+        ]:
+            require(ref_key in visualintent_refs, f"AIDE VisualIntent ledger missing repair evidence ref {ref_key}.", errors)
+        require(visualintent_summary.get("status") == "pass", "AIDE VisualIntent repair summary status must pass.", errors)
+        require(
+            visualintent_summary.get("work_unit") == "SS-PLV2-IR-REPAIR-002",
+            "AIDE VisualIntent repair summary must record SS-PLV2-IR-REPAIR-002.",
+            errors,
+        )
+        require(
+            visualintent_summary.get("blocker") == "visualintent_candidates_reduce_to_plasma_spec",
+            "AIDE VisualIntent repair summary must record the repaired blocker.",
+            errors,
+        )
+        require(
+            visualintent_summary.get("visualintent_candidates_reduce_to_plasma_spec") is True,
+            "AIDE VisualIntent repair summary must record the blocker as cleared.",
+            errors,
+        )
+        require(
+            visualintent_summary.get("agentic", {}).get("agent_mode") == "proposal-only",
+            "AIDE VisualIntent repair summary must record proposal-only agentic mode.",
+            errors,
+        )
+        require(
+            visualintent_summary.get("agentic", {}).get("source_mutation_by_aide") is False,
+            "AIDE VisualIntent repair summary must record no source mutation.",
+            errors,
+        )
+        visualintent_evidence = set(visualintent_summary.get("repair_evidence", []))
+        for ref in [
+            "validation/captures/plasma-v2/instrument-audit/visualintent/spec-reduction-report.json",
+            "validation/captures/plasma-v2/instrument-audit/visualintent/proof-summary.json",
+            "validation/captures/plasma-v2/instrument-audit/workbench-inspection.json",
+            "validation/captures/plasma-v2/stable-promotion/instrument-architecture-audit.json",
+        ]:
+            require(ref in visualintent_evidence, f"AIDE VisualIntent repair summary missing repair evidence {ref}.", errors)
+        visualintent_remaining_ids = {item.get("id") for item in visualintent_summary.get("remaining_blockers", []) if isinstance(item, dict)}
+        require(
+            visualintent_remaining_ids == {"SS-PLV2-I-REPAIR-001"},
+            "AIDE VisualIntent repair summary must leave only the final artistic acceptance repair.",
+            errors,
+        )
+        require("plasma-v2-visualintent-spec-reduction" in index_text, "AIDE evidence index must track VisualIntent spec reduction.", errors)
+        require("plasma-v2-visualintent-proof-summary" in index_text, "AIDE evidence index must track VisualIntent proof summary.", errors)
         require("human artistic acceptance remain authoritative" in index_text, "AIDE evidence index must preserve the human acceptance boundary.", errors)
 
     if errors:

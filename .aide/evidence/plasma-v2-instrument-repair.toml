@@ -37,7 +37,6 @@ workbench_shell_validation = "pass"
 instrument_architecture_reaudit = "hold"
 remaining_blocker = "SS-PLV2-I-REPAIR-001"
 remaining_blockers = [
-  "visualintent_candidates_reduce_to_plasma_spec",
   "final stable artistic acceptance",
 ]
 
@@ -52,6 +51,37 @@ agentic_receipt = "out/aide/agentic/SS-PLV2-IR-REPAIR-001/session-receipt.json"
 instrument_summary = "validation/captures/plasma-v2/instrument-audit/aide-repair-summary.json"
 legacy_authority_report = "validation/captures/plasma-v2/instrument-audit/legacy-authority-report.json"
 migration_report = "validation/captures/plasma-v2/instrument-audit/migration-report.json"
+workbench_inspection = "validation/captures/plasma-v2/instrument-audit/workbench-inspection.json"
+instrument_architecture_reaudit = "validation/captures/plasma-v2/stable-promotion/instrument-architecture-audit.json"
+repair_queue = ".aide/repairs/index.toml"
+work_unit = ".aide/work_units/plasma-v2-instrument-repair.toml"
+
+[visualintent]
+work_unit = "SS-PLV2-IR-REPAIR-002"
+repair_class = "instrument_architecture_gap"
+blocker = "visualintent_candidates_reduce_to_plasma_spec"
+visualintent_candidates_reduce_to_plasma_spec = true
+spec_reduction_report = "pass"
+proof_summary = "pass"
+workbench_shell_validation = "pass"
+instrument_architecture_reaudit = "hold"
+agentic_session = "proposal-only"
+source_mutation_by_aide = false
+automatic_promotion = false
+remaining_blocker = "SS-PLV2-I-REPAIR-001"
+remaining_blockers = [
+  "final stable artistic acceptance",
+]
+claim_boundary = "AIDE records VisualIntent admission evidence only; ScreenSave validators own the gate."
+
+[visualintent_refs]
+repair_scan = "out/aide/repairs/scan.json"
+release_readiness_gap_plan = "out/aide/repairs/plan-release_readiness_gap.json"
+agentic_proposal = "out/aide/agentic/SS-PLV2-IR-REPAIR-002/proposal.json"
+agentic_receipt = "out/aide/agentic/SS-PLV2-IR-REPAIR-002/session-receipt.json"
+visualintent_summary = "validation/captures/plasma-v2/instrument-audit/visualintent/aide-repair-summary.json"
+spec_reduction_report = "validation/captures/plasma-v2/instrument-audit/visualintent/spec-reduction-report.json"
+proof_summary = "validation/captures/plasma-v2/instrument-audit/visualintent/proof-summary.json"
 workbench_inspection = "validation/captures/plasma-v2/instrument-audit/workbench-inspection.json"
 instrument_architecture_reaudit = "validation/captures/plasma-v2/stable-promotion/instrument-architecture-audit.json"
 repair_queue = ".aide/repairs/index.toml"
