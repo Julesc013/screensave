@@ -38,6 +38,7 @@ REQUIRED_ENTRY_IDS = {
     "proof-bundle-v1-portable-v2",
     "aide-evidence-packets",
     "plasma-v2-publication-prep",
+    "plasma-v2-publication-ready-handoff",
 }
 
 FORBIDDEN_CLAIM_WORDS = {

@@ -1,0 +1,39 @@
+schema_version = 1
+evidence_id = "screensave.plasma-v2.publication-ready-handoff.evidence.v1"
+status = "publication-ready-handoff-recorded"
+work_unit = "SS-PLV2-JX0"
+decision_kind = "publication-ready break handoff"
+decision_owner = "ScreenSave release gates"
+aide_role = "evidence/control-plane only"
+recorded_on = "2026-06-29"
+
+[refs]
+pause_state = "validation/captures/plasma-v2/publication-prep/pause-state.json"
+closeout_scan = "validation/captures/plasma-v2/publication-prep/closeout-scan.json"
+publication_dry_run = "validation/captures/plasma-v2/publication-prep/publication-dry-run.json"
+pause_handoff_report = "validation/captures/plasma-v2/publication-prep/pause-handoff-report.json"
+publication_prep_gate = "validation/captures/plasma-v2/publication-prep/gate-report.json"
+stable_promotion_gate = "validation/captures/plasma-v2/stable-promotion/gate-report.json"
+release_manifest = "releases/plasma-v2-stable/release-manifest.toml"
+publication_checklist = "releases/plasma-v2-stable/publication-checklist.md"
+break_handoff = "docs/roadmap/break-handoff-2026-06-28.md"
+next_decision = "docs/roadmap/plasma-v2-next-decision.md"
+
+[assertions]
+stable = true
+release_promotion = "accepted"
+publication_prep = "ready"
+publication = "not-published"
+next_decision = "publish or continue productization"
+blocking_repairs = []
+aide_runtime_dependency = false
+aide_published_release = false
+aide_uploaded_artifacts = false
+aide_created_release_tag = false
+aide_created_github_release = false
+aide_certified_compatibility = false
+aide_started_workbench_mvp = false
+aide_started_manager_install_apply = false
+aide_started_all_saver_migration = false
+
+claim_boundary = "AIDE indexes publication-ready break handoff evidence only; ScreenSave release gates own publication, and no release upload, tag, GitHub release, compatibility certification broadening, Workbench MVP, Manager install/apply mutation, all-saver migration, or runtime dependency is admitted."

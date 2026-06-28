@@ -1,0 +1,31 @@
+{
+  "schema": "screensave.plasma-v2.publication-ready.aide-closeout-summary.v1",
+  "status": "pass",
+  "work_unit": "SS-PLV2-JX0",
+  "aide_role": "evidence/control-plane only",
+  "stable": true,
+  "release_promotion": "accepted",
+  "publication_prep": "ready",
+  "publication": "not-published",
+  "next_decision": "publish or continue productization",
+  "blocking_repairs": [],
+  "aide_assertions": {
+    "did_not_publish_release": true,
+    "did_not_upload_artifacts": true,
+    "did_not_create_release_tag": true,
+    "did_not_create_github_release": true,
+    "did_not_certify_compatibility": true,
+    "did_not_start_workbench_mvp": true,
+    "did_not_start_manager_install_apply": true,
+    "did_not_start_all_saver_migration": true,
+    "did_not_become_runtime_dependency": true
+  },
+  "refs": {
+    "evidence_ledger": ".aide/evidence/plasma-v2-publication-ready-handoff.toml",
+    "pause_handoff_report": "validation/captures/plasma-v2/publication-prep/pause-handoff-report.json",
+    "publication_dry_run": "validation/captures/plasma-v2/publication-prep/publication-dry-run.json",
+    "break_handoff": "docs/roadmap/break-handoff-2026-06-28.md",
+    "next_decision": "docs/roadmap/plasma-v2-next-decision.md"
+  },
+  "claim_boundary": "AIDE closeout summary records publication-ready handoff evidence only; publication, artifact upload, release tagging, GitHub release creation, compatibility certification broadening, Workbench MVP, Manager install/apply mutation, all-saver migration, and product authority remain ScreenSave gates."
+}

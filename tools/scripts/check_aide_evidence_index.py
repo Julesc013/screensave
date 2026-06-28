@@ -43,6 +43,7 @@ REQUIRED_IDS = {
     "plasma-v2-stable-promotion-decision",
     "plasma-v2-artistic-repair-evidence",
     "plasma-v2-publication-prep",
+    "plasma-v2-publication-ready-handoff",
 }
 
 
@@ -105,6 +106,7 @@ def main() -> int:
             "AIDE final stable artistic decision evidence only",
             "AIDE indexes final artistic repair evidence only",
             "AIDE indexes Plasma v2 publication-prep evidence only",
+            "AIDE indexes publication-ready break handoff evidence only",
             "ScreenSave/project authority owns acceptance",
             "ScreenSave release gates own publication",
             "compatibility certification",
@@ -118,10 +120,12 @@ def main() -> int:
 
     stable_ledger = ROOT / ".aide" / "evidence" / "plasma-v2-stable-promotion.toml"
     publication_ledger = ROOT / ".aide" / "evidence" / "plasma-v2-publication-prep.toml"
+    handoff_ledger = ROOT / ".aide" / "evidence" / "plasma-v2-publication-ready-handoff.toml"
     stable_summary = ROOT / "validation" / "captures" / "plasma-v2" / "final-artistic-decision" / "aide-decision-summary.json"
     repair_summary = ROOT / "validation" / "captures" / "plasma-v2" / "final-artistic-decision" / "aide-repair-summary.json"
     publication_summary = ROOT / "validation" / "captures" / "plasma-v2" / "publication-prep" / "aide-publication-summary.json"
-    for path in [stable_ledger, publication_ledger, stable_summary, repair_summary, publication_summary]:
+    handoff_summary = ROOT / "validation" / "captures" / "plasma-v2" / "publication-prep" / "aide-closeout-summary.json"
+    for path in [stable_ledger, publication_ledger, handoff_ledger, stable_summary, repair_summary, publication_summary, handoff_summary]:
         require(path.exists(), f"Missing stable-promotion AIDE evidence path: {path.relative_to(ROOT)}", errors)
     if stable_ledger.exists():
         text = stable_ledger.read_text(encoding="utf-8")
@@ -205,6 +209,52 @@ def main() -> int:
             "did_not_become_runtime_dependency",
         ):
             require(assertions.get(key) is True, f"publication AIDE summary must assert {key}.", errors)
+    if handoff_ledger.exists():
+        text = handoff_ledger.read_text(encoding="utf-8")
+        for needle in [
+            'work_unit = "SS-PLV2-JX0"',
+            'decision_kind = "publication-ready break handoff"',
+            'decision_owner = "ScreenSave release gates"',
+            'aide_role = "evidence/control-plane only"',
+            'publication_dry_run = "validation/captures/plasma-v2/publication-prep/publication-dry-run.json"',
+            'pause_handoff_report = "validation/captures/plasma-v2/publication-prep/pause-handoff-report.json"',
+            'publication = "not-published"',
+            'next_decision = "publish or continue productization"',
+            "stable = true",
+            'release_promotion = "accepted"',
+            'publication_prep = "ready"',
+            "aide_runtime_dependency = false",
+            "aide_published_release = false",
+            "aide_uploaded_artifacts = false",
+            "aide_created_release_tag = false",
+            "aide_created_github_release = false",
+            "aide_certified_compatibility = false",
+            "aide_started_workbench_mvp = false",
+            "aide_started_manager_install_apply = false",
+            "aide_started_all_saver_migration = false",
+        ]:
+            require(needle in text, f"publication-ready handoff AIDE ledger missing {needle!r}.", errors)
+    if handoff_summary.exists():
+        payload = json.loads(handoff_summary.read_text(encoding="utf-8"))
+        require(payload.get("work_unit") == "SS-PLV2-JX0", "handoff AIDE summary must name SS-PLV2-JX0.", errors)
+        require(payload.get("stable") is True, "handoff AIDE summary must record stable true.", errors)
+        require(payload.get("release_promotion") == "accepted", "handoff AIDE summary must record accepted release promotion.", errors)
+        require(payload.get("publication_prep") == "ready", "handoff AIDE summary must record publication prep ready.", errors)
+        require(payload.get("publication") == "not-published", "handoff AIDE summary must block publication.", errors)
+        require(payload.get("blocking_repairs") == [], "handoff AIDE summary must record no blocking repairs.", errors)
+        assertions = payload.get("aide_assertions", {})
+        for key in (
+            "did_not_publish_release",
+            "did_not_upload_artifacts",
+            "did_not_create_release_tag",
+            "did_not_create_github_release",
+            "did_not_certify_compatibility",
+            "did_not_start_workbench_mvp",
+            "did_not_start_manager_install_apply",
+            "did_not_start_all_saver_migration",
+            "did_not_become_runtime_dependency",
+        ):
+            require(assertions.get(key) is True, f"handoff AIDE summary must assert {key}.", errors)
 
     if errors:
         for error in errors:
