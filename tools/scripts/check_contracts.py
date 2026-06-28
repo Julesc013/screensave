@@ -159,6 +159,12 @@ REQUIRED_CONTRACTS = {
     ROOT / "contracts" / "visual_intent_v1.md": [
         "Status: draft authoring contract, not executable runtime behavior.",
         "not a universal graphics language",
+        "Product Reduction Law",
+        "VisualIntent cannot execute",
+        "explicit `plasma_v2_spec`",
+        "`candidate_count` defaults to `3`",
+        "`candidate_count` must never exceed `5`",
+        "candidate rationale must be textual evidence only",
         "product-family resolver",
         "product-specific specification",
         "must not bypass product schemas, proof",

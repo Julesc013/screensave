@@ -76,11 +76,40 @@ def main() -> int:
         for needle in (
             "Status: draft authoring contract, not executable runtime behavior.",
             "not a universal graphics language",
+            "VisualIntent cannot execute",
+            "VisualIntent cannot bypass product-specific schemas",
+            "Product Reduction Law",
             "product-specific specification",
+            "explicit `plasma_v2_spec`",
+            "plasma_v2_plan",
+            "`candidate_count` defaults to `3`",
+            "`candidate_count` must never exceed `5`",
+            "candidate IDs must be stable",
+            "candidate order must be stable",
+            "candidate rationale must be textual evidence only",
+            "generated candidates are review inputs",
             "must not bypass product schemas, proof",
             "does not generate C source",
         ):
             require(needle in text, f"VisualIntent contract is missing expected boundary text: {needle!r}", errors)
+        for field in (
+            "mood",
+            "brightness",
+            "contrast",
+            "density",
+            "motion_character",
+            "motion_speed",
+            "palette_hint",
+            "warmth",
+            "softness",
+            "complexity",
+            "avoid_flashing",
+            "deterministic",
+            "seed",
+            "target_product",
+            "candidate_count",
+        ):
+            require(field in text, f"VisualIntent contract is missing required field text: {field}", errors)
 
     if EXAMPLE.exists():
         with EXAMPLE.open("rb") as handle:

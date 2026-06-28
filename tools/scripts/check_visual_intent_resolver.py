@@ -13,6 +13,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 RESOLVER = ROOT / "tools" / "visualintent" / "resolve_plasma.py"
 SCHEMA = ROOT / "tools" / "visualintent" / "schemas" / "visual_intent_plasma_v1.schema.json"
 EXAMPLE = ROOT / "tools" / "visualintent" / "examples" / "plasma_warm_room.toml"
+CONTRACT = ROOT / "contracts" / "visual_intent_v1.md"
 OUT_DIR = ROOT / "out" / "checks" / "visualintent" / "plasma_warm_room"
 
 
@@ -37,12 +38,25 @@ def run_resolver(args: list[str]) -> subprocess.CompletedProcess[str]:
 
 def main() -> int:
     errors: list[str] = []
-    for path in [RESOLVER, SCHEMA, EXAMPLE]:
+    for path in [RESOLVER, SCHEMA, EXAMPLE, CONTRACT]:
         require(path.exists(), f"Missing VisualIntent resolver input {path.relative_to(ROOT)}.", errors)
     if errors:
         for error in errors:
             print(error, file=sys.stderr)
         return 1
+    contract_text = CONTRACT.read_text(encoding="utf-8")
+    for needle in [
+        "Product Reduction Law",
+        "VisualIntent cannot execute",
+        "VisualIntent cannot bypass product-specific schemas",
+        "explicit `plasma_v2_spec`",
+        "plasma_v2_plan",
+        "`candidate_count` defaults to `3`",
+        "`candidate_count` must never exceed `5`",
+        "candidate rationale must be textual evidence only",
+        "generated candidates are review inputs",
+    ]:
+        require(needle in contract_text, f"VisualIntent contract missing resolver law text: {needle}", errors)
 
     if OUT_DIR.exists():
         shutil.rmtree(OUT_DIR)

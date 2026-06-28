@@ -165,6 +165,23 @@ not executable behavior. It may propose product-family candidates, but Plasma
 truth starts when candidates reduce to `plasma_v2_spec` and then pass pack,
 capture, proof, review, and promotion gates.
 
+For the `visualintent_candidates_reduce_to_plasma_spec` gate to pass, the
+candidate resolver must prove this exact reduction:
+
+```text
+VisualIntent
+-> bounded deterministic Plasma candidate
+-> explicit plasma_v2_spec
+-> plasma_v2_plan
+-> ScreenSave proof / capture / review evidence
+```
+
+The resolver must preserve `candidate_count` bounds, deterministic candidate
+IDs, deterministic candidate order, textual rationale, and candidate-level claim
+boundaries. It must reject executable payloads, network/model/provider calls,
+source generation, runtime mutation, direct renderer commands, compatibility
+certification, publication, automatic promotion, and final artistic acceptance.
+
 AIDE may coordinate bounded development work, repair proposals, EvidencePacket
 projection, drift detection, and release-gate evidence. AIDE must not become
 the saver runtime, visual authority, release authority, compatibility
