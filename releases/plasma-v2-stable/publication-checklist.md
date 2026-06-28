@@ -31,3 +31,14 @@ Not performed in PAW-J:
 - All Core saver migration.
 - Manager install/apply mutation.
 - Graphical Workbench MVP.
+
+PAW-JX dry-run verification:
+
+- Publication-prep packet verified without publishing.
+- AIDE evidence refs verified as evidence/control-plane refs only.
+- Stable-promotion refs verified.
+- Package-stage refs verified.
+- No public upload occurred.
+- No release tag was created.
+- No GitHub release was created.
+- No compatibility certification broadening occurred.
