@@ -88,7 +88,9 @@ schema version 3 resets older saved Plasma state to:
 - no sampling, filter, emulation, or accent treatment
 
 The `plasma_lava` preset/theme keys remain as compatibility identity labels for
-older APIs and the settings UI. They are not the default runtime authority.
+older APIs and the settings UI. They are not the default runtime authority, and
+loading a saved default key does not reapply the legacy preset bundle on the
+next run.
 
 The classic default modulation is runtime motion inside the resolved `plasma`
 effect. It does not mutate saved settings and it does not make old presets,

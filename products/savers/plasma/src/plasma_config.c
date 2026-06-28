@@ -465,6 +465,24 @@ static void plasma_config_apply_first_principles_default(
     plasma_config_set_product_defaults(config);
 }
 
+static void plasma_config_apply_saved_preset_key(
+    const char *preset_key,
+    screensave_common_config *common_config,
+    plasma_config *config
+)
+{
+    if (common_config == NULL || config == NULL || !plasma_has_non_empty_text(preset_key)) {
+        return;
+    }
+
+    if (lstrcmpiA(preset_key, PLASMA_DEFAULT_PRESET_KEY) == 0) {
+        common_config->preset_key = PLASMA_DEFAULT_PRESET_KEY;
+        return;
+    }
+
+    plasma_apply_preset_bundle_to_config(preset_key, common_config, config);
+}
+
 static void plasma_config_apply_default_demo_schema(
     screensave_common_config *common_config,
     plasma_config *config
@@ -639,7 +657,7 @@ int plasma_config_load(
 
     preset_key[0] = '\0';
     if (plasma_read_string(key, "PresetKey", preset_key, sizeof(preset_key))) {
-        plasma_apply_preset_bundle_to_config(preset_key, common_config, config);
+        plasma_config_apply_saved_preset_key(preset_key, common_config, config);
     }
 
     if (plasma_read_string(key, "ThemeKey", theme_key, sizeof(theme_key))) {

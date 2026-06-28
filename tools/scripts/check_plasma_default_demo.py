@@ -155,6 +155,7 @@ CHECKS = [
             "DefaultDemoSchemaVersion",
             "plasma_config_set_common_first_principles_defaults",
             "plasma_config_apply_first_principles_default",
+            "plasma_config_apply_saved_preset_key",
             "plasma_config_apply_default_demo_schema",
             "common_config->use_deterministic_seed = 1;",
             "common_config->deterministic_seed = PLASMA_DEFAULT_DEMO_SEED;",
@@ -162,9 +163,12 @@ CHECKS = [
             "common_config->randomization_scope = 0UL;",
             "common_config->preset_key = PLASMA_DEFAULT_PRESET_KEY;",
             "common_config->theme_key = PLASMA_DEFAULT_THEME_KEY;",
+            "if (lstrcmpiA(preset_key, PLASMA_DEFAULT_PRESET_KEY) == 0)",
+            "plasma_config_apply_saved_preset_key(preset_key, common_config, config);",
         ],
         "forbidden": [
             "plasma_apply_preset_bundle_to_config(PLASMA_DEFAULT_PRESET_KEY, common_config, config);",
+            "if (plasma_read_string(key, \"PresetKey\", preset_key, sizeof(preset_key))) {\n        plasma_apply_preset_bundle_to_config(preset_key, common_config, config);",
         ],
     },
     {
