@@ -51,8 +51,8 @@ For the default `plasma` effect, the runtime now favors:
   monitor layouts receive a native output surface from the host
 - adaptive high-resolution field sizing outside preview mode when high detail
   and fine resolution are selected. The default demo now uses tiered caps:
-  1280x720 for GDI, 1920x1080 for GL11, 2560x1440 for GL21, and up to
-  6144x2304 for GL33/GL46. Smaller drawable surfaces run at native field
+  1280x720 for GDI, 1600x900 for GL11, 1920x1080 for GL21, and up to
+  2560x1440 for GL33/GL46. Smaller drawable surfaces run at native field
   resolution; larger virtual desktops are scaled down as one continuous field
   instead of tiled per-monitor chunks.
 - aspect-aware virtual-desktop coordinates with an edge guard. The visible
@@ -65,15 +65,16 @@ For the default `plasma` effect, the runtime now favors:
   GDI, GL11, GL21, GL33, and GL46 where those lanes are available
 - slower gentle phase motion tuned for display-refresh-facing flow rather than
   reading as a stream of still fields
-- classic layered plasma wave synthesis: horizontal, vertical, diagonal, and
-  two slowly drifting radial wave sources resolved into one scalar field
-- slow equation morphing inside the default lava field. The lava equation
-  remains the visual anchor, while secondary field families blend into it
+- single-field plasma synthesis: the default scalar field comes from one
+  broad-period equation context at a time rather than compositing a base field
+  with an overlay field
+- slow equation morphing inside that scalar field. The equation parameters
+  drift between compatible wave, radial, fold, and source-weight families
   procedurally instead of cutting or fading between presets.
 - no random composition jumps in the default plasma effect; non-default effects
   can still use composition refresh as explicit alternate modes
-- direct smooth RGB palette cycling from the scalar plasma field, instead of
-  theme-endpoint bands, contours, overlays, glyphs, or postprocessing
+- slow full-color palette/material morphing from the scalar plasma field,
+  instead of theme-endpoint bands, contours, overlays, glyphs, or postprocessing
 - restrained dark-room brightness through bounded channel ranges
 
 Preview mode remains more conservative so the Windows preview pane does not
@@ -163,7 +164,7 @@ coverage:
   resolution depending on renderer tier.
 - 1440p displays are covered natively on GL21 and higher.
 - 4K and broad mixed-monitor layouts are covered by the high GL33/GL46 field
-  budget when they fit within the 6144x2304 cap; larger desktop walls remain
+  budget through a 2560x1440 semantic field cap; larger desktop walls remain
   one continuous scaled field rather than mirrored or repeated tiles.
 - Multiple monitors are treated through the host-provided virtual desktop
   drawable size. This covers mixed monitor layouts, but the current host still

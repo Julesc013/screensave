@@ -2,13 +2,13 @@
 
 - Status: pass
 - Default: plasma_lava + plasma_lava
-- Field: adaptive high-resolution fine plasma field capped by renderer tier with edge-guarded virtual-desktop coordinates and classic layered wave synthesis
-- Motion: slower gentle phase motion tuned for display-refresh-facing flow
-- Color: direct full-color smooth RGB palette cycling from the scalar plasma field
+- Field: single adaptive fine plasma field capped for 4K-aware software synthesis with broad-period virtual-desktop coordinates and slow equation morphing
+- Motion: slow gentle phase motion tuned for continuous display-refresh-facing flow without tight repeating ripple periods
+- Color: slow full-color palette-material morphing from the scalar plasma field
 - Output: native drawable raster presentation with pixel-sharp renderer scaling and resolution-independent plasma coordinates
 - Renderers: gdi floor, gl46 preferred, optional gl21, gl33, gl46
 - Artifact: out/msvc/vs2017_xp/Release/plasma/plasma.scr
-- Artifact SHA256: d4e58fd8ed10d67704c7cb58205f27d61fb5c10ded3c1b904abddf414ac25d41
+- Artifact SHA256: 50080152f3b8300ea2cc7242a861af648b875911626b8fc804475f3695f58f64
 - Claim boundary: Post-stable local demo rebuild evidence only; this does not publish a release, broaden compatibility certification, or replace Plasma v2 proof/publication gates.
 
 ## Checks
@@ -53,5 +53,5 @@
 - Add per-monitor timing windows for heterogeneous multi-monitor refresh rates; the current host is one virtual-desktop window with one timer request.
 - Refresh publication manifests only after the project chooses to replace the staged artifact.
 - Add renderer-tier visual comparison captures for GL11/GL21/GL33 where local hardware exposes them.
-- Add shader/native-field implementations for GL33/GL46 if CPU field synthesis remains too expensive at native high-refresh targets.
+- Add shader/native-field implementations for GL33/GL46 only after the software reference path stays visually smooth at the declared caps.
 - Expose the new default posture through future Workbench direct-control UI without making Workbench runtime authority.

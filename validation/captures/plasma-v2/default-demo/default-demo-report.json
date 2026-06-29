@@ -2,7 +2,7 @@
   "artifact": {
     "exists": true,
     "path": "out/msvc/vs2017_xp/Release/plasma/plasma.scr",
-    "sha256": "d4e58fd8ed10d67704c7cb58205f27d61fb5c10ded3c1b904abddf414ac25d41"
+    "sha256": "50080152f3b8300ea2cc7242a861af648b875911626b8fc804475f3695f58f64"
   },
   "checks": [
     {
@@ -141,11 +141,11 @@
   ],
   "claim_boundary": "Post-stable local demo rebuild evidence only; this does not publish a release, broaden compatibility certification, or replace Plasma v2 proof/publication gates.",
   "demo_profile": {
-    "color": "direct full-color smooth RGB palette cycling from the scalar plasma field",
+    "color": "slow full-color palette-material morphing from the scalar plasma field",
     "customization_boundary": "All existing Plasma settings remain explicit config inputs; presets remain starting points.",
     "default_preset": "plasma_lava",
     "default_theme": "plasma_lava",
-    "field": "adaptive high-resolution fine plasma field capped by renderer tier with edge-guarded virtual-desktop coordinates and classic layered wave synthesis",
+    "field": "single adaptive fine plasma field capped for 4K-aware software synthesis with broad-period virtual-desktop coordinates and slow equation morphing",
     "forced_renderer_smoke": [
       "gdi",
       "gl11",
@@ -154,7 +154,7 @@
       "gl46"
     ],
     "minimum_renderer": "gdi",
-    "motion": "slower gentle phase motion tuned for display-refresh-facing flow",
+    "motion": "slow gentle phase motion tuned for continuous display-refresh-facing flow without tight repeating ripple periods",
     "optional_renderer_ladder": [
       "gl21",
       "gl33",
@@ -172,7 +172,7 @@
     "Add per-monitor timing windows for heterogeneous multi-monitor refresh rates; the current host is one virtual-desktop window with one timer request.",
     "Refresh publication manifests only after the project chooses to replace the staged artifact.",
     "Add renderer-tier visual comparison captures for GL11/GL21/GL33 where local hardware exposes them.",
-    "Add shader/native-field implementations for GL33/GL46 if CPU field synthesis remains too expensive at native high-refresh targets.",
+    "Add shader/native-field implementations for GL33/GL46 only after the software reference path stays visually smooth at the declared caps.",
     "Expose the new default posture through future Workbench direct-control UI without making Workbench runtime authority."
   ],
   "renderer_smoke": [
@@ -216,7 +216,7 @@
   "schema": "screensave.plasma.default-demo.v1",
   "source": {
     "branch": "main",
-    "commit": "6b680b4fc1ad42390c57ea61a1e546e2e926c2a0",
+    "commit": "85643be692a567f980cca1b88bd548bc30980ae8",
     "dirty": true
   },
   "status": "pass",

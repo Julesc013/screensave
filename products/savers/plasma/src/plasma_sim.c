@@ -5,17 +5,17 @@
 
 #define PLASMA_DEFAULT_DEMO_GDI_MAX_FIELD_WIDTH 1280
 #define PLASMA_DEFAULT_DEMO_GDI_MAX_FIELD_HEIGHT 720
-#define PLASMA_DEFAULT_DEMO_GL11_MAX_FIELD_WIDTH 1920
-#define PLASMA_DEFAULT_DEMO_GL11_MAX_FIELD_HEIGHT 1080
-#define PLASMA_DEFAULT_DEMO_GL21_MAX_FIELD_WIDTH 2560
-#define PLASMA_DEFAULT_DEMO_GL21_MAX_FIELD_HEIGHT 1440
-#define PLASMA_DEFAULT_DEMO_GL_HIGH_MAX_FIELD_WIDTH 6144
-#define PLASMA_DEFAULT_DEMO_GL_HIGH_MAX_FIELD_HEIGHT 2304
+#define PLASMA_DEFAULT_DEMO_GL11_MAX_FIELD_WIDTH 1600
+#define PLASMA_DEFAULT_DEMO_GL11_MAX_FIELD_HEIGHT 900
+#define PLASMA_DEFAULT_DEMO_GL21_MAX_FIELD_WIDTH 1920
+#define PLASMA_DEFAULT_DEMO_GL21_MAX_FIELD_HEIGHT 1080
+#define PLASMA_DEFAULT_DEMO_GL_HIGH_MAX_FIELD_WIDTH 2560
+#define PLASMA_DEFAULT_DEMO_GL_HIGH_MAX_FIELD_HEIGHT 1440
 #define PLASMA_DEFAULT_DEMO_MIN_FIELD_WIDTH 320
 #define PLASMA_DEFAULT_DEMO_MIN_FIELD_HEIGHT 180
-#define PLASMA_DEFAULT_DEMO_DOMAIN_SIZE 3072
-#define PLASMA_DEFAULT_DEMO_DOMAIN_MAX 8192
-#define PLASMA_DEFAULT_DEMO_EDGE_GUARD 192
+#define PLASMA_DEFAULT_DEMO_DOMAIN_SIZE 4096
+#define PLASMA_DEFAULT_DEMO_DOMAIN_MAX 12288
+#define PLASMA_DEFAULT_DEMO_EDGE_GUARD 256
 
 static int plasma_field_size_is_safe(const screensave_sizei *size)
 {
@@ -108,20 +108,6 @@ static unsigned int plasma_smoothstep_u8(unsigned int amount)
 
     value = (unsigned long)amount;
     return (unsigned int)((value * value * (765UL - (2UL * value))) / (255UL * 255UL));
-}
-
-static unsigned int plasma_classic_demo_curve_wave(unsigned int phase)
-{
-    unsigned int triangle;
-
-    phase &= 255U;
-    if (phase < 128U) {
-        triangle = phase * 2U;
-    } else {
-        triangle = (255U - phase) * 2U;
-    }
-
-    return plasma_smoothstep_u8(triangle);
 }
 
 static int plasma_default_demo_path(
@@ -833,10 +819,10 @@ static void plasma_demo_profile_for_cycle(
         return;
     }
 
-    scale = plasma_demo_hash_u8(state, cycle_index, 23UL) % 5U;
+    scale = plasma_demo_hash_u8(state, cycle_index, 23UL) % 3U;
     profile->scale_delta = (int)scale - 2;
-    profile->warp_amount = 20U + (plasma_demo_hash_u8(state, cycle_index, 31UL) % 76U);
-    profile->complexity_amount = 24U + (plasma_demo_hash_u8(state, cycle_index, 43UL) % 104U);
+    profile->warp_amount = 6U + (plasma_demo_hash_u8(state, cycle_index, 31UL) % 24U);
+    profile->complexity_amount = 4U + (plasma_demo_hash_u8(state, cycle_index, 43UL) % 28U);
     profile->phase_bias = plasma_demo_hash_u8(state, cycle_index, 59UL);
 }
 
@@ -1052,7 +1038,7 @@ static void plasma_demo_morph_context_build(
     family_count = (unsigned int)(sizeof(g_plasma_demo_families) / sizeof(g_plasma_demo_families[0]));
     source_family = &g_plasma_demo_families[family_index % family_count];
     target_family = &g_plasma_demo_families[target_family_index % family_count];
-    cycle_index = (state->phase_millis / 160UL) / 256UL;
+    cycle_index = (state->phase_millis / 512UL) / 256UL;
     context->domain_width = domain_width > 0 ? domain_width : PLASMA_DEFAULT_DEMO_DOMAIN_SIZE;
     context->domain_height = domain_height > 0 ? domain_height : PLASMA_DEFAULT_DEMO_DOMAIN_SIZE;
 
@@ -1089,6 +1075,9 @@ static unsigned int plasma_demo_wave_value(
 )
 {
     int distance;
+    int broad_x;
+    int broad_y;
+    int broad_distance;
     int linear_phase;
     int source_phase;
     int domain_phase;
@@ -1100,17 +1089,20 @@ static unsigned int plasma_demo_wave_value(
     }
 
     distance = plasma_abs_int(x - wave->source_x) + plasma_abs_int(y - wave->source_y);
+    broad_x = x / 20;
+    broad_y = y / 20;
+    broad_distance = distance / 20;
     linear_phase =
-        (x * wave->x_coeff) +
-        (y * wave->y_coeff) +
-        (plasma_abs_int(x - y) * wave->fold_coeff);
-    source_phase = distance * wave->source_coeff;
+        (broad_x * wave->x_coeff) +
+        (broad_y * wave->y_coeff) +
+        (plasma_abs_int(broad_x - broad_y) * wave->fold_coeff);
+    source_phase = broad_distance * wave->source_coeff;
     domain_phase = plasma_mix_int(linear_phase, source_phase, wave->source_weight);
     warp_phase =
         (((int)plasma_triangle_wave(
-            (unsigned int)(((x / 13) + (y / 17)) * 5) +
+            (unsigned int)((broad_x / 9) + (broad_y / 11)) +
             context->warp_base
-        ) - 128) * (int)context->profile.warp_amount) / 128;
+        ) - 128) * (int)context->profile.warp_amount) / 192;
     phase =
         domain_phase +
         warp_phase +
@@ -1159,105 +1151,11 @@ static unsigned int plasma_classic_demo_equation_value(
     value /= 4U;
 
     extra_value = plasma_triangle_wave(
-        (unsigned int)plasma_abs_int((x * 2) - (y * 3)) +
+        (unsigned int)plasma_abs_int((x / 18) - (y / 24)) +
         context->extra_phase_base
     );
-    extra_value = (value + extra_value) / 2U;
+    extra_value = ((value * 3U) + extra_value) / 4U;
     return plasma_mix_u8(value, extra_value, context->profile.complexity_amount);
-}
-
-static unsigned int plasma_classic_demo_field_value(
-    const plasma_execution_state *state,
-    int x,
-    int y,
-    int domain_width,
-    int domain_height
-)
-{
-    unsigned int phase_a;
-    unsigned int phase_b;
-    unsigned int phase_c;
-    unsigned int phase_d;
-    unsigned int source_a_x;
-    unsigned int source_a_y;
-    unsigned int source_b_x;
-    unsigned int source_b_y;
-    unsigned int wave_a;
-    unsigned int wave_b;
-    unsigned int wave_c;
-    unsigned int wave_d;
-    unsigned int wave_e;
-    unsigned int value;
-    int distance_a;
-    int distance_b;
-    int center_x;
-    int center_y;
-    int span_x;
-    int span_y;
-
-    if (state == NULL) {
-        return 0U;
-    }
-    if (domain_width <= 0) {
-        domain_width = PLASMA_DEFAULT_DEMO_DOMAIN_SIZE;
-    }
-    if (domain_height <= 0) {
-        domain_height = PLASMA_DEFAULT_DEMO_DOMAIN_SIZE;
-    }
-
-    phase_a = (unsigned int)((state->phase_millis / 24UL) & 255UL);
-    phase_b = (unsigned int)((state->phase_millis / 31UL) & 255UL);
-    phase_c = (unsigned int)((state->phase_millis / 43UL) & 255UL);
-    phase_d = (unsigned int)((state->phase_millis / 59UL) & 255UL);
-
-    center_x = domain_width / 2;
-    center_y = domain_height / 2;
-    span_x = (domain_width * 31) / 100;
-    span_y = (domain_height * 31) / 100;
-    if (span_x < 1) {
-        span_x = 1;
-    }
-    if (span_y < 1) {
-        span_y = 1;
-    }
-
-    source_a_x = (unsigned int)(
-        center_x +
-        ((int)(plasma_classic_demo_curve_wave(phase_a + 33U) * (unsigned int)span_x) / 255) -
-        (span_x / 2)
-    );
-    source_a_y = (unsigned int)(
-        center_y +
-        ((int)(plasma_classic_demo_curve_wave(phase_b + 97U) * (unsigned int)span_y) / 255) -
-        (span_y / 2)
-    );
-    source_b_x = (unsigned int)(
-        center_x +
-        ((int)(plasma_classic_demo_curve_wave(phase_c + 151U) * (unsigned int)span_x) / 255) -
-        (span_x / 2)
-    );
-    source_b_y = (unsigned int)(
-        center_y +
-        ((int)(plasma_classic_demo_curve_wave(phase_d + 211U) * (unsigned int)span_y) / 255) -
-        (span_y / 2)
-    );
-
-    distance_a = plasma_abs_int(x - (int)source_a_x) + plasma_abs_int(y - (int)source_a_y);
-    distance_b = plasma_abs_int(x - (int)source_b_x) + plasma_abs_int(y - (int)source_b_y);
-
-    wave_a = plasma_classic_demo_curve_wave((unsigned int)(x / 11) + phase_a);
-    wave_b = plasma_classic_demo_curve_wave((unsigned int)(y / 13) + phase_b + 37U);
-    wave_c = plasma_classic_demo_curve_wave((unsigned int)((x + y) / 17) + phase_c + 73U);
-    wave_d = plasma_classic_demo_curve_wave((unsigned int)(distance_a / 19) + phase_d + 109U);
-    wave_e = plasma_classic_demo_curve_wave((unsigned int)(distance_b / 23) + phase_b + 149U);
-
-    value = (wave_a + wave_b + wave_c + wave_d + wave_e) / 5U;
-    value = plasma_mix_u8(value, plasma_classic_demo_curve_wave(value + phase_c), 56U);
-    if (value > 255U) {
-        value = 255U;
-    }
-
-    return value;
 }
 
 static void plasma_update_plasma(plasma_execution_state *state)
@@ -1280,7 +1178,7 @@ static void plasma_update_plasma(plasma_execution_state *state)
     height = state->field_size.height;
     plasma_demo_domain_size(state, &domain_width, &domain_height);
 
-    family_position = state->phase_millis / 192UL;
+    family_position = state->phase_millis / 512UL;
     family_cycle = family_position / 256UL;
     family_amount = plasma_smoothstep_u8((unsigned int)(family_position & 255UL));
     family_count = (unsigned int)(sizeof(g_plasma_demo_families) / sizeof(g_plasma_demo_families[0]));
@@ -1304,26 +1202,16 @@ static void plasma_update_plasma(plasma_execution_state *state)
         for (x = 0; x < width; ++x) {
             int domain_x;
             int domain_y;
-            unsigned int lava_value;
-            unsigned int morph_value;
             unsigned int value;
 
             domain_x = plasma_demo_normalize_coord(x, width, domain_width);
             domain_y = plasma_demo_normalize_coord(y, height, domain_height);
-            lava_value = plasma_classic_demo_field_value(
-                state,
-                domain_x,
-                domain_y,
-                domain_width,
-                domain_height
-            );
-            morph_value = plasma_classic_demo_equation_value(
+            value = plasma_classic_demo_equation_value(
                 state,
                 domain_x,
                 domain_y,
                 &morph_context
             );
-            value = plasma_mix_u8(lava_value, morph_value, 96U);
             state->field_primary[(y * width) + x] = (unsigned char)value;
         }
     }
@@ -2046,10 +1934,10 @@ void plasma_step_session(
     state->variation_elapsed_millis += delta_millis;
     state->phase_millis += delta_millis * speed_units;
     if (plasma_default_demo_path(&session->plan, state)) {
-        state->palette_phase = (state->palette_phase + ((delta_millis * speed_units) / 48UL)) & 255UL;
-        state->source_phase_a += (delta_millis * speed_units) / 37UL;
-        state->source_phase_b += (delta_millis * speed_units) / 53UL;
-        state->source_phase_c += (delta_millis * speed_units) / 71UL;
+        state->palette_phase = (state->palette_phase + ((delta_millis * speed_units) / 96UL)) & 255UL;
+        state->source_phase_a += (delta_millis * speed_units) / 83UL;
+        state->source_phase_b += (delta_millis * speed_units) / 109UL;
+        state->source_phase_c += (delta_millis * speed_units) / 137UL;
     } else {
         state->palette_phase = (state->palette_phase + ((delta_millis * speed_units) / 10UL) + 1UL) & 255UL;
         state->source_phase_a += (delta_millis * (speed_units + 1UL)) / 11UL + 1UL;

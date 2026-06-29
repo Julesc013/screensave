@@ -119,20 +119,6 @@ static unsigned int plasma_treatment_smoothstep_u8(unsigned int amount)
     return (unsigned int)((value * value * (765UL - (2UL * value))) / (255UL * 255UL));
 }
 
-static unsigned int plasma_treatment_curve_wave(unsigned int phase)
-{
-    unsigned int triangle;
-
-    phase &= 255U;
-    if (phase < 128U) {
-        triangle = phase * 2U;
-    } else {
-        triangle = (255U - phase) * 2U;
-    }
-
-    return plasma_treatment_smoothstep_u8(triangle);
-}
-
 static unsigned int plasma_treatment_demo_hash_u8(
     const struct plasma_execution_state_tag *state,
     unsigned long cycle_index,
@@ -225,34 +211,6 @@ static int plasma_treatment_default_classic_path(
         output->mode == PLASMA_OUTPUT_MODE_NATIVE_RASTER;
 }
 
-static screensave_color plasma_treatment_classic_demo_color(
-    const struct plasma_execution_state_tag *state,
-    unsigned int value
-)
-{
-    screensave_color color;
-    unsigned int phase;
-    unsigned int red;
-    unsigned int green;
-    unsigned int blue;
-
-    phase = value & 255U;
-    if (state != NULL) {
-        phase = (phase + (unsigned int)((state->phase_millis / 96UL) & 255UL)) & 255U;
-        phase = (phase + (unsigned int)(state->palette_phase & 255UL)) & 255U;
-    }
-
-    red = plasma_treatment_curve_wave(phase);
-    green = plasma_treatment_curve_wave(phase + 85U);
-    blue = plasma_treatment_curve_wave(phase + 170U);
-
-    color.red = plasma_treatment_clamp_channel(18U + ((red * 218U) / 255U));
-    color.green = plasma_treatment_clamp_channel(20U + ((green * 210U) / 255U));
-    color.blue = plasma_treatment_clamp_channel(28U + ((blue * 220U) / 255U));
-    color.alpha = 255;
-    return color;
-}
-
 static void plasma_treatment_palette_context_build(
     const struct plasma_plan_tag *plan,
     const struct plasma_execution_state_tag *state,
@@ -295,7 +253,7 @@ static void plasma_treatment_palette_context_build(
         screensave_color target_primary;
         screensave_color target_accent;
 
-        color_position = state->phase_millis / 384UL;
+        color_position = state->phase_millis / 640UL;
         color_cycle = color_position / 256UL;
         color_amount = plasma_treatment_smoothstep_u8((unsigned int)(color_position & 255UL));
         cycle_primary = plasma_treatment_cycle_color(state, color_cycle, 73UL);
@@ -304,10 +262,10 @@ static void plasma_treatment_palette_context_build(
         target_accent = plasma_treatment_cycle_color(state, color_cycle + 1UL, 149UL);
         cycle_primary = plasma_treatment_morph_color(cycle_primary, target_primary, color_amount);
         cycle_accent = plasma_treatment_morph_color(cycle_accent, target_accent, color_amount);
-        context->primary_color = screensave_color_lerp(context->primary_color, cycle_primary, 112U);
-        context->accent_color = screensave_color_lerp(context->accent_color, cycle_accent, 128U);
-        context->highlight_color = screensave_color_lerp(context->accent_color, context->white_color, 96U);
-        context->palette_phase = (unsigned int)((state->phase_millis / 512UL) & 255UL);
+        context->primary_color = screensave_color_lerp(context->primary_color, cycle_primary, 88U);
+        context->accent_color = screensave_color_lerp(context->accent_color, cycle_accent, 104U);
+        context->highlight_color = screensave_color_lerp(context->accent_color, context->white_color, 88U);
+        context->palette_phase = (unsigned int)((state->phase_millis / 768UL) & 255UL);
     } else if (plan != NULL && state != NULL && plan->effect_mode == PLASMA_EFFECT_FIRE) {
         context->palette_phase = (unsigned int)((state->palette_phase / 2UL) & 255UL);
     }
@@ -781,7 +739,7 @@ static int plasma_theme_map_output(
             contour_edge = plasma_treatment_is_contour_edge(output, x, y, band_count);
 
             if (plasma_treatment_default_classic_path(plan, state, output)) {
-                color = plasma_treatment_classic_demo_color(state, value);
+                color = plasma_treatment_palette_color_from_context(&palette_context, value);
             } else if (
                 output->family == PLASMA_OUTPUT_FAMILY_RASTER &&
                 output->mode == PLASMA_OUTPUT_MODE_NATIVE_RASTER

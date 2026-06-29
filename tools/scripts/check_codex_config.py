@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import pathlib
 import sys
 import tomllib
@@ -9,6 +10,9 @@ import tomllib
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 CONFIG_PATH = ROOT / ".codex" / "config.toml"
+VSCODE_SETTINGS_PATH = ROOT / ".vscode" / "settings.json"
+EXPECTED_MODEL = "gpt-5.5"
+EXPECTED_FOLLOW_UP_QUEUE_MODE = "queue"
 
 EXPECTED_AGENT_NAMES = {
     "repo_explorer",
@@ -28,12 +32,35 @@ def load_toml(path: pathlib.Path) -> dict:
         return tomllib.load(handle)
 
 
+def load_json(path: pathlib.Path) -> dict:
+    with path.open("r", encoding="utf-8") as handle:
+        value = json.load(handle)
+    if not isinstance(value, dict):
+        raise ValueError(f"Expected {path.relative_to(ROOT)} to contain a JSON object.")
+    return value
+
+
 def main() -> int:
     config = load_toml(CONFIG_PATH)
     errors = []
 
-    if config.get("model") != "gpt-5.4":
-        errors.append("Expected .codex/config.toml to set model = 'gpt-5.4'.")
+    if config.get("model") != EXPECTED_MODEL:
+        errors.append(f"Expected .codex/config.toml to set model = {EXPECTED_MODEL!r}.")
+
+    try:
+        vscode_settings = load_json(VSCODE_SETTINGS_PATH)
+    except (OSError, json.JSONDecodeError, ValueError) as exc:
+        errors.append(f"Could not read .vscode/settings.json: {exc}")
+        vscode_settings = {}
+
+    follow_up_mode = vscode_settings.get("chatgpt.followUpQueueMode")
+    if follow_up_mode != EXPECTED_FOLLOW_UP_QUEUE_MODE:
+        errors.append(
+            "Expected .vscode/settings.json to set "
+            f"chatgpt.followUpQueueMode = {EXPECTED_FOLLOW_UP_QUEUE_MODE!r} so "
+            "in-progress Codex follow-ups are queued instead of steering or interrupting the current run."
+        )
+
     security_profile = (config.get("approval_policy"), config.get("sandbox_mode"))
     if security_profile not in APPROVED_SECURITY_PROFILES:
         errors.append(
