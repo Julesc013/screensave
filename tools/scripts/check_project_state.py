@@ -91,6 +91,8 @@ def validate_state(state: dict) -> list[str]:
     if portable_status == "accepted":
         if plasma_v2.get("status") == "publication-ready":
             expected_active_program = "plasma-v2-publication"
+        elif plasma_v2.get("status") == "publication-hold":
+            expected_active_program = "plasma-v3-visual-core-spike"
         elif plasma_v2.get("status") == "stable-promoted":
             expected_active_program = "plasma-v2-publication-prep"
         elif plasma_v2.get("status") == "release-candidate-hold":
@@ -146,13 +148,23 @@ def validate_state(state: dict) -> list[str]:
         require(list(portable_v2.get("remaining", [])) == [], "portable_v2.remaining must be empty after Gate C acceptance.", errors)
 
     if plasma_v2:
-        stable_promoted = plasma_v2.get("status") in {"stable-promoted", "publication-ready"}
-        require(plasma_v2.get("stable") is stable_promoted, "plasma_v2.stable must match stable-promoted/publication-ready state.", errors)
-        require(
-            plasma_v2.get("release_promotion") == ("accepted" if stable_promoted else "blocked"),
-            "plasma_v2.release_promotion must match stable-promoted/publication-ready state.",
-            errors,
-        )
+        plasma_status = plasma_v2.get("status")
+        stable_promoted = plasma_status in {"stable-promoted", "publication-ready"}
+        visual_hold = plasma_status == "publication-hold"
+        if visual_hold:
+            require(plasma_v2.get("stable") is False, "plasma_v2.stable must be false in publication-hold.", errors)
+            require(
+                plasma_v2.get("release_promotion") == "withdrawn-for-visual-quality",
+                "plasma_v2.release_promotion must be withdrawn-for-visual-quality in publication-hold.",
+                errors,
+            )
+        else:
+            require(plasma_v2.get("stable") is stable_promoted, "plasma_v2.stable must match stable-promoted/publication-ready state.", errors)
+            require(
+                plasma_v2.get("release_promotion") == ("accepted" if stable_promoted else "blocked"),
+                "plasma_v2.release_promotion must match stable-promoted/publication-ready state.",
+                errors,
+            )
         require(
             plasma_v2.get("status")
             in {
@@ -164,8 +176,9 @@ def validate_state(state: dict) -> list[str]:
                 "release-candidate-hold",
                 "stable-promoted",
                 "publication-ready",
+                "publication-hold",
             },
-            "plasma_v2.status must be a recognized candidate, stable-promoted, or publication-ready status.",
+            "plasma_v2.status must be a recognized candidate, stable-promoted, publication-ready, or publication-hold status.",
             errors,
         )
         if plasma_v2.get("status") == "stable-candidate":
@@ -435,6 +448,109 @@ def validate_state(state: dict) -> list[str]:
                 require("publication-ready packet accepted" in boundary, "plasma_v2.claim_boundary must record publication-ready acceptance.", errors)
                 require("actual release publication" in boundary, "plasma_v2.claim_boundary must keep actual publication separate.", errors)
                 require("release upload" in boundary, "plasma_v2.claim_boundary must keep release upload separate.", errors)
+            require("compatibility certification broadening" in boundary, "plasma_v2.claim_boundary must keep certification broadening separate.", errors)
+        if plasma_v2.get("status") == "publication-hold":
+            require(plasma_v2.get("release_candidate") == "plasma-v2-rc1", "plasma_v2.release_candidate must be plasma-v2-rc1.", errors)
+            require(authority.get("release_candidate") == "plasma-v2-rc1", "authority.release_candidate must be plasma-v2-rc1.", errors)
+            require(plasma_v2.get("packc") == "v1-candidate", "plasma_v2.packc must remain v1-candidate.", errors)
+            require(plasma_v2.get("manager_preview") == "ready", "plasma_v2.manager_preview must be ready.", errors)
+            require(
+                plasma_v2.get("workbench_release_readiness") == "ready",
+                "plasma_v2.workbench_release_readiness must be ready.",
+                errors,
+            )
+            require(
+                plasma_v2.get("visual_review") == "real-display-visual-rejected",
+                "plasma_v2.visual_review must record the real-display visual rejection.",
+                errors,
+            )
+            require(
+                plasma_v2.get("artistic_acceptance") == "superseded-by-visual-rejection",
+                "plasma_v2.artistic_acceptance must record superseded-by-visual-rejection.",
+                errors,
+            )
+            require(
+                plasma_v2.get("stable_promotion_historical") == "accepted",
+                "plasma_v2.stable_promotion_historical must preserve historical acceptance.",
+                errors,
+            )
+            require(
+                plasma_v2.get("current_product_verdict") == "visual-rejected",
+                "plasma_v2.current_product_verdict must be visual-rejected.",
+                errors,
+            )
+            require(plasma_v2.get("publication_prep") == "superseded", "plasma_v2.publication_prep must be superseded.", errors)
+            require(plasma_v2.get("publication") == "not-published", "plasma_v2.publication must remain not-published.", errors)
+            require(
+                plasma_v2.get("opened_next") == "plasma-v3-visual-core-spike",
+                "plasma_v2.opened_next must be plasma-v3-visual-core-spike.",
+                errors,
+            )
+            require(
+                plasma_v2.get("visual_blocker") == "current artifact fails real-display visual acceptance",
+                "plasma_v2.visual_blocker must record the real-display blocker.",
+                errors,
+            )
+            for label in (
+                "acceleration_matrix",
+                "performance_envelope",
+                "stable_candidate_review",
+                "stable_candidate_gate",
+                "package_stage",
+                "manager_preview_model",
+                "release_readiness_gate",
+                "final_artistic_decision",
+                "release_candidate_contract",
+                "release_candidate_package",
+                "release_candidate_evidence",
+                "release_candidate_gate",
+                "support_claims",
+                "manager_review",
+                "workbench_review",
+                "repair_burndown",
+                "stable_promotion_contract",
+                "instrument_architecture_contract",
+                "instrument_architecture_audit",
+                "instrument_repair_roadmap",
+                "instrument_repair_work_unit",
+                "instrument_repair_intake",
+                "stable_promotion_package",
+                "stable_promotion_evidence",
+                "stable_support_claims",
+                "stable_security_review",
+                "stable_provenance_review",
+                "stable_manager_review",
+                "stable_workbench_review",
+                "stable_artistic_decision",
+                "stable_promotion_gate",
+                "stable_repair_burndown",
+                "publication_prep_contract",
+                "publication_policy",
+                "publication_packet",
+                "publication_manifest",
+                "publication_artifact_manifest",
+                "publication_checksums",
+                "publication_provenance",
+                "publication_known_limits",
+                "publication_support_matrix",
+                "publication_install_notes",
+                "publication_rollback_notes",
+                "publication_third_party_notices",
+                "publication_checklist",
+                "publication_prep_gate",
+                "publication_aide_evidence",
+                "pause_handoff",
+                "visual_rejection_verdict",
+                "publication_hold",
+                "plasma_v3_visual_core_reset",
+                "plasma_v3_visual_spike_proof",
+            ):
+                require_path(plasma_v2.get(label), f"plasma_v2.{label}", errors)
+            boundary = str(plasma_v2.get("claim_boundary", "")).lower()
+            require("historical administrative evidence" in boundary, "plasma_v2.claim_boundary must preserve the historical evidence boundary.", errors)
+            require("visual-rejected" in boundary, "plasma_v2.claim_boundary must record the visual-rejected product truth.", errors)
+            require("actual release publication" in boundary, "plasma_v2.claim_boundary must keep actual publication separate.", errors)
+            require("release upload" in boundary, "plasma_v2.claim_boundary must keep release upload separate.", errors)
             require("compatibility certification broadening" in boundary, "plasma_v2.claim_boundary must keep certification broadening separate.", errors)
 
     for label, value in (

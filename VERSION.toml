@@ -11,23 +11,26 @@ status = "released-frozen"
 [development]
 current_state = "truth-proof-baseline-00"
 development_head = "plasma-u09-corrective-recut"
-active_milestone = "plasma-v2-publication"
+active_milestone = "plasma-v3-visual-core-spike"
 release_candidate = "plasma-v2-rc1"
 
 [plasma_v2]
-status = "publication-ready"
-stable = true
+status = "publication-hold"
+stable = false
 release_candidate = "plasma-v2-rc1"
 active_profile = "plasma.v2.reference.preview"
 packc = "v1-candidate"
 manager_preview = "ready"
 workbench_release_readiness = "ready"
-visual_review = "stable-candidate-round-recorded"
-artistic_acceptance = "accepted-for-stable"
-release_promotion = "accepted"
-publication_prep = "ready"
+visual_review = "real-display-visual-rejected"
+artistic_acceptance = "superseded-by-visual-rejection"
+stable_promotion_historical = "accepted"
+current_product_verdict = "visual-rejected"
+release_promotion = "withdrawn-for-visual-quality"
+publication_prep = "superseded"
 publication = "not-published"
-opened_next = "plasma-v2-publication"
+opened_next = "plasma-v3-visual-core-spike"
+visual_blocker = "current artifact fails real-display visual acceptance"
 
 [abi]
 platform_api = 1

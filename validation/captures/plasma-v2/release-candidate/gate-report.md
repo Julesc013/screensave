@@ -2,12 +2,12 @@
 
 Status: fail
 
-Release-candidate gate only; not stable release, release publication, compatibility certification, public SDK stability, all-saver migration, or automatic promotion.
+Release-candidate gate only; not stable release, release publication, compatibility certification, public SDK stability, all-saver migration, automatic promotion, or visual acceptance without a real-display human verdict.
 
 | Check | Status | Summary |
 | --- | --- | --- |
 | portable-v2-accepted | pass | Portable v2 must be accepted before Plasma release-candidate work. |
-| plasma-status | pass | Plasma v2 must be at release-readiness-reviewed, release-candidate, release-candidate-hold, stable-promoted, or publication-ready. |
+| plasma-status | pass | Plasma v2 must be at release-readiness-reviewed, release-candidate, release-candidate-hold, stable-promoted, publication-ready, or publication-hold. |
 | plasma-stability-state | pass | Plasma v2 stability fields must match the current lifecycle state. |
 | post-transition-release-candidate | pass | After transition, rc1 must be recorded by authority and Plasma state. |
 | post-transition-active-program | pass | After transition, the active program must match the current Plasma v2 decision lane. |
@@ -27,16 +27,8 @@ Release-candidate gate only; not stable release, release publication, compatibil
 | support-claims | pass | Support claims must remain not-stable, release-blocked, and uncertified. |
 | repair-burndown | pass | Repair queue must have no open blocking release-candidate repairs. |
 | package-not-published | pass | Release-candidate package must remain staged only. |
+| visual-rejection-blocker | fail | Active real-display visual rejection blocks Plasma v2 release-candidate publication lineage. |
 | fixed-release-candidate-capabilities | pass | Fixed release-candidate capabilities must be exposed. |
 | no-generic-or-promotion-capabilities | pass | Generic command, release, stable-promotion, and agent-apply capabilities must remain absent. |
 | no-release-overclaims | pass | No publication, stable, certification, or promotion overclaim may exist. |
-| validator-check_plasma_v2_release_candidate_contract | pass | Required release-candidate validator must pass. |
-| validator-check_plasma_v2_package_stage | fail | Required release-candidate validator must pass. |
-| validator-check_plasma_v2_release_candidate_evidence | pass | Required release-candidate validator must pass. |
-| validator-check_plasma_v2_artistic_decision | pass | Required release-candidate validator must pass. |
-| validator-check_support_claims | pass | Required release-candidate validator must pass. |
-| validator-check_plasma_v2_release_candidate_review | pass | Required release-candidate validator must pass. |
-| validator-check_agentic_policy | pass | Required release-candidate validator must pass. |
-| validator-check_agentic_receipts | pass | Required release-candidate validator must pass. |
-| validator-check_repair_queue | pass | Required release-candidate validator must pass. |
-| validator-check_project_adapter | pass | Required release-candidate validator must pass. |
+| validator-deep-release-candidate-subchecks | fail | Deep release-candidate validators skipped because active real-display visual rejection already blocks the release lineage. |

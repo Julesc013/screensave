@@ -20,6 +20,7 @@ HOLD_REPORT = REPORT_DIR / "hold-report.json"
 REPAIR_BURN = REPORT_DIR / "repair-burndown.json"
 EVIDENCE = REPORT_DIR / "proof-bundle-v1.json"
 INSTRUMENT_AUDIT = REPORT_DIR / "instrument-architecture-audit.json"
+VISUAL_REJECTION = ROOT / "validation" / "captures" / "plasma-v2" / "visual-rejection" / "verdict.toml"
 
 SUBCHECKS = [
     ("release-candidate-gate", ["tools/scripts/check_plasma_v2_release_candidate.py"]),
@@ -108,6 +109,7 @@ def build_report() -> dict[str, Any]:
     is_pre_transition = state_status == "release-candidate"
     is_hold_transition = state_status in {"release-candidate-hold", "request-changes", "defer-to-labs"}
     is_promoted_transition = state_status in {"stable-promoted", "publication-ready"}
+    is_visual_hold_transition = state_status == "publication-hold"
     expected_promoted_program = {
         "stable-promoted": "plasma-v2-publication-prep",
         "publication-ready": "plasma-v2-publication",
@@ -128,6 +130,14 @@ def build_report() -> dict[str, Any]:
                 and authority.get("active_program") == expected_promoted_program
                 and development.get("active_program") == expected_promoted_program
             )
+            or (
+                is_visual_hold_transition
+                and plasma.get("stable") is False
+                and plasma.get("release_promotion") == "withdrawn-for-visual-quality"
+                and plasma.get("current_product_verdict") == "visual-rejected"
+                and authority.get("active_program") == "plasma-v3-visual-core-spike"
+                and development.get("active_program") == "plasma-v3-visual-core-spike"
+            )
         )
         and plasma.get("release_candidate") == "plasma-v2-rc1"
         and authority.get("release_candidate") == "plasma-v2-rc1",
@@ -137,15 +147,45 @@ def build_report() -> dict[str, Any]:
         development_active_program=development.get("active_program"),
     )
 
-    for check_id, command in SUBCHECKS:
-        result = run(command)
+    active_visual_rejection = False
+    if VISUAL_REJECTION.exists():
+        verdict = load_toml(VISUAL_REJECTION)
+        visual = verdict.get("visual_verdict", {})
+        active_visual_rejection = (
+            visual.get("decision") == "reject-publication"
+            and visual.get("current_product_verdict") == "visual-rejected"
+            and visual.get("publication") == "not-published"
+        )
         add_check(
             checks,
-            check_id,
-            result.get("returncode") == 0,
-            "Command passed." if result.get("returncode") == 0 else "Command failed.",
-            run=result,
+            "visual-rejection-blocker",
+            not active_visual_rejection,
+            "Active real-display visual rejection blocks Plasma v2 stable promotion and publication lineage.",
+            verdict=str(VISUAL_REJECTION.relative_to(ROOT)),
+            decision=visual.get("decision"),
+            current_product_verdict=visual.get("current_product_verdict"),
+            reasons=visual.get("reasons", []),
         )
+    else:
+        add_check(checks, "visual-rejection-blocker", True, "No real-display visual rejection verdict is recorded.")
+
+    if active_visual_rejection:
+        add_check(
+            checks,
+            "stable-promotion-deep-subchecks",
+            False,
+            "Deep stable-promotion subchecks skipped because active real-display visual rejection already blocks promotion.",
+        )
+    else:
+        for check_id, command in SUBCHECKS:
+            result = run(command)
+            add_check(
+                checks,
+                check_id,
+                result.get("returncode") == 0,
+                "Command passed." if result.get("returncode") == 0 else "Command failed.",
+                run=result,
+            )
 
     names = capability_names()
     required_capabilities = {
@@ -294,7 +334,7 @@ def build_report() -> dict[str, Any]:
             "stable": accepted and blocking_count == 0 and instrument_ready,
             "release_promotion": "accepted" if accepted and blocking_count == 0 and instrument_ready else "blocked",
         },
-        "claim_boundary": "Stable-promotion gate report only; it does not publish a release, certify compatibility, accept artistic quality automatically, or admit AIDE source mutation.",
+        "claim_boundary": "Stable-promotion gate report only; it does not publish a release, certify compatibility, accept artistic quality automatically, admit AIDE source mutation, or override a real-display human visual verdict.",
         "checks": checks,
     }
 

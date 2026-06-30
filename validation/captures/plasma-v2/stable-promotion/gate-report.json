@@ -3,13 +3,29 @@
   "checks": [
     {
       "data": {
-        "active_program": "plasma-v2-publication",
-        "development_active_program": "plasma-v2-publication",
-        "plasma_status": "publication-ready"
+        "active_program": "plasma-v3-visual-core-spike",
+        "development_active_program": "plasma-v3-visual-core-spike",
+        "plasma_status": "publication-hold"
       },
       "id": "project-state-transition",
       "status": "pass",
       "summary": "Project state is a release candidate, a valid hold, or an accepted post-stable transition."
+    },
+    {
+      "data": {
+        "current_product_verdict": "visual-rejected",
+        "decision": "reject-publication",
+        "reasons": [
+          "low-resolution",
+          "blocky",
+          "stuttery",
+          "not visually acceptable"
+        ],
+        "verdict": "validation\\captures\\plasma-v2\\visual-rejection\\verdict.toml"
+      },
+      "id": "visual-rejection-blocker",
+      "status": "fail",
+      "summary": "Active real-display visual rejection blocks Plasma v2 stable promotion and publication lineage."
     },
     {
       "data": {
@@ -20,7 +36,7 @@
           ],
           "returncode": 1,
           "status": "fail",
-          "stderr": "validator-check_plasma_v2_package_stage: Required release-candidate validator must pass.",
+          "stderr": "visual-rejection-blocker: Active real-display visual rejection blocks Plasma v2 release-candidate publication lineage.\nvalidator-check_plasma_v2_package_stage: Required release-candidate validator must pass.\nvalidator-check_project_adapter: Required release-candidate validator must pass.",
           "stdout": "",
           "timeout_seconds": 300
         }
@@ -270,16 +286,16 @@
             "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
             "tools/scripts/check_project_adapter.py"
           ],
-          "returncode": 0,
-          "status": "pass",
-          "stderr": "",
-          "stdout": "Project adapter checks passed.",
+          "returncode": 1,
+          "status": "fail",
+          "stderr": "status must report the active portable-v2 or Plasma v2 program.",
+          "stdout": "",
           "timeout_seconds": 300
         }
       },
       "id": "project-adapter",
-      "status": "pass",
-      "summary": "Command passed."
+      "status": "fail",
+      "summary": "Command failed."
     },
     {
       "data": {
@@ -357,7 +373,7 @@
       "summary": "Any stable publication packet remains local, non-published, and upload-free."
     }
   ],
-  "claim_boundary": "Stable-promotion gate report only; it does not publish a release, certify compatibility, accept artistic quality automatically, or admit AIDE source mutation.",
+  "claim_boundary": "Stable-promotion gate report only; it does not publish a release, certify compatibility, accept artistic quality automatically, admit AIDE source mutation, or override a real-display human visual verdict.",
   "decision": {
     "artistic_decision": "accepted-for-stable",
     "instrument_architecture": "promotion-ready",
@@ -371,7 +387,7 @@
   "schema": "screensave.plasma-v2.stable-promotion.gate-report.v1",
   "source": {
     "branch": "main",
-    "commit": "ad207878aef14630cc3171e99558cfca559c4125",
+    "commit": "d178fce15a951b92bb435c91e31d6183eb8e2a67",
     "dirty": true
   },
   "status": "fail"

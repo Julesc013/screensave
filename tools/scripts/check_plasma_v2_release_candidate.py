@@ -16,6 +16,7 @@ CAPABILITY_BINDINGS = ROOT / "tools" / "project_adapter" / "capability_bindings.
 REPORT_DIR = ROOT / "validation" / "captures" / "plasma-v2" / "release-candidate"
 REPORT_JSON = REPORT_DIR / "gate-report.json"
 REPORT_MD = REPORT_DIR / "gate-report.md"
+VISUAL_REJECTION = ROOT / "validation" / "captures" / "plasma-v2" / "visual-rejection" / "verdict.toml"
 
 SUBCHECKS = [
     ["tools/scripts/check_plasma_v2_release_candidate_contract.py"],
@@ -121,11 +122,12 @@ def validate_state(results: list[dict[str, Any]]) -> None:
     add_result(
         results,
         "plasma-status",
-        status in {"release-readiness-reviewed", "release-candidate", "release-candidate-hold", "stable-promoted", "publication-ready"},
-        "Plasma v2 must be at release-readiness-reviewed, release-candidate, release-candidate-hold, stable-promoted, or publication-ready.",
+        status in {"release-readiness-reviewed", "release-candidate", "release-candidate-hold", "stable-promoted", "publication-ready", "publication-hold"},
+        "Plasma v2 must be at release-readiness-reviewed, release-candidate, release-candidate-hold, stable-promoted, publication-ready, or publication-hold.",
         observed=status,
     )
     stable_promoted = status in {"stable-promoted", "publication-ready"}
+    visual_hold = status == "publication-hold"
     add_result(
         results,
         "plasma-stability-state",
@@ -135,7 +137,14 @@ def validate_state(results: list[dict[str, Any]]) -> None:
             and plasma.get("release_promotion") == "accepted"
         )
         or (
+            visual_hold
+            and plasma.get("stable") is False
+            and plasma.get("release_promotion") == "withdrawn-for-visual-quality"
+            and plasma.get("current_product_verdict") == "visual-rejected"
+        )
+        or (
             not stable_promoted
+            and not visual_hold
             and plasma.get("stable") is False
             and plasma.get("release_promotion") == "blocked"
         ),
@@ -159,11 +168,13 @@ def validate_state(results: list[dict[str, Any]]) -> None:
             "Before transition, the active program must be plasma-v2-release-candidate.",
             observed=authority.get("active_program"),
         )
-    if status in {"release-candidate", "release-candidate-hold", "stable-promoted", "publication-ready"}:
+    if status in {"release-candidate", "release-candidate-hold", "stable-promoted", "publication-ready", "publication-hold"}:
         if status == "stable-promoted":
             expected_program = "plasma-v2-publication-prep"
         elif status == "publication-ready":
             expected_program = "plasma-v2-publication"
+        elif status == "publication-hold":
+            expected_program = "plasma-v3-visual-core-spike"
         else:
             expected_program = "plasma-v2-instrument-repair" if status == "release-candidate-hold" else "plasma-v2-stable-promotion"
         add_result(
@@ -235,6 +246,30 @@ def validate_artifacts(results: list[dict[str, Any]]) -> None:
     )
 
 
+def validate_visual_rejection(results: list[dict[str, Any]]) -> bool:
+    if not VISUAL_REJECTION.exists():
+        add_result(results, "visual-rejection-blocker", True, "No real-display visual rejection verdict is recorded.")
+        return False
+    verdict = load_toml(VISUAL_REJECTION)
+    visual = verdict.get("visual_verdict", {})
+    active = (
+        visual.get("decision") == "reject-publication"
+        and visual.get("current_product_verdict") == "visual-rejected"
+        and visual.get("publication") == "not-published"
+    )
+    add_result(
+        results,
+        "visual-rejection-blocker",
+        not active,
+        "Active real-display visual rejection blocks Plasma v2 release-candidate publication lineage.",
+        verdict=str(VISUAL_REJECTION.relative_to(ROOT)),
+        decision=visual.get("decision"),
+        current_product_verdict=visual.get("current_product_verdict"),
+        reasons=visual.get("reasons", []),
+    )
+    return active
+
+
 def validate_capabilities(results: list[dict[str, Any]]) -> None:
     bindings = load_json(CAPABILITY_BINDINGS)
     names = {item.get("name") for item in bindings.get("capabilities", [])}
@@ -302,9 +337,18 @@ def build_report() -> dict[str, Any]:
     validate_state(results)
     validate_paths(results)
     validate_artifacts(results)
+    active_visual_rejection = validate_visual_rejection(results)
     validate_capabilities(results)
     scan_overclaims(results)
-    run_validators(results)
+    if active_visual_rejection:
+        add_result(
+            results,
+            "validator-deep-release-candidate-subchecks",
+            False,
+            "Deep release-candidate validators skipped because active real-display visual rejection already blocks the release lineage.",
+        )
+    else:
+        run_validators(results)
     passed = all(result.get("status") == "pass" for result in results)
     return {
         "schema": "screensave.plasma-v2.release-candidate-gate.v1",
@@ -312,7 +356,7 @@ def build_report() -> dict[str, Any]:
         "candidate_id": "plasma-v2-rc1",
         "product": "plasma",
         "profile": "plasma.v2.reference.preview",
-        "claim_boundary": "Release-candidate gate only; not stable release, release publication, compatibility certification, public SDK stability, all-saver migration, or automatic promotion.",
+        "claim_boundary": "Release-candidate gate only; not stable release, release publication, compatibility certification, public SDK stability, all-saver migration, automatic promotion, or visual acceptance without a real-display human verdict.",
         "results": results,
     }
 

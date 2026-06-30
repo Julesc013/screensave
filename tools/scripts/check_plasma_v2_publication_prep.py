@@ -28,9 +28,11 @@ GATE_REPORT = ROOT / "validation" / "captures" / "plasma-v2" / "publication-prep
 GATE_REPORT_MD = ROOT / "validation" / "captures" / "plasma-v2" / "publication-prep" / "gate-report.md"
 STABLE_GATE = ROOT / "validation" / "captures" / "plasma-v2" / "stable-promotion" / "gate-report.json"
 AIDE_SUMMARY = ROOT / "validation" / "captures" / "plasma-v2" / "publication-prep" / "aide-publication-summary.json"
+VISUAL_REJECTION = ROOT / "validation" / "captures" / "plasma-v2" / "visual-rejection" / "verdict.toml"
 
 SUBCHECKS = [
     ("publication-prep-contract", [sys.executable, "tools/scripts/check_plasma_v2_publication_prep_contract.py"]),
+    ("visual-rejection-hold", [sys.executable, "tools/scripts/check_plasma_v2_visual_rejection.py"]),
     ("release-provenance", [sys.executable, "tools/scripts/check_release_provenance.py"]),
     ("release-security", [sys.executable, "tools/scripts/check_release_security.py"]),
     ("package-stage", [sys.executable, "tools/scripts/check_plasma_v2_package_stage.py"]),
@@ -144,30 +146,67 @@ def check_project_state(checks: list[dict[str, Any]]) -> None:
     plasma = state.get("plasma_v2", {})
     status = plasma.get("status")
     active_program = authority.get("active_program")
-    expected_active_programs = {
-        "stable-promoted": "plasma-v2-publication-prep",
-        "publication-ready": "plasma-v2-publication",
-    }
-    expected_active = expected_active_programs.get(str(status), "")
-    ok = (
-        status in expected_active_programs
-        and plasma.get("stable") is True
-        and plasma.get("release_promotion") == "accepted"
-        and plasma.get("release_candidate") == "plasma-v2-rc1"
-        and authority.get("release_candidate") == "plasma-v2-rc1"
-        and active_program == expected_active
-        and development.get("active_program") == expected_active
-    )
+    if status == "publication-hold":
+        expected_active = "plasma-v3-visual-core-spike"
+        ok = (
+            plasma.get("stable") is False
+            and plasma.get("release_promotion") == "withdrawn-for-visual-quality"
+            and plasma.get("current_product_verdict") == "visual-rejected"
+            and plasma.get("publication") == "not-published"
+            and plasma.get("opened_next") == expected_active
+            and plasma.get("release_candidate") == "plasma-v2-rc1"
+            and authority.get("release_candidate") == "plasma-v2-rc1"
+            and active_program == expected_active
+            and development.get("active_program") == expected_active
+        )
+    else:
+        expected_active_programs = {
+            "stable-promoted": "plasma-v2-publication-prep",
+            "publication-ready": "plasma-v2-publication",
+        }
+        expected_active = expected_active_programs.get(str(status), "")
+        ok = (
+            status in expected_active_programs
+            and plasma.get("stable") is True
+            and plasma.get("release_promotion") == "accepted"
+            and plasma.get("release_candidate") == "plasma-v2-rc1"
+            and authority.get("release_candidate") == "plasma-v2-rc1"
+            and active_program == expected_active
+            and development.get("active_program") == expected_active
+        )
     add_check(
         checks,
         "project-state",
         ok,
-        "Project state is stable-promoted for prep or publication-ready after prep.",
+        "Project state is stable-promoted/publication-ready or an explicit visual-rejection publication hold.",
         plasma_status=status,
         active_program=active_program,
         expected_active_program=expected_active,
         stable=plasma.get("stable"),
         release_promotion=plasma.get("release_promotion"),
+    )
+
+
+def check_visual_rejection(checks: list[dict[str, Any]]) -> None:
+    if not VISUAL_REJECTION.exists():
+        add_check(checks, "visual-rejection-blocker", True, "No visual-rejection verdict is recorded.")
+        return
+    verdict = load_toml(VISUAL_REJECTION)
+    visual = verdict.get("visual_verdict", {})
+    active = (
+        visual.get("decision") == "reject-publication"
+        and visual.get("current_product_verdict") == "visual-rejected"
+        and visual.get("publication") == "not-published"
+    )
+    add_check(
+        checks,
+        "visual-rejection-blocker",
+        not active,
+        "Active real-display visual rejection blocks Plasma v2 publication.",
+        verdict=str(VISUAL_REJECTION.relative_to(ROOT)),
+        decision=visual.get("decision"),
+        current_product_verdict=visual.get("current_product_verdict"),
+        reasons=visual.get("reasons", []),
     )
 
 
@@ -363,6 +402,7 @@ def build_report() -> dict[str, Any]:
     checks: list[dict[str, Any]] = []
     check_path_set(checks)
     check_project_state(checks)
+    check_visual_rejection(checks)
     check_manifests(checks)
     check_checksums(checks)
     check_documents(checks)
@@ -392,7 +432,7 @@ def build_report() -> dict[str, Any]:
             "dirty": bool(git_text(["status", "--short"])),
         },
         "checks": checks,
-        "claim_boundary": "Publication-prep gate only; no public release publication, compatibility certification broadening, SDK stability, all-saver migration, Manager install mutation, Workbench MVP, platform expansion, or AIDE runtime authority is admitted.",
+        "claim_boundary": "Publication-prep gate only; no public release publication, compatibility certification broadening, SDK stability, all-saver migration, Manager install mutation, Workbench MVP, platform expansion, AIDE runtime authority, or visual acceptance without a real-display human verdict is admitted.",
     }
 
 

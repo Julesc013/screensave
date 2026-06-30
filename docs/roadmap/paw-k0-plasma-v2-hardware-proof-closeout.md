@@ -1,28 +1,30 @@
 # PAW-K0 Plasma v2 Hardware Visual Proof Closeout
 
-Status: planned pre-publication evidence gate.
+Status: superseded by real-display visual rejection.
 
-PAW-K0 exists to prove the current publication-ready Plasma v2 artifact on real
-displays before PAW-K publication proceeds. It is not a rewrite, not a source
-redesign, not compatibility certification broadening, and not public release
-publication.
+PAW-K0 existed to prove the then-publication-ready Plasma v2 artifact on real
+displays before PAW-K publication. The real-display product verdict now exists
+and rejects publication, so this gate is no longer the active next step.
 
 ## Starting Truth
 
-- Plasma v2 is publication-ready.
-- Stable is true.
-- Release promotion is accepted.
-- Publication prep is ready.
+- Plasma v2 is publication-hold.
+- Stable is false.
+- Historical stable promotion is accepted.
+- Current product verdict is visual-rejected.
+- Release promotion is withdrawn-for-visual-quality.
+- Publication prep is superseded.
 - Publication is not published.
 - The current local artifact is `out/msvc/vs2017_xp/Release/plasma/plasma.scr`.
 - The current local artifact SHA-256 is
-  `50080152f3b8300ea2cc7242a861af648b875911626b8fc804475f3695f58f64`.
+  `f52a4e8f66668b88d1005238500c505ac07deb69bda2b1c6c657b7b8e90ce5ec`.
 
 ## Purpose
 
-Confirm that the high-resolution default Plasma v2 field still looks right when
-run through the real fullscreen saver path and representative renderer tiers on
-actual target hardware.
+This document remains as the former pre-publication proof shape. It is not the
+active next lane while
+`validation/captures/plasma-v2/visual-rejection/verdict.toml` records
+`decision = "reject-publication"`.
 
 The existing BenchLab/default-demo and publication-prep evidence remain useful.
 They do not replace real-display visual proof or the operator's human visual
@@ -45,7 +47,7 @@ Evidence should live under
 
 ## Pass Criteria
 
-PAW-K0 can recommend publication only when:
+PAW-K0 could recommend publication only when:
 
 - the artifact hash in the evidence matches the current local package metadata
 - the environment matrix names the actual OS, adapter, driver or renderer facts
@@ -65,6 +67,7 @@ PAW-K0 must recommend hold when:
 - fullscreen review shows visual, timing, sizing, seam, or control problems
 - renderer fallback cannot be explained truthfully
 - the human visual note requests changes
+- the current visual-rejection verdict remains active
 
 ## Work Units
 
@@ -84,7 +87,6 @@ GitHub release, certify broad compatibility, start Workbench MVP, mutate Manager
 install/apply state, migrate all savers, expand platforms, freeze the public
 SDK, or admit runtime executable plugins.
 
-If PAW-K0 passes and the project owner still chooses publication, PAW-K may use
-the closeout as direct pre-publication evidence. If PAW-K0 is blocked or fails,
-the correct next state is publication-ready hold or an explicit repair lane, not
-publication by inertia.
+The current next lane is the Plasma V3 visual-core spike. If a future replacement
+path earns an accepted real-display verdict, a new or revised hardware proof
+closeout can be opened for that path. Publication by inertia remains forbidden.

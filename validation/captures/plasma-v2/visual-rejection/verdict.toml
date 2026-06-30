@@ -1,0 +1,46 @@
+schema = "screensave.plasma-v2.visual-rejection.verdict.v1"
+verdict_id = "plasma-v2-real-display-visual-rejection-2026-07-01"
+observed_at = "2026-07-01T04:23:17+10:00"
+product = "plasma"
+candidate_id = "plasma-v2-rc1"
+profile = "plasma.v2.reference.preview"
+
+[artifact]
+path = "out/msvc/vs2017_xp/Release/plasma/plasma.scr"
+sha256 = "f52a4e8f66668b88d1005238500c505ac07deb69bda2b1c6c657b7b8e90ce5ec"
+identity_basis = "current local build artifact observed before the visual-rejection hold"
+
+[visual_verdict]
+decision = "reject-publication"
+current_product_verdict = "visual-rejected"
+real_display_required = true
+real_display_verdict = "rejected"
+publication = "not-published"
+opened_next = "plasma-v3-visual-core-spike"
+visual_blocker = "current artifact fails real-display visual acceptance"
+reasons = [
+  "low-resolution",
+  "blocky",
+  "stuttery",
+  "not visually acceptable",
+]
+
+[state_transition]
+from_status = "publication-ready"
+to_status = "publication-hold"
+stable = false
+stable_promotion_historical = "accepted"
+publication_prep = "superseded"
+release_promotion = "withdrawn-for-visual-quality"
+preserve_screen_save = true
+restart_plasma_visual_core = true
+
+[boundaries]
+publication_ready_is_not_publication = true
+screen_save_restart = false
+compatibility_broadening = false
+public_upload = false
+github_release = false
+manager_install_apply = false
+workbench_runtime_authority = false
+claim_boundary = "Administrative publication-prep evidence cannot override a failed real-display visual verdict."

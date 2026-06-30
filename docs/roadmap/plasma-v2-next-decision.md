@@ -1,34 +1,41 @@
 # Plasma v2 Next Decision
 
-Status: decision packet for resuming after PAW-JX.
+Status: superseded by Plasma v2 publication hold.
 
-Plasma v2 is publication-ready. The next step is a project decision, not an automatic continuation.
+This packet originally framed the post-PAW-JX options when Plasma v2 was still
+administratively publication-ready. The current product truth is now recorded in
+[`plasma-v2-publication-hold.md`](plasma-v2-publication-hold.md): Plasma v2 is
+not publishable because the tested artifact failed real-display visual
+acceptance.
 
 ## Current Truth
 
-- Plasma v2 = publication-ready.
-- Stable = true.
-- Release promotion = accepted.
-- Publication prep = ready.
+- Plasma v2 = publication-hold.
+- Stable = false.
+- Historical stable promotion = accepted.
+- Current product verdict = visual-rejected.
+- Release promotion = withdrawn-for-visual-quality.
+- Publication prep = superseded.
 - Publication = not-published.
-- Opened next = plasma-v2-publication.
+- Opened next = plasma-v3-visual-core-spike.
 - Release publication has not occurred.
 - Compatibility certification has not broadened.
 - AIDE remains evidence/control-plane only.
 
 ## Recommended Default
 
-Decide whether to publish Plasma v2 stable.
+Do not publish Plasma v2. Preserve ScreenSave. Continue the Plasma V3
+visual-core spike.
 
-If yes, run PAW-K0 Plasma v2 Hardware Visual Proof Closeout first, then open
-PAW-K Plasma v2 Publication only if the hardware proof and project owner both
-support publication. If no, explicitly choose which productization lane to open
-next.
+PAW-K0 and PAW-K are blocked while
+`validation/captures/plasma-v2/visual-rejection/verdict.toml` records
+`decision = "reject-publication"`.
 
-## Option A0: Hardware Proof Before Publish
+## Former Option A0: Hardware Proof Before Publish
 
-Use PAW-K0 when the project owner is leaning toward publication but wants the
-last real-display proof pass before public release work.
+PAW-K0 was the right gate before the real-display verdict existed. The verdict
+now exists and rejects publication, so PAW-K0 is no longer the current next
+step for Plasma v2.
 
 Allowed PAW-K0 work:
 
@@ -48,10 +55,9 @@ Still forbidden in PAW-K0:
 - Source redesign or Plasma modular extraction.
 - Workbench MVP or Manager install/apply mutation.
 
-## Option A: Publish
+## Former Option A: Publish
 
-Open PAW-K only after an explicit project-owner publication decision and either
-a PAW-K0 pass or an explicit owner-recorded deferral of PAW-K0.
+Do not open PAW-K for Plasma v2 while the visual rejection is active.
 
 Allowed PAW-K work:
 
@@ -70,23 +76,23 @@ Still forbidden unless separately approved:
 - macOS, Linux, or Web support claims.
 - Runtime plugin ecosystem.
 
-## Option B: Workbench MVP
+## Deferred Option B: Workbench MVP
 
-Use this only if publication is intentionally deferred.
+Use this only after the Plasma V3 visual core proves a good image worth editing.
 
 The current repo has a Workbench shell/proof cockpit layer, not a full graphical authoring app. A Workbench MVP should start with WorkbenchProject, live Plasma direct controls, libsslab preview, pack save/export, proof action, candidate compare, and review decision recording.
 
 Do not start with graph editing. Any graph-like authoring must lower into product-owned specs, plans, runtime, and proof.
 
-## Option C: Manager Install/Apply
+## Deferred Option C: Manager Install/Apply
 
-Use this only if publication is intentionally deferred and install/apply is the chosen productization lane.
+Use this only after the product visual core is acceptable.
 
 Scope should stay within safe current-user install, repair, rollback, pack install/remove, and provenance display. Manager remains optional; saver artifacts must continue to operate without it.
 
 ## Boundary
 
-Publication-ready is not publication. Hardware proof is not compatibility
-certification broadening. Stable promotion is not compatibility certification
+Publication-ready is not publication. Administrative packet evidence is not
+visual product acceptance. Stable promotion is not compatibility certification
 broadening. AIDE evidence is not product truth. Workbench shell is not the final
-graphical Workbench.
+graphical Workbench. A real-display visual rejection blocks PAW-K.

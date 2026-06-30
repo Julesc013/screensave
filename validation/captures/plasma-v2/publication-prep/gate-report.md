@@ -7,7 +7,8 @@ Recommended state: publication-hold
 ## Checks
 
 - publication-packet-paths: pass - Publication-prep packet paths exist.
-- project-state: pass - Project state is stable-promoted for prep or publication-ready after prep.
+- project-state: pass - Project state is stable-promoted/publication-ready or an explicit visual-rejection publication hold.
+- visual-rejection-blocker: fail - Active real-display visual rejection blocks Plasma v2 publication.
 - release-manifest: pass - Release manifest records publication-prep only.
 - release-manifest-artifacts-refs: pass - Release manifest artifacts refs exist.
 - release-manifest-evidence-refs: pass - Release manifest evidence refs exist.
@@ -28,6 +29,7 @@ Recommended state: publication-hold
 - aide-publication-summary: pass - AIDE publication summary records evidence-only posture.
 - no-publication-receipts: pass - No publication/upload receipt exists in PAW-J.
 - publication-prep-contract: pass - Command passed.
+- visual-rejection-hold: pass - Command passed.
 - release-provenance: fail - Command failed.
 - release-security: pass - Command passed.
 - package-stage: fail - Command failed.
@@ -35,4 +37,4 @@ Recommended state: publication-hold
 
 ## Boundary
 
-Publication-prep gate only; no public release publication, compatibility certification broadening, SDK stability, all-saver migration, Manager install mutation, Workbench MVP, platform expansion, or AIDE runtime authority is admitted.
+Publication-prep gate only; no public release publication, compatibility certification broadening, SDK stability, all-saver migration, Manager install mutation, Workbench MVP, platform expansion, AIDE runtime authority, or visual acceptance without a real-display human verdict is admitted.

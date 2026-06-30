@@ -1,6 +1,6 @@
 {
   "candidate_id": "plasma-v2-rc1",
-  "claim_boundary": "Release-candidate gate only; not stable release, release publication, compatibility certification, public SDK stability, all-saver migration, or automatic promotion.",
+  "claim_boundary": "Release-candidate gate only; not stable release, release publication, compatibility certification, public SDK stability, all-saver migration, automatic promotion, or visual acceptance without a real-display human verdict.",
   "product": "plasma",
   "profile": "plasma.v2.reference.preview",
   "results": [
@@ -15,16 +15,16 @@
     {
       "id": "plasma-status",
       "payload": {
-        "observed": "publication-ready"
+        "observed": "publication-hold"
       },
       "status": "pass",
-      "summary": "Plasma v2 must be at release-readiness-reviewed, release-candidate, release-candidate-hold, stable-promoted, or publication-ready."
+      "summary": "Plasma v2 must be at release-readiness-reviewed, release-candidate, release-candidate-hold, stable-promoted, publication-ready, or publication-hold."
     },
     {
       "id": "plasma-stability-state",
       "payload": {
-        "release_promotion": "accepted",
-        "stable": true
+        "release_promotion": "withdrawn-for-visual-quality",
+        "stable": false
       },
       "status": "pass",
       "summary": "Plasma v2 stability fields must match the current lifecycle state."
@@ -41,8 +41,8 @@
     {
       "id": "post-transition-active-program",
       "payload": {
-        "expected": "plasma-v2-publication",
-        "observed": "plasma-v2-publication"
+        "expected": "plasma-v3-visual-core-spike",
+        "observed": "plasma-v3-visual-core-spike"
       },
       "status": "pass",
       "summary": "After transition, the active program must match the current Plasma v2 decision lane."
@@ -228,6 +228,22 @@
       "summary": "Release-candidate package must remain staged only."
     },
     {
+      "id": "visual-rejection-blocker",
+      "payload": {
+        "current_product_verdict": "visual-rejected",
+        "decision": "reject-publication",
+        "reasons": [
+          "low-resolution",
+          "blocky",
+          "stuttery",
+          "not visually acceptable"
+        ],
+        "verdict": "validation\\captures\\plasma-v2\\visual-rejection\\verdict.toml"
+      },
+      "status": "fail",
+      "summary": "Active real-display visual rejection blocks Plasma v2 release-candidate publication lineage."
+    },
+    {
       "id": "fixed-release-candidate-capabilities",
       "payload": {
         "missing": []
@@ -252,164 +268,10 @@
       "summary": "No publication, stable, certification, or promotion overclaim may exist."
     },
     {
-      "id": "validator-check_plasma_v2_release_candidate_contract",
-      "payload": {
-        "run": {
-          "command": "tools/scripts/check_plasma_v2_release_candidate_contract.py",
-          "returncode": 0,
-          "status": "pass",
-          "stderr_tail": [],
-          "stdout_tail": [
-            "Plasma v2 release-candidate contract checks passed."
-          ]
-        }
-      },
-      "status": "pass",
-      "summary": "Required release-candidate validator must pass."
-    },
-    {
-      "id": "validator-check_plasma_v2_package_stage",
-      "payload": {
-        "run": {
-          "command": "tools/scripts/check_plasma_v2_package_stage.py",
-          "returncode": 1,
-          "status": "fail",
-          "stderr_tail": [
-            "release-candidate checksum mismatch for out/msvc/vs2017_xp/Release/plasma/plasma.scr"
-          ],
-          "stdout_tail": []
-        }
-      },
+      "id": "validator-deep-release-candidate-subchecks",
+      "payload": {},
       "status": "fail",
-      "summary": "Required release-candidate validator must pass."
-    },
-    {
-      "id": "validator-check_plasma_v2_release_candidate_evidence",
-      "payload": {
-        "run": {
-          "command": "tools/scripts/check_plasma_v2_release_candidate_evidence.py",
-          "returncode": 0,
-          "status": "pass",
-          "stderr_tail": [],
-          "stdout_tail": [
-            "Plasma v2 release-candidate evidence checks passed."
-          ]
-        }
-      },
-      "status": "pass",
-      "summary": "Required release-candidate validator must pass."
-    },
-    {
-      "id": "validator-check_plasma_v2_artistic_decision",
-      "payload": {
-        "run": {
-          "command": "tools/scripts/check_plasma_v2_artistic_decision.py",
-          "returncode": 0,
-          "status": "pass",
-          "stderr_tail": [],
-          "stdout_tail": [
-            "Plasma v2 artistic decision checks passed."
-          ]
-        }
-      },
-      "status": "pass",
-      "summary": "Required release-candidate validator must pass."
-    },
-    {
-      "id": "validator-check_support_claims",
-      "payload": {
-        "run": {
-          "command": "tools/scripts/check_support_claims.py",
-          "returncode": 0,
-          "status": "pass",
-          "stderr_tail": [],
-          "stdout_tail": [
-            "Plasma v2 support claim checks passed."
-          ]
-        }
-      },
-      "status": "pass",
-      "summary": "Required release-candidate validator must pass."
-    },
-    {
-      "id": "validator-check_plasma_v2_release_candidate_review",
-      "payload": {
-        "run": {
-          "command": "tools/scripts/check_plasma_v2_release_candidate_review.py",
-          "returncode": 0,
-          "status": "pass",
-          "stderr_tail": [],
-          "stdout_tail": [
-            "Plasma v2 release-candidate review checks passed."
-          ]
-        }
-      },
-      "status": "pass",
-      "summary": "Required release-candidate validator must pass."
-    },
-    {
-      "id": "validator-check_agentic_policy",
-      "payload": {
-        "run": {
-          "command": "tools/scripts/check_agentic_policy.py",
-          "returncode": 0,
-          "status": "pass",
-          "stderr_tail": [],
-          "stdout_tail": [
-            "AIDE agentic policy checks passed."
-          ]
-        }
-      },
-      "status": "pass",
-      "summary": "Required release-candidate validator must pass."
-    },
-    {
-      "id": "validator-check_agentic_receipts",
-      "payload": {
-        "run": {
-          "command": "tools/scripts/check_agentic_receipts.py",
-          "returncode": 0,
-          "status": "pass",
-          "stderr_tail": [],
-          "stdout_tail": [
-            "AIDE agentic receipt checks passed."
-          ]
-        }
-      },
-      "status": "pass",
-      "summary": "Required release-candidate validator must pass."
-    },
-    {
-      "id": "validator-check_repair_queue",
-      "payload": {
-        "run": {
-          "command": "tools/scripts/check_repair_queue.py",
-          "returncode": 0,
-          "status": "pass",
-          "stderr_tail": [],
-          "stdout_tail": [
-            "Repair queue checks passed."
-          ]
-        }
-      },
-      "status": "pass",
-      "summary": "Required release-candidate validator must pass."
-    },
-    {
-      "id": "validator-check_project_adapter",
-      "payload": {
-        "run": {
-          "command": "tools/scripts/check_project_adapter.py",
-          "returncode": 0,
-          "status": "pass",
-          "stderr_tail": [],
-          "stdout_tail": [
-            "Project adapter checks passed."
-          ]
-        }
-      },
-      "status": "pass",
-      "summary": "Required release-candidate validator must pass."
+      "summary": "Deep release-candidate validators skipped because active real-display visual rejection already blocks the release lineage."
     }
   ],
   "schema": "screensave.plasma-v2.release-candidate-gate.v1",

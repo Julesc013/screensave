@@ -8,14 +8,28 @@
       "status": "pass"
     },
     {
-      "active_program": "plasma-v2-publication",
-      "expected_active_program": "plasma-v2-publication",
+      "active_program": "plasma-v3-visual-core-spike",
+      "expected_active_program": "plasma-v3-visual-core-spike",
       "id": "project-state",
-      "message": "Project state is stable-promoted for prep or publication-ready after prep.",
-      "plasma_status": "publication-ready",
-      "release_promotion": "accepted",
-      "stable": true,
+      "message": "Project state is stable-promoted/publication-ready or an explicit visual-rejection publication hold.",
+      "plasma_status": "publication-hold",
+      "release_promotion": "withdrawn-for-visual-quality",
+      "stable": false,
       "status": "pass"
+    },
+    {
+      "current_product_verdict": "visual-rejected",
+      "decision": "reject-publication",
+      "id": "visual-rejection-blocker",
+      "message": "Active real-display visual rejection blocks Plasma v2 publication.",
+      "reasons": [
+        "low-resolution",
+        "blocky",
+        "stuttery",
+        "not visually acceptable"
+      ],
+      "status": "fail",
+      "verdict": "validation\\captures\\plasma-v2\\visual-rejection\\verdict.toml"
     },
     {
       "id": "release-manifest",
@@ -245,6 +259,17 @@
       "status": "pass"
     },
     {
+      "id": "visual-rejection-hold",
+      "message": "Command passed.",
+      "run": {
+        "command": "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe tools/scripts/check_plasma_v2_visual_rejection.py",
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "Plasma v2 visual-rejection hold checks passed."
+      },
+      "status": "pass"
+    },
+    {
       "id": "release-provenance",
       "message": "Command failed.",
       "run": {
@@ -289,12 +314,12 @@
       "status": "pass"
     }
   ],
-  "claim_boundary": "Publication-prep gate only; no public release publication, compatibility certification broadening, SDK stability, all-saver migration, Manager install mutation, Workbench MVP, platform expansion, or AIDE runtime authority is admitted.",
+  "claim_boundary": "Publication-prep gate only; no public release publication, compatibility certification broadening, SDK stability, all-saver migration, Manager install mutation, Workbench MVP, platform expansion, AIDE runtime authority, or visual acceptance without a real-display human verdict is admitted.",
   "recommended_state": "publication-hold",
   "schema": "screensave.plasma-v2.publication-prep.gate-report.v1",
   "source": {
     "branch": "main",
-    "commit": "ad207878aef14630cc3171e99558cfca559c4125",
+    "commit": "d178fce15a951b92bb435c91e31d6183eb8e2a67",
     "dirty": true
   },
   "status": "publication-hold"
