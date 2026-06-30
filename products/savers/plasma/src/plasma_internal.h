@@ -23,8 +23,8 @@
 #define PLASMA_PRODUCT_REGISTRY_ROOTA "Software\\Julesc013\\ScreenSave\\Products\\plasma"
 #define PLASMA_DEFAULT_PRESET_KEY "plasma_lava"
 #define PLASMA_DEFAULT_THEME_KEY "plasma_lava"
-#define PLASMA_PRESET_COUNT 23U
-#define PLASMA_THEME_COUNT 7U
+#define PLASMA_PRESET_COUNT 24U
+#define PLASMA_THEME_COUNT 8U
 
 typedef enum plasma_effect_mode_tag {
     PLASMA_EFFECT_PLASMA = 0,

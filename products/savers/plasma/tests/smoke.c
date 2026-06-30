@@ -1096,7 +1096,8 @@ int main(void)
         "aurora_curtain",
         "ribbon_aurora",
         "substrate_relief",
-        "filament_extrusion"
+        "filament_extrusion",
+        "amber_ribbon_morph"
     };
     static const char *const g_required_theme_keys[] = {
         "plasma_lava",
@@ -1105,7 +1106,8 @@ int main(void)
         "museum_phosphor",
         "quiet_darkroom",
         "midnight_interference",
-        "amber_terminal"
+        "amber_terminal",
+        "amber_ribbon_morph"
     };
     static const char *const g_u07_stable_preset_keys[] = {
         "plasma_lava",
@@ -1425,18 +1427,24 @@ int main(void)
         plasma_content_find_preset_entry("substrate_relief")->channel != PLASMA_CONTENT_CHANNEL_EXPERIMENTAL ||
         plasma_content_find_preset_entry("filament_extrusion") == NULL ||
         plasma_content_find_preset_entry("filament_extrusion")->channel != PLASMA_CONTENT_CHANNEL_EXPERIMENTAL ||
+        plasma_content_find_preset_entry("amber_ribbon_morph") == NULL ||
+        plasma_content_find_preset_entry("amber_ribbon_morph")->channel != PLASMA_CONTENT_CHANNEL_EXPERIMENTAL ||
         plasma_content_find_theme_entry("midnight_interference") == NULL ||
         plasma_content_find_theme_entry("midnight_interference")->channel != PLASMA_CONTENT_CHANNEL_EXPERIMENTAL ||
         plasma_content_find_theme_entry("amber_terminal") == NULL ||
         plasma_content_find_theme_entry("amber_terminal")->channel != PLASMA_CONTENT_CHANNEL_EXPERIMENTAL ||
+        plasma_content_find_theme_entry("amber_ribbon_morph") == NULL ||
+        plasma_content_find_theme_entry("amber_ribbon_morph")->channel != PLASMA_CONTENT_CHANNEL_EXPERIMENTAL ||
         plasma_content_preset_is_primary_visible(plasma_content_find_preset_entry("plasma_lava")) == 0 ||
         plasma_content_preset_is_primary_visible(plasma_content_find_preset_entry("ribbon_aurora")) == 0 ||
+        plasma_content_preset_is_primary_visible(plasma_content_find_preset_entry("amber_ribbon_morph")) == 0 ||
         plasma_content_preset_is_primary_visible(plasma_content_find_preset_entry("midnight_interference")) != 0 ||
         plasma_content_preset_is_primary_visible(plasma_content_find_preset_entry("amber_terminal")) != 0 ||
         plasma_content_preset_is_primary_visible(plasma_content_find_preset_entry("aurora_curtain")) != 0 ||
         plasma_content_preset_is_primary_visible(plasma_content_find_preset_entry("substrate_relief")) != 0 ||
         plasma_content_preset_is_primary_visible(plasma_content_find_preset_entry("filament_extrusion")) != 0 ||
         plasma_content_theme_is_primary_visible(plasma_content_find_theme_entry("plasma_lava")) == 0 ||
+        plasma_content_theme_is_primary_visible(plasma_content_find_theme_entry("amber_ribbon_morph")) == 0 ||
         plasma_content_theme_is_primary_visible(plasma_content_find_theme_entry("midnight_interference")) != 0 ||
         plasma_content_theme_is_primary_visible(plasma_content_find_theme_entry("amber_terminal")) != 0
     ) {
@@ -1701,6 +1709,27 @@ int main(void)
         plan.accent_treatment != PLASMA_ACCENT_TREATMENT_ACCENT_PASS
     ) {
         return 440;
+    }
+    if (
+        !plasma_compile_plan_for_renderer(
+            module,
+            "amber_ribbon_morph",
+            "amber_ribbon_morph",
+            NULL,
+            SCREENSAVE_RENDERER_KIND_GDI,
+            SCREENSAVE_RENDERER_KIND_GDI,
+            &plan
+        ) ||
+        plan.effect_mode != PLASMA_EFFECT_PLASMA ||
+        plan.output_family != PLASMA_OUTPUT_FAMILY_RASTER ||
+        plan.output_mode != PLASMA_OUTPUT_MODE_NATIVE_RASTER ||
+        plan.filter_treatment != PLASMA_FILTER_TREATMENT_GLOW_EDGE ||
+        plan.emulation_treatment != PLASMA_EMULATION_TREATMENT_NONE ||
+        plan.accent_treatment != PLASMA_ACCENT_TREATMENT_ACCENT_PASS ||
+        plan.requested_presentation_mode != PLASMA_PRESENTATION_MODE_RIBBON ||
+        plan.presentation_mode != PLASMA_PRESENTATION_MODE_FLAT
+    ) {
+        return 476;
     }
 
     if (

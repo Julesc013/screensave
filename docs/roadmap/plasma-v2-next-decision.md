@@ -20,11 +20,38 @@ Plasma v2 is publication-ready. The next step is a project decision, not an auto
 
 Decide whether to publish Plasma v2 stable.
 
-If yes, open PAW-K Plasma v2 Publication. If no, explicitly choose which productization lane to open next.
+If yes, run PAW-K0 Plasma v2 Hardware Visual Proof Closeout first, then open
+PAW-K Plasma v2 Publication only if the hardware proof and project owner both
+support publication. If no, explicitly choose which productization lane to open
+next.
+
+## Option A0: Hardware Proof Before Publish
+
+Use PAW-K0 when the project owner is leaning toward publication but wants the
+last real-display proof pass before public release work.
+
+Allowed PAW-K0 work:
+
+- Hardware and environment matrix.
+- Fullscreen `.scr` run notes.
+- Contact sheets or screenshot indices from real displays.
+- Renderer-tier comparison captures or explicit unavailable-tier notes.
+- Frame-time or pacing summary where available.
+- Human visual note with publish, defer, or repair recommendation.
+
+Still forbidden in PAW-K0:
+
+- Public upload.
+- GitHub release creation.
+- Release page publication.
+- Compatibility certification broadening.
+- Source redesign or Plasma modular extraction.
+- Workbench MVP or Manager install/apply mutation.
 
 ## Option A: Publish
 
-Open PAW-K only after an explicit project-owner publication decision.
+Open PAW-K only after an explicit project-owner publication decision and either
+a PAW-K0 pass or an explicit owner-recorded deferral of PAW-K0.
 
 Allowed PAW-K work:
 
@@ -59,4 +86,7 @@ Scope should stay within safe current-user install, repair, rollback, pack insta
 
 ## Boundary
 
-Publication-ready is not publication. Stable promotion is not compatibility certification broadening. AIDE evidence is not product truth. Workbench shell is not the final graphical Workbench.
+Publication-ready is not publication. Hardware proof is not compatibility
+certification broadening. Stable promotion is not compatibility certification
+broadening. AIDE evidence is not product truth. Workbench shell is not the final
+graphical Workbench.

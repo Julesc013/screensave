@@ -38,7 +38,7 @@ The current tracked Plasma artifact identity remains:
 
 ```text
 out/msvc/vs2017_xp/Release/plasma/plasma.scr
-SHA256: d4e58fd8ed10d67704c7cb58205f27d61fb5c10ded3c1b904abddf414ac25d41
+SHA256: 50080152f3b8300ea2cc7242a861af648b875911626b8fc804475f3695f58f64
 ```
 
 This is publication-ready evidence, not public publication. No public release
@@ -53,7 +53,7 @@ expansion, or AIDE runtime authority is included.
 | --- | --- | --- |
 | `PROJECT_STATE.toml` | Canonical machine-readable repo truth. | Records Plasma v2 as publication-ready, stable, accepted, and not published. |
 | `validation/captures/plasma-v2/default-demo/default-demo-report.json` | Proves the current high-resolution default Plasma posture. | Validates `plasma_lava`, adaptive high-resolution field caps, renderer ladder exposure, GDI floor, GL optionality, display-refresh pacing, and artifact hash. |
-| Plasma artifact identity | Names the exact `.scr` binary under discussion. | Current artifact hash is `d4e58fd8ed10d67704c7cb58205f27d61fb5c10ded3c1b904abddf414ac25d41`. |
+| Plasma artifact identity | Names the exact `.scr` binary under discussion. | Current artifact hash is `50080152f3b8300ea2cc7242a861af648b875911626b8fc804475f3695f58f64`. |
 | High-resolution implementation evidence | Describes the source-level default-demo upgrade. | Renderer-tier caps are GDI `1280x720`, GL11 `1920x1080`, GL21 `2560x1440`, and GL33/GL46 `6144x2304`, with larger procedural domain and edge guard. |
 | Instrument architecture audit | Checks whether Plasma is a direct-control deterministic field instrument. | Latest gate set reports promotion-ready; Plasma is not treated as a preset picker. |
 | `validation/captures/plasma-v2/stable-promotion/gate-report.json` | Checks stable-promotion eligibility. | Stable promotion is accepted and recorded as `stable = true`. |
@@ -279,13 +279,15 @@ flowchart LR
 flowchart TB
     Start["Current state\nPlasma v2 publication-ready"]
     Publish{"Project decision:\npublish now?"}
+    K0["PAW-K0\nhardware visual proof closeout"]
     K["PAW-K\nPlasma v2 Publication"]
     W["PAW-W1\nWorkbench MVP"]
     M["PAW-M1\nManager install/apply path"]
     Hold["Pause-safe publication-ready hold"]
 
     Start --> Publish
-    Publish -->|yes| K
+    Publish -->|yes, prove first| K0 -->|pass + owner decision| K
+    K0 -->|blocked or request changes| Hold
     Publish -->|defer publication, build tool| W
     Publish -->|defer publication, build distribution UX| M
     Publish -->|no decision yet| Hold
@@ -297,7 +299,8 @@ The repo is still paused at the same product decision:
 
 ```text
 Plasma v2 publication-ready
--> publish through PAW-K
+-> if publishing, run PAW-K0 hardware visual proof closeout
+   then publish through PAW-K only after pass + owner decision
    or defer publication and choose PAW-W1 Workbench MVP
    or defer publication and choose PAW-M1 Manager install/apply
 ```

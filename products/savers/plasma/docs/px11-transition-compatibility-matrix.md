@@ -10,18 +10,18 @@ It is a support matrix, not a promise that every theoretical pair now morphs.
 Preset morph classes:
 
 - `fire`: `plasma_lava`, `quiet_darkroom`
-- `plasma`: `aurora_plasma`, `museum_phosphor`, `amber_terminal`
+- `plasma`: `aurora_plasma`, `museum_phosphor`, `amber_terminal`, `amber_ribbon_morph` (experimental)
 - `interference`: `ocean_interference`, `midnight_interference`
 
 Theme morph classes:
 
-- `warm`: `plasma_lava`, `quiet_darkroom`, `amber_terminal`
+- `warm`: `plasma_lava`, `quiet_darkroom`, `amber_terminal`, `amber_ribbon_morph` (experimental)
 - `cool`: `aurora_cool`, `oceanic_blue`, `midnight_interference`
 - `phosphor`: `museum_phosphor`
 
 Bridge classes:
 
-- `warm_classic`: `plasma_lava`, `quiet_darkroom`, `museum_phosphor`, `amber_terminal`
+- `warm_classic`: `plasma_lava`, `quiet_darkroom`, `museum_phosphor`, `amber_terminal`, `amber_ribbon_morph` (experimental)
 - `cool_field`: `aurora_plasma`, `ocean_interference`, `midnight_interference`
 
 ## Supported Direct-Morph Classes
@@ -29,12 +29,12 @@ Bridge classes:
 Direct preset morphs are supported when the source and target presets share one preset morph class:
 
 - `fire`: `plasma_lava <-> quiet_darkroom`
-- `plasma`: `aurora_plasma <-> museum_phosphor <-> amber_terminal`
+- `plasma`: `aurora_plasma <-> museum_phosphor <-> amber_terminal <-> amber_ribbon_morph`
 - `interference`: `ocean_interference <-> midnight_interference`
 
 Direct theme morphs are supported when the source and target themes share one theme morph class:
 
-- `warm`: `plasma_lava <-> quiet_darkroom <-> amber_terminal`
+- `warm`: `plasma_lava <-> quiet_darkroom <-> amber_terminal <-> amber_ribbon_morph`
 - `cool`: `aurora_cool <-> oceanic_blue <-> midnight_interference`
 
 `museum_phosphor` is a real theme, but it has no second `phosphor` peer, so it does not create a broader direct theme morph family today.
@@ -48,8 +48,10 @@ Implemented warm bridge-capable crossings:
 
 - `plasma_lava <-> museum_phosphor`
 - `plasma_lava <-> amber_terminal`
+- `plasma_lava <-> amber_ribbon_morph`
 - `quiet_darkroom <-> museum_phosphor`
 - `quiet_darkroom <-> amber_terminal`
+- `quiet_darkroom <-> amber_ribbon_morph`
 
 Implemented cool bridge-capable crossings:
 

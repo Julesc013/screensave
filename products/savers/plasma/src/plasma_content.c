@@ -344,6 +344,18 @@ static const plasma_content_preset_entry g_preset_entries[] = {
         1,
         1,
         NULL
+    },
+    {
+        "amber_ribbon_morph",
+        &g_plasma_presets[23],
+        PLASMA_CONTENT_SOURCE_BUILT_IN,
+        PLASMA_CONTENT_CHANNEL_EXPERIMENTAL,
+        PLASMA_PRESET_MORPH_CLASS_PLASMA,
+        PLASMA_TRANSITION_BRIDGE_CLASS_WARM_CLASSIC,
+        1,
+        1,
+        1,
+        NULL
     }
 };
 
@@ -399,6 +411,14 @@ static const plasma_content_theme_entry g_theme_entries[] = {
     {
         "amber_terminal",
         &g_plasma_themes[6],
+        PLASMA_CONTENT_SOURCE_BUILT_IN,
+        PLASMA_CONTENT_CHANNEL_EXPERIMENTAL,
+        PLASMA_THEME_MORPH_CLASS_WARM,
+        NULL
+    },
+    {
+        "amber_ribbon_morph",
+        &g_plasma_themes[7],
         PLASMA_CONTENT_SOURCE_BUILT_IN,
         PLASMA_CONTENT_CHANNEL_EXPERIMENTAL,
         PLASMA_THEME_MORPH_CLASS_WARM,

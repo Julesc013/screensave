@@ -49,6 +49,13 @@ const screensave_theme_descriptor g_plasma_themes[] = {
         "Amber phosphor warmth with darker brass foundations and bounded terminal crest highlights.",
         { 86, 64, 16, 255 },
         { 216, 168, 46, 255 }
+    },
+    {
+        "amber_ribbon_morph",
+        "Amber Ribbon Morph",
+        "Dark violet foundations with molten amber ribbons, yellow crest lift, and slow carried color morphing.",
+        { 54, 24, 82, 255 },
+        { 255, 154, 24, 255 }
     }
 };
 

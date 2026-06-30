@@ -1,0 +1,32 @@
+schema_version = 1
+pack_id = "screensave.plasma.amber_ribbon_morph_v2"
+kind = "screensave.plasma.v2"
+product = "plasma"
+name = "Amber Ribbon Morph v2"
+author = "ScreenSave"
+license = "ScreenSave sample content"
+provenance = "User supplied amber ribbon reference reduced to bounded Plasma v2 candidate"
+proof_profile = "plasma.v2.visualintent.preview"
+
+[compatibility]
+minimum_schema_version = 2
+maximum_schema_version = 2
+pack_status = "v1-candidate"
+
+[plasma_spec_v2]
+schema_id = "screensave.plasma.spec.v2"
+schema_version = 2
+field_family = "radial_warped"
+scale = 78
+complexity = 82
+motion_speed = 24
+warp_amount = 38
+feedback_amount = 14
+output_style = "continuous"
+material = "plasma_lava"
+brightness = 86
+contrast = 92
+treatment = "none"
+quality_intent = "safe"
+seed_policy = "fixed"
+presentation = "flat"

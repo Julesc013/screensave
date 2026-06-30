@@ -1,0 +1,90 @@
+schema_version = 1
+program_id = "plasma-v2-hardware-proof-closeout"
+status = "planned"
+as_of = "2026-06-29"
+source_commit = "f92873d2019bc4d19eccb51e5451bf0da5d81635"
+source_mutation_by_aide = false
+automatic_merge = false
+automatic_release = false
+automatic_promotion = false
+claim_boundary = "PAW-K0 records real-display Plasma v2 hardware visual proof before publication; it does not publish, certify compatibility, promote, or transfer product truth to AIDE."
+
+[[work_units]]
+id = "SS-PLV2-K0-0"
+title = "Checkpoint Plasma v2 artifact identity before hardware proof"
+task_class = "release-readiness"
+objective = "Record the current publication-ready Plasma v2 artifact identity and ensure package metadata matches the local .scr before real-display proof."
+allowed_paths = ["docs/roadmap/paw-k0-plasma-v2-hardware-proof-closeout.md", ".aide/work_units/plasma-v2-hardware-proof-closeout.toml", "validation/captures/plasma-v2/hardware-proof/**", "packaging/windows/plasma-v2-release-candidate/**", "packaging/windows/plasma-v2-stable-promotion/**", "releases/plasma-v2-stable/**"]
+forbidden_paths = ["products/savers/plasma/src/**", "platform/**", "releases/plasma-v2-stable/publication-receipt.json", "releases/plasma-v2-stable/github-release.json", "releases/plasma-v2-stable/uploaded-assets.json"]
+selected_validation_tier = "T1"
+expected_validators = ["py -3 tools/scripts/check_project_state.py --summary", "py -3 tools/scripts/check_plasma_v2_package_stage.py", "py -3 tools/scripts/check_release_provenance.py", "py -3 tools/scripts/check_plasma_v2_publication_prep.py", "git diff --check"]
+evidence_outputs = ["validation/captures/plasma-v2/hardware-proof/intake-state.json"]
+claim_boundary = "Artifact identity checkpoint only; no public release publication, compatibility certification broadening, or product runtime change."
+rollback_point = "f92873d"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"
+
+[[work_units]]
+id = "SS-PLV2-K0-1"
+title = "Record hardware environment matrix and run plan"
+task_class = "review"
+objective = "Prepare the SY10-shaped environment matrix and operator run plan for real fullscreen Plasma v2 review."
+allowed_paths = ["validation/captures/plasma-v2/hardware-proof/**", "docs/roadmap/paw-k0-plasma-v2-hardware-proof-closeout.md"]
+forbidden_paths = ["products/**", "platform/**", "packaging/publication/**", "releases/plasma-v2-stable/publication-receipt.json"]
+selected_validation_tier = "T1"
+expected_validators = ["py -3 tools/scripts/check_docs_basics.py", "git diff --check"]
+evidence_outputs = ["validation/captures/plasma-v2/hardware-proof/environment-matrix.json", "validation/captures/plasma-v2/hardware-proof/operator-run-plan.md"]
+claim_boundary = "Environment plan only; no evidence is claimed until real hardware runs are recorded."
+rollback_point = "f92873d"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"
+
+[[work_units]]
+id = "SS-PLV2-K0-2"
+title = "Collect fullscreen visual proof and renderer-tier comparison"
+task_class = "review"
+objective = "Collect real-display fullscreen notes, screenshots or contact sheets, and renderer-tier comparison records for the current Plasma v2 artifact."
+allowed_paths = ["validation/captures/plasma-v2/hardware-proof/**", "releases/plasma-v2-stable/known-limits.md", "docs/roadmap/paw-k0-plasma-v2-hardware-proof-closeout.md"]
+forbidden_paths = ["products/savers/plasma/src/**", "platform/**", "packaging/publication/**", "releases/plasma-v2-stable/publication-receipt.json"]
+selected_validation_tier = "T2"
+expected_validators = ["py -3 tools/scripts/check_project_state.py --summary", "py -3 tools/scripts/check_plasma_v2_package_stage.py", "py -3 tools/scripts/check_docs_basics.py", "git diff --check"]
+evidence_outputs = ["validation/captures/plasma-v2/hardware-proof/fullscreen-contact-sheet.md", "validation/captures/plasma-v2/hardware-proof/renderer-tier-comparison.md"]
+claim_boundary = "Hardware visual proof only; BenchLab text smoke and automated validators do not replace the human visual note."
+rollback_point = "f92873d"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"
+
+[[work_units]]
+id = "SS-PLV2-K0-3"
+title = "Record frame-time and known-limits closeout"
+task_class = "review"
+objective = "Record frame-time, pacing, memory, resize, or blocked-measurement notes from the hardware proof pass and update known limits only when evidence requires it."
+allowed_paths = ["validation/captures/plasma-v2/hardware-proof/**", "releases/plasma-v2-stable/known-limits.md", "docs/roadmap/paw-k0-plasma-v2-hardware-proof-closeout.md"]
+forbidden_paths = ["products/savers/plasma/src/**", "platform/**", "packaging/publication/**", "releases/plasma-v2-stable/publication-receipt.json"]
+selected_validation_tier = "T2"
+expected_validators = ["py -3 tools/scripts/check_plasma_v2_package_stage.py", "py -3 tools/scripts/check_release_provenance.py", "py -3 tools/scripts/check_docs_basics.py", "git diff --check"]
+evidence_outputs = ["validation/captures/plasma-v2/hardware-proof/frame-time-summary.md", "validation/captures/plasma-v2/hardware-proof/known-limits-delta.md"]
+claim_boundary = "Performance and known-limits closeout only; no public performance promise or compatibility certification is created."
+rollback_point = "f92873d"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"
+
+[[work_units]]
+id = "SS-PLV2-K0-4"
+title = "Record human visual note and publication recommendation"
+task_class = "release-readiness"
+objective = "Record the operator-owned human visual note and recommend publish, defer, or repair before any PAW-K publication work."
+allowed_paths = ["validation/captures/plasma-v2/hardware-proof/**", "docs/roadmap/plasma-v2-next-decision.md", "docs/roadmap/paw-k-plasma-v2-publication.md", "docs/roadmap/paw-k0-plasma-v2-hardware-proof-closeout.md"]
+forbidden_paths = ["products/savers/plasma/src/**", "platform/**", "packaging/publication/**", "releases/plasma-v2-stable/publication-receipt.json", "releases/plasma-v2-stable/github-release.json", "releases/plasma-v2-stable/uploaded-assets.json"]
+selected_validation_tier = "T3"
+expected_validators = ["py -3 tools/scripts/check_project_state.py --summary", "py -3 tools/scripts/check_plasma_v2_publication_prep.py", "py -3 tools/project_adapter/screensave_project.py validate --tier T2", "git diff --check"]
+evidence_outputs = ["validation/captures/plasma-v2/hardware-proof/human-visual-note.md", "validation/captures/plasma-v2/hardware-proof/closeout-report.json"]
+claim_boundary = "Human recommendation only; PAW-K publication still requires an explicit project-owner publication decision."
+rollback_point = "f92873d"
+human_review_required = true
+agent_allowed = true
+agent_mode = "assistive"

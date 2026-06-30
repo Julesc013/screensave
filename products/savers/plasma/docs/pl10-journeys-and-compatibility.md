@@ -38,6 +38,7 @@ Current built-in preset mapping:
 - `aurora_plasma` -> `plasma`
 - `museum_phosphor` -> `plasma`
 - `amber_terminal` -> `plasma`
+- `amber_ribbon_morph` -> `plasma` (experimental candidate)
 - `ocean_interference` -> `interference`
 - `midnight_interference` -> `interference`
 
@@ -46,6 +47,7 @@ Current built-in theme mapping:
 - `plasma_lava` -> `warm`
 - `quiet_darkroom` -> `warm`
 - `amber_terminal` -> `warm`
+- `amber_ribbon_morph` -> `warm` (experimental candidate)
 - `aurora_cool` -> `cool`
 - `oceanic_blue` -> `cool`
 - `midnight_interference` -> `cool`
@@ -72,6 +74,7 @@ Current built-in bridge mapping:
 - `quiet_darkroom` -> `warm_classic`
 - `museum_phosphor` -> `warm_classic`
 - `amber_terminal` -> `warm_classic`
+- `amber_ribbon_morph` -> `warm_classic` (experimental candidate)
 - `aurora_plasma` -> `cool_field`
 - `ocean_interference` -> `cool_field`
 - `midnight_interference` -> `cool_field`
@@ -80,6 +83,7 @@ This means:
 
 - `quiet_darkroom -> museum_phosphor` is bridge-capable on richer lanes
 - `midnight_interference -> amber_terminal` is **not** bridge-capable because the bridge classes differ
+- `amber_ribbon_morph` uses the existing warm/plasma compatibility grammar, but remains outside stable sets
 
 ## Preset, Theme, And Set Relationship Model
 

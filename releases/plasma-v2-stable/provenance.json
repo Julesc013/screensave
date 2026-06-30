@@ -8,7 +8,7 @@
   "source_dirty_at_packet_start": false,
   "artifact": {
     "path": "out/msvc/vs2017_xp/Release/plasma/plasma.scr",
-    "sha256": "d4e58fd8ed10d67704c7cb58205f27d61fb5c10ded3c1b904abddf414ac25d41",
+    "sha256": "50080152f3b8300ea2cc7242a861af648b875911626b8fc804475f3695f58f64",
     "profile": "windows-current-x86",
     "toolchain": "VS2017 v141_xp Release Win32",
     "subsystem_floor": "Windows 5.01 evidence class",

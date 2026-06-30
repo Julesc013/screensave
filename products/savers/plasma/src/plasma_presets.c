@@ -223,6 +223,15 @@ const screensave_preset_descriptor g_plasma_presets[] = {
         SCREENSAVE_DETAIL_LEVEL_HIGH,
         1,
         0x00000A43UL
+    },
+    {
+        "amber_ribbon_morph",
+        "Amber Ribbon Morph",
+        "Soft plasma-ribbon study with violet shadow fields, amber body color, and carried procedural color morphing.",
+        "amber_ribbon_morph",
+        SCREENSAVE_DETAIL_LEVEL_HIGH,
+        1,
+        0x00000A44UL
     }
 };
 
@@ -525,6 +534,19 @@ static const plasma_preset_values g_plasma_preset_values[] = {
         PLASMA_EMULATION_TREATMENT_NONE,
         PLASMA_ACCENT_TREATMENT_ACCENT_PASS,
         PLASMA_PRESENTATION_MODE_CONTOUR_EXTRUSION
+    },
+    {
+        PLASMA_EFFECT_PLASMA,
+        PLASMA_SPEED_STANDARD,
+        PLASMA_RESOLUTION_FINE,
+        PLASMA_SMOOTHING_GLOW,
+        PLASMA_OUTPUT_FAMILY_RASTER,
+        PLASMA_OUTPUT_MODE_NATIVE_RASTER,
+        PLASMA_SAMPLING_TREATMENT_NONE,
+        PLASMA_FILTER_TREATMENT_GLOW_EDGE,
+        PLASMA_EMULATION_TREATMENT_NONE,
+        PLASMA_ACCENT_TREATMENT_ACCENT_PASS,
+        PLASMA_PRESENTATION_MODE_RIBBON
     }
 };
 

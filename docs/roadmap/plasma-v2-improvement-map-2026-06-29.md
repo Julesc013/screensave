@@ -8,7 +8,7 @@ Reference point:
 - External input report: `E:/Downloads/ScreenSave_Plasma_Architecture_Report_2026-06-29.md`
 - External diagram pack: `E:/Downloads/ScreenSave_Plasma_Architecture_Diagrams_2026-06-29.md`
 - Current Plasma artifact: `out/msvc/vs2017_xp/Release/plasma/plasma.scr`
-- Current artifact SHA-256: `d4e58fd8ed10d67704c7cb58205f27d61fb5c10ded3c1b904abddf414ac25d41`
+- Current artifact SHA-256: `50080152f3b8300ea2cc7242a861af648b875911626b8fc804475f3695f58f64`
 
 This note documents what the architecture now has, what it is missing, and the
 highest-value improvements needed to make ScreenSave and Plasma more portable,
@@ -273,13 +273,16 @@ Recommended work:
 
 The highest-leverage path is:
 
-1. Decide PAW-K: publish Plasma v2 now or explicitly defer publication.
-2. If publishing, run a narrow publication turn: final archive, release notes,
-   public links, checksums, provenance, release page, and publication receipt.
-3. If deferring, run PAW-W1: Workbench MVP over Plasma direct controls and
-   `libsslab` live preview.
-4. Add high-resolution visual proof: fullscreen captures, contact sheets,
-   human review, and renderer-tier comparisons on real target hardware.
+1. Decide PAW-K direction: publish Plasma v2 now or explicitly defer
+   publication.
+2. If publishing, run PAW-K0 first: real-display fullscreen proof, contact
+   sheets, renderer-tier comparisons, frame-time or pacing notes, and a human
+   visual note.
+3. If PAW-K0 passes and the owner still chooses publication, run PAW-K as a
+   narrow publication turn: final archive, release notes, public links,
+   checksums, provenance, release page, and publication receipt.
+4. If publication is deferred or PAW-K0 holds, run PAW-W1: Workbench MVP over
+   Plasma direct controls and `libsslab` live preview.
 5. Add performance telemetry and thresholds before native shader work.
 6. Add optional GL33/GL46 native-field synthesis only after the CPU/reference
    oracle and performance gates are strong enough to judge it.
@@ -306,8 +309,9 @@ ScreenSave and Plasma are now architecturally coherent. The next level is not a
 bigger rewrite. It is a sequence of bounded upgrades:
 
 ```text
-publish or defer explicitly
--> prove high-res behavior on real displays
+publish direction or defer explicitly
+-> prove high-res behavior on real displays through PAW-K0
+-> publish only through PAW-K, or hold intentionally
 -> make Workbench a real direct-control authoring tool
 -> add performance telemetry and optional native acceleration
 -> certify compatibility only with real evidence
