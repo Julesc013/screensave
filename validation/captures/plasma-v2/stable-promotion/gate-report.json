@@ -18,16 +18,16 @@
             "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
             "tools/scripts/check_plasma_v2_release_candidate.py"
           ],
-          "returncode": 0,
-          "status": "pass",
-          "stderr": "",
-          "stdout": "Plasma v2 release-candidate gate passed: validation/captures/plasma-v2/release-candidate/gate-report.json",
+          "returncode": 1,
+          "status": "fail",
+          "stderr": "validator-check_plasma_v2_package_stage: Required release-candidate validator must pass.",
+          "stdout": "",
           "timeout_seconds": 300
         }
       },
       "id": "release-candidate-gate",
-      "status": "pass",
-      "summary": "Command passed."
+      "status": "fail",
+      "summary": "Command failed."
     },
     {
       "data": {
@@ -72,16 +72,16 @@
             "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
             "tools/scripts/check_plasma_v2_package_stage.py"
           ],
-          "returncode": 0,
-          "status": "pass",
-          "stderr": "",
-          "stdout": "Plasma v2 package stage checks passed.",
+          "returncode": 1,
+          "status": "fail",
+          "stderr": "release-candidate checksum mismatch for out/msvc/vs2017_xp/Release/plasma/plasma.scr",
+          "stdout": "",
           "timeout_seconds": 300
         }
       },
       "id": "package-stage",
-      "status": "pass",
-      "summary": "Command passed."
+      "status": "fail",
+      "summary": "Command failed."
     },
     {
       "data": {
@@ -162,16 +162,16 @@
             "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
             "tools/scripts/check_release_provenance.py"
           ],
-          "returncode": 0,
-          "status": "pass",
-          "stderr": "",
-          "stdout": "Plasma v2 release provenance checks passed.",
+          "returncode": 1,
+          "status": "fail",
+          "stderr": "provenance artifact sha256 mismatch.",
+          "stdout": "",
           "timeout_seconds": 300
         }
       },
       "id": "release-provenance",
-      "status": "pass",
-      "summary": "Command passed."
+      "status": "fail",
+      "summary": "Command failed."
     },
     {
       "data": {
@@ -367,12 +367,12 @@
     "release_promotion": "accepted",
     "stable": true
   },
-  "recommended_state": "stable-promoted",
+  "recommended_state": "release-candidate-hold",
   "schema": "screensave.plasma-v2.stable-promotion.gate-report.v1",
   "source": {
     "branch": "main",
-    "commit": "f92873d2019bc4d19eccb51e5451bf0da5d81635",
+    "commit": "ad207878aef14630cc3171e99558cfca559c4125",
     "dirty": true
   },
-  "status": "promotion-ready"
+  "status": "fail"
 }

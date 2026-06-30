@@ -38,6 +38,7 @@
 *.obj binary
 *.pdb binary
 *.png binary
+*.ppm binary
 *.res binary
 *.scr binary
 *.tga binary

@@ -1,0 +1,11 @@
+label=warp-high
+control=warp
+control_value=920
+requested_renderer=gdi
+active_renderer=gdi
+width=192
+height=108
+frame=0000 hash=70298ca3 lit=20736 path=warp-high-frame-0000.ppm
+frame=0008 hash=d0368bcf lit=20736 path=warp-high-frame-0008.ppm
+frame=0032 hash=3453a53f lit=20736 path=warp-high-frame-0032.ppm
+frame=0064 hash=82fc2c75 lit=20736 path=warp-high-frame-0064.ppm

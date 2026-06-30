@@ -5,6 +5,7 @@ They live with the product so later `PL` work can extend them without rewriting 
 
 ## Post-PL Control Docs
 
+- [Plasma V3 Visual Core Reset](./plasma-v3-visual-core-reset.md): records the isolated visual-core reset boundary after the latest product acceptance veto
 - [PX00 Post-PL Program](./px00-post-pl-program.md): defines Plasma's current post-PL posture, role, and early-wave priorities
 - [PX00 Feature Ledger](./px00-feature-ledger.md): records the current stable, experimental, deferred, and caveat posture from the repo as it exists now
 - [PX00 Risk Register](./px00-risk-register.md): records the current support, proof, governance, and scope risks that later `PX` work must manage explicitly

@@ -1,8 +1,8 @@
 # Plasma v2 Stable-Promotion Gate Report
 
-- Status: promotion-ready
+- Status: fail
 - Candidate: plasma-v2-rc1
-- Recommended state: stable-promoted
+- Recommended state: release-candidate-hold
 - Artistic decision: accepted-for-stable
 - Instrument architecture: promotion-ready
 - Instrument stable eligible: True
@@ -12,15 +12,15 @@
 ## Checks
 
 - pass: project-state-transition - Project state is a release candidate, a valid hold, or an accepted post-stable transition.
-- pass: release-candidate-gate - Command passed.
+- fail: release-candidate-gate - Command failed.
 - pass: stable-promotion-contract - Command passed.
 - pass: instrument-architecture-audit - Command passed.
-- pass: package-stage - Command passed.
+- fail: package-stage - Command failed.
 - pass: stable-promotion-evidence - Command passed.
 - pass: final-artistic-decision - Command passed.
 - pass: release-candidate-support - Command passed.
 - pass: stable-support - Command passed.
-- pass: release-provenance - Command passed.
+- fail: release-provenance - Command failed.
 - pass: release-security - Command passed.
 - pass: stable-review - Command passed.
 - pass: aide-evidence-bridge - Command passed.

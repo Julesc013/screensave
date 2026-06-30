@@ -1,0 +1,294 @@
+{
+  "schema": "screensave.plasma.v3.visual-spike.proof.v0",
+  "status": "pass",
+  "dimensions": {
+    "width": 192,
+    "height": 108
+  },
+  "claim_boundary": "deterministic local visual-core spike evidence only; not publication, runtime compatibility certification, or acceptance",
+  "driver": "out/checks/plasma-v3-visual-spike/plasma_v3_visual_smoke.exe",
+  "source_files": [
+    "products/savers/plasma/tests/plasma_v3_visual_smoke.c",
+    "products/savers/plasma/src/v3/plasma_v3_spec.c",
+    "products/savers/plasma/src/v3/plasma_v3_plan.c",
+    "products/savers/plasma/src/v3/plasma_v3_runtime.c",
+    "products/savers/plasma/src/v3/field/plasma_v3_field.c",
+    "products/savers/plasma/src/v3/material/plasma_v3_material.c",
+    "products/savers/plasma/src/v3/treatment/plasma_v3_treatment.c",
+    "products/savers/plasma/src/v3/present/plasma_v3_present.c",
+    "products/savers/plasma/src/v3/proof/plasma_v3_proof.c"
+  ],
+  "contact_sheet": "validation/captures/plasma-v3/visual-spike/review-contact-sheet.ppm",
+  "contact_sheet_markdown": "validation/captures/plasma-v3/visual-spike/review-contact-sheet.md",
+  "frame_time_log": "validation/captures/plasma-v3/visual-spike/frame-time-log.csv",
+  "cases": [
+    {
+      "frames": [
+        {
+          "frame": 0,
+          "hash": "ccac02c0",
+          "lit_pixels": 20736,
+          "path": "validation/captures/plasma-v3/visual-spike/baseline-gdi/baseline-gdi-frame-0000.ppm",
+          "sha256": "706f58b2a527277bb192731945be495573740cb5b4f6bb4d3c45afe5574ca94f"
+        },
+        {
+          "frame": 8,
+          "hash": "0f450dc5",
+          "lit_pixels": 20736,
+          "path": "validation/captures/plasma-v3/visual-spike/baseline-gdi/baseline-gdi-frame-0008.ppm",
+          "sha256": "58b6bb58e270073077c3d3572a019cad4b69789f756902b73130bb75217d560c"
+        },
+        {
+          "frame": 32,
+          "hash": "1ec209a9",
+          "lit_pixels": 20736,
+          "path": "validation/captures/plasma-v3/visual-spike/baseline-gdi/baseline-gdi-frame-0032.ppm",
+          "sha256": "ec260010b75e536f8e4e10dc677cc10ad0de6b1d4e5b943b1e280e8c34a98bea"
+        },
+        {
+          "frame": 64,
+          "hash": "e4fae4ff",
+          "lit_pixels": 20736,
+          "path": "validation/captures/plasma-v3/visual-spike/baseline-gdi/baseline-gdi-frame-0064.ppm",
+          "sha256": "7305ba0f313ba1a747d00f258a417a89207787f0ac6c2f40a34ad8f153de10f9"
+        }
+      ],
+      "label": "baseline-gdi",
+      "control": "none",
+      "control_value": "0",
+      "requested_renderer": "gdi",
+      "active_renderer": "gdi",
+      "width": "192",
+      "height": "108"
+    },
+    {
+      "frames": [
+        {
+          "frame": 0,
+          "hash": "bcf2dd90",
+          "lit_pixels": 20736,
+          "path": "validation/captures/plasma-v3/visual-spike/field-scale-high/field-scale-high-frame-0000.ppm",
+          "sha256": "b242ffae147c0fc39a3c819030f281c9a6c4d02909c85d74e5a77d31ddde4f17"
+        },
+        {
+          "frame": 8,
+          "hash": "421138b5",
+          "lit_pixels": 20736,
+          "path": "validation/captures/plasma-v3/visual-spike/field-scale-high/field-scale-high-frame-0008.ppm",
+          "sha256": "9807be0f30c8e8a714efcc2455156fa2dd1bc8d123da2708b5c97f1854d5d170"
+        },
+        {
+          "frame": 32,
+          "hash": "390141d5",
+          "lit_pixels": 20736,
+          "path": "validation/captures/plasma-v3/visual-spike/field-scale-high/field-scale-high-frame-0032.ppm",
+          "sha256": "cd8f00e323684cabde363150c159ffbed0c114eb8db9a4428dcf28ac4a07ae63"
+        },
+        {
+          "frame": 64,
+          "hash": "dcda5a9f",
+          "lit_pixels": 20736,
+          "path": "validation/captures/plasma-v3/visual-spike/field-scale-high/field-scale-high-frame-0064.ppm",
+          "sha256": "7e30c80be2176fa51534bc324ff0042a5a7f8c5a082872a845f8bd492ffe2536"
+        }
+      ],
+      "label": "field-scale-high",
+      "control": "field_scale",
+      "control_value": "920",
+      "requested_renderer": "gdi",
+      "active_renderer": "gdi",
+      "width": "192",
+      "height": "108"
+    },
+    {
+      "frames": [
+        {
+          "frame": 0,
+          "hash": "70298ca3",
+          "lit_pixels": 20736,
+          "path": "validation/captures/plasma-v3/visual-spike/warp-high/warp-high-frame-0000.ppm",
+          "sha256": "46d0b5710d352bb0cf1bcf512421450ccebed808a7bd7d71b6807cdf6707ff27"
+        },
+        {
+          "frame": 8,
+          "hash": "d0368bcf",
+          "lit_pixels": 20736,
+          "path": "validation/captures/plasma-v3/visual-spike/warp-high/warp-high-frame-0008.ppm",
+          "sha256": "ae48178adbd6637afc122e6dee98ba12d0d13f0cf30802a82d53f2dc05dd5fe2"
+        },
+        {
+          "frame": 32,
+          "hash": "3453a53f",
+          "lit_pixels": 20736,
+          "path": "validation/captures/plasma-v3/visual-spike/warp-high/warp-high-frame-0032.ppm",
+          "sha256": "06ed404799dbde1329188a3e2bcae621df9583af4dad4fe7444223ef068f3ce2"
+        },
+        {
+          "frame": 64,
+          "hash": "82fc2c75",
+          "lit_pixels": 20736,
+          "path": "validation/captures/plasma-v3/visual-spike/warp-high/warp-high-frame-0064.ppm",
+          "sha256": "8c09090e3900dd6c7d8efe8cc986b5db16b1534ef461969f8f1552a54c1cc297"
+        }
+      ],
+      "label": "warp-high",
+      "control": "warp",
+      "control_value": "920",
+      "requested_renderer": "gdi",
+      "active_renderer": "gdi",
+      "width": "192",
+      "height": "108"
+    },
+    {
+      "frames": [
+        {
+          "frame": 0,
+          "hash": "ee8d771e",
+          "lit_pixels": 20736,
+          "path": "validation/captures/plasma-v3/visual-spike/palette-shift-high/palette-shift-high-frame-0000.ppm",
+          "sha256": "2428d4655ceafcec56c8e1be7209d120657bc08372db905ae8a1328eec25a10c"
+        },
+        {
+          "frame": 8,
+          "hash": "a77b62b6",
+          "lit_pixels": 20736,
+          "path": "validation/captures/plasma-v3/visual-spike/palette-shift-high/palette-shift-high-frame-0008.ppm",
+          "sha256": "bd8ddfeb7ee2617fac6a9e158dff822451fd0dc95cdcd10e2a87ad96c895ce48"
+        },
+        {
+          "frame": 32,
+          "hash": "746adcbb",
+          "lit_pixels": 20736,
+          "path": "validation/captures/plasma-v3/visual-spike/palette-shift-high/palette-shift-high-frame-0032.ppm",
+          "sha256": "82c18e9ff9822e8e0489ba55cf93ac03773db910a8485444bcab85b6912dfa3f"
+        },
+        {
+          "frame": 64,
+          "hash": "8a4b2e24",
+          "lit_pixels": 20736,
+          "path": "validation/captures/plasma-v3/visual-spike/palette-shift-high/palette-shift-high-frame-0064.ppm",
+          "sha256": "65e0049ead947abbc85243c250af949236fab939cdb1c7e8bcedd16cfb968852"
+        }
+      ],
+      "label": "palette-shift-high",
+      "control": "palette_shift",
+      "control_value": "940",
+      "requested_renderer": "gdi",
+      "active_renderer": "gdi",
+      "width": "192",
+      "height": "108"
+    },
+    {
+      "frames": [
+        {
+          "frame": 0,
+          "hash": "831a3c54",
+          "lit_pixels": 20736,
+          "path": "validation/captures/plasma-v3/visual-spike/phosphor-high/phosphor-high-frame-0000.ppm",
+          "sha256": "6579522bcf80c51b4032cbf377f6d9922b5c28609c0bb48e0b1370a089df92ce"
+        },
+        {
+          "frame": 8,
+          "hash": "bcda6ea6",
+          "lit_pixels": 20736,
+          "path": "validation/captures/plasma-v3/visual-spike/phosphor-high/phosphor-high-frame-0008.ppm",
+          "sha256": "7689a7a10d38176423bff759bf0ec7ec093ce4a9c36dcc358f58b2ed581275c0"
+        },
+        {
+          "frame": 32,
+          "hash": "2754577f",
+          "lit_pixels": 20736,
+          "path": "validation/captures/plasma-v3/visual-spike/phosphor-high/phosphor-high-frame-0032.ppm",
+          "sha256": "695fb5f8c652ea50a0c2c1598315ac8a080f74eaa9ace8149f42c82dcd7a333c"
+        },
+        {
+          "frame": 64,
+          "hash": "b3d8101f",
+          "lit_pixels": 20736,
+          "path": "validation/captures/plasma-v3/visual-spike/phosphor-high/phosphor-high-frame-0064.ppm",
+          "sha256": "8797ec06ea2c494ec612dc8b98e4f2608f012529ac1e63916c494f0c11040477"
+        }
+      ],
+      "label": "phosphor-high",
+      "control": "phosphor",
+      "control_value": "960",
+      "requested_renderer": "gdi",
+      "active_renderer": "gdi",
+      "width": "192",
+      "height": "108"
+    },
+    {
+      "frames": [
+        {
+          "frame": 0,
+          "hash": "ccac02c0",
+          "lit_pixels": 20736,
+          "path": "validation/captures/plasma-v3/visual-spike/baseline-gl11-preview/baseline-gl11-preview-frame-0000.ppm",
+          "sha256": "706f58b2a527277bb192731945be495573740cb5b4f6bb4d3c45afe5574ca94f"
+        },
+        {
+          "frame": 8,
+          "hash": "0f450dc5",
+          "lit_pixels": 20736,
+          "path": "validation/captures/plasma-v3/visual-spike/baseline-gl11-preview/baseline-gl11-preview-frame-0008.ppm",
+          "sha256": "58b6bb58e270073077c3d3572a019cad4b69789f756902b73130bb75217d560c"
+        },
+        {
+          "frame": 32,
+          "hash": "1ec209a9",
+          "lit_pixels": 20736,
+          "path": "validation/captures/plasma-v3/visual-spike/baseline-gl11-preview/baseline-gl11-preview-frame-0032.ppm",
+          "sha256": "ec260010b75e536f8e4e10dc677cc10ad0de6b1d4e5b943b1e280e8c34a98bea"
+        },
+        {
+          "frame": 64,
+          "hash": "e4fae4ff",
+          "lit_pixels": 20736,
+          "path": "validation/captures/plasma-v3/visual-spike/baseline-gl11-preview/baseline-gl11-preview-frame-0064.ppm",
+          "sha256": "7305ba0f313ba1a747d00f258a417a89207787f0ac6c2f40a34ad8f153de10f9"
+        }
+      ],
+      "label": "baseline-gl11-preview",
+      "control": "none",
+      "control_value": "0",
+      "requested_renderer": "gl11",
+      "active_renderer": "gl11",
+      "width": "192",
+      "height": "108"
+    }
+  ],
+  "control_influence": [
+    {
+      "control": "field_scale",
+      "value": 920,
+      "frame": 32,
+      "baseline_hash": "1ec209a9",
+      "variant_hash": "390141d5",
+      "changed": true
+    },
+    {
+      "control": "warp",
+      "value": 920,
+      "frame": 32,
+      "baseline_hash": "1ec209a9",
+      "variant_hash": "3453a53f",
+      "changed": true
+    },
+    {
+      "control": "palette_shift",
+      "value": 940,
+      "frame": 32,
+      "baseline_hash": "1ec209a9",
+      "variant_hash": "746adcbb",
+      "changed": true
+    },
+    {
+      "control": "phosphor",
+      "value": 960,
+      "frame": 32,
+      "baseline_hash": "1ec209a9",
+      "variant_hash": "2754577f",
+      "changed": true
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 # Plasma v2 Release-Candidate Gate
 
-Status: pass
+Status: fail
 
 Release-candidate gate only; not stable release, release publication, compatibility certification, public SDK stability, all-saver migration, or automatic promotion.
 
@@ -31,7 +31,7 @@ Release-candidate gate only; not stable release, release publication, compatibil
 | no-generic-or-promotion-capabilities | pass | Generic command, release, stable-promotion, and agent-apply capabilities must remain absent. |
 | no-release-overclaims | pass | No publication, stable, certification, or promotion overclaim may exist. |
 | validator-check_plasma_v2_release_candidate_contract | pass | Required release-candidate validator must pass. |
-| validator-check_plasma_v2_package_stage | pass | Required release-candidate validator must pass. |
+| validator-check_plasma_v2_package_stage | fail | Required release-candidate validator must pass. |
 | validator-check_plasma_v2_release_candidate_evidence | pass | Required release-candidate validator must pass. |
 | validator-check_plasma_v2_artistic_decision | pass | Required release-candidate validator must pass. |
 | validator-check_support_claims | pass | Required release-candidate validator must pass. |

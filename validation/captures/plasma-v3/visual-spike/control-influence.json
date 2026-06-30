@@ -1,0 +1,37 @@
+{
+  "status": "pass",
+  "rows": [
+    {
+      "control": "field_scale",
+      "value": 920,
+      "frame": 32,
+      "baseline_hash": "1ec209a9",
+      "variant_hash": "390141d5",
+      "changed": true
+    },
+    {
+      "control": "warp",
+      "value": 920,
+      "frame": 32,
+      "baseline_hash": "1ec209a9",
+      "variant_hash": "3453a53f",
+      "changed": true
+    },
+    {
+      "control": "palette_shift",
+      "value": 940,
+      "frame": 32,
+      "baseline_hash": "1ec209a9",
+      "variant_hash": "746adcbb",
+      "changed": true
+    },
+    {
+      "control": "phosphor",
+      "value": 960,
+      "frame": 32,
+      "baseline_hash": "1ec209a9",
+      "variant_hash": "2754577f",
+      "changed": true
+    }
+  ]
+}

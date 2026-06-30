@@ -129,9 +129,11 @@
     {
       "id": "checksums-match",
       "message": "Publication-prep checksums match referenced files.",
-      "mismatches": [],
+      "mismatches": [
+        "out/msvc/vs2017_xp/Release/plasma/plasma.scr: expected 50080152f3b8300ea2cc7242a861af648b875911626b8fc804475f3695f58f64, actual f52a4e8f66668b88d1005238500c505ac07deb69bda2b1c6c657b7b8e90ce5ec"
+      ],
       "missing": [],
-      "status": "pass"
+      "status": "fail"
     },
     {
       "id": "doc-known-limits",
@@ -170,7 +172,7 @@
       "status": "pass"
     },
     {
-      "artifact_ok": true,
+      "artifact_ok": false,
       "boundaries": {
         "all_saver_migration": "not claimed",
         "compatibility_certification_broadened": false,
@@ -180,7 +182,7 @@
       },
       "id": "publication-provenance",
       "message": "Publication-prep provenance records artifact and boundary facts.",
-      "status": "pass"
+      "status": "fail"
     },
     {
       "id": "publication-provenance-refs",
@@ -191,9 +193,9 @@
     {
       "id": "stable-promotion-accepted",
       "message": "Stable-promotion gate remains accepted before publication prep.",
-      "recommended_state": "stable-promoted",
-      "stable_gate_status": "promotion-ready",
-      "status": "pass"
+      "recommended_state": "release-candidate-hold",
+      "stable_gate_status": "fail",
+      "status": "fail"
     },
     {
       "id": "aide-publication-summary",
@@ -244,14 +246,14 @@
     },
     {
       "id": "release-provenance",
-      "message": "Command passed.",
+      "message": "Command failed.",
       "run": {
         "command": "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe tools/scripts/check_release_provenance.py",
-        "returncode": 0,
-        "stderr": "",
-        "stdout": "Plasma v2 release provenance checks passed."
+        "returncode": 1,
+        "stderr": "provenance artifact sha256 mismatch.",
+        "stdout": ""
       },
-      "status": "pass"
+      "status": "fail"
     },
     {
       "id": "release-security",
@@ -266,14 +268,14 @@
     },
     {
       "id": "package-stage",
-      "message": "Command passed.",
+      "message": "Command failed.",
       "run": {
         "command": "C:\\Users\\Jules\\AppData\\Local\\Programs\\Python\\Python311\\python.exe tools/scripts/check_plasma_v2_package_stage.py",
-        "returncode": 0,
-        "stderr": "",
-        "stdout": "Plasma v2 package stage checks passed."
+        "returncode": 1,
+        "stderr": "release-candidate checksum mismatch for out/msvc/vs2017_xp/Release/plasma/plasma.scr",
+        "stdout": ""
       },
-      "status": "pass"
+      "status": "fail"
     },
     {
       "id": "aide-evidence-index",
@@ -288,12 +290,12 @@
     }
   ],
   "claim_boundary": "Publication-prep gate only; no public release publication, compatibility certification broadening, SDK stability, all-saver migration, Manager install mutation, Workbench MVP, platform expansion, or AIDE runtime authority is admitted.",
-  "recommended_state": "publication-ready",
+  "recommended_state": "publication-hold",
   "schema": "screensave.plasma-v2.publication-prep.gate-report.v1",
   "source": {
     "branch": "main",
-    "commit": "f92873d2019bc4d19eccb51e5451bf0da5d81635",
+    "commit": "ad207878aef14630cc3171e99558cfca559c4125",
     "dirty": true
   },
-  "status": "publication-ready"
+  "status": "publication-hold"
 }

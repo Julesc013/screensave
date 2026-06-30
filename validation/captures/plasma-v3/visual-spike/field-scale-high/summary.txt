@@ -1,0 +1,11 @@
+label=field-scale-high
+control=field_scale
+control_value=920
+requested_renderer=gdi
+active_renderer=gdi
+width=192
+height=108
+frame=0000 hash=bcf2dd90 lit=20736 path=field-scale-high-frame-0000.ppm
+frame=0008 hash=421138b5 lit=20736 path=field-scale-high-frame-0008.ppm
+frame=0032 hash=390141d5 lit=20736 path=field-scale-high-frame-0032.ppm
+frame=0064 hash=dcda5a9f lit=20736 path=field-scale-high-frame-0064.ppm

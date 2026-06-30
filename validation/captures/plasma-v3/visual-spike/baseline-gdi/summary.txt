@@ -1,0 +1,11 @@
+label=baseline-gdi
+control=none
+control_value=0
+requested_renderer=gdi
+active_renderer=gdi
+width=192
+height=108
+frame=0000 hash=ccac02c0 lit=20736 path=baseline-gdi-frame-0000.ppm
+frame=0008 hash=0f450dc5 lit=20736 path=baseline-gdi-frame-0008.ppm
+frame=0032 hash=1ec209a9 lit=20736 path=baseline-gdi-frame-0032.ppm
+frame=0064 hash=e4fae4ff lit=20736 path=baseline-gdi-frame-0064.ppm

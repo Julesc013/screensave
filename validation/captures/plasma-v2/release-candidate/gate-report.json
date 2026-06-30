@@ -272,15 +272,15 @@
       "payload": {
         "run": {
           "command": "tools/scripts/check_plasma_v2_package_stage.py",
-          "returncode": 0,
-          "status": "pass",
-          "stderr_tail": [],
-          "stdout_tail": [
-            "Plasma v2 package stage checks passed."
-          ]
+          "returncode": 1,
+          "status": "fail",
+          "stderr_tail": [
+            "release-candidate checksum mismatch for out/msvc/vs2017_xp/Release/plasma/plasma.scr"
+          ],
+          "stdout_tail": []
         }
       },
-      "status": "pass",
+      "status": "fail",
       "summary": "Required release-candidate validator must pass."
     },
     {
@@ -413,5 +413,5 @@
     }
   ],
   "schema": "screensave.plasma-v2.release-candidate-gate.v1",
-  "status": "pass"
+  "status": "fail"
 }

@@ -1,0 +1,11 @@
+label=palette-shift-high
+control=palette_shift
+control_value=940
+requested_renderer=gdi
+active_renderer=gdi
+width=192
+height=108
+frame=0000 hash=ee8d771e lit=20736 path=palette-shift-high-frame-0000.ppm
+frame=0008 hash=a77b62b6 lit=20736 path=palette-shift-high-frame-0008.ppm
+frame=0032 hash=746adcbb lit=20736 path=palette-shift-high-frame-0032.ppm
+frame=0064 hash=8a4b2e24 lit=20736 path=palette-shift-high-frame-0064.ppm

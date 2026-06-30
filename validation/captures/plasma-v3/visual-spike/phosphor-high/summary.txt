@@ -1,0 +1,11 @@
+label=phosphor-high
+control=phosphor
+control_value=960
+requested_renderer=gdi
+active_renderer=gdi
+width=192
+height=108
+frame=0000 hash=831a3c54 lit=20736 path=phosphor-high-frame-0000.ppm
+frame=0008 hash=bcda6ea6 lit=20736 path=phosphor-high-frame-0008.ppm
+frame=0032 hash=2754577f lit=20736 path=phosphor-high-frame-0032.ppm
+frame=0064 hash=b3d8101f lit=20736 path=phosphor-high-frame-0064.ppm
